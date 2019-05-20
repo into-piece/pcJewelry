@@ -17,6 +17,15 @@ let routes = [
 }),
     "routes": [
       {
+        "path": "/index.html",
+        "redirect": "/business/client",
+        "authority": [
+          "admin",
+          "user"
+        ],
+        "exact": true
+      },
+      {
         "path": "/",
         "redirect": "/business/client",
         "authority": [

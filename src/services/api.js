@@ -10,7 +10,7 @@ export async function queryActivities() {
 }
 export async function querylistBrands() {
 
-    return request('/basic/brand/listBrands', {
+    return request('/server/basic/brand/listBrands', {
       method: 'POST',
       data: {
         method: 'POST',
@@ -22,7 +22,7 @@ export async function querylistBrands() {
 
 export async function saveTheBrand(params) {
 
-  return request('/basic/brand/saveBrand', {
+  return request('/server/basic/brand/saveBrand', {
     method: 'POST',
     data: {
        ...params
@@ -34,7 +34,7 @@ export async function saveTheBrand(params) {
 
 export async function deleteTheBrand(params) {
 
-  return request('/basic/brand/deleteBrand', {
+  return request('/server/basic/brand/deleteBrand', {
     method: 'POST',
     data: {
        ...params
@@ -46,7 +46,7 @@ export async function deleteTheBrand(params) {
 
 export async function updateTheBrand(params) {
 
-  return request('/basic/brand/updateBrand', {
+  return request('/server/basic/brand/updateBrand', {
     method: 'POST',
     data: {
       ...params
@@ -58,7 +58,7 @@ export async function updateTheBrand(params) {
 
 export async function freezeTheBrand(params) {
 
-  return request('/basic/brand/freeze', {
+  return request('/server/basic/brand/freeze', {
     method: 'POST',
     data: {
       ...params

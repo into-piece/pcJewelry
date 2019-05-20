@@ -16,8 +16,8 @@ import {
 } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import  styles from './Client.less'
 import { connect } from 'dva';
+import styles from '../../Account/Center/Center.less';
 import StandardTable from '@/components/StandardTable';
 import DescriptionList from '@/components/DescriptionList';
 
@@ -27,7 +27,6 @@ const { TabPane } = Tabs;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 import listStyles from './TableList.less';
-
 const { Description } = DescriptionList;
 
 const clientColumns = [

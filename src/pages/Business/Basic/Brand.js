@@ -80,11 +80,11 @@ class Brand extends Component {
       done: false,
       list: [],
       selectedRowKeys: [],
-      showList: [],
+      showItem: false,
       rowHeight: 0,
       isEdit: true,
-      update:false,
-      isAdd:true,
+      update: false,
+      isAdd: true,
     };
   }
 
@@ -100,7 +100,7 @@ class Brand extends Component {
     e.preventDefault();
     const { dispatch, form, rtnCode = {} } = this.props;
 
-    const { showList, current ,isAdd} = this.state;
+    const { showItem, current, isAdd } = this.state;
 
     form.validateFields((err, fieldsValue) => {
 
@@ -129,8 +129,7 @@ class Brand extends Component {
           },
         });
       }
-      this.state.showList=[];
-      this.state.showList.push(current);
+      this.state.showItem =current;
       this.setState({
         visible: false,
 
@@ -177,45 +176,37 @@ class Brand extends Component {
       pageSize: 8,
     };
 
-    const { selectedRowKeys, visible, current = {}, isEdit ,update} = this.state;
+    const { selectedRowKeys, visible, current = {}, isEdit, update } = this.state;
 
 
-    const { listLoading, body = {},dispatch,addloading,deleteloading,upateloading ,freezing} = this.props;
+    const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing } = this.props;
 
 
-    if(addloading||deleteloading||upateloading||freezing)
-    {
-      this.state.update=true;
-    }else
-    {
-      if(update)
-      {
+    if (addloading || deleteloading || upateloading || freezing) {
+      this.state.update = true;
+    } else {
+      if (update) {
         dispatch({
           type: 'basic/fetchListBrands',
-          payload: {
-          },
+          payload: {},
         });
-        this.state.update=false;
+        this.state.update = false;
       }
 
     }
 
-    if(listLoading&&body&&body.data&&body.data.length>0)
-    {
-      const newdata = body.data.map((value)=>{
-         const s= value.status;
-        if(s==0)
-        {
-          value.status='草稿'
-        }else if(s==1)
-        {
-          value.status='使用中'
-        }else if(s==2)
-        {
-          value.status='冻结'
+    if (listLoading && body && body.data && body.data.length > 0) {
+      const newdata = body.data.map((value) => {
+        const s = value.status;
+        if (s == 0) {
+          value.status = '草稿';
+        } else if (s == 1) {
+          value.status = '使用中';
+        } else if (s == 2) {
+          value.status = '冻结';
         }
         return value;
-      })
+      });
 
       this.state.data = newdata;
     }
@@ -287,7 +278,6 @@ class Brand extends Component {
     };
 
 
-
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -317,6 +307,7 @@ class Brand extends Component {
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   filterMultiple={false}
+                  bordered={false}
                   selectedRows={1}
                   type={'radio'}
                   rowSelection={rowSelection}
@@ -341,26 +332,30 @@ class Brand extends Component {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <Card>
+              <Card
+                bordered={false}
+              >
                 {/*<div style={{ overflow: 'scroll', minHeight: window.innerHeight * 0.7, display: 'inline' }}>*/}
                 <div>
               <span title="品牌信息"
-                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontStyle: 'bold', color: '#00f' }}>
+                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
               品牌信息
               </span>
-
                   <Divider/>
-                  <List
-                    layout={'inline'}
-                    itemLayout='vertical'
-                    loading={false}
-                    pagination={false}
-                    size={'small'}
-                    rowKey={'list-key'}
-                    dataSource={this.state.showList}
-                    renderItem={this.getRenderitem}
-                    columns={false}
-                  />
+                  {(this.state.showItem)?this.getRenderitem(this.state.showItem):''}
+                  {/*<List*/}
+                    {/*layout={'inline'}*/}
+                    {/*itemLayout='vertical'*/}
+                    {/*loading={false}*/}
+                    {/*pagination={false}*/}
+                    {/*size={'small'}*/}
+                    {/*bordered={false}*/}
+                    {/*split={false}*/}
+                    {/*rowKey={'list-key'}*/}
+                    {/*dataSource={this.state.showList}*/}
+                    {/*renderItem={this.getRenderitem}*/}
+                    {/*columns={false}*/}
+                  {/*/>*/}
 
                 </div>
 
@@ -370,17 +365,29 @@ class Brand extends Component {
 
               {/*</Card>*/}
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                <Row gutter={2} >
-                  <Col span={6} style={{textAlign:'center'}}>
-                    <Button  type="primary" icon="plus" size={'small'}
-                                         onClick={this.clickNewFrom}>新增</Button> </Col>
-                  <Col span={6} style={{textAlign:'center'}}><Button type="danger" icon="delete" size={'small'} onClick={this.clickDeleteFrom}
-                                        disabled={isEdit}>删除</Button></Col>
-                  <Col span={6} style={{textAlign:'center'}}> <Button type="primary" size={'small'} onClick={this.clickEditFrom}
-                                         disabled={isEdit} icon="edit">编辑</Button></Col>
-                  <Col span={6} style={{textAlign:'center'}}> <Button size={'small'} type="primary" icon="lock" onClick={this.clickFreezeFrom}
-                                         disabled={isEdit}>冻结</Button></Col>
-                </Row>
+            {/*    <Row gutter={2}>
+                  <Col lg={6} style={{ textAlign: 'center' }}>
+                    <Button type="primary" icon="plus" size={'small'}
+                            onClick={this.clickNewFrom}>新增</Button> </Col>
+                  <Col lg={6} style={{ textAlign: 'center' }}><Button type="danger" icon="delete" size={'small'}
+                                                                      onClick={this.clickDeleteFrom}
+                                                                      disabled={isEdit}>删除</Button></Col>
+                  <Col lg={6} style={{ textAlign: 'center' }}> <Button type="primary" size={'small'}
+                                                                       onClick={this.clickEditFrom}
+                                                                       disabled={isEdit} icon="edit">编辑</Button></Col>
+                  <Col lg={6} style={{ textAlign: 'center' }}> <Button size={'small'} type="primary" icon="lock"
+                                                                       onClick={this.clickFreezeFrom}
+                                                                       disabled={isEdit}>冻结</Button></Col>
+                </Row>*/}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Button className={styles.buttomControl} type="primary" icon="plus"  size={'small'} onClick={this.clickNewFrom}>新增</Button>
+                  <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'} onClick={this.clickDeleteFrom}
+                          isabled={isEdit}>删除</Button>
+                  <Button  className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
+                          disabled={isEdit} icon="edit">编辑</Button>
+                  <Button  className={styles.buttomControl} size={'small'} type="primary" icon="lock" onClick={this.clickFreezeFrom}
+                          disabled={isEdit}>冻结</Button>
+                </div>
 
               </Card>
             </div>
@@ -395,12 +402,12 @@ class Brand extends Component {
   }
 
   clickNewFrom = () => {
-    this.state.isAdd=true;
+    this.state.isAdd = true;
     this.setState({ visible: true, current: {} });
   };
 
   clickDeleteFrom = () => {
-    const brandNo = this.state.showList[0];
+    const brandNo = this.state.showItem;
 
     const { dispatch } = this.props;
     dispatch({
@@ -412,20 +419,19 @@ class Brand extends Component {
 
 
 
-    const empty = [];
     this.setState({
       selectedRowKeys: '',
-      showList: empty,
+      showItem: flse,
       isExit: true,
     });
 
   };
 
   clickEditFrom = () => {
-    this.state.isAdd=false;
+    this.state.isAdd = false;
     console.log('edit data');
     this.setState({
-      current: this.state.showList[0],
+      current: this.state.showItem,
       visible: true,
     });
 
@@ -433,7 +439,7 @@ class Brand extends Component {
 
 
   clickFreezeFrom = () => {
-    const brandNo = this.state.showList[0];
+    const brandNo = this.state.showItem;
 
     const { dispatch } = this.props;
     dispatch({
@@ -450,16 +456,14 @@ class Brand extends Component {
   selectChange = record => {
 
     console.log('select brand  ' + record.brandNo);
-    let showList2 = [];
+    // let showList2 = [];
     let edit = false;
-    if (record != '') {
-      showList2.push(record);
-    } else {
+    if (record === '')  {
       edit = true;
     }
 
     this.setState({
-      showList: showList2,
+      showItem: {...record},
       isEdit: edit,
       current: record,
     });
@@ -475,25 +479,27 @@ class Brand extends Component {
     });
   };
 
-
-  getRenderitem = (item) => {
-    return (
-
-      <div style={{ marginLeft: 10, marginTop: 10 }}>
-        <DescriptionList className={styles.headerList} size="small" col="1">
-          <Description term="品牌编号">{item.brandNo}</Description>
-          <Description term="品牌英文">{item.brandEnName}</Description>
-          <Description term="品牌中文">{item.brandZhName}</Description>
-        </DescriptionList>
-        {/* <Divider/>*/}
-      </div>
-
-    );
-
-
+  selectRowItem = () => {
+    console.log('select the item')
   };
 
 
-}
+  getRenderitem = (item) => {
+    return (
+      <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
+        <DescriptionList className={styles.headerList}  size='small' col='1'>
+        <Description term='品牌编号'>{item.brandNo}</Description>
+        <Description term='品牌英文'>{item.brandEnName}</Description>
+        <Description term='品牌中文'>{item.brandZhName}</Description>
+        </DescriptionList>
+      {/* <Divider/>*/}
+        </span>
 
-export default Brand;
+        );
+      };
+
+
+
+  }
+
+  export default Brand;
