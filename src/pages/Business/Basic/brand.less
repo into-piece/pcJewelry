@@ -1,0 +1,174 @@
+@import '~antd/lib/style/themes/default.less';
+
+.main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-top: 16px;
+  overflow: auto;
+  background-color: #2eabff;
+
+  .leftmenu {
+    width: 224px;
+    height:100%;
+    border-right: @border-width-base @border-style-base @border-color-split;
+
+    :global {
+      .ant-menu-inline {
+        border: none;
+      }
+
+      .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .right {
+    flex: 1;
+    padding-top: 8px;
+    padding-right: 10px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+
+    .title {
+      margin-bottom: 12px;
+      color: @heading-color;
+      font-weight: 500;
+      text-align: center;
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+
+  :global {
+    .ant-list-split .ant-list-item:last-child {
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .ant-list-item {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+  }
+}
+
+.row_controller{
+  width: 100%;
+}
+
+
+.menu_content{
+  backgroundColor:'#fff';
+  height:100%;
+}
+
+.view_left_content{
+  background-color: #fff;
+  height: 100%;
+  min-height: 70vh;
+  max-height: 70vh;
+  overflow: auto;
+  margin-bottom: 12px;
+}
+
+.view_right_content{
+  background-color: #fff;
+  height: 100% ;
+  min-height: 70vh;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+}
+
+
+
+
+.view_right_list_content{
+  background-color: #fff;
+  height: 100%;
+  width:100%;
+  position:absolute;
+}
+
+
+.view_right_list{
+  background-color: #fff;
+  height: 100% ;
+}
+
+.view_edit_list{
+  background-color: #fff;
+  width: 100%;
+}
+
+.headerList {
+  margin-bottom: 5px;
+}
+
+.bottom_view {
+  width: 100%;
+  position: 'absolute';
+  bottom: 30px;
+  alignText: 'center';
+}
+
+:global {
+  .ant-list-item-meta {
+    // 账号绑定图标
+    .taobao {
+      display: block;
+      color: #ff4000;
+      font-size: 48px;
+      line-height: 48px;
+      border-radius: @border-radius-base;
+    }
+
+    .dingding {
+      margin: 2px;
+      padding: 6px;
+      color: #fff;
+      font-size: 32px;
+      line-height: 32px;
+      background-color: #2eabff;
+      border-radius: @border-radius-base;
+    }
+
+    .alipay {
+      color: #2eabff;
+      font-size: 48px;
+      line-height: 48px;
+      border-radius: @border-radius-base;
+    }
+  }
+
+  // 密码强度
+  font.strong {
+    color: @success-color;
+  }
+
+  font.medium {
+    color: @warning-color;
+  }
+
+  font.weak {
+    color: @error-color;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .main {
+    flex-direction: column;
+
+    .leftmenu {
+      width: 100%;
+      border: none;
+    }
+
+    .right {
+      padding: 20px;
+    }
+  }
+}
