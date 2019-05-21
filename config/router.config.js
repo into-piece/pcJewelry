@@ -106,11 +106,36 @@ export default [
             routes: [
               {
                 path: '/business/client',
-                redirect: '/business/client/base',
+                redirect: '/business/client/emptyView',
               },
               {
-                path: '/business/client/base',
-                component: './Business/Client/ClientView',
+                path: '/business/client/emptyView',
+                component: './Business/Client/EmptyView',
+              },
+              {
+                path: '/business/client/client',
+                component: './Business/Client/ClientInfo',
+              },
+              {
+                path: '/business/client/terminal',
+                component: './Business/Client/TerminalClient',
+              },
+              {
+                path: '/business/client/product',
+                component: './Business/Client/Product',
+              },
+
+              {
+                path: '/business/client/marking',
+                component: './Business/Client/Mark',
+              },
+              {
+                path: '/business/client/package',
+                component: './Business/Client/PackageInfo',
+              },
+              {
+                path: '/business/client/history',
+                component: './Business/Client/History',
               },
             ],
           },

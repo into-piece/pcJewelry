@@ -382,19 +382,6 @@ class Brand extends Component {
               </span>
                   <Divider/>
                   {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
-                  {/*<List*/}
-                  {/*layout={'inline'}*/}
-                  {/*itemLayout='vertical'*/}
-                  {/*loading={false}*/}
-                  {/*pagination={false}*/}
-                  {/*size={'small'}*/}
-                  {/*bordered={false}*/}
-                  {/*split={false}*/}
-                  {/*rowKey={'list-key'}*/}
-                  {/*dataSource={this.state.showList}*/}
-                  {/*renderItem={this.getRenderitem}*/}
-                  {/*columns={false}*/}
-                  {/*/>*/}
 
                 </div>
 

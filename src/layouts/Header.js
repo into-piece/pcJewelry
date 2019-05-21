@@ -127,6 +127,7 @@ class HeaderView extends Component {
         {isTop && !isMobile ? (
           <TopNavHeader
             theme={navTheme}
+            size="small"
             mode="horizontal"
             onCollapse={handleMenuCollapse}
             onNoticeClear={this.handleNoticeClear}
@@ -139,6 +140,7 @@ class HeaderView extends Component {
             onCollapse={handleMenuCollapse}
             onNoticeClear={this.handleNoticeClear}
             onMenuClick={this.handleMenuClick}
+            size="small"
             onNoticeVisibleChange={this.handleNoticeVisibleChange}
             {...this.props}
           />
