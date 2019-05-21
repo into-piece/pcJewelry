@@ -106,7 +106,8 @@ export default {
         body:{
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode
+          rtnCode:action.payload.head.rtnCode,
+          rtnMsg:action.payload.head.rtnMsg
         }
       };
     },
@@ -115,6 +116,11 @@ export default {
       return {
         ...state,
         result:action.payload,
+        body:{
+          ...state.body,
+          rtnCode:action.payload.head.rtnCode,
+          rtnMsg:action.payload.head.rtnMsg
+        }
       };
 
 

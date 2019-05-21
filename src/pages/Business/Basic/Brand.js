@@ -51,7 +51,7 @@ const clientContentColumns = [
 ];
 
 @connect(({ loading, basic }) => {
-  const { rtnCode, head } = basic;
+  const { rtnCode, head,rtnMsg } = basic;
   return {
     listLoading: loading.effects['basic/fetchListBrands'],
     addloading: loading.effects['basic/addBrand'],
@@ -61,6 +61,7 @@ const clientContentColumns = [
     body: basic.body,
     rtnCode,
     head,
+    rtnMsg
   };
 })
 
@@ -84,7 +85,10 @@ class Brand extends Component {
       rowHeight: 0,
       isEdit: true,
       update: false,
+      isUpdateFrom: false,
       isAdd: true,
+      requestState:'success',
+      requestMes:'保存成功！'
     };
   }
 
@@ -100,7 +104,8 @@ class Brand extends Component {
     e.preventDefault();
     const { dispatch, form, rtnCode = {} } = this.props;
 
-    const { showItem, current, isAdd } = this.state;
+
+    const { showItem, isAdd } = this.state;
 
     form.validateFields((err, fieldsValue) => {
 
@@ -117,19 +122,28 @@ class Brand extends Component {
         });
       } else {
         const temp = { ...fieldsValue };
-        current.brandNo = temp.brandNo;
-        current.brandZhName = temp.brandZhName;
-        current.brandEnName = temp.brandEnName;
+        const data = { ...showItem };
+        data.brandNo = temp.brandNo;
+        data.brandZhName = temp.brandZhName;
+        data.brandEnName = temp.brandEnName;
+        this.state.current ={...data};
+        if (data.status === '冻结')
+          data.status = 2;
+        else if (data.status === '使用中')
+          data.status = 1;
+        else if (data.status === '草稿')
+          data.status = 0;
+
 
         // console.log('update ' + Object.keys(current));
         dispatch({
           type: 'basic/updateBrand',
           payload: {
-            ...current,
+            ...data,
           },
         });
+
       }
-      this.state.showItem =current;
       this.setState({
         visible: false,
 
@@ -139,6 +153,11 @@ class Brand extends Component {
 
 
   handleDone = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'basic/fetchListBrands',
+    });
+
     this.setState({
       visible: false,
       done: false,
@@ -176,7 +195,7 @@ class Brand extends Component {
       pageSize: 8,
     };
 
-    const { selectedRowKeys, visible, current = {}, isEdit, update } = this.state;
+    const { selectedRowKeys,  current = {}, isEdit, update } = this.state;
 
 
     const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing } = this.props;
@@ -184,13 +203,34 @@ class Brand extends Component {
 
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
+      if (upateloading) {
+        this.state.isUpdateFrom = true;
+      }
     } else {
       if (update) {
-        dispatch({
-          type: 'basic/fetchListBrands',
-          payload: {},
-        });
+        // dispatch({
+        //   type: 'basic/fetchListBrands',
+        //   payload: {},
+        // });
+
+        console.log('rntCode=' + body.rtnCode);
+        if(body.rtnCode==='000000')
+        {
+          this.state.requestState='success';
+        }else {
+          this.state.requestState='error';
+        }
+
+        this.state.requestMes =body.rtnMsg;
+        console.log('result = '+this.state.requestMes)
         this.state.update = false;
+        this.state.done = true;
+        this.state.visible = true;
+        if (this.state.isUpdateFrom) {
+          this.state.isUpdateFrom = false;
+          this.state.showItem = {...current};
+          // console.log(" change data "+(this.state.showItem.brandZhName));
+        }
       }
 
     }
@@ -211,9 +251,9 @@ class Brand extends Component {
       this.state.data = newdata;
     }
 
-    const rtnCode = body.rtnCode;
 
-    console.log('rntCode' + rtnCode);
+
+    console.log('rntCode=' + body.rtnCode);
 
 
     const modalFooter = this.state.done
@@ -228,8 +268,8 @@ class Brand extends Component {
       if (this.state.done) {
         return (
           <Result
-            type="success"
-            title="操作成功"
+            type={this.state.requestState}
+            title={this.state.requestMes}
             description=""
             actions={
               <Button type="primary" onClick={this.handleDone}>
@@ -302,7 +342,6 @@ class Brand extends Component {
 
               >
                 <Table
-
                   loading={listLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
@@ -321,7 +360,7 @@ class Brand extends Component {
                   width={640}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
                   destroyOnClose
-                  visible={visible}
+                  visible={this.state.visible}
                   {...modalFooter}
                 >
                   {getModalContent()}
@@ -342,19 +381,19 @@ class Brand extends Component {
               品牌信息
               </span>
                   <Divider/>
-                  {(this.state.showItem)?this.getRenderitem(this.state.showItem):''}
+                  {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
                   {/*<List*/}
-                    {/*layout={'inline'}*/}
-                    {/*itemLayout='vertical'*/}
-                    {/*loading={false}*/}
-                    {/*pagination={false}*/}
-                    {/*size={'small'}*/}
-                    {/*bordered={false}*/}
-                    {/*split={false}*/}
-                    {/*rowKey={'list-key'}*/}
-                    {/*dataSource={this.state.showList}*/}
-                    {/*renderItem={this.getRenderitem}*/}
-                    {/*columns={false}*/}
+                  {/*layout={'inline'}*/}
+                  {/*itemLayout='vertical'*/}
+                  {/*loading={false}*/}
+                  {/*pagination={false}*/}
+                  {/*size={'small'}*/}
+                  {/*bordered={false}*/}
+                  {/*split={false}*/}
+                  {/*rowKey={'list-key'}*/}
+                  {/*dataSource={this.state.showList}*/}
+                  {/*renderItem={this.getRenderitem}*/}
+                  {/*columns={false}*/}
                   {/*/>*/}
 
                 </div>
@@ -365,7 +404,7 @@ class Brand extends Component {
 
               {/*</Card>*/}
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-            {/*    <Row gutter={2}>
+                {/*    <Row gutter={2}>
                   <Col lg={6} style={{ textAlign: 'center' }}>
                     <Button type="primary" icon="plus" size={'small'}
                             onClick={this.clickNewFrom}>新增</Button> </Col>
@@ -380,12 +419,15 @@ class Brand extends Component {
                                                                        disabled={isEdit}>冻结</Button></Col>
                 </Row>*/}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Button className={styles.buttomControl} type="primary" icon="plus"  size={'small'} onClick={this.clickNewFrom}>新增</Button>
-                  <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'} onClick={this.clickDeleteFrom}
-                          isabled={isEdit}>删除</Button>
-                  <Button  className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
+                  <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
+                          onClick={this.clickNewFrom}>新增</Button>
+                  <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
+                          onClick={this.clickDeleteFrom}
+                          disabled={isEdit}>删除</Button>
+                  <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
                           disabled={isEdit} icon="edit">编辑</Button>
-                  <Button  className={styles.buttomControl} size={'small'} type="primary" icon="lock" onClick={this.clickFreezeFrom}
+                  <Button className={styles.buttomControl} size={'small'} type="primary" icon="lock"
+                          onClick={this.clickFreezeFrom}
                           disabled={isEdit}>冻结</Button>
                 </div>
 
@@ -418,10 +460,9 @@ class Brand extends Component {
     });
 
 
-
     this.setState({
       selectedRowKeys: '',
-      showItem: flse,
+      showItem: false,
       isExit: true,
     });
 
@@ -455,15 +496,15 @@ class Brand extends Component {
 
   selectChange = record => {
 
-    console.log('select brand  ' + record.brandNo);
+    console.log('select brand  ' + Object.keys(record));
     // let showList2 = [];
     let edit = false;
-    if (record === '')  {
+    if (record === '') {
       edit = true;
     }
 
     this.setState({
-      showItem: {...record},
+      showItem: { ...record },
       isEdit: edit,
       current: record,
     });
@@ -480,26 +521,25 @@ class Brand extends Component {
   };
 
   selectRowItem = () => {
-    console.log('select the item')
+    console.log('select the item');
   };
 
 
   getRenderitem = (item) => {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
-        <DescriptionList className={styles.headerList}  size='small' col='1'>
+        <DescriptionList className={styles.headerList} size='small' col='1'>
         <Description term='品牌编号'>{item.brandNo}</Description>
         <Description term='品牌英文'>{item.brandEnName}</Description>
         <Description term='品牌中文'>{item.brandZhName}</Description>
         </DescriptionList>
-      {/* <Divider/>*/}
+        {/* <Divider/>*/}
         </span>
 
-        );
-      };
+    );
+  };
 
 
+}
 
-  }
-
-  export default Brand;
+export default Brand;
