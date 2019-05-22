@@ -134,6 +134,15 @@ const clientContentColumns = [
   // },
 ];
 
+const maintainsColumn =[
+  {
+    title: '维护人',
+    dataIndex: 'code',
+    key: 'code',
+  },
+]
+
+
 const operationTabList = [
   {
     key: 'client',
@@ -174,6 +183,9 @@ class ClientView extends PureComponent {
     this.state={
       selectTitle:'客户',
       expandForm: false,
+      downTableColumn:clientContentColumns,
+      downTableContent:[],
+
     }
   }
 
@@ -287,7 +299,7 @@ class ClientView extends PureComponent {
 
     const { children } = this.props;
 
-    const {selectTitle}=this.state
+    const {selectTitle , downTableColumn ,downTableContent}=this.state
 
     const paginationProps = {
       showSizeChanger: true,
@@ -313,14 +325,22 @@ class ClientView extends PureComponent {
                   columns={clientColumns}
                   onSelectRow={this.handleSelectRows}
                 />
+                <Radio.Group defaultValue="show_clientlist" buttonStyle="solid">
+                  <Radio.Button value="show_clientlist"  onClick={this.selectClients}>客户列表</Radio.Button>
+                  <Radio.Button value="show_persion" onClick={this.selectMaintains}>共同维护人</Radio.Button>
+                </Radio.Group>
+
+                <Divider className={clientStyle.divder}/>
+
+                <Button icon="plus" type="primary" style={{marginBottom:10}}> 新建</Button>
 
                 <Table
                   pagination={paginationProps}
                   loading={false}
                   selectedRows={1}
-                  dataSource={[]}
+                  dataSource={downTableContent}
                   size="small"
-                  columns={clientContentColumns}
+                  columns={downTableColumn}
                 />
               </div>
             </Card>
@@ -400,6 +420,22 @@ class ClientView extends PureComponent {
     )
     router.push({ pathname: '/business/client/terminal', query: { id: 1 } });
   };
+
+  selectClients=()=>{
+
+    this.setState({
+      downTableColumn:clientContentColumns,
+      downTableContent:[]
+    })
+
+  }
+
+  selectMaintains =()=>{
+    this.setState({
+      downTableColumn:maintainsColumn,
+      downTableContent:[]
+    })
+  }
 
 
   startMark = () => {

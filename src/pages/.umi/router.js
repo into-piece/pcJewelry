@@ -152,7 +152,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/Info'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -169,7 +171,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/Brand'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -182,7 +186,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/SecurityView'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -195,7 +201,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/BindingView'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -208,7 +216,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/NotificationView'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -221,7 +231,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/Brand'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -243,7 +255,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/Requested'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -256,7 +270,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/SendWay'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -269,7 +285,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/Royalty'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -282,7 +300,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/RingNum'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -295,7 +315,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/basic.js').then(m => { return { namespace: 'basic',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Basic__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Basic__Info" */'../Business/Basic/Currency'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,

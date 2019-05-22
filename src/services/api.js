@@ -19,7 +19,6 @@ export async function querylistBrands() {
 }
 
 
-
 export async function saveTheBrand(params) {
 
   return request('/server/basic/brand/saveBrand', {
@@ -30,7 +29,7 @@ export async function saveTheBrand(params) {
     },
   });
 }
-///basic/brand/deleteBrand
+
 
 export async function deleteTheBrand(params) {
 
@@ -42,7 +41,6 @@ export async function deleteTheBrand(params) {
   });
 }
 
-///basic/brand/updateBrand
 
 export async function updateTheBrand(params) {
 
@@ -54,7 +52,7 @@ export async function updateTheBrand(params) {
   });
 }
 
-///basic/brand/freeze
+
 
 export async function freezeTheBrand(params) {
 
@@ -65,6 +63,119 @@ export async function freezeTheBrand(params) {
     },
   });
 }
+
+
+export async function querylistRoyalty() {
+
+  return request('/server/basic/business-commission-setting/listBusinessCommissionSettings', {
+    method: 'POST',
+    data: {
+      method: 'POST',
+    },
+  });
+}
+
+export async function saveTheRoyalty(params) {
+
+  return request('/server/basic/business-commission-setting/saveBusinessCommissionSetting', {
+    method: 'POST',
+    data: {
+      ...params
+
+    },
+  });
+}
+
+export async function deleteTheRoyalty(params) {
+
+  return request('/server/basic/business-commission-setting/deleteBusinessCommissionSetting', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+export async function updateTheRoyalty(params) {
+
+  return request('/server/basic/business-commission-setting/updateBusinessCommissionSetting', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheRoyalty(params) {
+
+  return request('/server/basic/business-commission-setting/freeze', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+
+
+export async function querylistsendWay() {
+
+  return request('/server/basic/delivery-method/listDeliveryMethods', {
+    method: 'POST',
+    data: {
+      method: 'POST',
+    },
+  });
+}
+
+export async function saveTheSendWay(params) {
+
+  return request('/server/basic/delivery-method/saveDeliveryMethod', {
+    method: 'POST',
+    data: {
+      ...params
+
+    },
+  });
+}
+
+export async function deleteTheSendWay(params) {
+
+  return request('/server/basic/delivery-method/deleteDeliveryMethod', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+export async function updateTheSendWay(params) {
+
+  return request('/server/basic/delivery-method/updateDeliveryMethod', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheSendWay(params) {
+
+  return request('/server/basic/delivery-method/freeze', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+
+
+
 
 
 export async function queryRule(params) {

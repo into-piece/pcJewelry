@@ -50,6 +50,12 @@ const clientContentColumns = [
   },
 ];
 
+const paginationProps = {
+  showSizeChanger: true,
+  showQuickJumper: true,
+  pageSize: 8,
+};
+
 @connect(({ loading, basic }) => {
   const { rtnCode, head,rtnMsg } = basic;
   return {
@@ -72,6 +78,8 @@ class Brand extends Component {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
   };
+
+
 
   constructor(props) {
     super(props);
@@ -189,11 +197,7 @@ class Brand extends Component {
 
   render() {
 
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      pageSize: 8,
-    };
+
 
     const { selectedRowKeys,  current = {}, isEdit, update } = this.state;
 
@@ -208,10 +212,6 @@ class Brand extends Component {
       }
     } else {
       if (update) {
-        // dispatch({
-        //   type: 'basic/fetchListBrands',
-        //   payload: {},
-        // });
 
         console.log('rntCode=' + body.rtnCode);
         if(body.rtnCode==='000000')
@@ -229,7 +229,6 @@ class Brand extends Component {
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
           this.state.showItem = {...current};
-          // console.log(" change data "+(this.state.showItem.brandZhName));
         }
       }
 
@@ -261,8 +260,6 @@ class Brand extends Component {
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
-    // console.log('user = ' + Object.keys(body));
-    // console.log('count = ' + body.data);
 
     const getModalContent = () => {
       if (this.state.done) {

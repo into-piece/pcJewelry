@@ -1,4 +1,14 @@
-import { querylistBrands, saveTheBrand,deleteTheBrand, updateTheBrand,freezeTheBrand} from '@/services/api';
+import { querylistBrands,
+  saveTheBrand,
+  deleteTheBrand,
+  updateTheBrand,
+  freezeTheBrand,
+  querylistRoyalty,
+  saveTheRoyalty,
+  deleteTheRoyalty,
+  updateTheRoyalty,
+  freezeTheRoyalty,
+} from '@/services/api';
 
 export default {
   namespace: 'basic',
@@ -60,37 +70,54 @@ export default {
     },
 
 
+    * fetchListRoyalty(_, { call, put }) {
+      const response = yield call(querylistRoyalty);
+      yield put({
+        type: 'list',
+        payload: response,
+      });
+    },
 
-    // *fetchCity({ payload }, { call, put }) {
-    //   yield put({
-    //     type: 'changeLoading',
-    //     payload: true,
-    //   });
-    //   const response = yield call(queryCity, payload);
-    //   yield put({
-    //     type: 'setCity',
-    //     payload: response,
-    //   });
-    //   yield put({
-    //     type: 'changeLoading',
-    //     payload: false,
-    //   });
-    // },
+    * addRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheRoyalty,payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    * updateRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheRoyalty,payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    * deleteRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheRoyalty,payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    * freezeRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheRoyalty,payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
   },
 
   reducers: {
-    setProvince(state, action) {
-      return {
-        ...state,
-        province: action.payload,
-      };
-    },
-    setCity(state, action) {
-      return {
-        ...state,
-        city: action.payload,
-      };
-    },
+
     changeLoading(state, action) {
       return {
         ...state,
@@ -126,6 +153,34 @@ export default {
 
     },
 
+
+    list(state, action) {
+      return {
+        ...state,
+        head: action.payload,
+        // rtnCode:action.payload.head.rtnCode,
+        body:{
+          ...state.body,
+          data: action.payload.body.records,
+          rtnCode:action.payload.head.rtnCode,
+          rtnMsg:action.payload.head.rtnMsg
+        }
+      };
+    },
+
+    save(state,action) {
+      return {
+        ...state,
+        result:action.payload,
+        body:{
+          ...state.body,
+          rtnCode:action.payload.head.rtnCode,
+          rtnMsg:action.payload.head.rtnMsg
+        }
+      };
+
+
+    },
 
   },
 };
