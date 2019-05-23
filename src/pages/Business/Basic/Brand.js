@@ -93,10 +93,13 @@ class Brand extends Component {
       rowHeight: 0,
       isEdit: true,
       update: false,
+      // addSuccessData: false,
       isUpdateFrom: false,
+      // isAddFrom: false,
       isAdd: true,
       requestState:'success',
-      requestMes:'保存成功！'
+      requestMes:'保存成功！',
+      isLoading:false,
     };
   }
 
@@ -125,9 +128,17 @@ class Brand extends Component {
         dispatch({
           type: 'basic/addBrand',
           payload: {
-            ...fieldsValue,
+         ...fieldsValue ,
           },
         });
+
+        this.setState({
+          selectedRowKeys: '',
+          showItem: false,
+          isEdit: true,
+        });
+
+        // this.state.addSuccessData = temp;
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
@@ -199,17 +210,25 @@ class Brand extends Component {
 
 
 
-    const { selectedRowKeys,  current = {}, isEdit, update } = this.state;
+    const { addSuccessData,selectedRowKeys,  current = {}, isEdit, update } = this.state;
 
 
     const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing } = this.props;
 
+
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing ||listLoading;
 
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
       }
+
+      // if(addloading)
+      // {
+      //   this.state.isAddFrom = true;
+      // }
+
     } else {
       if (update) {
 
@@ -230,6 +249,13 @@ class Brand extends Component {
           this.state.isUpdateFrom = false;
           this.state.showItem = {...current};
         }
+
+        // if (this.state.isAddFrom)
+        // {
+        //   this.state.isAddFrom = false;
+        //   this.state.showItem = addSuccessData
+        // }
+
       }
 
     }
@@ -339,7 +365,7 @@ class Brand extends Component {
 
               >
                 <Table
-                  loading={listLoading}
+                  loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   filterMultiple={false}
@@ -447,7 +473,7 @@ class Brand extends Component {
     this.setState({
       selectedRowKeys: '',
       showItem: false,
-      isExit: true,
+      isEdit: true,
     });
 
   };

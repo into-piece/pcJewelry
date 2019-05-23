@@ -90,6 +90,7 @@ class Requested extends PureComponent {
       isAdd: true,
       requestState: 'success',
       requestMes: '保存成功！',
+      isLoading:false,
     };
   }
 
@@ -124,6 +125,13 @@ class Requested extends PureComponent {
             ...fieldsValue,
           },
         });
+
+        this.setState({
+          selectedRowKeys: '',
+          showItem: false,
+          isEdit: true,
+        });
+
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
@@ -181,6 +189,7 @@ class Requested extends PureComponent {
 
     const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing, form: { getFieldDecorator } } = this.props;
 
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing ||listLoading;
 
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
@@ -307,7 +316,7 @@ class Requested extends PureComponent {
 
               >
                 <Table
-                  loading={listLoading}
+                  loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   filterMultiple={false}
@@ -392,7 +401,7 @@ class Requested extends PureComponent {
     this.setState({
       selectedRowKeys: '',
       showItem: false,
-      isExit: true,
+      isEdit: true,
     });
 
   };

@@ -78,16 +78,12 @@ class PackageInfo extends PureComponent {
       >
       <div>
         <DescriptionList size='small' col='2'>
-          <Description size="small" term='客户编号'>8009</Description>
-          <Description size="small" term='客户简称'>App</Description>
-          <Description size="small" term='国别'>Thailand</Description>
-          <Description term='客户渠道'>展览会</Description>
+          <Description size="small" term='终客编号'>8009-1</Description>
+          <Description size="small" term='终客简称'>App-1</Description>
+          <Description size="small" term='包装说明编码'>PPK001</Description>
         </DescriptionList>
-        <DescriptionList size='small' col='1'>
-          <Description term='字印英文名'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
-          <Description term='字印英文名'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
-          <Description term='字印说明'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
-        </DescriptionList>
+
+        <DescriptionList size="small" col="1"><Description term='包装说明'>1,把吊牌挂在产品尾圈上面。'\n'2.把产品连通吊牌放进PP带</Description></DescriptionList>
       </div>
       </Card>
     );

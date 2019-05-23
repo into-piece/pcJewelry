@@ -243,20 +243,15 @@ class ClientView extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem label="中文名称">
               {
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
+                <Input placeholder="请输入"/>
               }
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="类别">
               {
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
+                <Input placeholder="请输入" />
+
               }
             </FormItem>
           </Col>

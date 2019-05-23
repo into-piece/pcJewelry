@@ -78,17 +78,16 @@ class Mark extends PureComponent {
       >
         <div>
           <DescriptionList size='small' col='2'>
-            <Description size="small" term='客户编号'>8009</Description>
-            <Description size="small" term='客户简称'>App</Description>
-            <Description size="small" term='国别'>Thailand</Description>
-            <Description term='客户渠道'>展览会</Description>
+            <Description size="small" term='终客编号'>8009-1</Description>
+            <Description size="small" term='终客简称'>App-1</Description>
+            <Description size="small" term='字印编号'>TL0015</Description>
+            <Description term='字印价'>0.10</Description>
           </DescriptionList>
           <DescriptionList size='small' col='1'>
-              <Description term='字印中文名'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
-              <Description term='字印英文名'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
-              <Description term='字印说明'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
+            <Description term='字印英文名'>925 inside an oval+YH</Description>
+            <Description term='字印英文名'>925包在椭圆内(坐在板上)+镭射YH</Description>
+            <Description term='字印说明'></Description>
           </DescriptionList>
-
         </div>
       </Card>
     );

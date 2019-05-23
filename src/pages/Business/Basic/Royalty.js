@@ -103,6 +103,7 @@ class Royalty extends PureComponent {
       isAdd: true,
       requestState: 'success',
       requestMes: '保存成功！',
+      isLoading:false,
     };
   }
 
@@ -137,6 +138,13 @@ class Royalty extends PureComponent {
             ...fieldsValue,
           },
         });
+
+        this.setState({
+          selectedRowKeys: '',
+          showItem: false,
+          isEdit: true,
+        });
+
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
@@ -199,7 +207,7 @@ class Royalty extends PureComponent {
 
     const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing, form: { getFieldDecorator } } = this.props;
 
-
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing ||listLoading;
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
       if (upateloading) {
@@ -349,7 +357,7 @@ class Royalty extends PureComponent {
 
               >
                 <Table
-                  loading={listLoading}
+                  loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   filterMultiple={false}
@@ -437,7 +445,7 @@ class Royalty extends PureComponent {
     this.setState({
       selectedRowKeys: '',
       showItem: false,
-      isExit: true,
+      isEdit: true,
     });
 
   };
