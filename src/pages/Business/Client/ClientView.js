@@ -193,6 +193,7 @@ class ClientView extends PureComponent {
   componentDidMount() {
 
 
+    router.push('/business/client/emptyView')
     // const { dispatch, match } = this.props;
     // const { params } = match;
 
@@ -311,7 +312,7 @@ class ClientView extends PureComponent {
 
       <GridContent className={styles.userCenter}>
         <Row gutter={24}>
-          <Col lg={17} md={24}>
+          <Col lg={16} md={24}>
             <Card bordered={false} className={clientStyle.left_content} loading={false}>
               <div style={{ marginBottom: 16 }}>
                 <div className={listStyles.tableListForm}>{this.renderForm()}</div>
@@ -345,17 +346,17 @@ class ClientView extends PureComponent {
               </div>
             </Card>
           </Col>
-          <Col lg={7} md={24}>
+          <Col lg={8} md={24}>
             <div
               className={clientStyle.right_info}
             >
-              <div>
+              <div className={clientStyle.right_content_tbs}>
                 <RadioGroup
                   defaultValue="客户"
                   size="small"
+                  className={clientStyle.right_content_tabgroud}
                   onChange={this.onChange}
                   buttonStyle="solid"
-
                 >
                   <Radio.Button value="客户" onClick={this.startClient}>客户</Radio.Button>
                   <Radio.Button value="终客" onClick={this.startTerminal}>终客</Radio.Button>
@@ -388,8 +389,8 @@ class ClientView extends PureComponent {
 
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
                     <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                            icon="edit">复制</Button>
-                    <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
+                            icon="copy">复制</Button>
+                    <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
                     >撤销</Button>
                   </div>
                 </div>

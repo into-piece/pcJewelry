@@ -49,7 +49,7 @@ const clientContentColumns = [
 const paginationProps = {
   showSizeChanger: true,
   showQuickJumper: true,
-  pageSize: 8,
+  pageSize: 10,
 };
 const { Description } = DescriptionList;
 

@@ -10,7 +10,7 @@ export async function queryActivities() {
 }
 export async function querylistBrands() {
 
-    return request('/server/basic/brand/listBrands', {
+    return request('/basic/brand/listBrands', {
       method: 'POST',
       data: {
         method: 'POST',
@@ -21,7 +21,7 @@ export async function querylistBrands() {
 
 export async function saveTheBrand(params) {
 
-  return request('/server/basic/brand/saveBrand', {
+  return request('/basic/brand/saveBrand', {
     method: 'POST',
     data: {
        ...params
@@ -33,7 +33,7 @@ export async function saveTheBrand(params) {
 
 export async function deleteTheBrand(params) {
 
-  return request('/server/basic/brand/deleteBrand', {
+  return request('/basic/brand/deleteBrand', {
     method: 'POST',
     data: {
        ...params
@@ -44,7 +44,7 @@ export async function deleteTheBrand(params) {
 
 export async function updateTheBrand(params) {
 
-  return request('/server/basic/brand/updateBrand', {
+  return request('/basic/brand/updateBrand', {
     method: 'POST',
     data: {
       ...params
@@ -56,7 +56,7 @@ export async function updateTheBrand(params) {
 
 export async function freezeTheBrand(params) {
 
-  return request('/server/basic/brand/freeze', {
+  return request('/basic/brand/freeze', {
     method: 'POST',
     data: {
       ...params
@@ -67,7 +67,7 @@ export async function freezeTheBrand(params) {
 
 export async function querylistRoyalty() {
 
-  return request('/server/basic/business-commission-setting/listBusinessCommissionSettings', {
+  return request('/basic/business-commission-setting/listBusinessCommissionSettings', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -77,7 +77,7 @@ export async function querylistRoyalty() {
 
 export async function saveTheRoyalty(params) {
 
-  return request('/server/basic/business-commission-setting/saveBusinessCommissionSetting', {
+  return request('/basic/business-commission-setting/saveBusinessCommissionSetting', {
     method: 'POST',
     data: {
       ...params
@@ -88,7 +88,7 @@ export async function saveTheRoyalty(params) {
 
 export async function deleteTheRoyalty(params) {
 
-  return request('/server/basic/business-commission-setting/deleteBusinessCommissionSetting', {
+  return request('/basic/business-commission-setting/deleteBusinessCommissionSetting', {
     method: 'POST',
     data: {
       ...params
@@ -98,7 +98,7 @@ export async function deleteTheRoyalty(params) {
 
 export async function updateTheRoyalty(params) {
 
-  return request('/server/basic/business-commission-setting/updateBusinessCommissionSetting', {
+  return request('/basic/business-commission-setting/updateBusinessCommissionSetting', {
     method: 'POST',
     data: {
       ...params
@@ -109,7 +109,7 @@ export async function updateTheRoyalty(params) {
 
 export async function freezeTheRoyalty(params) {
 
-  return request('/server/basic/business-commission-setting/freeze', {
+  return request('/basic/business-commission-setting/freeze', {
     method: 'POST',
     data: {
       ...params
@@ -122,7 +122,7 @@ export async function freezeTheRoyalty(params) {
 
 export async function querylistsendWay() {
 
-  return request('/server/basic/delivery-method/listDeliveryMethods', {
+  return request('/basic/delivery-method/listDeliveryMethods', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -132,7 +132,7 @@ export async function querylistsendWay() {
 
 export async function saveTheSendWay(params) {
 
-  return request('/server/basic/delivery-method/saveDeliveryMethod', {
+  return request('/basic/delivery-method/saveDeliveryMethod', {
     method: 'POST',
     data: {
       ...params
@@ -143,7 +143,7 @@ export async function saveTheSendWay(params) {
 
 export async function deleteTheSendWay(params) {
 
-  return request('/server/basic/delivery-method/deleteDeliveryMethod', {
+  return request('/basic/delivery-method/deleteDeliveryMethod', {
     method: 'POST',
     data: {
       ...params
@@ -153,7 +153,7 @@ export async function deleteTheSendWay(params) {
 
 export async function updateTheSendWay(params) {
 
-  return request('/server/basic/delivery-method/updateDeliveryMethod', {
+  return request('/basic/delivery-method/updateDeliveryMethod', {
     method: 'POST',
     data: {
       ...params
@@ -164,7 +164,7 @@ export async function updateTheSendWay(params) {
 
 export async function freezeTheSendWay(params) {
 
-  return request('/server/basic/delivery-method/freeze', {
+  return request('/basic/delivery-method/freeze', {
     method: 'POST',
     data: {
       ...params

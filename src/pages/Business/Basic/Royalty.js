@@ -62,7 +62,7 @@ const clientContentColumns = [
 const paginationProps = {
   showSizeChanger: true,
   showQuickJumper: true,
-  pageSize: 8,
+  pageSize: 10,
 };
 const { Description } = DescriptionList;
 
@@ -278,7 +278,7 @@ class Royalty extends PureComponent {
         <Form
           size={'small'}
           onSubmit={this.handleSubmit}>
-          <FormItem label="提出编号" {...this.formLayout}>
+          <FormItem label="提成编号" {...this.formLayout}>
             {getFieldDecorator('deliveryCode', {
               rules: [{ required: true, message: '品牌编号' }],
               initialValue: current.deliveryCode,
