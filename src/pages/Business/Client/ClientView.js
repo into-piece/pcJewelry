@@ -185,7 +185,8 @@ class ClientView extends PureComponent {
       expandForm: false,
       downTableColumn:clientContentColumns,
       downTableContent:[],
-
+      rightlg:16,
+      leftlg:8
     }
   }
 
@@ -295,7 +296,7 @@ class ClientView extends PureComponent {
 
     const { children } = this.props;
 
-    const {selectTitle , downTableColumn ,downTableContent}=this.state
+    const {selectTitle , downTableColumn ,downTableContent,rightlg,leftlg}=this.state
 
     const paginationProps = {
       showSizeChanger: true,
@@ -307,7 +308,7 @@ class ClientView extends PureComponent {
 
       <GridContent className={styles.userCenter}>
         <Row gutter={24}>
-          <Col lg={16} md={24}>
+          <Col lg={rightlg} md={24}>
             <Card bordered={false} className={clientStyle.left_content} loading={false}>
               <div style={{ marginBottom: 16 }}>
                 <div className={listStyles.tableListForm}>{this.renderForm()}</div>
@@ -341,7 +342,7 @@ class ClientView extends PureComponent {
               </div>
             </Card>
           </Col>
-          <Col lg={8} md={24}>
+          <Col lg={leftlg} md={24}>
             <div
               className={clientStyle.right_info}
             >
@@ -437,7 +438,9 @@ class ClientView extends PureComponent {
   startMark = () => {
     this.setState(
       {
-        selectTitle:'字印'
+        selectTitle:'字印',
+        rightlg:16,
+        leftlg:8
       }
     )
     router.push({ pathname: '/business/client/marking', query: { id: 2 } });
@@ -447,7 +450,9 @@ class ClientView extends PureComponent {
   startProduct = () => {
     this.setState(
       {
-        selectTitle:'产品'
+        selectTitle:'产品',
+        rightlg:15,
+        leftlg:9
       }
     )
     router.push({ pathname: '/business/client/product', query: { id: 3 } });
@@ -457,7 +462,9 @@ class ClientView extends PureComponent {
   startPackageInfo = () => {
     this.setState(
       {
-        selectTitle:'打包'
+        selectTitle:'打包',
+        rightlg:16,
+        leftlg:8
       }
     )
     router.push({ pathname: '/business/client/package', query: { id: 4 } });
@@ -467,7 +474,9 @@ class ClientView extends PureComponent {
   startHistory = () => {
     this.setState(
       {
-        selectTitle:'历史'
+        selectTitle:'历史',
+        rightlg:14,
+        leftlg:10
       }
     )
     router.push({ pathname: '/business/client/history', query: { id: 5 } });

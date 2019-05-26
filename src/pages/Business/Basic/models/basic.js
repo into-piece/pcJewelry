@@ -30,7 +30,6 @@ export default {
     },
 
     * addBrand({ payload, callback }, { call, put }) {
-      console.log('model addBrand')
       const response = yield call(saveTheBrand,payload);
       yield put({
         type: 'saveBrand',

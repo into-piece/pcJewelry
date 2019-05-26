@@ -91,6 +91,7 @@ class Requested extends PureComponent {
       requestState: 'success',
       requestMes: '保存成功！',
       isLoading: false,
+      selectIndexAt:-1,
     };
   }
 
@@ -127,6 +128,7 @@ class Requested extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
+          selectIndexAt:-1,
           showItem: false,
           isEdit: true,
         });
@@ -318,8 +320,14 @@ class Requested extends PureComponent {
                   filterMultiple={false}
                   bordered={false}
                   selectedRows={1}
-                  type='radio'
-                  rowSelection={rowSelection}
+                  rowClassName={this.onSelectRowClass}
+                  onRow={(record, index) => {
+                    return {
+                      onClick: event => {
+                        this.selectChange(record,index)
+                      }
+                    };
+                  }}
                   size='small'
                   columns={clientContentColumns}
                 />
@@ -377,6 +385,10 @@ class Requested extends PureComponent {
     );
   }
 
+  onSelectRowClass = (record, index) => {
+    return index == this.state.selectIndexAt ? styles.row_select :"";
+  };
+
   clickNewFrom = () => {
     this.state.isAdd = true;
     this.setState({ visible: true, current: {} });
@@ -396,6 +408,7 @@ class Requested extends PureComponent {
 
     this.setState({
       selectedRowKeys: '',
+      selectIndexAt:-1,
       showItem: false,
       isEdit: true,
     });
@@ -426,8 +439,10 @@ class Requested extends PureComponent {
 
   };
 
-  selectChange = record => {
+  selectChange = (record,index) => {
 
+    console.log('select brand  ' + Object.keys(record));
+    // let showList2 = [];
     let edit = false;
     if (record === '') {
       edit = true;
@@ -437,6 +452,7 @@ class Requested extends PureComponent {
       showItem: { ...record },
       isEdit: edit,
       current: record,
+      selectIndexAt: index,
     });
   };
 

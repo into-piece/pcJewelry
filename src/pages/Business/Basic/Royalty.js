@@ -104,6 +104,7 @@ class Royalty extends PureComponent {
       requestState: 'success',
       requestMes: '保存成功！',
       isLoading:false,
+      selectIndexAt:-1,
     };
   }
 
@@ -141,6 +142,7 @@ class Royalty extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
+          selectIndexAt:-1,
           showItem: false,
           isEdit: true,
         });
@@ -363,8 +365,15 @@ class Royalty extends PureComponent {
                   filterMultiple={false}
                   bordered={false}
                   selectedRows={1}
-                  type='radio'
-                  rowSelection={rowSelection}
+                  rowClassName={this.onSelectRowClass}
+                  onRow={(record, index) => {
+                    return {
+                      onClick: event => {
+                        this.selectChange(record,index)
+
+                      }
+                    };
+                  }}
                   size='small'
                   columns={clientContentColumns}
                 />
@@ -425,6 +434,10 @@ class Royalty extends PureComponent {
   }
 
 
+  onSelectRowClass = (record, index) => {
+    return index == this.state.selectIndexAt ? styles.row_select :"";
+  };
+
   clickNewFrom = () => {
     this.state.isAdd = true;
     this.setState({ visible: true, current: {} });
@@ -444,6 +457,7 @@ class Royalty extends PureComponent {
 
     this.setState({
       selectedRowKeys: '',
+      selectIndexAt:-1,
       showItem: false,
       isEdit: true,
     });
@@ -474,7 +488,7 @@ class Royalty extends PureComponent {
 
   };
 
-  selectChange = record => {
+  selectChange = (record,index) => {
 
     let edit = false;
     if (record === '') {
@@ -485,6 +499,7 @@ class Royalty extends PureComponent {
       showItem: { ...record },
       isEdit: edit,
       current: record,
+      selectIndexAt: index,
     });
   };
 

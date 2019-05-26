@@ -100,6 +100,7 @@ class Brand extends Component {
       requestState:'success',
       requestMes:'保存成功！',
       isLoading:false,
+      selectIndexAt:-1,
     };
   }
 
@@ -134,6 +135,7 @@ class Brand extends Component {
 
         this.setState({
           selectedRowKeys: '',
+          selectIndexAt:-1,
           showItem: false,
           isEdit: true,
         });
@@ -250,11 +252,6 @@ class Brand extends Component {
           this.state.showItem = {...current};
         }
 
-        // if (this.state.isAddFrom)
-        // {
-        //   this.state.isAddFrom = false;
-        //   this.state.showItem = addSuccessData
-        // }
 
       }
 
@@ -371,9 +368,16 @@ class Brand extends Component {
                   filterMultiple={false}
                   bordered={false}
                   selectedRows={1}
-                  type={'radio'}
-                  rowSelection={rowSelection}
-                  size={'small'}
+                  rowClassName={this.onSelectRowClass}
+                  onRow={(record, index) => {
+                    return {
+                      onClick: event => {
+                        this.selectChange(record,index)
+
+                      }
+                    };
+                  }}
+                  size='small'
                   columns={clientContentColumns}
                 />
 
@@ -453,6 +457,11 @@ class Brand extends Component {
     );
   }
 
+
+  onSelectRowClass = (record, index) => {
+    return index == this.state.selectIndexAt ? styles.row_select :"";
+  };
+
   clickNewFrom = () => {
     this.state.isAdd = true;
     this.setState({ visible: true, current: {} });
@@ -472,6 +481,7 @@ class Brand extends Component {
 
     this.setState({
       selectedRowKeys: '',
+      selectIndexAt:-1,
       showItem: false,
       isEdit: true,
     });
@@ -504,7 +514,7 @@ class Brand extends Component {
   };
 
 
-  selectChange = record => {
+  selectChange = (record,index) => {
 
     console.log('select brand  ' + Object.keys(record));
     // let showList2 = [];
@@ -517,6 +527,7 @@ class Brand extends Component {
       showItem: { ...record },
       isEdit: edit,
       current: record,
+      selectIndexAt: index,
     });
   };
 

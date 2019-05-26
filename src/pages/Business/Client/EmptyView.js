@@ -12,6 +12,8 @@ class EmptyView extends PureComponent {
 
   render() {
 
+
+
     const { id} =this.props.match.params;
 
     return (<div>

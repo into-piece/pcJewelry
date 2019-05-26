@@ -85,7 +85,7 @@ class Mark extends PureComponent {
           </DescriptionList>
           <DescriptionList size='small' col='1'>
             <Description term='字印英文名'>925 inside an oval+YH</Description>
-            <Description term='字印英文名'>925包在椭圆内(坐在板上)+镭射YH</Description>
+            <Description term='字印中文名'>925包在椭圆内(坐在板上)+镭射YH</Description>
             <Description term='字印说明'></Description>
           </DescriptionList>
         </div>
