@@ -47,7 +47,7 @@ const clientContentColumns = [
 ];
 
 const paginationProps = {
-  showSizeChanger: true,
+  // showSizeChanger: true,
   showQuickJumper: true,
   pageSize: 10,
 };
@@ -272,18 +272,18 @@ class Requested extends PureComponent {
               initialValue: current.qualityCode,
             })(<Input placeholder="请输入"/>)}
           </FormItem>
-          <FormItem label="品质要求中文名" {...this.formLayout}>
-            {getFieldDecorator('qualityEnName', {
-              rules: [{ required: true, message: '请输入中文名称' }],
-              initialValue: current.qualityEnName,
-            })(
-              <Input placeholder="请输入"/>,
-            )}
-          </FormItem>
           <FormItem label="品质要求英文名称" {...this.formLayout}>
             {getFieldDecorator('qualityZhName', {
               rules: [{ required: true, message: '请输入英文名称' }],
               initialValue: current.qualityZhName,
+            })(
+              <Input placeholder="请输入"/>,
+            )}
+          </FormItem>
+          <FormItem label="品质要求中文名" {...this.formLayout}>
+            {getFieldDecorator('qualityEnName', {
+              rules: [{   message: '请输入中文名称' }],
+              initialValue: current.qualityEnName,
             })(
               <Input placeholder="请输入"/>,
             )}
@@ -305,8 +305,8 @@ class Requested extends PureComponent {
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.delivery}/>
-                <FormattedMessage id="app.client.menuMap.requested" defaultMessage="品质要求"/>
+                  component={SvgUtil.award}/>
+                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求"/>
               </div>
               <Card
                 bordered={false}

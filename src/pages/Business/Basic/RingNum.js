@@ -241,14 +241,14 @@ class RingNum extends PureComponent {
           // selectedRowKeys: '',
           sonSelectIndexAt: -1,
           showNumberItem: false,
-          isNumberEdit: true,
+          isEditNumber: true,
         });
 
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showNumberItem };
         data.sizeCode = temp.sizeCode;
-        this.state.currentNumber = { ...data };
+        this.state.currentNumber = { ...temp };
         if (data.status === '冻结')
           data.status = 2;
         else if (data.status === '使用中')
@@ -354,11 +354,11 @@ class RingNum extends PureComponent {
 
     this.state.isSonLoading = addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2;
 
-    // console.log('addsonloading ='+addsonloading+",deletesonloading="+deletesonloading+",upatesonloading="+upatesonloading+",sonfreezing="+sonfreezing+",istLoading2="+istLoading2)
+    console.log('addsonloading ='+addsonloading+",deletesonloading="+deletesonloading+",upatesonloading="+upatesonloading+",sonfreezing="+sonfreezing+",istLoading2="+istLoading2)
 
     if (addsonloading || deletesonloading || upatesonloading || sonfreezing) {
       this.state.updateNumber = true;
-      if (upateloading) {
+      if (upatesonloading) {
         this.state.isUpdateNumberFrom = true;
       }
     } else {
@@ -375,9 +375,10 @@ class RingNum extends PureComponent {
         this.state.done = true;
         this.state.visible = true;
         this.state.refreshList = 'number';
-        if (this.state.isUpdateFrom) {
+        if (this.state.isUpdateNumberFrom) {
           this.state.isUpdateNumberFrom = false;
           this.state.showNumberItem = { ...currentNumber };
+          console.log('number update '+this.state.showNumberItem)
         }
       }
 
@@ -519,8 +520,8 @@ class RingNum extends PureComponent {
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.delivery}/>
-                <FormattedMessage id="app.client.menuMap.num" defaultMessage="戒围标准"/>
+                  component={SvgUtil.ring}/>
+                <FormattedMessage id="app.basic.menuMap.num" defaultMessage="戒围标准"/>
               </div>
               <Card
                 bordered={false}
@@ -584,14 +585,15 @@ class RingNum extends PureComponent {
             <div className={styles.view_right_content}>
               <div className={styles.right_content_tbs}>
                 <RadioGroup
-                  defaultValue="客戒围标准"
+                  defaultValue="standard"
                   size="small"
                   className={styles.right_content_tabgroud}
                   onChange={this.onChange}
+                  value={modalType}
                   buttonStyle="solid"
                 >
-                  <Radio.Button value="客戒围标准" onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
-                  <Radio.Button value="戒围号" onClick={this.switchTabNumber}>戒围号</Radio.Button>
+                  <Radio.Button value="standard" className={styles.right_radio_tab} onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
+                  <Radio.Button value="number" className={styles.right_radio_tab} onClick={this.switchTabNumber}>戒围号</Radio.Button>
                 </RadioGroup>
               </div>
               {tabType === 'standard' ? this.getRingStandrad() : this.getRingNumber()}
@@ -628,7 +630,7 @@ class RingNum extends PureComponent {
           {/*{this.getRingStandrad()}*/}
           <Card
             bordered={false}
-            bodyStyle={{ paddingTop: 0, marginTop: 0 }}
+            className={styles.rignum_right_card_view}
           >
             <div>
               <span title="戒围标准"
@@ -666,13 +668,13 @@ class RingNum extends PureComponent {
 
   getRingNumber = () => {
 
-    const { isEditNumber } = this.state;
+    const { isEditNumber , isEdit} = this.state;
     return (<div className={styles.view_dwon}>
         <div className={clientStyle.list_info}>
           {/*{this.getRingStandrad()}*/}
           <Card
+            className={styles.rignum_right_card_view}
             bordered={false}
-            bodyStyle={{ paddingTop: 0, marginTop: 0 }}
           >
             <div>
               <span title="戒围号"
@@ -686,11 +688,12 @@ class RingNum extends PureComponent {
           </Card>
         </div>
 
-        <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+        <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}
+        >
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
-                    onClick={this.clickNewSonFrom}>新增</Button>
+                    onClick={this.clickNewSonFrom} disabled={isEdit}>新增</Button>
             <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
                     onClick={this.clickNumberDeleteFrom}
                     disabled={isEditNumber}>删除</Button>
@@ -747,7 +750,7 @@ class RingNum extends PureComponent {
       isEdit: true,
       sonSelectIndexAt: -1,
       showNumberItem: false,
-      isNumberEdit: true,
+      isEditNumber: true,
       fristLoad:true,
       data2:[]
     });
@@ -850,6 +853,8 @@ class RingNum extends PureComponent {
       showNumberItem: false,
       fristLoad:false,
       isEditNumber: true,
+      modalType:'standard',
+      tabType: 'standard',
 
     });
   };
@@ -867,6 +872,8 @@ class RingNum extends PureComponent {
       isEditNumber: edit,
       currentNumber: record,
       sonSelectIndexAt: index,
+      modalType:'number',
+      tabType: 'number',
     });
   };
 

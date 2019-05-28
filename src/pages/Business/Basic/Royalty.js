@@ -60,7 +60,7 @@ const clientContentColumns = [
 ];
 
 const paginationProps = {
-  showSizeChanger: true,
+  // showSizeChanger: true,
   showQuickJumper: true,
   pageSize: 10,
 };
@@ -290,7 +290,7 @@ class Royalty extends PureComponent {
           onSubmit={this.handleSubmit}>
           <FormItem label="提成编号" {...this.formLayout}>
             {getFieldDecorator('deliveryCode', {
-              rules: [{ required: true, message: '品牌编号' }],
+              rules: [{  required: true, message: '品牌编号' }],
               initialValue: current.deliveryCode,
             })(<Input placeholder="请输入"/>)}
           </FormItem>
@@ -304,7 +304,7 @@ class Royalty extends PureComponent {
           </FormItem>
           <FormItem label="业务提成英文名称" {...this.formLayout}>
             {getFieldDecorator('paymentEnName', {
-              rules: [{ required: true, message: '请输入品牌编号'}],
+              rules: [{    message: '请输入品牌编号'}],
               initialValue: current.paymentEnName,
             })(
               <Input placeholder="请输入"/>,
@@ -351,7 +351,7 @@ class Royalty extends PureComponent {
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
                   component={SvgUtil.percentage}/>
-                <FormattedMessage id="app.client.menuMap.royalty" defaultMessage="业务提成设当"/>
+                <FormattedMessage id="app.basic.menuMap.royalty" defaultMessage="业务提成设当"/>
               </div>
               <Card
                 bordered={false}

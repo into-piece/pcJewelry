@@ -403,7 +403,9 @@ class ClientView extends PureComponent {
   startClient = () => {
     this.setState(
       {
-        selectTitle:'客户'
+        selectTitle:'客户',
+        rightlg:16,
+        leftlg:8
       }
     )
     router.push({ pathname: '/business/client/client', query: { id: 1 } });
@@ -412,7 +414,9 @@ class ClientView extends PureComponent {
   startTerminal = () => {
     this.setState(
       {
-        selectTitle:'终客'
+        selectTitle:'终客',
+        rightlg:16,
+        leftlg:8
       }
     )
     router.push({ pathname: '/business/client/terminal', query: { id: 1 } });
@@ -422,7 +426,8 @@ class ClientView extends PureComponent {
 
     this.setState({
       downTableColumn:clientContentColumns,
-      downTableContent:[]
+      downTableContent:[],
+
     })
 
   }

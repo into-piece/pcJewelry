@@ -16,24 +16,24 @@ class Info extends Component {
     super(props);
     const { match, location } = props;
     const menuMap = {
-      brand: <FormattedMessage id="app.client.menuMap.brand" defaultMessage="Basic Settings"/>,
+      brand: <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="Brand"/>,
       requested: (
-        <FormattedMessage id="app.client.menuMap.requested" defaultMessage="Security Settings"/>
+        <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="Requirements"/>
       ),
-      sendWay: <FormattedMessage id="app.client.menuMap.way" defaultMessage="Account Binding"/>,
+      sendWay: <FormattedMessage id="app.basic.menuMap.way" defaultMessage="Shipping Method"/>,
       royalty: (
         <FormattedMessage
-          id="app.client.menuMap.royalty"
-          defaultMessage="app.client.menuMap.royalty"
+          id="app.basic.menuMap.royalty"
+          defaultMessage="Commission Setting"
         />
       ),
       ring: (
-        <FormattedMessage id="app.client.menuMap.num" defaultMessage="app.client.menuMap.num"/>
+        <FormattedMessage id="app.basic.menuMap.num" defaultMessage="Ring Around"/>
       ),
       currency: (
         <FormattedMessage
-          id="app.client.menuMap.currency"
-          defaultMessage="app.client.menuMap.currency"
+          id="app.basic.menuMap.currency"
+          defaultMessage="Currency"
         />
       ),
     };
@@ -81,10 +81,10 @@ class Info extends Component {
   };
 
   getMenuIcon = key => {
-    const { ring, euro, delivery, award, percentage } = SvgUtil;
+    const { ring, euro, delivery, award, percentage, diamond } = SvgUtil;
     if (key === 'ring') return ring;
-    else if (key === 'brand') return award;
-    else if (key === 'requested') return delivery;
+    else if (key === 'brand') return diamond;
+    else if (key === 'requested') return award;
     else if (key === 'sendWay') return delivery;
     else if (key === 'royalty') return percentage;
     else if (key === 'currency') return euro;
@@ -115,7 +115,7 @@ class Info extends Component {
 
   render() {
 
-    const {children} = this.props;
+    const { children } = this.props;
     const { mode, selectKey } = this.state;
     return (
       <PageHeaderWrapper title="基础数据">

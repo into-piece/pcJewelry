@@ -18,6 +18,7 @@ import SvgUtil from './../../../utils/SvgUtil';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
+import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 
 const FormItem = Form.Item;
@@ -51,7 +52,7 @@ const clientContentColumns = [
 ];
 
 const paginationProps = {
-  showSizeChanger: true,
+  // showSizeChanger: true,
   showQuickJumper: true,
   pageSize: 10,
 };
@@ -310,18 +311,18 @@ class Brand extends Component {
               initialValue: current.brandNo,
             })(<Input placeholder="请输入"/>)}
           </FormItem>
-          <FormItem label="中文名称" {...this.formLayout}>
-            {getFieldDecorator('brandZhName', {
-              rules: [{ required: true, message: '请输入中文名称' }],
-              initialValue: current.brandZhName,
-            })(
-              <Input placeholder="请输入"/>,
-            )}
-          </FormItem>
           <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('brandEnName', {
               rules: [{ required: true, message: '请输入品牌编号' }],
               initialValue: current.brandEnName,
+            })(
+              <Input placeholder="请输入"/>,
+            )}
+          </FormItem>
+          <FormItem label="中文名称" {...this.formLayout}>
+            {getFieldDecorator('brandZhName', {
+              rules: [{message: '请输入中文名称' }],
+              initialValue: current.brandZhName,
             })(
               <Input placeholder="请输入"/>,
             )}
@@ -353,8 +354,8 @@ class Brand extends Component {
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.award}/>
-                <FormattedMessage id="app.client.menuMap.brand" defaultMessage="品牌"/>
+                  component={SvgUtil.diamond}/>
+                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌"/>
               </div>
               <Card
                 bordered={false}
@@ -403,7 +404,7 @@ class Brand extends Component {
               >
                 {/*<div style={{ overflow: 'scroll', minHeight: window.innerHeight * 0.7, display: 'inline' }}>*/}
                 <div>
-              <span title="品牌信息"
+              <span title={formatMessage({ id: 'navbar.lang' })}
                     style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
               品牌信息
               </span>
@@ -411,8 +412,6 @@ class Brand extends Component {
                   {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
 
                 </div>
-
-                {/*</div>*/}
 
               </Card>
 

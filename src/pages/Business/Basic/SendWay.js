@@ -47,7 +47,7 @@ const clientContentColumns = [
 
 
 const paginationProps = {
-  showSizeChanger: true,
+  // showSizeChanger: true,
   showQuickJumper: true,
   pageSize: 10,
 };
@@ -287,7 +287,7 @@ class Requested extends PureComponent {
           </FormItem>
           <FormItem label="配送方式英文名称" {...this.formLayout}>
             {getFieldDecorator('deliveryEnName', {
-              rules: [{ required: true, message: '请输入英文名称'}],
+              rules: [{   message: '请输入英文名称'}],
               initialValue: current.deliveryEnName,
             })(
               <Input placeholder="请输入"/>,
@@ -310,7 +310,7 @@ class Requested extends PureComponent {
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
                   component={SvgUtil.delivery}/>
-                <FormattedMessage id="app.client.menuMap.way" defaultMessage="配送方式"/>
+                <FormattedMessage id="app.basic.menuMap.way" defaultMessage="配送方式"/>
               </div>
               <Card
                 bordered={false}

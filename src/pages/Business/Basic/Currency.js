@@ -57,7 +57,7 @@ const currencyContentColumns = [
 ];
 
 const paginationProps = {
-  showSizeChanger: true,
+  // showSizeChanger: true,
   showQuickJumper: true,
   pageSize: 10,
 };
@@ -338,8 +338,8 @@ class Currency extends PureComponent {
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.percentage}/>
-                <FormattedMessage id="app.client.menuMap.currency" defaultMessage="业务提成设当"/>
+                  component={SvgUtil.euro}/>
+                <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="业务提成设当"/>
               </div>
               <Card
                 bordered={false}
@@ -385,9 +385,9 @@ class Currency extends PureComponent {
                 bordered={false}
               >
                 <div>
-              <span title="业务提成设定"
+              <span title="币种信息"
                     style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
-              业务提成设定
+              币种信息
               </span>
                   <Divider/>
                   {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
@@ -400,15 +400,16 @@ class Currency extends PureComponent {
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
-                          onClick={this.clickNewFrom}>新增</Button>
+                          onClick={this.clickNewFrom}
+                          disabled={true}>新增</Button>
                   <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
                           onClick={this.clickDeleteFrom}
-                          disabled={isEdit}>删除</Button>
+                          disabled={true}>删除</Button>
                   <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
-                          disabled={isEdit} icon="edit">编辑</Button>
+                          disabled={true} icon="edit">编辑</Button>
                   <Button className={styles.buttomControl} size={'small'} type="primary" icon="lock"
                           onClick={this.clickFreezeFrom}
-                          disabled={isEdit}>冻结</Button>
+                          disabled={true}>冻结</Button>
                 </div>
 
               </Card>
