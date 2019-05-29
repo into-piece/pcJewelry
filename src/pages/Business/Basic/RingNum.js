@@ -132,7 +132,7 @@ class RingNum extends PureComponent {
       refreshList: 'standard',
       selectIndexAt: -1,
       sonSelectIndexAt: -1,
-      fristLoad:true,
+      fristLoad: true,
     };
   }
 
@@ -142,7 +142,7 @@ class RingNum extends PureComponent {
     dispatch({
       type: 'ringnum/fetchListRingNum',
     });
-    this.state.data2=[];
+    this.state.data2 = [];
 
   }
 
@@ -215,7 +215,7 @@ class RingNum extends PureComponent {
     const { dispatch, form, rtnCode = {} } = this.props;
 
 
-    const { showItem, isAdd,showNumberItem } = this.state;
+    const { showItem, isAdd, showNumberItem } = this.state;
 
     form.validateFields((err, fieldsValue) => {
 
@@ -260,7 +260,7 @@ class RingNum extends PureComponent {
         dispatch({
           type: 'ringnum/updateSonRingNum',
           payload: {
-            ...data
+            ...data,
           },
         });
 
@@ -274,7 +274,7 @@ class RingNum extends PureComponent {
 
   handleDone = () => {
     const { dispatch } = this.props;
-    const { refreshList,showItem } = this.state;
+    const { refreshList, showItem } = this.state;
 
     if (refreshList === 'standard') {
       dispatch({
@@ -288,8 +288,8 @@ class RingNum extends PureComponent {
         showNumberItem: false,
         isEditNumber: true,
       });
-    }else {
-      const params ={
+    } else {
+      const params = {
         ring_around_st_id: showItem.id,
       };
       dispatch({
@@ -301,7 +301,7 @@ class RingNum extends PureComponent {
       this.setState({
         visible: false,
         done: false,
-        fristLoad:false,
+        fristLoad: false,
       });
     }
   };
@@ -315,7 +315,7 @@ class RingNum extends PureComponent {
 
   render() {
 
-    const { selectedRowKeys = [], current = {},currentNumber={}, update,updateNumber, isEdit, modalType ,fristLoad,tabType } = this.state;
+    const { selectedRowKeys = [], current = {}, currentNumber = {}, update, updateNumber, isEdit, modalType, fristLoad, tabType } = this.state;
 
 
     const {
@@ -344,7 +344,7 @@ class RingNum extends PureComponent {
         this.state.done = true;
         this.state.visible = true;
         this.state.refreshList = 'standard';
-        if(this.state.isUpdateFrom) {
+        if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
           this.state.showItem = { ...current };
         }
@@ -354,7 +354,7 @@ class RingNum extends PureComponent {
 
     this.state.isSonLoading = addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2;
 
-    console.log('addsonloading ='+addsonloading+",deletesonloading="+deletesonloading+",upatesonloading="+upatesonloading+",sonfreezing="+sonfreezing+",istLoading2="+istLoading2)
+    console.log('addsonloading =' + addsonloading + ',deletesonloading=' + deletesonloading + ',upatesonloading=' + upatesonloading + ',sonfreezing=' + sonfreezing + ',istLoading2=' + istLoading2);
 
     if (addsonloading || deletesonloading || upatesonloading || sonfreezing) {
       this.state.updateNumber = true;
@@ -378,7 +378,7 @@ class RingNum extends PureComponent {
         if (this.state.isUpdateNumberFrom) {
           this.state.isUpdateNumberFrom = false;
           this.state.showNumberItem = { ...currentNumber };
-          console.log('number update '+this.state.showNumberItem)
+          console.log('number update ' + this.state.showNumberItem);
         }
       }
 
@@ -401,9 +401,9 @@ class RingNum extends PureComponent {
       this.state.data = newdata;
     }
 
-    this.state.data2=[];
+    this.state.data2 = [];
     // if (sonListLoading && body2 && body2.sonData && body2.sonData.length > 0) {
-    if ((!fristLoad)&&body2 && body2.sonData && body2.sonData.length > 0) {
+    if ((!fristLoad) && body2 && body2.sonData && body2.sonData.length > 0) {
       const newdata2 = body2.sonData.map((value) => {
         const s = value.status;
         if (s == 0) {
@@ -510,7 +510,7 @@ class RingNum extends PureComponent {
       };
 
 
-    console.log('modalType '+modalType)
+    console.log('modalType ' + modalType);
 
     return (
       <GridContent>
@@ -533,6 +533,7 @@ class RingNum extends PureComponent {
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   filterMultiple={false}
+                  className={styles.row_table}
                   bordered={false}
                   selectedRows={1}
                   rowClassName={this.onSelectRowClass}
@@ -543,15 +544,15 @@ class RingNum extends PureComponent {
                       },
                     };
                   }}
-                  size='small'
+                  size='middle'
                   columns={ringNumContentColumns}
                 />
                 <Table
                   loading={this.state.isSonLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data2}
-                  filterMultiple={false}
                   bordered={false}
+
                   selectedRows={1}
                   rowClassName={this.onSelectRowNumberClass}
                   onRow={(record, index) => {
@@ -561,7 +562,7 @@ class RingNum extends PureComponent {
                       },
                     };
                   }}
-                  size='small'
+                  size='middle'
                   columns={subringNumContentColumns}
                 />
 
@@ -592,8 +593,10 @@ class RingNum extends PureComponent {
                   value={modalType}
                   buttonStyle="solid"
                 >
-                  <Radio.Button value="standard" className={styles.right_radio_tab} onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
-                  <Radio.Button value="number" className={styles.right_radio_tab} onClick={this.switchTabNumber}>戒围号</Radio.Button>
+                  <Radio.Button value="standard" className={styles.right_radio_tab}
+                                onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
+                  <Radio.Button value="number" className={styles.right_radio_tab}
+                                onClick={this.switchTabNumber}>戒围号</Radio.Button>
                 </RadioGroup>
               </div>
               {tabType === 'standard' ? this.getRingStandrad() : this.getRingNumber()}
@@ -668,7 +671,7 @@ class RingNum extends PureComponent {
 
   getRingNumber = () => {
 
-    const { isEditNumber , isEdit} = this.state;
+    const { isEditNumber, isEdit } = this.state;
     return (<div className={styles.view_dwon}>
         <div className={clientStyle.list_info}>
           {/*{this.getRingStandrad()}*/}
@@ -712,11 +715,20 @@ class RingNum extends PureComponent {
 
 
   onSelectRowClass = (record, index) => {
-    return index == this.state.selectIndexAt ? styles.row_select : '';
+    let color = '';
+    if (index % 2 == 0) {
+      color = styles.row_normal;
+    }
+
+    return index == this.state.selectIndexAt ? styles.row_select : color;
   };
 
   onSelectRowNumberClass = (record, index) => {
-    return index == this.state.sonSelectIndexAt ? styles.row_select : '';
+    let color = '';
+    if (index % 2 == 0) {
+      color = styles.row_normal;
+    }
+    return index == this.state.sonSelectIndexAt ? styles.row_select : color;
   };
 
   clickNewFrom = () => {
@@ -751,8 +763,8 @@ class RingNum extends PureComponent {
       sonSelectIndexAt: -1,
       showNumberItem: false,
       isEditNumber: true,
-      fristLoad:true,
-      data2:[]
+      fristLoad: true,
+      data2: [],
     });
 
   };
@@ -847,13 +859,13 @@ class RingNum extends PureComponent {
       showItem: { ...record },
       isEdit: edit,
       current: record,
-      currentNumber:false,
+      currentNumber: false,
       selectIndexAt: index,
       sonSelectIndexAt: -1,
       showNumberItem: false,
-      fristLoad:false,
+      fristLoad: false,
       isEditNumber: true,
-      modalType:'standard',
+      modalType: 'standard',
       tabType: 'standard',
 
     });
@@ -872,7 +884,7 @@ class RingNum extends PureComponent {
       isEditNumber: edit,
       currentNumber: record,
       sonSelectIndexAt: index,
-      modalType:'number',
+      modalType: 'number',
       tabType: 'number',
     });
   };

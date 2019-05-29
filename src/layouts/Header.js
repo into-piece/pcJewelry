@@ -121,14 +121,15 @@ class HeaderView extends Component {
     const width = this.getHeadWidth();
     const HeaderDom = visible ? (
       <Header
-        style={{ padding: 0, width, zIndex: 2 }}
         className={fixedHeader ? styles.fixedHeader : ''}
+        style={{ padding: 0, width, zIndex: 2 }}
       >
         {isTop && !isMobile ? (
           <TopNavHeader
             theme={navTheme}
             size="small"
             mode="horizontal"
+            className={styles.content}
             onCollapse={handleMenuCollapse}
             onNoticeClear={this.handleNoticeClear}
             onMenuClick={this.handleMenuClick}
@@ -140,6 +141,7 @@ class HeaderView extends Component {
             onCollapse={handleMenuCollapse}
             onNoticeClear={this.handleNoticeClear}
             onMenuClick={this.handleMenuClick}
+            className={styles.content}
             size="small"
             onNoticeVisibleChange={this.handleNoticeVisibleChange}
             {...this.props}

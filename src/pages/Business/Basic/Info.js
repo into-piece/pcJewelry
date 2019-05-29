@@ -118,7 +118,9 @@ class Info extends Component {
     const { children } = this.props;
     const { mode, selectKey } = this.state;
     return (
-      <PageHeaderWrapper title="基础数据">
+      <PageHeaderWrapper
+      size="small"
+      >
         {/*lg={17} md={24}*/}
         <div className={styles.main}>
           <div

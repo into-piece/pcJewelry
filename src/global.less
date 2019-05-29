@@ -12,13 +12,41 @@ body,
 
 // 被选中的表格行的样式
 .clickRowStyl {
-  background-color : #ff3f19
+  background-color: #ff3f19
 }
 
 .ant-layout {
   min-height: 100vh;
 }
 
+
+.ant-table-thead {
+  background-color: #2eabff !important;
+
+  > tr {
+    background-color: #ffffff !important;
+  }
+}
+
+.ant-table-tbody {
+  > tr > td{
+    border-width: 0 !important;
+    border-color: #ffffff !important;
+  }
+}
+.antd-pro-components-global-header-index-header
+{
+  background-color: #006EE1 !important;
+}
+
+.antd-pro-components-sider-menu-index-logo
+{
+  > a > h1 {
+    color: #fff !important;
+  }
+  background-color: #006EE1!important;
+
+}
 canvas {
   display: block;
 }
@@ -43,11 +71,13 @@ ol {
   .ant-table {
     width: 100%;
     overflow-x: auto;
+
     &-thead > tr,
     &-tbody > tr {
       > th,
       > td {
         white-space: pre;
+
         > span {
           display: block;
         }

@@ -32,7 +32,7 @@ export default class GlobalHeader extends PureComponent {
           </Link>
         )}
         <span className={styles.trigger} onClick={this.toggle}>
-          <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} />
+          <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} style={{color:'#fff'}} color={'#fff'}/>
         </span>
         <RightContent {...this.props} />
       </div>

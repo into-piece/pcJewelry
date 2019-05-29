@@ -123,6 +123,7 @@ class BasicLayout extends React.Component {
             onCollapse={this.handleMenuCollapse}
             menuData={menuData}
             isMobile={isMobile}
+            size="small"
             {...this.props}
           />
         )}
@@ -136,13 +137,14 @@ class BasicLayout extends React.Component {
             menuData={menuData}
             handleMenuCollapse={this.handleMenuCollapse}
             logo={logo}
+            size="small"
+            className={styles.header_view}
             isMobile={isMobile}
             {...this.props}
           />
           <Content className={styles.content} style={contentStyle}>
             {children}
           </Content>
-          <Footer />
         </Layout>
       </Layout>
     );

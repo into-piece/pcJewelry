@@ -374,7 +374,7 @@ class Royalty extends PureComponent {
                       }
                     };
                   }}
-                  size='small'
+                  size='middle'
                   columns={clientContentColumns}
                 />
                 <Modal
@@ -435,7 +435,13 @@ class Royalty extends PureComponent {
 
 
   onSelectRowClass = (record, index) => {
-    return index == this.state.selectIndexAt ? styles.row_select :"";
+    let color = '';
+    if (index % 2 == 0) {
+      color = styles.row_normal;
+    }
+
+    return index == this.state.selectIndexAt ? styles.row_select : color;
+    // return index == this.state.selectIndexAt ? styles.row_select :"";
   };
 
   clickNewFrom = () => {
