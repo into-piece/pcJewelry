@@ -328,7 +328,7 @@ class Requested extends PureComponent {
                       }
                     };
                   }}
-                  size='small'
+                  size='middle'
                   columns={clientContentColumns}
                 />
                 <Modal

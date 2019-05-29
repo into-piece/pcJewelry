@@ -79,13 +79,13 @@ export default {
   theme: {
     'primary-color': primaryColor,
   },
-  // proxy: {
-  //   '/server/': {
-  //     target: 'http://www.zhuoyiwuliu.com:8081/',//basic/brand/listBrands/
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/server/': {
+      target: 'http://www.zhuoyiwuliu.com:8081/',//basic/brand/listBrands/
+      changeOrigin: true,
+      pathRewrite: { '^/server': '' },
+    },
+  },
   /*  proxy: {
       '/server/api/': {
         target: 'https://preview.pro.ant.design/',
