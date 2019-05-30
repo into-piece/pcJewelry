@@ -46,6 +46,7 @@ export default {
     },
 
     * deleteRequested({ payload, callback }, { call, put }) {
+
       const response = yield call(deleteTheRequested,payload);
       yield put({
         type: 'save',

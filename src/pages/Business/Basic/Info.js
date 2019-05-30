@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { Menu, Card, Row, Col, Icon } from 'antd';
+import { Menu, Card, Row, Col, Icon,PageHeader } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Basic.less';
@@ -118,7 +118,7 @@ class Info extends Component {
     const { children } = this.props;
     const { mode, selectKey } = this.state;
     return (
-      <PageHeaderWrapper
+      <div
       size="small"
       >
         {/*lg={17} md={24}*/}
@@ -143,7 +143,7 @@ class Info extends Component {
           </div>
         </div>
 
-      </PageHeaderWrapper>
+      </div>
     );
   }
 

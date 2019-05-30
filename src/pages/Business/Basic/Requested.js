@@ -12,6 +12,7 @@ import {
   Input,
   Button,
   Divider,
+  message,
 } from 'antd';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
@@ -49,7 +50,7 @@ const clientContentColumns = [
 const paginationProps = {
   // showSizeChanger: true,
   showQuickJumper: true,
-  pageSize: 10,
+  pageSize: 5,
 };
 const { Description } = DescriptionList;
 
@@ -91,7 +92,8 @@ class Requested extends PureComponent {
       requestState: 'success',
       requestMes: '保存成功！',
       isLoading: false,
-      selectIndexAt:-1,
+      multipleData: [],
+      selectIndexAt: -1,
     };
   }
 
@@ -128,7 +130,7 @@ class Requested extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
-          selectIndexAt:-1,
+          selectIndexAt: -1,
           showItem: false,
           isEdit: true,
         });
@@ -210,7 +212,7 @@ class Requested extends PureComponent {
         this.state.requestMes = body.rtnMsg;
         this.state.update = false;
         this.state.done = true;
-        this.state.visible = true;
+        // this.state.visible = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
           this.state.showItem = { ...current };
@@ -240,28 +242,37 @@ class Requested extends PureComponent {
 
     const rowSelection = {
       selectedRowKeys,
-      type: 'radio',
+      type: 'checkbox',
       onChange: this.onSelectChange,
       onSelect: this.selectChange,
     };
 
+    if (this.state.done) {
+      if (this.state.requestState == 'success') {
+        message.success(this.state.requestMes);
+      } else {
+        message.error(this.state.requestMes);
+      }
+      this.handleDone()
+    }
+
 
     const getModalContent = () => {
-      if (this.state.done) {
-        return (
-          <Result
-            type={this.state.requestState}
-            title={this.state.requestMes}
-            description=""
-            actions={
-              <Button type="primary" onClick={this.handleDone}>
-                知道了
-              </Button>
-            }
-            className={formstyles.formResult}
-          />
-        );
-      }
+      // if (this.state.done) {
+      //   return (
+      //     <Result
+      //       type={this.state.requestState}
+      //       title={this.state.requestMes}
+      //       description=""
+      //       actions={
+      //         <Button type="primary" onClick={this.handleDone}>
+      //           知道了
+      //         </Button>
+      //       }
+      //       className={formstyles.formResult}
+      //     />
+      //   );
+      // }
       return (
         <Form
           size={'small'}
@@ -282,7 +293,7 @@ class Requested extends PureComponent {
           </FormItem>
           <FormItem label="品质要求中文名" {...this.formLayout}>
             {getFieldDecorator('qualityEnName', {
-              rules: [{   message: '请输入中文名称' }],
+              rules: [{ message: '请输入中文名称' }],
               initialValue: current.qualityEnName,
             })(
               <Input placeholder="请输入"/>,
@@ -317,17 +328,19 @@ class Requested extends PureComponent {
                   loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
-                  filterMultiple={false}
+                  rowSelection={rowSelection}
+                  rowKey={record =>
+                    record.id
+                  }
                   bordered={false}
-                  selectedRows={1}
                   rowClassName={this.onSelectRowClass}
-                  onRow={(record, index) => {
-                    return {
-                      onClick: event => {
-                        this.selectChange(record,index)
-                      }
-                    };
-                  }}
+                  // onRow={(record, index) => {
+                  //   return {
+                  //     onClick: event => {
+                  //       this.selectChange(record,index)
+                  //     }
+                  //   };
+                  // }}
                   size='middle'
                   columns={clientContentColumns}
                 />
@@ -391,7 +404,8 @@ class Requested extends PureComponent {
       color = styles.row_normal;
     }
 
-    return index == this.state.selectIndexAt ? styles.row_select : color;
+    // return index == this.state.selectIndexAt ? styles.row_select : color;
+    return color;
     // return index == this.state.selectIndexAt ? styles.row_select :"";
   };
 
@@ -401,25 +415,36 @@ class Requested extends PureComponent {
   };
 
   clickDeleteFrom = () => {
-    const requestedNo = this.state.showItem;
+    // const requestedNo = this.state.showItem;
+    const { multipleData } = this.state;
 
     const { dispatch } = this.props;
+    // const data =  Array.from(multipleData)
+    const data = [];
+    data.push(multipleData)
+
     dispatch({
       type: 'requested/deleteRequested',
-      payload: {
-        ...requestedNo,
-      },
+      payload:
+        // ...requestedNo,
+         {"list":multipleData}
+      ,
     });
 
 
     this.setState({
       selectedRowKeys: '',
-      selectIndexAt:-1,
+      selectIndexAt: -1,
       showItem: false,
       isEdit: true,
     });
 
   };
+
+  errorHandler =()=>{
+    message.warn("报错！")
+
+  }
 
   clickEditFrom = () => {
     this.state.isAdd = false;
@@ -445,11 +470,50 @@ class Requested extends PureComponent {
 
   };
 
-  selectChange = (record,index) => {
+  selectChange = (record, index) => {
 
     console.log('select brand  ' + Object.keys(record));
-    // let showList2 = [];
+    // let edit = false;
+    // if (record === '') {
+    //   edit = true;
+    // }
+    //
+    // this.setState({
+    //   showItem: { ...record },
+    //   isEdit: edit,
+    //   current: record,
+    //   selectIndexAt: index,
+    // });
+  };
+
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log('onSelectChage');
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+
+
+    if (selectedRowKeys.length > 0) {
+      const recordK = selectedRowKeys[selectedRowKeys.length - 1];
+      const record = selectedRows.filter(value => value.id == recordK);
+      // this.showSelectItem(selectedRows[selectedRows.length-1])
+      this.setState({
+        multipleData: selectedRowKeys,
+      });
+      this.showSelectItem(record[0]);
+    } else {
+      this.setState({
+        showItem: false,
+        isEdit: true,
+        current: false,
+      });
+    }
+    this.setState({
+      selectedRowKeys,
+    });
+  };
+
+  showSelectItem = record => {
     let edit = false;
+    console.log('display ' + record.qualityCode);
     if (record === '') {
       edit = true;
     }
@@ -458,15 +522,7 @@ class Requested extends PureComponent {
       showItem: { ...record },
       isEdit: edit,
       current: record,
-      selectIndexAt: index,
-    });
-  };
-
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('onSelectChage');
-
-    this.setState({
-      selectedRowKeys,
+      // selectIndexAt: index,
     });
   };
 

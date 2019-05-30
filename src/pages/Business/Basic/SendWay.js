@@ -28,12 +28,12 @@ const clientContentColumns = [
     key: 'deliveryCode',
   },
   {
-    title: '送货方式中文名称',
+    title: '中文名',
     dataIndex: 'deliveryZhName',
     key: 'deliveryZhName',
   },
   {
-    title: '送货方式英文名称',
+    title: '英文名',
     dataIndex: 'deliveryEnName',
     key: 'deliveryEnName',
   },
@@ -277,7 +277,7 @@ class Requested extends PureComponent {
               initialValue: current.deliveryCode,
             })(<Input placeholder="请输入"/>)}
           </FormItem>
-          <FormItem label="配送方式中文名" {...this.formLayout}>
+          <FormItem label="中文名" {...this.formLayout}>
             {getFieldDecorator('deliveryZhName', {
               rules: [{ required: true, message: '请输入中文名称' }],
               initialValue: current.deliveryZhName,
@@ -285,7 +285,7 @@ class Requested extends PureComponent {
               <Input placeholder="请输入"/>,
             )}
           </FormItem>
-          <FormItem label="配送方式英文名称" {...this.formLayout}>
+          <FormItem label="英文名" {...this.formLayout}>
             {getFieldDecorator('deliveryEnName', {
               rules: [{   message: '请输入英文名称'}],
               initialValue: current.deliveryEnName,
@@ -486,8 +486,8 @@ class Requested extends PureComponent {
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size='small' col='1'>
         <Description term='业务提出编号'>{item.deliveryCode}</Description>
-        <Description term='业务提成中文名'>{item.deliveryZhName}</Description>
-        <Description term='业务提成英文名'>{item.deliveryEnName}</Description>
+        <Description term='中文名'>{item.deliveryZhName}</Description>
+        <Description term='英文名'>{item.deliveryEnName}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
         </span>
