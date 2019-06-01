@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { Menu, Card, Row, Col, Icon,PageHeader } from 'antd';
+import { Menu, Card, Row, Col, Icon, PageHeader ,Breadcrumb} from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Basic.less';
@@ -119,30 +119,46 @@ class Info extends Component {
     const { mode, selectKey } = this.state;
     return (
       <div
-      size="small"
+        className={styles.page}
       >
-        {/*lg={17} md={24}*/}
-        <div className={styles.main}>
-          <div
-            className={styles.leftmenu}
-            ref={ref => {
-              this.main = ref;
-            }}
-          >
-            <Menu
-              mode={mode}
-              selectedKeys={[selectKey]}
-              size={'small'}
-              onClick={this.selectKey}
-            >
-              {this.getmenu()}
-            </Menu>
-          </div>
-          <div className={styles.right}>
-            {children}
-          </div>
-        </div>
+<div className={styles.nav}>
+        <Breadcrumb>
+          <Breadcrumb.Item>主页</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="">业务</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/business/basic/base#/business/basic/base">基础数据</a>
+          </Breadcrumb.Item>
 
+        </Breadcrumb>
+</div>
+        <div className={styles.center_content}>
+          {/*lg={17} md={24}*/}
+          <div className={styles.main}>
+
+
+            <div
+              className={styles.leftmenu}
+              ref={ref => {
+                this.main = ref;
+              }}
+            >
+              <Menu
+                mode={mode}
+                selectedKeys={[selectKey]}
+                size={'small'}
+                onClick={this.selectKey}
+              >
+                {this.getmenu()}
+              </Menu>
+            </div>
+            <div className={styles.right}>
+              {children}
+            </div>
+          </div>
+
+        </div>
       </div>
     );
   }

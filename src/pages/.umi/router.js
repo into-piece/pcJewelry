@@ -41,7 +41,7 @@ let routes = [
         "routes": [
           {
             "path": "/business/client",
-            "name": "client",
+            "name": "Client",
             "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
@@ -147,7 +147,7 @@ models: () => [
           },
           {
             "path": "/business/basic",
-            "name": "basic",
+            "name": "Basic",
             "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
@@ -357,6 +357,104 @@ models: () => [
 }),
                 "exact": true
               },
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/product",
+            "name": "Product",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Product__Product" */'../Business/Product/Product'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/specimen",
+            "name": "Specimen",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Specimen__Specimen" */'../Business/Specimen/Specimen'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/quote",
+            "name": "Quote",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Quote__Quote" */'../Business/Quote/Quote'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/proforminvoice",
+            "name": "Proform Invoice",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Proforminvoice__Proforminvoice" */'../Business/Proforminvoice/Proforminvoice'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/deliver",
+            "name": "Deliver",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Deliver__Deliver" */'../Business/Deliver/Deliver'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/Receiving",
+            "name": "Receiving",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Receiving__Receiving" */'../Business/Receiving/Receiving'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
+              {
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+              }
+            ]
+          },
+          {
+            "path": "/business/report",
+            "name": "Report",
+            "component": _dvaDynamic({
+  
+  component: () => import(/* webpackChunkName: "p__Business__Report__Report" */'../Business/Report/Report'),
+  LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
+}),
+            "routes": [
               {
                 "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }

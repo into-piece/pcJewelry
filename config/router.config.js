@@ -101,7 +101,7 @@ export default [
         routes: [
           {
             path: '/business/client',
-            name: 'client',
+            name: 'Client',
             component: './Business/Client/ClientView',
             routes: [
               {
@@ -141,7 +141,7 @@ export default [
           },
           {
             path: '/business/basic',
-            name: 'basic',
+            name: 'Basic',
             component: './Business/Basic/Info',
             routes: [
               {
@@ -196,6 +196,55 @@ export default [
               },
             ],
           },
+          {
+            path: '/business/product',
+            name: 'Product',
+            component: './Business/Product/Product',
+            routes: [
+            ],
+          },
+
+          {
+            path:'/business/specimen',
+            name:'Specimen',
+            component:'./Business/Specimen/Specimen',
+            routes:[],
+          },
+          {
+            path:'/business/quote',
+            name:'Quote',
+            component:'./Business/Quote/Quote',
+            routes:[]
+          },
+          {
+            path:'/business/proforminvoice',
+            name:'Proform Invoice',
+            component:'./Business/Proforminvoice/Proforminvoice',
+            routes:[]
+          },
+
+          {
+            path: '/business/deliver',
+            name: 'Deliver',
+            component: './Business/Deliver/Deliver',
+            routes: [
+            ],
+          },
+
+          {
+            path:'/business/Receiving',
+            name:'Receiving',
+            component:'./Business/Receiving/Receiving',
+            routes:[]
+          },
+
+          {
+            path:'/business/report',
+            name:'Report',
+            component:'./Business/Report/Report',
+            routes:[]
+          },
+
         ],
       },
 

@@ -454,7 +454,10 @@ class RingNum extends PureComponent {
           <Form
             size={'small'}
             onSubmit={this.handleNumberSubmit}>
-            <FormItem label="戒围号" {...this.formLayout}>
+            <FormItem label="戒围号"
+                      help="手寸输入用逗号'.'分割，如7.8.9录后请按回车健"
+                      validateStatus="success"
+                      {...this.formLayout}>
               {getFieldDecorator('sizeCode', {
                 rules: [{ required: true, message: '请输入戒围标准编号' }],
                 initialValue: currentNumber.sizeCode,
@@ -515,8 +518,8 @@ class RingNum extends PureComponent {
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
-          <Col lg={16} md={24} className={styles.view_left_content}>
-            <div>
+          <Col lg={16} md={24}>
+            <div className={styles.view_left_content}>
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
@@ -585,19 +588,21 @@ class RingNum extends PureComponent {
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
               <div className={styles.right_content_tbs}>
-                <RadioGroup
-                  defaultValue="standard"
-                  size="small"
-                  className={styles.right_content_tabgroud}
-                  onChange={this.onChange}
-                  value={modalType}
-                  buttonStyle="solid"
-                >
-                  <Radio.Button value="standard" className={styles.right_radio_tab}
-                                onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
-                  <Radio.Button value="number" className={styles.right_radio_tab}
-                                onClick={this.switchTabNumber}>戒围号</Radio.Button>
-                </RadioGroup>
+                <div className={styles.right_content_tabgroud}>
+                  <RadioGroup
+                    defaultValue="standard"
+                    size="small"
+                    className={styles.right_content_tabs}
+                    onChange={this.onChange}
+                    value={modalType}
+                    buttonStyle="solid"
+                  >
+                    <Radio.Button value="standard" className={styles.right_radio_tab}
+                                  onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
+                    <Radio.Button value="number" className={styles.right_radio_tab}
+                                  onClick={this.switchTabNumber}>戒围号</Radio.Button>
+                  </RadioGroup>
+                </div>
               </div>
               {tabType === 'standard' ? this.getRingStandrad() : this.getRingNumber()}
             </div>

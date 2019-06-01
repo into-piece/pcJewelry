@@ -304,8 +304,8 @@ class Requested extends PureComponent {
     return (
       <GridContent>
         <Row gutter={24}  className={styles.row_content}>
-          <Col  lg={16} md={24} className={styles.view_left_content}>
-            <div>
+          <Col  lg={16} md={24} >
+            <div className={styles.view_left_content}>
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
                   style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}

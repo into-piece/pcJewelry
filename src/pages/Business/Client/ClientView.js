@@ -14,13 +14,12 @@ import {
   Button,
   Input,
   Divider,
+  Breadcrumb
 } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from 'dva';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
-import StandardTable from '@/components/StandardTable';
 import DescriptionList from '@/components/DescriptionList';
 import router from 'umi/router';
 
@@ -134,13 +133,13 @@ const clientContentColumns = [
   // },
 ];
 
-const maintainsColumn =[
+const maintainsColumn = [
   {
     title: '维护人',
     dataIndex: 'code',
     key: 'code',
   },
-]
+];
 
 
 const operationTabList = [
@@ -180,21 +179,21 @@ class ClientView extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state={
-      selectTitle:'客户',
+    this.state = {
+      selectTitle: '客户',
       expandForm: false,
-      downTableColumn:clientContentColumns,
-      downTableContent:[],
-      rightlg:16,
-      leftlg:8
-    }
+      downTableColumn: clientContentColumns,
+      downTableContent: [],
+      rightlg: 16,
+      leftlg: 8,
+    };
   }
 
 
   componentDidMount() {
 
 
-    router.push('/business/client/emptyView')
+    router.push('/business/client/emptyView');
     // const { dispatch, match } = this.props;
     // const { params } = match;
 
@@ -251,7 +250,7 @@ class ClientView extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem label="类别">
               {
-                <Input placeholder="请输入" />
+                <Input placeholder="请输入"/>
 
               }
             </FormItem>
@@ -296,7 +295,7 @@ class ClientView extends PureComponent {
 
     const { children } = this.props;
 
-    const {selectTitle , downTableColumn ,downTableContent,rightlg,leftlg}=this.state
+    const { selectTitle, downTableColumn, downTableContent, rightlg, leftlg } = this.state;
 
     const paginationProps = {
       showSizeChanger: true,
@@ -306,148 +305,169 @@ class ClientView extends PureComponent {
 
     return (
 
-      <GridContent className={styles.userCenter}>
-        <Row gutter={24}>
-          <Col lg={rightlg} md={24}>
-            <Card bordered={false} className={clientStyle.left_content} loading={false}>
-              <div style={{ marginBottom: 16 }}>
-                <div className={listStyles.tableListForm}>{this.renderForm()}</div>
-                <Table
-                  style={{ marginBottom: 20 }}
-                  loading={false}
-                  size="small"
-                  dataSource={[]}
-                  selectedRows={1}
-                  pagination={paginationProps}
-                  columns={clientColumns}
-                  onSelectRow={this.handleSelectRows}
-                />
-                <Radio.Group defaultValue="show_clientlist" buttonStyle="solid">
-                  <Radio.Button value="show_clientlist"  onClick={this.selectClients}>客户列表</Radio.Button>
-                  <Radio.Button value="show_persion" onClick={this.selectMaintains}>共同维护人</Radio.Button>
-                </Radio.Group>
+      <div className={clientStyle.page}>
+        <div className={clientStyle.nav} >
+          <Breadcrumb>
+            <Breadcrumb.Item>主页</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">业务</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/business/basic/base#/business/client/">客户资料</a>
+            </Breadcrumb.Item>
 
-                <Divider className={clientStyle.divder}/>
+          </Breadcrumb>
+        </div>
+        <div className={clientStyle.center_content}>
+          <Row gutter={24}>
+            <Col lg={rightlg} md={24}>
+              <Card bordered={false} className={clientStyle.left_content} loading={false}>
+                <div style={{ marginBottom: 16 }}>
+                  <div className={listStyles.tableListForm}>{this.renderForm()}</div>
+                  <Table
+                    style={{ marginBottom: 20 }}
+                    loading={false}
+                    size="small"
+                    dataSource={[]}
+                    selectedRows={1}
+                    pagination={paginationProps}
+                    columns={clientColumns}
+                    onSelectRow={this.handleSelectRows}
+                  />
+                  <Radio.Group defaultValue="show_clientlist" buttonStyle="solid">
+                    <Radio.Button value="show_clientlist" onClick={this.selectClients}>客户列表</Radio.Button>
+                    <Radio.Button value="show_persion" onClick={this.selectMaintains}>共同维护人</Radio.Button>
+                  </Radio.Group>
 
-                <Button icon="plus" type="primary" style={{marginBottom:10}}> 新建</Button>
+                  <Divider className={clientStyle.divder}/>
 
-                <Table
-                  pagination={paginationProps}
-                  loading={false}
-                  selectedRows={1}
-                  dataSource={downTableContent}
-                  size="small"
-                  columns={downTableColumn}
-                />
-              </div>
-            </Card>
-          </Col>
-          <Col lg={leftlg} md={24}>
-            <div
-              className={clientStyle.right_info}
-            >
-              <div className={clientStyle.right_content_tbs}>
-                <RadioGroup
-                  defaultValue="客户"
-                  size="small"
-                  className={clientStyle.right_content_tabgroud}
-                  onChange={this.onChange}
-                  buttonStyle="solid"
-                >
-                  <Radio.Button value="客户" onClick={this.startClient}>客户</Radio.Button>
-                  <Radio.Button value="终客" onClick={this.startTerminal}>终客</Radio.Button>
-                  <Radio.Button value="字印" onClick={this.startMark}>字印</Radio.Button>
-                  <Radio.Button value="包装" onClick={this.startPackageInfo}>包装</Radio.Button>
-                  <Radio.Button value="产品" onClick={this.startProduct}>产品</Radio.Button>
-                  <Radio.Button value="历史订单" onClick={this.startHistory}>历史订单</Radio.Button>
-                </RadioGroup>
-              </div>
-              <div className={clientStyle.list_info}>
-                <span className={clientStyle.title_info}>{selectTitle}</span>
-                <Divider
-                  className={clientStyle.divder}
-                />
-                {children}
-              </div>
-              <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
-                <div
-                  style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', flexDirection: 'column' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Button className={clientStyle.buttomControl} type="primary" icon="plus" size={'small'}>新增</Button>
-                    <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-                    >删除</Button>
-                    <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                            icon="edit">编辑</Button>
-                    <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-                    >冻结</Button>
-                  </div>
+                  <Button icon="plus" type="primary" style={{ marginBottom: 10 }}> 新建</Button>
 
-
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
-                    <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                            icon="copy">复制</Button>
-                    <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
-                    >撤销</Button>
-                  </div>
+                  <Table
+                    pagination={paginationProps}
+                    loading={false}
+                    selectedRows={1}
+                    dataSource={downTableContent}
+                    size="small"
+                    columns={downTableColumn}
+                  />
                 </div>
-
               </Card>
+            </Col>
+            <Col lg={leftlg} md={24}>
+              <div
+                className={clientStyle.right_info}
+              >
+                <div className={clientStyle.right_content_tbs}>
+                  <RadioGroup
+                    defaultValue="客户"
+                    size="small"
+                    className={clientStyle.right_content_tabgroud}
+                    onChange={this.onChange}
+                    buttonStyle="solid"
+                  >
+                    <Radio.Button value="客户" onClick={this.startClient}>客户</Radio.Button>
+                    <Radio.Button value="终客" onClick={this.startTerminal}>终客</Radio.Button>
+                    <Radio.Button value="字印" onClick={this.startMark}>字印</Radio.Button>
+                    <Radio.Button value="包装" onClick={this.startPackageInfo}>包装</Radio.Button>
+                    <Radio.Button value="产品" onClick={this.startProduct}>产品</Radio.Button>
+                    <Radio.Button value="历史订单" onClick={this.startHistory}>历史订单</Radio.Button>
+                  </RadioGroup>
+                </div>
+                <div className={clientStyle.list_info}>
+                  <span className={clientStyle.title_info}>{selectTitle}</span>
+                  <Divider
+                    className={clientStyle.divder}
+                  />
+                  {children}
+                </div>
+                <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      justifyContent: 'flex-start',
+                      flexDirection: 'column',
+                    }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Button className={clientStyle.buttomControl} type="primary" icon="plus"
+                              size={'small'}>新增</Button>
+                      <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
+                      >删除</Button>
+                      <Button className={clientStyle.buttomControl} type="primary" size={'small'}
+                              icon="edit">编辑</Button>
+                      <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
+                      >冻结</Button>
+                    </div>
 
-            </div>
-          </Col>
-        </Row>
-      </GridContent>
+
+                    <div
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
+                      <Button className={clientStyle.buttomControl} type="primary" size={'small'}
+                              icon="copy">复制</Button>
+                      <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
+                      >撤销</Button>
+                    </div>
+                  </div>
+
+                </Card>
+
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </div>
     );
   }
 
   startClient = () => {
     this.setState(
       {
-        selectTitle:'客户',
-        rightlg:16,
-        leftlg:8
-      }
-    )
+        selectTitle: '客户',
+        rightlg: 16,
+        leftlg: 8,
+      },
+    );
     router.push({ pathname: '/business/client/client', query: { id: 1 } });
   };
 
   startTerminal = () => {
     this.setState(
       {
-        selectTitle:'终客',
-        rightlg:16,
-        leftlg:8
-      }
-    )
+        selectTitle: '终客',
+        rightlg: 16,
+        leftlg: 8,
+      },
+    );
     router.push({ pathname: '/business/client/terminal', query: { id: 1 } });
   };
 
-  selectClients=()=>{
+  selectClients = () => {
 
     this.setState({
-      downTableColumn:clientContentColumns,
-      downTableContent:[],
+      downTableColumn: clientContentColumns,
+      downTableContent: [],
 
-    })
+    });
 
-  }
+  };
 
-  selectMaintains =()=>{
+  selectMaintains = () => {
     this.setState({
-      downTableColumn:maintainsColumn,
-      downTableContent:[]
-    })
-  }
+      downTableColumn: maintainsColumn,
+      downTableContent: [],
+    });
+  };
 
 
   startMark = () => {
     this.setState(
       {
-        selectTitle:'字印',
-        rightlg:16,
-        leftlg:8
-      }
-    )
+        selectTitle: '字印',
+        rightlg: 16,
+        leftlg: 8,
+      },
+    );
     router.push({ pathname: '/business/client/marking', query: { id: 2 } });
   };
 
@@ -455,11 +475,11 @@ class ClientView extends PureComponent {
   startProduct = () => {
     this.setState(
       {
-        selectTitle:'产品',
-        rightlg:15,
-        leftlg:9
-      }
-    )
+        selectTitle: '产品',
+        rightlg: 15,
+        leftlg: 9,
+      },
+    );
     router.push({ pathname: '/business/client/product', query: { id: 3 } });
   };
 
@@ -467,11 +487,11 @@ class ClientView extends PureComponent {
   startPackageInfo = () => {
     this.setState(
       {
-        selectTitle:'打包',
-        rightlg:16,
-        leftlg:8
-      }
-    )
+        selectTitle: '打包',
+        rightlg: 16,
+        leftlg: 8,
+      },
+    );
     router.push({ pathname: '/business/client/package', query: { id: 4 } });
   };
 
@@ -479,11 +499,11 @@ class ClientView extends PureComponent {
   startHistory = () => {
     this.setState(
       {
-        selectTitle:'历史',
-        rightlg:14,
-        leftlg:10
-      }
-    )
+        selectTitle: '历史',
+        rightlg: 14,
+        leftlg: 10,
+      },
+    );
     router.push({ pathname: '/business/client/history', query: { id: 5 } });
   };
 
