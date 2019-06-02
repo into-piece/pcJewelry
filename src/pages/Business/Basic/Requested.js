@@ -25,20 +25,16 @@ import DescriptionList from '@/components/DescriptionList';
 
 const FormItem = Form.Item;
 const clientContentColumns = [
-  {
-    title: '品质要求代码',
-    dataIndex: 'qualityCode',
-    key: 'qualityCode',
-  },
+
   {
     title: '品质要求中文名称',
-    dataIndex: 'qualityEnName',
-    key: 'qualityEnName',
+    dataIndex: 'qualityZhName',
+    key: 'qualityZhName',
   },
   {
     title: '品质要求英文名称',
-    dataIndex: 'qualityZhName',
-    key: 'qualityZhName',
+    dataIndex: 'qualityEnName',
+    key: 'qualityEnName',
   },
   {
     title: '状态',
@@ -92,7 +88,8 @@ class Requested extends PureComponent {
       requestState: 'success',
       requestMes: '保存成功！',
       isLoading: false,
-      multipleData: [],
+      // multipleData: [],
+      rowData:[],
       selectIndexAt: -1,
     };
   }
@@ -130,6 +127,7 @@ class Requested extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
+          rowData:[],
           selectIndexAt: -1,
           showItem: false,
           isEdit: true,
@@ -138,7 +136,6 @@ class Requested extends PureComponent {
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
-        data.qualityCode = temp.qualityCode;
         data.qualityZhName = temp.qualityZhName;
         data.qualityEnName = temp.qualityEnName;
         this.state.current = { ...data };
@@ -247,13 +244,15 @@ class Requested extends PureComponent {
       onSelect: this.selectChange,
     };
 
+    console.log(selectedRowKeys);
+
     if (this.state.done) {
       if (this.state.requestState == 'success') {
         message.success(this.state.requestMes);
       } else {
         message.error(this.state.requestMes);
       }
-      this.handleDone()
+      this.handleDone();
     }
 
 
@@ -277,24 +276,18 @@ class Requested extends PureComponent {
         <Form
           size={'small'}
           onSubmit={this.handleSubmit}>
-          <FormItem label="品质要求代码" {...this.formLayout}>
-            {getFieldDecorator('qualityCode', {
-              rules: [{ required: true, message: '配送编号' }],
-              initialValue: current.qualityCode,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem>
           <FormItem label="品质要求英文名称" {...this.formLayout}>
-            {getFieldDecorator('qualityZhName', {
+            {getFieldDecorator('qualityEnName', {
               rules: [{ required: true, message: '请输入英文名称' }],
-              initialValue: current.qualityZhName,
+              initialValue: current.qualityEnName,
             })(
               <Input placeholder="请输入"/>,
             )}
           </FormItem>
           <FormItem label="品质要求中文名" {...this.formLayout}>
-            {getFieldDecorator('qualityEnName', {
+            {getFieldDecorator('qualityZhName', {
               rules: [{ message: '请输入中文名称' }],
-              initialValue: current.qualityEnName,
+              initialValue: current.qualityZhName,
             })(
               <Input placeholder="请输入"/>,
             )}
@@ -332,15 +325,15 @@ class Requested extends PureComponent {
                   rowKey={record =>
                     record.id
                   }
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowItem(record);
+                      },
+                    };
+                  }}
                   bordered={false}
                   rowClassName={this.onSelectRowClass}
-                  // onRow={(record, index) => {
-                  //   return {
-                  //     onClick: event => {
-                  //       this.selectChange(record,index)
-                  //     }
-                  //   };
-                  // }}
                   size='middle'
                   columns={clientContentColumns}
                 />
@@ -416,18 +409,18 @@ class Requested extends PureComponent {
 
   clickDeleteFrom = () => {
     // const requestedNo = this.state.showItem;
-    const { multipleData } = this.state;
+    const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     // const data =  Array.from(multipleData)
     const data = [];
-    data.push(multipleData)
+    data.push(selectedRowKeys);
 
     dispatch({
       type: 'requested/deleteRequested',
       payload:
-        // ...requestedNo,
-         {"list":multipleData}
+      // ...requestedNo,
+        { 'list': selectedRowKeys }
       ,
     });
 
@@ -435,16 +428,17 @@ class Requested extends PureComponent {
     this.setState({
       selectedRowKeys: '',
       selectIndexAt: -1,
+      rowData:[],
       showItem: false,
       isEdit: true,
     });
 
   };
 
-  errorHandler =()=>{
-    message.warn("报错！")
+  errorHandler = () => {
+    message.warn('报错！');
 
-  }
+  };
 
   clickEditFrom = () => {
     this.state.isAdd = false;
@@ -456,15 +450,73 @@ class Requested extends PureComponent {
   };
 
 
+  clickRowItem = (record) => {
+
+
+    const { selectedRowKeys , rowData} = this.state;
+    const selects = selectedRowKeys?selectedRowKeys:[];
+    const id = record.id
+    if (selects.includes(id)) {
+      console.log('包含');
+      selects.splice(selects.findIndex(index=>index===id),1)
+      if(rowData.includes(record))
+      {
+        console.log('includes '+record.id)
+        rowData.splice(rowData.findIndex(item=>item.id===id),1)
+      }
+    } else {
+      console.log('不包');
+      selects.push(id)
+      rowData.push(record)
+    }
+
+    if(selects.length>0)
+    {
+      const recordK = selects[selects.length - 1];
+        const r = rowData.filter(value => value.id == recordK);
+      this.showSelectItem(r[0])
+    }else
+    {
+      this.setState({
+            showItem: false,
+            isEdit: true,
+            current: false,
+          });
+    }
+
+    // if (selects.length > 0) {
+    //   const recordK = selectedRowKeys[selects.length - 1];
+    //   const record = selectedRows.filter(value => value.id == recordK);
+    //   // this.showSelectItem(selectedRows[selectedRows.length-1])
+    //   this.setState({
+    //     multipleData: selectedRowKeys,
+    //   });
+    //   this.showSelectItem(record[0]);
+    // } else {
+    //   this.setState({
+    //     showItem: false,
+    //     isEdit: true,
+    //     current: false,
+    //   });
+    // }
+
+    this.setState({
+      selectedRowKeys: [].concat(selects),
+    });
+
+    console.log([].concat(selects))
+  };
+
+
+
   clickFreezeFrom = () => {
-    const RequestedNo = this.state.showItem;
+    const { selectedRowKeys } = this.state;
+
 
     const { dispatch } = this.props;
     dispatch({
       type: 'requested/freezeRequested',
-      payload: {
-        ...RequestedNo,
-      },
+      payload: { 'list': selectedRowKeys },
     });
 
 
@@ -472,18 +524,7 @@ class Requested extends PureComponent {
 
   selectChange = (record, index) => {
 
-    console.log('select brand  ' + Object.keys(record));
-    // let edit = false;
-    // if (record === '') {
-    //   edit = true;
-    // }
-    //
-    // this.setState({
-    //   showItem: { ...record },
-    //   isEdit: edit,
-    //   current: record,
-    //   selectIndexAt: index,
-    // });
+    console.log('changle record  ' + Object.keys(record));
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -495,9 +536,9 @@ class Requested extends PureComponent {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
       // this.showSelectItem(selectedRows[selectedRows.length-1])
-      this.setState({
-        multipleData: selectedRowKeys,
-      });
+      // this.setState({
+      //   multipleData: selectedRowKeys,
+      // });
       this.showSelectItem(record[0]);
     } else {
       this.setState({
@@ -508,12 +549,12 @@ class Requested extends PureComponent {
     }
     this.setState({
       selectedRowKeys,
+      rowData:selectedRows
     });
   };
 
   showSelectItem = record => {
     let edit = false;
-    console.log('display ' + record.qualityCode);
     if (record === '') {
       edit = true;
     }
@@ -535,9 +576,9 @@ class Requested extends PureComponent {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='品质要求代码'>{item.qualityCode}</Description>
         <Description term='品质要求中文名'>{item.qualityZhName}</Description>
         <Description term='品质要求英文名'>{item.qualityEnName}</Description>
+        <Description term='状态'>{item.status}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
         </span>

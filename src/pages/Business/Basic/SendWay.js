@@ -11,6 +11,7 @@ import {
   Input,
   Button,
   Divider,
+  message,
 } from 'antd';
 import styles  from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
@@ -22,11 +23,7 @@ import {connect} from 'dva'
 import DescriptionList from '@/components/DescriptionList';
 const FormItem = Form.Item;
 const clientContentColumns = [
-  {
-    title: '送货方式代码',
-    dataIndex: 'deliveryCode',
-    key: 'deliveryCode',
-  },
+
   {
     title: '中文名',
     dataIndex: 'deliveryZhName',
@@ -92,6 +89,7 @@ class Requested extends PureComponent {
       requestMes: '保存成功！',
       isLoading:false,
       selectIndexAt:-1,
+      rowData:[]
     };
   }
 
@@ -129,6 +127,7 @@ class Requested extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
+          rowData:[],
           selectIndexAt:-1,
           showItem: false,
           isEdit: true,
@@ -137,7 +136,6 @@ class Requested extends PureComponent {
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
-        data.deliveryCode = temp.deliveryCode;
         data.deliveryZhName = temp.deliveryZhName;
         data.deliveryEnName = temp.deliveryEnName;
         this.state.current ={...data};
@@ -210,10 +208,8 @@ class Requested extends PureComponent {
         }
 
         this.state.requestMes =body.rtnMsg;
-        console.log('result = '+this.state.requestMes)
         this.state.update = false;
         this.state.done = true;
-        this.state.visible = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
           this.state.showItem = {...current};
@@ -239,12 +235,21 @@ class Requested extends PureComponent {
     }
 
 
+    if (this.state.done) {
+      if (this.state.requestState == 'success') {
+        message.success(this.state.requestMes);
+      } else {
+        message.error(this.state.requestMes);
+      }
+      this.handleDone()
+    }
+
 
     console.log('rntCode=' + body.rtnCode+",data = "+(body.data));
 
     const rowSelection = {
       selectedRowKeys,
-      type: 'radio',
+      type: 'checkbox',
       onChange: this.onSelectChange,
       onSelect: this.selectChange,
     };
@@ -252,31 +257,11 @@ class Requested extends PureComponent {
 
 
     const getModalContent = () => {
-      if (this.state.done) {
-        return (
-          <Result
-            type={this.state.requestState}
-            title={this.state.requestMes}
-            description=""
-            actions={
-              <Button type="primary" onClick={this.handleDone}>
-                知道了
-              </Button>
-            }
-            className={formstyles.formResult}
-          />
-        );
-      }
+
       return (
         <Form
           size={'small'}
           onSubmit={this.handleSubmit}>
-          <FormItem label="配送方式编号" {...this.formLayout}>
-            {getFieldDecorator('deliveryCode', {
-              rules: [{ required: true, message: '配送编号' }],
-              initialValue: current.deliveryCode,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem>
           <FormItem label="中文名" {...this.formLayout}>
             {getFieldDecorator('deliveryZhName', {
               rules: [{ required: true, message: '请输入中文名称' }],
@@ -321,18 +306,19 @@ class Requested extends PureComponent {
                   loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
-                  filterMultiple={false}
+                  rowSelection={rowSelection}
+                  rowKey={record =>
+                    record.id
+                  }
                   bordered={false}
-                  selectedRows={1}
-                  rowClassName={this.onSelectRowClass}
-                  onRow={(record, index) => {
+                  onRow={record => {
                     return {
                       onClick: event => {
-                        this.selectChange(record,index)
-
-                      }
+                        this.clickRowItem(record);
+                      },
                     };
                   }}
+                  rowClassName={this.onSelectRowClass}
                   size='middle'
                   columns={clientContentColumns}
                 />
@@ -396,9 +382,7 @@ class Requested extends PureComponent {
     if (index % 2 == 0) {
       color = styles.row_normal;
     }
-
-    return index == this.state.selectIndexAt ? styles.row_select : color;
-    // return index == this.state.selectIndexAt ? styles.row_select :"";
+    return color;
   };
 
   clickNewFrom = () => {
@@ -407,19 +391,19 @@ class Requested extends PureComponent {
   };
 
   clickDeleteFrom = () => {
-    const SendWayNo = this.state.showItem;
+    // const SendWayNo = this.state.showItem;
+    const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
       type: 'sendway/deleteSendWay',
-      payload: {
-        ... SendWayNo,
-      },
+      payload:  { 'list': selectedRowKeys },
     });
 
 
     this.setState({
       selectedRowKeys: '',
+      rowData:[],
       selectIndexAt:-1,
       showItem: false,
       isEdit: true,
@@ -438,22 +422,81 @@ class Requested extends PureComponent {
 
 
   clickFreezeFrom = () => {
-    const sendWayNo = this.state.showItem;
-
+    const { selectedRowKeys } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'sendway/freezeSendWay',
-      payload: {
-        ... sendWayNo,
-      },
+      payload:  { 'list': selectedRowKeys },
     });
 
 
   };
 
 
-  selectChange = (record,index) => {
+  clickRowItem = (record) => {
+    const { selectedRowKeys , rowData} = this.state;
+    const selects = selectedRowKeys?selectedRowKeys:[];
+    const id = record.id
+    if (selects.includes(id)) {
+      selects.splice(selects.findIndex(index=>index===id),1)
+      if(rowData.includes(record))
+      {
+        rowData.splice(rowData.findIndex(item=>item.id===id),1)
+      }
+    } else {
+      selects.push(id)
+      rowData.push(record)
+    }
 
+    if(selects.length>0)
+    {
+      const recordK = selects[selects.length - 1];
+      const r = rowData.filter(value => value.id == recordK);
+      this.showSelectItem(r[0])
+    }else
+    {
+      this.setState({
+        showItem: false,
+        isEdit: true,
+        current: false,
+      });
+    }
+
+    this.setState({
+      selectedRowKeys: [].concat(selects),
+    });
+
+    console.log([].concat(selects))
+  };
+
+  selectChange = (record,index) => {
+  };
+
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+
+    if (selectedRowKeys.length > 0) {
+      const recordK = selectedRowKeys[selectedRowKeys.length - 1];
+      const record = selectedRows.filter(value => value.id == recordK);
+      // this.showSelectItem(selectedRows[selectedRows.length-1])
+
+      this.showSelectItem(record[0]);
+    } else {
+      this.setState({
+        showItem: false,
+        isEdit: true,
+        current: false,
+      });
+    }
+
+
+    this.setState({
+      selectedRowKeys,
+      rowData:selectedRows
+    });
+  };
+
+
+  showSelectItem = record => {
     let edit = false;
     if (record === '') {
       edit = true;
@@ -463,16 +506,7 @@ class Requested extends PureComponent {
       showItem: { ...record },
       isEdit: edit,
       current: record,
-      selectIndexAt: index,
-    });
-  };
-
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('onSelectChage');
-    console.log('select key = ' + Object.keys(selectedRows));
-
-    this.setState({
-      selectedRowKeys,
+      // selectIndexAt: index,
     });
   };
 
@@ -485,9 +519,9 @@ class Requested extends PureComponent {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='业务提出编号'>{item.deliveryCode}</Description>
         <Description term='中文名'>{item.deliveryZhName}</Description>
         <Description term='英文名'>{item.deliveryEnName}</Description>
+        <Description term='状态'>{item.status}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
         </span>

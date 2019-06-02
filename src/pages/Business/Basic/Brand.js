@@ -12,6 +12,7 @@ import {
   Button,
   Divider,
   List,
+  message
 } from 'antd';
 import styles from './brand.less';
 import SvgUtil from './../../../utils/SvgUtil';
@@ -29,11 +30,7 @@ const { Description } = DescriptionList;
 
 
 const clientContentColumns = [
-  {
-    title: '产品编号',
-    dataIndex: 'brandNo',
-    key: 'brandNo',
-  },
+
   {
     title: '中文名称',
     dataIndex: 'brandZhName',
@@ -101,6 +98,7 @@ class Brand extends Component {
       requestState:'success',
       requestMes:'保存成功！',
       isLoading:false,
+      rowData:[],
       selectIndexAt:-1,
     };
   }
@@ -136,6 +134,7 @@ class Brand extends Component {
 
         this.setState({
           selectedRowKeys: '',
+          rowData:[],
           selectIndexAt:-1,
           showItem: false,
           isEdit: true,
@@ -145,7 +144,6 @@ class Brand extends Component {
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
-        data.brandNo = temp.brandNo;
         data.brandZhName = temp.brandZhName;
         data.brandEnName = temp.brandEnName;
         this.state.current ={...data};
@@ -247,7 +245,6 @@ class Brand extends Component {
         console.log('result = '+this.state.requestMes)
         this.state.update = false;
         this.state.done = true;
-        this.state.visible = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
           this.state.showItem = {...current};
@@ -285,32 +282,22 @@ class Brand extends Component {
 
 
 
-    const getModalContent = () => {
-      if (this.state.done) {
-        return (
-          <Result
-            type={this.state.requestState}
-            title={this.state.requestMes}
-            description=""
-            actions={
-              <Button type="primary" onClick={this.handleDone}>
-                知道了
-              </Button>
-            }
-            className={formstyles.formResult}
-          />
-        );
+    if (this.state.done) {
+      if (this.state.requestState == 'success') {
+        message.success(this.state.requestMes);
+      } else {
+        message.error(this.state.requestMes);
       }
+      this.handleDone()
+    }
+
+    const getModalContent = () => {
+
       return (
         <Form
           size={'small'}
           onSubmit={this.handleSubmit}>
-          <FormItem label="品牌编号" {...this.formLayout}>
-            {getFieldDecorator('brandNo', {
-              rules: [{ required: true, message: '品牌编号' }],
-              initialValue: current.brandNo,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem>
+
           <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('brandEnName', {
               rules: [{ required: true, message: '请输入品牌编号' }],
@@ -333,7 +320,7 @@ class Brand extends Component {
 
     const rowSelection = {
       selectedRowKeys,
-      type: 'radio',
+      type: 'checkbox',
       onChange: this.onSelectChange,
       onSelect: this.selectChange,
     };
@@ -368,24 +355,25 @@ class Brand extends Component {
                   loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
-                  filterMultiple={false}
+                  rowSelection={rowSelection}
+                  rowKey={record =>
+                    record.id
+                  }
                   bordered={false}
-                  selectedRows={1}
-                  rowClassName={this.onSelectRowClass}
-                  onRow={(record, index) => {
+                  onRow={record => {
                     return {
                       onClick: event => {
-                        this.selectChange(record,index)
-
-                      }
+                        this.clickRowItem(record);
+                      },
                     };
                   }}
+                  rowClassName={this.onSelectRowClass}
                   size='middle'
                   columns={clientContentColumns}
                 />
 
                 <Modal
-                  title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
+                  title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}
                   className={styles.standardListForm}
                   width={640}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -406,7 +394,7 @@ class Brand extends Component {
               >
                 {/*<div style={{ overflow: 'scroll', minHeight: window.innerHeight * 0.7, display: 'inline' }}>*/}
                 <div>
-              <span title={formatMessage({ id: 'navbar.lang' })}
+              <span
                     style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
               品牌信息
               </span>
@@ -464,30 +452,63 @@ class Brand extends Component {
     if (index % 2 == 0) {
       color = styles.row_normal;
     }
-
-    return index == this.state.selectIndexAt ? styles.row_select : color;
-    // return index == this.state.selectIndexAt ? styles.row_select :"";
+    return color;
   };
+
 
   clickNewFrom = () => {
     this.state.isAdd = true;
     this.setState({ visible: true, current: {} });
   };
 
+
+  clickRowItem = (record) => {
+
+    const { selectedRowKeys, rowData } = this.state;
+    const selects = selectedRowKeys ? selectedRowKeys : [];
+    const id = record.id
+    if (selects.includes(id)) {
+      selects.splice(selects.findIndex(index => index === id), 1)
+      if (rowData.includes(record)) {
+        console.log('includes ' + record.id)
+        rowData.splice(rowData.findIndex(item => item.id === id), 1)
+      }
+    } else {
+      selects.push(id)
+      rowData.push(record)
+    }
+
+    if (selects.length > 0) {
+      const recordK = selects[selects.length - 1];
+      const r = rowData.filter(value => value.id == recordK);
+      this.showSelectItem(r[0])
+    } else {
+      this.setState({
+        showItem: false,
+        isEdit: true,
+        current: false,
+      });
+    }
+    this.setState({
+      selectedRowKeys: [].concat(selects),
+    });
+
+
+  }
+
   clickDeleteFrom = () => {
-    const brandNo = this.state.showItem;
+    const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/deleteBrand',
-      payload: {
-        ...brandNo,
-      },
+      payload: {"list":selectedRowKeys},
     });
 
 
     this.setState({
       selectedRowKeys: '',
+      rowData:[],
       selectIndexAt:-1,
       showItem: false,
       isEdit: true,
@@ -507,14 +528,12 @@ class Brand extends Component {
 
 
   clickFreezeFrom = () => {
-    const brandNo = this.state.showItem;
+    const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/freeBrand',
-      payload: {
-        ...brandNo,
-      },
+      payload:  { 'list': selectedRowKeys },
     });
 
 
@@ -524,29 +543,45 @@ class Brand extends Component {
   selectChange = (record,index) => {
 
     console.log('select brand  ' + Object.keys(record));
-    // let showList2 = [];
-    let edit = false;
-    if (record === '') {
-      edit = true;
-    }
 
-    this.setState({
-      showItem: { ...record },
-      isEdit: edit,
-      current: record,
-      selectIndexAt: index,
-    });
+
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     console.log('onSelectChage');
-    console.log('select key = ' + Object.keys(selectedRows));
-    // this.setState({ selectedRowKeys });
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
 
+
+    if (selectedRowKeys.length > 0) {
+      const recordK = selectedRowKeys[selectedRowKeys.length - 1];
+      const record = selectedRows.filter(value => value.id == recordK);
+      // this.showSelectItem(selectedRows[selectedRows.length-1])
+      this.showSelectItem(record[0]);
+    } else {
+      this.setState({
+        showItem: false,
+        isEdit: true,
+        current: false,
+      });
+    }
     this.setState({
       selectedRowKeys,
+      rowData:selectedRows
     });
   };
+
+  showSelectItem = record => {
+    let edit = false;
+    if (record === '') {
+      edit = true;
+    }
+    this.setState({
+      showItem: { ...record },
+      isEdit: edit,
+      current: record,
+      // selectIndexAt: index,
+    });
+  }
 
   selectRowItem = () => {
     console.log('select the item');
@@ -557,7 +592,6 @@ class Brand extends Component {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='品牌编号'>{item.brandNo}</Description>
         <Description term='品牌英文'>{item.brandEnName}</Description>
         <Description term='品牌中文'>{item.brandZhName}</Description>
         </DescriptionList>
