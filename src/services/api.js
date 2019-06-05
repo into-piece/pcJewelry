@@ -391,6 +391,68 @@ export async function freezeTheSonRingNum(params) {
 }
 
 
+/*===============基础接口部分=结束===============*/
+
+
+
+
+/*===============客户接口部分=开始===============*/
+export async function querylistClient(parmas) {
+
+  return request('/business/customer-type/listCustomerType', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveTheClient(params) {
+
+  return request('/business/customer-type/saveOrUpdate', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheClient(params) {
+
+  return request('/business/customer-type/delete', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateTheClient(params) {
+
+  return request('/business/customer-type/saveOrUpdate', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+export async function freezeTheClient(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/business/customer-type/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+
+
+
+
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }

@@ -325,13 +325,13 @@ class Requested extends PureComponent {
                   rowKey={record =>
                     record.id
                   }
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickRowItem(record);
-                      },
-                    };
-                  }}
+                  // onRow={record => {
+                  //   return {
+                  //     onClick: event => {
+                  //       this.clickRowItem(record);
+                  //     },
+                  //   };
+                  // }}
                   bordered={false}
                   rowClassName={this.onSelectRowClass}
                   size='middle'

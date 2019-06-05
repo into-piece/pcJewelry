@@ -17,8 +17,9 @@ import {
   List,
   Divider,
 } from 'antd';
-import styles from './ClientInfo.less';
+import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
+import clientStyle from './Client.less';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -126,27 +127,18 @@ class History extends PureComponent {
 
 
     return (<div className={styles.content}>
+      <div className={styles.right_info}>
 
       <Form layout="inline">
-
-
         <FormItem label="订单号码">{<Input placeholder="请输入"/>}</FormItem>
         <Button type="primary" htmlType="submit">
           查询
         </Button>
 
-
-        {/*<Col md={8} sm={12}>*/}
-        {/*<span className={styles.submitButtons}>*/}
-        {/*<Button type="primary" htmlType="submit">*/}
-        {/*查询*/}
-        {/*</Button>*/}
-        {/*</span>*/}
-        {/*</Col>*/}
-
       </Form>
       <Table
-        style={{ marginBottom: 5 }}
+        // style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}}
+        style={{ marginBottom: 5}}
         pagination={false}
         loading={false}
         dataSource={tempHistory}
@@ -159,7 +151,7 @@ class History extends PureComponent {
               });
             },
             onMouseEnter: event => {
-              console.log('mouse '+index);
+              // console.log('mouse '+index);
 
             },
           };
@@ -168,6 +160,38 @@ class History extends PureComponent {
         rowKey="id"
 
       />
+      </div>
+      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
+            className={styles.cardconrtll}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            flexDirection: 'column',
+          }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Button className={clientStyle.buttomControl} type="primary" icon="plus"
+                    size={'small'}>新增</Button>
+            <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
+            >删除</Button>
+            <Button className={clientStyle.buttomControl} type="primary" size={'small'}
+                    icon="edit">编辑</Button>
+            <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
+            >冻结</Button>
+          </div>
+
+
+          <div
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
+            <Button className={clientStyle.buttomControl} type="primary" size={'small'}
+                    icon="copy">复制</Button>
+            <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
+            >撤销</Button>
+          </div>
+        </div>
+
+      </Card>
 
     </div>);
   }

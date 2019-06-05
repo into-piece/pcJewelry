@@ -360,13 +360,13 @@ class Brand extends Component {
                     record.id
                   }
                   bordered={false}
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickRowItem(record);
-                      },
-                    };
-                  }}
+                  // onRow={record => {
+                  //   return {
+                  //     onClick: event => {
+                  //       this.clickRowItem(record);
+                  //     },
+                  //   };
+                  // }}
                   rowClassName={this.onSelectRowClass}
                   size='middle'
                   columns={clientContentColumns}

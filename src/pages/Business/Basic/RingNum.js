@@ -540,13 +540,13 @@ class RingNum extends PureComponent {
                     record.id
                   }
                   bordered={false}
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickStandardRowItem(record);
-                      },
-                    };
-                  }}
+                  // onRow={record => {
+                  //   return {
+                  //     onClick: event => {
+                  //       this.clickStandardRowItem(record);
+                  //     },
+                  //   };
+                  // }}
                   rowClassName={this.onSelectRowClass}
                   size='middle'
                   columns={ringNumContentColumns}
@@ -561,13 +561,13 @@ class RingNum extends PureComponent {
                   rowKey={record =>
                     record.id
                   }
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickRowNumberItem(record);
-                      },
-                    };
-                  }}
+                  // onRow={record => {
+                  //   return {
+                  //     onClick: event => {
+                  //       this.clickRowNumberItem(record);
+                  //     },
+                  //   };
+                  // }}
                   size='middle'
                   columns={subringNumContentColumns}
 
