@@ -73,19 +73,18 @@ export default {
   devtool: ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION ? 'source-map' : false,
   // 路由配置
   routes: pageRoutes,
-  history:'hash',
   // Theme for antd
   // https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
   },
-  // proxy: {
-  //   '/server/': {
-  //     target: 'http://www.zhuoyiwuliu.com:8081/',//basic/brand/listBrands/
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/server/': {
+      target: 'http://www.zhuoyiwuliu.com:8081/',//basic/brand/listBrands/
+      changeOrigin: true,
+      pathRewrite: { '^/server': '' },
+    },
+  },
   /*  proxy: {
       '/server/api/': {
         target: 'https://preview.pro.ant.design/',
@@ -124,7 +123,7 @@ export default {
   manifest: {
     basePath: './',
   },
-
+  history:'hash',
   base: './',
   exportStatic: {
     // dynamicRoot: true,

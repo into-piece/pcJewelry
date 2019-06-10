@@ -8,26 +8,25 @@ export async function queryProjectNotice() {
 export async function queryActivities() {
   return request('/api/activities');
 }
-
 export async function querylistBrands() {
 
-  // return request('/server/basic/brand/listBrands', {
-  return request('/basic/brand/listBrands', {
-    method: 'POST',
-    data: {
+    return request('/server/basic/brand/listBrands', {
+    // return request('/basic/brand/listBrands', {
       method: 'POST',
-    },
-  });
+      data: {
+        method: 'POST',
+      },
+    });
 }
 
 
 export async function saveTheBrand(params) {
 
-  // return request('/server/basic/brand/saveBrand', {
-  return request('/basic/brand/saveOrUpdate', {
+  return request('/server/basic/brand/saveOrUpdate', {
+  // return request('/basic/brand/saveBrand', {
     method: 'POST',
     data: {
-      ...params,
+       ...params
 
     },
   });
@@ -36,40 +35,41 @@ export async function saveTheBrand(params) {
 
 export async function deleteTheBrand(params) {
 
-  // return request('/server/basic/brand/deleteBrand', {
-  return request('/basic/brand/deleteBrand', {
+  return request('/server/basic/brand/deleteBrand', {
+  // return request('/basic/brand/deleteBrand', {
     method: 'POST',
-    data: params.list,
+    data:  params.list,
   });
 }
 
 
 export async function updateTheBrand(params) {
 
-  // return request('/server/basic/brand/updateBrand', {
-  return request('/basic/brand/saveOrUpdate', {
+  return request('/server/basic/brand/saveOrUpdate', {
+  // return request('/basic/brand/updateBrand', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
 
 
+
 export async function freezeTheBrand(params) {
 
-  // return request('/server/basic/brand/freeze', {
-  return request('/basic/brand/freeze', {
+  return request('/server/basic/brand/freeze', {
+  // return request('/basic/brand/freeze', {
     method: 'POST',
-    data: params.list,
+    data:params.list,
   });
 }
 
 
 export async function querylistRoyalty() {
 
-  // return request('/server/basic/business-commission-setting/listBusinessCommissionSettings', {
-  return request('/basic/business-commission-setting/listBusinessCommissionSettings', {
+  return request('/server/basic/business-commission-setting/listBusinessCommissionSettings', {
+  // return request('/basic/business-commission-setting/listBusinessCommissionSettings', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -79,11 +79,11 @@ export async function querylistRoyalty() {
 
 export async function saveTheRoyalty(params) {
 
-  // return request('/server/basic/business-commission-setting/saveBusinessCommissionSetting', {
-  return request('/basic/business-commission-setting/saveOrUpdateBusinessCommissionSetting', {
+  return request('/server/basic/business-commission-setting/saveOrUpdateBusinessCommissionSetting', {
+  // return request('/basic/business-commission-setting/saveBusinessCommissionSetting', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
 
     },
   });
@@ -91,8 +91,8 @@ export async function saveTheRoyalty(params) {
 
 export async function deleteTheRoyalty(params) {
 
-  // return request('/server/basic/business-commission-setting/deleteBusinessCommissionSetting', {
-  return request('/basic/business-commission-setting/deleteBusinessCommissionSetting', {
+  return request('/server/basic/business-commission-setting/deleteBusinessCommissionSetting', {
+  // return request('/basic/business-commission-setting/deleteBusinessCommissionSetting', {
     method: 'POST',
     data: params.list,
   });
@@ -100,11 +100,11 @@ export async function deleteTheRoyalty(params) {
 
 export async function updateTheRoyalty(params) {
 
-  // return request('/server/basic/business-commission-setting/updateBusinessCommissionSetting', {
-  return request('/basic/business-commission-setting/saveOrUpdateBusinessCommissionSetting', {
+  return request('/server/basic/business-commission-setting/saveOrUpdateBusinessCommissionSetting', {
+  // return request('/basic/business-commission-setting/updateBusinessCommissionSetting', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
@@ -112,18 +112,20 @@ export async function updateTheRoyalty(params) {
 
 export async function freezeTheRoyalty(params) {
 
-  // return request('/server/basic/business-commission-setting/freeze', {
-  return request('/basic/business-commission-setting/freeze', {
+  return request('/server/basic/business-commission-setting/freeze', {
+  // return request('/basic/business-commission-setting/freeze', {
     method: 'POST',
     data: params.list,
   });
 }
 
 
+
+
 export async function querylistsendWay() {
 
-  // return request('/server/basic/delivery-method/listDeliveryMethods', {
-  return request('/basic/delivery-method/listDeliveryMethods', {
+  return request('/server/basic/delivery-method/listDeliveryMethods', {
+  // return request('/basic/delivery-method/listDeliveryMethods', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -133,11 +135,11 @@ export async function querylistsendWay() {
 
 export async function saveTheSendWay(params) {
 
-  // return request('/server/basic/delivery-method/saveDeliveryMethod', {
-  return request('/basic/delivery-method/saveOrUpdateDeliveryMethod', {
+  return request('/server/basic/delivery-method/saveOrUpdateDeliveryMethod', {
+  // return request('/basic/delivery-method/saveDeliveryMethod', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
 
     },
   });
@@ -145,8 +147,8 @@ export async function saveTheSendWay(params) {
 
 export async function deleteTheSendWay(params) {
 
-  // return request('/server/basic/delivery-method/deleteDeliveryMethod', {
-  return request('/basic/delivery-method/deleteDeliveryMethod', {
+  return request('/server/basic/delivery-method/deleteDeliveryMethod', {
+  // return request('/basic/delivery-method/deleteDeliveryMethod', {
     method: 'POST',
     data: params.list,
   });
@@ -154,11 +156,11 @@ export async function deleteTheSendWay(params) {
 
 export async function updateTheSendWay(params) {
 
-  // return request('/server/basic/delivery-method/updateDeliveryMethod', {
-  return request('/basic/delivery-method/saveOrUpdateDeliveryMethod', {
+  return request('/server/basic/delivery-method/saveOrUpdateDeliveryMethod', {
+  // return request('/basic/delivery-method/updateDeliveryMethod', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
@@ -166,18 +168,19 @@ export async function updateTheSendWay(params) {
 
 export async function freezeTheSendWay(params) {
 
-  // return request('/server/basic/delivery-method/freeze', {
-  return request('/basic/delivery-method/freeze', {
+  return request('/server/basic/delivery-method/freeze', {
+  // return request('/basic/delivery-method/freeze', {
     method: 'POST',
     data: params.list,
   });
 }
 
 
+
 export async function querylistRequested() {
 
-  // return request('/server/basic/quality-requirements/listQualityRequirementss', {
-  return request('/basic/quality-requirements/listQualityRequirementss', {
+  return request('/server/basic/quality-requirements/listQualityRequirementss', {
+  // return request('/basic/quality-requirements/listQualityRequirementss', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -187,11 +190,11 @@ export async function querylistRequested() {
 
 export async function saveTheRequested(params) {
 
-  // return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
-  return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  // return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
 
     },
   });
@@ -199,20 +202,22 @@ export async function saveTheRequested(params) {
 
 export async function deleteTheRequested(params) {
 
-  // return request('/server/basic/quality-requirements/deleteQualityRequirements', {
-  return request('/basic/quality-requirements/deleteQualityRequirements', {
+  return request('/server/basic/quality-requirements/deleteQualityRequirements', {
+  // return request('/basic/quality-requirements/deleteQualityRequirements', {
     method: 'POST',
-    data: params.list,
+    data:
+      params.list
+
   });
 }
 
 export async function updateTheRequested(params) {
 
-  // return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
-  return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  // return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
@@ -220,8 +225,8 @@ export async function updateTheRequested(params) {
 
 export async function freezeTheRequested(params) {
 
-  // return request('/server/basic/quality-requirements/freeze', {
-  return request('/basic/quality-requirements/freeze', {
+  return request('/server/basic/quality-requirements/freeze', {
+  // return request('/basic/quality-requirements/freeze', {
     method: 'POST',
     data: params.list,
   });
@@ -230,8 +235,8 @@ export async function freezeTheRequested(params) {
 
 export async function querylistCurrency() {
 
-  // return request('/server/basic/currency/listCurrency', {
-  return request('/basic/currency/listCurrency', {
+  return request('/server/basic/currency/listCurrency', {
+  // return request('/basic/currency/listCurrency', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -241,11 +246,11 @@ export async function querylistCurrency() {
 
 export async function saveTheCurrency(params) {
 
-  // return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
-  return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  // return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
 
     },
   });
@@ -253,8 +258,8 @@ export async function saveTheCurrency(params) {
 
 export async function deleteTheCurrency(params) {
 
-  // return request('/server/basic/quality-requirements/deleteQualityRequirements', {
-  return request('/basic/quality-requirements/deleteQualityRequirements', {
+  return request('/server/basic/quality-requirements/deleteQualityRequirements', {
+    // return request('/basic/quality-requirements/deleteQualityRequirements', {
     method: 'POST',
     data: params.list,
   });
@@ -262,11 +267,11 @@ export async function deleteTheCurrency(params) {
 
 export async function updateTheCurrency(params) {
 
-  // return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
-  return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  return request('/server/basic/quality-requirements/saveOrUpdateQualityRequirements', {
+  // return request('/basic/quality-requirements/saveOrUpdateQualityRequirements', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
@@ -274,18 +279,21 @@ export async function updateTheCurrency(params) {
 
 export async function freezeTheCurrency(params) {
 
-  // return request('/server/basic/quality-requirements/freeze', {
-  return request('/basic/quality-requirements/freeze', {
+  return request('/server/basic/quality-requirements/freeze', {
+    // return request('/basic/quality-requirements/freeze', {
     method: 'POST',
-    data: params.list,
+    data: {
+      ...params
+    },
   });
 }
 
 
+
 export async function querylistRingNum() {
 
-  // return request('/server/basic/ring-around-the-standard/listRingAroundTheStandards', {
-  return request('/basic/ring-around-the-standard/listRingAroundTheStandards', {
+  return request('/server/basic/ring-around-the-standard/listRingAroundTheStandards', {
+  // return request('/basic/ring-around-the-standard/listRingAroundTheStandards', {
     method: 'POST',
     data: {
       method: 'POST',
@@ -295,11 +303,11 @@ export async function querylistRingNum() {
 
 export async function saveTheRingNum(params) {
 
-  // return request('/server/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
-  return request('/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
+  return request('/server/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
+  // return request('/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
 
     },
   });
@@ -307,8 +315,8 @@ export async function saveTheRingNum(params) {
 
 export async function deleteTheRingNum(params) {
 
-  // return request('/server/basic/ring-around-the-standard/delete', {
-  return request('/basic/ring-around-the-standard/delete', {
+  return request('/server/basic/ring-around-the-standard/delete', {
+  // return request('/basic/ring-around-the-standard/delete', {
     method: 'POST',
     data: params.list,
   });
@@ -316,11 +324,11 @@ export async function deleteTheRingNum(params) {
 
 export async function updateTheRingNum(params) {
 
-  // return request('/server/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
-  return request('/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
+  return request('/server/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
+  // return request('/basic/ring-around-the-standard/saveOrUpdateRingAroundTheStandard', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
@@ -328,8 +336,8 @@ export async function updateTheRingNum(params) {
 
 export async function freezeTheRingNum(params) {
 
-  // return request('/server/basic/ring-around-the-standard/freeze', {
-  return request('/basic/ring-around-the-standard/freeze', {
+  return request('/server/basic/ring-around-the-standard/freeze', {
+  // return request('/basic/ring-around-the-standard/freeze', {
     method: 'POST',
     data: params.list,
   });
@@ -338,8 +346,8 @@ export async function freezeTheRingNum(params) {
 
 export async function querylistSonRingNum(params) {
 
-  // return request('/server/basic/ring-around/listRingAroundByStandardId', {
-  return request('/basic/ring-around/listRingAroundByStandardId', {
+  return request('/server/basic/ring-around/listRingAroundByStandardId', {
+  // return request('/basic/ring-around/listRingAroundByStandardId', {
     method: 'POST',
     data: {
       ...params,
@@ -349,8 +357,8 @@ export async function querylistSonRingNum(params) {
 
 export async function saveTheSonRingNum(params) {
 
-  // return request('/server/basic/ring-around/saveOrUpdateRingAround', {
-  return request('/basic/ring-around/saveOrUpdateRingAround', {
+  return request('/server/basic/ring-around/saveOrUpdateRingAround', {
+  // return request('/basic/ring-around/saveOrUpdateRingAround', {
     method: 'POST',
     data: {
       ...params,
@@ -362,8 +370,8 @@ export async function saveTheSonRingNum(params) {
 
 export async function deleteTheSonRingNum(params) {
 
-  // return request('/server/basic/ring-around/delete', {
-  return request('/basic/ring-around/delete', {
+  return request('/server/basic/ring-around/delete', {
+  // return request('/basic/ring-around/delete', {
     method: 'POST',
     data: params.list,
   });
@@ -371,11 +379,11 @@ export async function deleteTheSonRingNum(params) {
 
 export async function updateTheSonRingNum(params) {
 
-  // return request('/server/basic/ring-around/saveOrUpdateRingAround', {
-  return request('/basic/ring-around/saveOrUpdateRingAround', {
+  return request('/server/basic/ring-around/saveOrUpdateRingAround', {
+  // return request('/basic/ring-around/saveOrUpdateRingAround', {
     method: 'POST',
     data: {
-      ...params,
+      ...params
     },
   });
 }
@@ -390,7 +398,6 @@ export async function freezeTheSonRingNum(params) {
   });
 }
 
-
 /*===============基础接口部分=结束===============*/
 
 
@@ -399,7 +406,7 @@ export async function freezeTheSonRingNum(params) {
 /*===============客户接口部分=开始===============*/
 export async function querylistClient(parmas) {
 
-  return request('/business/customer-type/listCustomerType', {
+  return request('/server/business/customer-type/listCustomerType', {
     // return request('/basic/ring-around/listRingAroundByStandardId', {
     method: 'POST',
     data: {
@@ -410,7 +417,7 @@ export async function querylistClient(parmas) {
 
 export async function saveTheClient(params) {
 
-  return request('/business/customer-type/saveOrUpdate', {
+  return request('/server/business/customer-type/saveOrUpdate', {
     // return request('/basic/ring-around/saveOrUpdateRingAround', {
     method: 'POST',
     data: {
@@ -422,7 +429,7 @@ export async function saveTheClient(params) {
 
 export async function deleteTheClient(params) {
 
-  return request('/business/customer-type/delete', {
+  return request('/server/business/customer-type/delete', {
     // return request('/basic/ring-around/delete', {
     method: 'POST',
     data: params.list,
@@ -431,7 +438,7 @@ export async function deleteTheClient(params) {
 
 export async function updateTheClient(params) {
 
-  return request('/business/customer-type/saveOrUpdate', {
+  return request('/server/business/customer-type/saveOrUpdate', {
     // return request('/basic/ring-around/saveOrUpdateRingAround', {
     method: 'POST',
     data: {
@@ -439,10 +446,67 @@ export async function updateTheClient(params) {
     },
   });
 }
+
+
 export async function freezeTheClient(params) {
 
   // return request('/server/basic/ring-around/freeze', {
-  return request('/business/customer-type/freeze', {
+  return request('/basic/business/customer/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+
+export async function querylistCustomer(parmas) {
+
+  return request('/server/business/customer/listCustomer', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveTheCustomer(params) {
+
+  return request('/server/business/customer/saveCustomer', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheCustomer(params) {
+
+  return request('/server/business/customer/deleteCustomer', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateTheCustomer(params) {
+
+  return request('/server/business/customer/saveCustomer', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheCustomer(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/business/customer/freeze', {
     method: 'POST',
     data: params.list,
   });
@@ -458,6 +522,7 @@ export async function queryRule(params) {
 }
 
 
+
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',
@@ -469,7 +534,7 @@ export async function removeRule(params) {
 }
 
 export async function addRule(params) {
-  console.log('rule = ' + params);
+  console.log('rule = '+params);
   return request('/api/rule', {
     method: 'POST',
     data: {

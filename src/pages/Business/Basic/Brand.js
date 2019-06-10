@@ -12,7 +12,7 @@ import {
   Button,
   Divider,
   List,
-  message
+  message,
 } from 'antd';
 import styles from './brand.less';
 import SvgUtil from './../../../utils/SvgUtil';
@@ -55,7 +55,7 @@ const paginationProps = {
 };
 
 @connect(({ loading, basic }) => {
-  const { rtnCode, head,rtnMsg } = basic;
+  const { rtnCode, head, rtnMsg } = basic;
   return {
     listLoading: loading.effects['basic/fetchListBrands'],
     addloading: loading.effects['basic/addBrand'],
@@ -65,7 +65,7 @@ const paginationProps = {
     body: basic.body,
     rtnCode,
     head,
-    rtnMsg
+    rtnMsg,
   };
 })
 
@@ -76,7 +76,6 @@ class Brand extends Component {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
   };
-
 
 
   constructor(props) {
@@ -95,11 +94,12 @@ class Brand extends Component {
       isUpdateFrom: false,
       // isAddFrom: false,
       isAdd: true,
-      requestState:'success',
-      requestMes:'保存成功！',
-      isLoading:false,
-      rowData:[],
-      selectIndexAt:-1,
+      requestState: 'success',
+      requestMes: '保存成功！',
+      isLoading: false,
+      rowData: [],
+      rowSelectedData: [],
+      selectIndexAt: -1,
     };
   }
 
@@ -128,14 +128,14 @@ class Brand extends Component {
         dispatch({
           type: 'basic/addBrand',
           payload: {
-         ...fieldsValue ,
+            ...fieldsValue,
           },
         });
 
         this.setState({
           selectedRowKeys: '',
-          rowData:[],
-          selectIndexAt:-1,
+          rowData: [],
+          selectIndexAt: -1,
           showItem: false,
           isEdit: true,
         });
@@ -146,7 +146,7 @@ class Brand extends Component {
         const data = { ...showItem };
         data.brandZhName = temp.brandZhName;
         data.brandEnName = temp.brandEnName;
-        this.state.current ={...data};
+        this.state.current = { ...data };
         if (data.status === '冻结')
           data.status = 2;
         else if (data.status === '使用中')
@@ -210,14 +210,13 @@ class Brand extends Component {
   render() {
 
 
-
-    const { addSuccessData,selectedRowKeys,  current = {}, isEdit, update } = this.state;
+    const { addSuccessData, selectedRowKeys, current = {}, isEdit, update } = this.state;
 
 
     const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing } = this.props;
 
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing ||listLoading;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
 
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
@@ -234,20 +233,19 @@ class Brand extends Component {
       if (update) {
 
         console.log('rntCode=' + body.rtnCode);
-        if(body.rtnCode==='000000')
-        {
-          this.state.requestState='success';
-        }else {
-          this.state.requestState='error';
+        if (body.rtnCode === '000000') {
+          this.state.requestState = 'success';
+        } else {
+          this.state.requestState = 'error';
         }
 
-        this.state.requestMes =body.rtnMsg;
-        console.log('result = '+this.state.requestMes)
+        this.state.requestMes = body.rtnMsg;
+        console.log('result = ' + this.state.requestMes);
         this.state.update = false;
         this.state.done = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
-          this.state.showItem = {...current};
+          this.state.showItem = { ...current };
         }
 
 
@@ -272,7 +270,6 @@ class Brand extends Component {
     }
 
 
-
     console.log('rntCode=' + body.rtnCode);
 
 
@@ -281,14 +278,13 @@ class Brand extends Component {
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
-
     if (this.state.done) {
       if (this.state.requestState == 'success') {
         message.success(this.state.requestMes);
       } else {
         message.error(this.state.requestMes);
       }
-      this.handleDone()
+      this.handleDone();
     }
 
     const getModalContent = () => {
@@ -308,7 +304,7 @@ class Brand extends Component {
           </FormItem>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('brandZhName', {
-              rules: [{message: '请输入中文名称' }],
+              rules: [{ message: '请输入中文名称' }],
               initialValue: current.brandZhName,
             })(
               <Input placeholder="请输入"/>,
@@ -336,7 +332,7 @@ class Brand extends Component {
       <GridContent>
         <Row gutter={24}
              className={styles.row_content}>
-          <Col lg={16} md={24} >
+          <Col lg={16} md={24}>
             <div
               className={styles.view_left_content}
             >
@@ -360,13 +356,13 @@ class Brand extends Component {
                     record.id
                   }
                   bordered={false}
-                  // onRow={record => {
-                  //   return {
-                  //     onClick: event => {
-                  //       this.clickRowItem(record);
-                  //     },
-                  //   };
-                  // }}
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowItem(record);
+                      },
+                    };
+                  }}
                   rowClassName={this.onSelectRowClass}
                   size='middle'
                   columns={clientContentColumns}
@@ -395,7 +391,7 @@ class Brand extends Component {
                 {/*<div style={{ overflow: 'scroll', minHeight: window.innerHeight * 0.7, display: 'inline' }}>*/}
                 <div>
               <span
-                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
+                style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
               品牌信息
               </span>
                   <Divider/>
@@ -464,24 +460,46 @@ class Brand extends Component {
 
   clickRowItem = (record) => {
 
-    const { selectedRowKeys, rowData } = this.state;
+    const { selectedRowKeys, rowSelectedData } = this.state;
+    let rowData = this.state.rowData;
+    // const selects = selectedRowKeys ? selectedRowKeys : [];
     const selects = selectedRowKeys ? selectedRowKeys : [];
-    const id = record.id
+    const id = record.id;
+
+
+
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index => index === id), 1)
-      if (rowData.includes(record)) {
-        console.log('includes ' + record.id)
-        rowData.splice(rowData.findIndex(item => item.id === id), 1)
+      selects.splice(selects.findIndex(index => index === id), 1);
+      if(rowData.includes(record))
+        rowData=[]
+      if (rowSelectedData.includes(record)) {
+        console.log('includes ' + record.id);
+        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
+        // rowData.splice(rowData.findIndex(item => item.id === id), 1);
       }
     } else {
-      selects.push(id)
-      rowData.push(record)
+
+      // console.log("record is ",rowData)
+      if (rowData.length > 0) {
+        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+      }
+      rowData=[];
+      rowData.push({ ...record });
+      selects.push(id);
+      // rowData.push(record)
+      rowSelectedData.push(record);
+
+
+
+      // console.log("record puth ",rowData)
     }
 
     if (selects.length > 0) {
       const recordK = selects[selects.length - 1];
-      const r = rowData.filter(value => value.id == recordK);
-      this.showSelectItem(r[0])
+      // const r = rowData.filter(value => value.id == recordK);
+      const r = rowSelectedData.filter(value => value.id == recordK);
+
+      this.showSelectItem(r[0]);
     } else {
       this.setState({
         showItem: false,
@@ -491,10 +509,11 @@ class Brand extends Component {
     }
     this.setState({
       selectedRowKeys: [].concat(selects),
+      rowData,
     });
 
-
-  }
+    // this.showSelectItem(record)
+  };
 
   clickDeleteFrom = () => {
     const { selectedRowKeys } = this.state;
@@ -502,14 +521,14 @@ class Brand extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/deleteBrand',
-      payload: {"list":selectedRowKeys},
+      payload: { 'list': selectedRowKeys },
     });
 
 
     this.setState({
       selectedRowKeys: '',
-      rowData:[],
-      selectIndexAt:-1,
+      rowData: [],
+      selectIndexAt: -1,
       showItem: false,
       isEdit: true,
     });
@@ -533,14 +552,14 @@ class Brand extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/freeBrand',
-      payload:  { 'list': selectedRowKeys },
+      payload: { 'list': selectedRowKeys },
     });
 
 
   };
 
 
-  selectChange = (record,index) => {
+  selectChange = (record, index) => {
 
     console.log('select brand  ' + Object.keys(record));
 
@@ -566,7 +585,8 @@ class Brand extends Component {
     }
     this.setState({
       selectedRowKeys,
-      rowData:selectedRows
+      // rowData:selectedRows
+      rowSelectedData: selectedRows,
     });
   };
 
@@ -581,7 +601,7 @@ class Brand extends Component {
       current: record,
       // selectIndexAt: index,
     });
-  }
+  };
 
   selectRowItem = () => {
     console.log('select the item');

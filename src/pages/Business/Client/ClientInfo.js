@@ -51,74 +51,352 @@ const listdata = [{
 @Form.create()
 class ClientInfo extends PureComponent {
 
+  formLayout = {
+    labelCol: { span: 12 },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 12 },
+    },
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
+      content: '',
+      isEdit: true,
+      isAddEdit: true,
     };
   }
 
 
   componentWillMount() {
 
-    console.log(Object.keys(this.props.location.query));
+    // console.log('customer', this.props.location.params);
+
 
   }
 
   render() {
 
+    const { location } = this.props;
 
-    const { visible } = this.state;
+    const {visible} = this.state;
+
+    let content=''
+    if (location && location.params) {
+      let data = location.params;
+      content = data.content
+      // console.log('customer render ', data);
+      if (data.typeId && data.typeId !== ''){
+        this.state.isAddEdit = false;
+      }
+      else {
+        this.state.isAddEdit = true;
+
+      }
+
+      if(data.content&&data.content!=='')
+      {
+        this.state.isEdit = false;
+      }else {
+        this.state.isEdit = true;
+      }
+
+    } else {
+      this.state.isAddEdit = true;
+      this.state.isEdit = true;
+    }
 
 
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
+    const getModalContent = () => {
+
+
+      /*
+      * "city":"",
+				"companyPhone":"",
+				"companyWebsite":"",
+				"country":"",
+				"createTime":"2019-06-01 16:25:34",
+				"createUser":"zengwl",
+				"customerChannels":"333",
+				"customerNo":"C12ee3",
+				"customerQuotationCoefficient":"234",
+				"delFlag":"0",
+				"deliveryMethod":"222updateCustomer",
+				"enName":"",
+				"id":"310a8afcf3bfcd91c610a6080c97f969",
+				"modifier":"",
+				"mtime":"2019-06-07 22:42:48",
+				"prepaymentRatio":"234",
+				"qualityRequirements":"234",
+				"remarks":"",
+				"settlementCurrency":"234",
+				"shotName":"111",
+				"status":"0",
+				"typeId":"a21824c3ca4ec352169d36194247a413",
+				"zhName":"333"
+			},
+			{
+				"city":"222updateCustomer",
+				"companyPhone":"222updateCustomer",
+				"companyWebsite":"222updateCustomer",
+				"country":"222updateCustomer",
+				"createTime":"2019-06-01 22:06:10",
+				"createUser":"zengwl",
+				"customerChannels":"222updateCustomer",
+				"customerNo":"ddd",
+				"customerQuotationCoefficient":"222updateCustomer",
+				"delFlag":"0",
+				"deliveryMethod":"222updateCustomer",
+				"enName":"222updateCustomer",
+				"id":"f693ce29bf4f69e8144b9e7bfb9e367f",
+				"modifier":"",
+				"mtime":"2019-06-07 22:42:51",
+				"prepaymentRatio":"222updateCustomer",
+				"qualityRequirements":"222updateCustomer",
+				"remarks":"222updateCustomer",
+				"settlementCurrency":"222updateCustomer",
+				"shotName":"666",
+				"status":"0",
+				"typeId":"a21824c3ca4ec352169d36194247a413",
+				"zhName":"222updateCustomer"
+      * */
+      const { form: { getFieldDecorator } } = this.props;
+
+      return (
+        <Form
+          layout="inline"
+          size={'small'}
+          className={styles.from_content}
+          labelAlign="left"
+          onSubmit={this.handleSubmit}>
+
+          <Row gutter={2} justify="start">
+            <Col lg={12} md={12} sm={12} xs={12}  >
+              <FormItem label="客户编号" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('customerNo', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}  >
+
+              <FormItem label="简称" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('shotName', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12} >
+              <FormItem label="来源" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qualityEnName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}  >
+
+              <FormItem label="中文名      :" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('zhName', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('enName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qualityZhName', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qualityEnName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('country', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('city', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="公司电话" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('companyPhone', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="公司网址" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qualityEnName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="结算币种" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('settlementCurrency', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="品质等级" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qualityRequirements', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="客户报价系数" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('customerQuotationCoefficient', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="预付款比例" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('prepaymentRatio', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('deliveryMethod', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="共同维护人" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qualityEnName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('remarks', {
+                  rules: [{ message: '请输入中文名称' }],
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+
+
+
+
+        </Form>
+      );
+    };
+
     return (<div className={styles.content}>
+
       <div className={styles.right_info}>
+        {content === '' ? '' : (
+          this.showCustomer(content)
+        )}
 
-        <DescriptionList size='small' col='2'>
-          <Description size="small" term='客户编号'>8009</Description>
-          <Description size="small" term='客户简称'>App</Description>
-          <Description size="small" term='国别'>Thailand</Description>
-          <Description term='城市'>Bangkok</Description>
-          <Description term='英文名'>Jewelry Prncess</Description>
-          <Description term='中文名'>陈先生</Description>
-          <Description term='客户渠道'>展览会</Description>
-        </DescriptionList>
-        <DescriptionList size='small' col='1'>
-          <Description term='英文地址'>53/11-12 Narathiwat Ratchanakharin Rd Thun Mahamek ,Sathorn 10120</Description>
-        </DescriptionList>
-        <DescriptionList size='small' col='2'>
-          <Description term='电话'></Description>
-          <Description term='公司网站'></Description>
-          <Description term='结算币种'>USD</Description>
-          <Description term='品质质量'></Description>
-          <Description term='客户报价系数'>10%</Description>
-          <Description term='送货方式'></Description>
-          <Description term='预付款比例'>30%</Description>
-        </DescriptionList>
-        <span className={styles.title_info}>备注</span>
-        <Divider className={styles.divder}/>
-        <span style={{
-          marginBottom: 10,
-          paddingLeft: 10,
-          fontSize: 20,
-          fontWeight: 'bold',
-          color: '#35B0F4',
-        }}>联络信息</span>
-        <Divider className={styles.divder}/>
-        <List
-          loading={false}
-          dataSource={listdata}
-          renderItem={this.getContantItem}
-          size="small"
-          bordered={false}
-          split={true}
-
-        />
 
       </div>
       <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
@@ -132,77 +410,162 @@ class ClientInfo extends PureComponent {
           }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button className={clientStyle.buttomControl} type="primary" icon="plus"
-                    size={'small'}>新增</Button>
+                    size={'small'} disabled={this.state.isAddEdit} onClick={this.clickFrom}>新增</Button>
             <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-            >删除</Button>
+                    disabled={this.state.isEdit}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit">编辑</Button>
+                    icon="edit" disabled={this.state.isEdit}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-            >冻结</Button>
+                    disabled={this.state.isEdit}>冻结</Button>
           </div>
 
 
           <div
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="copy">复制</Button>
+                    icon="copy" disabled={this.state.isEdit}>复制</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
-            >撤销</Button>
+                    disabled={this.state.isEdit}>撤销</Button>
           </div>
         </div>
 
       </Card>
+      <Modal
+        // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
+        title={'任务添加'}
+        width={740}
+        className={styles.standardListForm}
+        bodyStyle={{ padding: '28px 0 0' }}
+        destroyOnClose
+        visible={visible}
+        {...modalFooter}
+      >
+        {getModalContent()}
+      </Modal>
+    </div>);
+    ;
+  }
 
-      </div>);;
-      }
+
+  clickFrom =()=>{
+    this.setState({
+      visible: true,
+      isAdd: true,
+      current: {},
+    })
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
 
 
-      getContantItem = (item) => {
+  showCustomer = (item) => {
 
-        return (<DescriptionList size='small' col='2'>
-        <Description term='联系人'>{item.name}</Description>
-        <Description term='电话'>{item.phone}</Description>
-        <Description term='Email'>{item.email}</Description>
-        <Description term='手机'>{item.phone2}</Description>
-        <Description term='QQ'>{item.QQ}</Description>
-        <Description term='微信'>{item.wechat}</Description>
-        </DescriptionList>);
-      };
 
-      getModalContent = () => {
 
-        const {form: {getFieldDecorator}} = this.props;
+    return (<div>
+      <DescriptionList size='small' col='2'>
+        <Description size="small" term='客户编号'>{item.customerNo}</Description>
+        <Description size="small" term='客户简称'>{item.shotName}</Description>
+        <Description size="small" term='国别'>{item.country}</Description>
+        <Description term='城市'>{item.city}</Description>
+        <Description term='英文名'>{item.enName}</Description>
+        <Description term='中文名'>{item.zhName}</Description>
+        <Description term='客户渠道'>{item.customerChannels}</Description>
+      </DescriptionList>
+      <DescriptionList size='small' col='1'>
+        <Description term='英文地址'></Description>
+      </DescriptionList>
+      <DescriptionList size='small' col='2'>
+        <Description term='电话'>{item.companyPhone}</Description>
+        <Description term='公司网站'>{item.companyWebsite}</Description>
+        <Description term='结算币种'>{item.settlementCurrency}</Description>
+        <Description term='品质质量'>{item.customerNo}</Description>
+        <Description term='客户报价系数'>{item.customerNo}</Description>
+        <Description term='送货方式'>{item.qualityRequirements}</Description>
+        <Description term='预付款比例'>{item.prepaymentRatio}%</Description>
+      </DescriptionList>
+      <span className={styles.title_info}>备注</span>
+      <DescriptionList size='small' col='1'>
+        <Description term=''>{item.remarks}</Description>
+      </DescriptionList>
+      <Divider className={styles.divder}/>
+      <span style={{
+        marginBottom: 10,
+        paddingLeft: 10,
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#35B0F4',
+      }}>联络信息</span>
+      <Divider className={styles.divder}/>
+      <List
+        loading={false}
+        dataSource={listdata}
+        renderItem={this.getContantItem}
+        size="small"
+        bordered={false}
+        split={true}
 
-        return (
-        <Form
+      />
+
+    </div>);
+  };
+
+
+  getModalContent =()=>{
+
+  }
+
+
+  getContantItem = (item) => {
+
+    return (<DescriptionList size='small' col='2'>
+      <Description term='联系人'>{item.name}</Description>
+      <Description term='电话'>{item.phone}</Description>
+      <Description term='Email'>{item.email}</Description>
+      <Description term='手机'>{item.phone2}</Description>
+      <Description term='QQ'>{item.QQ}</Description>
+      <Description term='微信'>{item.wechat}</Description>
+    </DescriptionList>);
+  };
+
+  getModalContent = () => {
+
+    const { form: { getFieldDecorator } } = this.props;
+
+    return (
+      <Form
         size={'small'}
         onSubmit={this.handleSubmit}>
         <FormItem label="品质要求英文名称" {...this.formLayout}>
-        {getFieldDecorator('qualityEnName', {
-          rules: [{ required: true, message: '请输入英文名称' }],
-        })(
-          <Input placeholder="请输入"/>,
-        )}
+          {getFieldDecorator('qualityEnName', {
+            rules: [{ required: true, message: '请输入英文名称' }],
+          })(
+            <Input placeholder="请输入"/>,
+          )}
         </FormItem>
         <FormItem label="品质要求中文名" {...this.formLayout}>
-        {getFieldDecorator('qualityZhName', {
-          rules: [{ message: '请输入中文名称' }],
-        })(
-          <Input placeholder="请输入"/>,
-        )}
+          {getFieldDecorator('qualityZhName', {
+            rules: [{ message: '请输入中文名称' }],
+          })(
+            <Input placeholder="请输入"/>,
+          )}
         </FormItem>
-        </Form>
-        );
-      };
+      </Form>
+    );
+  };
 
-      handleDone = () => {
+  handleDone = () => {
 
-      };
+  };
 
-      handleSubmit = () => {
+  handleSubmit = () => {
 
-      };
+  };
 
-      }
+}
 
-      export default ClientInfo;
+export default ClientInfo;
