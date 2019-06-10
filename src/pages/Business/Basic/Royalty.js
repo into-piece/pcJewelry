@@ -103,6 +103,7 @@ class Royalty extends PureComponent {
       requestMes: '保存成功！',
       isLoading: false,
       selectIndexAt: -1,
+      rowSelectedData: [],
       rowData:[],
     };
   }
@@ -348,13 +349,13 @@ class Royalty extends PureComponent {
                     record.id
                   }
                   bordered={false}
-                  // onRow={record => {
-                  //   return {
-                  //     onClick: event => {
-                  //       this.clickRowItem(record);
-                  //     },
-                  //   };
-                  // }}
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowItem(record);
+                      },
+                    };
+                  }}
                   rowClassName={this.onSelectRowClass}
                   size='middle'
                   columns={clientContentColumns}
@@ -435,39 +436,47 @@ class Royalty extends PureComponent {
   clickRowItem = (record) => {
 
 
-    const { selectedRowKeys , rowData} = this.state;
-    const selects = selectedRowKeys?selectedRowKeys:[];
-    const id = record.id
+    const { selectedRowKeys, rowSelectedData } = this.state;
+    let rowData = this.state.rowData;
+    const selects = selectedRowKeys ? selectedRowKeys : [];
+    const id = record.id;
+
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index=>index===id),1)
+      selects.splice(selects.findIndex(index => index === id), 1);
       if(rowData.includes(record))
-      {
-        rowData.splice(rowData.findIndex(item=>item.id===id),1)
+        rowData=[]
+      if (rowSelectedData.includes(record)) {
+        console.log('includes ' + record.id);
+        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
-      selects.push(id)
-      rowData.push(record)
+
+      if (rowData.length > 0) {
+        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+      }
+      rowData=[];
+      rowData.push({ ...record });
+      selects.push(id);
+      rowSelectedData.push(record);
     }
 
-    if(selects.length>0)
-    {
+    if (selects.length > 0) {
       const recordK = selects[selects.length - 1];
-      const r = rowData.filter(value => value.id == recordK);
-      this.showSelectItem(r[0])
-    }else
-    {
+      // const r = rowData.filter(value => value.id == recordK);
+      const r = rowSelectedData.filter(value => value.id == recordK);
+
+      this.showSelectItem(r[0]);
+    } else {
       this.setState({
         showItem: false,
         isEdit: true,
         current: false,
       });
     }
-
     this.setState({
       selectedRowKeys: [].concat(selects),
+      rowData,
     });
-
-    console.log([].concat(selects))
   };
 
   selectChange = (record,index) => {
@@ -534,11 +543,9 @@ class Royalty extends PureComponent {
         current: false,
       });
     }
-
-
     this.setState({
       selectedRowKeys,
-      rowData:selectedRows
+      rowSelectedData: selectedRows,
     });
   };
 

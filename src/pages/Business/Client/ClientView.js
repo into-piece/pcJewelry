@@ -231,7 +231,7 @@ class ClientView extends PureComponent {
 
     let {
       selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update,
-      pageCurrent,fristLoad,
+      pageCurrent, fristLoad,
       selectedRowKeys, customerSelectedRowKeys,
     } = this.state;
 
@@ -249,9 +249,10 @@ class ClientView extends PureComponent {
       onSelect: this.selectChange,
     };
 
+    let {children}= this.props
 
     const {
-      children, clientListloading,
+      clientListloading,
       clientUpdateloading, clientSaveloading,
       clientFreezeloading, clientDeleteloading,
       customerBody = {},
@@ -259,6 +260,14 @@ class ClientView extends PureComponent {
       customerListloading, customerSaveloading,
       customerUpdateloading, customerDeleteloading, customerFreezeloading,
     } = this.props;
+
+    console.log('clidren =', this.props.children.props);
+
+    if (children && children.props) {
+      //children.props.refreshList = this.refreshCustomerList();
+      // children({ refreshList: this.refreshCustomerList() });
+      // this.props.children.props.refreshList = this.refreshCustomerList
+    }
 
     const paginationProps = {
       showQuickJumper: true,
@@ -382,7 +391,7 @@ class ClientView extends PureComponent {
 
                   <Table
                     loading={isCurstomerUpdate || customerListloading}
-                    dataSource={fristLoad?[]:customerBody.data}
+                    dataSource={fristLoad ? [] : customerBody.data}
                     size="middle"
                     rowKey={record =>
                       record.id
@@ -553,7 +562,7 @@ class ClientView extends PureComponent {
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
-      console.log({ ...fieldsValue });
+      // console.log({ ...fieldsValue });
       if (isAdd) {
 
         // console.log('add');
@@ -634,8 +643,8 @@ class ClientView extends PureComponent {
 
     const { showItem } = this.state;
 
-    console.log('edit');
-    console.log(showItem);
+    // console.log('edit');
+    // console.log(showItem);
     this.setState({
       current: showItem,
       visible: true,
@@ -705,7 +714,7 @@ class ClientView extends PureComponent {
   };
 
   pageChange = (page, pageSize) => {
-    console.log(page, pageSize);
+    // console.log(page, pageSize);
     const { dispatch } = this.props;
 
     const { defaultPageSize, selectZhName, selectEnName } = this.state;
@@ -746,11 +755,11 @@ class ClientView extends PureComponent {
         showItem: false,
         isEdit: true,
         current: false,
-        fristLoad:true,
+        fristLoad: true,
         customerSelectedRowKeys: '',
         selectCustomerItem: '',
       });
-      this.state.showItem = false
+      this.state.showItem = false;
 
     }
 
@@ -758,7 +767,7 @@ class ClientView extends PureComponent {
     this.setState({
       selectedRowKeys,
     });
-    this.clearClient()
+    this.clearClient();
 
 
   };
@@ -771,7 +780,7 @@ class ClientView extends PureComponent {
       customerSelectedRowKeys: selectedRowKeys,
     });
 
-    console.log('selectCustomerChange');
+    // console.log('selectCustomerChange');
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
@@ -794,8 +803,7 @@ class ClientView extends PureComponent {
       });
 
     }
-    this.startClient()
-
+    this.startClient();
 
 
   };
@@ -817,12 +825,19 @@ class ClientView extends PureComponent {
 
 
     this.setState({
-      fristLoad:false
-    })
+      fristLoad: false,
+    });
 
 
   };
 
+  refreshCustomerList = () => {
+    console.log('refreshCustomerList');
+
+    const { showItem } = this.state;
+    this.loadCustomerList(showItem.id)
+
+  };
 
   showSelectItem = record => {
     let edit = false;
@@ -838,7 +853,7 @@ class ClientView extends PureComponent {
       current: { ...record },
       selectCustomerItem: '',
     });
-    this.state.showItem={...record}
+    this.state.showItem = { ...record };
   };
 
   onSelectRowClass = (record, index) => {
@@ -862,7 +877,6 @@ class ClientView extends PureComponent {
 
 
   startClient = () => {
-    console.log('startClient');
 
     const { selectCustomerItem, showItem } = this.state;
     // console.log(selectCustomerItem)
@@ -879,14 +893,15 @@ class ClientView extends PureComponent {
     } else {
       params.typeId = false;
     }
-    console.log('select customer ', selectCustomerItem,params);
+    console.log('select customer ', selectCustomerItem, params);
+    params.ref = this.refreshCustomerList
     params.content = selectCustomerItem !== '' ? { ...selectCustomerItem } : '';
     router.replace({ pathname: '/business/client/client', params: params });
   };
   clearClient = () => {
     console.log('clearClient');
 
-    const   {showItem}   = this.state;
+    const { showItem } = this.state;
     const params = {};
     if (showItem) {
       params.typeId = showItem.id;

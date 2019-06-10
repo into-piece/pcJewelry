@@ -355,14 +355,13 @@ class Currency extends PureComponent {
                   bordered={false}
                   selectedRows={1}
                   rowClassName={this.onSelectRowClass}
-                  // onRow={(record, index) => {
-                  //   return {
-                  //     onClick: event => {
-                  //       this.selectChange(record,index)
-                  //
-                  //     }
-                  //   };
-                  // }}
+                  onRow={(record, index) => {
+                    return {
+                      onClick: event => {
+                        this.selectChange(record,index)
+                      }
+                    };
+                  }}
                   size='middle'
                   columns={currencyContentColumns}
                 />

@@ -19,12 +19,13 @@ import {
   Modal,
 } from 'antd';
 import styles from './base.less';
-
+import {connect} from 'dva'
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
+const {TextArea} = Input;
 const listdata = [{
   name: '张三',
   phone: '0755-88888888',
@@ -48,6 +49,17 @@ const listdata = [{
   wechat: 'zhangsan',
 }];
 
+
+@connect(({  loading, customer }) => {
+  return {
+    body: customer.body,
+    customerSaveloading: loading.effects['customer/addCustomer'],
+    customerUpdateloading: loading.effects['customer/updateCustomer'],
+    customerDeleteloading: loading.effects['customer/deleteCustomer'],
+    customerFreezeloading: loading.effects['customer/freezeCustomer'],
+  };
+
+})
 @Form.create()
 class ClientInfo extends PureComponent {
 
@@ -66,28 +78,25 @@ class ClientInfo extends PureComponent {
       content: '',
       isEdit: true,
       isAddEdit: true,
+      isAdd: true,
     };
   }
 
 
-  componentWillMount() {
 
-    // console.log('customer', this.props.location.params);
-
-
-  }
 
   render() {
 
     const { location } = this.props;
 
-    const {visible} = this.state;
+    const {visible,current={}} = this.state;
 
     let content=''
     if (location && location.params) {
       let data = location.params;
       content = data.content
-      // console.log('customer render ', data);
+      console.log('customer render ', data);
+      // data.ref()
       if (data.typeId && data.typeId !== ''){
         this.state.isAddEdit = false;
       }
@@ -117,30 +126,6 @@ class ClientInfo extends PureComponent {
 
 
       /*
-      * "city":"",
-				"companyPhone":"",
-				"companyWebsite":"",
-				"country":"",
-				"createTime":"2019-06-01 16:25:34",
-				"createUser":"zengwl",
-				"customerChannels":"333",
-				"customerNo":"C12ee3",
-				"customerQuotationCoefficient":"234",
-				"delFlag":"0",
-				"deliveryMethod":"222updateCustomer",
-				"enName":"",
-				"id":"310a8afcf3bfcd91c610a6080c97f969",
-				"modifier":"",
-				"mtime":"2019-06-07 22:42:48",
-				"prepaymentRatio":"234",
-				"qualityRequirements":"234",
-				"remarks":"",
-				"settlementCurrency":"234",
-				"shotName":"111",
-				"status":"0",
-				"typeId":"a21824c3ca4ec352169d36194247a413",
-				"zhName":"333"
-			},
 			{
 				"city":"222updateCustomer",
 				"companyPhone":"222updateCustomer",
@@ -180,17 +165,19 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}  >
               <FormItem label="客户编号" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('customerNo', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{ required: true, message: '请输入客户编号' }],
+                  initialValue: current.customerNo,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} md={12} sm={12} xs={12}  >
+            <Col lg={12} md={12} sm={12} xs={12}>
 
               <FormItem label="简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('shotName', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{required: true, message: '请输入中文名称' }],
+                  initialValue: current.shotName,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -202,7 +189,8 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12} >
               <FormItem label="来源" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('qualityEnName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{ message: '请输入来源' }],
+                  initialValue: current.source,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -210,9 +198,10 @@ class ClientInfo extends PureComponent {
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}  >
 
-              <FormItem label="中文名      :" {...this.formLayout} className={styles.from_content_col}>
+              <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('zhName', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入中文名' }],
+                  initialValue: current.zhName,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -225,7 +214,8 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('enName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{   message: '请输入英文名' }],
+                  initialValue: current.enName,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -235,7 +225,8 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('qualityZhName', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入中文地址' }],
+                  initialValue: current.qualityZhName,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -248,7 +239,8 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('qualityEnName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{  message: '请输入英文地址' }],
+                  initialValue: current.qualityEnName,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -258,7 +250,8 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('country', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入国别' }],
+                  initialValue: current.country,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -271,7 +264,8 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('city', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{ message: '请输入城市' }],
+                  initialValue: current.city,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -281,7 +275,8 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="公司电话" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('companyPhone', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入公司电话' }],
+                  initialValue: current.companyPhone,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -293,8 +288,9 @@ class ClientInfo extends PureComponent {
           <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="公司网址" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qualityEnName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                {getFieldDecorator('companyWebsite', {
+                  rules: [{  message: '请输入公司网址' }],
+                  initialValue: current.companyWebsite,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -304,7 +300,8 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="结算币种" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('settlementCurrency', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入结算币种' }],
+                  initialValue: current.settlementCurrency,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -317,7 +314,8 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="品质等级" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('qualityRequirements', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{ message: '请输入品质等级' }],
+                  initialValue: current.qualityRequirements,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -327,7 +325,8 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="客户报价系数" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('customerQuotationCoefficient', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入客户报价系数' }],
+                  initialValue: current.customerQuotationCoefficient,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -340,7 +339,8 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="预付款比例" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('prepaymentRatio', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
+                  rules: [{ message: '请输入预付款比例' }],
+                  initialValue: current.prepaymentRatio,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -350,7 +350,8 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('deliveryMethod', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入送货方式' }],
+                  initialValue: current.deliveryMethod,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
@@ -359,29 +360,32 @@ class ClientInfo extends PureComponent {
 
 
           </Row>
+
           <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="共同维护人" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qualityEnName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
 
               <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('remarks', {
-                  rules: [{ message: '请输入中文名称' }],
+                  rules: [{ message: '请输入备注' }],
+                  initialValue: current.remarks,
+                })(
+                  <TextArea rows={4} placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="共同维护人" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('modifier', {
+                  rules: [{ message: '请输入共同维护人' }],
+                  initialValue: current.modifier,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
               </FormItem>
             </Col>
 
-
           </Row>
+
 
 
 
@@ -410,9 +414,9 @@ class ClientInfo extends PureComponent {
           }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button className={clientStyle.buttomControl} type="primary" icon="plus"
-                    size={'small'} disabled={this.state.isAddEdit} onClick={this.clickFrom}>新增</Button>
+                    size={'small'} disabled={this.state.isAddEdit} onClick={this.clickNewFrom}>新增</Button>
             <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-                    disabled={this.state.isEdit}>删除</Button>
+                    disabled={this.state.isEdit} onClick={this.clickDeleteFrom}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
                     icon="edit" disabled={this.state.isEdit}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
@@ -447,13 +451,52 @@ class ClientInfo extends PureComponent {
   }
 
 
-  clickFrom =()=>{
+  clickNewFrom =()=>{
     this.setState({
       visible: true,
       isAdd: true,
       current: {},
     })
   }
+
+  clickEditFrom = () => {
+    this.state.isAdd = false;
+    this.setState({
+      current: this.state.showItem,
+      visible: true,
+    });
+
+  };
+
+  clickDeleteFrom = () => {
+    const { selectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customer/deleteCustomer',
+      payload: { 'list': selectedRowKeys },
+    });
+
+
+    this.setState({
+      selectedRowKeys: '',
+      showItem: false,
+      isEdit: true,
+    });
+
+  };
+
+  clickFreezeFrom = () => {
+    const { selectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customer/freeCustomer',
+      payload: { 'list': selectedRowKeys },
+    });
+
+
+  };
 
   handleCancel = () => {
     this.setState({
@@ -515,9 +558,7 @@ class ClientInfo extends PureComponent {
   };
 
 
-  getModalContent =()=>{
 
-  }
 
 
   getContantItem = (item) => {
@@ -559,12 +600,62 @@ class ClientInfo extends PureComponent {
   };
 
   handleDone = () => {
-
+    this.setState({
+      visible: false,
+    });
   };
+
+
+
 
   handleSubmit = () => {
 
-  };
+    const {visible} = this.state;
+
+
+    const { dispatch, form,location } = this.props;
+    const { showItem, isAdd } = this.state;
+
+    let content=''
+    let data={}
+    if (location && location.params) {
+      data = location.params;
+      content = data.content
+    }
+
+
+
+    form.validateFields((err, fieldsValue) => {
+
+      if (err) return;
+
+      let params = {};
+      params = { ...fieldsValue };
+      console.log({ ...fieldsValue });
+      if (isAdd) {
+
+        params.typeId = data.typeId;
+        console.log("param save ",params)
+        dispatch({
+          type: 'customer/addCustomer',
+          payload: {
+            ...params,
+          },
+        });
+
+      } else {
+
+        params.typeId = content.typeId;
+        this.state.current = { ...data };
+        dispatch({
+          type: 'client/updateClient',
+          payload: {
+            ...params,
+          },
+        });
+      }
+    });
+  }
 
 }
 

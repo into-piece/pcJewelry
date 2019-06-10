@@ -421,7 +421,6 @@ class Brand extends Component {
                   <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
                           onClick={this.clickNewFrom}>新增</Button>
                   <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
-                          onClick={this.clickDeleteFrom}
                           disabled={isEdit}>删除</Button>
                   <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
                           disabled={isEdit} icon="edit">编辑</Button>
@@ -537,7 +536,6 @@ class Brand extends Component {
 
   clickEditFrom = () => {
     this.state.isAdd = false;
-    console.log('edit data');
     this.setState({
       current: this.state.showItem,
       visible: true,

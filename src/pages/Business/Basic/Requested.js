@@ -90,6 +90,7 @@ class Requested extends PureComponent {
       isLoading: false,
       // multipleData: [],
       rowData:[],
+      rowSelectedData: [],
       selectIndexAt: -1,
     };
   }
@@ -325,13 +326,13 @@ class Requested extends PureComponent {
                   rowKey={record =>
                     record.id
                   }
-                  // onRow={record => {
-                  //   return {
-                  //     onClick: event => {
-                  //       this.clickRowItem(record);
-                  //     },
-                  //   };
-                  // }}
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowItem(record);
+                      },
+                    };
+                  }}
                   bordered={false}
                   rowClassName={this.onSelectRowClass}
                   size='middle'
@@ -452,59 +453,48 @@ class Requested extends PureComponent {
 
   clickRowItem = (record) => {
 
+    const { selectedRowKeys, rowSelectedData } = this.state;
+    let rowData = this.state.rowData;
+    const selects = selectedRowKeys ? selectedRowKeys : [];
+    const id = record.id;
 
-    const { selectedRowKeys , rowData} = this.state;
-    const selects = selectedRowKeys?selectedRowKeys:[];
-    const id = record.id
     if (selects.includes(id)) {
-      console.log('包含');
-      selects.splice(selects.findIndex(index=>index===id),1)
+      selects.splice(selects.findIndex(index => index === id), 1);
       if(rowData.includes(record))
-      {
-        console.log('includes '+record.id)
-        rowData.splice(rowData.findIndex(item=>item.id===id),1)
+        rowData=[]
+      if (rowSelectedData.includes(record)) {
+        console.log('includes ' + record.id);
+        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
-      console.log('不包');
-      selects.push(id)
-      rowData.push(record)
+
+      if (rowData.length > 0) {
+        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+      }
+      rowData=[];
+      rowData.push({ ...record });
+      selects.push(id);
+      rowSelectedData.push(record);
     }
 
-    if(selects.length>0)
-    {
+    if (selects.length > 0) {
       const recordK = selects[selects.length - 1];
-        const r = rowData.filter(value => value.id == recordK);
-      this.showSelectItem(r[0])
-    }else
-    {
+      // const r = rowData.filter(value => value.id == recordK);
+      const r = rowSelectedData.filter(value => value.id == recordK);
+
+      this.showSelectItem(r[0]);
+    } else {
       this.setState({
-            showItem: false,
-            isEdit: true,
-            current: false,
-          });
+        showItem: false,
+        isEdit: true,
+        current: false,
+      });
     }
-
-    // if (selects.length > 0) {
-    //   const recordK = selectedRowKeys[selects.length - 1];
-    //   const record = selectedRows.filter(value => value.id == recordK);
-    //   // this.showSelectItem(selectedRows[selectedRows.length-1])
-    //   this.setState({
-    //     multipleData: selectedRowKeys,
-    //   });
-    //   this.showSelectItem(record[0]);
-    // } else {
-    //   this.setState({
-    //     showItem: false,
-    //     isEdit: true,
-    //     current: false,
-    //   });
-    // }
-
     this.setState({
       selectedRowKeys: [].concat(selects),
+      rowData,
     });
 
-    console.log([].concat(selects))
   };
 
 
@@ -528,17 +518,9 @@ class Requested extends PureComponent {
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('onSelectChage');
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-
-
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
-      // this.showSelectItem(selectedRows[selectedRows.length-1])
-      // this.setState({
-      //   multipleData: selectedRowKeys,
-      // });
       this.showSelectItem(record[0]);
     } else {
       this.setState({
@@ -549,7 +531,8 @@ class Requested extends PureComponent {
     }
     this.setState({
       selectedRowKeys,
-      rowData:selectedRows
+      // rowData:selectedRows
+      rowSelectedData: selectedRows,
     });
   };
 
