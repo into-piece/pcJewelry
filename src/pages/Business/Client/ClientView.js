@@ -169,6 +169,7 @@ class ClientView extends PureComponent {
       selectedRowKeys: [],
       customerSelectedRowKeys: [],
       fristLoad: true,
+      selectType:"client"
     };
   }
 
@@ -231,7 +232,7 @@ class ClientView extends PureComponent {
 
     let {
       selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update,
-      pageCurrent, fristLoad,
+      pageCurrent, fristLoad,selectType,
       selectedRowKeys, customerSelectedRowKeys,
     } = this.state;
 
@@ -391,7 +392,7 @@ class ClientView extends PureComponent {
 
                   <Table
                     loading={isCurstomerUpdate || customerListloading}
-                    dataSource={fristLoad ? [] : customerBody.data}
+                    dataSource={selectType==='client'?(fristLoad ? [] : customerBody.data):[]}
                     size="middle"
                     rowKey={record =>
                       record.id
@@ -928,6 +929,7 @@ class ClientView extends PureComponent {
     this.setState({
       downTableColumn: clientContentColumns,
       downTableContent: [],
+      selectType:"client"
 
     });
 
@@ -937,6 +939,7 @@ class ClientView extends PureComponent {
     this.setState({
       downTableColumn: maintainsColumn,
       downTableContent: [],
+      selectType:"maintains"
     });
   };
 

@@ -17,6 +17,7 @@ import {
   Divider,
   List,
   Modal,
+  message,
 } from 'antd';
 import styles from './base.less';
 import {connect} from 'dva'
@@ -79,6 +80,7 @@ class ClientInfo extends PureComponent {
       isEdit: true,
       isAddEdit: true,
       isAdd: true,
+      update: false,
     };
   }
 
@@ -87,34 +89,54 @@ class ClientInfo extends PureComponent {
 
   render() {
 
-    const { location } = this.props;
+    const { location,body, customerSaveloading,
+      customerUpdateloading, customerDeleteloading, customerFreezeloading, } = this.props;
 
-    const {visible,current={}} = this.state;
+    const {visible,current={},update} = this.state;
 
     let content=''
     if (location && location.params) {
       let data = location.params;
       content = data.content
-      console.log('customer render ', data);
+      // console.log('customer render ', data);
       // data.ref()
-      if (data.typeId && data.typeId !== ''){
+      if (data.typeId && data.typeId !== '')
         this.state.isAddEdit = false;
-      }
-      else {
+      else
         this.state.isAddEdit = true;
 
-      }
-
       if(data.content&&data.content!=='')
-      {
+
         this.state.isEdit = false;
-      }else {
+      else
         this.state.isEdit = true;
-      }
+
 
     } else {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
+    }
+
+    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading ;
+
+
+    if (isCurstomerUpdate) {
+      this.state.update = true;
+    } else {
+      if (update) {
+        if (body.rtnCode === '000000') {
+          this.state.requestState = 'success';
+          message.success(body.rtnMsg);
+        } else {
+          message.error(body.rtnMsg);
+          this.state.requestState = 'error';
+        }
+        this.handleDone();
+        this.state.update = false;
+
+      }
+
+
     }
 
 
@@ -124,33 +146,6 @@ class ClientInfo extends PureComponent {
 
     const getModalContent = () => {
 
-
-      /*
-			{
-				"city":"222updateCustomer",
-				"companyPhone":"222updateCustomer",
-				"companyWebsite":"222updateCustomer",
-				"country":"222updateCustomer",
-				"createTime":"2019-06-01 22:06:10",
-				"createUser":"zengwl",
-				"customerChannels":"222updateCustomer",
-				"customerNo":"ddd",
-				"customerQuotationCoefficient":"222updateCustomer",
-				"delFlag":"0",
-				"deliveryMethod":"222updateCustomer",
-				"enName":"222updateCustomer",
-				"id":"f693ce29bf4f69e8144b9e7bfb9e367f",
-				"modifier":"",
-				"mtime":"2019-06-07 22:42:51",
-				"prepaymentRatio":"222updateCustomer",
-				"qualityRequirements":"222updateCustomer",
-				"remarks":"222updateCustomer",
-				"settlementCurrency":"222updateCustomer",
-				"shotName":"666",
-				"status":"0",
-				"typeId":"a21824c3ca4ec352169d36194247a413",
-				"zhName":"222updateCustomer"
-      * */
       const { form: { getFieldDecorator } } = this.props;
 
       return (
@@ -470,11 +465,19 @@ class ClientInfo extends PureComponent {
 
   clickDeleteFrom = () => {
     const { selectedRowKeys } = this.state;
+    const { dispatch,location } = this.props;
+    let data={}
+    if (location && location.params) {
+      data = location.params;
+    }
 
-    const { dispatch } = this.props;
+
+
+
     dispatch({
       type: 'customer/deleteCustomer',
-      payload: { 'list': selectedRowKeys },
+      payload:{typeId:{...data.typeId}}
+      // payload: { 'list': selectedRowKeys },
     });
 
 
@@ -600,6 +603,15 @@ class ClientInfo extends PureComponent {
   };
 
   handleDone = () => {
+
+    const { location} = this.props
+    if (location && location.params) {
+      let data = location.params;
+      data.ref()
+    }
+      // console.log('customer render ', data);
+      // data.ref()
+    //handle
     this.setState({
       visible: false,
     });
