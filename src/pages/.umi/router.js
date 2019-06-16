@@ -46,7 +46,9 @@ let routes = [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/ClientView'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -63,7 +65,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/EmptyView'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -76,7 +80,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/ClientInfo'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -89,7 +95,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/TerminalClient'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -102,7 +110,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/Product'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -115,7 +125,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/Mark'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -128,7 +140,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/PackageInfo'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
@@ -141,7 +155,9 @@ models: () => [
   app: window.g_app,
 models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}})
+  import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/History'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,

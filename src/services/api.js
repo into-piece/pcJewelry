@@ -514,7 +514,113 @@ export async function freezeTheCustomer(params) {
 
 
 
+export async function querylistTerminal(parmas) {
 
+  return request('/server/business/end-customer/listEndCustomer', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveTheTerminal(params) {
+
+  return request('/server/business/end-customer/saveEndCustomer', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheTerminal(params) {
+
+  return request('/server/business/end-customer/deleteEndCustomer', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateTheTerminal(params) {
+
+  return request('/server/business/end-customer/saveEndCustomer', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheTerminal(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/business/end-customer/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+
+export async function querylistMark(parmas) {
+
+  return request('/server/business/marking/listMarking', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveTheMark(params) {
+
+  return request('/server/business/marking/saveMarking', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheMark(params) {
+
+  return request('/server/business/marking/deleteMarking', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateTheMark(params) {
+
+  return request('/server/business/marking/saveMarking', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheMark(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/business/marking/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
 
 
 export async function queryRule(params) {

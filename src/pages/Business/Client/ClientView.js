@@ -169,7 +169,11 @@ class ClientView extends PureComponent {
       selectedRowKeys: [],
       customerSelectedRowKeys: [],
       fristLoad: true,
-      selectType:"client"
+      rowSelectedData: [],
+      rowData: [],
+      rowCustomerData: [],
+      rowCustomerSelectedData: [],
+      selectType: 'client',
     };
   }
 
@@ -232,7 +236,7 @@ class ClientView extends PureComponent {
 
     let {
       selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update,
-      pageCurrent, fristLoad,selectType,
+      pageCurrent, fristLoad, selectType,
       selectedRowKeys, customerSelectedRowKeys,
     } = this.state;
 
@@ -250,7 +254,7 @@ class ClientView extends PureComponent {
       onSelect: this.selectChange,
     };
 
-    let {children}= this.props
+    let { children } = this.props;
 
     const {
       clientListloading,
@@ -262,7 +266,6 @@ class ClientView extends PureComponent {
       customerUpdateloading, customerDeleteloading, customerFreezeloading,
     } = this.props;
 
-    console.log('clidren =', this.props.children.props);
 
     if (children && children.props) {
       //children.props.refreshList = this.refreshCustomerList();
@@ -288,6 +291,29 @@ class ClientView extends PureComponent {
     if (body) {
       typeTableContent = body.data;
     }
+
+    if (customerBody.data) {
+
+      // if (customerBody.data.status === '冻结')
+      //   customerBody.data.status = 2;
+      // else if (customerBody.data.status === '使用中')
+      //   customerBody.data.status = 1;
+      // else if (customerBody.data.status === '草稿')
+      //   customerBody.data.status = 0;
+
+      // customerBody.data.map((value) => {
+      //   const s = value.status;
+      //   if (s == 0) {
+      //     value.status = '草稿';
+      //   } else if (s == 1) {
+      //     value.status = '使用中';
+      //   } else if (s == 2) {
+      //     value.status = '冻结';
+      //   }
+      //   return value;
+      // });
+    }
+
     if (isUpdate) {
       this.state.update = true;
       if (clientUpdateloading) {
@@ -379,6 +405,13 @@ class ClientView extends PureComponent {
                       record.id
                     }
                     columns={clientColumns}
+                    onRow={record => {
+                      return {
+                        onClick: event => {
+                          this.clickRowItem(record);
+                        },
+                      };
+                    }}
                     onSelectRow={this.handleSelectRows}
                   />
                   <Radio.Group defaultValue="show_clientlist" buttonStyle="solid">
@@ -392,12 +425,19 @@ class ClientView extends PureComponent {
 
                   <Table
                     loading={isCurstomerUpdate || customerListloading}
-                    dataSource={selectType==='client'?(fristLoad ? [] : customerBody.data):[]}
+                    dataSource={selectType === 'client' ? (fristLoad ? [] : customerBody.data) : []}
                     size="middle"
                     rowKey={record =>
                       record.id
                     }
                     rowSelection={rowCustomerSelection}
+                    onRow={record => {
+                      return {
+                        onClick: event => {
+                          this.clickCustomerRowItem(record);
+                        },
+                      };
+                    }}
                     rowClassName={this.onSelectRowClass}
                     columns={downTableColumn}
                   />
@@ -447,7 +487,6 @@ class ClientView extends PureComponent {
         </div>
 
         <Modal
-          // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
           title={'任务添加'}
           width={640}
           className={styles.standardListForm}
@@ -517,6 +556,121 @@ class ClientView extends PureComponent {
   };
 
 
+  clickRowItem = (record) => {
+
+    const { selectedRowKeys, rowSelectedData } = this.state;
+    let rowData = this.state.rowData;
+    const selects = selectedRowKeys ? selectedRowKeys : [];
+    const id = record.id;
+
+    if (selects.includes(id)) {
+      selects.splice(selects.findIndex(index => index === id), 1);
+      if (rowData.includes(record))
+        rowData = [];
+      if (rowSelectedData.includes(record)) {
+        console.log('includes ' + record.id);
+        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
+      }
+    } else {
+
+      if (rowData.length > 0) {
+        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+      }
+      rowData = [];
+      rowData.push({ ...record });
+      selects.push(id);
+      rowSelectedData.push(record);
+    }
+
+    if (selects.length > 0) {
+      const recordK = selects[selects.length - 1];
+      const r = rowSelectedData.filter(value => value.id == recordK);
+
+      this.showSelectItem(r[0]);
+    } else {
+      this.setState({
+        showItem: false,
+        isEdit: true,
+        current: false,
+        fristLoad: true,
+      });
+      this.state.showItem = false;
+
+
+    }
+
+    this.state.selectCustomerItem=''
+    this.setState({
+      selectedRowKeys: [].concat(selects),
+      rowData,
+      customerSelectedRowKeys: [],
+      selectCustomerItem: '',
+      rowCustomerData: [],
+      rowCustomerSelectedData: [],
+    });
+
+    // this.clearClient();
+    this.startShowTab()
+  };
+
+  clickCustomerRowItem = (record) => {
+    const { customerSelectedRowKeys, rowCustomerSelectedData } = this.state;
+    let rowCustomerData = this.state.rowCustomerData;
+    // const selects = selectedRowKeys ? selectedRowKeys : [];
+    const selects = customerSelectedRowKeys ? customerSelectedRowKeys : [];
+    const id = record.id;
+
+
+    if (selects.includes(id)) {
+      selects.splice(selects.findIndex(index => index === id), 1);
+      if (rowCustomerData.includes(record))
+        rowCustomerData = [];
+      if (rowCustomerSelectedData.includes(record)) {
+        console.log('includes ' + record.id);
+        rowCustomerSelectedData.splice(rowCustomerSelectedData.findIndex(item => item.id === id), 1);
+        // rowData.splice(rowData.findIndex(item => item.id === id), 1);
+      }
+    } else {
+
+      // console.log("record is ",rowData)
+      if (rowCustomerSelectedData.length > 0) {
+        selects.splice(selects.findIndex(index => index === rowCustomerSelectedData[0].id), 1);
+      }
+      rowCustomerData = [];
+      rowCustomerData.push({ ...record });
+      selects.push(id);
+      // rowData.push(record)
+      rowCustomerSelectedData.push(record);
+
+
+      // console.log("record puth ",rowData)
+    }
+
+    if (selects.length > 0) {
+      const recordK = selects[selects.length - 1];
+      const r = rowCustomerSelectedData.filter(value => value.id == recordK);
+      this.state.selectCustomerItem = r[0];
+      this.setState({
+        selectCustomerItem: r[0],
+      });
+      console.log('selectCustomerItem = ', r);
+      this.startClient();
+    } else {
+      this.state.selectCustomerItem = '';
+      this.setState({
+        selectCustomerItem: '',
+      });
+      // this.clearClient();
+    }
+    this.setState({
+      customerSelectedRowKeys: [].concat(selects),
+      rowCustomerData,
+    });
+
+    this.startShowTab();
+    // this.showSelectItem(record)
+  };
+
   handleSearch = () => {
 
     const { dispatch, form } = this.props;
@@ -557,16 +711,25 @@ class ClientView extends PureComponent {
   };
 
 
+  startShowTab = () => {
+    const { selectTitle } = this.state;
+    if (selectTitle === '终客') {
+      this.startTerminal();
+    } else if (selectTitle === '字印') {
+      this.startMark();
+    }else if(selectTitle==='客户')
+      this.startClient()
+  };
+
+
   handleSubmit = () => {
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
-      // console.log({ ...fieldsValue });
       if (isAdd) {
 
-        // console.log('add');
         dispatch({
           type: 'client/addClient',
           payload: {
@@ -579,6 +742,8 @@ class ClientView extends PureComponent {
           selectedRowKeys: '',
           isEdit: true,
           update: true,
+          rowData: [],
+          fristLoad: true,
           customerSelectedRowKeys: '',
           selectCustomerItem: '',
         });
@@ -590,6 +755,7 @@ class ClientView extends PureComponent {
         const data = { ...showItem };
         data.zhName = temp.zhName;
         data.enName = temp.enName;
+
         this.state.current = { ...data };
         dispatch({
           type: 'client/updateClient',
@@ -620,7 +786,7 @@ class ClientView extends PureComponent {
     });
     this.setState({
       visible: false,
-      fristLoad: false,
+      fristLoad: true,
       // pageCurrent:1,
     });
   };
@@ -676,6 +842,8 @@ class ClientView extends PureComponent {
       showItem: false,
       isEdit: true,
       pageCurrent: 1,
+      rowData: [],
+      rowSelectedData: [],
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
     });
@@ -734,6 +902,7 @@ class ClientView extends PureComponent {
     this.setState({
       selectedRowKeys: '',
       showItem: false,
+      // selectPage:page,
       pageCurrent: page,
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
@@ -757,8 +926,6 @@ class ClientView extends PureComponent {
         isEdit: true,
         current: false,
         fristLoad: true,
-        customerSelectedRowKeys: '',
-        selectCustomerItem: '',
       });
       this.state.showItem = false;
 
@@ -767,45 +934,53 @@ class ClientView extends PureComponent {
 
     this.setState({
       selectedRowKeys,
+      rowSelectedData: selectedRows,
+      customerSelectedRowKeys: [],
+      selectCustomerItem: '',
+      rowCustomerData: [],
+      rowCustomerSelectedData: [],
     });
-    this.clearClient();
-
+    this.state.selectCustomerItem = '';
+    // this.clearClient();
+    this.startShowTab();
 
   };
 
 
+  //merchange
   selectCustomerChange = (selectedRowKeys, selectedRows) => {
+    console.log('selectCustomerChange');
+    // this.state.customerSelectedRowKeys = selectedRowKeys;
 
-
-    this.setState({
-      customerSelectedRowKeys: selectedRowKeys,
-    });
 
     // console.log('selectCustomerChange');
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
-      // this.showSelectItem(record[0]);
       const d = record[0];
       const selectCustomerItem = { ...d };
       this.setState({
         selectCustomerItem,
+        rowCustomerData: selectedRows,
+        customerSelectedRowKeys: selectedRowKeys,
       });
       this.state.selectCustomerItem = selectCustomerItem;
 
-      console.log('save select cu', this.state.selectCustomerItem);
+      // console.log('save select cu', this.state.selectCustomerItem);
+      this.startClient();
 
     } else {
       this.state.selectCustomerItem = '';
       this.setState({
         selectCustomerItem: '',
         isEdit: true,
+        rowCustomerData: selectedRows,
+        customerSelectedRowKeys: selectedRowKeys,
         current: false,
       });
-
+      // this.clearClient();
     }
-    this.startClient();
-
+    this.startShowTab();
 
   };
 
@@ -836,7 +1011,11 @@ class ClientView extends PureComponent {
     console.log('refreshCustomerList');
 
     const { showItem } = this.state;
-    this.loadCustomerList(showItem.id)
+    this.loadCustomerList(showItem.id);
+
+
+    // this.clearClient();
+    this.startShowTab();
 
   };
 
@@ -879,8 +1058,8 @@ class ClientView extends PureComponent {
 
   startClient = () => {
 
-    const { selectCustomerItem, showItem } = this.state;
-    // console.log(selectCustomerItem)
+    const { selectCustomerItem, showItem, customerSelectedRowKeys } = this.state;
+    console.log(selectCustomerItem)
     this.setState(
       {
         selectTitle: '客户',
@@ -888,22 +1067,31 @@ class ClientView extends PureComponent {
         leftlg: 8,
       },
     );
+
+
     const params = {};
+    params.ref = this.refreshCustomerList;
     if (showItem) {
       params.typeId = showItem.id;
     } else {
       params.typeId = false;
     }
-    console.log('select customer ', selectCustomerItem, params);
-    params.ref = this.refreshCustomerList
+    params.content = '';
+
+    // console.log('select customer ', selectCustomerItem, params);
+    params.ref = this.refreshCustomerList;
     params.content = selectCustomerItem !== '' ? { ...selectCustomerItem } : '';
+    params.ckeys = [].concat(customerSelectedRowKeys);
+    console.log('keys ', customerSelectedRowKeys);
     router.replace({ pathname: '/business/client/client', params: params });
   };
+
+
   clearClient = () => {
-    console.log('clearClient');
 
     const { showItem } = this.state;
     const params = {};
+    params.ref = this.refreshCustomerList;
     if (showItem) {
       params.typeId = showItem.id;
     } else {
@@ -911,6 +1099,12 @@ class ClientView extends PureComponent {
     }
     params.content = '';
     router.replace({ pathname: '/business/client/client', params: params });
+
+    this.setState({
+      customerSelectedRowKeys: '',
+      rowCustomerSelectedData: [],
+    });
+
   };
 
   startTerminal = () => {
@@ -921,7 +1115,15 @@ class ClientView extends PureComponent {
         leftlg: 8,
       },
     );
-    router.push({ pathname: '/business/client/terminal', query: { id: 1 } });
+    const { selectCustomerItem } = this.state;
+    const params = {};
+    if (selectCustomerItem) {
+      params.customerId = selectCustomerItem.id;
+    } else {
+      params.customerId = false;
+    }
+    // console.log('select customer t', selectCustomerItem, params);
+    router.replace({ pathname: '/business/client/terminal', params: params });
   };
 
   selectClients = () => {
@@ -929,7 +1131,7 @@ class ClientView extends PureComponent {
     this.setState({
       downTableColumn: clientContentColumns,
       downTableContent: [],
-      selectType:"client"
+      selectType: 'client',
 
     });
 
@@ -939,7 +1141,7 @@ class ClientView extends PureComponent {
     this.setState({
       downTableColumn: maintainsColumn,
       downTableContent: [],
-      selectType:"maintains"
+      selectType: 'maintains',
     });
   };
 
@@ -952,7 +1154,14 @@ class ClientView extends PureComponent {
         leftlg: 8,
       },
     );
-    router.push({ pathname: '/business/client/marking', query: { id: 2 } });
+    const { selectCustomerItem } = this.state;
+    const params = {};
+    if (selectCustomerItem) {
+      params.customerId = selectCustomerItem.id;
+    } else {
+      params.customerId = false;
+    }
+    router.replace({ pathname: '/business/client/marking', params: params });
   };
 
 

@@ -232,7 +232,7 @@ class Brand extends Component {
     } else {
       if (update) {
 
-        console.log('rntCode=' + body.rtnCode);
+        // console.log('rntCode=' + body.rtnCode);
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
         } else {
@@ -240,7 +240,7 @@ class Brand extends Component {
         }
 
         this.state.requestMes = body.rtnMsg;
-        console.log('result = ' + this.state.requestMes);
+        // console.log('result = ' + this.state.requestMes);
         this.state.update = false;
         this.state.done = true;
         if (this.state.isUpdateFrom) {
@@ -270,7 +270,7 @@ class Brand extends Component {
     }
 
 
-    console.log('rntCode=' + body.rtnCode);
+    // console.log('rntCode=' + body.rtnCode);
 
 
     const modalFooter = this.state.done

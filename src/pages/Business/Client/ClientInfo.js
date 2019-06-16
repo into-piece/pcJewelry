@@ -20,13 +20,13 @@ import {
   message,
 } from 'antd';
 import styles from './base.less';
-import {connect} from 'dva'
+import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
-const {TextArea} = Input;
+const { TextArea } = Input;
 const listdata = [{
   name: '张三',
   phone: '0755-88888888',
@@ -51,7 +51,7 @@ const listdata = [{
 }];
 
 
-@connect(({  loading, customer }) => {
+@connect(({ loading, customer }) => {
   return {
     body: customer.body,
     customerSaveloading: loading.effects['customer/addCustomer'],
@@ -81,23 +81,28 @@ class ClientInfo extends PureComponent {
       isAddEdit: true,
       isAdd: true,
       update: false,
+
     };
   }
 
 
 
-
   render() {
 
-    const { location,body, customerSaveloading,
-      customerUpdateloading, customerDeleteloading, customerFreezeloading, } = this.props;
+    const {
+      location, body, customerSaveloading,
+      customerUpdateloading, customerDeleteloading, customerFreezeloading,
+    } = this.props;
 
-    const {visible,current={},update} = this.state;
+    const { visible, current = {}, update } = this.state;
 
-    let content=''
+    let content = '';
     if (location && location.params) {
       let data = location.params;
-      content = data.content
+      content = data.content;
+      this.state.showItem = { ...content };
+      this.state.info = { ...data };
+
       // console.log('customer render ', data);
       // data.ref()
       if (data.typeId && data.typeId !== '')
@@ -105,7 +110,7 @@ class ClientInfo extends PureComponent {
       else
         this.state.isAddEdit = true;
 
-      if(data.content&&data.content!=='')
+      if (data.content && data.content !== '')
 
         this.state.isEdit = false;
       else
@@ -115,9 +120,10 @@ class ClientInfo extends PureComponent {
     } else {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
+      content='';
     }
 
-    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading ;
+    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading;
 
 
     if (isCurstomerUpdate) {
@@ -157,7 +163,7 @@ class ClientInfo extends PureComponent {
           onSubmit={this.handleSubmit}>
 
           <Row gutter={2} justify="start">
-            <Col lg={12} md={12} sm={12} xs={12}  >
+            <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="客户编号" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('customerNo', {
                   rules: [{ required: true, message: '请输入客户编号' }],
@@ -171,7 +177,7 @@ class ClientInfo extends PureComponent {
 
               <FormItem label="简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('shotName', {
-                  rules: [{required: true, message: '请输入中文名称' }],
+                  rules: [{ required: true, message: '请输入中文名称' }],
                   initialValue: current.shotName,
                 })(
                   <Input placeholder="请输入"/>,
@@ -181,17 +187,17 @@ class ClientInfo extends PureComponent {
           </Row>
 
           <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12} >
-              <FormItem label="来源" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qualityEnName', {
-                  rules: [{ message: '请输入来源' }],
-                  initialValue: current.source,
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="客户渠道" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('customerChannels', {
+                  rules: [{ message: '请输入客户渠道' }],
+                  initialValue: current.customerChannels,
                 })(
                   <Input placeholder="请输入"/>,
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} md={12} sm={12} xs={12}  >
+            <Col lg={12} md={12} sm={12} xs={12}>
 
               <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('zhName', {
@@ -209,7 +215,7 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('enName', {
-                  rules: [{   message: '请输入英文名' }],
+                  rules: [{ message: '请输入英文名' }],
                   initialValue: current.enName,
                 })(
                   <Input placeholder="请输入"/>,
@@ -234,7 +240,7 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('qualityEnName', {
-                  rules: [{  message: '请输入英文地址' }],
+                  rules: [{ message: '请输入英文地址' }],
                   initialValue: current.qualityEnName,
                 })(
                   <Input placeholder="请输入"/>,
@@ -284,7 +290,7 @@ class ClientInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="公司网址" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('companyWebsite', {
-                  rules: [{  message: '请输入公司网址' }],
+                  rules: [{ message: '请输入公司网址' }],
                   initialValue: current.companyWebsite,
                 })(
                   <Input placeholder="请输入"/>,
@@ -382,9 +388,6 @@ class ClientInfo extends PureComponent {
           </Row>
 
 
-
-
-
         </Form>
       );
     };
@@ -413,9 +416,9 @@ class ClientInfo extends PureComponent {
             <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
                     disabled={this.state.isEdit} onClick={this.clickDeleteFrom}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit" disabled={this.state.isEdit}>编辑</Button>
+                    icon="edit" disabled={this.state.isEdit} onClick={this.clickEditFrom}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-                    disabled={this.state.isEdit}>冻结</Button>
+                    disabled={this.state.isEdit} onClick={this.clickFreezeFrom}>冻结</Button>
           </div>
 
 
@@ -446,15 +449,18 @@ class ClientInfo extends PureComponent {
   }
 
 
-  clickNewFrom =()=>{
+  clickNewFrom = () => {
+    const { info } = this.state;
     this.setState({
       visible: true,
       isAdd: true,
       current: {},
-    })
-  }
+    });
+
+  };
 
   clickEditFrom = () => {
+    const { info } = this.state;
     this.state.isAdd = false;
     this.setState({
       current: this.state.showItem,
@@ -464,22 +470,16 @@ class ClientInfo extends PureComponent {
   };
 
   clickDeleteFrom = () => {
-    const { selectedRowKeys } = this.state;
-    const { dispatch,location } = this.props;
-    let data={}
-    if (location && location.params) {
-      data = location.params;
+    const { info } = this.state;
+    const { dispatch } = this.props;
+
+    if (info.ckeys) {
+      const keys = info.ckeys;
+      dispatch({
+        type: 'customer/deleteCustomer',
+        payload: { 'list': info.ckeys },
+      });
     }
-
-
-
-
-    dispatch({
-      type: 'customer/deleteCustomer',
-      payload:{typeId:{...data.typeId}}
-      // payload: { 'list': selectedRowKeys },
-    });
-
 
     this.setState({
       selectedRowKeys: '',
@@ -487,16 +487,19 @@ class ClientInfo extends PureComponent {
       isEdit: true,
     });
 
+
   };
 
   clickFreezeFrom = () => {
-    const { selectedRowKeys } = this.state;
+    const { info } = this.state;
 
+    const keys = info.ckeys;
     const { dispatch } = this.props;
     dispatch({
-      type: 'customer/freeCustomer',
-      payload: { 'list': selectedRowKeys },
+      type: 'customer/freezeCustomer',
+      payload: { 'list': keys },
     });
+
 
 
   };
@@ -509,7 +512,6 @@ class ClientInfo extends PureComponent {
 
 
   showCustomer = (item) => {
-
 
 
     return (<div>
@@ -561,9 +563,6 @@ class ClientInfo extends PureComponent {
   };
 
 
-
-
-
   getContantItem = (item) => {
 
     return (<DescriptionList size='small' col='2'>
@@ -604,13 +603,15 @@ class ClientInfo extends PureComponent {
 
   handleDone = () => {
 
-    const { location} = this.props
-    if (location && location.params) {
-      let data = location.params;
-      data.ref()
-    }
-      // console.log('customer render ', data);
-      // data.ref()
+    // const { location } = this.props;
+    const { info } = this.state;
+
+
+    if (info && info.ref)
+      info.ref();
+
+    // console.log('customer render ', data);
+    // data.ref()
     //handle
     this.setState({
       visible: false,
@@ -618,23 +619,19 @@ class ClientInfo extends PureComponent {
   };
 
 
-
-
   handleSubmit = () => {
 
-    const {visible} = this.state;
+    const { visible } = this.state;
 
 
-    const { dispatch, form,location } = this.props;
-    const { showItem, isAdd } = this.state;
+    const { dispatch, form } = this.props;
+    const { isAdd, info } = this.state;
 
-    let content=''
-    let data={}
-    if (location && location.params) {
-      data = location.params;
-      content = data.content
+    let content = '';
+
+    if (info) {
+      content = info.content;
     }
-
 
 
     form.validateFields((err, fieldsValue) => {
@@ -644,30 +641,35 @@ class ClientInfo extends PureComponent {
       let params = {};
       params = { ...fieldsValue };
       console.log({ ...fieldsValue });
-      if (isAdd) {
+      // if (isAdd) {
 
-        params.typeId = data.typeId;
-        console.log("param save ",params)
-        dispatch({
-          type: 'customer/addCustomer',
-          payload: {
-            ...params,
-          },
-        });
+      params.typeId = info.typeId;
+      if (!isAdd && info.content && info.content.id)
+        params.id = info.content.id;
 
-      } else {
+      dispatch({
+        type: 'customer/updateCustomer',
+        payload: {
+          ...params,
+        },
+      });
 
-        params.typeId = content.typeId;
-        this.state.current = { ...data };
-        dispatch({
-          type: 'client/updateClient',
-          payload: {
-            ...params,
-          },
-        });
-      }
+      // }
+      // else {
+      //
+      //   params.typeId = content.typeId;
+      //   params.id = info.content.id;
+      //
+      //   this.state.current = { ...data };
+      //   dispatch({
+      //     type: 'customer/updateCustomer',
+      //     payload: {
+      //       ...params,
+      //     },
+      //   });
+      // }
     });
-  }
+  };
 
 }
 
