@@ -810,8 +810,6 @@ class ClientView extends PureComponent {
 
     const { showItem } = this.state;
 
-    // console.log('edit');
-    // console.log(showItem);
     this.setState({
       current: showItem,
       visible: true,
@@ -1120,7 +1118,7 @@ class ClientView extends PureComponent {
     if (selectCustomerItem) {
       params.customerId = selectCustomerItem.id;
     } else {
-      params.customerId = false;
+      params.customerId = '';
     }
     // console.log('select customer t', selectCustomerItem, params);
     router.replace({ pathname: '/business/client/terminal', params: params });
@@ -1159,7 +1157,7 @@ class ClientView extends PureComponent {
     if (selectCustomerItem) {
       params.customerId = selectCustomerItem.id;
     } else {
-      params.customerId = false;
+      params.customerId = '';
     }
     router.replace({ pathname: '/business/client/marking', params: params });
   };
@@ -1180,19 +1178,26 @@ class ClientView extends PureComponent {
   startPackageInfo = () => {
     this.setState(
       {
-        selectTitle: '打包',
+        selectTitle: '包装',
         rightlg: 16,
         leftlg: 8,
       },
     );
-    router.push({ pathname: '/business/client/package', query: { id: 4 } });
+    const { selectCustomerItem } = this.state;
+    const params = {};
+    if (selectCustomerItem) {
+      params.customerId = selectCustomerItem.id;
+    } else {
+      params.customerId = '';
+    }
+    router.replace({ pathname: '/business/client/package', params: params });
   };
 
 
   startHistory = () => {
     this.setState(
       {
-        selectTitle: '历史',
+        selectTitle: '历史订单',
         rightlg: 13,
         leftlg: 11,
       },

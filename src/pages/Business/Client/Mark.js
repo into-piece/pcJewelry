@@ -17,10 +17,10 @@ import {
   Modal,
   Divider,
   List,
+  Upload,
   message,
 } from 'antd';
 import styles from './base.less';
-
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import { connect } from 'dva';
@@ -130,7 +130,6 @@ class Mark extends PureComponent {
     }
 
 
-
     if (location && location.params) {
       const data = location.params;
       if (data.customerId !== this.state.customerId) {
@@ -156,11 +155,69 @@ class Mark extends PureComponent {
     }
 
 
+    function getBase64(img, callback) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => callback(reader.result));
+      reader.readAsDataURL(img);
+    }
+
+
     const getModalContent = () => {
 
+
+      const beforeUpload=(file)=> {
+        console.log("beforeUpload",file)
+        const isUpload = (!(file.fileList&&file.fileList.lenght>1))
+        // if(!isUpload)
+        //   message.error('只能上传一张图片');
+        console.log('iup',isUpload)
+        return (!(file.fileList&&file.fileList.lenght>1))
+
+
+      }
+
+      const normFile = (e) => {
+        // console.log("eve ",e.file.originFileObj)
+        // const reader = new FileReader();
+        // reader.readAsDataURL(e.file.originFileObj)
+        // console.log('load file is ',reader.result);
+        return this.state.imageUrl;
+      };
+
+      const handleChange = info => {
+
+        console.log('info = ',info)
+        if (info.file.status === 'done') {
+          getBase64(info.file.originFileObj, imageUrl => {
+              this.setState({
+                imageUrl,
+                loading: false,
+              });
+              this.state.imageUrl = imageUrl;
+            },
+          );
+        }
+
+        let fileList = [...info.fileList];
+        fileList = fileList.slice(-1);
+        fileList = fileList.map(file => {
+          if (file.response) {
+            file.url = file.response.url;
+          }
+          return file;
+        });
+        this.setState({ fileList });
+
+      };
       const { form: { getFieldDecorator } } = this.props;
 
-
+      const uploadButton = (
+        <div>
+          <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+          <div className="ant-upload-text">上传图片</div>
+        </div>
+      );
+      const imageUrl = this.state.imageUrl;
       return (
         <Form
           layout="inline"
@@ -168,6 +225,33 @@ class Mark extends PureComponent {
           className={styles.from_content}
           labelAlign="left"
           onSubmit={this.handleSubmit}>
+          <Row gutter={2}>
+
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('markingPic', {
+                  initialValue: current.markingPic,
+                  getValueFromEvent: normFile,
+                })(
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    action="/"
+                    beforeUpload={beforeUpload}
+                    fileList={this.state.fileList}
+                    onChange={handleChange}
+                  >
+                    {/*{imageUrl?'':uploadButton}*/}
+                    { uploadButton}
+                  </Upload>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
 
           <Row gutter={2} justify="start">
             <Col lg={12} md={12} sm={12} xs={12}>
@@ -243,22 +327,6 @@ class Mark extends PureComponent {
 
 
           </Row>
-          <Row gutter={2}>
-
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('markingPic', {
-                  rules: [{ message: '请输入字印图片' }],
-                  initialValue: current.markingPic,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-
-          </Row>
 
 
         </Form>
@@ -268,7 +336,6 @@ class Mark extends PureComponent {
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
 
 
     return (<div className={styles.content}>
@@ -297,11 +364,11 @@ class Mark extends PureComponent {
             <Button className={clientStyle.buttomControl} type="primary" icon="plus"
                     size={'small'} onClick={this.clickNewFrom} disabled={this.state.isAddEdit}>新增</Button>
             <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-            onClick={this.clickDeleteFrom} disabled={this.state.isEdit}>删除</Button>
+                    onClick={this.clickDeleteFrom} disabled={this.state.isEdit}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
                     icon="edit" onClick={this.clickEditFrom} disabled={this.state.isEdit}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-            onClick={this.clickFreezeFrom} disabled={ this.state.isEdit}>冻结</Button>
+                    onClick={this.clickFreezeFrom} disabled={this.state.isEdit}>冻结</Button>
           </div>
 
 
@@ -453,11 +520,23 @@ class Mark extends PureComponent {
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
-      let params = { ...fieldsValue };
-      params.customerId = this.state.customerId;
+      let params = {};
+      const fiedls = { ...fieldsValue }
+      // params.customerId = this.state.customerId;
       if (isAdd) {
 
+        params.marking = fiedls;
+        params.marking.customerId = this.state.customerId;
+        params.file = fiedls.markingPic?fiedls.markingPic:''
 
+
+        params.marking =   {
+          customerId:'8b8723a4fe7f8a6c8e5e01c3821101d0',
+          markingNo:"255633",
+          zhName:'222updateCustomer',
+          enName:'444rr',
+          endShotName:'444rr3'
+        }
         console.log(params);
         // if (isAdd) {
         dispatch({

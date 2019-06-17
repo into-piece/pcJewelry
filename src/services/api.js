@@ -623,6 +623,169 @@ export async function freezeTheMark(params) {
 }
 
 
+
+export async function querylistPackage(parmas) {
+
+  return request('/server/business/pack/listPack', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveThePackage(params) {
+
+  return request('/server/business/marking/saveMarking', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteThePackage(params) {
+
+  return request('/server/business/pack/deletePack', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateThePackage(params) {
+
+  return request('/server/business/pack/savePack', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeThePackage(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/business/pack/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+export async function querylistProduct(parmas) {
+
+  return request('/server/business/product/listProduct', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {/business/product/listProduct
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveTheProduct(params) {
+
+  return request('/server/business/product/saveProduct', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheProduct(params) {
+
+  return request('/server/business/product/deleteProduct', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateTheProduct(params) {
+
+  return request('/server/business/product/saveProduct', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheProduct(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/business/product/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+export async function querylistProductSeries(parmas) {
+
+  return request('/server/business/product-line/listProductLine', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    data: {
+      ...parmas
+    }
+  });
+}
+
+export async function saveTheProductSeries(params) {
+
+  return request('/server/business/product-line/saveProductLine', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheProductSeries(params) {
+
+  return request('/server/business/product-line/deleteProductLine', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function updateTheProductSeries(params) {
+
+  return request('/server/business/product-line/saveProductLine', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    data: {
+      ...params
+    },
+  });
+}
+
+
+export async function freezeTheProductSeries(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/business/product-line/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
 }

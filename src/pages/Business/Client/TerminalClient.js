@@ -28,27 +28,6 @@ import { connect } from 'dva';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
-const listdata = [{
-
-  code: '8009',
-  clientName: 'App',
-  country: 'Thailand',
-
-},
-  {
-
-    code: '8009',
-    clientName: 'App',
-    country: 'Thailand',
-
-  },
-  {
-
-    code: '8009',
-    clientName: 'App',
-    country: 'Thailand',
-
-  }];
 
 
 @connect(({ loading, terminal }) => {

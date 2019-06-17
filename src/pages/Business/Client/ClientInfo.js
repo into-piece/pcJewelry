@@ -23,7 +23,7 @@ import styles from './base.less';
 import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
-
+import GeographicView from './../../Account/Settings/GeographicView'
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
 const { TextArea } = Input;
@@ -268,7 +268,7 @@ class ClientInfo extends PureComponent {
                   rules: [{ message: '请输入城市' }],
                   initialValue: current.city,
                 })(
-                  <Input placeholder="请输入"/>,
+                  <GeographicView />
                 )}
               </FormItem>
             </Col>
