@@ -23,7 +23,8 @@ import styles from './base.less';
 import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
-import GeographicView from './../../Account/Settings/GeographicView'
+import GeographicView from './../../Account/Settings/GeographicView';
+
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
 const { TextArea } = Input;
@@ -67,8 +68,7 @@ class ClientInfo extends PureComponent {
   formLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 12 },
+      span: 24,
     },
   };
 
@@ -84,7 +84,6 @@ class ClientInfo extends PureComponent {
 
     };
   }
-
 
 
   render() {
@@ -120,7 +119,7 @@ class ClientInfo extends PureComponent {
     } else {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
-      content='';
+      content = '';
     }
 
     let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading;
@@ -155,240 +154,232 @@ class ClientInfo extends PureComponent {
       const { form: { getFieldDecorator } } = this.props;
 
       return (
-        <Form
-          layout="inline"
-          size={'small'}
-          className={styles.from_content}
-          labelAlign="left"
-          onSubmit={this.handleSubmit}>
 
-          <Row gutter={2} justify="start">
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="客户编号" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('customerNo', {
-                  rules: [{ required: true, message: '请输入客户编号' }],
-                  initialValue: current.customerNo,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+        <div className={clientStyle.list_info}>
+          <span className={clientStyle.sun_title_info}>客户</span>
+          <Divider className={clientStyle.divder}/>
+          <Form
+            layout="inline"
+            size={'small'}
+            className={styles.from_content}
+            labelAlign="left"
+            onSubmit={this.handleSubmit}>
 
-              <FormItem label="简称" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('shotName', {
-                  rules: [{ required: true, message: '请输入中文名称' }],
-                  initialValue: current.shotName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+            <Row gutter={2} justify="start">
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="客户编号" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('customerNo', {
+                    rules: [{ required: true, message: '请输入客户编号' }],
+                    initialValue: current.customerNo,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="客户渠道" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('customerChannels', {
-                  rules: [{ message: '请输入客户渠道' }],
-                  initialValue: current.customerChannels,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="简称" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('shotName', {
+                    rules: [{ required: true, message: '请输入中文名称' }],
+                    initialValue: current.shotName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
-              <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('zhName', {
-                  rules: [{ message: '请输入中文名' }],
-                  initialValue: current.zhName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="客户渠道" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('customerChannels', {
+                    rules: [{ message: '请输入客户渠道' }],
+                    initialValue: current.customerChannels,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
+            </Row>
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('enName', {
-                  rules: [{ message: '请输入英文名' }],
-                  initialValue: current.enName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Row gutter={2}>
 
-              <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qualityZhName', {
-                  rules: [{ message: '请输入中文地址' }],
-                  initialValue: current.qualityZhName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
+                <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('zhName', {
+                    rules: [{ message: '请输入中文名' }],
+                    initialValue: current.zhName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('enName', {
+                    rules: [{ message: '请输入英文名' }],
+                    initialValue: current.enName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qualityEnName', {
-                  rules: [{ message: '请输入英文地址' }],
-                  initialValue: current.qualityEnName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('qualityZhName', {
+                    rules: [{ message: '请输入中文地址' }],
+                    initialValue: current.qualityZhName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('qualityEnName', {
+                    rules: [{ message: '请输入英文地址' }],
+                    initialValue: current.qualityEnName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-              <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('country', {
-                  rules: [{ message: '请输入国别' }],
-                  initialValue: current.country,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+                <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('country', {
+                    rules: [{ message: '请输入国别' }],
+                    initialValue: current.country,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('city', {
+                    rules: [{ message: '请输入城市' }],
+                    initialValue: current.city,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
+            </Row>
+            <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('city', {
-                  rules: [{ message: '请输入城市' }],
-                  initialValue: current.city,
-                })(
-                  <GeographicView />
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="公司电话" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('companyPhone', {
+                    rules: [{ message: '请输入公司电话' }],
+                    initialValue: current.companyPhone,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
-              <FormItem label="公司电话" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('companyPhone', {
-                  rules: [{ message: '请输入公司电话' }],
-                  initialValue: current.companyPhone,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="公司网址" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('companyWebsite', {
+                    rules: [{ message: '请输入公司网址' }],
+                    initialValue: current.companyWebsite,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
+                <FormItem label="结算币种" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('settlementCurrency', {
+                    rules: [{ message: '请输入结算币种' }],
+                    initialValue: current.settlementCurrency,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="品质等级" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('qualityRequirements', {
+                    rules: [{ message: '请输入品质等级' }],
+                    initialValue: current.qualityRequirements,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="公司网址" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('companyWebsite', {
-                  rules: [{ message: '请输入公司网址' }],
-                  initialValue: current.companyWebsite,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="结算币种" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('settlementCurrency', {
-                  rules: [{ message: '请输入结算币种' }],
-                  initialValue: current.settlementCurrency,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="品质等级" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qualityRequirements', {
-                  rules: [{ message: '请输入品质等级' }],
-                  initialValue: current.qualityRequirements,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="客户报价系数" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('customerQuotationCoefficient', {
-                  rules: [{ message: '请输入客户报价系数' }],
-                  initialValue: current.customerQuotationCoefficient,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="预付款比例" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('prepaymentRatio', {
-                  rules: [{ message: '请输入预付款比例' }],
-                  initialValue: current.prepaymentRatio,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('deliveryMethod', {
-                  rules: [{ message: '请输入送货方式' }],
-                  initialValue: current.deliveryMethod,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+                <FormItem label="客户报价系数" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('customerQuotationCoefficient', {
+                    rules: [{ message: '请输入客户报价系数' }],
+                    initialValue: current.customerQuotationCoefficient,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="预付款比例" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('prepaymentRatio', {
+                    rules: [{ message: '请输入预付款比例' }],
+                    initialValue: current.prepaymentRatio,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-          </Row>
+            </Row>
+            <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('deliveryMethod', {
+                    rules: [{ message: '请输入送货方式' }],
+                    initialValue: current.deliveryMethod,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-              <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('remarks', {
-                  rules: [{ message: '请输入备注' }],
-                  initialValue: current.remarks,
-                })(
-                  <TextArea rows={4} placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="共同维护人" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('modifier', {
-                  rules: [{ message: '请输入共同维护人' }],
-                  initialValue: current.modifier,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-          </Row>
+                <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('remarks', {
+                    rules: [{ message: '请输入备注' }],
+                    initialValue: current.remarks,
+                  })(
+                    <TextArea rows={4} placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="共同维护人" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('modifier', {
+                    rules: [{ message: '请输入共同维护人' }],
+                    initialValue: current.modifier,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-        </Form>
+            </Row>
+
+
+          </Form>
+        </div>
       );
     };
 
@@ -434,10 +425,8 @@ class ClientInfo extends PureComponent {
       </Card>
       <Modal
         // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
-        title={'任务添加'}
         width={740}
         className={styles.standardListForm}
-        bodyStyle={{ padding: '28px 0 0' }}
         destroyOnClose
         visible={visible}
         {...modalFooter}
@@ -499,7 +488,6 @@ class ClientInfo extends PureComponent {
       type: 'customer/freezeCustomer',
       payload: { 'list': keys },
     });
-
 
 
   };

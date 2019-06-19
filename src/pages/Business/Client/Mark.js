@@ -24,6 +24,7 @@ import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import { connect } from 'dva';
+import Deliver from '../Deliver/Deliver';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -74,8 +75,9 @@ class Mark extends PureComponent {
   formLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 12 },
+      span: 24,
+      // xs: { span: 24 },
+      // sm: { span: 12 },
     },
   };
 
@@ -134,6 +136,7 @@ class Mark extends PureComponent {
       const data = location.params;
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
+        if(data.customerId!=='')
         this.loadMarklList();
       }
 
@@ -165,16 +168,16 @@ class Mark extends PureComponent {
     const getModalContent = () => {
 
 
-      const beforeUpload=(file)=> {
-        console.log("beforeUpload",file)
-        const isUpload = (!(file.fileList&&file.fileList.lenght>1))
+      const beforeUpload = (file) => {
+        console.log('beforeUpload', file);
+        const isUpload = (!(file.fileList && file.fileList.lenght > 1));
         // if(!isUpload)
         //   message.error('只能上传一张图片');
-        console.log('iup',isUpload)
-        return (!(file.fileList&&file.fileList.lenght>1))
+        console.log('iup', isUpload);
+        return (!(file.fileList && file.fileList.lenght > 1));
 
 
-      }
+      };
 
       const normFile = (e) => {
         // console.log("eve ",e.file.originFileObj)
@@ -186,7 +189,7 @@ class Mark extends PureComponent {
 
       const handleChange = info => {
 
-        console.log('info = ',info)
+        console.log('info = ', info);
         if (info.file.status === 'done') {
           getBase64(info.file.originFileObj, imageUrl => {
               this.setState({
@@ -219,117 +222,125 @@ class Mark extends PureComponent {
       );
       const imageUrl = this.state.imageUrl;
       return (
-        <Form
-          layout="inline"
-          size={'small'}
-          className={styles.from_content}
-          labelAlign="left"
-          onSubmit={this.handleSubmit}>
-          <Row gutter={2}>
 
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('markingPic', {
-                  initialValue: current.markingPic,
-                  getValueFromEvent: normFile,
-                })(
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    action="/"
-                    beforeUpload={beforeUpload}
-                    fileList={this.state.fileList}
-                    onChange={handleChange}
-                  >
-                    {/*{imageUrl?'':uploadButton}*/}
-                    { uploadButton}
-                  </Upload>,
-                )}
-              </FormItem>
-            </Col>
+        <div className={clientStyle.list_info}>
+          <span className={clientStyle.sun_title_info}>字印</span>
+          <Divider className={clientStyle.divder}/>
+          <Form
+            layout="inline"
+            size={'small'}
+            className={styles.from_content}
+            labelAlign="left"
+            onSubmit={this.handleSubmit}>
 
 
-          </Row>
+            <Row gutter={2}>
 
-          <Row gutter={2} justify="start">
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('endNo', {
-                  rules: [{ required: true, message: '请输入终客编号' }],
-                  initialValue: current.endNo,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+              <Col lg={12} md={12} sm={12} xs={12}>
 
-              <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('endShotName', {
-                  rules: [{ required: true, message: '请输入终客简称' }],
-                  initialValue: current.endShotName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('zhName', {
-                  rules: [{ message: '请输入中文名' }],
-                  initialValue: current.zhName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('enName', {
-                  rules: [{ message: '请输入英文名' }],
-                  initialValue: current.enName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+                <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('markingPic', {
+                    initialValue: current.markingPic,
+                    getValueFromEvent: normFile,
+                  })(
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      action="/"
+                      beforeUpload={beforeUpload}
+                      fileList={this.state.fileList}
+                      onChange={handleChange}
+                    >
+                      {/*{imageUrl?'':uploadButton}*/}
+                      {uploadButton}
+                    </Upload>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="字印价" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('markingPrice', {
-                  rules: [{ message: '字印价' }],
-                  initialValue: current.markingPrice,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            </Row>
 
-              <FormItem label="字印说明" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('markingExplain', {
-                  rules: [{ message: '请输入字印说明' }],
-                  initialValue: current.markingExplain,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+            <Row gutter={2} justify="start">
+              <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('endNo', {
+                    rules: [{ required: true, message: '请输入终客编号' }],
+                    initialValue: current.endNo,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={12} md={12} sm={12} xs={12}>
+
+                <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('endShotName', {
+                    rules: [{ required: true, message: '请输入终客简称' }],
+                    initialValue: current.endShotName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+
+            <Row gutter={2}>
+              <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('zhName', {
+                    rules: [{ message: '请输入中文名' }],
+                    initialValue: current.zhName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={12} md={12} sm={12} xs={12}>
+
+                <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('enName', {
+                    rules: [{ message: '请输入英文名' }],
+                    initialValue: current.enName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-          </Row>
+            </Row>
+            <Row gutter={2}>
+              <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="字印价" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('markingPrice', {
+                    rules: [{ message: '字印价' }],
+                    initialValue: current.markingPrice,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={12} md={12} sm={12} xs={12}>
+
+                <FormItem label="字印说明" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('markingExplain', {
+                    rules: [{ message: '请输入字印说明' }],
+                    initialValue: current.markingExplain,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-        </Form>
+            </Row>
+
+
+          </Form>
+        </div>
+
       );
     };
 
@@ -342,7 +353,7 @@ class Mark extends PureComponent {
       <div className={styles.right_info}>
         <List
           loading={isUpdate || markListloading}
-          dataSource={body.data}
+          dataSource={(!this.state.isAddEdit)?body.data:[]}
           renderItem={this.getContantItem}
           size="small"
           bordered={false}
@@ -383,10 +394,8 @@ class Mark extends PureComponent {
 
       </Card>
       <Modal
-        title={'任务添加'}
         width={640}
         className={styles.standardListForm}
-        bodyStyle={{ padding: '28px 0 0' }}
         destroyOnClose
         visible={visible}
         {...modalFooter}
@@ -398,9 +407,16 @@ class Mark extends PureComponent {
 
 
   getContantItem = (item) => {
+
+    const { selectedItem }  = this.state;
+
     return (
+
       <Card
         hoverable
+        className={selectedItem === item ? styles.list_selected_content : ''} onClick={() => {
+        this.changeSelectItem(item);
+      }}
         cover={<img alt="example"
                     src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559223238&di=bd3da77adf53b2475750e850b6106117&imgtype=jpg&er=1&src=http%3A%2F%2Fres.cngoldres.com%2Fupload%2F2014%2F1029%2F3c1910541d8059177e7d3f598611c859.jpg%3F_%3D1414568255062"/>}
       >
@@ -418,9 +434,21 @@ class Mark extends PureComponent {
           </DescriptionList>
         </div>
       </Card>
+
     );
   };
 
+
+  changeSelectItem = (item) => {
+
+    const { selectedItem } = this.state;
+    let selectitem = selectedItem === item ? '' : item;
+
+    this.setState({
+      selectedItem: selectitem,
+    });
+
+  };
 
   loadMarklList = () => {
     console.log('loadMarkList');
@@ -521,22 +549,33 @@ class Mark extends PureComponent {
 
       if (err) return;
       let params = {};
-      const fiedls = { ...fieldsValue }
+      const fiedls = { ...fieldsValue };
+      let marking = {};
       // params.customerId = this.state.customerId;
       if (isAdd) {
 
-        params.marking = fiedls;
-        params.marking.customerId = this.state.customerId;
-        params.file = fiedls.markingPic?fiedls.markingPic:''
+        marking = fiedls;
+        marking.customerId = this.state.customerId;
+        // params.marking.customerId = this.state.customerId;
+        params.file = fiedls.markingPic ? fiedls.markingPic : '';
 
 
-        params.marking =   {
-          customerId:'8b8723a4fe7f8a6c8e5e01c3821101d0',
-          markingNo:"255633",
-          zhName:'222updateCustomer',
-          enName:'444rr',
-          endShotName:'444rr3'
-        }
+        // params.marking =   {
+        //   customerId:'8b8723a4fe7f8a6c8e5e01c3821101d0',
+        //   markingNo:"255633",
+        //   zhName:'222updateCustomer',
+        //   enName:'444rr',
+        //   endShotName:'444rr3'
+        // }
+
+        console.log('json ', JSON.stringify(marking));
+
+        // params.marking="{'customerId':'8b8723a4fe7f8a6c8e5e01c3821101d0'}"
+        params.marking = JSON.stringify(marking);
+        // params.marking=JSON.stringify(fieldsValue)
+
+        // params.marking = '{"customerId":"id","markingNo":"1000","zhName":"中文名","enName":"英文名","endShotName":"终客简称","markingPrice":"字印价","markingExplain":"字印说明","markingPic":""}';
+
         console.log(params);
         // if (isAdd) {
         dispatch({

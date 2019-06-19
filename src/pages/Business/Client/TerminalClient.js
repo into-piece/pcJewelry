@@ -24,7 +24,7 @@ import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import { connect } from 'dva';
-
+import GeographicView from './GeographicView';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -48,8 +48,7 @@ class TerminalClient extends PureComponent {
   formLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 12 },
+      span: 24
     },
   };
 
@@ -111,6 +110,7 @@ class TerminalClient extends PureComponent {
       console.log("ter minal ",data)
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
+        if(data.customerId!=='')
         this.loadTerminalList();
       }
 
@@ -141,8 +141,21 @@ class TerminalClient extends PureComponent {
 
       const { form: { getFieldDecorator } } = this.props;
 
+      // const validatorGeographic = (rule, value, callback) => {
+      //   const { province={}, city={} } = value;
+      //   if (!province.key) {
+      //     callback('Please input your province!');
+      //   }
+      //   if (!city.key) {
+      //     callback('Please input your city!');
+      //   }
+      //   callback();
+      // };
 
       return (
+        <div className={clientStyle.list_info}>
+          <span className={clientStyle.sun_title_info}>终客</span>
+          <Divider className={clientStyle.divder}/>
         <Form
           layout="inline"
           size={'small'}
@@ -151,7 +164,7 @@ class TerminalClient extends PureComponent {
           onSubmit={this.handleSubmit}>
 
           <Row gutter={2} justify="start">
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endNo', {
                   rules: [{ required: true, message: '请输入终客编号' }],
@@ -161,7 +174,7 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
 
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
@@ -172,10 +185,8 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-          </Row>
 
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('zhName', {
                   rules: [{ message: '请输入中文名' }],
@@ -185,7 +196,41 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+
+
+          </Row>
+
+          <Row gutter={2}>
+
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('country', {
+                  rules: [{ message: '请输入国别' }],
+                  initialValue: current.country,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+
+              <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('city', {
+                  rules: [ {
+                    // validator: validatorGeographic,
+                  }],
+                  initialValue: current.city,
+
+                },)(
+
+                  <Input placeholder="请输入"/>,
+                  {/*<GeographicView />,*/}
+                )}
+              </FormItem>
+            </Col>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
 
               <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('enName', {
@@ -200,32 +245,7 @@ class TerminalClient extends PureComponent {
 
           </Row>
           <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('country', {
-                  rules: [{ message: '请输入国别' }],
-                  initialValue: current.country,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('city', {
-                  rules: [{ message: '请输入城市' }],
-                  initialValue: current.city,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('zhAddress', {
                   rules: [{ message: '请输入中文地址' }],
@@ -235,7 +255,7 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
 
               <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('enAddress', {
@@ -246,11 +266,7 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-
-
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem label="电话" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('phone', {
                   rules: [{ message: '请输入电话' }],
@@ -260,7 +276,10 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={8} md={8} sm={8} xs={8}>
 
               <FormItem label="联络人姓名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('contactName', {
@@ -271,48 +290,7 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
-
-
-          </Row>
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="QQ" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qq', {
-                  rules: [{ message: '请输入QQ' }],
-                  initialValue: current.qq,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="微信" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('wechat', {
-                  rules: [{ message: '微信' }],
-                  initialValue: current.wechat,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-
-          </Row>
-
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-
-              <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('remarks', {
-                  rules: [{ message: '请输入备注' }],
-                  initialValue: current.remarks,
-                })(
-                  <TextArea rows={4} placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={8} md={8} sm={8} xs={8}>
 
               <FormItem label="Email" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('email', {
@@ -323,10 +301,48 @@ class TerminalClient extends PureComponent {
                 )}
               </FormItem>
             </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem label="QQ" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('qq', {
+                  rules: [{ message: '请输入QQ' }],
+                  initialValue: current.qq,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={2}>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+
+              <FormItem label="微信" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('wechat', {
+                  rules: [{ message: '微信' }],
+                  initialValue: current.wechat,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+
+              <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('remarks', {
+                  rules: [{ message: '请输入备注' }],
+                  initialValue: current.remarks,
+                })(
+                  <TextArea rows={4} placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
           </Row>
 
 
         </Form>
+        </div>
       );
     };
 
@@ -335,7 +351,7 @@ class TerminalClient extends PureComponent {
 
         <List
           loading={isUpdate||terminalListloading}
-          dataSource={body.data}
+          dataSource={(!this.state.isAddEdit)?body.data:[]}
           renderItem={this.getContantItem}
           size="small"
           bordered={false}
@@ -376,10 +392,8 @@ class TerminalClient extends PureComponent {
 
       </Card>
       <Modal
-        title={'任务添加'}
         width={640}
         className={styles.standardListForm}
-        bodyStyle={{ padding: '28px 0 0' }}
         destroyOnClose
         visible={visible}
         {...modalFooter}

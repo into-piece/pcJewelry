@@ -50,8 +50,7 @@ class PackageInfo extends PureComponent {
   formLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 12 },
+      span: 24,
     },
   };
 
@@ -110,6 +109,7 @@ class PackageInfo extends PureComponent {
       const data = location.params;
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
+        if(data.customerId!=='')
         this.loadPackagelList();
       }
 
@@ -196,78 +196,82 @@ class PackageInfo extends PureComponent {
 
 
       return (
-        <Form
-          layout="inline"
-          size={'small'}
-          className={styles.from_content}
-          labelAlign="left"
-          onSubmit={this.handleSubmit}>
+        <div className={clientStyle.list_info}>
+          <span className={clientStyle.sun_title_info}>包装</span>
+          <Divider className={clientStyle.divder}/>
+          <Form
+            layout="inline"
+            size={'small'}
+            className={styles.from_content}
+            labelAlign="left"
+            onSubmit={this.handleSubmit}>
 
-          <Row gutter={2} justify="start">
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Row gutter={2} justify="start">
+              <Col lg={12} md={12} sm={12} xs={12}>
 
-              <FormItem label="包装说明图片" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('packPic', {
-                  getValueFromEvent: normFile,
-                  initialValue: current.enName,
-                })(
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    action="/"
-                    beforeUpload={beforeUpload}
-                    fileList={this.state.fileList}
-                    onChange={handleChange}
-                  >
-                    {/*{imageUrl?'':uploadButton}*/}
-                    {uploadButton}
-                  </Upload>,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+                <FormItem label="包装说明图片" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('packPic', {
+                    getValueFromEvent: normFile,
+                    initialValue: current.enName,
+                  })(
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      action="/"
+                      beforeUpload={beforeUpload}
+                      fileList={this.state.fileList}
+                      onChange={handleChange}
+                    >
+                      {/*{imageUrl?'':uploadButton}*/}
+                      {uploadButton}
+                    </Upload>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
 
-          <Row gutter={2} justify="start">
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('endNo', {
-                  rules: [{ message: '请输入终客编号' }],
-                  initialValue: current.endNo,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Row gutter={2} justify="start">
+              <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('endNo', {
+                    rules: [{ message: '请输入终客编号' }],
+                    initialValue: current.endNo,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={12} md={12} sm={12} xs={12}>
 
-              <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('endShotName', {
-                  rules: [{ message: '请输入终客简称' }],
-                  initialValue: current.endShotName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+                <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('endShotName', {
+                    rules: [{ message: '请输入终客简称' }],
+                    initialValue: current.endShotName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
 
-          <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem label="包装说明" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('packExplain', {
-                  rules: [{ required: true, message: '请输入包装说明' }],
-                  initialValue: current.packExplain,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+            <Row gutter={2}>
+              <Col lg={12} md={12} sm={12} xs={12}>
+                <FormItem label="包装说明" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('packExplain', {
+                    rules: [{ required: true, message: '请输入包装说明' }],
+                    initialValue: current.packExplain,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-          </Row>
+            </Row>
 
-        </Form>
+          </Form>
+        </div>
       );
     };
 
@@ -276,7 +280,7 @@ class PackageInfo extends PureComponent {
       <div className={styles.right_info}>
         <List
           loading={false}
-          dataSource={body.data}
+          dataSource={(!this.state.isAddEdit)?body.data:[]}
           renderItem={this.getContantItem}
           size="small"
           bordered={false}
@@ -318,10 +322,8 @@ class PackageInfo extends PureComponent {
 
       </Card>
       <Modal
-        title={'任务添加'}
         width={640}
         className={styles.standardListForm}
-        bodyStyle={{ padding: '28px 0 0' }}
         destroyOnClose
         visible={visible}
         {...modalFooter}
@@ -336,6 +338,9 @@ class PackageInfo extends PureComponent {
     return (
       <Card
         hoverable
+        className={selectedItem === item ? styles.list_selected_content : ''} onClick={() => {
+        this.changeSelectItem(item);
+      }}
         cover={<img alt="example"
                     src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559223238&di=bd3da77adf53b2475750e850b6106117&imgtype=jpg&er=1&src=http%3A%2F%2Fres.cngoldres.com%2Fupload%2F2014%2F1029%2F3c1910541d8059177e7d3f598611c859.jpg%3F_%3D1414568255062"/>}
       >
@@ -353,6 +358,16 @@ class PackageInfo extends PureComponent {
     );
   };
 
+  changeSelectItem = (item) => {
+
+    const { selectedItem } = this.state;
+    let selectitem = selectedItem === item ? '' : item;
+
+    this.setState({
+      selectedItem: selectitem,
+    });
+
+  };
 
   loadPackagelList = () => {
     console.log('loadPackageList');
@@ -453,12 +468,12 @@ class PackageInfo extends PureComponent {
 
       if (err) return;
       let params = {};
-      params.pack={}
-      const fields = { ...fieldsValue }
+      params.pack = {};
+      const fields = { ...fieldsValue };
       // params.customerId = this.state.customerId;
       if (isAdd) {
 
-        params.file = fields.packPic?fields.packPic:'';
+        params.file = fields.packPic ? fields.packPic : '';
         params.pack = fields;
         params.pack.customerId = this.state.customerId;
         console.log(params);
@@ -483,8 +498,8 @@ class PackageInfo extends PureComponent {
       }
 
       this.setState({
-        visible:false
-      })
+        visible: false,
+      });
     });
   };
 }
