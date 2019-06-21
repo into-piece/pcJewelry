@@ -45,8 +45,12 @@ let routes = [
             "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -66,8 +70,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -83,8 +91,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -100,8 +112,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -117,8 +133,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -134,8 +154,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -151,8 +175,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -168,8 +196,12 @@ models: () => [
                 "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
+  import(/* webpackChunkName: 'p__Business__Client__models__city.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/city.js').then(m => { return { namespace: 'city',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__client.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/client.js').then(m => { return { namespace: 'client',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/customer.js').then(m => { return { namespace: 'customer',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/geographic.js').then(m => { return { namespace: 'geographic',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__image.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/image.js').then(m => { return { namespace: 'image',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
@@ -181,7 +213,7 @@ models: () => [
                 "exact": true
               },
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -297,7 +329,7 @@ models: () => [
                     "exact": true
                   },
                   {
-                    "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                    "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
                   }
                 ]
               },
@@ -387,7 +419,7 @@ models: () => [
                 "exact": true
               },
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -401,7 +433,7 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -415,7 +447,7 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -429,7 +461,7 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -443,7 +475,7 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -457,7 +489,7 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -471,7 +503,7 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
@@ -485,12 +517,12 @@ models: () => [
 }),
             "routes": [
               {
-                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+                "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
               }
             ]
           },
           {
-            "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+            "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
           }
         ]
       },
@@ -503,12 +535,12 @@ models: () => [
         "exact": true
       },
       {
-        "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+        "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
       }
     ]
   },
   {
-    "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/_umi-build-dev@1.8.4@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
+    "component": () => React.createElement(require('G:/htmlproject/jewelry5_g/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/pages', hasRoutesInConfig: true })
   }
 ];
 window.g_routes = routes;

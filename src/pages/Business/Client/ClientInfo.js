@@ -24,6 +24,7 @@ import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import GeographicView from './../../Account/Settings/GeographicView';
+import City from './components/City';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
@@ -51,6 +52,15 @@ const listdata = [{
   wechat: 'zhangsan',
 }];
 
+
+const validatorGeographic = (rule, value, callback) => {
+
+  // console.log("validatorGeographic = ",value)
+  if (!value.name) {
+    callback("请输入城市名称");
+  }
+  callback();
+};
 
 @connect(({ loading, customer }) => {
   return {
@@ -122,13 +132,18 @@ class ClientInfo extends PureComponent {
       content = '';
     }
 
-    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading;
+    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading||customerFreezeloading;
 
 
     if (isCurstomerUpdate) {
       this.state.update = true;
+      if(customerUpdateloading)
+      this.state.customerUpdate =true;
     } else {
       if (update) {
+
+
+
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
           message.success(body.rtnMsg);
@@ -136,9 +151,18 @@ class ClientInfo extends PureComponent {
           message.error(body.rtnMsg);
           this.state.requestState = 'error';
         }
+        if(this.state.customerUpdate)
+        {
+          console.log("update fini")
+          const {updateCustomer} = this.state;
+          this.setState({
+            info:updateCustomer
+          })
+          this.state.customerUpdate = false;
+        }
+
         this.handleDone();
         this.state.update = false;
-
       }
 
 
@@ -261,10 +285,14 @@ class ClientInfo extends PureComponent {
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('city', {
-                    rules: [{ message: '请输入城市' }],
+                    rules: [ {
+                      validator: validatorGeographic,
+                    }],
                     initialValue: current.city,
-                  })(
-                    <Input placeholder="请输入"/>,
+
+                  },)(
+                    <City content={current.city}/>
+
                   )}
                 </FormItem>
               </Col>
@@ -628,12 +656,26 @@ class ClientInfo extends PureComponent {
 
       let params = {};
       params = { ...fieldsValue };
-      console.log({ ...fieldsValue });
+      // console.log({ ...fieldsValue });
       // if (isAdd) {
 
+      if(fieldsValue.city.name)
+        params.city=fieldsValue.city.name
       params.typeId = info.typeId;
-      if (!isAdd && info.content && info.content.id)
+      if (!isAdd && info.content && info.content.id){
+        let tempFields = {...fieldsValue};
+        tempFields.city = {...fieldsValue}.city.name;
+        const updateCustomer = Object.assign(info.content,{...tempFields});
+        console.log("assign params = ",updateCustomer)
+        this.state.updateCustomer = updateCustomer;
         params.id = info.content.id;
+          if (params.status === '冻结')
+            params.status = 2;
+          else if (params.status === '使用中')
+            params.status = 1;
+          else if (params.status === '草稿')
+            params.status = 0;
+      }
 
       dispatch({
         type: 'customer/updateCustomer',
@@ -641,6 +683,9 @@ class ClientInfo extends PureComponent {
           ...params,
         },
       });
+
+
+
 
       // }
       // else {

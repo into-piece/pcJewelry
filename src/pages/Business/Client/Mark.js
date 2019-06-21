@@ -25,6 +25,7 @@ import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import { connect } from 'dva';
 import Deliver from '../Deliver/Deliver';
+import MarkListItem from './components/MarkListItem';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -55,6 +56,9 @@ const listdata = [{
 @connect(({ loading, mark }) => {
   return {
     body: mark.body,
+    // province: city.province,
+    // areas: city.areas,
+    // citys: city.citys,
     markListloading: loading.effects['mark/fetchListMark'],
     markSaveloading: loading.effects['mark/addMark'],
     markUpdateloading: loading.effects['mark/updateMark'],
@@ -66,11 +70,6 @@ const listdata = [{
 @Form.create()
 class Mark extends PureComponent {
 
-
-  componentWillMount() {
-
-
-  }
 
   formLayout = {
     labelCol: { span: 12 },
@@ -91,8 +90,12 @@ class Mark extends PureComponent {
       update: false,
       customerId: '',
       selectedItem: '',
+      provinces: [],
+      areas: [],
+      city: [],
     };
   }
+
 
   render() {
 
@@ -136,8 +139,8 @@ class Mark extends PureComponent {
       const data = location.params;
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
-        if(data.customerId!=='')
-        this.loadMarklList();
+        if (data.customerId !== '')
+          this.loadMarklList();
       }
 
       if (data.customerId && data.customerId !== '')
@@ -158,50 +161,62 @@ class Mark extends PureComponent {
     }
 
 
-    function getBase64(img, callback) {
+    const getBase64 = (img, callback) => {
       const reader = new FileReader();
       reader.addEventListener('load', () => callback(reader.result));
       reader.readAsDataURL(img);
-    }
+    };
 
 
     const getModalContent = () => {
 
-
-      const beforeUpload = (file) => {
-        console.log('beforeUpload', file);
-        const isUpload = (!(file.fileList && file.fileList.lenght > 1));
-        // if(!isUpload)
-        //   message.error('只能上传一张图片');
-        console.log('iup', isUpload);
-        return (!(file.fileList && file.fileList.lenght > 1));
-
-
-      };
-
       const normFile = (e) => {
-        // console.log("eve ",e.file.originFileObj)
-        // const reader = new FileReader();
-        // reader.readAsDataURL(e.file.originFileObj)
-        // console.log('load file is ',reader.result);
         return this.state.imageUrl;
       };
 
       const handleChange = info => {
 
-        console.log('info = ', info);
+        // console.log('info = ', info);
+        let fileList = [...info.fileList];
+
+        this.state.imageUrl = false;
+        this.state.fileName = false;
+
         if (info.file.status === 'done') {
           getBase64(info.file.originFileObj, imageUrl => {
+              let imageName;
+              if (info.file)
+                imageName = info.file.name;
               this.setState({
                 imageUrl,
+                imageName,
                 loading: false,
               });
+              // console.log("上传的图片 ",imageUrl)
               this.state.imageUrl = imageUrl;
+              this.state.fileName = imageName;
             },
           );
         }
 
-        let fileList = [...info.fileList];
+
+        const file = info.file;
+
+        if (file.type) {
+          const isJPG = (file.type.indexOf('image') != -1);
+          if (!isJPG) {
+            message.error('只能上传图片格式的文件');
+            return;
+          }
+        }
+        if (file.size) {
+          const isLt2M = file.size / 1024 / 1024 < 3;
+          if (!isLt2M) {
+            message.error('上传图片不能大于 3MB!');
+            return;
+          }
+        }
+
         fileList = fileList.slice(-1);
         fileList = fileList.map(file => {
           if (file.response) {
@@ -209,17 +224,13 @@ class Mark extends PureComponent {
           }
           return file;
         });
+
         this.setState({ fileList });
 
       };
       const { form: { getFieldDecorator } } = this.props;
 
-      const uploadButton = (
-        <div>
-          <Icon type={this.state.loading ? 'loading' : 'plus'}/>
-          <div className="ant-upload-text">上传图片</div>
-        </div>
-      );
+
       const imageUrl = this.state.imageUrl;
       return (
 
@@ -239,23 +250,21 @@ class Mark extends PureComponent {
               <Col lg={12} md={12} sm={12} xs={12}>
 
                 <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('markingPic', {
-                    initialValue: current.markingPic,
-                    getValueFromEvent: normFile,
-                  })(
+
                     <Upload
                       name="avatar"
                       listType="picture-card"
                       className="avatar-uploader"
-                      action="/"
-                      beforeUpload={beforeUpload}
                       fileList={this.state.fileList}
                       onChange={handleChange}
                     >
                       {/*{imageUrl?'':uploadButton}*/}
-                      {uploadButton}
+                      <div>
+                        <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                        <div className="ant-upload-text">上传图片</div>
+                      </div>
                     </Upload>,
-                  )}
+
                 </FormItem>
               </Col>
 
@@ -353,8 +362,8 @@ class Mark extends PureComponent {
       <div className={styles.right_info}>
         <List
           loading={isUpdate || markListloading}
-          dataSource={(!this.state.isAddEdit)?body.data:[]}
-          renderItem={this.getContantItem}
+          dataSource={(!this.state.isAddEdit) ? body.data : []}
+          renderItem={this.getContantItem2}
           size="small"
           bordered={false}
           split={true}
@@ -375,11 +384,12 @@ class Mark extends PureComponent {
             <Button className={clientStyle.buttomControl} type="primary" icon="plus"
                     size={'small'} onClick={this.clickNewFrom} disabled={this.state.isAddEdit}>新增</Button>
             <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-                    onClick={this.clickDeleteFrom} disabled={this.state.isEdit}>删除</Button>
+                    onClick={this.clickDeleteFrom} disabled={this.state.isEdit || this.state.isAddEdit}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit" onClick={this.clickEditFrom} disabled={this.state.isEdit}>编辑</Button>
+                    icon="edit" onClick={this.clickEditFrom}
+                    disabled={this.state.isEdit || this.state.isAddEdit}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-                    onClick={this.clickFreezeFrom} disabled={this.state.isEdit}>冻结</Button>
+                    onClick={this.clickFreezeFrom} disabled={this.state.isEdit || this.state.isAddEdit}>冻结</Button>
           </div>
 
 
@@ -408,7 +418,7 @@ class Mark extends PureComponent {
 
   getContantItem = (item) => {
 
-    const { selectedItem }  = this.state;
+    const { selectedItem } = this.state;
 
     return (
 
@@ -438,8 +448,25 @@ class Mark extends PureComponent {
     );
   };
 
+  getContantItem2 = (item) => {
+
+    const { selectedItem } = this.state;
+
+    return (
+
+      <div onClick={() => {
+        this.changeSelectItem(item);
+      }}>
+        <MarkListItem item={item} callbackUrl={this.callbackUrl}
+                      isSelected={selectedItem === item}
+        />
+      </div>
+    );
+  };
+
 
   changeSelectItem = (item) => {
+    // console.log('changeSelectItem');
 
     const { selectedItem } = this.state;
     let selectitem = selectedItem === item ? '' : item;
@@ -450,12 +477,39 @@ class Mark extends PureComponent {
 
   };
 
+
   loadMarklList = () => {
-    console.log('loadMarkList');
+    // console.log('loadMarkList');
     const { dispatch } = this.props;
     dispatch({
       type: 'mark/fetchListMark',
       payload: { 'customerId': this.state.customerId },
+    });
+
+  };
+
+
+  callbackUrl = (item) => {
+
+    let fileList = [];
+    if (item && item.path) {
+
+      fileList = [
+        {
+          uid: item.id,
+          name: item.fileName,
+          status: 'done',
+          url: item.path,
+        },
+      ];
+      this.state.imageUrl = item.path;
+      this.state.fileName = item.fileName;
+    } else {
+      this.state.imageUrl = '';
+      this.state.fileName = '';
+    }
+    this.setState({
+      fileList,
     });
 
   };
@@ -466,12 +520,16 @@ class Mark extends PureComponent {
       visible: true,
       isAdd: true,
       current: {},
+      fileList: [],
     });
 
   };
 
   clickEditFrom = () => {
+    //
+
     this.state.isAdd = false;
+    // this.state.selectedItem.markingPic="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAB2wAAAdsBV+WHHwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIiSURBVEiJ7ZbPaxNBFMe/b6wxllLRg/jj7qU30Sp6UiokrbaQGslGiweT2pMU6t29tOBVlJJs6u8uhRYxlqyLh9KLPfRPEPFkRQp6UCto0/e82GQKSmZ3WfHQ72n2y7zvZ97sMAywrX8kMpnkWN4rAOd+lyyp3T9T1+4PfI0CVmbTaF9zLKf4e+KJbduGtRHARDwIYLVpyMChN923o4CNthoAKpe908JYAJDQVlQouumpMGDj7SpM974GYXSLKXK3lKudCAM27nhTTt6bhGBEsz5C4Xhxuvd9kJzAB4Q79t8AsKhZByColi7Mt8cKvl4+tp7YmbgI4F3DFBxVHaoUKxgArj7u+aRYZQCsNV26Usl5N00zAv9jXU7+ZQYic1oOk6j+wkyq1qo20iVQdNPPAEzoeUzsli2/K1YwAOypf7sFkL/5TUAnCT+IHZydzTJB1nSPCBw72LH8cQEGNWt1o75xqVVdpMNVydXyQvRUy/khwmeHZ84vtaoN3XEl73cL0ZQGhRCNmEBDgyez84dF+DmAZMMkujfsph+aZrQFhd5Je7vadmAOwEHNXlj5kBz9W82fFLjj5F5yQDjZMARvqa6y9uKZemxgx/LGSGSoycQXCPcXZlOfg+QAQR4COb9PiF+guVgGSabo9lWDQgHDjsuW38XE7pb5BDss1BhMkEcEdDYMoerKkeXxsFDA+FSL9pSVZdW+PmTbdstrcVv/hX4B64GpDsmUF3MAAAAASUVORK5CYII="
     this.setState({
       current: this.state.selectedItem,
       visible: true,
@@ -486,7 +544,7 @@ class Mark extends PureComponent {
     if (id) {
       let keys = [];
       keys.push(id);
-      console.log('delet', keys, id);
+      // console.log('delet', keys, id);
       dispatch({
         type: 'mark/deleteMark',
         payload: { 'list': keys },
@@ -542,7 +600,7 @@ class Mark extends PureComponent {
 
 
     const { dispatch, form } = this.props;
-    const { isAdd, customerId, selectedItem } = this.state;
+    const { isAdd, customerId, selectedItem, imageUrl, imageName } = this.state;
 
 
     form.validateFields((err, fieldsValue) => {
@@ -550,52 +608,26 @@ class Mark extends PureComponent {
       if (err) return;
       let params = {};
       const fiedls = { ...fieldsValue };
+      // console.log("fiedl = ",fiedls)
       let marking = {};
-      // params.customerId = this.state.customerId;
-      if (isAdd) {
-
-        marking = fiedls;
-        marking.customerId = this.state.customerId;
-        // params.marking.customerId = this.state.customerId;
-        params.file = fiedls.markingPic ? fiedls.markingPic : '';
-
-
-        // params.marking =   {
-        //   customerId:'8b8723a4fe7f8a6c8e5e01c3821101d0',
-        //   markingNo:"255633",
-        //   zhName:'222updateCustomer',
-        //   enName:'444rr',
-        //   endShotName:'444rr3'
-        // }
-
-        console.log('json ', JSON.stringify(marking));
-
-        // params.marking="{'customerId':'8b8723a4fe7f8a6c8e5e01c3821101d0'}"
-        params.marking = JSON.stringify(marking);
-        // params.marking=JSON.stringify(fieldsValue)
-
-        // params.marking = '{"customerId":"id","markingNo":"1000","zhName":"中文名","enName":"英文名","endShotName":"终客简称","markingPrice":"字印价","markingExplain":"字印说明","markingPic":""}';
-
-        console.log(params);
-        // if (isAdd) {
-        dispatch({
-          type: 'mark/addMark',
-          payload: {
-            ...params,
-          },
-        });
-      } else {
-
-        params.id = selectedItem.id;
-
-        // this.state.current = { ...data };
-        dispatch({
-          type: 'mark/updateMark',
-          payload: {
-            ...params,
-          },
-        });
+      marking = fiedls;
+      marking.customerId = this.state.customerId;
+      params.imgStr = imageUrl ? imageUrl : '';
+      params.fileName = imageName ? imageName : '';
+      params.marking = marking;
+      // console.log('提交文件名', imageName);
+      if (!isAdd) {
+        params.marking.id = selectedItem.id;
+        params.marking.markingNo = selectedItem.markingNo;
       }
+      dispatch({
+        type: 'mark/updateMark',
+        payload: {
+          ...params,
+        },
+      });
+
+      // console.log(params);
     });
   };
 }

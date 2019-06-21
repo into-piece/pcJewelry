@@ -24,7 +24,7 @@ import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import styles from './base.less';
 import { connect } from 'dva';
-
+import  ImageUpload from './components/ImageUpload'
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -146,16 +146,6 @@ class PackageInfo extends PureComponent {
     const getModalContent = () => {
 
 
-      const beforeUpload = (file) => {
-        console.log('beforeUpload', file);
-        // const isUpload = (!(file.fileList && file.fileList.lenght > 1));
-        // if (isUpload)
-        //   message.error('只能上传一张图片');
-
-        return (!(file.fileList && file.fileList.lenght > 1));
-
-
-      };
 
       const normFile = (e) => {
         return this.state.imageUrl;
@@ -163,19 +153,44 @@ class PackageInfo extends PureComponent {
 
       const handleChange = info => {
 
-        console.log('info = ', info);
+        // console.log('info = ', info);
+        let fileList = [...info.fileList];
+
+        this.state.imageUrl=false;
+        this.state.fileName=false;
+
         if (info.file.status === 'done') {
           getBase64(info.file.originFileObj, imageUrl => {
+              let imageName;
+              if(info.file)
+                imageName = info.file.name;
               this.setState({
                 imageUrl,
+                imageName,
                 loading: false,
               });
               this.state.imageUrl = imageUrl;
+              this.state.fileName = imageName;
             },
           );
         }
 
-        let fileList = [...info.fileList];
+
+
+        const file = info.file;
+
+        const isJPG = (file.type.indexOf('image')!=-1);
+        if (!isJPG) {
+          message.error('只能上传图片格式的文件');
+          return ;
+        }
+
+        const isLt2M = file.size / 1024 / 1024 < 3;
+        if (!isLt2M) {
+          message.error('上传图片不能大于 3MB!');
+          return ;
+        }
+
         fileList = fileList.slice(-1);
         fileList = fileList.map(file => {
           if (file.response) {
@@ -183,15 +198,22 @@ class PackageInfo extends PureComponent {
           }
           return file;
         });
-        this.setState({ fileList });
-      };
 
-      const uploadButton = (
-        <div>
-          <Icon type={this.state.loading ? 'loading' : 'plus'}/>
-          <div className="ant-upload-text">上传图片</div>
-        </div>
-      );
+        this.setState({ fileList });
+
+      } ;
+
+      const getBase64=(img, callback)=>{
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+      }
+
+
+
+
+
+
       const { form: { getFieldDecorator } } = this.props;
 
 
@@ -212,19 +234,19 @@ class PackageInfo extends PureComponent {
                 <FormItem label="包装说明图片" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('packPic', {
                     getValueFromEvent: normFile,
-                    initialValue: current.enName,
                   })(
                     <Upload
                       name="avatar"
                       listType="picture-card"
                       className="avatar-uploader"
-                      action="/"
-                      beforeUpload={beforeUpload}
                       fileList={this.state.fileList}
                       onChange={handleChange}
                     >
                       {/*{imageUrl?'':uploadButton}*/}
-                      {uploadButton}
+                      <div>
+                        <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                        <div className="ant-upload-text">上传图片</div>
+                      </div>
                     </Upload>,
                   )}
                 </FormItem>
@@ -385,15 +407,25 @@ class PackageInfo extends PureComponent {
       visible: true,
       isAdd: true,
       current: {},
+      fileList:[],
     });
 
   };
 
   clickEditFrom = () => {
+    const fileList= [
+      {
+        uid: '-1',
+        name: 'xxx.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+    ]
     this.state.isAdd = false;
     this.setState({
       current: this.state.selectedItem,
       visible: true,
+      fileList
     });
 
   };
@@ -461,41 +493,34 @@ class PackageInfo extends PureComponent {
 
 
     const { dispatch, form } = this.props;
-    const { isAdd, selectedItem } = this.state;
+    const { isAdd, selectedItem ,imageUrl,imageName} = this.state;
 
 
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
-      let params = {};
-      params.pack = {};
-      const fields = { ...fieldsValue };
-      // params.customerId = this.state.customerId;
-      if (isAdd) {
 
-        params.file = fields.packPic ? fields.packPic : '';
-        params.pack = fields;
-        params.pack.customerId = this.state.customerId;
-        console.log(params);
-        // if (isAdd) {
+      // params.customerId = this.state.customerId;
+
+      let params = {};
+      const fiedls = { ...fieldsValue };
+      let pack = {};
+      pack = fiedls;
+      pack.customerId = this.state.customerId;
+      params.imgStr = imageUrl ? imageUrl : '';
+      params.fileName = imageName?imageName:'';
+      params.pack = pack;
+      if (!isAdd) {
+        params.pack.id = selectedItem.id;
+      }
+
         dispatch({
           type: 'packageinfo/addPackage',
           payload: {
             ...params,
           },
-        });
-      } else {
 
-        params.id = selectedItem.id;
-
-        // this.state.current = { ...data };
-        dispatch({
-          type: 'packageinfo/updatePackage',
-          payload: {
-            ...params,
-          },
-        });
-      }
+      });
 
       this.setState({
         visible: false,

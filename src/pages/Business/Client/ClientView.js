@@ -266,13 +266,6 @@ class ClientView extends PureComponent {
       customerUpdateloading, customerDeleteloading, customerFreezeloading,
     } = this.props;
 
-
-    if (children && children.props) {
-      //children.props.refreshList = this.refreshCustomerList();
-      // children({ refreshList: this.refreshCustomerList() });
-      // this.props.children.props.refreshList = this.refreshCustomerList
-    }
-
     const paginationProps = {
       showQuickJumper: true,
       pageSize: body.size,
@@ -283,7 +276,6 @@ class ClientView extends PureComponent {
     };
 
 
-    // console.log("list data",customerBody.data)
 
     let isUpdate = clientUpdateloading || clientSaveloading || clientDeleteloading || clientFreezeloading;
     let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading || customerDeleteloading;
@@ -292,27 +284,48 @@ class ClientView extends PureComponent {
       typeTableContent = body.data;
     }
 
-    if (customerBody.data) {
-
-      // if (customerBody.data.status === '冻结')
-      //   customerBody.data.status = 2;
-      // else if (customerBody.data.status === '使用中')
-      //   customerBody.data.status = 1;
-      // else if (customerBody.data.status === '草稿')
-      //   customerBody.data.status = 0;
-
-      // customerBody.data.map((value) => {
-      //   const s = value.status;
-      //   if (s == 0) {
-      //     value.status = '草稿';
-      //   } else if (s == 1) {
-      //     value.status = '使用中';
-      //   } else if (s == 2) {
-      //     value.status = '冻结';
-      //   }
-      //   return value;
-      // });
+    if(customerListloading)
+    {
+      this.state.customerLoad = true;
+    }else
+    {
+      if(this.state.customerLoad)
+      {
+        this.state.customerLoad = false;
+        const {rowCustomerData} =this.state;
+        console.log("update list row ",rowCustomerData)
+      }
     }
+
+    if (customerBody.data) {
+      customerBody.data.map((value) => {
+        const s = value.status;
+        if (s == 0) {
+          value.status = '草稿';
+        } else if (s == 1) {
+          value.status = '使用中';
+        } else if (s == 2) {
+          value.status = '冻结';
+        }
+        return value;
+      });
+    }
+
+    if(isCurstomerUpdate)
+    {
+      this.state.customerLoading = true;
+    }else
+    {
+      if(this.state.customerLoading)
+      {
+        //dd
+        // this.state.
+        this.startShowTab()
+        this.state.customerLoading = false;
+      }
+    }
+
+
 
     if (isUpdate) {
       this.state.update = true;
@@ -1080,7 +1093,7 @@ class ClientView extends PureComponent {
     params.ref = this.refreshCustomerList;
     params.content = selectCustomerItem !== '' ? { ...selectCustomerItem } : '';
     params.ckeys = [].concat(customerSelectedRowKeys);
-    console.log('keys ', customerSelectedRowKeys);
+    console.log('keys ', customerSelectedRowKeys,selectCustomerItem);
     router.replace({ pathname: '/business/client/client', params: params });
   };
 

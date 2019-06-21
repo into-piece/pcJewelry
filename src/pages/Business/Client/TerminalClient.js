@@ -24,11 +24,25 @@ import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import { connect } from 'dva';
+import AllCity from './components/AllCity'
+import City from './components/City'
 import GeographicView from './GeographicView';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
 
+const validatorGeographic = (rule, value, callback) => {
+  // const { name } = value;
+
+  console.log("validatorGeographic = ",value)
+  if (!value.name) {
+    callback("请输入城市名称");
+  }
+  // if (!city.key) {
+  //   callback('Please input your city!');
+  // }
+  callback();
+};
 
 @connect(({ loading, terminal }) => {
   return {
@@ -41,6 +55,7 @@ const { Description } = DescriptionList;
   };
 
 })
+
 @Form.create()
 class TerminalClient extends PureComponent {
 
@@ -64,6 +79,7 @@ class TerminalClient extends PureComponent {
       selectedItem:''
     };
   }
+
 
 
 
@@ -218,14 +234,13 @@ class TerminalClient extends PureComponent {
               <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('city', {
                   rules: [ {
-                    // validator: validatorGeographic,
+                    validator: validatorGeographic,
                   }],
                   initialValue: current.city,
 
                 },)(
+                  <City content={current.city}/>
 
-                  <Input placeholder="请输入"/>,
-                  {/*<GeographicView />,*/}
                 )}
               </FormItem>
             </Col>
@@ -551,6 +566,8 @@ class TerminalClient extends PureComponent {
 
       if (err) return;
       let params = { ...fieldsValue };
+      if(fieldsValue.city.name)
+      params.city=fieldsValue.city.name
       params.customerId = this.state.customerId;
       if (isAdd) {
 
