@@ -3,43 +3,7 @@ import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 
 const { Option } = Select;
-import jsonp from 'fetch-jsonp';
 
-let timeout;
-let currentValue;
-
-function fetch(value, callback) {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  currentValue = value;
-
-  function fake() {
-    const str = querystring.encode({
-      code: 'utf-8',
-      q: value,
-    });
-    jsonp(`https://suggest.taobao.com/sug?${str}`)
-      .then(response => response.json())
-      .then(d => {
-        if (currentValue === value) {
-          const result = d.result;
-          const data = [];
-          result.forEach(r => {
-            data.push({
-              value: r[0],
-              text: r[0],
-            });
-            console.log('result ', d);
-          });
-          callback(data);
-        }
-      });
-  }
-
-  timeout = setTimeout(fake, 300);
-}
 
 
 import { connect } from 'dva';
@@ -78,11 +42,8 @@ class City extends PureComponent {
 
   render() {
 
-
     const { value,isFirst } = this.state;
     const { content } = this.props;
-
-    console.log('value =', value);
 
 
     let showValue
@@ -119,7 +80,6 @@ class City extends PureComponent {
     if (body && body.data)
       data = body.data;
 
-    console.log('citys ', data, 'isArray ', Array.isArray(data));
 
     return this.getOption(data);
   }
@@ -128,10 +88,7 @@ class City extends PureComponent {
   selectCityItem = item => {
     const { onChange } = this.props;
     const { value } = this.state;
-    console.log('selectCityItem value ', value, 'chang ', onChange);
-    onChange({
-      name: value,
-    });
+    onChange(value);
   };
 
   getOption = list => {
@@ -142,9 +99,13 @@ class City extends PureComponent {
         </Option>
       );
     }
+
+
+
     return list.map(item => (
-      <Option key={item.code} value={item.name}>
-        {item.name}
+      // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
+      <Option key={item.code} value={item.name+'/'+item.nameEn}>
+        {item.name+'/'+item.nameEn}
       </Option>
     ));
   };
@@ -161,7 +122,6 @@ class City extends PureComponent {
     });
 
   };
-
 
 }
 

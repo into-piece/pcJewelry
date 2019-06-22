@@ -18,7 +18,7 @@ import jsonp from 'fetch-jsonp';
     loading: loading.effects['image/fetchImageUrl'],
   };
 })
-class PackageListItem extends PureComponent {
+class MarkListItem extends PureComponent {
 
 
 
@@ -28,7 +28,7 @@ class PackageListItem extends PureComponent {
 
     const _this = this;
     let params = {};
-    params.dataNo = item.packNo;
+    params.dataNo = item.markingNo;
     fetch('/server/business/upload-img/listUploadImg', {
       method: 'POST',
       credentials: 'include',
@@ -51,7 +51,7 @@ class PackageListItem extends PureComponent {
               loading:false
             })
             console.log('image  data ', imageObject);
-            return;
+          return;
           }
         }
         _this.setState({
@@ -79,10 +79,6 @@ class PackageListItem extends PureComponent {
   }
 
 
-  componentDidMount() {
-
-  }
-
   render() {
 
 
@@ -90,7 +86,6 @@ class PackageListItem extends PureComponent {
 
 
     const { loading,imageObject,isFirst } = this.state;
-
 
     if (isFirst && item) {
     // if (item) {
@@ -123,17 +118,31 @@ class PackageListItem extends PureComponent {
         <DescriptionList size='small' col='2'>
           <Description size="small" term='终客编号'>{item.endNo}</Description>
           <Description size="small" term='终客简称'>{item.endShotName}</Description>
-          <Description size="small" term='包装说明编码'>{item.packNo}</Description>
+          <Description size="small" term='字印编号'>{item.markingNo}</Description>
+          <Description term='字印价'>{item.endNo}</Description>
         </DescriptionList>
-
-        <DescriptionList size="small" col="1"><Description
-          term='包装说明'>{item.packExplain}</Description></DescriptionList>
+        <DescriptionList size='small' col='1'>
+          <Description term='字印英文名'>{item.enName}</Description>
+          <Description term='字印中文名'>{item.zhName}</Description>
+          <Description term='字印说明'>{item.markingExplain}</Description>
+        </DescriptionList>
       </div>
     </Card>);
 
   }
 
 
+  loadMrarkImageUrl = (item) => {
+    let params = {};
+    params.dataNo = item.markingNo;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'image/fetchImageUrl',
+      payload: { ...params },
+    });
+
+  };
+
 }
 
-export default PackageListItem;
+export default MarkListItem;

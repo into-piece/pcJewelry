@@ -25,6 +25,9 @@ import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import GeographicView from './../../Account/Settings/GeographicView';
 import City from './components/City';
+import Dict from './components/Dict';
+import QualityRequirements from './components/QualityRequirements';
+import DeliveryMethods from './components/DeliveryMethods';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
@@ -55,10 +58,12 @@ const listdata = [{
 
 const validatorGeographic = (rule, value, callback) => {
 
-  // console.log("validatorGeographic = ",value)
-  if (!value.name) {
-    callback("请输入城市名称");
-  }
+  console.log("validatorGeographic = ",value)
+  //   if(value)
+  //   {}
+  // if (!value.name) {
+  //   callback("请输入城市名称");
+  // }
   callback();
 };
 
@@ -204,7 +209,7 @@ class ClientInfo extends PureComponent {
 
                 <FormItem label="简称" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('shotName', {
-                    rules: [{ required: true, message: '请输入中文名称' }],
+                    rules: [{ required: true, message: '请输入简称' }],
                     initialValue: current.shotName,
                   })(
                     <Input placeholder="请输入"/>,
@@ -275,19 +280,16 @@ class ClientInfo extends PureComponent {
 
                 <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('country', {
-                    rules: [{ message: '请输入国别' }],
                     initialValue: current.country,
                   })(
-                    <Input placeholder="请输入"/>,
+
+                    <City content={current.country}/>
                   )}
                 </FormItem>
               </Col>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('city', {
-                    rules: [ {
-                      validator: validatorGeographic,
-                    }],
                     initialValue: current.city,
 
                   },)(
@@ -301,9 +303,9 @@ class ClientInfo extends PureComponent {
             <Row gutter={2}>
               <Col lg={8} md={8} sm={8} xs={8}>
 
-                <FormItem label="公司电话" {...this.formLayout} className={styles.from_content_col}>
+                <FormItem label="电话" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('companyPhone', {
-                    rules: [{ message: '请输入公司电话' }],
+                    rules: [{ message: '请输入电话' }],
                     initialValue: current.companyPhone,
                   })(
                     <Input placeholder="请输入"/>,
@@ -312,9 +314,9 @@ class ClientInfo extends PureComponent {
               </Col>
 
               <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem label="公司网址" {...this.formLayout} className={styles.from_content_col}>
+                <FormItem label="网址" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('companyWebsite', {
-                    rules: [{ message: '请输入公司网址' }],
+                    rules: [{ message: '请输入网址' }],
                     initialValue: current.companyWebsite,
                   })(
                     <Input placeholder="请输入"/>,
@@ -323,30 +325,28 @@ class ClientInfo extends PureComponent {
               </Col>
               <Col lg={8} md={8} sm={8} xs={8}>
 
-                <FormItem label="结算币种" {...this.formLayout} className={styles.from_content_col}>
+                <FormItem label="币种" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('settlementCurrency', {
-                    rules: [{ message: '请输入结算币种' }],
                     initialValue: current.settlementCurrency,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <Dict dict="H006" defaultValue="美元" content={current.settlementCurrency}/>,
                   )}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={2}>
               <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem label="品质等级" {...this.formLayout} className={styles.from_content_col}>
+                <FormItem label="品质" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('qualityRequirements', {
-                    rules: [{ message: '请输入品质等级' }],
                     initialValue: current.qualityRequirements,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <QualityRequirements   placeholder="请输入" content={current.qualityRequirements}/>,
                   )}
                 </FormItem>
               </Col>
               <Col lg={8} md={8} sm={8} xs={8}>
 
-                <FormItem label="客户报价系数" {...this.formLayout} className={styles.from_content_col}>
+                <FormItem label="报价系数" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('customerQuotationCoefficient', {
                     rules: [{ message: '请输入客户报价系数' }],
                     initialValue: current.customerQuotationCoefficient,
@@ -369,18 +369,18 @@ class ClientInfo extends PureComponent {
 
             </Row>
             <Row gutter={2}>
-              <Col lg={8} md={8} sm={8} xs={8}>
+              <Col lg={12} md={12} sm={12} xs={12}>
 
                 <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('deliveryMethod', {
                     rules: [{ message: '请输入送货方式' }],
                     initialValue: current.deliveryMethod,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <DeliveryMethods content={current.deliveryMethod} />,
                   )}
                 </FormItem>
               </Col>
-              <Col lg={8} md={8} sm={8} xs={8}>
+              <Col lg={12} md={12} sm={12} xs={12}>
 
                 <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('remarks', {
@@ -391,16 +391,7 @@ class ClientInfo extends PureComponent {
                   )}
                 </FormItem>
               </Col>
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem label="共同维护人" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('modifier', {
-                    rules: [{ message: '请输入共同维护人' }],
-                    initialValue: current.modifier,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
+
 
 
             </Row>
@@ -545,11 +536,11 @@ class ClientInfo extends PureComponent {
       </DescriptionList>
       <DescriptionList size='small' col='2'>
         <Description term='电话'>{item.companyPhone}</Description>
-        <Description term='公司网站'>{item.companyWebsite}</Description>
-        <Description term='结算币种'>{item.settlementCurrency}</Description>
-        <Description term='品质质量'>{item.customerNo}</Description>
-        <Description term='客户报价系数'>{item.customerNo}</Description>
-        <Description term='送货方式'>{item.qualityRequirements}</Description>
+        <Description term='网站'>{item.companyWebsite}</Description>
+        <Description term='币种'>{item.settlementCurrency}</Description>
+        <Description term='品质质量'>{item.qualityRequirements}</Description>
+        <Description term='报价系数'>{item.customerQuotationCoefficient}</Description>
+        <Description term='送货方式'>{item.deliveryMethod}</Description>
         <Description term='预付款比例'>{item.prepaymentRatio}%</Description>
       </DescriptionList>
       <span className={styles.title_info}>备注</span>
@@ -656,15 +647,31 @@ class ClientInfo extends PureComponent {
 
       let params = {};
       params = { ...fieldsValue };
-      // console.log({ ...fieldsValue });
       // if (isAdd) {
 
-      if(fieldsValue.city.name)
-        params.city=fieldsValue.city.name
+      // if(fieldsValue.city)
+      //   params.city=fieldsValue.city.name
+
+      // if(fieldsValue.country)
+      //   params.country=fieldsValue.country.name
+
+      // if(fieldsValue.settlementCurrency)
+      //   params.settlementCurrency=fieldsValue.settlementCurrency.name
+
+
+      // if(fieldsValue.qualityRequirements)
+      //   params.qualityRequirements=fieldsValue.qualityRequirements.name
+
       params.typeId = info.typeId;
       if (!isAdd && info.content && info.content.id){
         let tempFields = {...fieldsValue};
-        tempFields.city = {...fieldsValue}.city.name;
+        // tempFields.city = {...fieldsValue}.city.name;
+        // tempFields.country = {...fieldsValue}.country.name;
+
+        // tempFields.settlementCurrency = {...fieldsValue}.settlementCurrency.name;
+        // tempFields.qualityRequirements = {...fieldsValue}.qualityRequirements.name;
+
+
         const updateCustomer = Object.assign(info.content,{...tempFields});
         console.log("assign params = ",updateCustomer)
         this.state.updateCustomer = updateCustomer;
@@ -685,24 +692,12 @@ class ClientInfo extends PureComponent {
       });
 
 
-
-
-      // }
-      // else {
-      //
-      //   params.typeId = content.typeId;
-      //   params.id = info.content.id;
-      //
-      //   this.state.current = { ...data };
-      //   dispatch({
-      //     type: 'customer/updateCustomer',
-      //     payload: {
-      //       ...params,
-      //     },
-      //   });
-      // }
     });
   };
+
+  
+
+
 
 }
 

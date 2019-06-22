@@ -24,9 +24,10 @@ import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import { connect } from 'dva';
-import AllCity from './components/AllCity'
-import City from './components/City'
+import AllCity from './components/AllCity';
+import City from './components/City';
 import GeographicView from './GeographicView';
+
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -34,15 +35,29 @@ const { Description } = DescriptionList;
 const validatorGeographic = (rule, value, callback) => {
   // const { name } = value;
 
-  console.log("validatorGeographic = ",value)
+  console.log('validatorGeographic = ', value);
   if (!value.name) {
-    callback("请输入城市名称");
+    callback('请输入城市名称');
   }
   // if (!city.key) {
   //   callback('Please input your city!');
   // }
   callback();
 };
+
+const validatorCounTry = (rule, value, callback) => {
+  // const { name } = value;
+
+  console.log('validatorGeographic = ', value);
+  if (!value.name) {
+    callback('请输入国家名称');
+  }
+  // if (!city.key) {
+  //   callback('Please input your city!');
+  // }
+  callback();
+};
+
 
 @connect(({ loading, terminal }) => {
   return {
@@ -63,7 +78,7 @@ class TerminalClient extends PureComponent {
   formLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
-      span: 24
+      span: 24,
     },
   };
 
@@ -76,18 +91,16 @@ class TerminalClient extends PureComponent {
       isAdd: true,
       update: false,
       customerId: '',
-      selectedItem:''
+      selectedItem: '',
     };
   }
-
-
 
 
   render() {
 
     const {
       location, body = {}, terminalSaveloading,
-      terminalUpdateloading, terminalDeleteloading, terminalFreezeloading,terminalListloading
+      terminalUpdateloading, terminalDeleteloading, terminalFreezeloading, terminalListloading,
     } = this.props;
 
 
@@ -123,11 +136,11 @@ class TerminalClient extends PureComponent {
 
     if (location && location.params) {
       const data = location.params;
-      console.log("ter minal ",data)
+      // console.log("ter minal ",data)
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
-        if(data.customerId!=='')
-        this.loadTerminalList();
+        if (data.customerId !== '')
+          this.loadTerminalList();
       }
 
       if (data.customerId && data.customerId !== '')
@@ -148,7 +161,6 @@ class TerminalClient extends PureComponent {
     }
 
 
-
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
@@ -157,206 +169,192 @@ class TerminalClient extends PureComponent {
 
       const { form: { getFieldDecorator } } = this.props;
 
-      // const validatorGeographic = (rule, value, callback) => {
-      //   const { province={}, city={} } = value;
-      //   if (!province.key) {
-      //     callback('Please input your province!');
-      //   }
-      //   if (!city.key) {
-      //     callback('Please input your city!');
-      //   }
-      //   callback();
-      // };
 
       return (
         <div className={clientStyle.list_info}>
           <span className={clientStyle.sun_title_info}>终客</span>
           <Divider className={clientStyle.divder}/>
-        <Form
-          layout="inline"
-          size={'small'}
-          className={styles.from_content}
-          labelAlign="left"
-          onSubmit={this.handleSubmit}>
+          <Form
+            layout="inline"
+            size={'small'}
+            className={styles.from_content}
+            labelAlign="left"
+            onSubmit={this.handleSubmit}>
 
-          <Row gutter={2} justify="start">
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('endNo', {
-                  rules: [{ required: true, message: '请输入终客编号' }],
-                  initialValue: current.endNo,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Row gutter={2} justify="start">
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('endNo', {
+                    rules: [{ required: true, message: '请输入终客编号' }],
+                    initialValue: current.endNo,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-              <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('endShotName', {
-                  rules: [{ required: true, message: '请输入终客简称' }],
-                  initialValue: current.endShotName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+                <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('endShotName', {
+                    rules: [{ required: true, message: '请输入终客简称' }],
+                    initialValue: current.endShotName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('zhName', {
-                  rules: [{ message: '请输入中文名' }],
-                  initialValue: current.zhName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-
-
-          </Row>
-
-          <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('zhName', {
+                    rules: [{ message: '请输入中文名' }],
+                    initialValue: current.zhName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('country', {
-                  rules: [{ message: '请输入国别' }],
-                  initialValue: current.country,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            </Row>
 
-              <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('city', {
-                  rules: [ {
-                    validator: validatorGeographic,
-                  }],
-                  initialValue: current.city,
-
-                },)(
-                  <City content={current.city}/>
-
-                )}
-              </FormItem>
-            </Col>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-
-              <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('enName', {
-                  rules: [{ message: '请输入英文名' }],
-                  initialValue: current.enName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+            <Row gutter={2}>
 
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('zhAddress', {
-                  rules: [{ message: '请输入中文地址' }],
-                  initialValue: current.zhAddress,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('country', {
+                    rules: [],
+                    initialValue: current.country,
+                  })(
+                    <City content={current.country}/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-              <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('enAddress', {
-                  rules: [{ message: '请输入英文地址' }],
-                  initialValue: current.enAddress,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem label="电话" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('phone', {
-                  rules: [{ message: '请输入电话' }],
-                  initialValue: current.phone,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+                <FormItem label="城市" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('city', {
+                    initialValue: current.city,
 
-          </Row>
-          <Row gutter={2}>
-            <Col lg={8} md={8} sm={8} xs={8}>
+                  })(
+                    <City content={current.city}/>,
+                  )}
+                </FormItem>
+              </Col>
 
-              <FormItem label="联络人姓名" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('contactName', {
-                  rules: [{required: true, message: '请输入联系人' }],
-                  initialValue: current.contactName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
-              <FormItem label="Email" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('email', {
-                  rules: [{ message: '请输入Email' }],
-                  initialValue: current.email,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem label="QQ" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('qq', {
-                  rules: [{ message: '请输入QQ' }],
-                  initialValue: current.qq,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={2}>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-
-              <FormItem label="微信" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('wechat', {
-                  rules: [{ message: '微信' }],
-                  initialValue: current.wechat,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
-
-              <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
-                {getFieldDecorator('remarks', {
-                  rules: [{ message: '请输入备注' }],
-                  initialValue: current.remarks,
-                })(
-                  <TextArea rows={4} placeholder="请输入"/>,
-                )}
-              </FormItem>
-            </Col>
+                <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('enName', {
+                    rules: [{ message: '请输入英文名' }],
+                    initialValue: current.enName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-          </Row>
+            </Row>
+            <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('zhAddress', {
+                    rules: [{ message: '请输入中文地址' }],
+                    initialValue: current.zhAddress,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+
+                <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('enAddress', {
+                    rules: [{ message: '请输入英文地址' }],
+                    initialValue: current.enAddress,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="电话" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('phone', {
+                    rules: [{ message: '请输入电话' }],
+                    initialValue: current.phone,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+
+            </Row>
+            <Row gutter={2}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+
+                <FormItem label="联络人姓名" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('contactName', {
+                    rules: [{ required: true, message: '请输入联系人' }],
+                    initialValue: current.contactName,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+
+                <FormItem label="Email" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('email', {
+                    rules: [{ message: '请输入Email' }],
+                    initialValue: current.email,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="QQ" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('qq', {
+                    rules: [{ message: '请输入QQ' }],
+                    initialValue: current.qq,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={2}>
+
+              <Col lg={8} md={8} sm={8} xs={8}>
+
+                <FormItem label="微信" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('wechat', {
+                    rules: [{ message: '微信' }],
+                    initialValue: current.wechat,
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
+
+                <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('remarks', {
+                    rules: [{ message: '请输入备注' }],
+                    initialValue: current.remarks,
+                  })(
+                    <TextArea rows={4} placeholder="请输入"/>,
+                  )}
+                </FormItem>
+              </Col>
 
 
-        </Form>
+            </Row>
+
+
+          </Form>
         </div>
       );
     };
@@ -365,8 +363,8 @@ class TerminalClient extends PureComponent {
       <div className={styles.right_info}>
 
         <List
-          loading={isUpdate||terminalListloading}
-          dataSource={(!this.state.isAddEdit)?body.data:[]}
+          loading={isUpdate || terminalListloading}
+          dataSource={(!this.state.isAddEdit) ? body.data : []}
           renderItem={this.getContantItem}
           size="small"
           bordered={false}
@@ -390,9 +388,9 @@ class TerminalClient extends PureComponent {
             <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
                     disabled={this.state.isEdit} onClick={this.clickDeleteFrom}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit" disabled={this.state.isEdit}onClick={this.clickEditFrom}>编辑</Button>
+                    icon="edit" disabled={this.state.isEdit} onClick={this.clickEditFrom}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-                    disabled={this.state.isEdit}onClick={this.clickFreezeFrom}>冻结</Button>
+                    disabled={this.state.isEdit} onClick={this.clickFreezeFrom}>冻结</Button>
           </div>
 
 
@@ -421,10 +419,12 @@ class TerminalClient extends PureComponent {
 
   getContantItem = (item) => {
 
-    const { selectedItem }  = this.state;
+    const { selectedItem } = this.state;
 
     return (
-      <div className={selectedItem===item?styles.list_selected_content:''} onClick={()=>{this.changeSelectItem(item)}}>
+      <div className={selectedItem === item ? styles.list_selected_content : ''} onClick={() => {
+        this.changeSelectItem(item);
+      }}>
         <DescriptionList size='small' col='2'>
           <Description term='终客编号'>{item.endNo}</Description>
           <Description term='终客简称'>{item.endShotName}</Description>
@@ -452,19 +452,16 @@ class TerminalClient extends PureComponent {
   };
 
 
+  changeSelectItem = (item) => {
 
-
-
-  changeSelectItem =(item) =>{
-
-    const {selectedItem}=this.state;
-    let selectitem = selectedItem===item?'':item
+    const { selectedItem } = this.state;
+    let selectitem = selectedItem === item ? '' : item;
 
     this.setState({
-      selectedItem:selectitem
+      selectedItem: selectitem,
     });
 
-  }
+  };
 
 
   loadTerminalList = () => {
@@ -499,11 +496,11 @@ class TerminalClient extends PureComponent {
   clickDeleteFrom = () => {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
-    const id = selectedItem.id
+    const id = selectedItem.id;
     if (id) {
-      let keys =[];
-      keys.push(id)
-      console.log("delet",keys,id,)
+      let keys = [];
+      keys.push(id);
+      console.log('delet', keys, id);
       dispatch({
         type: 'terminal/deleteTerminal',
         payload: { 'list': keys },
@@ -523,10 +520,10 @@ class TerminalClient extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id
+    const id = selectedItem.id;
     if (id) {
-      let keys =[];
-      keys.push(id)
+      let keys = [];
+      keys.push(id);
       dispatch({
         type: 'terminal/freezeTerminal',
         payload: { 'list': keys },
@@ -549,7 +546,7 @@ class TerminalClient extends PureComponent {
     });
     this.setState({
       visible: false,
-      selectedItem:'',
+      selectedItem: '',
       // fristLoad: true,
     });
   };
@@ -559,18 +556,19 @@ class TerminalClient extends PureComponent {
 
 
     const { dispatch, form } = this.props;
-    const { isAdd, customerId ,selectedItem} = this.state;
+    const { isAdd, customerId, selectedItem } = this.state;
 
 
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
       let params = { ...fieldsValue };
-      if(fieldsValue.city.name)
-      params.city=fieldsValue.city.name
+      // if (fieldsValue.city.name)
+      //   params.city = fieldsValue.city.name;
+      // if (fieldsValue.country.name)
+      //   params.country = fieldsValue.country.name;
       params.customerId = this.state.customerId;
       if (isAdd) {
-
 
 
         console.log(params);

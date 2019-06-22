@@ -85,6 +85,7 @@ export default {
     },
 
     save(state,action) {
+      console.log("customer request list action is ",action)
       return {
         ...state,
         result:action.payload,

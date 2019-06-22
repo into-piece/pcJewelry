@@ -529,7 +529,6 @@ class Mark extends PureComponent {
     //
 
     this.state.isAdd = false;
-    // this.state.selectedItem.markingPic="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAB2wAAAdsBV+WHHwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIiSURBVEiJ7ZbPaxNBFMe/b6wxllLRg/jj7qU30Sp6UiokrbaQGslGiweT2pMU6t29tOBVlJJs6u8uhRYxlqyLh9KLPfRPEPFkRQp6UCto0/e82GQKSmZ3WfHQ72n2y7zvZ97sMAywrX8kMpnkWN4rAOd+lyyp3T9T1+4PfI0CVmbTaF9zLKf4e+KJbduGtRHARDwIYLVpyMChN923o4CNthoAKpe908JYAJDQVlQouumpMGDj7SpM974GYXSLKXK3lKudCAM27nhTTt6bhGBEsz5C4Xhxuvd9kJzAB4Q79t8AsKhZByColi7Mt8cKvl4+tp7YmbgI4F3DFBxVHaoUKxgArj7u+aRYZQCsNV26Usl5N00zAv9jXU7+ZQYic1oOk6j+wkyq1qo20iVQdNPPAEzoeUzsli2/K1YwAOypf7sFkL/5TUAnCT+IHZydzTJB1nSPCBw72LH8cQEGNWt1o75xqVVdpMNVydXyQvRUy/khwmeHZ84vtaoN3XEl73cL0ZQGhRCNmEBDgyez84dF+DmAZMMkujfsph+aZrQFhd5Je7vadmAOwEHNXlj5kBz9W82fFLjj5F5yQDjZMARvqa6y9uKZemxgx/LGSGSoycQXCPcXZlOfg+QAQR4COb9PiF+guVgGSabo9lWDQgHDjsuW38XE7pb5BDss1BhMkEcEdDYMoerKkeXxsFDA+FSL9pSVZdW+PmTbdstrcVv/hX4B64GpDsmUF3MAAAAASUVORK5CYII="
     this.setState({
       current: this.state.selectedItem,
       visible: true,

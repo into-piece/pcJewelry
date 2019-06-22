@@ -32,6 +32,7 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 import listStyles from './TableList.less';
 import baseStyles from './base.less';
+import maintainer from './models/maintainer';
 
 const { Description } = DescriptionList;
 
@@ -117,7 +118,7 @@ const operationTabList = [
     tab: <span>历史订单</span>,
   },
 ];
-
+const   defaultPageSize = 5
 @connect(({ client, loading, customer }) => {
   const { rtnCode, rtnMsg } = client;
   return {
@@ -141,6 +142,8 @@ const operationTabList = [
 @Form.create()
 class ClientView extends PureComponent {
 
+
+
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -157,12 +160,12 @@ class ClientView extends PureComponent {
       typeTableContent: [],
       rightlg: 16,
       leftlg: 8,
-      defaultPageSize: 5,
       pageCurrent: 1,
       visible: false,
       showItem: false,
       selectCustomerItem: '',
       pageChangeCurrent: 1,
+      customerPageCurrent:1,
       isEdit: true,
       selectZhName: false,
       selectEnName: false,
@@ -174,18 +177,19 @@ class ClientView extends PureComponent {
       rowCustomerData: [],
       rowCustomerSelectedData: [],
       selectType: 'client',
+      maintainerAddVisible: false,
     };
   }
 
 
   componentDidMount() {
     const { dispatch } = this.props;
-    const { defaultPageSize } = this.state;
+
     dispatch({
       type: 'client/fetchListClient',
       payload: { size: defaultPageSize },
     });
-    router.push('/business/client/emptyView');
+    router.replace('/business/client/emptyView');
 
   }
 
@@ -233,11 +237,13 @@ class ClientView extends PureComponent {
 
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
+    const maintainermodalFooter = { okText: '保存', onOk: this.handleMaintainerSubmit, onCancel: this.handleCancel };
+
 
     let {
       selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update,
-      pageCurrent, fristLoad, selectType,
-      selectedRowKeys, customerSelectedRowKeys,
+      pageCurrent,customerPageCurrent,customerPageSize,customerPageTotal, fristLoad, selectType,selectCustomerItem,
+      selectedRowKeys, customerSelectedRowKeys, maintainsLoading, maintainTableContent, maintainerAddVisible,
     } = this.state;
 
     const rowSelection = {
@@ -248,6 +254,13 @@ class ClientView extends PureComponent {
     };
 
     const rowCustomerSelection = {
+      selectedRowKeys: customerSelectedRowKeys,
+      type: 'checkbox',
+      onChange: this.selectCustomerChange,
+      onSelect: this.selectChange,
+    };
+
+    const rowMaintainerSelection = {
       selectedRowKeys: customerSelectedRowKeys,
       type: 'checkbox',
       onChange: this.selectCustomerChange,
@@ -276,6 +289,15 @@ class ClientView extends PureComponent {
     };
 
 
+    const paginationCustomerProps = {
+      showQuickJumper: true,
+      pageSize: 5,
+      current: customerPageCurrent,
+      total: customerBody.total,
+      onChange: this.pageCustomerChange,
+
+    };
+
 
     let isUpdate = clientUpdateloading || clientSaveloading || clientDeleteloading || clientFreezeloading;
     let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading || customerDeleteloading;
@@ -284,16 +306,13 @@ class ClientView extends PureComponent {
       typeTableContent = body.data;
     }
 
-    if(customerListloading)
-    {
+    if (customerListloading) {
       this.state.customerLoad = true;
-    }else
-    {
-      if(this.state.customerLoad)
-      {
+    } else {
+      if (this.state.customerLoad) {
         this.state.customerLoad = false;
-        const {rowCustomerData} =this.state;
-        console.log("update list row ",rowCustomerData)
+        const { rowCustomerData } = this.state;
+        console.log('update list row ', rowCustomerData);
       }
     }
 
@@ -311,20 +330,14 @@ class ClientView extends PureComponent {
       });
     }
 
-    if(isCurstomerUpdate)
-    {
+    if (isCurstomerUpdate) {
       this.state.customerLoading = true;
-    }else
-    {
-      if(this.state.customerLoading)
-      {
-        //dd
-        // this.state.
-        this.startShowTab()
+    } else {
+      if (this.state.customerLoading) {
+        // this.startShowTab();
         this.state.customerLoading = false;
       }
     }
-
 
 
     if (isUpdate) {
@@ -359,27 +372,53 @@ class ClientView extends PureComponent {
 
     const getModalContent = () => {
       return (
-        <Form
-          size={'small'}
-          onSubmit={this.handleSubmit}>
-          <FormItem label="中文名称" {...this.formLayout}>
-            {getFieldDecorator('zhName', {
-              rules: [{ required: true, message: '请输入中文名称' }],
-              initialValue: current.zhName,
-            })(
-              <Input placeholder="请输入"/>,
-            )}
-          </FormItem>
-          <FormItem label="英文名称" {...this.formLayout}>
-            {getFieldDecorator('enName', {
-              rules: [{ message: '请输入英文名称' }],
-              initialValue: current.enName,
-            })(
-              <Input placeholder="请输入"/>,
-            )}
-          </FormItem>
+        <div  >
+          <span className={clientStyle.sun_title_info}>类型</span>
+          <Divider className={clientStyle.divder}/>
+          <Form
+            size={'small'}
+            onSubmit={this.handleSubmit}>
+            <FormItem label="中文名称" {...this.formLayout}>
+              {getFieldDecorator('zhName', {
+                rules: [{ required: true, message: '请输入中文名称' }],
+                initialValue: current.zhName,
+              })(
+                <Input placeholder="请输入"/>,
+              )}
+            </FormItem>
+            <FormItem label="英文名称" {...this.formLayout}>
+              {getFieldDecorator('enName', {
+                rules: [{ message: '请输入英文名称' }],
+                initialValue: current.enName,
+              })(
+                <Input placeholder="请输入"/>,
+              )}
+            </FormItem>
 
-        </Form>
+          </Form>
+        </div>
+      );
+
+    };
+    const getMaintainerContent = () => {
+      return (
+        <div>
+          <span className={clientStyle.sun_title_info}>共同维护人</span>
+          <Divider className={clientStyle.divder}/>
+          <Form
+            size={'small'}
+            onSubmit={this.handleSubmit}>
+            <FormItem label="共同维护人" {...this.formLayout}>
+              {getFieldDecorator('salesmanId', {
+                rules: [{ required: true, message: '请输入共同维护人' }],
+                initialValue: current.salesmanId,
+              })(
+                <Input placeholder="请输入"/>,
+              )}
+            </FormItem>
+
+          </Form>
+        </div>
       );
 
     };
@@ -434,11 +473,14 @@ class ClientView extends PureComponent {
 
                   <Divider className={clientStyle.divder}/>
 
-                  <Button icon="plus" type="primary" style={{ marginBottom: 10 }}> 新建</Button>
+                  <Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({
+                    maintainerAddVisible: true,
+                  })} disabled={(!selectCustomerItem)||selectCustomerItem===''}> 新建</Button>
 
                   <Table
+                    style={{ display: selectType === 'client' ? '' : 'none' }}
                     loading={isCurstomerUpdate || customerListloading}
-                    dataSource={selectType === 'client' ? (fristLoad ? [] : customerBody.data) : []}
+                    dataSource={(fristLoad ? [] : customerBody.data)}
                     size="middle"
                     rowKey={record =>
                       record.id
@@ -451,9 +493,24 @@ class ClientView extends PureComponent {
                         },
                       };
                     }}
+                    pagination={paginationCustomerProps}
                     rowClassName={this.onSelectRowClass}
-                    columns={downTableColumn}
+                    columns={clientContentColumns}
                   />
+
+                  <Table
+                    style={{ display: selectType === 'maintains' ? '' : 'none' }}
+                    loading={maintainsLoading}
+                    dataSource={maintainTableContent}
+                    size="middle"
+                    rowKey={record =>
+                      record.id
+                    }
+                    rowSelection={rowMaintainerSelection}
+                    rowClassName={this.onSelectRowClass}
+                    columns={maintainsColumn}
+                  />
+
                 </div>
               </Card>
             </Col>
@@ -500,15 +557,23 @@ class ClientView extends PureComponent {
         </div>
 
         <Modal
-          title={'任务添加'}
           width={640}
           className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
           visible={visible}
           {...modalFooter}
         >
           {getModalContent()}
+        </Modal>
+
+        <Modal
+          width={640}
+          className={styles.standardListForm}
+          destroyOnClose
+          visible={maintainerAddVisible}
+          {...maintainermodalFooter}
+        >
+          {getMaintainerContent()}
         </Modal>
       </div>
     );
@@ -581,7 +646,7 @@ class ClientView extends PureComponent {
       if (rowData.includes(record))
         rowData = [];
       if (rowSelectedData.includes(record)) {
-        console.log('includes ' + record.id);
+        // console.log('includes ' + record.id);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
@@ -612,18 +677,19 @@ class ClientView extends PureComponent {
 
     }
 
-    this.state.selectCustomerItem=''
+    this.state.selectCustomerItem = '';
     this.setState({
       selectedRowKeys: [].concat(selects),
       rowData,
       customerSelectedRowKeys: [],
       selectCustomerItem: '',
       rowCustomerData: [],
+      customerPageCurrent:1,
       rowCustomerSelectedData: [],
     });
 
     // this.clearClient();
-    this.startShowTab()
+    this.startShowTab();
   };
 
   clickCustomerRowItem = (record) => {
@@ -639,9 +705,8 @@ class ClientView extends PureComponent {
       if (rowCustomerData.includes(record))
         rowCustomerData = [];
       if (rowCustomerSelectedData.includes(record)) {
-        console.log('includes ' + record.id);
+        // console.log('includes ' + record.id);
         rowCustomerSelectedData.splice(rowCustomerSelectedData.findIndex(item => item.id === id), 1);
-        // rowData.splice(rowData.findIndex(item => item.id === id), 1);
       }
     } else {
 
@@ -655,8 +720,6 @@ class ClientView extends PureComponent {
       // rowData.push(record)
       rowCustomerSelectedData.push(record);
 
-
-      // console.log("record puth ",rowData)
     }
 
     if (selects.length > 0) {
@@ -673,7 +736,6 @@ class ClientView extends PureComponent {
       this.setState({
         selectCustomerItem: '',
       });
-      // this.clearClient();
     }
     this.setState({
       customerSelectedRowKeys: [].concat(selects),
@@ -681,13 +743,11 @@ class ClientView extends PureComponent {
     });
 
     this.startShowTab();
-    // this.showSelectItem(record)
   };
 
   handleSearch = () => {
 
     const { dispatch, form } = this.props;
-    const { defaultPageSize } = this.state;
     form.validateFields((err, fieldsValue) => {
 
       console.log(err);
@@ -724,23 +784,43 @@ class ClientView extends PureComponent {
   };
 
 
+  /**
+   * 更新右视图
+   */
   startShowTab = () => {
+    console.log("startShowTab")
     const { selectTitle } = this.state;
     if (selectTitle === '终客') {
       this.startTerminal();
     } else if (selectTitle === '字印') {
       this.startMark();
-    }else if(selectTitle==='客户')
-      this.startClient()
+    } else if (selectTitle === '客户')
+      this.startClient();
+    else if (selectTitle === '包装')
+      this.startPackageInfo();
   };
 
+
+  handleMaintainerSubmit = () => {
+    console.log('handleMaintainerSubmit');
+    const { form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) console.log(err);
+
+      this.saveMaintainerList({ ...fieldsValue });
+
+      this.setState({
+        maintainerAddVisible: false,
+      });
+    });
+  };
 
   handleSubmit = () => {
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
     form.validateFields((err, fieldsValue) => {
-
-      if (err) return;
+      console.log("handlesub error",err)
+      // if (err) return;
       if (isAdd) {
 
         dispatch({
@@ -759,11 +839,10 @@ class ClientView extends PureComponent {
           fristLoad: true,
           customerSelectedRowKeys: '',
           selectCustomerItem: '',
+
         });
 
       } else {
-        // console.log(fieldsValue);
-        // console.log(showItem);
         const temp = { ...fieldsValue };
         const data = { ...showItem };
         data.zhName = temp.zhName;
@@ -778,8 +857,6 @@ class ClientView extends PureComponent {
         });
 
       }
-
-
     });
     this.setState({
       visible: false,
@@ -789,7 +866,7 @@ class ClientView extends PureComponent {
 
   handleDone = () => {
     const { dispatch } = this.props;
-    const { defaultPageSize, pageCurrent } = this.state;
+    const {  pageCurrent } = this.state;
     dispatch({
       type: 'client/fetchListClient',
       payload: {
@@ -800,13 +877,13 @@ class ClientView extends PureComponent {
     this.setState({
       visible: false,
       fristLoad: true,
-      // pageCurrent:1,
     });
   };
 
   handleCancel = () => {
     this.setState({
       visible: false,
+      maintainerAddVisible: false,
     });
   };
 
@@ -842,7 +919,6 @@ class ClientView extends PureComponent {
     dispatch({
       type: 'client/deleteClient',
       payload:
-      // ...requestedNo,
         { 'list': selectedRowKeys }
       ,
     });
@@ -872,7 +948,6 @@ class ClientView extends PureComponent {
     dispatch({
       type: 'client/freezeClient',
       payload:
-      // ...requestedNo,
         { 'list': selectedRowKeys }
       ,
     });
@@ -889,15 +964,14 @@ class ClientView extends PureComponent {
   };
 
   selectChange = (record, index) => {
-
-
+    console.log("selectChange")
   };
 
   pageChange = (page, pageSize) => {
     // console.log(page, pageSize);
     const { dispatch } = this.props;
 
-    const { defaultPageSize, selectZhName, selectEnName } = this.state;
+    const {  selectZhName, selectEnName } = this.state;
     const zhName = selectZhName ? selectZhName : undefined;
     const enName = selectEnName ? selectEnName : undefined;
     dispatch({
@@ -917,14 +991,35 @@ class ClientView extends PureComponent {
       pageCurrent: page,
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
+      customerPageCurrent:1,
+      isEdit:true
+    });
+    this.startShowTab();
+  };
+  pageCustomerChange = (page, pageSize) => {
+    // console.log(page, pageSize);
+    const { dispatch } = this.props;
 
+    const { showItem } = this.state;
+    dispatch({
+      type: 'customer/fetchListCustomer',
+      payload: {
+        size: defaultPageSize,
+        current: page,
+        typeId:showItem.id
+      },
     });
 
+    this.setState({
+      customerPageCurrent: page,
+      customerSelectedRowKeys: '',
+      selectCustomerItem: '',
+    });
+    this.state.selectCustomerItem = '';
+    this.startShowTab()
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-
-    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
 
 
     if (selectedRowKeys.length > 0) {
@@ -947,10 +1042,12 @@ class ClientView extends PureComponent {
       selectedRowKeys,
       rowSelectedData: selectedRows,
       customerSelectedRowKeys: [],
+      customerPageCurrent:1,
       selectCustomerItem: '',
       rowCustomerData: [],
       rowCustomerSelectedData: [],
     });
+    this.state.customerPageCurrent = 1;
     this.state.selectCustomerItem = '';
     // this.clearClient();
     this.startShowTab();
@@ -961,10 +1058,7 @@ class ClientView extends PureComponent {
   //merchange
   selectCustomerChange = (selectedRowKeys, selectedRows) => {
     console.log('selectCustomerChange');
-    // this.state.customerSelectedRowKeys = selectedRowKeys;
 
-
-    // console.log('selectCustomerChange');
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
@@ -977,7 +1071,6 @@ class ClientView extends PureComponent {
       });
       this.state.selectCustomerItem = selectCustomerItem;
 
-      // console.log('save select cu', this.state.selectCustomerItem);
       this.startClient();
 
     } else {
@@ -1000,13 +1093,13 @@ class ClientView extends PureComponent {
 
     console.log('loadCustomerList');
     const { dispatch } = this.props;
-    const { defaultPageSize } = this.state;
+    const {customerPageCurrent} = this.state;
     dispatch({
       type: 'customer/fetchListCustomer',
       payload: {
-        // size: defaultPageSize,
+        size: defaultPageSize,
         typeId,
-        // current:0
+        current:customerPageCurrent
       },
     });
 
@@ -1024,9 +1117,8 @@ class ClientView extends PureComponent {
     const { showItem } = this.state;
     this.loadCustomerList(showItem.id);
 
-
-    // this.clearClient();
-    this.startShowTab();
+      //2019-06-22 15:23
+    // this.startShowTab();
 
   };
 
@@ -1070,7 +1162,7 @@ class ClientView extends PureComponent {
   startClient = () => {
 
     const { selectCustomerItem, showItem, customerSelectedRowKeys } = this.state;
-    console.log(selectCustomerItem)
+    // console.log(selectCustomerItem);
     this.setState(
       {
         selectTitle: '客户',
@@ -1093,30 +1185,12 @@ class ClientView extends PureComponent {
     params.ref = this.refreshCustomerList;
     params.content = selectCustomerItem !== '' ? { ...selectCustomerItem } : '';
     params.ckeys = [].concat(customerSelectedRowKeys);
-    console.log('keys ', customerSelectedRowKeys,selectCustomerItem);
+    // console.log('keys ', customerSelectedRowKeys, selectCustomerItem);
     router.replace({ pathname: '/business/client/client', params: params });
   };
 
 
-  clearClient = () => {
 
-    const { showItem } = this.state;
-    const params = {};
-    params.ref = this.refreshCustomerList;
-    if (showItem) {
-      params.typeId = showItem.id;
-    } else {
-      params.typeId = false;
-    }
-    params.content = '';
-    router.replace({ pathname: '/business/client/client', params: params });
-
-    this.setState({
-      customerSelectedRowKeys: '',
-      rowCustomerSelectedData: [],
-    });
-
-  };
 
   startTerminal = () => {
     this.setState(
@@ -1150,10 +1224,13 @@ class ClientView extends PureComponent {
 
   selectMaintains = () => {
     this.setState({
-      downTableColumn: maintainsColumn,
-      downTableContent: [],
+      maintainTableContent: [],
       selectType: 'maintains',
+      maintainsLoading: true,
     });
+    this.loadmaintainerList();
+
+
   };
 
 
@@ -1184,7 +1261,7 @@ class ClientView extends PureComponent {
         leftlg: 9,
       },
     );
-    router.push({ pathname: '/business/client/product', query: { id: 3 } });
+    router.replace({ pathname: '/business/client/product', query: { id: 3 } });
   };
 
 
@@ -1215,7 +1292,7 @@ class ClientView extends PureComponent {
         leftlg: 11,
       },
     );
-    router.push({ pathname: '/business/client/history', query: { id: 5 } });
+    router.replace({ pathname: '/business/client/history', query: { id: 5 } });
   };
 
 
@@ -1228,6 +1305,105 @@ class ClientView extends PureComponent {
       selectedRows: rows,
     });
   };
-}
+
+  loadmaintainerList = () => {
+    const { selectCustomerItem } = this.state;
+    const _this = this;
+    console.log('loadmaintainerList （', selectCustomerItem);
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      _this.setState({
+        maintainsLoading: false,
+      });
+      return;
+    }
+
+
+    let params = { customerId: selectCustomerItem.id };
+
+    fetch('/business/co-maintainer/listCoMaintainer', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const body = d.body;
+        if (body && body.records) {
+          if (body.records.length > 0) {
+            _this.setState({
+              maintainTableContent: body.records,
+              maintainsLoading: false,
+            });
+            return;
+          }
+        }
+        _this.setState({
+          maintainsLoading: false,
+        });
+        console.log('result ', d);
+      }).catch(function(ex) {
+      console.log('parsing failed', ex);
+      message.error('加载失败！');
+      _this.setState({
+        maintainsLoading: false,
+      });
+    });
+    // }
+  };
+
+  saveMaintainerList = (item) => {
+    const { selectCustomerItem } = this.state;
+    const _this = this;
+    console.log('saveMaintainerList （', selectCustomerItem);
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      this.setState({
+        maintainsLoading: false,
+      });
+      return;
+    }
+
+
+    let params = {
+      customerId: selectCustomerItem.id,
+      salesmanId: item.salesmanId,
+    };
+
+    fetch('/business/co-maintainer/saveCoMaintainer', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const head = d.head;
+
+        if (!head)
+          message.error('保存失败！');
+        else {
+          if (head.rtnCode === '000000')
+
+            message.success(head.rtnMes);
+          else
+            message.success(head.rtnMes);
+        }
+        _this.setState({
+          maintainsLoading: false,
+        });
+        console.log('result ', d);
+      }).catch(function(ex) {
+      message.error('保存数据失败！ 请重试');
+      _this.setState({
+        maintainsLoading: false,
+      });
+    });
+    // }
+  };
+};
 
 export default ClientView;
