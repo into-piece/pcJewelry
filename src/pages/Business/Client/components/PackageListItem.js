@@ -91,7 +91,6 @@ class PackageListItem extends PureComponent {
 
     const { loading,imageObject,isFirst } = this.state;
 
-
     if (isFirst && item) {
     // if (item) {
       this.fetch2(item);

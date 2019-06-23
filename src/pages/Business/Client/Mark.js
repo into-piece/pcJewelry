@@ -93,6 +93,7 @@ class Mark extends PureComponent {
       provinces: [],
       areas: [],
       city: [],
+      fileList:[]
     };
   }
 
@@ -105,7 +106,7 @@ class Mark extends PureComponent {
     } = this.props;
 
 
-    const { selectedItem, visible, current = {}, update } = this.state;
+    const { selectedItem, visible, current = {}, update, fileList } = this.state;
 
     const isUpdate = markUpdateloading || markSaveloading || markDeleteloading || markFreezeloading;
     if (isUpdate) {
@@ -170,35 +171,34 @@ class Mark extends PureComponent {
 
     const getModalContent = () => {
 
-      const normFile = (e) => {
-        return this.state.imageUrl;
-      };
+
 
       const handleChange = info => {
 
         // console.log('info = ', info);
         let fileList = [...info.fileList];
 
-        this.state.imageUrl = false;
-        this.state.fileName = false;
+        // this.state.imageUrl = [];
+        // this.state.fileName = false;
 
-        if (info.file.status === 'done') {
-          getBase64(info.file.originFileObj, imageUrl => {
-              let imageName;
-              if (info.file)
-                imageName = info.file.name;
-              this.setState({
-                imageUrl,
-                imageName,
-                loading: false,
-              });
-              // console.log("上传的图片 ",imageUrl)
-              this.state.imageUrl = imageUrl;
-              this.state.fileName = imageName;
-            },
-          );
-        }
+        // if (info.file.status === 'done') {
+        //   getBase64(info.file.originFileObj, imageUrl => {
+        //       let imageName;
+        //       if (info.file)
+        //         imageName = info.file.name;
+        //       this.setState({
+        //         imageUrl,
+        //         imageName,
+        //         loading: false,
+        //       });
+        //       // console.log("上传的图片 ",imageUrl)
+        //       this.state.imageUrl = imageUrl;
+        //       this.state.fileName = imageName;
+        //     },
+        //   );
+        // }
 
+        // const imageUrl = this.state.imageUrl;
 
         const file = info.file;
 
@@ -217,7 +217,7 @@ class Mark extends PureComponent {
           }
         }
 
-        fileList = fileList.slice(-1);
+        fileList = fileList.slice(-10);
         fileList = fileList.map(file => {
           if (file.response) {
             file.url = file.response.url;
@@ -231,7 +231,6 @@ class Mark extends PureComponent {
       const { form: { getFieldDecorator } } = this.props;
 
 
-      const imageUrl = this.state.imageUrl;
       return (
 
         <div className={clientStyle.list_info}>
@@ -247,23 +246,23 @@ class Mark extends PureComponent {
 
             <Row gutter={2}>
 
-              <Col lg={12} md={12} sm={12} xs={12}>
+              <Col lg={24} md={24} sm={24} xs={24}>
 
                 <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
 
-                    <Upload
-                      name="avatar"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      fileList={this.state.fileList}
-                      onChange={handleChange}
-                    >
-                      {/*{imageUrl?'':uploadButton}*/}
-                      <div>
-                        <Icon type={this.state.loading ? 'loading' : 'plus'}/>
-                        <div className="ant-upload-text">上传图片</div>
-                      </div>
-                    </Upload>,
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    fileList={this.state.fileList?this.state.fileList:[]}
+                    onChange={handleChange}
+                  >
+                    {/*{imageUrl?'':uploadButton}*/}
+                    <div>
+                      <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                      <div className="ant-upload-text">上传图片</div>
+                    </div>
+                  </Upload>,
 
                 </FormItem>
               </Col>
@@ -492,22 +491,27 @@ class Mark extends PureComponent {
   callbackUrl = (item) => {
 
     let fileList = [];
-    if (item && item.path) {
-
-      fileList = [
+    if (item) {
+      fileList = item.map(v => (
         {
-          uid: item.id,
-          name: item.fileName,
+          uid: v.id,
+          name: v.fileName,
           status: 'done',
-          url: item.path,
-        },
-      ];
-      this.state.imageUrl = item.path;
-      this.state.fileName = item.fileName;
+          url: v.path,
+        }
+      ));
+      this.state.imageUrl = item.map(v => {
+        return v.path;
+      });
+      this.state.fileName  = item.map(v => {
+        return v.fileName;
+      });
     } else {
-      this.state.imageUrl = '';
-      this.state.fileName = '';
+      this.state.imageUrl = [];
+      this.state.fileName = [];
     }
+    console.log('upload edit list ',fileList)
+    this.state.fileList = this.state.fileList;
     this.setState({
       fileList,
     });
@@ -533,6 +537,16 @@ class Mark extends PureComponent {
       current: this.state.selectedItem,
       visible: true,
     });
+    /*
+    *
+    * {
+        uid: '-1',
+        name: 'xxx.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+    *
+    * */
 
   };
 
@@ -599,7 +613,7 @@ class Mark extends PureComponent {
 
 
     const { dispatch, form } = this.props;
-    const { isAdd, customerId, selectedItem, imageUrl, imageName } = this.state;
+    const { isAdd, customerId, selectedItem, imageUrl, imageName, fileList } = this.state;
 
 
     form.validateFields((err, fieldsValue) => {
@@ -607,26 +621,35 @@ class Mark extends PureComponent {
       if (err) return;
       let params = {};
       const fiedls = { ...fieldsValue };
-      // console.log("fiedl = ",fiedls)
+
+      const urls = fileList.map(v => (
+        v.thumbUrl
+      ));
+
+      const names = fileList.map(v => (
+        v.name
+      ));
+
       let marking = {};
       marking = fiedls;
       marking.customerId = this.state.customerId;
       params.imgStr = imageUrl ? imageUrl : '';
       params.fileName = imageName ? imageName : '';
       params.marking = marking;
+      console.log('file List ', urls, names);
       // console.log('提交文件名', imageName);
       if (!isAdd) {
         params.marking.id = selectedItem.id;
         params.marking.markingNo = selectedItem.markingNo;
       }
-      dispatch({
-        type: 'mark/updateMark',
-        payload: {
-          ...params,
-        },
-      });
+      // dispatch({
+      //   type: 'mark/updateMark',
+      //   payload: {
+      //     ...params,
+      //   },
+      // });
 
-      // console.log(params);
+
     });
   };
 }

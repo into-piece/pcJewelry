@@ -773,6 +773,15 @@ export async function freezeTheProductSeries(params) {
   });
 }
 
+export async function queryListWordbook(params) {
+
+  // return request('/server/basic/ring-around/freeze', {
+  return request('/server/sys/mst-wordbook/listMstWordbook', {
+    method: 'POST',
+    data: { ...params },
+  });
+}
+
 
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);

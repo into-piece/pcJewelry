@@ -58,7 +58,7 @@ const listdata = [{
 
 const validatorGeographic = (rule, value, callback) => {
 
-  console.log("validatorGeographic = ",value)
+  console.log('validatorGeographic = ', value);
   //   if(value)
   //   {}
   // if (!value.name) {
@@ -70,6 +70,7 @@ const validatorGeographic = (rule, value, callback) => {
 @connect(({ loading, customer }) => {
   return {
     body: customer.body,
+    customerListloading: loading.effects['customer/fetchListCustomer'],
     customerSaveloading: loading.effects['customer/addCustomer'],
     customerUpdateloading: loading.effects['customer/updateCustomer'],
     customerDeleteloading: loading.effects['customer/deleteCustomer'],
@@ -96,6 +97,9 @@ class ClientInfo extends PureComponent {
       isAddEdit: true,
       isAdd: true,
       update: false,
+      settlementCurrency: '',
+      qualityRequirements: '',
+      deliveryMethod: '',
 
     };
   }
@@ -115,6 +119,9 @@ class ClientInfo extends PureComponent {
       let data = location.params;
       content = data.content;
       this.state.showItem = { ...content };
+      this.featQuality();
+      this.featCurrency();
+      this.featDelivery();
       this.state.info = { ...data };
 
       // console.log('customer render ', data);
@@ -137,16 +144,15 @@ class ClientInfo extends PureComponent {
       content = '';
     }
 
-    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading||customerFreezeloading;
+    let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading || customerFreezeloading;
 
 
     if (isCurstomerUpdate) {
       this.state.update = true;
-      if(customerUpdateloading)
-      this.state.customerUpdate =true;
+      if (customerUpdateloading)
+        this.state.customerUpdate = true;
     } else {
       if (update) {
-
 
 
         if (body.rtnCode === '000000') {
@@ -156,13 +162,12 @@ class ClientInfo extends PureComponent {
           message.error(body.rtnMsg);
           this.state.requestState = 'error';
         }
-        if(this.state.customerUpdate)
-        {
-          console.log("update fini")
-          const {updateCustomer} = this.state;
+        if (this.state.customerUpdate) {
+          console.log('update fini');
+          const { updateCustomer } = this.state;
           this.setState({
-            info:updateCustomer
-          })
+            info: updateCustomer,
+          });
           this.state.customerUpdate = false;
         }
 
@@ -282,8 +287,7 @@ class ClientInfo extends PureComponent {
                   {getFieldDecorator('country', {
                     initialValue: current.country,
                   })(
-
-                    <City content={current.country}/>
+                    <City content={current.country}/>,
                   )}
                 </FormItem>
               </Col>
@@ -292,9 +296,8 @@ class ClientInfo extends PureComponent {
                   {getFieldDecorator('city', {
                     initialValue: current.city,
 
-                  },)(
-                    <City content={current.city}/>
-
+                  })(
+                    <City content={current.city}/>,
                   )}
                 </FormItem>
               </Col>
@@ -340,7 +343,7 @@ class ClientInfo extends PureComponent {
                   {getFieldDecorator('qualityRequirements', {
                     initialValue: current.qualityRequirements,
                   })(
-                    <QualityRequirements   placeholder="请输入" content={current.qualityRequirements}/>,
+                    <QualityRequirements placeholder="请输入" content={current.qualityRequirements}/>,
                   )}
                 </FormItem>
               </Col>
@@ -369,14 +372,14 @@ class ClientInfo extends PureComponent {
 
             </Row>
             <Row gutter={2}>
-              <Col lg={12} md={12} sm={12} xs={12}>
+              <Col lg={8} md={8} sm={8} xs={8}>
 
                 <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('deliveryMethod', {
                     rules: [{ message: '请输入送货方式' }],
                     initialValue: current.deliveryMethod,
                   })(
-                    <DeliveryMethods content={current.deliveryMethod} />,
+                    <DeliveryMethods content={current.deliveryMethod}/>,
                   )}
                 </FormItem>
               </Col>
@@ -393,7 +396,6 @@ class ClientInfo extends PureComponent {
               </Col>
 
 
-
             </Row>
 
 
@@ -406,7 +408,7 @@ class ClientInfo extends PureComponent {
 
       <div className={styles.right_info}>
         {content === '' ? '' : (
-          this.showCustomer(content)
+          this.showCustomer({ ...content })
         )}
 
 
@@ -520,6 +522,7 @@ class ClientInfo extends PureComponent {
 
   showCustomer = (item) => {
 
+    const { settlementCurrency, qualityRequirements, deliveryMethod } = this.state;
 
     return (<div>
       <DescriptionList size='small' col='2'>
@@ -537,10 +540,10 @@ class ClientInfo extends PureComponent {
       <DescriptionList size='small' col='2'>
         <Description term='电话'>{item.companyPhone}</Description>
         <Description term='网站'>{item.companyWebsite}</Description>
-        <Description term='币种'>{item.settlementCurrency}</Description>
-        <Description term='品质质量'>{item.qualityRequirements}</Description>
+        <Description term='币种'>{settlementCurrency}</Description>
+        <Description term='品质'>{qualityRequirements}</Description>
         <Description term='报价系数'>{item.customerQuotationCoefficient}</Description>
-        <Description term='送货方式'>{item.deliveryMethod}</Description>
+        <Description term='送货方式'>{deliveryMethod}</Description>
         <Description term='预付款比例'>{item.prepaymentRatio}%</Description>
       </DescriptionList>
       <span className={styles.title_info}>备注</span>
@@ -567,6 +570,99 @@ class ClientInfo extends PureComponent {
       />
 
     </div>);
+  };
+
+  featQuality = () => {
+    const { showItem } = this.state;
+    // console.log('featQuality item ', showItem);
+    if (showItem && showItem.qualityRequirements) {
+      let params = { id: showItem.qualityRequirements };
+      fetch('/server/basic/quality-requirements/listQualityRequirementss', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      })
+        .then(response => response.json())
+        .then(d => {
+          const body = d.body;
+          let qualityRequirements = '';
+          if (body.records.length > 0) {
+            qualityRequirements = body.records[0].qualityEnName;
+            this.setState({
+              qualityRequirements,
+            });
+          }
+          // console.log('qualityRequirements value ', qualityRequirements);
+        }).catch(function(ex) {
+        // message.error('加载图片失败！');
+
+      });
+    }
+  };
+
+
+  featCurrency = () => {
+    const { showItem } = this.state;
+    // console.log('featQuality item ', showItem);
+    if (showItem && showItem.settlementCurrency) {
+      let params = { id: showItem.settlementCurrency };
+      fetch('/server/sys/mst-wordbook/listMstWordbook', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      })
+        .then(response => response.json())
+        .then(d => {
+          const body = d.body;
+          let settlementCurrency = '';
+          if (body.records.length > 0) {
+            settlementCurrency = body.records[0].wordbookContentZh;
+            this.setState({
+              settlementCurrency,
+            });
+          }
+          // console.log('settlementCurrency value ', settlementCurrency);
+        }).catch(function(ex) {
+        // message.error('加载图片失败！');
+      });
+    }
+
+  }
+
+  featDelivery = () => {
+    const { showItem } = this.state;
+    // console.log('featQuality item ', showItem);
+    if (showItem && showItem.deliveryMethod) {
+      let params = { id: showItem.deliveryMethod };
+      fetch('/server/basic/delivery-method/listDeliveryMethods', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      })
+        .then(response => response.json())
+        .then(d => {
+          const body = d.body;
+          let deliveryMethod = '';
+          if (body.records.length > 0) {
+            deliveryMethod = body.records[0].deliveryZhName;
+            this.setState({
+              deliveryMethod,
+            });
+          }
+          // console.log('settlementCurrency value ', deliveryMethod);
+        }).catch(function(ex) {
+        // message.error('加载图片失败！');
+      });
+    }
   };
 
 
@@ -663,25 +759,20 @@ class ClientInfo extends PureComponent {
       //   params.qualityRequirements=fieldsValue.qualityRequirements.name
 
       params.typeId = info.typeId;
-      if (!isAdd && info.content && info.content.id){
-        let tempFields = {...fieldsValue};
-        // tempFields.city = {...fieldsValue}.city.name;
-        // tempFields.country = {...fieldsValue}.country.name;
-
-        // tempFields.settlementCurrency = {...fieldsValue}.settlementCurrency.name;
-        // tempFields.qualityRequirements = {...fieldsValue}.qualityRequirements.name;
+      if (!isAdd && info.content && info.content.id) {
+        let tempFields = { ...fieldsValue };
 
 
-        const updateCustomer = Object.assign(info.content,{...tempFields});
-        console.log("assign params = ",updateCustomer)
+        const updateCustomer = Object.assign(info.content, { ...tempFields });
+        console.log('assign params = ', updateCustomer);
         this.state.updateCustomer = updateCustomer;
         params.id = info.content.id;
-          if (params.status === '冻结')
-            params.status = 2;
-          else if (params.status === '使用中')
-            params.status = 1;
-          else if (params.status === '草稿')
-            params.status = 0;
+        if (params.status === '冻结')
+          params.status = 2;
+        else if (params.status === '使用中')
+          params.status = 1;
+        else if (params.status === '草稿')
+          params.status = 0;
       }
 
       dispatch({
@@ -694,9 +785,6 @@ class ClientInfo extends PureComponent {
 
     });
   };
-
-  
-
 
 
 }

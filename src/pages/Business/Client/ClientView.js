@@ -17,6 +17,7 @@ import {
   Modal,
   Breadcrumb,
   message,
+  Drawer,
 } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { connect } from 'dva';
@@ -118,7 +119,8 @@ const operationTabList = [
     tab: <span>历史订单</span>,
   },
 ];
-const   defaultPageSize = 5
+const defaultPageSize = 5;
+
 @connect(({ client, loading, customer }) => {
   const { rtnCode, rtnMsg } = client;
   return {
@@ -143,7 +145,6 @@ const   defaultPageSize = 5
 class ClientView extends PureComponent {
 
 
-
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -165,7 +166,7 @@ class ClientView extends PureComponent {
       showItem: false,
       selectCustomerItem: '',
       pageChangeCurrent: 1,
-      customerPageCurrent:1,
+      customerPageCurrent: 1,
       isEdit: true,
       selectZhName: false,
       selectEnName: false,
@@ -177,6 +178,7 @@ class ClientView extends PureComponent {
       rowCustomerData: [],
       rowCustomerSelectedData: [],
       selectType: 'client',
+      drawVisible:false,
       maintainerAddVisible: false,
     };
   }
@@ -242,8 +244,8 @@ class ClientView extends PureComponent {
 
     let {
       selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update,
-      pageCurrent,customerPageCurrent,customerPageSize,customerPageTotal, fristLoad, selectType,selectCustomerItem,
-      selectedRowKeys, customerSelectedRowKeys, maintainsLoading, maintainTableContent, maintainerAddVisible,
+      pageCurrent, customerPageCurrent, customerPageSize, customerPageTotal, fristLoad, selectType, selectCustomerItem,
+      selectedRowKeys, customerSelectedRowKeys, maintainsLoading, maintainTableContent, maintainerAddVisible,drawVisible
     } = this.state;
 
     const rowSelection = {
@@ -372,7 +374,7 @@ class ClientView extends PureComponent {
 
     const getModalContent = () => {
       return (
-        <div  >
+        <div>
           <span className={clientStyle.sun_title_info}>类型</span>
           <Divider className={clientStyle.divder}/>
           <Form
@@ -475,7 +477,7 @@ class ClientView extends PureComponent {
 
                   <Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({
                     maintainerAddVisible: true,
-                  })} disabled={(!selectCustomerItem)||selectCustomerItem===''}> 新建</Button>
+                  })} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button>
 
                   <Table
                     style={{ display: selectType === 'client' ? '' : 'none' }}
@@ -514,47 +516,18 @@ class ClientView extends PureComponent {
                 </div>
               </Card>
             </Col>
-            <Col lg={leftlg} md={24}>
-              <div
-                className={clientStyle.right_info}
-              >
-                <div className={clientStyle.right_content_tbs}>
-                  <RadioGroup
-                    defaultValue="类型"
-                    size="small"
-                    className={clientStyle.right_content_tabgroud}
-                    onChange={this.onChange}
-                    buttonStyle="solid"
-                    value={selectTitle}
-                  >
-                    <Radio.Button value="类型" onClick={this.startType}>类型</Radio.Button>
-                    <Radio.Button value="客户" onClick={this.startClient}>客户</Radio.Button>
-                    <Radio.Button value="终客" onClick={this.startTerminal}>终客</Radio.Button>
-                    <Radio.Button value="字印" onClick={this.startMark}>字印</Radio.Button>
-                    <Radio.Button value="包装" onClick={this.startPackageInfo}>包装</Radio.Button>
-                    <Radio.Button value="产品" onClick={this.startProduct}>产品</Radio.Button>
-                    <Radio.Button value="历史订单" onClick={this.startHistory}>历史订单</Radio.Button>
-                  </RadioGroup>
-                </div>
-                <div className={clientStyle.list_info}>
-                  <span className={clientStyle.title_info}>{selectTitle}</span>
-                  <Divider
-                    className={clientStyle.divder}
-                  />
-
-                  {
-                    selectTitle === '类型' ? this.getAddType() : children
-                  }
-
-
-                  {/*{children}*/}
-                </div>
-
-
-              </div>
+            <Col lg={leftlg} md={24} >
+              {this.getDetailInfo()}
             </Col>
           </Row>
         </div>
+        <Drawer
+          width={720}
+          onClose={this.onClose}
+          visible={drawVisible}
+        >
+          {this.getDetailInfo()}
+        </Drawer>
 
         <Modal
           width={640}
@@ -579,6 +552,27 @@ class ClientView extends PureComponent {
     );
   }
 
+
+  clickToggleDrawer =() =>{
+    const { drawVisible } = this.state;
+
+    if(!drawVisible)
+      this.showDrawer()
+
+    console.log("- toggle ")
+  }
+
+  showDrawer = () => {
+    this.setState({
+      drawVisible: true,
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      drawVisible: false,
+    });
+  };
 
   getAddType = () => {
 
@@ -634,6 +628,50 @@ class ClientView extends PureComponent {
   };
 
 
+  getDetailInfo = () => {
+
+    const {children} = this.props;
+    const {selectTitle} =this.state
+
+    return (
+      <div
+        className={clientStyle.right_info}
+      >
+        <div className={clientStyle.right_content_tbs}>
+          <RadioGroup
+            defaultValue="类型"
+            size="small"
+            className={clientStyle.right_content_tabgroud}
+            onChange={this.onChange}
+            buttonStyle="solid"
+            value={selectTitle}
+          >
+            <Radio.Button value="类型" onClick={this.startType}>类型</Radio.Button>
+            <Radio.Button value="客户" onClick={this.startClient}>客户</Radio.Button>
+            <Radio.Button value="终客" onClick={this.startTerminal}>终客</Radio.Button>
+            <Radio.Button value="字印" onClick={this.startMark}>字印</Radio.Button>
+            <Radio.Button value="包装" onClick={this.startPackageInfo}>包装</Radio.Button>
+            <Radio.Button value="产品" onClick={this.startProduct}>产品</Radio.Button>
+            <Radio.Button value="历史订单" onClick={this.startHistory}>历史订单</Radio.Button>
+          </RadioGroup>
+        </div>
+        <div className={clientStyle.list_info}>
+          <span className={clientStyle.title_info} onClick={this.clickToggleDrawer}>{selectTitle}</span>
+          <Divider
+            className={clientStyle.divder}
+          />
+
+          {
+            selectTitle === '类型' ? this.getAddType() : children
+          }
+        </div>
+      </div>
+    );
+
+
+  };
+
+
   clickRowItem = (record) => {
 
     const { selectedRowKeys, rowSelectedData } = this.state;
@@ -684,7 +722,7 @@ class ClientView extends PureComponent {
       customerSelectedRowKeys: [],
       selectCustomerItem: '',
       rowCustomerData: [],
-      customerPageCurrent:1,
+      customerPageCurrent: 1,
       rowCustomerSelectedData: [],
     });
 
@@ -788,7 +826,7 @@ class ClientView extends PureComponent {
    * 更新右视图
    */
   startShowTab = () => {
-    console.log("startShowTab")
+    console.log('startShowTab');
     const { selectTitle } = this.state;
     if (selectTitle === '终客') {
       this.startTerminal();
@@ -819,7 +857,7 @@ class ClientView extends PureComponent {
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
     form.validateFields((err, fieldsValue) => {
-      console.log("handlesub error",err)
+      console.log('handlesub error', err);
       // if (err) return;
       if (isAdd) {
 
@@ -866,7 +904,7 @@ class ClientView extends PureComponent {
 
   handleDone = () => {
     const { dispatch } = this.props;
-    const {  pageCurrent } = this.state;
+    const { pageCurrent } = this.state;
     dispatch({
       type: 'client/fetchListClient',
       payload: {
@@ -964,14 +1002,14 @@ class ClientView extends PureComponent {
   };
 
   selectChange = (record, index) => {
-    console.log("selectChange")
+    console.log('selectChange');
   };
 
   pageChange = (page, pageSize) => {
     // console.log(page, pageSize);
     const { dispatch } = this.props;
 
-    const {  selectZhName, selectEnName } = this.state;
+    const { selectZhName, selectEnName } = this.state;
     const zhName = selectZhName ? selectZhName : undefined;
     const enName = selectEnName ? selectEnName : undefined;
     dispatch({
@@ -991,8 +1029,8 @@ class ClientView extends PureComponent {
       pageCurrent: page,
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
-      customerPageCurrent:1,
-      isEdit:true
+      customerPageCurrent: 1,
+      isEdit: true,
     });
     this.startShowTab();
   };
@@ -1006,7 +1044,7 @@ class ClientView extends PureComponent {
       payload: {
         size: defaultPageSize,
         current: page,
-        typeId:showItem.id
+        typeId: showItem.id,
       },
     });
 
@@ -1016,7 +1054,7 @@ class ClientView extends PureComponent {
       selectCustomerItem: '',
     });
     this.state.selectCustomerItem = '';
-    this.startShowTab()
+    this.startShowTab();
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -1042,7 +1080,7 @@ class ClientView extends PureComponent {
       selectedRowKeys,
       rowSelectedData: selectedRows,
       customerSelectedRowKeys: [],
-      customerPageCurrent:1,
+      customerPageCurrent: 1,
       selectCustomerItem: '',
       rowCustomerData: [],
       rowCustomerSelectedData: [],
@@ -1093,13 +1131,13 @@ class ClientView extends PureComponent {
 
     console.log('loadCustomerList');
     const { dispatch } = this.props;
-    const {customerPageCurrent} = this.state;
+    const { customerPageCurrent } = this.state;
     dispatch({
       type: 'customer/fetchListCustomer',
       payload: {
         size: defaultPageSize,
         typeId,
-        current:customerPageCurrent
+        current: customerPageCurrent,
       },
     });
 
@@ -1117,7 +1155,7 @@ class ClientView extends PureComponent {
     const { showItem } = this.state;
     this.loadCustomerList(showItem.id);
 
-      //2019-06-22 15:23
+    //2019-06-22 15:23
     // this.startShowTab();
 
   };
@@ -1190,8 +1228,6 @@ class ClientView extends PureComponent {
   };
 
 
-
-
   startTerminal = () => {
     this.setState(
       {
@@ -1257,8 +1293,8 @@ class ClientView extends PureComponent {
     this.setState(
       {
         selectTitle: '产品',
-        rightlg: 15,
-        leftlg: 9,
+        rightlg: 16,
+        leftlg: 8,
       },
     );
     router.replace({ pathname: '/business/client/product', query: { id: 3 } });
@@ -1288,8 +1324,8 @@ class ClientView extends PureComponent {
     this.setState(
       {
         selectTitle: '历史订单',
-        rightlg: 13,
-        leftlg: 11,
+        rightlg: 16,
+        leftlg: 8,
       },
     );
     router.replace({ pathname: '/business/client/history', query: { id: 5 } });
