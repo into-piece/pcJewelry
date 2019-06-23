@@ -24,9 +24,10 @@ import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import styles from './base.less';
 import { connect } from 'dva';
-import  ImageUpload from './components/ImageUpload'
+import ImageUpload from './components/ImageUpload';
 import MarkListItem from './components/MarkListItem';
 import PackageListItem from './components/PackageListItem';
+
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -66,6 +67,7 @@ class PackageInfo extends PureComponent {
       update: false,
       customerId: '',
       selectedItem: '',
+      fileList: [],
     };
   }
 
@@ -77,7 +79,7 @@ class PackageInfo extends PureComponent {
     } = this.props;
 
 
-    const { selectedItem, visible, current = {}, update } = this.state;
+    const { selectedItem, visible, current = {}, update, fileList } = this.state;
 
     const isUpdate = packageUpdateloading || packageSaveloading || packageDeleteloading || packageFreezeloading;
     if (isUpdate) {
@@ -111,8 +113,8 @@ class PackageInfo extends PureComponent {
       const data = location.params;
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
-        if(data.customerId!=='')
-        this.loadPackagelList();
+        if (data.customerId !== '')
+          this.loadPackagelList();
       }
 
       if (data.customerId && data.customerId !== '')
@@ -138,7 +140,6 @@ class PackageInfo extends PureComponent {
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
-
     const getBase64 = (img, callback) => {
       const reader = new FileReader();
       reader.addEventListener('load', () => callback(reader.result));
@@ -148,36 +149,11 @@ class PackageInfo extends PureComponent {
 
     const getModalContent = () => {
 
-      const normFile = (e) => {
-        return this.state.imageUrl;
-      };
-
 
       const handleChange = info => {
 
-        // console.log('info = ', info);
+
         let fileList = [...info.fileList];
-
-        this.state.imageUrl = false;
-        this.state.fileName = false;
-
-        if (info.file.status === 'done') {
-          getBase64(info.file.originFileObj, imageUrl => {
-              let imageName;
-              if (info.file)
-                imageName = info.file.name;
-              this.setState({
-                imageUrl,
-                imageName,
-                loading: false,
-              });
-              // console.log("上传的图片 ",imageUrl)
-              this.state.imageUrl = imageUrl;
-              this.state.fileName = imageName;
-            },
-          );
-        }
-
 
         const file = info.file;
 
@@ -196,7 +172,7 @@ class PackageInfo extends PureComponent {
           }
         }
 
-        fileList = fileList.slice(-1);
+        fileList = fileList.slice(-10);
         fileList = fileList.map(file => {
           if (file.response) {
             file.url = file.response.url;
@@ -207,8 +183,6 @@ class PackageInfo extends PureComponent {
         this.setState({ fileList });
 
       };
-
-
 
 
       const { form: { getFieldDecorator } } = this.props;
@@ -226,21 +200,21 @@ class PackageInfo extends PureComponent {
             onSubmit={this.handleSubmit}>
 
             <Row gutter={2} justify="start">
-              <Col lg={12} md={12} sm={12} xs={12}>
+              <Col lg={24} md={24} sm={24} xs={24}>
 
                 <FormItem label="包装说明图片" {...this.formLayout} className={styles.from_content_col}>
-                    <Upload
-                      name="avatar"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      fileList={this.state.fileList}
-                      onChange={handleChange}
-                    >
-                      <div>
-                        <Icon type={this.state.loading ? 'loading' : 'plus'}/>
-                        <div className="ant-upload-text">上传图片</div>
-                      </div>
-                    </Upload>,
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    fileList={this.state.fileList ? this.state.fileList : []}
+                    onChange={handleChange}
+                  >
+                    <div>
+                      <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                      <div className="ant-upload-text">上传图片</div>
+                    </div>
+                  </Upload>,
                 </FormItem>
               </Col>
             </Row>
@@ -293,8 +267,8 @@ class PackageInfo extends PureComponent {
     return (<div className={styles.content}>
       <div className={styles.right_info}>
         <List
-          loading={isUpdate||packageListloading}
-          dataSource={(!this.state.isAddEdit)?body.data:[]}
+          loading={isUpdate || packageListloading}
+          dataSource={(isUpdate||packageListloading)?[]:(!this.state.isAddEdit) ? body.data : []}
           renderItem={this.getContantItem2}
           size="small"
           bordered={false}
@@ -319,7 +293,8 @@ class PackageInfo extends PureComponent {
                     onClick={this.clickDeleteFrom}
                     disabled={this.state.isEdit || this.state.isAddEdit}>删除</Button>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit" onClick={this.clickEditFrom} disabled={this.state.isEdit || this.state.isAddEdit}>编辑</Button>
+                    icon="edit" onClick={this.clickEditFrom}
+                    disabled={this.state.isEdit || this.state.isAddEdit}>编辑</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
                     onClick={this.clickFreezeFrom} disabled={this.state.isEdit || this.state.isAddEdit}>冻结</Button>
           </div>
@@ -383,34 +358,39 @@ class PackageInfo extends PureComponent {
         this.changeSelectItem(item);
       }}>
         <PackageListItem item={item} callbackUrl={this.callbackUrl}
-                      isSelected={selectedItem === item}
+                         isSelected={selectedItem === item}
         />
       </div>
     );
   };
 
   callbackUrl = (item) => {
-
     let fileList = [];
-    if (item && item.path) {
-
-      fileList = [
+    if (item) {
+      fileList = item.map(v => (
         {
-          uid: item.id,
-          name: item.fileName,
+          uid: v.id,
+          name: v.fileName,
           status: 'done',
-          url: item.path,
-        },
-      ];
-      this.state.imageUrl = item.path;
-      this.state.fileName = item.fileName;
+          url: v.path,
+        }
+      ));
+      this.state.imageUrl = item.map(v => {
+        return v.path;
+      });
+      this.state.fileName = item.map(v => {
+        return v.fileName;
+      });
     } else {
-      this.state.imageUrl = '';
-      this.state.fileName = '';
+      this.state.imageUrl = [];
+      this.state.fileName = [];
     }
+    console.log('upload edit list ', fileList);
+    this.state.fileList = this.state.fileList;
     this.setState({
       fileList,
     });
+
 
   };
 
@@ -442,7 +422,7 @@ class PackageInfo extends PureComponent {
       visible: true,
       isAdd: true,
       current: {},
-      fileList:[],
+      fileList: [],
     });
 
   };
@@ -520,24 +500,32 @@ class PackageInfo extends PureComponent {
 
 
     const { dispatch, form } = this.props;
-    const { isAdd, selectedItem ,imageUrl,imageName} = this.state;
+    const { isAdd, selectedItem, fileList, imageUrl, imageName } = this.state;
 
 
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
 
-      // params.customerId = this.state.customerId;
-
 
       let params = {};
+      let urls, names;
       const fiedls = { ...fieldsValue };
-      // console.log("fiedl = ",fiedls)
+
+      if (fileList.length > 0) {
+        urls = fileList.map(v => (
+          v.thumbUrl?v.thumbUrl:v.url
+        ));
+
+        names = fileList.map(v => (
+          v.name
+        ));
+      }
       let pack = {};
       pack = fiedls;
       pack.customerId = this.state.customerId;
-      params.imgStr = imageUrl ? imageUrl : '';
-      params.fileName = imageName ? imageName : '';
+      params.imgStr = urls;
+      params.fileName = names;
       params.pack = pack;
       console.log('package', params);
       if (!isAdd) {
@@ -545,11 +533,11 @@ class PackageInfo extends PureComponent {
         params.pack.packNo = selectedItem.markingNo;
       }
 
-        dispatch({
-          type: 'packageinfo/addPackage',
-          payload: {
-            ...params,
-          },
+      dispatch({
+        type: 'packageinfo/addPackage',
+        payload: {
+          ...params,
+        },
 
       });
 

@@ -90,9 +90,6 @@ class Mark extends PureComponent {
       update: false,
       customerId: '',
       selectedItem: '',
-      provinces: [],
-      areas: [],
-      city: [],
       fileList:[]
     };
   }
@@ -361,7 +358,7 @@ class Mark extends PureComponent {
       <div className={styles.right_info}>
         <List
           loading={isUpdate || markListloading}
-          dataSource={(!this.state.isAddEdit) ? body.data : []}
+          dataSource={(isUpdate || markListloading)?[]:(!this.state.isAddEdit) ? body.data : []}
           renderItem={this.getContantItem2}
           size="small"
           bordered={false}
@@ -447,6 +444,8 @@ class Mark extends PureComponent {
     );
   };
 
+
+
   getContantItem2 = (item) => {
 
     const { selectedItem } = this.state;
@@ -511,7 +510,7 @@ class Mark extends PureComponent {
       this.state.fileName = [];
     }
     console.log('upload edit list ',fileList)
-    this.state.fileList = this.state.fileList;
+    // this.state.fileList = this.state.fileList;
     this.setState({
       fileList,
     });
@@ -530,8 +529,6 @@ class Mark extends PureComponent {
   };
 
   clickEditFrom = () => {
-    //
-
     this.state.isAdd = false;
     this.setState({
       current: this.state.selectedItem,
@@ -623,7 +620,7 @@ class Mark extends PureComponent {
       const fiedls = { ...fieldsValue };
 
       const urls = fileList.map(v => (
-        v.thumbUrl
+        v.thumbUrl?v.thumbUrl:v.url
       ));
 
       const names = fileList.map(v => (
@@ -633,21 +630,21 @@ class Mark extends PureComponent {
       let marking = {};
       marking = fiedls;
       marking.customerId = this.state.customerId;
-      params.imgStr = imageUrl ? imageUrl : '';
-      params.fileName = imageName ? imageName : '';
+      params.imgStr = urls;
+      params.fileName = names;
       params.marking = marking;
-      console.log('file List ', urls, names);
+      // console.log('file List ', urls, names,fileList);
       // console.log('提交文件名', imageName);
       if (!isAdd) {
         params.marking.id = selectedItem.id;
         params.marking.markingNo = selectedItem.markingNo;
       }
-      // dispatch({
-      //   type: 'mark/updateMark',
-      //   payload: {
-      //     ...params,
-      //   },
-      // });
+      dispatch({
+        type: 'mark/updateMark',
+        payload: {
+          ...params,
+        },
+      });
 
 
     });

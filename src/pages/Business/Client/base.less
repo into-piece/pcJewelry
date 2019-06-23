@@ -61,7 +61,8 @@
   justify-content: start;
   width: 100%;
   background-color: #fff;
-  overflow-x: hidden;
+  //overflow-x: hidden;
+  overflow: auto;
 }
 
 
@@ -82,13 +83,23 @@
 }
 
 .carousel_image{
+  //display: flex;
+  //justify-content: center;
+  //items-align:center;
+  //width: 100%;
+  text-align: center;
   display: flex;
   justify-content: center;
-  items-align:center;
-  width: 100%;
+  align-items: center;
   background-position: center center;
-  max-height: 300px;
 
+
+}
+
+.carousel_image_ground
+{
+  max-width: 360px;
+  max-height: 360px;
 }
 
 .divder {

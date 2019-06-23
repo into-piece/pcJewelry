@@ -17,7 +17,7 @@ import {
   Divider,
   List,
   Modal,
-  message,
+  message, Spin,
 } from 'antd';
 import styles from './base.less';
 import { connect } from 'dva';
@@ -93,9 +93,14 @@ class ClientInfo extends PureComponent {
     this.state = {
       visible: false,
       content: '',
+      id: '',
       isEdit: true,
       isAddEdit: true,
+      showItem: false,
       isAdd: true,
+      isFrist: false,
+      isDelete:false,
+      isLoading:false,
       update: false,
       settlementCurrency: '',
       qualityRequirements: '',
@@ -109,39 +114,50 @@ class ClientInfo extends PureComponent {
 
     const {
       location, body, customerSaveloading,
-      customerUpdateloading, customerDeleteloading, customerFreezeloading,
+      customerUpdateloading, customerDeleteloading, customerFreezeloading, customerListloading,
     } = this.props;
 
-    const { visible, current = {}, update } = this.state;
+    const { visible, current = {}, update ,isDelete } = this.state;
 
     let content = '';
     if (location && location.params) {
       let data = location.params;
       content = data.content;
-      this.state.showItem = { ...content };
-      this.featQuality();
-      this.featCurrency();
-      this.featDelivery();
+      // this.state.showItem = { ...content };
+
+      console.log('state ', this.state.id, content.id);
+      if (!content.id) {
+        this.state.id = '';
+      } else if (this.state.id !== content.id) {
+        this.state.id = content.id;
+        this.loadCustomeForId();
+      }
+
       this.state.info = { ...data };
 
-      // console.log('customer render ', data);
-      // data.ref()
       if (data.typeId && data.typeId !== '')
         this.state.isAddEdit = false;
       else
         this.state.isAddEdit = true;
 
-      if (data.content && data.content !== '')
+      if (data.content && data.content !== '') {
+        if(!isDelete)
+        {
+          this.state.isEdit = false;
+        }
 
-        this.state.isEdit = false;
-      else
+
+      } else {
         this.state.isEdit = true;
-
+        this.state.showItem = false;
+      }
 
     } else {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
       content = '';
+      this.state.id = '';
+      this.state.showItem = false;
     }
 
     let isCurstomerUpdate = customerDeleteloading || customerSaveloading || customerUpdateloading || customerFreezeloading;
@@ -154,6 +170,7 @@ class ClientInfo extends PureComponent {
     } else {
       if (update) {
 
+        this.loadCustomeForId();
 
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
@@ -163,7 +180,6 @@ class ClientInfo extends PureComponent {
           this.state.requestState = 'error';
         }
         if (this.state.customerUpdate) {
-          console.log('update fini');
           const { updateCustomer } = this.state;
           this.setState({
             info: updateCustomer,
@@ -192,6 +208,7 @@ class ClientInfo extends PureComponent {
         <div className={clientStyle.list_info}>
           <span className={clientStyle.sun_title_info}>客户</span>
           <Divider className={clientStyle.divder}/>
+
           <Form
             layout="inline"
             size={'small'}
@@ -404,17 +421,30 @@ class ClientInfo extends PureComponent {
       );
     };
 
+    const isload = isCurstomerUpdate || this.state.isLoading;
+
+
+    console.log("isload ",isload)
+
     return (<div className={styles.content}>
 
       <div className={styles.right_info}>
-        {content === '' ? '' : (
-          this.showCustomer({ ...content })
-        )}
+        {/*{(body.data&&body.data.length>0) === '' ? '' : (*/}
+        {/*this.showCustomer({ ...body.data[0] })*/}
+        {/*)} */}
+        {/*{(!this.state.showItem) ? '' : (*/}
+          {/*this.showCustomer(isCurstomerUpdate || customerListloading)*/}
+        {/*)}*/}
+        {isload ? this.showCustomer(isload) : (
+          (!this.state.showItem) ? '' : (
+            this.showCustomer(isload)
+          ))}
 
 
       </div>
       <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
-            className={styles.cardconrtll}>
+            className={styles.cardconrtll}
+      >
         <div
           style={{
             display: 'flex',
@@ -437,9 +467,9 @@ class ClientInfo extends PureComponent {
           <div
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
             <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="copy" disabled={this.state.isEdit}>复制</Button>
+                    icon="copy" disabled={true}>复制</Button>
             <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
-                    disabled={this.state.isEdit}>撤销</Button>
+                    disabled={true}>撤销</Button>
           </div>
         </div>
 
@@ -490,12 +520,16 @@ class ClientInfo extends PureComponent {
         payload: { 'list': info.ckeys },
       });
     }
-
+    this.state.showItem = false;
+    this.state.isEdit = true;
+    this.state.isDelete = true;
     this.setState({
-      selectedRowKeys: '',
       showItem: false,
       isEdit: true,
+      isDelete:true
     });
+
+
 
 
   };
@@ -513,6 +547,51 @@ class ClientInfo extends PureComponent {
 
   };
 
+  loadCustomeForId = () => {
+
+
+    const { id } = this.state;
+    // console.log('featQuality item ', showItem);
+    this.state.isLoading = true;
+    const _this = this;
+    let params = { id };
+    fetch('/business/customer/listCustomer', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+
+        const body = d.body;
+        let showItem = false;
+        if (body.records.length > 0) {
+          showItem = body.records[0];
+          this.setState({
+            showItem,
+          });
+          this.featQuality();
+          this.featCurrency();
+          this.featDelivery();
+        } else {
+          showItem = false;
+        }
+        _this.setState({
+          isLoading:false
+        })
+        // console.log('qualityRequirements value ', qualityRequirements);
+      }).catch(function(ex) {
+      // message.error('加载图片失败！');
+      _this.setState({
+        isLoading:false
+      })
+    });
+  };
+
+
   handleCancel = () => {
     this.setState({
       visible: false,
@@ -520,56 +599,61 @@ class ClientInfo extends PureComponent {
   };
 
 
-  showCustomer = (item) => {
-
+  showCustomer = (isload) => {
     const { settlementCurrency, qualityRequirements, deliveryMethod } = this.state;
 
-    return (<div>
-      <DescriptionList size='small' col='2'>
-        <Description size="small" term='客户编号'>{item.customerNo}</Description>
-        <Description size="small" term='客户简称'>{item.shotName}</Description>
-        <Description size="small" term='国别'>{item.country}</Description>
-        <Description term='城市'>{item.city}</Description>
-        <Description term='英文名'>{item.enName}</Description>
-        <Description term='中文名'>{item.zhName}</Description>
-        <Description term='客户渠道'>{item.customerChannels}</Description>
-      </DescriptionList>
-      <DescriptionList size='small' col='1'>
-        <Description term='英文地址'></Description>
-      </DescriptionList>
-      <DescriptionList size='small' col='2'>
-        <Description term='电话'>{item.companyPhone}</Description>
-        <Description term='网站'>{item.companyWebsite}</Description>
-        <Description term='币种'>{settlementCurrency}</Description>
-        <Description term='品质'>{qualityRequirements}</Description>
-        <Description term='报价系数'>{item.customerQuotationCoefficient}</Description>
-        <Description term='送货方式'>{deliveryMethod}</Description>
-        <Description term='预付款比例'>{item.prepaymentRatio}%</Description>
-      </DescriptionList>
-      <span className={styles.title_info}>备注</span>
-      <DescriptionList size='small' col='1'>
-        <Description term=''>{item.remarks}</Description>
-      </DescriptionList>
-      <Divider className={styles.divder}/>
-      <span style={{
-        marginBottom: 10,
-        paddingLeft: 10,
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#35B0F4',
-      }}>联络信息</span>
-      <Divider className={styles.divder}/>
-      <List
-        loading={false}
-        dataSource={listdata}
-        renderItem={this.getContantItem}
-        size="small"
-        bordered={false}
-        split={true}
 
-      />
+    return (
 
-    </div>);
+      <div>
+        <Spin spinning={isload}>
+          <DescriptionList size='small' col='2'>
+            <Description size="small" term='客户编号'>{this.state.showItem.customerNo}</Description>
+            <Description size="small" term='客户简称'>{this.state.showItem.shotName}</Description>
+            <Description size="small" term='国别'>{this.state.showItem.country}</Description>
+            <Description term='城市'>{this.state.showItem.city}</Description>
+            <Description term='英文名'>{this.state.showItem.enName}</Description>
+            <Description term='中文名'>{this.state.showItem.zhName}</Description>
+            <Description term='客户渠道'>{this.state.showItem.customerChannels}</Description>
+          </DescriptionList>
+          <DescriptionList size='small' col='1'>
+            <Description term='英文地址'></Description>
+          </DescriptionList>
+          <DescriptionList size='small' col='2'>
+            <Description term='电话'>{this.state.showItem.companyPhone}</Description>
+            <Description term='网站'>{this.state.showItem.companyWebsite}</Description>
+            <Description term='币种'>{settlementCurrency}</Description>
+            <Description term='品质'>{qualityRequirements}</Description>
+            <Description term='报价系数'>{this.state.showItem.customerQuotationCoefficient}</Description>
+            <Description term='送货方式'>{deliveryMethod}</Description>
+            <Description term='预付款比例'>{this.state.showItem.prepaymentRatio}%</Description>
+          </DescriptionList>
+          <span className={styles.title_info}>备注</span>
+          <DescriptionList size='small' col='1'>
+            <Description term=''>{this.state.showItem.remarks}</Description>
+          </DescriptionList>
+          <Divider className={styles.divder}/>
+          <span style={{
+            marginBottom: 10,
+            paddingLeft: 10,
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: '#35B0F4',
+          }}>联络信息</span>
+          <Divider className={styles.divder}/>
+          <List
+            loading={false}
+            dataSource={listdata}
+            renderItem={this.getContantItem}
+            size="small"
+            bordered={false}
+            split={true}
+
+          />
+        </Spin>
+      </div>
+    )
+      ;
   };
 
   featQuality = () => {
@@ -577,7 +661,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.qualityRequirements) {
       let params = { id: showItem.qualityRequirements };
-      fetch('/server/basic/quality-requirements/listQualityRequirementss', {
+      fetch('/basic/quality-requirements/listQualityRequirementss', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -608,8 +692,8 @@ class ClientInfo extends PureComponent {
     const { showItem } = this.state;
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.settlementCurrency) {
-      let params = { id: showItem.settlementCurrency };
-      fetch('/server/sys/mst-wordbook/listMstWordbook', {
+      let params = { wordbookCode: showItem.settlementCurrency };
+      fetch('/sys/mst-wordbook/listMstWordbook', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -627,20 +711,20 @@ class ClientInfo extends PureComponent {
               settlementCurrency,
             });
           }
-          // console.log('settlementCurrency value ', settlementCurrency);
+          console.log('settlementCurrency value ', settlementCurrency);
         }).catch(function(ex) {
         // message.error('加载图片失败！');
       });
     }
 
-  }
+  };
 
   featDelivery = () => {
     const { showItem } = this.state;
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.deliveryMethod) {
       let params = { id: showItem.deliveryMethod };
-      fetch('/server/basic/delivery-method/listDeliveryMethods', {
+      fetch('/basic/delivery-method/listDeliveryMethods', {
         method: 'POST',
         credentials: 'include',
         headers: {

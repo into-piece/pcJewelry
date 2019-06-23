@@ -3,7 +3,7 @@ import { Icon, message, Upload, Form, Card, Carousel } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import styles from '../base.less';
 
-import Zmage from 'react-zmage'
+import Zmage from 'react-zmage';
 
 const { Description } = DescriptionList;
 
@@ -27,7 +27,7 @@ class MarkListItem extends PureComponent {
     const _this = this;
     let params = {};
     params.dataNo = item.markingNo;
-    fetch('/server/business/upload-img/listUploadImg', {
+    fetch('/business/upload-img/listUploadImg', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -41,8 +41,6 @@ class MarkListItem extends PureComponent {
         if (body && body.records) {
           if (body.records.length > 0) {
             const imageObject = body.records;
-            // console.log('image object ', imageObject);
-            // path = imageObject.path;
             this.state.imageObject = imageObject;
             _this.setState({
               imageObject,
@@ -85,28 +83,17 @@ class MarkListItem extends PureComponent {
 
     const { loading, imageObject, isFirst } = this.state;
 
-    if (isFirst && item) {
-      // if (item) {
+    // if (isFirst && item) {
+      if (item) {
       this.fetch2(item);
       this.state.isFirst = false;
     }
     let paths = [];
 
 
-
-
     if (isSelected && callbackUrl) {
-      // const fileList = imageObject.map(v=>(
-      //   {
-      //     uid:v.id,
-      //     name:v.fileName,
-      //     status:'done',
-      //     url:v.path,
-      //   }
-      // ))
-      // console.log("load images filelist ",fileList)
 
-        callbackUrl(imageObject);
+      callbackUrl(imageObject);
     }
 
     if (imageObject.length > 0) {
@@ -151,22 +138,22 @@ class MarkListItem extends PureComponent {
 
   getImages = (paths) => {
     return paths.map((v) => (// src={v}
-      <div><Zmage alt="加载失败" align="middle" className={styles.carousel_image} src={v} set={paths.map(image=>({src:image}))} /></div>
+      <div className={styles.carousel_image_ground}><Zmage alt="加载失败" align="center" className={styles.carousel_image}
+                                                           src={v} set={paths.map(image => ({ src: image }))}/></div>
     ));
 
   };
 
 
-  loadMrarkImageUrl = (item) => {
-    let params = {};
-    params.dataNo = item.markingNo;
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'image/fetchImageUrl',
-      payload: { ...params },
-    });
+  // shouldComponentUpdate(nextProps, nextState, nextContext) {
+  //   const { item } = this.props;
+  //   console.log("refresh")
+  //   if(item)
+  //   this.fetch2(item);
+  //   return true;
+  // }
 
-  };
+
 
 }
 
