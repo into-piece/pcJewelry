@@ -99,12 +99,12 @@ class ClientInfo extends PureComponent {
       showItem: false,
       isAdd: true,
       isFrist: false,
-      isDelete:false,
       isLoading:false,
       update: false,
       settlementCurrency: '',
       qualityRequirements: '',
       deliveryMethod: '',
+      customerDelete:false,
 
     };
   }
@@ -117,15 +117,16 @@ class ClientInfo extends PureComponent {
       customerUpdateloading, customerDeleteloading, customerFreezeloading, customerListloading,
     } = this.props;
 
-    const { visible, current = {}, update ,isDelete } = this.state;
+    const { visible, current = {}, update,customerDelete  } = this.state;
 
     let content = '';
     if (location && location.params) {
       let data = location.params;
+      console.log(" render data is ",data)
       content = data.content;
       // this.state.showItem = { ...content };
 
-      console.log('state ', this.state.id, content.id);
+      // console.log('state ', this.state.id, content.id);
       if (!content.id) {
         this.state.id = '';
       } else if (this.state.id !== content.id) {
@@ -141,12 +142,11 @@ class ClientInfo extends PureComponent {
         this.state.isAddEdit = true;
 
       if (data.content && data.content !== '') {
-        if(!isDelete)
-        {
+        // if(!isDelete)
+        // {
+        //   this.state.isEdit = false;
+        // }
           this.state.isEdit = false;
-        }
-
-
       } else {
         this.state.isEdit = true;
         this.state.showItem = false;
@@ -167,6 +167,7 @@ class ClientInfo extends PureComponent {
       this.state.update = true;
       if (customerUpdateloading)
         this.state.customerUpdate = true;
+
     } else {
       if (update) {
 
@@ -187,7 +188,8 @@ class ClientInfo extends PureComponent {
           this.state.customerUpdate = false;
         }
 
-        this.handleDone();
+        this.handleDone(customerDelete);
+
         this.state.update = false;
       }
 
@@ -424,8 +426,6 @@ class ClientInfo extends PureComponent {
     const isload = isCurstomerUpdate || this.state.isLoading;
 
 
-    console.log("isload ",isload)
-
     return (<div className={styles.content}>
 
       <div className={styles.right_info}>
@@ -519,14 +519,18 @@ class ClientInfo extends PureComponent {
         type: 'customer/deleteCustomer',
         payload: { 'list': info.ckeys },
       });
+
     }
     this.state.showItem = false;
     this.state.isEdit = true;
-    this.state.isDelete = true;
+    const customerDelete = true;
+    // this.state.isDelete = true;
     this.setState({
       showItem: false,
       isEdit: true,
-      isDelete:true
+      customerDelete
+
+      // isDelete:true
     });
 
 
@@ -555,7 +559,7 @@ class ClientInfo extends PureComponent {
     this.state.isLoading = true;
     const _this = this;
     let params = { id };
-    fetch('/business/customer/listCustomer', {
+    fetch('/server/business/customer/listCustomer', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -661,7 +665,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.qualityRequirements) {
       let params = { id: showItem.qualityRequirements };
-      fetch('/basic/quality-requirements/listQualityRequirementss', {
+      fetch('/server/basic/quality-requirements/listQualityRequirementss', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -693,7 +697,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.settlementCurrency) {
       let params = { wordbookCode: showItem.settlementCurrency };
-      fetch('/sys/mst-wordbook/listMstWordbook', {
+      fetch('/server/sys/mst-wordbook/listMstWordbook', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -724,7 +728,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.deliveryMethod) {
       let params = { id: showItem.deliveryMethod };
-      fetch('/basic/delivery-method/listDeliveryMethods', {
+      fetch('/server/basic/delivery-method/listDeliveryMethods', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -788,20 +792,23 @@ class ClientInfo extends PureComponent {
     );
   };
 
-  handleDone = () => {
+  handleDone = (isdelete=false) => {
+
+    console.log("handleDone ",isdelete)
 
     // const { location } = this.props;
     const { info } = this.state;
-
+    const  customerDelete = false;
 
     if (info && info.ref)
-      info.ref();
+      info.ref(isdelete);
 
     // console.log('customer render ', data);
     // data.ref()
     //handle
     this.setState({
       visible: false,
+      customerDelete
     });
   };
 

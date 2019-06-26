@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Icon, message, Upload, Form, Card } from 'antd';
+import { Icon, message, Upload, Form, Card, Carousel } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import styles from '../base.less';
 
 ;
 const { Description } = DescriptionList;
-
 
 
 import jsonp from 'fetch-jsonp';
@@ -19,7 +18,7 @@ class PackageListItem extends PureComponent {
     const _this = this;
     let params = {};
     params.dataNo = item.packNo;
-    fetch('/business/upload-img/listUploadImg', {
+    fetch('/server/business/upload-img/listUploadImg', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -66,8 +65,6 @@ class PackageListItem extends PureComponent {
   }
 
 
-
-
   render() {
 
 
@@ -102,7 +99,8 @@ class PackageListItem extends PureComponent {
       hoverable
       loading={loading}
       className={isSelected ? styles.list_selected_content : ''}
-      cover={this.getImages(paths)}
+      cover={<Carousel className={styles.carousel_content} autoplay>{this.getImages(paths)}
+      </Carousel>}
     >
       <div>
         <DescriptionList size='small' col='2'>
@@ -120,7 +118,7 @@ class PackageListItem extends PureComponent {
 
   getImages = (paths) => {
     return paths.map((v) => (// src={v}
-      <div className={styles.carousel_image_ground}><Zmage alt="加载失败" align="center" className={styles.carousel_image}
+      <div className={styles.carousel_image_ground}><Zmage alt="图片" align="center" className={styles.carousel_image}
                                                            src={v} set={paths.map(image => ({ src: image }))}/></div>
     ));
 

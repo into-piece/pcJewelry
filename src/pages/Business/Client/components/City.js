@@ -34,9 +34,7 @@ class City extends PureComponent {
       value,
       isFirst:false
     });
-    onChange({
-      name:value
-    })
+    onChange(value)
   };
 
 

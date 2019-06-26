@@ -27,7 +27,7 @@ class MarkListItem extends PureComponent {
     const _this = this;
     let params = {};
     params.dataNo = item.markingNo;
-    fetch('/business/upload-img/listUploadImg', {
+    fetch('/server/business/upload-img/listUploadImg', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -56,7 +56,7 @@ class MarkListItem extends PureComponent {
         // console.log('result ', d);
       }).catch(function(ex) {
       console.log('parsing failed', ex);
-      message.error('加载图片失败！');
+      // message.error('加载图片失败！');
       _this.setState({
         loading: false,
       });
@@ -106,7 +106,7 @@ class MarkListItem extends PureComponent {
     if (!paths)
       paths = [];
 
-    console.log('image Object ', paths);
+    // console.log('image Object ', paths);
 
 
     return (<Card
@@ -138,7 +138,7 @@ class MarkListItem extends PureComponent {
 
   getImages = (paths) => {
     return paths.map((v) => (// src={v}
-      <div className={styles.carousel_image_ground}><Zmage alt="加载失败" align="center" className={styles.carousel_image}
+      <div className={styles.carousel_image_ground}><Zmage alt="图片" align="center" className={styles.carousel_image}
                                                            src={v} set={paths.map(image => ({ src: image }))}/></div>
     ));
 

@@ -32,9 +32,7 @@ class Dict extends PureComponent {
       value,
       isFirst: false,
     });
-    onChange({
-      name: value,
-    });
+    onChange(value);
   };
 
 
@@ -143,7 +141,7 @@ class Dict extends PureComponent {
           loading: false,
           dicts: body.records,
         });
-        console.log('result ', d);
+        // console.log('result ', d);
       }).catch(function(ex) {
       // message.error('加载图片失败！');
 

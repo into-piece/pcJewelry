@@ -164,21 +164,47 @@ class PackageInfo extends PureComponent {
             return;
           }
         }
-        if (file.size) {
-          const isLt2M = file.size / 1024 / 1024 < 3;
-          if (!isLt2M) {
-            message.error('上传图片不能大于 3MB!');
-            return;
-          }
-        }
 
         fileList = fileList.slice(-10);
         fileList = fileList.map(file => {
           if (file.response) {
             file.url = file.response.url;
           }
+          if(!file.url){
+            getBase64(file.originFileObj, imageUrl => {
+
+              fileList.forEach(((v, i) => {
+
+                if (v.name === info.file.name) {
+                  fileList[i].url = imageUrl;
+                  // console.log("change file name =  ", v.name, info.file)
+                  this.setState({
+                    fileList,
+                  });
+                }
+                ;
+
+              }));
+            });
+          }
           return file;
         });
+        // if (info.file.status === 'done') {
+        //   getBase64(info.file.originFileObj, imageUrl => {
+        //       fileList.forEach(((v,i)=>{
+        //         if(v.name===info.file.name)
+        //         {
+        //           fileList[i].url = imageUrl;
+        //           this.setState({
+        //             fileList
+        //           })
+        //         };
+        //       }))
+        //     },
+        //   );
+        //
+        // }
+
 
         this.setState({ fileList });
 
@@ -207,6 +233,9 @@ class PackageInfo extends PureComponent {
                     name="avatar"
                     listType="picture-card"
                     className="avatar-uploader"
+                    beforeUpload={()=>{
+                      return false;
+                    }}
                     fileList={this.state.fileList ? this.state.fileList : []}
                     onChange={handleChange}
                   >
@@ -234,7 +263,7 @@ class PackageInfo extends PureComponent {
 
                 <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('endShotName', {
-                    rules: [{ message: '请输入终客简称' }],
+                    rules: [{required: true, message: '请输入终客简称' }],
                     initialValue: current.endShotName,
                   })(
                     <Input placeholder="请输入"/>,
@@ -259,6 +288,13 @@ class PackageInfo extends PureComponent {
             </Row>
 
           </Form>
+          <Modal align="center"
+                 width={640}
+                 destroyOnClose
+          >
+
+          </Modal>
+
         </div>
       );
     };
@@ -385,7 +421,7 @@ class PackageInfo extends PureComponent {
       this.state.imageUrl = [];
       this.state.fileName = [];
     }
-    console.log('upload edit list ', fileList);
+    // console.log('upload edit list ', fileList);
     this.state.fileList = this.state.fileList;
     this.setState({
       fileList,
@@ -514,7 +550,7 @@ class PackageInfo extends PureComponent {
 
       if (fileList.length > 0) {
         urls = fileList.map(v => (
-          v.thumbUrl?v.thumbUrl:v.url
+          v.url
         ));
 
         names = fileList.map(v => (
@@ -530,7 +566,7 @@ class PackageInfo extends PureComponent {
       console.log('package', params);
       if (!isAdd) {
         params.pack.id = selectedItem.id;
-        params.pack.packNo = selectedItem.markingNo;
+        params.pack.packNo = selectedItem.packNo;
       }
 
       dispatch({

@@ -103,7 +103,7 @@ class QualityRequirements extends PureComponent {
     let params = {};
     const _this = this;
     params.wordbookTypeCode = dict;
-    console.log('dict params is ',params)
+    // console.log('dict params is ',params)
     fetch('/basic/quality-requirements/listQualityRequirementss', {
       method: 'POST',
       credentials: 'include',

@@ -90,7 +90,7 @@ class Mark extends PureComponent {
       update: false,
       customerId: '',
       selectedItem: '',
-      fileList:[]
+      fileList: [],
     };
   }
 
@@ -166,38 +166,31 @@ class Mark extends PureComponent {
     };
 
 
+    const getBase64_2 = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    };
+
+
     const getModalContent = () => {
 
 
+      const handleChange =   info => {
 
-      const handleChange = info => {
 
-        // console.log('info = ', info);
         let fileList = [...info.fileList];
 
-        // this.state.imageUrl = [];
-        // this.state.fileName = false;
 
-        // if (info.file.status === 'done') {
-        //   getBase64(info.file.originFileObj, imageUrl => {
-        //       let imageName;
-        //       if (info.file)
-        //         imageName = info.file.name;
-        //       this.setState({
-        //         imageUrl,
-        //         imageName,
-        //         loading: false,
-        //       });
-        //       // console.log("上传的图片 ",imageUrl)
-        //       this.state.imageUrl = imageUrl;
-        //       this.state.fileName = imageName;
-        //     },
-        //   );
-        // }
 
         // const imageUrl = this.state.imageUrl;
 
         const file = info.file;
+
+        console.log('handleChange = ',file);
 
         if (file.type) {
           const isJPG = (file.type.indexOf('image') != -1);
@@ -206,22 +199,90 @@ class Mark extends PureComponent {
             return;
           }
         }
-        if (file.size) {
-          const isLt2M = file.size / 1024 / 1024 < 3;
-          if (!isLt2M) {
-            message.error('上传图片不能大于 3MB!');
-            return;
-          }
-        }
+        // if (file.size) {
+        //   const isLt2M = file.size / 1024 / 1024 < 3;
+        //   if (!isLt2M) {
+        //     message.error('上传图片不能大于 3MB!');
+        //     return;
+        //   }
+        // }
 
         fileList = fileList.slice(-10);
-        fileList = fileList.map(file => {
+        fileList = fileList.map(   file => {
+          // console.log('image is the ', file);
           if (file.response) {
             file.url = file.response.url;
           }
+          if(!file.url){
+          getBase64(file.originFileObj, imageUrl => {
+
+            fileList.forEach(((v, i) => {
+
+              if (v.name === info.file.name) {
+                fileList[i].url = imageUrl;
+                // console.log("change file name =  ", v.name, info.file)
+                this.setState({
+                  fileList,
+                });
+              }
+              ;
+
+            }));
+          });
+
+            // const url = await getBase64_2(file.originFileObj);
+            // fileList.forEach(((v, i) => {
+            //
+            //   if (v.name === info.file.name) {
+            //     console.log('file name =  ', v.name, url);
+            //     fileList[i].url = url;
+            //     this.setState({
+            //       fileList,
+            //     });
+            //   }
+            //   ;
+            // }));
+          }
+
           return file;
         });
 
+
+
+        // if (info.file.status === 'done') {
+        // getBase64(info.file.originFileObj, imageUrl => {
+        //     fileList.forEach(((v, i) => {
+        //       console.log("file name =  ",v.name,info.file)
+        //       if (v.name === info.file.name) {
+        //         fileList[i].url = imageUrl;
+        //         this.setState({
+        //           fileList,
+        //         });
+        //       }
+        //       ;
+        //
+        //     }));
+        //
+        //
+        //   },
+
+        // console.log("file info ",info,info.url)
+        // );
+
+        // const url = await getBase64_2(file.originFileObj);
+        // fileList.forEach(((v, i) => {
+        //
+        //   if (v.name === info.file.name) {
+        //     console.log('file name =  ', v.name, url);
+        //     fileList[i].url = url;
+        //     this.setState({
+        //       fileList,
+        //     });
+        //   }
+        //   ;
+        // }));
+        // console.log('file info ', fileList);
+        // }
         this.setState({ fileList });
 
       };
@@ -249,9 +310,17 @@ class Mark extends PureComponent {
 
                   <Upload
                     name="avatar"
+                    beforeUpload={file => {
+                      // await getBase64(file.originFileObj,async imageUrl =>{
+                      //   file.url = imageUrl;
+                      //   console.log('getBase64>', file);
+                      // })
+                      console.log('beforeUpload>', file);
+                      return false;
+                    }}
+                    // customRequest={this.customRequest}
                     listType="picture-card"
-                    className="avatar-uploader"
-                    fileList={this.state.fileList?this.state.fileList:[]}
+                    fileList={this.state.fileList ? this.state.fileList : []}
                     onChange={handleChange}
                   >
                     {/*{imageUrl?'':uploadButton}*/}
@@ -295,7 +364,7 @@ class Mark extends PureComponent {
               <Col lg={12} md={12} sm={12} xs={12}>
                 <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('zhName', {
-                    rules: [{ message: '请输入中文名' }],
+                    rules: [{ required: true, message: '请输入中文名' }],
                     initialValue: current.zhName,
                   })(
                     <Input placeholder="请输入"/>,
@@ -306,7 +375,7 @@ class Mark extends PureComponent {
 
                 <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('enName', {
-                    rules: [{ message: '请输入英文名' }],
+                    rules: [{ required: true, message: '请输入英文名' }],
                     initialValue: current.enName,
                   })(
                     <Input placeholder="请输入"/>,
@@ -358,7 +427,7 @@ class Mark extends PureComponent {
       <div className={styles.right_info}>
         <List
           loading={isUpdate || markListloading}
-          dataSource={(isUpdate || markListloading)?[]:(!this.state.isAddEdit) ? body.data : []}
+          dataSource={(isUpdate || markListloading) ? [] : (!this.state.isAddEdit) ? body.data : []}
           renderItem={this.getContantItem2}
           size="small"
           bordered={false}
@@ -412,6 +481,12 @@ class Mark extends PureComponent {
   }
 
 
+  customRequest = (file) => {
+    file.status = 'done';
+    console.log('file ', file);
+    return true;
+  };
+
   getContantItem = (item) => {
 
     const { selectedItem } = this.state;
@@ -443,7 +518,6 @@ class Mark extends PureComponent {
 
     );
   };
-
 
 
   getContantItem2 = (item) => {
@@ -502,14 +576,14 @@ class Mark extends PureComponent {
       this.state.imageUrl = item.map(v => {
         return v.path;
       });
-      this.state.fileName  = item.map(v => {
+      this.state.fileName = item.map(v => {
         return v.fileName;
       });
     } else {
       this.state.imageUrl = [];
       this.state.fileName = [];
     }
-    console.log('upload edit list ',fileList)
+    // console.log('upload edit list ',fileList)
     // this.state.fileList = this.state.fileList;
     this.setState({
       fileList,
@@ -620,7 +694,7 @@ class Mark extends PureComponent {
       const fiedls = { ...fieldsValue };
 
       const urls = fileList.map(v => (
-        v.thumbUrl?v.thumbUrl:v.url
+        v.url
       ));
 
       const names = fileList.map(v => (
@@ -631,10 +705,10 @@ class Mark extends PureComponent {
       marking = fiedls;
       marking.customerId = this.state.customerId;
       params.imgStr = urls;
+      // params.imgStr = this.state.urls;
       params.fileName = names;
       params.marking = marking;
       // console.log('file List ', urls, names,fileList);
-      // console.log('提交文件名', imageName);
       if (!isAdd) {
         params.marking.id = selectedItem.id;
         params.marking.markingNo = selectedItem.markingNo;
@@ -649,6 +723,28 @@ class Mark extends PureComponent {
 
     });
   };
+
+  parseImage = () => {
+
+    const { fileList } = this.state;
+    const lenght = fileList.lenght;
+    getBase64(info.file.originFileObj, imageUrl => {
+        let imageName;
+        if (info.file)
+          imageName = info.file.name;
+        this.setState({
+          imageUrl,
+          imageName,
+          loading: false,
+        });
+        // console.log("上传的图片 ",imageUrl)
+        this.state.imageUrl = imageUrl;
+        this.state.fileName = imageName;
+      },
+    );
+  };
+
+
 }
 
 export default Mark;

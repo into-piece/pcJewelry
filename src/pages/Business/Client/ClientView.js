@@ -314,7 +314,7 @@ class ClientView extends PureComponent {
       if (this.state.customerLoad) {
         this.state.customerLoad = false;
         const { rowCustomerData } = this.state;
-        console.log('update list row ', rowCustomerData);
+        // console.log('update list row ', rowCustomerData);
       }
     }
 
@@ -339,6 +339,15 @@ class ClientView extends PureComponent {
         // this.startShowTab();
         this.state.customerLoading = false;
       }
+    }
+
+    if(this.state.isDelete)
+    {
+      this.setState({
+
+      })
+      this.startShowTab();
+      this.state.isDelete = false;
     }
 
 
@@ -1032,7 +1041,7 @@ class ClientView extends PureComponent {
       customerPageCurrent: 1,
       isEdit: true,
     });
-    this.startShowTab();
+
   };
   pageCustomerChange = (page, pageSize) => {
     // console.log(page, pageSize);
@@ -1149,11 +1158,23 @@ class ClientView extends PureComponent {
 
   };
 
-  refreshCustomerList = () => {
-    console.log('refreshCustomerList');
+  refreshCustomerList = (isdelete) => {
 
     const { showItem } = this.state;
     this.loadCustomerList(showItem.id);
+    this.state.isDelete = isdelete;
+
+    console.log("customer is  ",isdelete," delete")
+
+    if(isdelete) {
+
+      this.state.selectCustomerItem = '';
+      this.setState({
+        selectCustomerItem: '',
+        customerSelectedRowKeys:''
+      });
+      this.startClient();
+    }
 
     //2019-06-22 15:23
     // this.startShowTab();
@@ -1407,7 +1428,7 @@ class ClientView extends PureComponent {
       salesmanId: item.salesmanId,
     };
 
-    fetch('/business/co-maintainer/saveCoMaintainer', {
+    fetch('/server/business/co-maintainer/saveCoMaintainer', {
       method: 'POST',
       credentials: 'include',
       headers: {
