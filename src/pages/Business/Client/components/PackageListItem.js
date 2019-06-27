@@ -18,7 +18,7 @@ class PackageListItem extends PureComponent {
     const _this = this;
     let params = {};
     params.dataNo = item.packNo;
-    fetch('/server/business/upload-img/listUploadImg', {
+    fetch('/business/upload-img/listUploadImg', {
       method: 'POST',
       credentials: 'include',
       headers: {

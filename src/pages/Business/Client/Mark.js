@@ -26,6 +26,9 @@ import clientStyle from './Client.less';
 import { connect } from 'dva';
 import Deliver from '../Deliver/Deliver';
 import MarkListItem from './components/MarkListItem';
+import Cropper from 'react-cropper';
+// import   '../../../../node_modules/cropperjs/dist/cropper.css'; //需要找到相对的 node_modules 路径，必须引入该css文件！
+import 'cropperjs/dist/cropper.css';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -91,6 +94,7 @@ class Mark extends PureComponent {
       customerId: '',
       selectedItem: '',
       fileList: [],
+      cropperVisible: false,
     };
   }
 
@@ -175,22 +179,29 @@ class Mark extends PureComponent {
       });
     };
 
+    const modalFooter = this.state.done
+      ? { footer: null, onCancel: this.handleDone }
+      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+
+    const modalCropperFooter = this.state.done
+      ? { footer: null, onCancel: this.handleCropDone }
+      : { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
 
     const getModalContent = () => {
 
 
-      const handleChange =   info => {
+      const handleChange = info => {
 
 
         let fileList = [...info.fileList];
-
 
 
         // const imageUrl = this.state.imageUrl;
 
         const file = info.file;
 
-        console.log('handleChange = ',file);
+        console.log('handleChange = ', file);
 
         if (file.type) {
           const isJPG = (file.type.indexOf('image') != -1);
@@ -208,27 +219,30 @@ class Mark extends PureComponent {
         // }
 
         fileList = fileList.slice(-10);
-        fileList = fileList.map(   file => {
+        fileList = fileList.map(file => {
           // console.log('image is the ', file);
           if (file.response) {
             file.url = file.response.url;
           }
-          if(!file.url){
-          getBase64(file.originFileObj, imageUrl => {
+          if (!file.url) {
+            getBase64(file.originFileObj, imageUrl => {
 
-            fileList.forEach(((v, i) => {
+              fileList.forEach(((v, i) => {
 
-              if (v.name === info.file.name) {
-                fileList[i].url = imageUrl;
-                // console.log("change file name =  ", v.name, info.file)
-                this.setState({
-                  fileList,
-                });
-              }
-              ;
+                if (v.name === info.file.name) {
+                  fileList[i].url = imageUrl;
+                  // console.log("change file name =  ", v.name, info.file)
+                  this.setState({
+                    fileList,
+                    cropperVisible: true,
+                    uploadFile: imageUrl,
+                    uploadFileName: v.name,
+                  });
+                }
+                ;
 
-            }));
-          });
+              }));
+            });
 
             // const url = await getBase64_2(file.originFileObj);
             // fileList.forEach(((v, i) => {
@@ -246,7 +260,6 @@ class Mark extends PureComponent {
 
           return file;
         });
-
 
 
         // if (info.file.status === 'done') {
@@ -286,8 +299,40 @@ class Mark extends PureComponent {
         this.setState({ fileList });
 
       };
+      const openCutImageModal = () => {
+        const crop = () => {
+          // image in dataUrl
+          const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
+          // console.log("crop image "+cropi);
+          this.setState({
+            cropImage: cropi,
+          });
+
+        };
+
+        const { cropImage, uploadFile } = this.state;
+
+        return (
+          <div className={styles.cropper_view}>
+            <Cropper
+              ref="cropper"
+              src={uploadFile}
+              className={styles.cropper}
+              style={{ height: 400 }}
+              preview='.cropper-preview'
+              viewMode={1} //定义cropper的视图模式
+              zoomable={true} //是否允许放大图像
+              guides={true}
+              background={true}
+              crop={crop}
+            />
+            <img className={styles.cropper_preview} src={cropImage}/>
+          </div>
+        );
+      };
       const { form: { getFieldDecorator } } = this.props;
 
+      const { cropperVisible } = this.state;
 
       return (
 
@@ -309,6 +354,7 @@ class Mark extends PureComponent {
                 <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
 
                   <Upload
+                    accept="image/*"
                     name="avatar"
                     beforeUpload={file => {
                       // await getBase64(file.originFileObj,async imageUrl =>{
@@ -413,14 +459,18 @@ class Mark extends PureComponent {
 
 
           </Form>
+          <Modal
+            {...modalCropperFooter}
+            width={740}
+            destroyOnClose
+            visible={cropperVisible}
+          >
+            {openCutImageModal()}
+          </Modal>
         </div>
 
       );
     };
-
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
     return (<div className={styles.content}>
@@ -481,11 +531,48 @@ class Mark extends PureComponent {
   }
 
 
-  customRequest = (file) => {
-    file.status = 'done';
-    console.log('file ', file);
-    return true;
+  handleCropSubmit = () => {
+    // console.log('handleCropSubmit');
+    const { cropImage, uploadFileName, fileList } = this.state;
+
+    fileList.forEach(((v, i) => {
+      if (v.name === uploadFileName) {
+        fileList[i].name = 'crop'+Date.parse(new Date())+fileList[i].name;
+        fileList[i].url = cropImage;
+        fileList[i].thumbUrl = cropImage;
+        // console.log("set file url ",cropImage)
+      };
+    }));
+
+    this.setState({
+      cropperVisible: false,
+      fileList,
+    });
   };
+
+
+  handleCropCancle = () => {
+    console.log('handleCropCancle');
+    this.setState({
+      cropperVisible: false,
+      cropImage:'',
+      uploadFileName:''
+
+    });
+
+
+  };
+
+
+  handleCropDone = () => {
+    console.log('handleCropDone');
+    this.setState({
+      cropperVisible: false,
+      cropImage:'',
+      uploadFileName:''
+    });
+  };
+
 
   getContantItem = (item) => {
 
@@ -724,25 +811,25 @@ class Mark extends PureComponent {
     });
   };
 
-  parseImage = () => {
-
-    const { fileList } = this.state;
-    const lenght = fileList.lenght;
-    getBase64(info.file.originFileObj, imageUrl => {
-        let imageName;
-        if (info.file)
-          imageName = info.file.name;
-        this.setState({
-          imageUrl,
-          imageName,
-          loading: false,
-        });
-        // console.log("上传的图片 ",imageUrl)
-        this.state.imageUrl = imageUrl;
-        this.state.fileName = imageName;
-      },
-    );
-  };
+  // parseImage = () => {
+  //
+  //   const { fileList } = this.state;
+  //   const lenght = fileList.lenght;
+  //   getBase64(info.file.originFileObj, imageUrl => {
+  //       let imageName;
+  //       if (info.file)
+  //         imageName = info.file.name;
+  //       this.setState({
+  //         imageUrl,
+  //         imageName,
+  //         loading: false,
+  //       });
+  //       // console.log("上传的图片 ",imageUrl)
+  //       this.state.imageUrl = imageUrl;
+  //       this.state.fileName = imageName;
+  //     },
+  //   );
+  // };
 
 
 }

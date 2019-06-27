@@ -1428,7 +1428,7 @@ class ClientView extends PureComponent {
       salesmanId: item.salesmanId,
     };
 
-    fetch('/server/business/co-maintainer/saveCoMaintainer', {
+    fetch('/business/co-maintainer/saveCoMaintainer', {
       method: 'POST',
       credentials: 'include',
       headers: {

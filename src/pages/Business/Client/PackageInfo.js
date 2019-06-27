@@ -28,6 +28,8 @@ import ImageUpload from './components/ImageUpload';
 import MarkListItem from './components/MarkListItem';
 import PackageListItem from './components/PackageListItem';
 
+import Cropper from 'react-cropper';
+
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -68,6 +70,8 @@ class PackageInfo extends PureComponent {
       customerId: '',
       selectedItem: '',
       fileList: [],
+      cropperVisible: false,
+
     };
   }
 
@@ -170,7 +174,7 @@ class PackageInfo extends PureComponent {
           if (file.response) {
             file.url = file.response.url;
           }
-          if(!file.url){
+          if (!file.url) {
             getBase64(file.originFileObj, imageUrl => {
 
               fileList.forEach(((v, i) => {
@@ -210,9 +214,14 @@ class PackageInfo extends PureComponent {
 
       };
 
+      const imageCrop = crop => {
+        console.log('image crop ', crop);
+        console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+      };
+
 
       const { form: { getFieldDecorator } } = this.props;
-
+      const { cropperVisible } = this.state;
 
       return (
         <div className={clientStyle.list_info}>
@@ -233,7 +242,7 @@ class PackageInfo extends PureComponent {
                     name="avatar"
                     listType="picture-card"
                     className="avatar-uploader"
-                    beforeUpload={()=>{
+                    beforeUpload={() => {
                       return false;
                     }}
                     fileList={this.state.fileList ? this.state.fileList : []}
@@ -263,7 +272,7 @@ class PackageInfo extends PureComponent {
 
                 <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('endShotName', {
-                    rules: [{required: true, message: '请输入终客简称' }],
+                    rules: [{ required: true, message: '请输入终客简称' }],
                     initialValue: current.endShotName,
                   })(
                     <Input placeholder="请输入"/>,
@@ -288,15 +297,10 @@ class PackageInfo extends PureComponent {
             </Row>
 
           </Form>
-          <Modal align="center"
-                 width={640}
-                 destroyOnClose
-          >
 
-          </Modal>
 
-        </div>
-      );
+        </div>)
+        ;
     };
 
 
@@ -304,7 +308,7 @@ class PackageInfo extends PureComponent {
       <div className={styles.right_info}>
         <List
           loading={isUpdate || packageListloading}
-          dataSource={(isUpdate||packageListloading)?[]:(!this.state.isAddEdit) ? body.data : []}
+          dataSource={(isUpdate || packageListloading) ? [] : (!this.state.isAddEdit) ? body.data : []}
           renderItem={this.getContantItem2}
           size="small"
           bordered={false}
@@ -356,7 +360,7 @@ class PackageInfo extends PureComponent {
         {getModalContent()}
       </Modal>
     </div>);
-  }
+  };
 
 
   getContantItem = (item) => {

@@ -559,7 +559,7 @@ class ClientInfo extends PureComponent {
     this.state.isLoading = true;
     const _this = this;
     let params = { id };
-    fetch('/server/business/customer/listCustomer', {
+    fetch('/business/customer/listCustomer', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -665,7 +665,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.qualityRequirements) {
       let params = { id: showItem.qualityRequirements };
-      fetch('/server/basic/quality-requirements/listQualityRequirementss', {
+      fetch('/basic/quality-requirements/listQualityRequirementss', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -697,7 +697,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.settlementCurrency) {
       let params = { wordbookCode: showItem.settlementCurrency };
-      fetch('/server/sys/mst-wordbook/listMstWordbook', {
+      fetch('/sys/mst-wordbook/listMstWordbook', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -728,7 +728,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.deliveryMethod) {
       let params = { id: showItem.deliveryMethod };
-      fetch('/server/basic/delivery-method/listDeliveryMethods', {
+      fetch('/basic/delivery-method/listDeliveryMethods', {
         method: 'POST',
         credentials: 'include',
         headers: {
