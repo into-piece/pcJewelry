@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { Layout, message } from 'antd';
+import { Layout, Menu, message } from 'antd';
 import Animate from 'rc-animate';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -145,7 +145,8 @@ class HeaderView extends Component {
             size="small"
             onNoticeVisibleChange={this.handleNoticeVisibleChange}
             {...this.props}
-          />
+          >
+          </GlobalHeader>
         )}
       </Header>
     ) : null;

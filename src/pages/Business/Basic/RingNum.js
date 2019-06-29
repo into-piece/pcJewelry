@@ -128,10 +128,12 @@ class RingNum extends PureComponent {
       isSonLoading: false,
       tabType: 'standard',
       refreshList: 'standard',
-      selectIndexAt: -1,
-      sonSelectIndexAt: -1,
       standardRowData: [],
+      standarRowKeys:[],
       numberRowData: [],
+      numberRowKeys:[],
+      rowData: [],
+      rowNumberData:[],
       fristLoad: true,
     };
   }
@@ -561,13 +563,13 @@ class RingNum extends PureComponent {
                   rowKey={record =>
                     record.id
                   }
-                  // onRow={record => {
-                  //   return {
-                  //     onClick: event => {
-                  //       this.clickRowNumberItem(record);
-                  //     },
-                  //   };
-                  // }}
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowNumberItem(record);
+                      },
+                    };
+                  }}
                   size='middle'
                   columns={subringNumContentColumns}
 
@@ -620,14 +622,26 @@ class RingNum extends PureComponent {
 
   clickStandardRowItem = (record) => {
     const { standardSelectedRowKeys, standardRowData } = this.state;
+    let rowData = this.state.rowData;
     const selects = standardSelectedRowKeys ? standardSelectedRowKeys : [];
     const id = record.id;
+
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
+      if (rowData.includes(record))
+        rowData = [];
+
       if (standardRowData.includes(record)) {
         standardRowData.splice(standardRowData.findIndex(item => item.id === id), 1);
       }
     } else {
+
+
+      if (rowData.length > 0) {
+        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+      }
+      rowData = [];
+      rowData.push({ ...record });
       selects.push(id);
       standardRowData.push(record);
     }
@@ -635,6 +649,7 @@ class RingNum extends PureComponent {
     if (selects.length > 0) {
       const recordK = selects[selects.length - 1];
       const r = standardRowData.filter(value => value.id == recordK);
+
       this.showSelectItem(r[0]);
     } else {
       this.setState({
@@ -651,6 +666,7 @@ class RingNum extends PureComponent {
 
     this.setState({
       standardSelectedRowKeys: [].concat(selects),
+      rowData
     });
 
   };
@@ -658,15 +674,29 @@ class RingNum extends PureComponent {
 
   clickRowNumberItem = (record) => {
     const { numberSelectedRowKeys , numberRowData} = this.state;
+    let rowNumberData = this.state.rowNumberData;
     const selects = numberSelectedRowKeys?numberSelectedRowKeys:[];
     const id = record.id
+
+
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index=>index===id),1)
+
+      if (rowNumberData.includes(record))
+        rowNumberData = [];
+
       if(numberRowData.includes(record))
       {
         numberRowData.splice(numberRowData.findIndex(item=>item.id===id),1)
       }
     } else {
+      // console.log("record is ",rowData)
+      if (numberRowData.length > 0) {
+        selects.splice(selects.findIndex(index => index === numberRowData[0].id), 1);
+      }
+      rowNumberData = [];
+      rowNumberData.push({ ...record });
+
       selects.push(id)
       numberRowData.push(record)
     }
@@ -687,6 +717,7 @@ class RingNum extends PureComponent {
 
     this.setState({
       numberSelectedRowKeys: [].concat(selects),
+      rowNumberData
     });
 
   };
@@ -961,7 +992,6 @@ class RingNum extends PureComponent {
     if (standardSelectedRowKeys.length > 0) {
       const recordK = standardSelectedRowKeys[standardSelectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
-
       this.showSelectItem(record[0]);
     } else {
       this.setState({
@@ -987,14 +1017,22 @@ class RingNum extends PureComponent {
 
   onSelectNumberChange = (numberSelectedRowKeys, selectRows) => {
 
-    console.log('num '+numberSelectedRowKeys.length)
+    // console.log('num '+numberSelectedRowKeys.length)
     if (numberSelectedRowKeys.length > 0) {
       const recordK = numberSelectedRowKeys[numberSelectedRowKeys.length - 1];
       const record = selectRows.filter(value => value.id == recordK);
-      console.log(record)
+      // console.log(record)
+      const d = record[0];
+      const showNumberItem = { ...d };
+      this.setState({
+        showNumberItem,
+        rowNumberData: selectRows,
+        numberSelectedRowKeys: numberSelectedRowKeys,
+      });
+      this.state.showNumberItem = showNumberItem;
       this.showSelectNumberItem(record[0]);
     } else {
-      console.log('number is 0')
+      // console.log('number is 0')
       this.setState({
         showNumberItem: false,
         isEditNumber: true,

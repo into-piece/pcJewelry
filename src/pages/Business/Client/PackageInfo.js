@@ -139,11 +139,6 @@ class PackageInfo extends PureComponent {
     }
 
 
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-
     const getBase64 = (img, callback) => {
       const reader = new FileReader();
       reader.addEventListener('load', () => callback(reader.result));
@@ -151,9 +146,51 @@ class PackageInfo extends PureComponent {
     };
 
 
+    const modalFooter = this.state.done
+      ? { footer: null, onCancel: this.handleDone }
+      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+
+    const modalCropperFooter = this.state.done
+      ? { footer: null, onCancel: this.handleCropDone }
+      : { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
+
+
+
+
     const getModalContent = () => {
 
+      const openCutImageModal = () => {
+        const crop = () => {
+          // image in dataUrl
+          const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
+          // console.log("crop image "+cropi);
+          this.setState({
+            cropImage: cropi,
+          });
 
+        };
+
+        const { cropImage, uploadFile } = this.state;
+
+        return (
+          <div className={styles.cropper_view}>
+            <Cropper
+              ref="cropper"
+              src={uploadFile}
+              className={styles.cropper}
+              style={{ height: 400 }}
+              preview='.cropper-preview'
+              viewMode={1} //定义cropper的视图模式
+              zoomable={true} //是否允许放大图像
+              guides={true}
+              background={true}
+              crop={crop}
+            />
+            <img className={styles.cropper_preview} src={cropImage}/>
+          </div>
+        );
+      };
       const handleChange = info => {
 
 
@@ -171,6 +208,7 @@ class PackageInfo extends PureComponent {
 
         fileList = fileList.slice(-10);
         fileList = fileList.map(file => {
+          // console.log('image is the ', file);
           if (file.response) {
             file.url = file.response.url;
           }
@@ -179,46 +217,25 @@ class PackageInfo extends PureComponent {
 
               fileList.forEach(((v, i) => {
 
-                if (v.name === info.file.name) {
+                if (v.uid === info.file.uid) {
                   fileList[i].url = imageUrl;
                   // console.log("change file name =  ", v.name, info.file)
                   this.setState({
                     fileList,
+                    cropperVisible: true,
+                    uploadFile: imageUrl,
+                    uploadFileUid: v.uid,
                   });
                 }
                 ;
-
               }));
+              return file;
             });
           }
-          return file;
+          return file
         });
-        // if (info.file.status === 'done') {
-        //   getBase64(info.file.originFileObj, imageUrl => {
-        //       fileList.forEach(((v,i)=>{
-        //         if(v.name===info.file.name)
-        //         {
-        //           fileList[i].url = imageUrl;
-        //           this.setState({
-        //             fileList
-        //           })
-        //         };
-        //       }))
-        //     },
-        //   );
-        //
-        // }
-
-
         this.setState({ fileList });
-
       };
-
-      const imageCrop = crop => {
-        console.log('image crop ', crop);
-        console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-      };
-
 
       const { form: { getFieldDecorator } } = this.props;
       const { cropperVisible } = this.state;
@@ -228,6 +245,7 @@ class PackageInfo extends PureComponent {
           <span className={clientStyle.sun_title_info}>包装</span>
           <Divider className={clientStyle.divder}/>
           <Form
+            accept="image/*"
             layout="inline"
             size={'small'}
             className={styles.from_content}
@@ -297,7 +315,14 @@ class PackageInfo extends PureComponent {
             </Row>
 
           </Form>
-
+          <Modal
+            {...modalCropperFooter}
+            width={740}
+            destroyOnClose
+            visible={cropperVisible}
+          >
+            {openCutImageModal()}
+          </Modal>
 
         </div>)
         ;
@@ -361,6 +386,51 @@ class PackageInfo extends PureComponent {
       </Modal>
     </div>);
   };
+
+
+
+  handleCropSubmit = () => {
+    // console.log('handleCropSubmit');
+    const { cropImage, uploadFileUid, fileList } = this.state;
+
+    fileList.forEach(((v, i) => {
+      if (v.uid === uploadFileUid) {
+        fileList[i].name = 'crop'+Date.parse(new Date())+fileList[i].name;
+        fileList[i].url = cropImage;
+        fileList[i].thumbUrl = cropImage;
+        // console.log("set file url ",cropImage)
+      };
+    }));
+
+    this.setState({
+      cropperVisible: false,
+      fileList,
+    });
+  };
+
+
+  handleCropCancle = () => {
+    console.log('handleCropCancle');
+    this.setState({
+      cropperVisible: false,
+      cropImage:'',
+      uploadFileUid:''
+
+    });
+
+
+  };
+
+
+  handleCropDone = () => {
+    console.log('handleCropDone');
+    this.setState({
+      cropperVisible: false,
+      cropImage:'',
+      uploadFileUid:''
+    });
+  };
+
 
 
   getContantItem = (item) => {

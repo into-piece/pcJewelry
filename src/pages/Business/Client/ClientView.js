@@ -752,7 +752,6 @@ class ClientView extends PureComponent {
       if (rowCustomerData.includes(record))
         rowCustomerData = [];
       if (rowCustomerSelectedData.includes(record)) {
-        // console.log('includes ' + record.id);
         rowCustomerSelectedData.splice(rowCustomerSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
@@ -776,7 +775,7 @@ class ClientView extends PureComponent {
       this.setState({
         selectCustomerItem: r[0],
       });
-      console.log('selectCustomerItem = ', r);
+      // console.log('selectCustomerItem = ', r);
       this.startClient();
     } else {
       this.state.selectCustomerItem = '';

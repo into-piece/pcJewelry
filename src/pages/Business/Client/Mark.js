@@ -184,9 +184,7 @@ class Mark extends PureComponent {
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
-    const modalCropperFooter = this.state.done
-      ? { footer: null, onCancel: this.handleCropDone }
-      : { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
+    const modalCropperFooter = { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
 
     const getModalContent = () => {
 
@@ -229,14 +227,14 @@ class Mark extends PureComponent {
 
               fileList.forEach(((v, i) => {
 
-                if (v.name === info.file.name) {
+                if (v.uid === info.file.uid) {
                   fileList[i].url = imageUrl;
                   // console.log("change file name =  ", v.name, info.file)
                   this.setState({
                     fileList,
                     cropperVisible: true,
                     uploadFile: imageUrl,
-                    uploadFileName: v.name,
+                    uploadFileUid: v.uid,
                   });
                 }
                 ;
@@ -533,10 +531,10 @@ class Mark extends PureComponent {
 
   handleCropSubmit = () => {
     // console.log('handleCropSubmit');
-    const { cropImage, uploadFileName, fileList } = this.state;
+    const { cropImage, uploadFileUid, fileList } = this.state;
 
     fileList.forEach(((v, i) => {
-      if (v.name === uploadFileName) {
+      if (v.uid === uploadFileUid) {
         fileList[i].name = 'crop'+Date.parse(new Date())+fileList[i].name;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
@@ -556,7 +554,7 @@ class Mark extends PureComponent {
     this.setState({
       cropperVisible: false,
       cropImage:'',
-      uploadFileName:''
+      uploadFileUid:''
 
     });
 
@@ -569,7 +567,7 @@ class Mark extends PureComponent {
     this.setState({
       cropperVisible: false,
       cropImage:'',
-      uploadFileName:''
+      uploadFileUid:''
     });
   };
 

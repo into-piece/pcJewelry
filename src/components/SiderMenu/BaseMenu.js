@@ -6,23 +6,18 @@ import { urlToList } from '../_utils/pathTools';
 import { getMenuMatches } from './SiderMenuUtils';
 import { isUrl } from '@/utils/utils';
 import styles from './index.less';
-import IconFont from '@/components/IconFont';
 
 const { SubMenu } = Menu;
 
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
-//   icon: 'icon-geren' #For Iconfont ,
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
 const getIcon = icon => {
+  if (typeof icon === 'string' && isUrl(icon)) {
+    return <img src={icon} alt="icon" className={styles.icon} />;
+  }
   if (typeof icon === 'string') {
-    if (isUrl(icon)) {
-      return <Icon component={() => <img src={icon} alt="icon" className={styles.icon} />} />;
-    }
-    if (icon.startsWith('icon-')) {
-      return <IconFont type={icon} />;
-    }
     return <Icon type={icon} />;
   }
   return icon;
@@ -33,13 +28,13 @@ export default class BaseMenu extends PureComponent {
    * 获得菜单子节点
    * @memberof SiderMenu
    */
-  getNavMenuItems = menusData => {
+  getNavMenuItems = (menusData, parent) => {
     if (!menusData) {
       return [];
     }
     return menusData
       .filter(item => item.name && !item.hideInMenu)
-      .map(item => this.getSubMenuOrItem(item))
+      .map(item => this.getSubMenuOrItem(item, parent))
       .filter(item => item);
   };
 
@@ -105,8 +100,8 @@ export default class BaseMenu extends PureComponent {
         onClick={
           isMobile
             ? () => {
-                onCollapse(true);
-              }
+              onCollapse(true);
+            }
             : undefined
         }
       >
@@ -122,18 +117,10 @@ export default class BaseMenu extends PureComponent {
     }
     return `/${path || ''}`.replace(/\/+/g, '/');
   };
-
-  getPopupContainer = (fixedHeader, layout) => {
-    if (fixedHeader && layout === 'topmenu') {
-      return this.wrap;
-    }
-    return document.body;
-  };
-
-  getRef = ref => {
-    this.wrap = ref;
-  };
-
+  handleClick = (e)=>{ //点击左侧菜单
+    const { onHandlePage } = this.props;
+    onHandlePage(e)
+  }
   render() {
     const {
       openKeys,
@@ -142,8 +129,6 @@ export default class BaseMenu extends PureComponent {
       location: { pathname },
       className,
       collapsed,
-      fixedHeader,
-      layout,
     } = this.props;
     // if pathname can't match, use the nearest parent's key
     let selectedKeys = this.getSelectedMenuKeys(pathname);
@@ -162,22 +147,19 @@ export default class BaseMenu extends PureComponent {
     });
 
     return (
-      <>
-        <Menu
-          key="Menu"
-          mode={mode}
-          theme={theme}
-          onOpenChange={handleOpenChange}
-          selectedKeys={selectedKeys}
-          style={style}
-          className={cls}
-          {...props}
-          getPopupContainer={() => this.getPopupContainer(fixedHeader, layout)}
-        >
-          {this.getNavMenuItems(menuData)}
-        </Menu>
-        <div ref={this.getRef} />
-      </>
+      <Menu
+        key="Menu"
+        mode={mode}
+        theme={theme}
+        onClick={this.handleClick}
+        onOpenChange={handleOpenChange}
+        selectedKeys={selectedKeys}
+        style={style}
+        className={cls}
+        {...props}
+      >
+        {this.getNavMenuItems(menuData)}
+      </Menu>
     );
   }
 }

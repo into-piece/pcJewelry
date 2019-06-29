@@ -70,6 +70,7 @@ const validatorGeographic = (rule, value, callback) => {
 @connect(({ loading, customer }) => {
   return {
     body: customer.body,
+    isSuccess:customer.isSuccess,
     customerListloading: loading.effects['customer/fetchListCustomer'],
     customerSaveloading: loading.effects['customer/addCustomer'],
     customerUpdateloading: loading.effects['customer/updateCustomer'],
@@ -90,6 +91,7 @@ class ClientInfo extends PureComponent {
 
   constructor(props) {
     super(props);
+
     this.state = {
       visible: false,
       content: '',
@@ -115,9 +117,11 @@ class ClientInfo extends PureComponent {
     const {
       location, body, customerSaveloading,
       customerUpdateloading, customerDeleteloading, customerFreezeloading, customerListloading,
-    } = this.props;
+      isSuccess} = this.props;
 
     const { visible, current = {}, update,customerDelete  } = this.state;
+
+    console.log("是否请求成功!",isSuccess)
 
     let content = '';
     if (location && location.params) {

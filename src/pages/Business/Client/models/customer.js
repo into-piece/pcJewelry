@@ -69,9 +69,11 @@ export default {
   reducers: {
 
     list(state, action) {
+      // console.log("payload ,",action)
       return {
         ...state,
         head: action.payload,
+        isSuccess:action.payload!==undefined?"0":"1",
         // rtnCode:action.payload.head.rtnCode,
         body:{
           ...state.body,
