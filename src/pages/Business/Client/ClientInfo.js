@@ -117,15 +117,16 @@ class ClientInfo extends PureComponent {
     const {
       location, body, customerSaveloading,
       customerUpdateloading, customerDeleteloading, customerFreezeloading, customerListloading,
-      isSuccess} = this.props;
+      isSuccess,params} = this.props;
 
     const { visible, current = {}, update,customerDelete  } = this.state;
 
     console.log("是否请求成功!",isSuccess)
 
     let content = '';
-    if (location && location.params) {
-      let data = location.params;
+    // if (location && location.params) {
+    if (params) {
+      let data = {...params};
       console.log(" render data is ",data)
       content = data.content;
       // this.state.showItem = { ...content };
@@ -284,7 +285,7 @@ class ClientInfo extends PureComponent {
               <Col lg={8} md={8} sm={8} xs={8}>
 
                 <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('qualityZhName', {
+                  {getFieldDecorator('zh_address', {
                     rules: [{ message: '请输入中文地址' }],
                     initialValue: current.qualityZhName,
                   })(
@@ -296,7 +297,7 @@ class ClientInfo extends PureComponent {
             <Row gutter={2}>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('qualityEnName', {
+                  {getFieldDecorator('en_address', {
                     rules: [{ message: '请输入英文地址' }],
                     initialValue: current.qualityEnName,
                   })(
@@ -563,7 +564,7 @@ class ClientInfo extends PureComponent {
     this.state.isLoading = true;
     const _this = this;
     let params = { id };
-    fetch('/business/customer/listCustomer', {
+    fetch('/server/business/customer/listCustomer', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -625,7 +626,8 @@ class ClientInfo extends PureComponent {
             <Description term='客户渠道'>{this.state.showItem.customerChannels}</Description>
           </DescriptionList>
           <DescriptionList size='small' col='1'>
-            <Description term='英文地址'></Description>
+            <Description term='中文地址'>{this.state.showItem.zh_address}</Description>
+            <Description term='英文地址'>{this.state.showItem.en_address}</Description>
           </DescriptionList>
           <DescriptionList size='small' col='2'>
             <Description term='电话'>{this.state.showItem.companyPhone}</Description>
@@ -669,7 +671,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.qualityRequirements) {
       let params = { id: showItem.qualityRequirements };
-      fetch('/basic/quality-requirements/listQualityRequirementss', {
+      fetch('/server/basic/quality-requirements/listQualityRequirementss', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -701,7 +703,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.settlementCurrency) {
       let params = { wordbookCode: showItem.settlementCurrency };
-      fetch('/sys/mst-wordbook/listMstWordbook', {
+      fetch('/server/sys/mst-wordbook/listMstWordbook', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -732,7 +734,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.deliveryMethod) {
       let params = { id: showItem.deliveryMethod };
-      fetch('/basic/delivery-method/listDeliveryMethods', {
+      fetch('/server/basic/delivery-method/listDeliveryMethods', {
         method: 'POST',
         credentials: 'include',
         headers: {

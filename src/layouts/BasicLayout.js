@@ -1,31 +1,30 @@
 import React, { Suspense } from 'react';
+import { Layout, Menu, Tabs, Dropdown, Icon } from 'antd';
 import router from 'umi/router';
-import { Route } from 'react-router-dom';
-import { Layout,Tabs,Dropdown,Menu,Icon  } from 'antd';
 import DocumentTitle from 'react-document-title';
-import isEqual from 'lodash/isEqual';
-import memoizeOne from 'memoize-one';
+import { Route } from 'react-router-dom';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
+import isEqual from 'lodash/isEqual';
+import memoizeOne from 'memoize-one';
 import Media from 'react-media';
-import { formatMessage } from 'umi/locale';
-import Authorized from '@/utils/Authorized';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo_img.png';
 import Footer from './Footer';
+import Authorized from '@/utils/Authorized';
 import Header from './Header';
 import Context from './MenuContext';
-import Exception403 from '../pages/Exception/403';
-import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
+import getPageTitle from '@/utils/getPageTitle';
 import styles from './BasicLayout.less';
 
 // lazy load SettingDrawer
 const SettingDrawer = React.lazy(() => import('@/components/SettingDrawer'));
 
-const { Content } = Layout;
 const { TabPane } = Tabs;
+const { Content } = Layout;
+
 const query = {
   'screen-xs': {
     maxWidth: 575,
@@ -51,52 +50,53 @@ const query = {
   },
 };
 
-class BasicLayout extends React.PureComponent {
+class BasicLayout extends React.Component {
+
   constructor(props) {
     super(props);
-    const {routes} = props.route,routeKey = '/business/client',tabName = '首页'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    const { routes } = props.route, routeKey = '/business/client', tabName = '客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabLists = this.updateTree(routes);
-    let tabList=[],tabListArr=[];
+    let tabList = [], tabListArr = [];
     tabLists.map((v) => {
-      if(v.key === routeKey){
-        if(tabList.length === 0){
-          v.closable = false
-          v.tab = tabName
+      if (v.key === routeKey) {
+        if (tabList.length === 0) {
+          v.closable = false;
+          v.tab = tabName;
           tabList.push(v);
         }
       }
-      if(v.key){
-        tabListArr.push(v.key)
+      if (v.key) {
+        tabListArr.push(v.key);
       }
     });
     //获取所有已存在key值
     this.state = ({
-      tabList:tabList,
-      tabListKey:[routeKey],
-      activeKey:routeKey,
+      tabList: tabList,
+      tabListKey: [routeKey],
+      activeKey: routeKey,
       tabListArr,
-      routeKey
-    })
+      routeKey,
+    });
 
     this.getPageTitle = memoizeOne(this.getPageTitle);
     this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
   }
 
+
   componentDidMount() {
-    this.props.history.push({ pathname : '/'  })
     const {
       dispatch,
-      route: { routes, authority },
+      route: { routes, path, authority },
     } = this.props;
-    dispatch({
-      type: 'user/fetchCurrent',
-    });
+    // dispatch({
+    //   type: 'user/fetchCurrent',
+    // });
     dispatch({
       type: 'setting/getSetting',
     });
     dispatch({
       type: 'menu/getMenuData',
-      payload: { routes, authority },
+      payload: { routes, path, authority },
     });
   }
 
@@ -106,8 +106,15 @@ class BasicLayout extends React.PureComponent {
     // 递归获取树列表
     const getTreeList = data => {
       data.forEach(node => {
-        if(!node.level){
-          treeList.push({ tab: node.name, key: node.path,locale:node.locale,closable:true,content:node.component });
+        if (!node.level) {
+          treeList.push({
+            icon: node.icon,
+            tab: node.name,
+            key: node.path,
+            locale: node.locale,
+            closable: true,
+            content: node.component,
+          });
         }
         if (node.routes && node.routes.length > 0) { //!node.hideChildrenInMenu &&
           getTreeList(node.routes);
@@ -126,19 +133,6 @@ class BasicLayout extends React.PureComponent {
       this.handleMenuCollapse(false);
     }
   }
-
-  getContext() {
-    const { location, breadcrumbNameMap } = this.props;
-    return {
-      location,
-      breadcrumbNameMap,
-    };
-  }
-
-  matchParamsPath = (pathname, breadcrumbNameMap) => {
-    const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
-    return breadcrumbNameMap[pathKey];
-  };
 
   getRouterAuthority = (pathname, routeData) => {
     let routeAuthority = ['noAuthority'];
@@ -170,6 +164,21 @@ class BasicLayout extends React.PureComponent {
     return `${pageName} - Ant Tabs`;
   };
 
+
+  getContext() {
+    const { location, breadcrumbNameMap } = this.props;
+    return {
+      location,
+      breadcrumbNameMap,
+    };
+  }
+
+  matchParamsPath = (pathname, breadcrumbNameMap) => {
+    const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
+    return breadcrumbNameMap[pathKey];
+  };
+
+
   getLayoutStyle = () => {
     const { fixSiderbar, isMobile, collapsed, layout } = this.props;
     if (fixSiderbar && layout !== 'topmenu' && !isMobile) {
@@ -189,81 +198,86 @@ class BasicLayout extends React.PureComponent {
   };
 
   renderSettingDrawer = () => {
-    // Do not render SettingDrawer in production
     // unless it is deployed in preview.pro.ant.design as demo
-    if (process.env.NODE_ENV === 'production' && APP_TYPE !== 'site') {
+    // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+    if (
+      process.env.NODE_ENV === 'production' &&
+      ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION !== 'site'
+    ) {
       return null;
     }
-    return <SettingDrawer />;
+    return <SettingDrawer/>;
   };
 
-  onHandlePage =(e)=>{//点击左侧菜单
-    let {menuData} = this.props,{key} = e;
+  onHandlePage = (e) => {//点击左侧菜单
+    let { menuData } = this.props, { key } = e;
+    console.log(' menu list is ', menuData);
     const tabLists = this.updateTreeList(menuData);
-    const {tabListKey,tabList,tabListArr} =  this.state;
-    if(tabListArr.includes(key)){
-      router.push(key)
-    }else{
-      key = '/exception/404'
-      router.push('/exception/404')
+    const { tabListKey, tabList, tabListArr } = this.state;
+    if (tabListArr.includes(key)) {
+      router.push(key);
+    } else {
+      key = '/exception/404';
+      router.push('/exception/404');
     }
 
     this.setState({
-      activeKey:key
-    })
+      activeKey: key,
+    });
     tabLists.map((v) => {
-      if(v.key === key){
-        if(tabList.length === 0){
-          v.closable = false
+      if (v.key === key) {
+        if (tabList.length === 0) {
+          v.closable = false;
           this.setState({
-            tabList:[...tabList,v]
-          })
-        }else{
-          if(!tabListKey.includes(v.key)){
+            tabList: [...tabList, v],
+          });
+        } else {
+          if (!tabListKey.includes(v.key)) {
             this.setState({
-              tabList:[...tabList,v],
-              tabListKey:[...tabListKey,v.key]
-            })
+              tabList: [...tabList, v],
+              tabListKey: [...tabListKey, v.key],
+            });
           }
         }
       }
-    })
+    });
     // this.setState({
     //   tabListKey:this.state.tabList.map((va)=>va.key)
     // })
-  }
+  };
 
   // 切换 tab页 router.push(key);
   onChange = key => {
-    this.setState({ activeKey:key });
-    router.push(key)
+    console.log('change tab');
+    this.setState({ activeKey: key });
+    router.push(key);
   };
 
   onEdit = (targetKey, action) => {
     this[action](targetKey);
-  }
+  };
 
   remove = (targetKey) => {
-    let {activeKey} = this.state;
+    let { activeKey } = this.state;
     let lastIndex;
     this.state.tabList.forEach((pane, i) => {
       if (pane.key === targetKey) {
         lastIndex = i - 1;
       }
     });
-    const tabList = [],tabListKey=[]
+    const tabList = [], tabListKey = [];
     this.state.tabList.map(pane => {
-      if(pane.key !== targetKey){
-        tabList.push(pane)
-        tabListKey.push(pane.key)
+      if (pane.key !== targetKey) {
+        tabList.push(pane);
+        tabListKey.push(pane.key);
       }
     });
     if (lastIndex >= 0 && activeKey === targetKey) {
       activeKey = tabList[lastIndex].key;
     }
-    router.push(activeKey)
-    this.setState({ tabList, activeKey,tabListKey });
-  }
+    router.push(activeKey);
+    this.setState({ tabList, activeKey, tabListKey });
+  };
 
   updateTreeList = data => {
     const treeData = data;
@@ -271,8 +285,15 @@ class BasicLayout extends React.PureComponent {
     // 递归获取树列表
     const getTreeList = data => {
       data.forEach(node => {
-        if(!node.level){
-          treeList.push({ tab: node.name, key: node.path,locale:node.locale,closable:true,content:node.component });
+        if (!node.level) {
+          treeList.push({
+            tab: node.name,
+            key: node.path,
+            icon: node.icon,
+            locale: node.locale,
+            closable: true,
+            content: node.component,
+          });
         }
         if (node.children && node.children.length > 0) { //!node.hideChildrenInMenu &&
           getTreeList(node.children);
@@ -283,60 +304,58 @@ class BasicLayout extends React.PureComponent {
     return treeList;
   };
 
-  onClickHover=(e)=>{
+  onClickHover = (e) => {
     // message.info(`Click on item ${key}`);
-    let { key } = e,{activeKey,tabList,tabListKey,routeKey} = this.state;
+    let { key } = e, { activeKey, tabList, tabListKey, routeKey } = this.state;
 
-    if(key === '1'){
-      tabList= tabList.filter((v)=>v.key !== activeKey || v.key === routeKey)
-      tabListKey = tabListKey.filter((v)=>v !== activeKey || v === routeKey)
+    if (key === '1') {
+      tabList = tabList.filter((v) => v.key !== activeKey || v.key === routeKey);
+      tabListKey = tabListKey.filter((v) => v !== activeKey || v === routeKey);
       this.setState({
-        activeKey:routeKey,
+        activeKey: routeKey,
         tabList,
-        tabListKey
-      })
-    }else if(key === '2'){
-      tabList= tabList.filter((v)=>v.key === activeKey || v.key === routeKey)
-      tabListKey = tabListKey.filter((v)=>v === activeKey || v === routeKey)
+        tabListKey,
+      });
+    } else if (key === '2') {
+      tabList = tabList.filter((v) => v.key === activeKey || v.key === routeKey);
+      tabListKey = tabListKey.filter((v) => v === activeKey || v === routeKey);
       this.setState({
         activeKey,
         tabList,
-        tabListKey
-      })
-    }else if(key === '3'){
-      tabList= tabList.filter((v)=>v.key === routeKey)
-      tabListKey = tabListKey.filter((v)=>v === routeKey)
+        tabListKey,
+      });
+    } else if (key === '3') {
+      tabList = tabList.filter((v) => v.key === routeKey);
+      tabListKey = tabListKey.filter((v) => v === routeKey);
       this.setState({
-        activeKey:routeKey,
+        activeKey: routeKey,
         tabList,
-        tabListKey
-      })
+        tabListKey,
+      });
     }
 
-  }
+  };
 
   render() {
     const {
       navTheme,
       layout: PropsLayout,
+      children,
       location: { pathname },
       isMobile,
-      children,
       menuData,
-      breadcrumbNameMap,
       route: { routes },
-      fixedHeader,
+      breadcrumbNameMap,
       hidenAntTabs,
+      fixedHeader,
     } = this.props;
-    let {activeKey,routeKey} = this.state;
-    if(pathname === '/'){
-      // router.push(routeKey)
-      activeKey = routeKey
-    }
+
     const isTop = PropsLayout === 'topmenu';
-    const routerConfig = this.getRouterAuthority(pathname, routes);
-    const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
-    this.props.location.onHandlePage = this.onHandlePage;
+    let { activeKey, routeKey } = this.state;
+    if (pathname === '/') {
+      // router.push(routeKey)
+      activeKey = routeKey;
+    }
     const menu = (
       <Menu onClick={this.onClickHover}>
         <Menu.Item key="1">关闭当前标签页</Menu.Item>
@@ -345,13 +364,14 @@ class BasicLayout extends React.PureComponent {
       </Menu>
     );
     const operations = (
-      <Dropdown overlay={menu} >
+      <Dropdown overlay={menu}>
         <a className="ant-dropdown-link" href="#">
-          Hover me<Icon type="down" />
+          页签<Icon type="down"/>
         </a>
       </Dropdown>
     );
-
+    const routerConfig = this.getRouterAuthority(pathname, routes);
+    const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
     const layout = (
       <Layout>
         {isTop && !isMobile ? null : (
@@ -361,8 +381,9 @@ class BasicLayout extends React.PureComponent {
             onCollapse={this.handleMenuCollapse}
             menuData={menuData}
             isMobile={isMobile}
+            onHandlePage={this.onHandlePage}
+            size="small"
             {...this.props}
-            onHandlePage ={this.onHandlePage}
           />
         )}
         <Layout
@@ -375,45 +396,47 @@ class BasicLayout extends React.PureComponent {
             menuData={menuData}
             handleMenuCollapse={this.handleMenuCollapse}
             logo={logo}
+            size="small"
+            className={styles.header_view}
             isMobile={isMobile}
-            {...this.props}
-          />
+          >
+
+          </Header>
           <Content className={styles.content} style={contentStyle}>
             {hidenAntTabs ?
-              (<Authorized authority={routerConfig} noMatch={<Exception403 />}>
-                {children}
-              </Authorized>) :
+              (
+                { children }
+              ) :
               (this.state.tabList && this.state.tabList.length ? (
                 <Tabs
                   // className={styles.tabs}
                   activeKey={activeKey}
                   onChange={this.onChange}
-                  tabBarExtraContent={operations}
-                  tabBarStyle={{background:'#fff'}}
-                  tabPosition="top"
-                  tabBarGutter={-1}
                   hideAdd
                   type="editable-card"
                   onEdit={this.onEdit}
                 >
                   {this.state.tabList.map(item => (
-                    <TabPane tab={item.tab} key={item.key} closable={item.closable}>
-                      <Authorized authority={routerConfig} noMatch={<Exception403 />}>
-                        {/*{item.content}*/}
-                        <Route key={item.key} path={item.path} component={item.content} exact={item.exact} />
-                      </Authorized>
+                    <TabPane tab={<span>
+          <Icon type={item.icon}/>
+
+                      {item.tab}
+        </span>} key={item.key} closable={item.closable}>
+
+                      {/*{item.content}*/}
+                      <Route key={item.key} path={item.path} component={item.content} exact={item.exact}/>
+
                     </TabPane>
                   ))}
                 </Tabs>
               ) : null)}
           </Content>
-          <Footer />
         </Layout>
       </Layout>
     );
     return (
       <React.Fragment>
-        <DocumentTitle title={this.getPageTitle(pathname, breadcrumbNameMap)}>
+        <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>
           <ContainerQuery query={query}>
             {params => (
               <Context.Provider value={this.getContext()}>
@@ -422,20 +445,20 @@ class BasicLayout extends React.PureComponent {
             )}
           </ContainerQuery>
         </DocumentTitle>
-        <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense>
+        <Suspense fallback={null}>{this.renderSettingDrawer()}</Suspense>
       </React.Fragment>
     );
   }
 }
 
-export default connect(({ global, setting, menu }) => ({
+export default connect(({ global, setting, menu: menuModel }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
-  menuData: menu.menuData,
-  breadcrumbNameMap: menu.breadcrumbNameMap,
+  menuData: menuModel.menuData,
+  breadcrumbNameMap: menuModel.breadcrumbNameMap,
   ...setting,
 }))(props => (
   <Media query="(max-width: 599px)">
-    {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
+    {isMobile => <BasicLayout {...props} isMobile={isMobile}/>}
   </Media>
 ));

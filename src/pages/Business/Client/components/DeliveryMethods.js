@@ -98,7 +98,7 @@ class DeliveryMethods extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     console.log('dict params is ',params)
-    fetch('/basic/delivery-method/listDeliveryMethods', {
+    fetch('/server/basic/delivery-method/listDeliveryMethods', {
       method: 'POST',
       credentials: 'include',
       headers: {

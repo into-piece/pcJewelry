@@ -124,7 +124,7 @@ class Dict extends PureComponent {
     const _this = this
     params.wordbookTypeCode = dict;
     console.log('dict params is ',params)
-    fetch('/sys/mst-wordbook/listMstWordbook', {
+    fetch('/server/sys/mst-wordbook/listMstWordbook', {
       method: 'POST',
       credentials: 'include',
       headers: {

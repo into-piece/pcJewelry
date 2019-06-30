@@ -79,7 +79,7 @@ class PackageInfo extends PureComponent {
 
     const {
       location, body = {}, packageSaveloading,
-      packageUpdateloading, packageDeleteloading, packageFreezeloading, packageListloading,
+      packageUpdateloading, packageDeleteloading, packageFreezeloading, packageListloading,params
     } = this.props;
 
 
@@ -113,8 +113,8 @@ class PackageInfo extends PureComponent {
     }
 
 
-    if (location && location.params) {
-      const data = location.params;
+    if (params) {
+      const data = {...params};
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
         if (data.customerId !== '')

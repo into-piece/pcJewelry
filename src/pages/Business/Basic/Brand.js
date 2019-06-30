@@ -472,7 +472,7 @@ class Brand extends Component {
       if(rowData.includes(record))
         rowData=[]
       if (rowSelectedData.includes(record)) {
-        console.log('includes ' + record.id);
+        // console.log('includes ' + record.id);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
         // rowData.splice(rowData.findIndex(item => item.id === id), 1);
       }
@@ -559,14 +559,14 @@ class Brand extends Component {
 
   selectChange = (record, index) => {
 
-    console.log('select brand  ' + Object.keys(record));
+    // console.log('select brand  ' + Object.keys(record));
 
 
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     console.log('onSelectChage');
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
 
 
     if (selectedRowKeys.length > 0) {
@@ -602,7 +602,7 @@ class Brand extends Component {
   };
 
   selectRowItem = () => {
-    console.log('select the item');
+    // console.log('select the item');
   };
 
 

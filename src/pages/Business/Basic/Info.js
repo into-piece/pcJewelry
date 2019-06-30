@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { Menu, Card, Row, Col, Icon, PageHeader ,Breadcrumb} from 'antd';
+import { Menu, Card, Row, Col, Icon, PageHeader, Breadcrumb } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Basic.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import SvgUtil from './../../../utils/SvgUtil';
+import Brand from './Brand';
+import RingNum from './RingNum';
+import Requested from './Requested';
+import SendWay from './SendWay';
+import Royalty from './Royalty';
+import Currency from './Currency';
 
 const { Item } = Menu;
 
@@ -42,18 +48,20 @@ class Info extends Component {
       mode: 'inline',
       menuMap,
       selectKey: menuMap[key] ? key : 'brand',
+      Component: <Brand/>,
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const { match, location } = props;
-    let selectKey = location.pathname.replace(`${match.path}/`, '');
-    selectKey = state.menuMap[selectKey] ? selectKey : 'brand';
-    if (selectKey !== state.selectKey) {
-      return { selectKey };
-    }
-    return null;
-  }
+
+  // static getDerivedStateFromProps(props, state) {
+  //   const { match, location } = props;
+  //   let selectKey = location.pathname.replace(`${match.path}/`, '');
+  //   selectKey = state.menuMap[selectKey] ? selectKey : 'brand';
+  //   if (selectKey !== state.selectKey) {
+  //     return { selectKey };
+  //   }
+  //   return null;
+  // }
 
   componentDidMount() {
     window.addEventListener('resize', this.resize);
@@ -91,10 +99,23 @@ class Info extends Component {
   };
 
   selectKey = ({ key }) => {
-    router.push(`/business/basic/${key}`);
+
+    // router.push(`/business/basic/${key}`);
+    let Component;
+    if (key === 'ring') Component = <RingNum/>;
+    else if (key === 'brand') Component = <Brand/>;
+    else if (key === 'requested') Component = <Requested/>;
+    else if (key === 'sendWay') Component = <SendWay/>;
+    else if (key === 'royalty') Component = <Royalty/>;
+    else if (key === 'currency') {
+      Component = <Currency/>;
+    }
     this.setState({
       selectKey: key,
+      Component,
     });
+    this.state.selectKey = key;
+    // console.log('selectKey', key);
   };
 
   resize = () => {
@@ -116,23 +137,25 @@ class Info extends Component {
   render() {
 
     const { children } = this.props;
-    const { mode, selectKey } = this.state;
+    const { mode, selectKey, Component } = this.state;
+
+    console.log('select key ', selectKey);
     return (
       <div
         className={styles.page}
       >
-<div className={styles.nav}>
-        <Breadcrumb>
-          <Breadcrumb.Item>主页</Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a href="">业务</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a href="/business/basic/base#/business/basic/base">基础数据</a>
-          </Breadcrumb.Item>
+        <div className={styles.nav}>
+          <Breadcrumb style={{display:'none'}}>
+            <Breadcrumb.Item>主页</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">业务</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/business/basic/base#/business/basic/base">基础数据</a>
+            </Breadcrumb.Item>
 
-        </Breadcrumb>
-</div>
+          </Breadcrumb>
+        </div>
         <div className={styles.center_content}>
           {/*lg={17} md={24}*/}
           <div className={styles.main}>
@@ -147,14 +170,13 @@ class Info extends Component {
               <Menu
                 mode={mode}
                 selectedKeys={[selectKey]}
-                size={'small'}
                 onClick={this.selectKey}
               >
                 {this.getmenu()}
               </Menu>
             </div>
             <div className={styles.right}>
-              {children}
+              {Component}
             </div>
           </div>
 

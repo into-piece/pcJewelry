@@ -42,6 +42,7 @@ let routes = [
           {
             "path": "/business/client",
             "name": "Client",
+            "icon": "user",
             "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
@@ -228,6 +229,7 @@ models: () => [
           {
             "path": "/business/basic",
             "name": "Basic",
+            "icon": "bulb",
             "component": _dvaDynamic({
   app: window.g_app,
 models: () => [
@@ -434,6 +436,7 @@ models: () => [
           {
             "path": "/business/product",
             "name": "Product",
+            "icon": "shopping",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Product__Product" */'../Business/Product/Product'),
@@ -448,6 +451,7 @@ models: () => [
           {
             "path": "/business/specimen",
             "name": "Specimen",
+            "icon": "form",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Specimen__Specimen" */'../Business/Specimen/Specimen'),
@@ -462,6 +466,7 @@ models: () => [
           {
             "path": "/business/quote",
             "name": "Quote",
+            "icon": "form",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Quote__Quote" */'../Business/Quote/Quote'),
@@ -476,6 +481,7 @@ models: () => [
           {
             "path": "/business/proforminvoice",
             "name": "Proform Invoice",
+            "icon": "form",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Proforminvoice__Proforminvoice" */'../Business/Proforminvoice/Proforminvoice'),
@@ -490,6 +496,7 @@ models: () => [
           {
             "path": "/business/deliver",
             "name": "Deliver",
+            "icon": "form",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Deliver__Deliver" */'../Business/Deliver/Deliver'),
@@ -504,6 +511,7 @@ models: () => [
           {
             "path": "/business/Receiving",
             "name": "Receiving",
+            "icon": "form",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Receiving__Receiving" */'../Business/Receiving/Receiving'),
@@ -518,6 +526,7 @@ models: () => [
           {
             "path": "/business/report",
             "name": "Report",
+            "icon": "form",
             "component": _dvaDynamic({
   
   component: () => import(/* webpackChunkName: "p__Business__Report__Report" */'../Business/Report/Report'),

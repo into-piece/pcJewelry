@@ -38,7 +38,7 @@ class Specimen extends Component {
     return (
       <div className={business.page}>
         <div className={business.nav}>
-          <Breadcrumb>
+          <Breadcrumb style={{display:'none'}}>
             <Breadcrumb.Item>主页</Breadcrumb.Item>
             <Breadcrumb.Item>
               <a href="">业务</a>

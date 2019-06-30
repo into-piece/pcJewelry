@@ -129,7 +129,7 @@ class Currency extends PureComponent {
 
       if (isAdd) {
 
-        console.log('data = '+Object.keys({ ...fieldsValue}))
+        // console.log('data = '+Object.keys({ ...fieldsValue}))
 
         dispatch({
           type: 'currency/addCurrency',
@@ -214,7 +214,7 @@ class Currency extends PureComponent {
     } else {
       if (update) {
 
-        console.log('rntCode=' + body.rtnCode);
+        // console.log('rntCode=' + body.rtnCode);
         if(body.rtnCode==='000000')
         {
           this.state.requestState='success';
@@ -223,7 +223,7 @@ class Currency extends PureComponent {
         }
 
         this.state.requestMes =body.rtnMsg;
-        console.log('result = '+this.state.requestMes)
+        // console.log('result = '+this.state.requestMes)
         this.state.update = false;
         this.state.done = true;
         this.state.visible = true;
@@ -253,7 +253,7 @@ class Currency extends PureComponent {
 
 
 
-    console.log('rntCode=' + body.rtnCode+",data = "+(body.data));
+    // console.log('rntCode=' + body.rtnCode+",data = "+(body.data));
 
     const rowSelection = {
       selectedRowKeys,
@@ -500,7 +500,7 @@ class Currency extends PureComponent {
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     console.log('onSelectChage');
-    console.log('select key = ' + Object.keys(selectedRows));
+    // console.log('select key = ' + Object.keys(selectedRows));
 
     this.setState({
       selectedRowKeys,
@@ -508,7 +508,7 @@ class Currency extends PureComponent {
   };
 
   selectRowItem = () => {
-    console.log('select the item');
+    // console.log('select the item');
   };
 
 

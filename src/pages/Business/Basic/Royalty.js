@@ -130,7 +130,7 @@ class Royalty extends PureComponent {
 
       if (isAdd) {
 
-        console.log('data = ' + Object.keys({ ...fieldsValue }));
+        // console.log('data = ' + Object.keys({ ...fieldsValue }));
 
         dispatch({
           type: 'royalty/addRoyalty',
@@ -216,7 +216,7 @@ class Royalty extends PureComponent {
     } else {
       if (update) {
 
-        console.log('rntCode=' + body.rtnCode);
+        // console.log('rntCode=' + body.rtnCode);
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
         } else {
@@ -224,7 +224,7 @@ class Royalty extends PureComponent {
         }
 
         this.state.requestMes = body.rtnMsg;
-        console.log('result = ' + this.state.requestMes);
+        // console.log('result = ' + this.state.requestMes);
         this.state.update = false;
         this.state.done = true;
         if (this.state.isUpdateFrom) {
@@ -446,7 +446,7 @@ class Royalty extends PureComponent {
       if(rowData.includes(record))
         rowData=[]
       if (rowSelectedData.includes(record)) {
-        console.log('includes ' + record.id);
+        // console.log('includes ' + record.id);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
@@ -564,7 +564,7 @@ class Royalty extends PureComponent {
   };
 
   selectRowItem = () => {
-    console.log('select the item');
+    // console.log('select the item');
   };
 
 

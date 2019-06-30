@@ -103,7 +103,7 @@ class Mark extends PureComponent {
 
     const {
       location, body = {}, markSaveloading,
-      markUpdateloading, markDeleteloading, markFreezeloading, markListloading,
+      markUpdateloading, markDeleteloading, markFreezeloading, markListloading,params
     } = this.props;
 
 
@@ -137,8 +137,8 @@ class Mark extends PureComponent {
     }
 
 
-    if (location && location.params) {
-      const data = location.params;
+    if ( params) {
+      const data = {...params};
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
         if (data.customerId !== '')
@@ -208,13 +208,7 @@ class Mark extends PureComponent {
             return;
           }
         }
-        // if (file.size) {
-        //   const isLt2M = file.size / 1024 / 1024 < 3;
-        //   if (!isLt2M) {
-        //     message.error('上传图片不能大于 3MB!');
-        //     return;
-        //   }
-        // }
+
 
         fileList = fileList.slice(-10);
         fileList = fileList.map(file => {
@@ -242,58 +236,13 @@ class Mark extends PureComponent {
               }));
             });
 
-            // const url = await getBase64_2(file.originFileObj);
-            // fileList.forEach(((v, i) => {
-            //
-            //   if (v.name === info.file.name) {
-            //     console.log('file name =  ', v.name, url);
-            //     fileList[i].url = url;
-            //     this.setState({
-            //       fileList,
-            //     });
-            //   }
-            //   ;
-            // }));
+
           }
 
           return file;
         });
 
 
-        // if (info.file.status === 'done') {
-        // getBase64(info.file.originFileObj, imageUrl => {
-        //     fileList.forEach(((v, i) => {
-        //       console.log("file name =  ",v.name,info.file)
-        //       if (v.name === info.file.name) {
-        //         fileList[i].url = imageUrl;
-        //         this.setState({
-        //           fileList,
-        //         });
-        //       }
-        //       ;
-        //
-        //     }));
-        //
-        //
-        //   },
-
-        // console.log("file info ",info,info.url)
-        // );
-
-        // const url = await getBase64_2(file.originFileObj);
-        // fileList.forEach(((v, i) => {
-        //
-        //   if (v.name === info.file.name) {
-        //     console.log('file name =  ', v.name, url);
-        //     fileList[i].url = url;
-        //     this.setState({
-        //       fileList,
-        //     });
-        //   }
-        //   ;
-        // }));
-        // console.log('file info ', fileList);
-        // }
         this.setState({ fileList });
 
       };
@@ -384,7 +333,7 @@ class Mark extends PureComponent {
               <Col lg={12} md={12} sm={12} xs={12}>
                 <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('endNo', {
-                    rules: [{ required: true, message: '请输入终客编号' }],
+                    rules: [{ message: '请输入终客编号' }],
                     initialValue: current.endNo,
                   })(
                     <Input placeholder="请输入"/>,
@@ -395,7 +344,7 @@ class Mark extends PureComponent {
 
                 <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('endShotName', {
-                    rules: [{ required: true, message: '请输入终客简称' }],
+                    rules: [{ message: '请输入终客简称' }],
                     initialValue: current.endShotName,
                   })(
                     <Input placeholder="请输入"/>,

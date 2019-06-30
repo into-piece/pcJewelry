@@ -117,7 +117,7 @@ class Requested extends PureComponent {
 
       if (isAdd) {
 
-        console.log('data = '+Object.keys({ ...fieldsValue}))
+        // console.log('data = '+Object.keys({ ...fieldsValue}))
 
         dispatch({
           type: 'sendway/addSendWay',
@@ -200,7 +200,7 @@ class Requested extends PureComponent {
     } else {
       if (update) {
 
-        console.log('rntCode=' + body.rtnCode);
+        // console.log('rntCode=' + body.rtnCode);
         if(body.rtnCode==='000000')
         {
           this.state.requestState='success';
@@ -246,7 +246,7 @@ class Requested extends PureComponent {
     }
 
 
-    console.log('rntCode=' + body.rtnCode+",data = "+(body.data));
+    // console.log('rntCode=' + body.rtnCode+",data = "+(body.data));
 
     const rowSelection = {
       selectedRowKeys,
@@ -445,7 +445,7 @@ class Requested extends PureComponent {
       if(rowData.includes(record))
         rowData=[]
       if (rowSelectedData.includes(record)) {
-        console.log('includes ' + record.id);
+        // console.log('includes ' + record.id);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {

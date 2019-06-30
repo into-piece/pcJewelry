@@ -117,7 +117,7 @@ class Requested extends PureComponent {
 
       if (isAdd) {
 
-        console.log('data = ' + Object.keys({ ...fieldsValue }));
+        // console.log('data = ' + Object.keys({ ...fieldsValue }));
 
         dispatch({
           type: 'requested/addRequested',
@@ -236,7 +236,7 @@ class Requested extends PureComponent {
     }
 
 
-    console.log('rntCode=' + body.rtnCode + ',data = ' + (body.data));
+    console.log('rntCode=' + body.rtnCode );
 
     const rowSelection = {
       selectedRowKeys,
@@ -463,7 +463,7 @@ class Requested extends PureComponent {
       if(rowData.includes(record))
         rowData=[]
       if (rowSelectedData.includes(record)) {
-        console.log('includes ' + record.id);
+        // console.log('includes ' + record.id);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
@@ -514,7 +514,7 @@ class Requested extends PureComponent {
 
   selectChange = (record, index) => {
 
-    console.log('changle record  ' + Object.keys(record));
+    // console.log('changle record  ' + Object.keys(record));
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -551,7 +551,7 @@ class Requested extends PureComponent {
   };
 
   selectRowItem = () => {
-    console.log('select the item');
+    // console.log('select the item');
   };
 
 

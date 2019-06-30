@@ -229,7 +229,7 @@ class RingNum extends PureComponent {
         params.sizeCode = fieldsValue.sizeCode;
         params.ringAroundStId = showItem.id,
 
-          console.log('params data = ' + Object.keys(params));
+          // console.log('params data = ' + Object.keys(params));
 
         dispatch({
           type: 'ringnum/addSonRingNum',
@@ -359,7 +359,7 @@ class RingNum extends PureComponent {
 
     this.state.isSonLoading = addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2;
 
-    console.log('addsonloading =' + addsonloading + ',deletesonloading=' + deletesonloading + ',upatesonloading=' + upatesonloading + ',sonfreezing=' + sonfreezing + ',istLoading2=' + istLoading2);
+    // console.log('addsonloading =' + addsonloading + ',deletesonloading=' + deletesonloading + ',upatesonloading=' + upatesonloading + ',sonfreezing=' + sonfreezing + ',istLoading2=' + istLoading2);
 
     if (addsonloading || deletesonloading || upatesonloading || sonfreezing) {
       this.state.updateNumber = true;
@@ -382,7 +382,7 @@ class RingNum extends PureComponent {
         if (this.state.isUpdateNumberFrom) {
           this.state.isUpdateNumberFrom = false;
           this.state.showNumberItem = { ...currentNumber };
-          console.log('number update ' + this.state.showNumberItem);
+          // console.log('number update ' + this.state.showNumberItem);
         }
       }
 
@@ -434,7 +434,7 @@ class RingNum extends PureComponent {
     }
 
 
-    console.log('rntCode2=' + body2.rtnCode + ',data2 = ' + (this.state.data2));
+    // console.log('rntCode2=' + body2.rtnCode + ',data2 = ' + (this.state.data2));
 
     const rowSelection = {
       selectedRowKeys: standardSelectedRowKeys,
@@ -515,7 +515,7 @@ class RingNum extends PureComponent {
       };
 
 
-    console.log('modalType ' + modalType);
+    // console.log('modalType ' + modalType);
 
     return (
       <GridContent>
@@ -1086,7 +1086,7 @@ class RingNum extends PureComponent {
   };
 
   selectRowItem = () => {
-    console.log('select the item');
+    // console.log('select the item');
   };
 
   getRenderSonitem = (item) => {
