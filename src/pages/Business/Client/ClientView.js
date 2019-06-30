@@ -128,6 +128,31 @@ const contactsColumn = [
     dataIndex: 'contacts',
     key: 'contacts',
   },
+  {
+    title: '手机',
+    dataIndex: 'tel',
+    key: 'tel',
+  },
+  {
+    title: 'tel',
+    dataIndex: 'phone',
+    key: 'phone',
+  },
+  {
+    title: 'email',
+    dataIndex: 'email',
+    key: 'email',
+  },
+  {
+    title: 'qq',
+    dataIndex: 'qq',
+    key: 'qq',
+  },
+  {
+    title: 'wechat',
+    dataIndex: 'wechat',
+    key: 'wechat',
+  },
 ];
 
 const operationTabList = [
@@ -219,6 +244,7 @@ class ClientView extends PureComponent {
       maintainerAddVisible: false,
       contactsAddVisible: false,
       contactsTableContent: [],
+      contactsTableBody: {},
       Component: '',
       searchCustomerParams: {},
     };
@@ -286,10 +312,10 @@ class ClientView extends PureComponent {
 
 
     let {
-      selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update,
-      pageCurrent, customerPageCurrent, customerPageSize, customerPageTotal, fristLoad, selectType, selectCustomerItem,contactsAddVisible,contactsLoading,
+      selectTitle, downTableColumn, typeTableContent, downTableContent, rightlg, leftlg, visible, current = {}, update, contactsTableBody,
+      pageCurrent, customerPageCurrent, customerPageSize, customerPageTotal, fristLoad, selectType, selectCustomerItem, contactsAddVisible, contactsLoading,
       selectedRowKeys, customerSelectedRowKeys, maintainsLoading, maintainTableContent, maintainerAddVisible, drawVisible, contactsTableContent, contactsSelectedRowKeys,
-     } = this.state;
+    } = this.state;
 
     const rowSelection = {
       selectedRowKeys,
@@ -315,6 +341,8 @@ class ClientView extends PureComponent {
     const rowContactsSelection = {
       selectedRowKeys: contactsSelectedRowKeys,
       type: 'checkbox',
+      onChange: this.selectContactsChange,
+      onSelect: this.selectChange,
     };
 
     let { children } = this.props;
@@ -498,7 +526,7 @@ class ClientView extends PureComponent {
                     rules: [{ required: true, message: '请输入姓名' }],
                     // initialValue: current.customerNo,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <Input type="string" placeholder="请输入"/>,
                   )}
                 </FormItem>
               </Col>
@@ -509,7 +537,7 @@ class ClientView extends PureComponent {
                     rules: [{ required: true, message: '请输入手机' }],
                     // initialValue: current.shotName,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <Input type="integer" placeholder="请输入"/>,
                   )}
                 </FormItem>
               </Col>
@@ -520,7 +548,7 @@ class ClientView extends PureComponent {
                     rules: [{ message: '请输入电话' }],
                     // initialValue: current.customerChannels,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <Input type="number" placeholder="请输入"/>,
                   )}
                 </FormItem>
               </Col>
@@ -530,11 +558,11 @@ class ClientView extends PureComponent {
             <Row gutter={2} justify="start">
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="email" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('contacts', {
-                    rules: [{   message: '请输入姓名' }],
+                  {getFieldDecorator('email', {
+                    rules: [{ message: '请输入姓名' }],
                     // initialValue: current.customerNo,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <Input type="email" placeholder="请输入"/>,
                   )}
                 </FormItem>
               </Col>
@@ -542,18 +570,18 @@ class ClientView extends PureComponent {
 
                 <FormItem label="QQ" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('qq', {
-                    rules: [{   message: '请输入手机' }],
+                    rules: [{ message: '请输入QQ' }],
                     // initialValue: current.shotName,
                   })(
-                    <Input placeholder="请输入"/>,
+                    <Input type="number" placeholder="请输入"/>,
                   )}
                 </FormItem>
               </Col>
 
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="wechat" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('phone', {
-                    rules: [{ message: '请输入电话' }],
+                  {getFieldDecorator('wechat', {
+                    rules: [{ message: '请输入微信' }],
                     // initialValue: current.customerChannels,
                   })(
                     <Input placeholder="请输入"/>,
@@ -568,6 +596,7 @@ class ClientView extends PureComponent {
       );
 
     };
+
 
 
     return (
@@ -677,16 +706,26 @@ class ClientView extends PureComponent {
                     columns={maintainsColumn}
                   />
 
-                  <Table
+                  {/*<Table*/}
+                  {/*style={{ display: selectType === 'contacts' ? '' : 'none' }}*/}
+                  {/*loading={contactsLoading}*/}
+                  {/*dataSource={contactsTableContent}*/}
+                  {/*size="middle"*/}
+                  {/*rowKey={record =>*/}
+                  {/*record.id*/}
+                  {/*}*/}
+                  {/*rowSelection={rowContactsSelection}*/}
+                  {/*rowClassName={this.onSelectRowClass}*/}
+                  {/*columns={contactsColumn}*/}
+                  {/*/>*/}
+
+                  <JewelryTable
                     style={{ display: selectType === 'contacts' ? '' : 'none' }}
-                    loading={contactsLoading}
-                    dataSource={contactsTableContent}
-                    size="middle"
-                    rowKey={record =>
-                      record.id
-                    }
-                    rowSelection={rowContactsSelection}
-                    rowClassName={this.onSelectRowClass}
+                    onSelectItem={(item) => {
+                      console.log('select item ', item);
+                    }}
+                    isLoading={contactsLoading}
+                    body={contactsTableBody}
                     columns={contactsColumn}
                   />
 
@@ -1096,7 +1135,7 @@ class ClientView extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) console.log(err);
 
-      this.saveMaintainerList({ ...fieldsValue });
+      this.saveContactsList({ ...fieldsValue });
 
       this.setState({
         contactsAddVisible: false,
@@ -1173,7 +1212,7 @@ class ClientView extends PureComponent {
     this.setState({
       visible: false,
       maintainerAddVisible: false,
-      saveContactsList:false
+      saveContactsList: false,
     });
   };
 
@@ -1383,6 +1422,13 @@ class ClientView extends PureComponent {
     this.startShowTab();
 
   };
+  selectContactsChange = (selectedRowKeys, selectedRows) => {
+    // console.log('contactsSelectedRowKeys');
+    this.setState({
+      contactsSelectedRowKeys: selectedRowKeys,
+    });
+
+  };
 
 
   loadCustomerList = typeId => {
@@ -1550,7 +1596,7 @@ class ClientView extends PureComponent {
       selectType: 'contacts',
       contactsLoading: true,
     });
-    this.loadmaintainerList();
+    this.loadContactsList();
   };
 
 
@@ -1685,6 +1731,53 @@ class ClientView extends PureComponent {
     });
     // }
   };
+  loadContactsList = () => {
+    const { selectCustomerItem } = this.state;
+    const _this = this;
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      _this.setState({
+        contactsLoading: false,
+      });
+      return;
+    }
+
+
+    let params = { customerId: selectCustomerItem.id };
+
+    fetch('/server/business.customer/business-contact-information/listContact', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const body = d.body;
+        if (body && body.records) {
+          if (body.records.length > 0) {
+            _this.setState({
+              contactsTableContent: body.records,
+              contactsTableBody: body,
+              contactsLoading: false,
+            });
+            return;
+          }
+        }
+        _this.setState({
+          contactsLoading: false,
+        });
+        // console.log('result ', d);
+      }).catch(function(ex) {
+      // console.log('parsing failed', ex);
+      message.error('加载失败！');
+      _this.setState({
+        contactsLoading: false,
+      });
+    });
+    // }
+  };
 
   saveMaintainerList = (item) => {
     const { selectCustomerItem } = this.state;
@@ -1727,7 +1820,7 @@ class ClientView extends PureComponent {
         _this.setState({
           maintainsLoading: false,
         });
-        console.log('result ', d);
+        // console.log('result ', d);
       }).catch(function(ex) {
       message.error('保存数据失败！ 请重试');
       _this.setState({
@@ -1740,21 +1833,22 @@ class ClientView extends PureComponent {
   saveContactsList = (item) => {
     const { selectCustomerItem } = this.state;
     const _this = this;
-    console.log('saveMaintainerList （', selectCustomerItem);
+    console.log('saveContactsList （', selectCustomerItem);
     if (!selectCustomerItem || selectCustomerItem === '') {
       this.setState({
-        maintainsLoading: false,
+        contactsLoading: false,
       });
       return;
     }
 
+    let params = item;
+    params.customerId = selectCustomerItem.id;
+    // let params = {
+    //   customerId: selectCustomerItem.id,
+    //   salesmanId: item.salesmanId,
+    // };
 
-    let params = {
-      customerId: selectCustomerItem.id,
-      salesmanId: item.salesmanId,
-    };
-
-    fetch('/server/business/co-maintainer/saveCoMaintainer', {
+    fetch('/server/business.customer/business-contact-information/saveOrUpdate', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1769,20 +1863,19 @@ class ClientView extends PureComponent {
         if (!head)
           message.error('保存失败！');
         else {
-          if (head.rtnCode === '000000')
 
-            message.success(head.rtnMes);
-          else
-            message.success(head.rtnMes);
+          message.success(head.rtnMes);
         }
         _this.setState({
-          maintainsLoading: false,
+          contactsLoading: false,
         });
-        console.log('result ', d);
+
+        this.loadmaintainerList();
+        // console.log('result ', d);
       }).catch(function(ex) {
       message.error('保存数据失败！ 请重试');
       _this.setState({
-        maintainsLoading: false,
+        contactsLoading: false,
       });
     });
     // }

@@ -121,13 +121,13 @@ class ClientInfo extends PureComponent {
 
     const { visible, current = {}, update,customerDelete  } = this.state;
 
-    console.log("是否请求成功!",isSuccess)
+    // console.log("是否请求成功!",isSuccess)
 
     let content = '';
     // if (location && location.params) {
     if (params) {
       let data = {...params};
-      console.log(" render data is ",data)
+      // console.log(" render data is ",data)
       content = data.content;
       // this.state.showItem = { ...content };
 

@@ -39,13 +39,13 @@ class JewelryTable extends Component {
       onSelect: this.selectChange,
     };
 
-
+    console.log("contactsTableBody" , body)
     return (
       <Table
         {...this.props}
         size="middle"
         loading={isLoading}
-        dataSource={body.data}
+        dataSource={body.records}
         rowSelection={rowSelection}
         pagination={paginationProps}
         rowClassName={this.onSelectRowClass}
