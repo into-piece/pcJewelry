@@ -34,7 +34,7 @@ const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
 
-
+import TerminalSelected from './components/TerminalSelected';
 @connect(({ loading, packageinfo }) => {
   return {
     body: packageinfo.body,
@@ -71,6 +71,7 @@ class PackageInfo extends PureComponent {
       selectedItem: '',
       fileList: [],
       cropperVisible: false,
+      terminalShotName:'',
 
     };
   }
@@ -139,11 +140,7 @@ class PackageInfo extends PureComponent {
     }
 
 
-    const getBase64 = (img, callback) => {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => callback(reader.result));
-      reader.readAsDataURL(img);
-    };
+
 
 
     const modalFooter = this.state.done
@@ -151,182 +148,10 @@ class PackageInfo extends PureComponent {
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
-    const modalCropperFooter = this.state.done
-      ? { footer: null, onCancel: this.handleCropDone }
-      : { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
 
 
 
 
-    const getModalContent = () => {
-
-      const openCutImageModal = () => {
-        const crop = () => {
-          // image in dataUrl
-          const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
-          // console.log("crop image "+cropi);
-          this.setState({
-            cropImage: cropi,
-          });
-
-        };
-
-        const { cropImage, uploadFile } = this.state;
-
-        return (
-          <div className={styles.cropper_view}>
-            <Cropper
-              ref="cropper"
-              src={uploadFile}
-              className={styles.cropper}
-              style={{ height: 400 }}
-              preview='.cropper-preview'
-              viewMode={1} //定义cropper的视图模式
-              zoomable={true} //是否允许放大图像
-              guides={true}
-              background={true}
-              crop={crop}
-            />
-            <img className={styles.cropper_preview} src={cropImage}/>
-          </div>
-        );
-      };
-      const handleChange = info => {
-
-
-        let fileList = [...info.fileList];
-
-        const file = info.file;
-
-        if (file.type) {
-          const isJPG = (file.type.indexOf('image') != -1);
-          if (!isJPG) {
-            message.error('只能上传图片格式的文件');
-            return;
-          }
-        }
-
-        fileList = fileList.slice(-10);
-        fileList = fileList.map(file => {
-          // console.log('image is the ', file);
-          if (file.response) {
-            file.url = file.response.url;
-          }
-          if (!file.url) {
-            getBase64(file.originFileObj, imageUrl => {
-
-              fileList.forEach(((v, i) => {
-
-                if (v.uid === info.file.uid) {
-                  fileList[i].url = imageUrl;
-                  // console.log("change file name =  ", v.name, info.file)
-                  this.setState({
-                    fileList,
-                    cropperVisible: true,
-                    uploadFile: imageUrl,
-                    uploadFileUid: v.uid,
-                  });
-                }
-                ;
-              }));
-              return file;
-            });
-          }
-          return file
-        });
-        this.setState({ fileList });
-      };
-
-      const { form: { getFieldDecorator } } = this.props;
-      const { cropperVisible } = this.state;
-
-      return (
-        <div className={clientStyle.list_info}>
-          <span className={clientStyle.sun_title_info}>包装</span>
-          <Divider className={clientStyle.divder}/>
-          <Form
-            accept="image/*"
-            layout="inline"
-            size={'small'}
-            className={styles.from_content}
-            labelAlign="left"
-            onSubmit={this.handleSubmit}>
-
-            <Row gutter={2} justify="start">
-              <Col lg={24} md={24} sm={24} xs={24}>
-
-                <FormItem label="包装说明图片" {...this.formLayout} className={styles.from_content_col}>
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    beforeUpload={() => {
-                      return false;
-                    }}
-                    fileList={this.state.fileList ? this.state.fileList : []}
-                    onChange={handleChange}
-                  >
-                    <div>
-                      <Icon type={this.state.loading ? 'loading' : 'plus'}/>
-                      <div className="ant-upload-text">上传图片</div>
-                    </div>
-                  </Upload>,
-                </FormItem>
-              </Col>
-            </Row>
-
-            <Row gutter={2} justify="start">
-              <Col lg={12} md={12} sm={12} xs={12}>
-                <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('endNo', {
-                    rules: [{ message: '请输入终客编号' }],
-                    initialValue: current.endNo,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col lg={12} md={12} sm={12} xs={12}>
-
-                <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('endShotName', {
-                    rules: [{ required: true, message: '请输入终客简称' }],
-                    initialValue: current.endShotName,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-
-            <Row gutter={2}>
-              <Col lg={12} md={12} sm={12} xs={12}>
-                <FormItem label="包装说明" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('packExplain', {
-                    rules: [{ required: true, message: '请输入包装说明' }],
-                    initialValue: current.packExplain,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-
-
-            </Row>
-
-          </Form>
-          <Modal
-            {...modalCropperFooter}
-            width={740}
-            destroyOnClose
-            visible={cropperVisible}
-          >
-            {openCutImageModal()}
-          </Modal>
-
-        </div>)
-        ;
-    };
 
 
     return (<div className={styles.content}>
@@ -382,11 +207,198 @@ class PackageInfo extends PureComponent {
         visible={visible}
         {...modalFooter}
       >
-        {getModalContent()}
+        {this.getModalContent()}
       </Modal>
     </div>);
   };
 
+
+
+    getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
+    getModalContent = () => {
+
+      const modalCropperFooter = this.state.done
+        ? { footer: null, onCancel: this.handleCropDone }
+        : { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
+
+    const openCutImageModal = () => {
+      const crop = () => {
+        // image in dataUrl
+        const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
+        // console.log("crop image "+cropi);
+        this.setState({
+          cropImage: cropi,
+        });
+
+      };
+
+      const { cropImage, uploadFile ,  } = this.state;
+
+      return (
+        <div className={styles.cropper_view}>
+          <Cropper
+            ref="cropper"
+            src={uploadFile}
+            className={styles.cropper}
+            style={{ height: 400 }}
+            preview='.cropper-preview'
+            viewMode={1} //定义cropper的视图模式
+            zoomable={true} //是否允许放大图像
+            guides={true}
+            background={true}
+            crop={crop}
+          />
+          <img className={styles.cropper_preview} src={cropImage}/>
+        </div>
+      );
+    };
+    const handleChange = info => {
+
+
+      let fileList = [...info.fileList];
+
+      const file = info.file;
+
+      if (file.type) {
+        const isJPG = (file.type.indexOf('image') != -1);
+        if (!isJPG) {
+          message.error('只能上传图片格式的文件');
+          return;
+        }
+      }
+
+      fileList = fileList.slice(-10);
+      fileList = fileList.map(file => {
+        // console.log('image is the ', file);
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        if (!file.url) {
+          this.getBase64(file.originFileObj, imageUrl => {
+
+            fileList.forEach(((v, i) => {
+
+              if (v.uid === info.file.uid) {
+                fileList[i].url = imageUrl;
+                // console.log("change file name =  ", v.name, info.file)
+                this.setState({
+                  fileList,
+                  cropperVisible: true,
+                  uploadFile: imageUrl,
+                  uploadFileUid: v.uid,
+                });
+              }
+              ;
+            }));
+            return file;
+          });
+        }
+        return file
+      });
+      this.setState({ fileList });
+    };
+
+    const { form: { getFieldDecorator } } = this.props;
+    const { cropperVisible ,terminalShotName,current={}} = this.state;
+
+    return (
+      <div className={clientStyle.list_info}>
+        <span className={clientStyle.sun_title_info}>包装</span>
+        <Divider className={clientStyle.divder}/>
+        <Form
+          accept="image/*"
+          layout="inline"
+          size={'small'}
+          className={styles.from_content}
+          labelAlign="left"
+          onSubmit={this.handleSubmit}>
+
+          <Row gutter={2} justify="start">
+            <Col lg={24} md={24} sm={24} xs={24}>
+
+              <FormItem label="包装说明图片" {...this.formLayout} className={styles.from_content_col}>
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  beforeUpload={() => {
+                    return false;
+                  }}
+                  fileList={this.state.fileList ? this.state.fileList : []}
+                  onChange={handleChange}
+                >
+                  <div>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <div className="ant-upload-text">上传图片</div>
+                  </div>
+                </Upload>,
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={2} justify="start">
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('endNo', {
+                  rules: [{ message: '请输入终客编号' }],
+                  initialValue: current.endNo,
+                })(
+                  <TerminalSelected content={current.endNo} onSelectEndName={(file) => {
+                    this.setState({
+                      terminalShotName:file
+                    })
+                  }}/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('endShotName', {
+                  rules: [{ required: true, message: '请输入终客简称' }],
+                  initialValue: terminalShotName?terminalShotName:current.endShotName,
+                })(
+                  <div>
+                    <Input placeholder="请输入" value={terminalShotName?terminalShotName:current.endShotName}></Input>,
+                  </div>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="包装说明" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('packExplain', {
+                  rules: [{ required: true, message: '请输入包装说明' }],
+                  initialValue: current.packExplain,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+
+        </Form>
+        <Modal
+          {...modalCropperFooter}
+          width={740}
+          destroyOnClose
+          visible={cropperVisible}
+        >
+          {openCutImageModal()}
+        </Modal>
+
+      </div>)
+      ;
+  };
 
 
   handleCropSubmit = () => {

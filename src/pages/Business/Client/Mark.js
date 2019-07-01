@@ -30,6 +30,8 @@ import Cropper from 'react-cropper';
 // import   '../../../../node_modules/cropperjs/dist/cropper.css'; //需要找到相对的 node_modules 路径，必须引入该css文件！
 import 'cropperjs/dist/cropper.css';
 
+import TerminalSelected from './components/TerminalSelected';
+
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -83,6 +85,10 @@ class Mark extends PureComponent {
     },
   };
 
+
+
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -103,8 +109,13 @@ class Mark extends PureComponent {
 
     const {
       location, body = {}, markSaveloading,
-      markUpdateloading, markDeleteloading, markFreezeloading, markListloading,params
+      markUpdateloading, markDeleteloading, markFreezeloading, markListloading, params,
     } = this.props;
+
+
+   const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+
 
 
     const { selectedItem, visible, current = {}, update, fileList } = this.state;
@@ -137,8 +148,8 @@ class Mark extends PureComponent {
     }
 
 
-    if ( params) {
-      const data = {...params};
+    if (params) {
+      const data = { ...params };
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
         if (data.customerId !== '')
@@ -161,263 +172,6 @@ class Mark extends PureComponent {
       this.state.isEdit = true;
 
     }
-
-
-    const getBase64 = (img, callback) => {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => callback(reader.result));
-      reader.readAsDataURL(img);
-    };
-
-
-    const getBase64_2 = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    };
-
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-
-    const modalCropperFooter = { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
-
-    const getModalContent = () => {
-
-
-      const handleChange = info => {
-
-
-        let fileList = [...info.fileList];
-
-
-        // const imageUrl = this.state.imageUrl;
-
-        const file = info.file;
-
-        console.log('handleChange = ', file);
-
-        if (file.type) {
-          const isJPG = (file.type.indexOf('image') != -1);
-          if (!isJPG) {
-            message.error('只能上传图片格式的文件');
-            return;
-          }
-        }
-
-
-        fileList = fileList.slice(-10);
-        fileList = fileList.map(file => {
-          // console.log('image is the ', file);
-          if (file.response) {
-            file.url = file.response.url;
-          }
-          if (!file.url) {
-            getBase64(file.originFileObj, imageUrl => {
-
-              fileList.forEach(((v, i) => {
-
-                if (v.uid === info.file.uid) {
-                  fileList[i].url = imageUrl;
-                  // console.log("change file name =  ", v.name, info.file)
-                  this.setState({
-                    fileList,
-                    cropperVisible: true,
-                    uploadFile: imageUrl,
-                    uploadFileUid: v.uid,
-                  });
-                }
-                ;
-
-              }));
-            });
-
-
-          }
-
-          return file;
-        });
-
-
-        this.setState({ fileList });
-
-      };
-      const openCutImageModal = () => {
-        const crop = () => {
-          // image in dataUrl
-          const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
-          // console.log("crop image "+cropi);
-          this.setState({
-            cropImage: cropi,
-          });
-
-        };
-
-        const { cropImage, uploadFile } = this.state;
-
-        return (
-          <div className={styles.cropper_view}>
-            <Cropper
-              ref="cropper"
-              src={uploadFile}
-              className={styles.cropper}
-              style={{ height: 400 }}
-              preview='.cropper-preview'
-              viewMode={1} //定义cropper的视图模式
-              zoomable={true} //是否允许放大图像
-              guides={true}
-              background={true}
-              crop={crop}
-            />
-            <img className={styles.cropper_preview} src={cropImage}/>
-          </div>
-        );
-      };
-      const { form: { getFieldDecorator } } = this.props;
-
-      const { cropperVisible } = this.state;
-
-      return (
-
-        <div className={clientStyle.list_info}>
-          <span className={clientStyle.sun_title_info}>字印</span>
-          <Divider className={clientStyle.divder}/>
-          <Form
-            layout="inline"
-            size={'small'}
-            className={styles.from_content}
-            labelAlign="left"
-            onSubmit={this.handleSubmit}>
-
-
-            <Row gutter={2}>
-
-              <Col lg={24} md={24} sm={24} xs={24}>
-
-                <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
-
-                  <Upload
-                    accept="image/*"
-                    name="avatar"
-                    beforeUpload={file => {
-                      // await getBase64(file.originFileObj,async imageUrl =>{
-                      //   file.url = imageUrl;
-                      //   console.log('getBase64>', file);
-                      // })
-                      console.log('beforeUpload>', file);
-                      return false;
-                    }}
-                    // customRequest={this.customRequest}
-                    listType="picture-card"
-                    fileList={this.state.fileList ? this.state.fileList : []}
-                    onChange={handleChange}
-                  >
-                    {/*{imageUrl?'':uploadButton}*/}
-                    <div>
-                      <Icon type={this.state.loading ? 'loading' : 'plus'}/>
-                      <div className="ant-upload-text">上传图片</div>
-                    </div>
-                  </Upload>,
-
-                </FormItem>
-              </Col>
-
-
-            </Row>
-
-            <Row gutter={2} justify="start">
-              <Col lg={12} md={12} sm={12} xs={12}>
-                <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('endNo', {
-                    rules: [{ message: '请输入终客编号' }],
-                    initialValue: current.endNo,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col lg={12} md={12} sm={12} xs={12}>
-
-                <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('endShotName', {
-                    rules: [{ message: '请输入终客简称' }],
-                    initialValue: current.endShotName,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-
-            <Row gutter={2}>
-              <Col lg={12} md={12} sm={12} xs={12}>
-                <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('zhName', {
-                    rules: [{ required: true, message: '请输入中文名' }],
-                    initialValue: current.zhName,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col lg={12} md={12} sm={12} xs={12}>
-
-                <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('enName', {
-                    rules: [{ required: true, message: '请输入英文名' }],
-                    initialValue: current.enName,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-
-
-            </Row>
-            <Row gutter={2}>
-              <Col lg={12} md={12} sm={12} xs={12}>
-                <FormItem label="字印价" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('markingPrice', {
-                    rules: [{ message: '字印价' }],
-                    initialValue: current.markingPrice,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col lg={12} md={12} sm={12} xs={12}>
-
-                <FormItem label="字印说明" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('markingExplain', {
-                    rules: [{ message: '请输入字印说明' }],
-                    initialValue: current.markingExplain,
-                  })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </FormItem>
-              </Col>
-
-
-            </Row>
-
-
-          </Form>
-          <Modal
-            {...modalCropperFooter}
-            width={740}
-            destroyOnClose
-            visible={cropperVisible}
-          >
-            {openCutImageModal()}
-          </Modal>
-        </div>
-
-      );
-    };
 
 
     return (<div className={styles.content}>
@@ -472,7 +226,7 @@ class Mark extends PureComponent {
         visible={visible}
         {...modalFooter}
       >
-        {getModalContent()}
+        {this.getModalContent()}
       </Modal>
     </div>);
   }
@@ -484,11 +238,12 @@ class Mark extends PureComponent {
 
     fileList.forEach(((v, i) => {
       if (v.uid === uploadFileUid) {
-        fileList[i].name = 'crop'+Date.parse(new Date())+fileList[i].name;
+        fileList[i].name = 'crop' + Date.parse(new Date()) + fileList[i].name;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
-      };
+      }
+      ;
     }));
 
     this.setState({
@@ -502,8 +257,8 @@ class Mark extends PureComponent {
     console.log('handleCropCancle');
     this.setState({
       cropperVisible: false,
-      cropImage:'',
-      uploadFileUid:''
+      cropImage: '',
+      uploadFileUid: '',
 
     });
 
@@ -515,8 +270,8 @@ class Mark extends PureComponent {
     console.log('handleCropDone');
     this.setState({
       cropperVisible: false,
-      cropImage:'',
-      uploadFileUid:''
+      cropImage: '',
+      uploadFileUid: '',
     });
   };
 
@@ -756,6 +511,269 @@ class Mark extends PureComponent {
 
 
     });
+  };
+
+
+  getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
+
+  getBase64_2 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+
+  getModalContent = () => {
+
+    const modalCropperFooter = { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
+    const handleChange = info => {
+
+
+      const {current } = this.state;
+
+      let fileList = [...info.fileList];
+
+
+      // const imageUrl = this.state.imageUrl;
+
+      const file = info.file;
+
+      console.log('handleChange = ', file);
+
+      if (file.type) {
+        const isJPG = (file.type.indexOf('image') != -1);
+        if (!isJPG) {
+          message.error('只能上传图片格式的文件');
+          return;
+        }
+      }
+
+
+      fileList = fileList.slice(-10);
+      fileList = fileList.map(file => {
+        // console.log('image is the ', file);
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        if (!file.url) {
+          this.getBase64(file.originFileObj, imageUrl => {
+
+            fileList.forEach(((v, i) => {
+
+              if (v.uid === info.file.uid) {
+                fileList[i].url = imageUrl;
+                // console.log("change file name =  ", v.name, info.file)
+                this.setState({
+                  fileList,
+                  cropperVisible: true,
+                  uploadFile: imageUrl,
+                  uploadFileUid: v.uid,
+                });
+              }
+              ;
+
+            }));
+          });
+
+
+        }
+
+        return file;
+      });
+
+
+      this.setState({ fileList });
+
+    };
+    const openCutImageModal = () => {
+      const crop = () => {
+        // image in dataUrl
+        const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
+        // console.log("crop image "+cropi);
+        this.setState({
+          cropImage: cropi,
+        });
+
+      };
+
+      const { cropImage, uploadFile } = this.state;
+
+      return (
+        <div className={styles.cropper_view}>
+          <Cropper
+            ref="cropper"
+            src={uploadFile}
+            className={styles.cropper}
+            style={{ height: 400 }}
+            preview='.cropper-preview'
+            viewMode={1} //定义cropper的视图模式
+            zoomable={true} //是否允许放大图像
+            guides={true}
+            background={true}
+            crop={crop}
+          />
+          <img className={styles.cropper_preview} src={cropImage}/>
+        </div>
+      );
+    };
+    const { form: { getFieldDecorator , setFieldsValue } } = this.props;
+
+    const { cropperVisible ,current={},terminalShotName} = this.state;
+    // if(terminalShotName&&terminalShotName!=='')
+    // setFieldsValue({"endShotName":terminalShotName})
+    // setFieldsValue({'endShotName':terminalShotName})
+
+    return (
+
+      <div className={clientStyle.list_info}>
+        <span className={clientStyle.sun_title_info}>字印</span>
+        <Divider className={clientStyle.divder}/>
+        <Form
+          layout="inline"
+          size={'small'}
+          className={styles.from_content}
+          labelAlign="left"
+          onSubmit={this.handleSubmit}>
+
+
+          <Row gutter={2}>
+
+            <Col lg={24} md={24} sm={24} xs={24}>
+
+              <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
+
+                <Upload
+                  accept="image/*"
+                  name="avatar"
+                  beforeUpload={file => {
+                    // await getBase64(file.originFileObj,async imageUrl =>{
+                    //   file.url = imageUrl;
+                    //   console.log('getBase64>', file);
+                    // })
+                    // console.log('beforeUpload>', file);
+                    return false;
+                  }}
+                  // customRequest={this.customRequest}
+                  listType="picture-card"
+                  fileList={this.state.fileList ? this.state.fileList : []}
+                  onChange={handleChange}
+                >
+                  {/*{imageUrl?'':uploadButton}*/}
+                  <div>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <div className="ant-upload-text">上传图片</div>
+                  </div>
+                </Upload>,
+
+              </FormItem>
+            </Col>
+
+
+          </Row>
+
+          <Row gutter={2} justify="start">
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('endNo', {
+                  rules: [{ message: '请输入终客编号' }],
+                  initialValue: current.endNo,
+                })(
+                  <TerminalSelected content={current.endNo} onSelectEndName={(file) => {
+                    console.log('end name ', file);
+                      this.setState({
+                        terminalShotName:file
+                      })
+                  }}/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('endShotName', {
+                  rules: [{ message: '请输入终客简称' }],
+                  initialValue: terminalShotName?terminalShotName:current.endShotName,
+                })(
+                  <div>
+                  <Input placeholder="请输入" value={terminalShotName?terminalShotName:current.endShotName}></Input>,
+                  </div>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('zhName', {
+                  rules: [{ required: true, message: '请输入中文名' }],
+                  initialValue: current.zhName,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('enName', {
+                  rules: [{ required: true, message: '请输入英文名' }],
+                  initialValue: current.enName,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+          <Row gutter={2}>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem label="字印价" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('markingPrice', {
+                  rules: [{ message: '字印价' }],
+                  initialValue: current.markingPrice,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={12} md={12} sm={12} xs={12}>
+
+              <FormItem label="字印说明" {...this.formLayout} className={styles.from_content_col}>
+                {getFieldDecorator('markingExplain', {
+                  rules: [{ message: '请输入字印说明' }],
+                  initialValue: current.markingExplain,
+                })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+
+
+        </Form>
+        <Modal
+          {...modalCropperFooter}
+          width={740}
+          destroyOnClose
+          visible={cropperVisible}
+        >
+          {openCutImageModal()}
+        </Modal>
+      </div>
+
+    );
   };
 
   // parseImage = () => {

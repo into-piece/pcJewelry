@@ -39,7 +39,7 @@ class JewelryTable extends Component {
       onSelect: this.selectChange,
     };
 
-    console.log("contactsTableBody" , body)
+    // console.log("contactsTableBody" , body)
     return (
       <Table
         {...this.props}
