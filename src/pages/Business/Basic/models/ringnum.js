@@ -8,7 +8,7 @@ import {
   saveTheSonRingNum,
   deleteTheSonRingNum,
   updateTheSonRingNum,
-  freezeTheSonRingNum
+  freezeTheSonRingNum,
 } from '@/services/api';
 
 export default {
@@ -22,8 +22,7 @@ export default {
   },
 
   effects: {
-
-    * fetchListRingNum(_, { call, put }) {
+    *fetchListRingNum(_, { call, put }) {
       const response = yield call(querylistRingNum);
       yield put({
         type: 'list',
@@ -31,8 +30,8 @@ export default {
       });
     },
 
-    * addRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheRingNum,payload);
+    *addRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheRingNum, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -40,8 +39,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheRingNum,payload);
+    *updateRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheRingNum, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -49,8 +48,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheRingNum,payload);
+    *deleteRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheRingNum, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -58,8 +57,8 @@ export default {
       if (callback) callback();
     },
 
-    * freezeRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheRingNum,payload);
+    *freezeRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheRingNum, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -67,8 +66,8 @@ export default {
       if (callback) callback();
     },
 
-    * fetchListSonRingNum({payload,callback}, { call, put }) {
-      const response = yield call(querylistSonRingNum,payload);
+    *fetchListSonRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(querylistSonRingNum, payload);
       yield put({
         type: 'sublist',
         payload: response,
@@ -76,8 +75,8 @@ export default {
       if (callback) callback();
     },
 
-    * addSonRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheSonRingNum,payload);
+    *addSonRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheSonRingNum, payload);
       yield put({
         type: 'saveitem',
         payload: response,
@@ -85,8 +84,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateSonRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheSonRingNum,payload);
+    *updateSonRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheSonRingNum, payload);
       yield put({
         type: 'saveitem',
         payload: response,
@@ -94,10 +93,8 @@ export default {
       if (callback) callback();
     },
 
-
-
-    * freezeSonRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheSonRingNum,payload);
+    *freezeSonRingNum({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheSonRingNum, payload);
       yield put({
         type: 'saveitem',
         payload: response,
@@ -105,52 +102,42 @@ export default {
       if (callback) callback();
     },
 
-
-    * deleteSonRingNumber ({ payload, callback }, { call, put }) {
+    *deleteSonRingNumber({ payload, callback }, { call, put }) {
       console.log('inv deleteSonRingNum');
-      const response = yield call(deleteTheSonRingNum,payload);
+      const response = yield call(deleteTheSonRingNum, payload);
       yield put({
         type: 'saveitem',
         payload: response,
       });
       if (callback) callback();
     },
-
-
-
-
   },
 
   reducers: {
-
-
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
 
     sublist(state, action) {
@@ -158,29 +145,26 @@ export default {
         ...state,
         head2: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body2:{
+        body2: {
           ...state.body,
           sonData: action.payload.body.records,
-          rtnCode2:action.payload.head.rtnCode,
-          rtnMsg2:action.payload.head.rtnMsg
-        }
+          rtnCode2: action.payload.head.rtnCode,
+          rtnMsg2: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    saveitem(state,action) {
+    saveitem(state, action) {
       return {
         ...state,
-        result2:action.payload,
-        body2:{
+        result2: action.payload,
+        body2: {
           ...state.body,
           sonData: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

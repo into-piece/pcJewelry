@@ -4,7 +4,6 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-
 import { connect } from 'dva';
 
 // import { connect } from 'dva';
@@ -16,7 +15,7 @@ import { connect } from 'dva';
 })
 class Dict extends PureComponent {
   state = {
-    dicts:[],
+    dicts: [],
     value: undefined,
     isFirst: true,
   };
@@ -35,30 +34,23 @@ class Dict extends PureComponent {
     onChange(value);
   };
 
-
   componentDidMount() {
-    this.loadDict()
-    const {dict } = this.props;
-    console.log('dict ',dict)
-
+    this.loadDict();
+    const { dict } = this.props;
+    console.log('dict ', dict);
   }
 
-
   render() {
+    const { content, defaultValue } = this.props;
+    const { value, isFirst } = this.state;
 
-    const { content,defaultValue } = this.props;
-    const {value,isFirst} = this.state;
-
-    let showValue
-    if(isFirst)
-      showValue = content;
+    let showValue;
+    if (isFirst) showValue = content;
     else {
       showValue = value;
     }
 
-    if(!showValue)
-      showValue = defaultValue;
-
+    if (!showValue) showValue = defaultValue;
 
     return (
       <Select
@@ -80,12 +72,10 @@ class Dict extends PureComponent {
   getDict() {
     const { dicts } = this.state;
 
-    console.log('dict ',dicts)
+    console.log('dict ', dicts);
 
     return this.getOption(dicts);
   }
-
-
 
   getOption = list => {
     if (!list || list.length < 1) {
@@ -96,7 +86,6 @@ class Dict extends PureComponent {
       );
     }
 
-
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
       <Option key={item.wordbookContentCode} value={item.wordbookCode}>
@@ -105,7 +94,7 @@ class Dict extends PureComponent {
     ));
   };
 
-  loadDictsUrl = (item) => {
+  loadDictsUrl = item => {
     let params = {};
 
     const { dispatch } = this.props;
@@ -113,18 +102,16 @@ class Dict extends PureComponent {
       type: 'dict/fetchWorkBook',
       payload: { ...params },
     });
-
   };
-
 
   loadDict = () => {
     const { dict } = this.props;
 
     let params = {};
-    const _this = this
+    const _this = this;
     params.wordbookTypeCode = dict;
-    console.log('dict params is ',params)
-    fetch('/sys/mst-wordbook/listMstWordbook', {
+    console.log('dict params is ', params);
+    fetch('/server/sys/mst-wordbook/listMstWordbook', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -136,22 +123,17 @@ class Dict extends PureComponent {
       .then(d => {
         const body = d.body;
 
-        if(body.records)
-        _this.setState({
-          loading: false,
-          dicts: body.records,
-        });
+        if (body.records)
+          _this.setState({
+            loading: false,
+            dicts: body.records,
+          });
         // console.log('result ', d);
-      }).catch(function(ex) {
-      // message.error('加载图片失败！');
-
-    });
-
+      })
+      .catch(function(ex) {
+        // message.error('加载图片失败！');
+      });
   };
-
-
-
-
 }
 
 export default Dict;

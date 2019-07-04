@@ -1,9 +1,4 @@
-import {
-  queryAllCity,
-  queryProvince,
-  queryAreas,
-  queryCity,
-} from '@/services/city';
+import { queryAllCity, queryProvince, queryAreas, queryCity } from '@/services/city';
 
 export default {
   namespace: 'city',
@@ -16,18 +11,16 @@ export default {
   },
 
   effects: {
-
-
-    * fetchAllCity({payload, callback}, { call, put }) {
-      const response = yield call(queryAllCity,payload);
+    *fetchAllCity({ payload, callback }, { call, put }) {
+      const response = yield call(queryAllCity, payload);
       yield put({
         type: 'list',
         payload: response,
       });
       if (callback) callback();
     },
-    * fetchProvinces({payload, callback}, { call, put }) {
-      const response = yield call(queryProvince,payload);
+    *fetchProvinces({ payload, callback }, { call, put }) {
+      const response = yield call(queryProvince, payload);
       yield put({
         type: 'province',
         payload: response,
@@ -35,8 +28,8 @@ export default {
       if (callback) callback();
     },
 
-    * fetchAreas({payload, callback}, { call, put }) {
-      const response = yield call(queryAreas,payload);
+    *fetchAreas({ payload, callback }, { call, put }) {
+      const response = yield call(queryAreas, payload);
       yield put({
         type: 'areas',
         payload: response,
@@ -44,34 +37,30 @@ export default {
       if (callback) callback();
     },
 
-    * fetchCity({payload, callback}, { call, put }) {
-      const response = yield call(queryCity,payload);
+    *fetchCity({ payload, callback }, { call, put }) {
+      const response = yield call(queryCity, payload);
       yield put({
         type: 'citys',
         payload: response,
       });
       if (callback) callback();
     },
-
-
   },
 
   reducers: {
-
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-          size:action.payload.body.size,
-          total:action.payload.body.total,
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+          size: action.payload.body.size,
+          total: action.payload.body.total,
+        },
       };
     },
 
@@ -80,31 +69,30 @@ export default {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        province:{
+        province: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-          size:action.payload.body.size,
-          total:action.payload.body.total,
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+          size: action.payload.body.size,
+          total: action.payload.body.total,
+        },
       };
     },
-
 
     areas(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        areas:{
+        areas: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-          size:action.payload.body.size,
-          total:action.payload.body.total,
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+          size: action.payload.body.size,
+          total: action.payload.body.total,
+        },
       };
     },
 
@@ -113,31 +101,27 @@ export default {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        city:{
+        city: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-          size:action.payload.body.size,
-          total:action.payload.body.total,
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+          size: action.payload.body.size,
+          total: action.payload.body.total,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

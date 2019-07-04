@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { FormattedMessage } from 'umi-plugin-react/locale';
-import { Menu ,Icon} from 'antd';
+import { Menu, Icon } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Info.less';
 
@@ -82,9 +82,11 @@ class Info extends Component {
     const { mode: currentMode } = this.state;
 
     let mode = 'inline';
-    const { offsetWidth,height,innerHeight ,innerWidth} = this.main;
+    const { offsetWidth, height, innerHeight, innerWidth } = this.main;
 
-    this.print2("change width ="+offsetWidth+'height '+window.innerHeight+"，wid="+innerWidth);
+    this.print2(
+      'change width =' + offsetWidth + 'height ' + window.innerHeight + '，wid=' + innerWidth
+    );
     if (offsetWidth > 400 && offsetWidth < 641) {
       mode = 'horizontal';
     }
@@ -98,9 +100,7 @@ class Info extends Component {
     }
   };
 
-
-  print2(obj)
-  {
+  print2(obj) {
     console.log(obj);
   }
 
@@ -111,24 +111,28 @@ class Info extends Component {
     }
     const { mode, selectKey } = this.state;
     return (
-        <div
-          className={styles.main}
-          ref={ref => {
-            this.main = ref;
-          }}
-        >
-          <div>
-            <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.selectKey} className={styles.leftmenu}>
-              <Icon tyle={'mail'}/>
-              {this.getmenu()}
-            </Menu>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{this.getRightTitle()}</div>
-            {children}
-          </div>
+      <div
+        className={styles.main}
+        ref={ref => {
+          this.main = ref;
+        }}
+      >
+        <div>
+          <Menu
+            mode={mode}
+            selectedKeys={[selectKey]}
+            onClick={this.selectKey}
+            className={styles.leftmenu}
+          >
+            <Icon tyle={'mail'} />
+            {this.getmenu()}
+          </Menu>
         </div>
-
+        <div className={styles.right}>
+          <div className={styles.title}>{this.getRightTitle()}</div>
+          {children}
+        </div>
+      </div>
     );
   }
 }

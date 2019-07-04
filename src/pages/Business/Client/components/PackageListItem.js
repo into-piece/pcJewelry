@@ -3,22 +3,17 @@ import { Icon, message, Upload, Form, Card, Carousel } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import styles from '../base.less';
 
-;
 const { Description } = DescriptionList;
-
 
 import jsonp from 'fetch-jsonp';
 import Zmage from 'react-zmage';
 
-
 class PackageListItem extends PureComponent {
-
-
-  fetch = (item) => {
+  fetch = item => {
     const _this = this;
     let params = {};
     params.dataNo = item.packNo;
-    fetch('/business/upload-img/listUploadImg', {
+    fetch('/server/business/upload-img/listUploadImg', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -44,16 +39,16 @@ class PackageListItem extends PureComponent {
           loading: false,
         });
         // console.log('result ', d);
-      }).catch(function(ex) {
-      console.log('parsing failed', ex);
-      message.error('加载图片失败！');
-      _this.setState({
-        loading: false,
+      })
+      .catch(function(ex) {
+        console.log('parsing failed', ex);
+        message.error('加载图片失败！');
+        _this.setState({
+          loading: false,
+        });
       });
-    });
     // }
   };
-
 
   constructor(props) {
     super(props);
@@ -64,12 +59,8 @@ class PackageListItem extends PureComponent {
     };
   }
 
-
   render() {
-
-
     const { item, isSelected, callbackUrl } = this.props;
-
 
     const { loading, imageObject, isFirst } = this.state;
 
@@ -79,7 +70,6 @@ class PackageListItem extends PureComponent {
       this.state.isFirst = false;
     }
     let paths = [];
-
 
     if (isSelected && callbackUrl) {
       callbackUrl(imageObject);
@@ -91,39 +81,55 @@ class PackageListItem extends PureComponent {
       });
     }
 
-    if (!paths)
-      paths = [];
+    if (!paths) paths = [];
 
+    return (
+      <Card
+        hoverable
+        loading={loading}
+        className={isSelected ? styles.list_selected_content : ''}
+        cover={
+          <Carousel className={styles.carousel_content} autoplay>
+            {this.getImages(paths)}
+          </Carousel>
+        }
+      >
+        <div>
+          <DescriptionList size="small" col="2">
+            <Description size="small" term="终客编号">
+              {item.endNo}
+            </Description>
+            <Description size="small" term="终客简称">
+              {item.endShotName}
+            </Description>
+            <Description size="small" term="包装说明编码">
+              {item.packNo}
+            </Description>
+          </DescriptionList>
 
-    return (<Card
-      hoverable
-      loading={loading}
-      className={isSelected ? styles.list_selected_content : ''}
-      cover={<Carousel className={styles.carousel_content} autoplay>{this.getImages(paths)}
-      </Carousel>}
-    >
-      <div>
-        <DescriptionList size='small' col='2'>
-          <Description size="small" term='终客编号'>{item.endNo}</Description>
-          <Description size="small" term='终客简称'>{item.endShotName}</Description>
-          <Description size="small" term='包装说明编码'>{item.packNo}</Description>
-        </DescriptionList>
-
-        <DescriptionList size="small" col="1"><Description
-          term='包装说明'>{item.packExplain}</Description></DescriptionList>
-      </div>
-    </Card>);
-
+          <DescriptionList size="small" col="1">
+            <Description term="包装说明">{item.packExplain}</Description>
+          </DescriptionList>
+        </div>
+      </Card>
+    );
   }
 
-  getImages = (paths) => {
-    return paths.map((v) => (// src={v}
-      <div className={styles.carousel_image_ground}><Zmage alt="图片" align="center" className={styles.carousel_image}
-                                                           src={v} set={paths.map(image => ({ src: image }))}/></div>
+  getImages = paths => {
+    return paths.map((
+      v // src={v}
+    ) => (
+      <div className={styles.carousel_image_ground}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image }))}
+        />
+      </div>
     ));
-
   };
-
 }
 
 export default PackageListItem;

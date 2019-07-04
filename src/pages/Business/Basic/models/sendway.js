@@ -17,9 +17,7 @@ export default {
   },
 
   effects: {
-
-
-    * fetchListSendWay(_, { call, put }) {
+    *fetchListSendWay(_, { call, put }) {
       const response = yield call(querylistsendWay);
       yield put({
         type: 'list',
@@ -27,8 +25,8 @@ export default {
       });
     },
 
-    * addSendWay({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheSendWay,payload);
+    *addSendWay({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheSendWay, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -36,8 +34,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateSendWay({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheSendWay,payload);
+    *updateSendWay({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheSendWay, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -45,8 +43,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteSendWay({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheSendWay,payload);
+    *deleteSendWay({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheSendWay, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -54,48 +52,41 @@ export default {
       if (callback) callback();
     },
 
-    * freezeSendWay({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheSendWay,payload);
+    *freezeSendWay({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheSendWay, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
   },
 
   reducers: {
-
-
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

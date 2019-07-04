@@ -25,7 +25,6 @@ import DescriptionList from '@/components/DescriptionList';
 const FormItem = Form.Item;
 
 const clientContentColumns = [
-
   {
     title: '提成中文名',
     dataIndex: 'paymentZhName',
@@ -50,7 +49,8 @@ const clientContentColumns = [
     title: '提成比率(%)',
     dataIndex: 'royaltyRate',
     key: 'royaltyRate',
-  }, {
+  },
+  {
     title: '状态  ',
     dataIndex: 'status',
     key: 'status',
@@ -79,12 +79,10 @@ const { Description } = DescriptionList;
 })
 @Form.create()
 class Royalty extends PureComponent {
-
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
   };
-
 
   constructor(props) {
     super(props);
@@ -104,7 +102,7 @@ class Royalty extends PureComponent {
       isLoading: false,
       selectIndexAt: -1,
       rowSelectedData: [],
-      rowData:[],
+      rowData: [],
     };
   }
 
@@ -115,21 +113,16 @@ class Royalty extends PureComponent {
     });
   }
 
-
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form, rtnCode = {} } = this.props;
 
-
     const { showItem, isAdd } = this.state;
 
     form.validateFields((err, fieldsValue) => {
-
       if (err) return;
 
-
       if (isAdd) {
-
         // console.log('data = ' + Object.keys({ ...fieldsValue }));
 
         dispatch({
@@ -141,12 +134,11 @@ class Royalty extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
-          rowData:[],
+          rowData: [],
           selectIndexAt: -1,
           showItem: false,
           isEdit: true,
         });
-
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
@@ -156,13 +148,9 @@ class Royalty extends PureComponent {
         data.profitShareTo = temp.profitShareTo;
         data.royaltyRate = temp.royaltyRate;
         this.state.current = { ...data };
-        if (data.status === '冻结')
-          data.status = 2;
-        else if (data.status === '使用中')
-          data.status = 1;
-        else if (data.status === '草稿')
-          data.status = 0;
-
+        if (data.status === '冻结') data.status = 2;
+        else if (data.status === '使用中') data.status = 1;
+        else if (data.status === '草稿') data.status = 0;
 
         // console.log('update ' + Object.keys(current));
         dispatch({
@@ -171,11 +159,9 @@ class Royalty extends PureComponent {
             ...data,
           },
         });
-
       }
       this.setState({
         visible: false,
-
       });
     });
   };
@@ -192,7 +178,6 @@ class Royalty extends PureComponent {
     });
   };
 
-
   handleCancel = () => {
     this.setState({
       visible: false,
@@ -200,12 +185,18 @@ class Royalty extends PureComponent {
   };
 
   render() {
-
-
     const { selectedRowKeys = [], current = {}, isEdit, update } = this.state;
 
-
-    const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing, form: { getFieldDecorator } } = this.props;
+    const {
+      listLoading,
+      body = {},
+      dispatch,
+      addloading,
+      deleteloading,
+      upateloading,
+      freezing,
+      form: { getFieldDecorator },
+    } = this.props;
 
     this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
     if (addloading || deleteloading || upateloading || freezing) {
@@ -215,7 +206,6 @@ class Royalty extends PureComponent {
       }
     } else {
       if (update) {
-
         // console.log('rntCode=' + body.rtnCode);
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
@@ -232,11 +222,10 @@ class Royalty extends PureComponent {
           this.state.showItem = { ...current };
         }
       }
-
     }
 
     if (listLoading && body && body.data && body.data.length > 0) {
-      const newdata = body.data.map((value) => {
+      const newdata = body.data.map(value => {
         const s = value.status;
         if (s == 0) {
           value.status = '草稿';
@@ -251,7 +240,6 @@ class Royalty extends PureComponent {
       this.state.data = newdata;
     }
 
-
     if (this.state.done) {
       if (this.state.requestState == 'success') {
         message.success(this.state.requestMes);
@@ -261,7 +249,6 @@ class Royalty extends PureComponent {
       this.handleDone();
     }
 
-
     const rowSelection = {
       selectedRowKeys,
       type: 'checkbox',
@@ -269,52 +256,38 @@ class Royalty extends PureComponent {
       onSelect: this.selectChange,
     };
 
-
     const getModalContent = () => {
-
       return (
-        <Form
-          size={'small'}
-          onSubmit={this.handleSubmit}>
+        <Form size={'small'} onSubmit={this.handleSubmit}>
           <FormItem label="业务提成中文名" {...this.formLayout}>
             {getFieldDecorator('paymentZhName', {
               rules: [{ required: true, message: '请输入中文名称' }],
               initialValue: current.paymentZhName,
-            })(
-              <Input placeholder="请输入"/>,
-            )}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="业务提成英文名称" {...this.formLayout}>
             {getFieldDecorator('paymentEnName', {
               rules: [{ message: '请输入品牌编号' }],
               initialValue: current.paymentEnName,
-            })(
-              <Input placeholder="请输入"/>,
-            )}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="利润比例从(%)" type="integer" {...this.formLayout}>
             {getFieldDecorator('profitShareFrom', {
               rules: [{ required: true, message: '请输入利润比例从' }],
               initialValue: current.profitShareFrom,
-            })(
-              <Input placeholder="请输入" type='number'/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
           <FormItem label="利润比例到(%)" {...this.formLayout}>
             {getFieldDecorator('profitShareTo', {
               rules: [{ required: true, message: '利润比例到' }],
               initialValue: current.profitShareTo,
-            })(
-              <Input placeholder="请输入" type='number'/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
           <FormItem label="提成比率(%)" {...this.formLayout}>
             {getFieldDecorator('royaltyRate', {
               rules: [{ required: true, message: '请输入提成比率' }],
               initialValue: current.royaltyRate,
-            })(
-              <Input placeholder="请输入" type='number'/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
         </Form>
       );
@@ -331,23 +304,24 @@ class Royalty extends PureComponent {
             <div className={styles.view_left_content}>
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
-                  style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.percentage}/>
-                <FormattedMessage id="app.basic.menuMap.royalty" defaultMessage="业务提成设当"/>
+                  style={{
+                    width: 50,
+                    height: 50,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingLeft: 10,
+                  }}
+                  component={SvgUtil.percentage}
+                />
+                <FormattedMessage id="app.basic.menuMap.royalty" defaultMessage="业务提成设当" />
               </div>
-              <Card
-                bordered={false}
-                loading={false}
-
-              >
+              <Card bordered={false} loading={false}>
                 <Table
                   loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   rowSelection={rowSelection}
-                  rowKey={record =>
-                    record.id
-                  }
+                  rowKey={record => record.id}
                   bordered={false}
                   onRow={record => {
                     return {
@@ -357,7 +331,7 @@ class Royalty extends PureComponent {
                     };
                   }}
                   rowClassName={this.onSelectRowClass}
-                  size='middle'
+                  size="middle"
                   columns={clientContentColumns}
                 />
                 <Modal
@@ -376,46 +350,74 @@ class Royalty extends PureComponent {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <Card
-                bordered={false}
-              >
+              <Card bordered={false}>
                 <div>
-              <span title="业务提成设定"
-                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
-              业务提成设定
-              </span>
-                  <Divider/>
-                  {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
-
+                  <span
+                    title="业务提成设定"
+                    style={{
+                      marginBottom: 32,
+                      paddingLeft: 10,
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#35B0F4',
+                    }}
+                  >
+                    业务提成设定
+                  </span>
+                  <Divider />
+                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
 
-
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
-                          onClick={this.clickNewFrom}>新增</Button>
-                  <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
-                          onClick={this.clickDeleteFrom}
-                          disabled={isEdit}>删除</Button>
-                  <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
-                          disabled={isEdit} icon="edit">编辑</Button>
-                  <Button className={styles.buttomControl} size={'small'} type="primary" icon="lock"
-                          onClick={this.clickFreezeFrom}
-                          disabled={isEdit}>冻结</Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    icon="plus"
+                    size={'small'}
+                    onClick={this.clickNewFrom}
+                  >
+                    新增
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="danger"
+                    icon="delete"
+                    size={'small'}
+                    onClick={this.clickDeleteFrom}
+                    disabled={isEdit}
+                  >
+                    删除
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    size={'small'}
+                    onClick={this.clickEditFrom}
+                    disabled={isEdit}
+                    icon="edit"
+                  >
+                    编辑
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    size={'small'}
+                    type="primary"
+                    icon="lock"
+                    onClick={this.clickFreezeFrom}
+                    disabled={isEdit}
+                  >
+                    冻结
+                  </Button>
                 </div>
-
               </Card>
             </div>
           </Col>
         </Row>
       </GridContent>
     );
-
-
   }
-
 
   onSelectRowClass = (record, index) => {
     let color = '';
@@ -432,10 +434,7 @@ class Royalty extends PureComponent {
     this.setState({ visible: true, current: {} });
   };
 
-
-  clickRowItem = (record) => {
-
-
+  clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
     let rowData = this.state.rowData;
     const selects = selectedRowKeys ? selectedRowKeys : [];
@@ -443,18 +442,16 @@ class Royalty extends PureComponent {
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
-      if(rowData.includes(record))
-        rowData=[]
+      if (rowData.includes(record)) rowData = [];
       if (rowSelectedData.includes(record)) {
         // console.log('includes ' + record.id);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
-
       if (rowData.length > 0) {
         selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
       }
-      rowData=[];
+      rowData = [];
       rowData.push({ ...record });
       selects.push(id);
       rowSelectedData.push(record);
@@ -479,29 +476,25 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record,index) => {
-  };
+  selectChange = (record, index) => {};
 
   clickDeleteFrom = () => {
     const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
 
-
     dispatch({
       type: 'royalty/deleteRoyalty',
-      payload: { 'list': selectedRowKeys },
+      payload: { list: selectedRowKeys },
     });
-
 
     this.setState({
       selectedRowKeys: '',
-      rowData:[],
+      rowData: [],
       selectIndexAt: -1,
       showItem: false,
       isEdit: true,
     });
-
   };
 
   clickEditFrom = () => {
@@ -510,9 +503,7 @@ class Royalty extends PureComponent {
       current: this.state.showItem,
       visible: true,
     });
-
   };
-
 
   clickFreezeFrom = () => {
     const { selectedRowKeys } = this.state;
@@ -520,18 +511,13 @@ class Royalty extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'royalty/freezeRoyalty',
-      payload: { 'list': selectedRowKeys },
+      payload: { list: selectedRowKeys },
     });
-
-
   };
 
-  selectChange = (record, index) => {
-
-  };
+  selectChange = (record, index) => {};
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
@@ -567,25 +553,21 @@ class Royalty extends PureComponent {
     // console.log('select the item');
   };
 
-
-  getRenderitem = (item) => {
+  getRenderitem = item => {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
-        <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='提成中文名'>{item.paymentZhName}</Description>
-        <Description term='提成英文名'>{item.paymentEnName}</Description>
-        <Description term='利润比例从(%)'>{item.profitShareFrom}</Description>
-        <Description term='利润比例到(%)'>{item.profitShareTo}</Description>
-        <Description term='提成比率(%)'>{item.royaltyRate}</Description>
-        <Description term='状态'>{item.status}</Description>
+        <DescriptionList className={styles.headerList} size="small" col="1">
+          <Description term="提成中文名">{item.paymentZhName}</Description>
+          <Description term="提成英文名">{item.paymentEnName}</Description>
+          <Description term="利润比例从(%)">{item.profitShareFrom}</Description>
+          <Description term="利润比例到(%)">{item.profitShareTo}</Description>
+          <Description term="提成比率(%)">{item.royaltyRate}</Description>
+          <Description term="状态">{item.status}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
-        </span>
-
+      </span>
     );
   };
-
-
 }
 
 export default Royalty;

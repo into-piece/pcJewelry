@@ -18,11 +18,11 @@ class Info extends Component {
     super(props);
     const { match, location } = props;
     const menuMap = {
-      brand: <FormattedMessage id="app.client.menuMap.brand" defaultMessage="Basic Settings"/>,
+      brand: <FormattedMessage id="app.client.menuMap.brand" defaultMessage="Basic Settings" />,
       requested: (
-        <FormattedMessage id="app.client.menuMap.requested" defaultMessage="Security Settings"/>
+        <FormattedMessage id="app.client.menuMap.requested" defaultMessage="Security Settings" />
       ),
-      sendWay: <FormattedMessage id="app.client.menuMap.way" defaultMessage="Account Binding"/>,
+      sendWay: <FormattedMessage id="app.client.menuMap.way" defaultMessage="Account Binding" />,
       royalty: (
         <FormattedMessage
           id="app.client.menuMap.royalty"
@@ -30,7 +30,7 @@ class Info extends Component {
         />
       ),
       ring: (
-        <FormattedMessage id="app.client.menuMap.num" defaultMessage="app.client.menuMap.num"/>
+        <FormattedMessage id="app.client.menuMap.num" defaultMessage="app.client.menuMap.num" />
       ),
       currency: (
         <FormattedMessage
@@ -70,9 +70,10 @@ class Info extends Component {
     const { menuMap } = this.state;
     return Object.keys(menuMap).map(item => (
       <Item key={item} style={{ textAlign: 'vertical-center' }}>
-        <span style={{ alignSelf: 'center' }}><Icon style={{ width: 25, height: 25 }}
-                                                    component={this.getMenuIcon(item)}/>
-          {menuMap[item]}</span>
+        <span style={{ alignSelf: 'center' }}>
+          <Icon style={{ width: 25, height: 25 }} component={this.getMenuIcon(item)} />
+          {menuMap[item]}
+        </span>
       </Item>
     ));
   };
@@ -139,20 +140,12 @@ class Info extends Component {
               this.main = ref;
             }}
           >
-            <Menu
-              mode={mode}
-              selectedKeys={[selectKey]}
-              size={'small'}
-              onClick={this.selectKey}
-            >
+            <Menu mode={mode} selectedKeys={[selectKey]} size={'small'} onClick={this.selectKey}>
               {this.getmenu()}
             </Menu>
           </div>
-          <div className={styles.right}>
-            {children}
-          </div>
+          <div className={styles.right}>{children}</div>
         </div>
-
       </PageHeaderWrapper>
     );
   }

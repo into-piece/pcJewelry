@@ -4,7 +4,6 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-
 import { connect } from 'dva';
 
 // import { connect } from 'dva';
@@ -16,12 +15,10 @@ import { connect } from 'dva';
 })
 class QualityRequirements extends PureComponent {
   state = {
-    dicts:[],
+    dicts: [],
     value: undefined,
     isFirst: true,
   };
-
-
 
   handleChange = value => {
     const { onChange } = this.props;
@@ -32,21 +29,16 @@ class QualityRequirements extends PureComponent {
     onChange(value);
   };
 
-
   componentDidMount() {
-
-    this.loadDict()
+    this.loadDict();
   }
 
-
   render() {
-
     const { content } = this.props;
-    const {value,isFirst} = this.state;
+    const { value, isFirst } = this.state;
 
-    let showValue
-    if(isFirst)
-      showValue = content;
+    let showValue;
+    if (isFirst) showValue = content;
     else {
       showValue = value;
     }
@@ -68,13 +60,10 @@ class QualityRequirements extends PureComponent {
   }
 
   getDict() {
-
-    const { dicts } = this.state
+    const { dicts } = this.state;
 
     return this.getOption(dicts);
   }
-
-
 
   getOption = list => {
     if (!list || list.length < 1) {
@@ -85,7 +74,6 @@ class QualityRequirements extends PureComponent {
       );
     }
 
-
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
       <Option key={item.qualityZhName} value={item.id}>
@@ -94,9 +82,6 @@ class QualityRequirements extends PureComponent {
     ));
   };
 
-
-
-
   loadDict = () => {
     const { dict } = this.props;
 
@@ -104,7 +89,7 @@ class QualityRequirements extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch('/basic/quality-requirements/listQualityRequirementss', {
+    fetch('/server/basic/quality-requirements/listQualityRequirementss', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -116,21 +101,16 @@ class QualityRequirements extends PureComponent {
       .then(d => {
         const body = d.body;
 
-        if(body.records)
-        _this.setState({
-          loading: false,
-          dicts: body.records,
-        });
-      }).catch(function(ex) {
-      // message.error('加载图片失败！');
-
-    });
-
+        if (body.records)
+          _this.setState({
+            loading: false,
+            dicts: body.records,
+          });
+      })
+      .catch(function(ex) {
+        // message.error('加载图片失败！');
+      });
   };
-
-
-
-
 }
 
 export default QualityRequirements;

@@ -4,18 +4,14 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-
 import { connect } from 'dva';
-
 
 class DeliveryMethods extends PureComponent {
   state = {
-    dicts:[],
+    dicts: [],
     value: undefined,
     isFirst: true,
   };
-
-
 
   handleChange = value => {
     const { onChange } = this.props;
@@ -26,21 +22,16 @@ class DeliveryMethods extends PureComponent {
     onChange(value);
   };
 
-
   componentDidMount() {
-
-    this.loadDict()
+    this.loadDict();
   }
 
-
   render() {
-
     const { content } = this.props;
-    const {value,isFirst} = this.state;
+    const { value, isFirst } = this.state;
 
-    let showValue
-    if(isFirst)
-      showValue = content;
+    let showValue;
+    if (isFirst) showValue = content;
     else {
       showValue = value;
     }
@@ -62,13 +53,10 @@ class DeliveryMethods extends PureComponent {
   }
 
   getDict() {
-
-    const { dicts } = this.state
+    const { dicts } = this.state;
 
     return this.getOption(dicts);
   }
-
-
 
   getOption = list => {
     if (!list || list.length < 1) {
@@ -79,7 +67,6 @@ class DeliveryMethods extends PureComponent {
       );
     }
 
-
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
       <Option key={item.deliveryZhName} value={item.id}>
@@ -88,17 +75,14 @@ class DeliveryMethods extends PureComponent {
     ));
   };
 
-
-
-
   loadDict = () => {
     const { dict } = this.props;
 
     let params = {};
     const _this = this;
     params.wordbookTypeCode = dict;
-    console.log('dict params is ',params)
-    fetch('/basic/delivery-method/listDeliveryMethods', {
+    console.log('dict params is ', params);
+    fetch('/server/basic/delivery-method/listDeliveryMethods', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -110,22 +94,17 @@ class DeliveryMethods extends PureComponent {
       .then(d => {
         const body = d.body;
 
-        if(body.records)
-        _this.setState({
-          loading: false,
-          dicts: body.records,
-        });
+        if (body.records)
+          _this.setState({
+            loading: false,
+            dicts: body.records,
+          });
         console.log('result q', d);
-      }).catch(function(ex) {
-      // message.error('加载图片失败！');
-
-    });
-
+      })
+      .catch(function(ex) {
+        // message.error('加载图片失败！');
+      });
   };
-
-
-
-
 }
 
 export default DeliveryMethods;

@@ -1,4 +1,5 @@
-import { querylistBrands,
+import {
+  querylistBrands,
   saveTheBrand,
   deleteTheBrand,
   updateTheBrand,
@@ -21,7 +22,7 @@ export default {
   },
 
   effects: {
-    * fetchListBrands(_, { call, put }) {
+    *fetchListBrands(_, { call, put }) {
       const response = yield call(querylistBrands);
       yield put({
         type: 'listBrand',
@@ -29,8 +30,8 @@ export default {
       });
     },
 
-    * addBrand({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheBrand,payload);
+    *addBrand({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheBrand, payload);
       yield put({
         type: 'saveBrand',
         payload: response,
@@ -38,9 +39,9 @@ export default {
       if (callback) callback();
     },
 
-    * updateBrand({ payload, callback }, { call, put }) {
-      console.log('model updateBrand')
-      const response = yield call(updateTheBrand,payload);
+    *updateBrand({ payload, callback }, { call, put }) {
+      console.log('model updateBrand');
+      const response = yield call(updateTheBrand, payload);
       yield put({
         type: 'saveBrand',
         payload: response,
@@ -48,9 +49,9 @@ export default {
       if (callback) callback();
     },
 
-    * deleteBrand({ payload, callback }, { call, put }) {
-      console.log('model deleteBrand')
-      const response = yield call(deleteTheBrand,payload);
+    *deleteBrand({ payload, callback }, { call, put }) {
+      console.log('model deleteBrand');
+      const response = yield call(deleteTheBrand, payload);
       yield put({
         type: 'saveBrand',
         payload: response,
@@ -58,9 +59,9 @@ export default {
       if (callback) callback();
     },
 
-    * freeBrand({ payload, callback }, { call, put }) {
-      console.log('model freeBrand')
-      const response = yield call(freezeTheBrand,payload);
+    *freeBrand({ payload, callback }, { call, put }) {
+      console.log('model freeBrand');
+      const response = yield call(freezeTheBrand, payload);
       yield put({
         type: 'saveBrand',
         payload: response,
@@ -68,8 +69,7 @@ export default {
       if (callback) callback();
     },
 
-
-    * fetchListRoyalty(_, { call, put }) {
+    *fetchListRoyalty(_, { call, put }) {
       const response = yield call(querylistRoyalty);
       yield put({
         type: 'list',
@@ -77,8 +77,8 @@ export default {
       });
     },
 
-    * addRoyalty({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheRoyalty,payload);
+    *addRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheRoyalty, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -86,8 +86,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateRoyalty({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheRoyalty,payload);
+    *updateRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheRoyalty, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -95,8 +95,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteRoyalty({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheRoyalty,payload);
+    *deleteRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheRoyalty, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -104,19 +104,17 @@ export default {
       if (callback) callback();
     },
 
-    * freezeRoyalty({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheRoyalty,payload);
+    *freezeRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheRoyalty, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
   },
 
   reducers: {
-
     changeLoading(state, action) {
       return {
         ...state,
@@ -129,57 +127,51 @@ export default {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    saveBrand(state,action) {
+    saveBrand(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
 
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

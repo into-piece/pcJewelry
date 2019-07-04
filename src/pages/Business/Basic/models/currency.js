@@ -14,9 +14,7 @@ export default {
   },
 
   effects: {
-
-
-    * fetchListCurrency(_, { call, put }) {
+    *fetchListCurrency(_, { call, put }) {
       const response = yield call(querylistCurrency);
       yield put({
         type: 'list',
@@ -24,8 +22,8 @@ export default {
       });
     },
 
-    * addCurrency({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheCurrency,payload);
+    *addCurrency({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheCurrency, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -33,8 +31,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateCurrency({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheCurrency,payload);
+    *updateCurrency({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheCurrency, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -42,8 +40,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteCurrency({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheCurrency,payload);
+    *deleteCurrency({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheCurrency, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -51,48 +49,41 @@ export default {
       if (callback) callback();
     },
 
-    * freezeCurrency({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheCurrency,payload);
+    *freezeCurrency({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheCurrency, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
   },
 
   reducers: {
-
-
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

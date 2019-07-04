@@ -100,8 +100,8 @@ export default class BaseMenu extends PureComponent {
         onClick={
           isMobile
             ? () => {
-              onCollapse(true);
-            }
+                onCollapse(true);
+              }
             : undefined
         }
       >
@@ -117,10 +117,11 @@ export default class BaseMenu extends PureComponent {
     }
     return `/${path || ''}`.replace(/\/+/g, '/');
   };
-  handleClick = (e)=>{ //点击左侧菜单
+  handleClick = e => {
+    //点击左侧菜单
     const { onHandlePage } = this.props;
-    onHandlePage(e)
-  }
+    onHandlePage(e);
+  };
   render() {
     const {
       openKeys,

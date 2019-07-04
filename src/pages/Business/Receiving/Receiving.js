@@ -19,9 +19,7 @@ import {
 import business from '../business.less';
 import listStyles from '../Client/TableList.less';
 
-
 class Receiving extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -30,16 +28,13 @@ class Receiving extends Component {
     };
   }
 
-
   render() {
-
     const { leftlg, rightlg } = this.state;
 
     return (
       <div className={business.page}>
         <div className={business.nav}>
-          <Breadcrumb
-            style={{display:'none'}}>
+          <Breadcrumb style={{ display: 'none' }}>
             <Breadcrumb.Item>主页</Breadcrumb.Item>
             <Breadcrumb.Item>
               <a href="">业务</a>
@@ -47,28 +42,18 @@ class Receiving extends Component {
             <Breadcrumb.Item>
               <a href="#/business/receiving/">收付款</a>
             </Breadcrumb.Item>
-
           </Breadcrumb>
         </div>
         <div className={business.center_content}>
           <Row gutter={24}>
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }}>
-
-                </div>
+                <div style={{ marginBottom: 16 }} />
               </Card>
             </Col>
             <Col lg={leftlg} md={24}>
-              <div
-                className={business.right_info}
-              >
-
-                <div className={business.list_info}>
-
-                </div>
-
-
+              <div className={business.right_info}>
+                <div className={business.list_info} />
               </div>
             </Col>
           </Row>
@@ -76,7 +61,6 @@ class Receiving extends Component {
       </div>
     );
   }
-
 }
 
 export default Receiving;

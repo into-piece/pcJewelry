@@ -51,13 +51,15 @@ const query = {
 };
 
 class BasicLayout extends React.Component {
-
   constructor(props) {
     super(props);
-    const { routes } = props.route, routeKey = '/business/client', tabName = '客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    const { routes } = props.route,
+      routeKey = '/business/client',
+      tabName = '客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabLists = this.updateTree(routes);
-    let tabList = [], tabListArr = [];
-    tabLists.map((v) => {
+    let tabList = [],
+      tabListArr = [];
+    tabLists.map(v => {
       if (v.key === routeKey) {
         if (tabList.length === 0) {
           v.closable = false;
@@ -70,18 +72,17 @@ class BasicLayout extends React.Component {
       }
     });
     //获取所有已存在key值
-    this.state = ({
+    this.state = {
       tabList: tabList,
       tabListKey: [routeKey],
       activeKey: routeKey,
       tabListArr,
       routeKey,
-    });
+    };
 
     this.getPageTitle = memoizeOne(this.getPageTitle);
     this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
   }
-
 
   componentDidMount() {
     const {
@@ -116,7 +117,8 @@ class BasicLayout extends React.Component {
             content: node.component,
           });
         }
-        if (node.routes && node.routes.length > 0) { //!node.hideChildrenInMenu &&
+        if (node.routes && node.routes.length > 0) {
+          //!node.hideChildrenInMenu &&
           getTreeList(node.routes);
         }
       });
@@ -164,7 +166,6 @@ class BasicLayout extends React.Component {
     return `${pageName} - Ant Tabs`;
   };
 
-
   getContext() {
     const { location, breadcrumbNameMap } = this.props;
     return {
@@ -177,7 +178,6 @@ class BasicLayout extends React.Component {
     const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
     return breadcrumbNameMap[pathKey];
   };
-
 
   getLayoutStyle = () => {
     const { fixSiderbar, isMobile, collapsed, layout } = this.props;
@@ -206,11 +206,13 @@ class BasicLayout extends React.Component {
     ) {
       return null;
     }
-    return <SettingDrawer/>;
+    return <SettingDrawer />;
   };
 
-  onHandlePage = (e) => {//点击左侧菜单
-    let { menuData } = this.props, { key } = e;
+  onHandlePage = e => {
+    //点击左侧菜单
+    let { menuData } = this.props,
+      { key } = e;
     console.log(' menu list is ', menuData);
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;
@@ -224,7 +226,7 @@ class BasicLayout extends React.Component {
     this.setState({
       activeKey: key,
     });
-    tabLists.map((v) => {
+    tabLists.map(v => {
       if (v.key === key) {
         if (tabList.length === 0) {
           v.closable = false;
@@ -257,7 +259,7 @@ class BasicLayout extends React.Component {
     this[action](targetKey);
   };
 
-  remove = (targetKey) => {
+  remove = targetKey => {
     let { activeKey } = this.state;
     let lastIndex;
     this.state.tabList.forEach((pane, i) => {
@@ -265,7 +267,8 @@ class BasicLayout extends React.Component {
         lastIndex = i - 1;
       }
     });
-    const tabList = [], tabListKey = [];
+    const tabList = [],
+      tabListKey = [];
     this.state.tabList.map(pane => {
       if (pane.key !== targetKey) {
         tabList.push(pane);
@@ -295,7 +298,8 @@ class BasicLayout extends React.Component {
             content: node.component,
           });
         }
-        if (node.children && node.children.length > 0) { //!node.hideChildrenInMenu &&
+        if (node.children && node.children.length > 0) {
+          //!node.hideChildrenInMenu &&
           getTreeList(node.children);
         }
       });
@@ -304,36 +308,36 @@ class BasicLayout extends React.Component {
     return treeList;
   };
 
-  onClickHover = (e) => {
+  onClickHover = e => {
     // message.info(`Click on item ${key}`);
-    let { key } = e, { activeKey, tabList, tabListKey, routeKey } = this.state;
+    let { key } = e,
+      { activeKey, tabList, tabListKey, routeKey } = this.state;
 
     if (key === '1') {
-      tabList = tabList.filter((v) => v.key !== activeKey || v.key === routeKey);
-      tabListKey = tabListKey.filter((v) => v !== activeKey || v === routeKey);
+      tabList = tabList.filter(v => v.key !== activeKey || v.key === routeKey);
+      tabListKey = tabListKey.filter(v => v !== activeKey || v === routeKey);
       this.setState({
         activeKey: routeKey,
         tabList,
         tabListKey,
       });
     } else if (key === '2') {
-      tabList = tabList.filter((v) => v.key === activeKey || v.key === routeKey);
-      tabListKey = tabListKey.filter((v) => v === activeKey || v === routeKey);
+      tabList = tabList.filter(v => v.key === activeKey || v.key === routeKey);
+      tabListKey = tabListKey.filter(v => v === activeKey || v === routeKey);
       this.setState({
         activeKey,
         tabList,
         tabListKey,
       });
     } else if (key === '3') {
-      tabList = tabList.filter((v) => v.key === routeKey);
-      tabListKey = tabListKey.filter((v) => v === routeKey);
+      tabList = tabList.filter(v => v.key === routeKey);
+      tabListKey = tabListKey.filter(v => v === routeKey);
       this.setState({
         activeKey: routeKey,
         tabList,
         tabListKey,
       });
     }
-
   };
 
   render() {
@@ -366,7 +370,8 @@ class BasicLayout extends React.Component {
     const operations = (
       <Dropdown overlay={menu}>
         <a className="ant-dropdown-link" href="#">
-          页签<Icon type="down"/>
+          页签
+          <Icon type="down" />
         </a>
       </Dropdown>
     );
@@ -399,37 +404,42 @@ class BasicLayout extends React.Component {
             size="small"
             className={styles.header_view}
             isMobile={isMobile}
-          >
-
-          </Header>
+          />
           <Content className={styles.content} style={contentStyle}>
-            {hidenAntTabs ?
-              (
-                { children }
-              ) :
-              (this.state.tabList && this.state.tabList.length ? (
-                <Tabs
-                  // className={styles.tabs}
-                  activeKey={activeKey}
-                  onChange={this.onChange}
-                  hideAdd
-                  type="editable-card"
-                  onEdit={this.onEdit}
-                >
-                  {this.state.tabList.map(item => (
-                    <TabPane tab={<span>
-          <Icon type={item.icon}/>
+            {hidenAntTabs ? (
+              { children }
+            ) : this.state.tabList && this.state.tabList.length ? (
+              <Tabs
+                // className={styles.tabs}
+                activeKey={activeKey}
+                onChange={this.onChange}
+                hideAdd
+                type="editable-card"
+                onEdit={this.onEdit}
+              >
+                {this.state.tabList.map(item => (
+                  <TabPane
+                    tab={
+                      <span>
+                        <Icon type={item.icon} />
 
-                      {item.tab}
-        </span>} key={item.key} closable={item.closable}>
-
-                      {/*{item.content}*/}
-                      <Route key={item.key} path={item.path} component={item.content} exact={item.exact}/>
-
-                    </TabPane>
-                  ))}
-                </Tabs>
-              ) : null)}
+                        {item.tab}
+                      </span>
+                    }
+                    key={item.key}
+                    closable={item.closable}
+                  >
+                    {/*{item.content}*/}
+                    <Route
+                      key={item.key}
+                      path={item.path}
+                      component={item.content}
+                      exact={item.exact}
+                    />
+                  </TabPane>
+                ))}
+              </Tabs>
+            ) : null}
           </Content>
         </Layout>
       </Layout>
@@ -459,6 +469,6 @@ export default connect(({ global, setting, menu: menuModel }) => ({
   ...setting,
 }))(props => (
   <Media query="(max-width: 599px)">
-    {isMobile => <BasicLayout {...props} isMobile={isMobile}/>}
+    {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
   </Media>
 ));

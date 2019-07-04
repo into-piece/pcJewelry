@@ -121,7 +121,7 @@ export default class HeaderSearch extends PureComponent {
           }
         }}
       >
-        <Icon type="search" key="Icon"  style={{color:'#fff'}}/>
+        <Icon type="search" key="Icon" style={{ color: '#fff' }} />
         <AutoComplete
           key="AutoComplete"
           {...restProps}

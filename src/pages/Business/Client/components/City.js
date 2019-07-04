@@ -4,8 +4,6 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-
-
 import { connect } from 'dva';
 
 // import { connect } from 'dva';
@@ -19,7 +17,7 @@ class City extends PureComponent {
   state = {
     data: [],
     value: undefined,
-    isFirst:true
+    isFirst: true,
   };
 
   handleSearch = value => {
@@ -32,26 +30,20 @@ class City extends PureComponent {
     const { onChange } = this.props;
     this.setState({
       value,
-      isFirst:false
+      isFirst: false,
     });
-    onChange(value)
+    onChange(value);
   };
 
-
   render() {
-
-    const { value,isFirst } = this.state;
+    const { value, isFirst } = this.state;
     const { content } = this.props;
 
-
-    let showValue
-    if(isFirst)
-      showValue = content;
+    let showValue;
+    if (isFirst) showValue = content;
     else {
       showValue = value;
     }
-
-
 
     return (
       <Select
@@ -72,16 +64,12 @@ class City extends PureComponent {
   }
 
   getCity() {
-
     let data = [];
     const { body } = this.props;
-    if (body && body.data)
-      data = body.data;
-
+    if (body && body.data) data = body.data;
 
     return this.getOption(data);
   }
-
 
   selectCityItem = item => {
     const { onChange } = this.props;
@@ -98,17 +86,15 @@ class City extends PureComponent {
       );
     }
 
-
-
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.code} value={item.name+'/'+item.nameEn}>
-        {item.name+'/'+item.nameEn}
+      <Option key={item.code} value={item.name + '/' + item.nameEn}>
+        {item.name + '/' + item.nameEn}
       </Option>
     ));
   };
 
-  loadImageUrl = (item) => {
+  loadImageUrl = item => {
     console.log('load image url ', item);
     let params = {};
     params.name = item;
@@ -118,9 +104,7 @@ class City extends PureComponent {
       type: 'city/fetchAllCity',
       payload: { ...params },
     });
-
   };
-
 }
 
 export default City;

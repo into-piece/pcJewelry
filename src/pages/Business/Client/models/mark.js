@@ -17,10 +17,8 @@ export default {
   },
 
   effects: {
-
-
-    * fetchListMark({payload, callback}, { call, put }) {
-      const response = yield call(querylistMark,payload);
+    *fetchListMark({ payload, callback }, { call, put }) {
+      const response = yield call(querylistMark, payload);
       yield put({
         type: 'list',
         payload: response,
@@ -28,8 +26,8 @@ export default {
       if (callback) callback();
     },
 
-    * addMark({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheMark,payload);
+    *addMark({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheMark, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -37,8 +35,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateMark({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheMark,payload);
+    *updateMark({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheMark, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -46,8 +44,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteMark({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheMark,payload);
+    *deleteMark({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheMark, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -55,49 +53,43 @@ export default {
       if (callback) callback();
     },
 
-    * freezeMark({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheMark,payload);
+    *freezeMark({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheMark, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
   },
 
   reducers: {
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-          size:action.payload.body.size,
-          total:action.payload.body.total,
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+          size: action.payload.body.size,
+          total: action.payload.body.total,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

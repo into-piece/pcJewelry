@@ -8,28 +8,19 @@ const { Description } = DescriptionList;
 
 import { connect } from 'dva';
 
-
 @connect(({ city, loading }) => {
-
   return {
     body: city.body,
     loading: loading.effects['image/fetchImageUrl'],
   };
 })
 class AllCity extends PureComponent {
-
-
   constructor(props) {
     super(props);
-
   }
 
-
   render() {
-
-
     const { body = {}, loading = false, value } = this.props;
-
 
     const onSelectChange = item => {
       console.log('selectProvinceItem ', item);
@@ -64,15 +55,14 @@ class AllCity extends PureComponent {
         >
           {this.getProvinceOption()}
         </Select>
-      </Spin>);
-
+      </Spin>
+    );
   }
 
   getProvinceOption() {
     const { body = {} } = this.props;
     return this.getOption(body.data);
   }
-
 
   getOption = list => {
     if (!list || list.length < 1) {
@@ -89,13 +79,9 @@ class AllCity extends PureComponent {
     ));
   };
 
-
-
-
   selectProvinceItem = item => {
     const { dispatch } = this.props;
     if (item !== '') {
-
       const name = {};
       name.name = item.key;
       console.log('selectProvinceItem ', item);
@@ -106,9 +92,7 @@ class AllCity extends PureComponent {
         },
       });
     }
-
   };
-
 }
 
 export default AllCity;

@@ -1,5 +1,5 @@
 export default {
-  'app.basic.menuMap.basice':'基础数据',
+  'app.basic.menuMap.basice': '基础数据',
   'app.basic.menuMap.brand': '品牌',
   'app.basic.menuMap.requested': '品质要求',
   'app.basic.menuMap.way': '送货方式',

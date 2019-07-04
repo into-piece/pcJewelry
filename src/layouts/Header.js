@@ -145,8 +145,7 @@ class HeaderView extends Component {
             size="small"
             onNoticeVisibleChange={this.handleNoticeVisibleChange}
             {...this.props}
-          >
-          </GlobalHeader>
+          />
         )}
       </Header>
     ) : null;

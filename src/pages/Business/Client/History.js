@@ -31,7 +31,6 @@ const historyColumn = [
     render: (text, row, index) => {
       return text;
     },
-
   },
   {
     title: '原始订单码',
@@ -44,13 +43,11 @@ const historyColumn = [
     key: 'total',
   },
 
-
   {
     title: '款数',
     dataIndex: 'typeCount',
     key: 'typeCount',
   },
-
 
   {
     title: '总重',
@@ -58,37 +55,25 @@ const historyColumn = [
     key: 'sum',
   },
 
-
   {
     title: '金额',
     dataIndex: 'amount',
     key: 'amount',
   },
-
-
 ];
 
-
 class History extends PureComponent {
-
-
   constructor(props) {
     super(props);
     this.state = {
       selectIndexAt: -1,
       mouseIndexAt: -1,
     };
-
   }
 
-
-  componentWillMount() {
-
-
-  }
+  componentWillMount() {}
 
   render() {
-
     const historyData = [
       {
         code: 'PI_20171125_APP',
@@ -103,20 +88,21 @@ class History extends PureComponent {
         total: 2,
         typeCount: 2,
         amount: '50.000.0',
-      }, {
-        code: 'PI_20171125_APP',
-        historyCode: 'PI_20171125_APP',
-        total: 2,
-        typeCount: 2,
-        amount: '50.000.0',
-      }, {
+      },
+      {
         code: 'PI_20171125_APP',
         historyCode: 'PI_20171125_APP',
         total: 2,
         typeCount: 2,
         amount: '50.000.0',
       },
-
+      {
+        code: 'PI_20171125_APP',
+        historyCode: 'PI_20171125_APP',
+        total: 2,
+        typeCount: 2,
+        amount: '50.000.0',
+      },
     ];
 
     const amount = 3;
@@ -125,75 +111,114 @@ class History extends PureComponent {
       amount,
     });
 
-
-    return (<div className={styles.content}>
-      <div className={styles.right_info}>
-
-      <Form layout="inline">
-        <FormItem label="订单号码">{<Input placeholder="请输入"/>}</FormItem>
-        <Button type="primary" htmlType="submit">
-          查询
-        </Button>
-
-      </Form>
-      <Table
-        // style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}}
-        style={{ marginBottom: 5}}
-        pagination={false}
-        loading={false}
-        dataSource={tempHistory}
-        rowClassName={this.onSelectRowClass}
-        onRow={(record, index) => {
-          return {
-            onClick: event => {
-              this.setState({
-                selectIndexAt: index,
-              });
-            },
-            onMouseEnter: event => {
-              // console.log('mouse '+index);
-
-            },
-          };
-        }}
-        columns={historyColumn}
-        rowKey="id"
-
-      />
-      </div>
-      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
-            className={styles.cardconrtll}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            flexDirection: 'column',
-          }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Button className={clientStyle.buttomControl} type="primary" icon="plus"
-                    size={'small'}>新增</Button>
-            <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-            >删除</Button>
-            <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit">编辑</Button>
-            <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-            >冻结</Button>
-          </div>
-
-
-          <div
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
-            <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="copy">复制</Button>
-            <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
-            >撤销</Button>
-          </div>
+    return (
+      <div className={styles.content}>
+        <div className={styles.right_info}>
+          <Form layout="inline">
+            <FormItem label="订单号码">{<Input placeholder="请输入" />}</FormItem>
+            <Button type="primary" htmlType="submit">
+              查询
+            </Button>
+          </Form>
+          <Table
+            // style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}}
+            style={{ marginBottom: 5 }}
+            pagination={false}
+            loading={false}
+            dataSource={tempHistory}
+            rowClassName={this.onSelectRowClass}
+            onRow={(record, index) => {
+              return {
+                onClick: event => {
+                  this.setState({
+                    selectIndexAt: index,
+                  });
+                },
+                onMouseEnter: event => {
+                  // console.log('mouse '+index);
+                },
+              };
+            }}
+            columns={historyColumn}
+            rowKey="id"
+          />
         </div>
+        <Card
+          bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
+          className={styles.cardconrtll}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Button
+                className={clientStyle.buttomControl}
+                type="primary"
+                icon="plus"
+                size={'small'}
+              >
+                新增
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                type="danger"
+                icon="delete"
+                size={'small'}
+              >
+                删除
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                type="primary"
+                size={'small'}
+                icon="edit"
+              >
+                编辑
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                size={'small'}
+                type="primary"
+                icon="lock"
+              >
+                冻结
+              </Button>
+            </div>
 
-      </Card>
-
-    </div>);
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingTop: 10,
+              }}
+            >
+              <Button
+                className={clientStyle.buttomControl}
+                type="primary"
+                size={'small'}
+                icon="copy"
+              >
+                复制
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                size={'small'}
+                type="primary"
+                icon="rollback"
+              >
+                撤销
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
   }
 
   onSelectRowClass = (record, index) => {
@@ -201,8 +226,6 @@ class History extends PureComponent {
     return index == this.state.selectIndexAt ? styles.row_select : styles.row_noselect;
     // return (index==this.state.selectIndexAt||index==this.state.mouseIndexAt)?styles.row_select:""
   };
-
-
 }
 
 export default History;

@@ -17,10 +17,8 @@ export default {
   },
 
   effects: {
-
-
-    * fetchListTerminal({payload, callback}, { call, put }) {
-      const response = yield call(querylistTerminal,payload);
+    *fetchListTerminal({ payload, callback }, { call, put }) {
+      const response = yield call(querylistTerminal, payload);
       yield put({
         type: 'list',
         payload: response,
@@ -28,8 +26,8 @@ export default {
       if (callback) callback();
     },
 
-    * addTerminal({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheTerminal,payload);
+    *addTerminal({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheTerminal, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -37,8 +35,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateTerminal({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheTerminal,payload);
+    *updateTerminal({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheTerminal, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -46,8 +44,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteTerminal({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheTerminal,payload);
+    *deleteTerminal({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheTerminal, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -55,49 +53,43 @@ export default {
       if (callback) callback();
     },
 
-    * freezeTerminal({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheTerminal,payload);
+    *freezeTerminal({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheTerminal, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
   },
 
   reducers: {
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-          size:action.payload.body.size,
-          total:action.payload.body.total,
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+          size: action.payload.body.size,
+          total: action.payload.body.total,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg,
-
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

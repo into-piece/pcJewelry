@@ -4,20 +4,21 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-
 // import { connect } from 'dva';
 
 class TerminalSelected extends PureComponent {
-  state = {
-    value: undefined,
-    isFirst: true,
-    records: [],
-
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: undefined,
+      isFirst: true,
+      records: [],
+    };
+  }
 
   handleSearch = value => {
     // fetch(value, data => this.setState({ data }));
-    this.fetch(value);
+    this.fetchList(value);
   };
 
   handleChange = value => {
@@ -36,34 +37,28 @@ class TerminalSelected extends PureComponent {
           return true;
         }
       });
-      if (r.length > 0)
-        endName = r[0];
+      if (r.length > 0) endName = r[0];
 
       onSelectEndName(endName.endShotName);
     }
   };
 
-
   render() {
-
-    const { value, isFirst, loading ,records} = this.state;
+    const { value, isFirst, loading } = this.state;
     const { content } = this.props;
-
-
-    // console.log("endNo is ",records)
 
     let showValue;
     if (isFirst) {
       showValue = content;
-      // this.fetch('');
+      if (!showValue) this.fetchList('');
     } else {
       showValue = value;
     }
 
-
     return (
       <Select
         showSearch
+        loading={loading}
         value={showValue}
         placeholder={this.props.placeholder}
         style={this.props.style}
@@ -74,45 +69,39 @@ class TerminalSelected extends PureComponent {
         onChange={this.handleChange}
         notFoundContent={null}
       >
-        {this.getEndNo(records)}
+        {this.getEndNo()}
       </Select>
     );
   }
 
-  getEndNo(records) {
-
-
-
+  getEndNo() {
+    const { records } = this.state;
+    console.log('endNo is ', records);
     return this.getOption(records);
   }
 
-
   getOption = list => {
     if (!list || list.length < 1) {
+      console.log('empity');
       return (
         <Option key={0} value={0}>
           没有找到选项
         </Option>
       );
     }
-
-
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.id} value={item.endNo}>
+      <Option key={item} value={item.endNo}>
         {item.endNo}
       </Option>
     ));
   };
 
-
-  fetch = (item) => {
-
-
+  fetchList = item => {
     let params = {};
     params.endNo = item;
     params.size = 10;
-    const _this = this;
+    const mythis = this;
     fetch('/server/business/end-customer/listEndCustomer', {
       method: 'POST',
       credentials: 'include',
@@ -123,41 +112,47 @@ class TerminalSelected extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-
         const body = d.body;
         if (body && body.records) {
           // if (body.records.length > 0) {
-            let  records = body.records;
-            // console.log("terminal records ",records)
-          if(!records) records=[];
-          console.log("list update ",records)
-            this.state.records = records;
-            _this.setState({
-              records,
-              loading: false,
-            });
-            // console.log('image  data ', imageObject);
-            return;
-          }
-
-        // }
-        this.state.records = [];
-        _this.setState({
+          let records = body.records;
+          // console.log("terminal records ",records)
+          if (!records) records = [];
+          console.log('list update ', records);
+          mythis.setState({
+            records,
+            loading: false,
+            isFirst: false,
+          });
+          // console.log('image  data ', imageObject);
+          // return;
+        } else {
+          // }
+          mythis.setState({
+            loading: false,
+            records: [],
+            isFirst: false,
+          });
+        }
+      })
+      .catch(function(ex) {
+        console.log('parsing failed', ex);
+        // message.error('加载图片失败！');
+        mythis.setState({
           loading: false,
-          records:[],
+          records: [],
+          isFirst: false,
         });
-
-      }).catch(function(ex) {
-      console.log('parsing failed', ex);
-      // message.error('加载图片失败！');
-      _this.setState({
-        loading: false,
-        records:[],
       });
-    });
+
     // }
   };
 
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    console.log('shouldComponentUpdate');
+
+    return true;
+  }
 }
 
 export default TerminalSelected;

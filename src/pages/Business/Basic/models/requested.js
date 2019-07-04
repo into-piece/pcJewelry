@@ -17,9 +17,7 @@ export default {
   },
 
   effects: {
-
-
-    * fetchListRequested(_, { call, put }) {
+    *fetchListRequested(_, { call, put }) {
       const response = yield call(querylistRequested);
       yield put({
         type: 'list',
@@ -27,8 +25,8 @@ export default {
       });
     },
 
-    * addRequested({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheRequested,payload);
+    *addRequested({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheRequested, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -36,8 +34,8 @@ export default {
       if (callback) callback();
     },
 
-    * updateRequested({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheRequested,payload);
+    *updateRequested({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheRequested, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -45,9 +43,8 @@ export default {
       if (callback) callback();
     },
 
-    * deleteRequested({ payload, callback }, { call, put }) {
-
-      const response = yield call(deleteTheRequested,payload);
+    *deleteRequested({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheRequested, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -55,48 +52,41 @@ export default {
       if (callback) callback();
     },
 
-    * freezeRequested({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheRequested,payload);
+    *freezeRequested({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheRequested, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
   },
 
   reducers: {
-
-
-
     list(state, action) {
       return {
         ...state,
         head: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body:{
+        body: {
           ...state.body,
           data: action.payload.body.records,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
     },
 
-    save(state,action) {
+    save(state, action) {
       return {
         ...state,
-        result:action.payload,
-        body:{
+        result: action.payload,
+        body: {
           ...state.body,
-          rtnCode:action.payload.head.rtnCode,
-          rtnMsg:action.payload.head.rtnMsg
-        }
+          rtnCode: action.payload.head.rtnCode,
+          rtnMsg: action.payload.head.rtnMsg,
+        },
       };
-
-
     },
-
   },
 };

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Icon,Menu } from 'antd';
+import { Icon, Menu } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
@@ -32,16 +32,20 @@ export default class GlobalHeader extends PureComponent {
           </Link>
         )}
         {/*<Menu*/}
-          {/*theme="light"*/}
-          {/*mode="horizontal"*/}
-          {/*defaultSelectedKeys={['2']}*/}
+        {/*theme="light"*/}
+        {/*mode="horizontal"*/}
+        {/*defaultSelectedKeys={['2']}*/}
         {/*>*/}
-          {/*<Menu.Item key="1">nav 1</Menu.Item>*/}
-          {/*<Menu.Item key="2">nav 2</Menu.Item>*/}
-          {/*<Menu.Item key="3">nav 3</Menu.Item>*/}
+        {/*<Menu.Item key="1">nav 1</Menu.Item>*/}
+        {/*<Menu.Item key="2">nav 2</Menu.Item>*/}
+        {/*<Menu.Item key="3">nav 3</Menu.Item>*/}
         {/*</Menu>*/}
         <span className={styles.trigger} onClick={this.toggle}>
-          <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} style={{color:'#fff'}} color={'#fff'}/>
+          <Icon
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            style={{ color: '#fff' }}
+            color={'#fff'}
+          />
         </span>
         <RightContent {...this.props} />
       </div>

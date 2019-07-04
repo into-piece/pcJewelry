@@ -1,17 +1,5 @@
 import React, { PureComponent } from 'react';
-import {
-  Table,
-  Card,
-  Row,
-  Col,
-  Icon,
-  Form,
-  Select,
-  Modal,
-  Input,
-  Button,
-  Divider,
-} from 'antd';
+import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divider } from 'antd';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import SvgUtil from '../../../utils/SvgUtil';
@@ -64,7 +52,7 @@ const paginationProps = {
 
 const { Description } = DescriptionList;
 @connect(({ loading, currency }) => {
-  const { rtnCode,rtnMsg } = currency;
+  const { rtnCode, rtnMsg } = currency;
   return {
     listLoading: loading.effects['currency/fetchListCurrency'],
     addloading: loading.effects['currency/addCurrency'],
@@ -73,22 +61,19 @@ const { Description } = DescriptionList;
     freezing: loading.effects['currency/freezeCurrency'],
     body: currency.body,
     rtnCode,
-    rtnMsg
+    rtnMsg,
   };
 })
 @Form.create()
 class Currency extends PureComponent {
-
-
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
   };
 
-
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       mode: 'inline',
       visible: false,
       done: false,
@@ -101,8 +86,8 @@ class Currency extends PureComponent {
       isAdd: true,
       requestState: 'success',
       requestMes: '保存成功！',
-      isLoading:false,
-      selectIndexAt:-1,
+      isLoading: false,
+      selectIndexAt: -1,
     };
   }
 
@@ -113,22 +98,16 @@ class Currency extends PureComponent {
     });
   }
 
-
-
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form, rtnCode = {} } = this.props;
 
-
     const { showItem, isAdd } = this.state;
 
     form.validateFields((err, fieldsValue) => {
-
       if (err) return;
 
-
       if (isAdd) {
-
         // console.log('data = '+Object.keys({ ...fieldsValue}))
 
         dispatch({
@@ -140,11 +119,10 @@ class Currency extends PureComponent {
 
         this.setState({
           selectedRowKeys: '',
-          selectIndexAt:-1,
+          selectIndexAt: -1,
           showItem: false,
           isEdit: true,
         });
-
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
@@ -154,14 +132,10 @@ class Currency extends PureComponent {
         data.cashPurchasePrice = temp.cashPurchasePrice;
         data.cashSellingPrice = temp.cashSellingPrice;
         data.spotSellingPrice = temp.spotSellingPrice;
-        this.state.current ={...data};
-        if (data.status === '冻结')
-          data.status = 2;
-        else if (data.status === '使用中')
-          data.status = 1;
-        else if (data.status === '草稿')
-          data.status = 0;
-
+        this.state.current = { ...data };
+        if (data.status === '冻结') data.status = 2;
+        else if (data.status === '使用中') data.status = 1;
+        else if (data.status === '草稿') data.status = 0;
 
         // console.log('update ' + Object.keys(current));
         dispatch({
@@ -170,11 +144,9 @@ class Currency extends PureComponent {
             ...data,
           },
         });
-
       }
       this.setState({
         visible: false,
-
       });
     });
   };
@@ -191,21 +163,27 @@ class Currency extends PureComponent {
     });
   };
 
-
   handleCancel = () => {
     this.setState({
       visible: false,
     });
   };
 
-
   render() {
-    const { selectedRowKeys=[], current = {}, isEdit, update } = this.state;
+    const { selectedRowKeys = [], current = {}, isEdit, update } = this.state;
 
+    const {
+      listLoading,
+      body = {},
+      dispatch,
+      addloading,
+      deleteloading,
+      upateloading,
+      freezing,
+      form: { getFieldDecorator },
+    } = this.props;
 
-    const { listLoading, body = {}, dispatch, addloading, deleteloading, upateloading, freezing, form: { getFieldDecorator } } = this.props;
-
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing ||listLoading;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
       if (upateloading) {
@@ -213,30 +191,27 @@ class Currency extends PureComponent {
       }
     } else {
       if (update) {
-
         // console.log('rntCode=' + body.rtnCode);
-        if(body.rtnCode==='000000')
-        {
-          this.state.requestState='success';
-        }else {
-          this.state.requestState='error';
+        if (body.rtnCode === '000000') {
+          this.state.requestState = 'success';
+        } else {
+          this.state.requestState = 'error';
         }
 
-        this.state.requestMes =body.rtnMsg;
+        this.state.requestMes = body.rtnMsg;
         // console.log('result = '+this.state.requestMes)
         this.state.update = false;
         this.state.done = true;
         this.state.visible = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
-          this.state.showItem = {...current};
+          this.state.showItem = { ...current };
         }
       }
-
     }
 
     if (listLoading && body && body.data && body.data.length > 0) {
-      const newdata = body.data.map((value) => {
+      const newdata = body.data.map(value => {
         const s = value.status;
         if (s == 0) {
           value.status = '草稿';
@@ -251,8 +226,6 @@ class Currency extends PureComponent {
       this.state.data = newdata;
     }
 
-
-
     // console.log('rntCode=' + body.rtnCode+",data = "+(body.data));
 
     const rowSelection = {
@@ -261,8 +234,6 @@ class Currency extends PureComponent {
       onChange: this.onSelectChange,
       onSelect: this.selectChange,
     };
-
-
 
     const getModalContent = () => {
       if (this.state.done) {
@@ -281,46 +252,36 @@ class Currency extends PureComponent {
         );
       }
       return (
-        <Form
-          size={'small'}
-          onSubmit={this.handleSubmit}>
+        <Form size={'small'} onSubmit={this.handleSubmit}>
           <FormItem label="币种" {...this.formLayout}>
             {getFieldDecorator('currency', {
               rules: [{ required: true, message: '请输入币种' }],
               initialValue: current.currency,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="买入汇率" {...this.formLayout}>
             {getFieldDecorator('buyingRate', {
               rules: [{ required: true, message: '请输入汇率' }],
               initialValue: current.buyingRate,
-            })(
-              <Input placeholder="请输入" type="number"/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
           <FormItem label="现金购买价格" type="integer" {...this.formLayout}>
             {getFieldDecorator('cashPurchasePrice', {
-              rules: [{ required: true, message: '请输入现金购买价格', }],
+              rules: [{ required: true, message: '请输入现金购买价格' }],
               initialValue: current.cashPurchasePrice,
-            })(
-              <Input placeholder="请输入"  type='number'/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
           <FormItem label="现金销售价格" {...this.formLayout}>
             {getFieldDecorator('cashSellingPrice', {
               rules: [{ required: true, message: '请输入现金销售价格' }],
               initialValue: current.cashSellingPrice,
-            })(
-              <Input placeholder="请输入"  type='number'/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
           <FormItem label="现货销售价格" {...this.formLayout}>
             {getFieldDecorator('spotSellingPrice', {
               rules: [{ required: true, message: '请输入现货销售价格' }],
               initialValue: current.spotSellingPrice,
-            })(
-              <Input placeholder="请输入"  type='number'/>,
-            )}
+            })(<Input placeholder="请输入" type="number" />)}
           </FormItem>
         </Form>
       );
@@ -332,21 +293,23 @@ class Currency extends PureComponent {
 
     return (
       <GridContent>
-        <Row gutter={24}  className={styles.row_content}>
-          <Col  lg={16} md={24} >
-            <div
-              className={styles.view_left_content}>
+        <Row gutter={24} className={styles.row_content}>
+          <Col lg={16} md={24}>
+            <div className={styles.view_left_content}>
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
-                  style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.euro}/>
-                <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="业务提成设当"/>
+                  style={{
+                    width: 50,
+                    height: 50,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingLeft: 10,
+                  }}
+                  component={SvgUtil.euro}
+                />
+                <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="业务提成设当" />
               </div>
-              <Card
-                bordered={false}
-                loading={false}
-
-              >
+              <Card bordered={false} loading={false}>
                 <Table
                   loading={this.state.isLoading}
                   pagination={paginationProps}
@@ -358,11 +321,11 @@ class Currency extends PureComponent {
                   onRow={(record, index) => {
                     return {
                       onClick: event => {
-                        this.selectChange(record,index)
-                      }
+                        this.selectChange(record, index);
+                      },
                     };
                   }}
-                  size='middle'
+                  size="middle"
                   columns={currencyContentColumns}
                 />
                 <Modal
@@ -381,37 +344,68 @@ class Currency extends PureComponent {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <Card
-                bordered={false}
-              >
+              <Card bordered={false}>
                 <div>
-              <span title="币种信息"
-                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
-              币种信息
-              </span>
-                  <Divider/>
-                  {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
-
+                  <span
+                    title="币种信息"
+                    style={{
+                      marginBottom: 32,
+                      paddingLeft: 10,
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#35B0F4',
+                    }}
+                  >
+                    币种信息
+                  </span>
+                  <Divider />
+                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
 
-
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
-                          onClick={this.clickNewFrom}
-                          disabled={true}>新增</Button>
-                  <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
-                          onClick={this.clickDeleteFrom}
-                          disabled={true}>删除</Button>
-                  <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
-                          disabled={true} icon="edit">编辑</Button>
-                  <Button className={styles.buttomControl} size={'small'} type="primary" icon="lock"
-                          onClick={this.clickFreezeFrom}
-                          disabled={true}>冻结</Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    icon="plus"
+                    size={'small'}
+                    onClick={this.clickNewFrom}
+                    disabled={true}
+                  >
+                    新增
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="danger"
+                    icon="delete"
+                    size={'small'}
+                    onClick={this.clickDeleteFrom}
+                    disabled={true}
+                  >
+                    删除
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    size={'small'}
+                    onClick={this.clickEditFrom}
+                    disabled={true}
+                    icon="edit"
+                  >
+                    编辑
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    size={'small'}
+                    type="primary"
+                    icon="lock"
+                    onClick={this.clickFreezeFrom}
+                    disabled={true}
+                  >
+                    冻结
+                  </Button>
                 </div>
-
               </Card>
             </div>
           </Col>
@@ -420,10 +414,7 @@ class Currency extends PureComponent {
     );
   }
 
-
-
   onSelectRowClass = (record, index) => {
-
     let color = '';
     if (index % 2 == 0) {
       color = styles.row_normal;
@@ -449,14 +440,12 @@ class Currency extends PureComponent {
       },
     });
 
-
     this.setState({
       selectedRowKeys: '',
-      selectIndexAt:-1,
+      selectIndexAt: -1,
       showItem: false,
       isEdit: true,
     });
-
   };
 
   clickEditFrom = () => {
@@ -465,9 +454,7 @@ class Currency extends PureComponent {
       current: this.state.showItem,
       visible: true,
     });
-
   };
-
 
   clickFreezeFrom = () => {
     const royaltyNo = this.state.showItem;
@@ -479,12 +466,9 @@ class Currency extends PureComponent {
         ...royaltyNo,
       },
     });
-
-
   };
 
-  selectChange = (record,index) => {
-
+  selectChange = (record, index) => {
     let edit = false;
     if (record === '') {
       edit = true;
@@ -511,23 +495,20 @@ class Currency extends PureComponent {
     // console.log('select the item');
   };
 
-
-  getRenderitem = (item) => {
+  getRenderitem = item => {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
-        <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='币种'>{item.currency}</Description>
-        <Description term='买入汇率'>{item.buyingRate}</Description>
-        <Description term='现金购买价格'>{item.cashPurchasePrice}</Description>
-        <Description term='现金销售价格'>{item.cashSellingPrice}</Description>
-        <Description term='现货销售价格'>{item.spotSellingPrice}</Description>
+        <DescriptionList className={styles.headerList} size="small" col="1">
+          <Description term="币种">{item.currency}</Description>
+          <Description term="买入汇率">{item.buyingRate}</Description>
+          <Description term="现金购买价格">{item.cashPurchasePrice}</Description>
+          <Description term="现金销售价格">{item.cashSellingPrice}</Description>
+          <Description term="现货销售价格">{item.spotSellingPrice}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
-        </span>
-
+      </span>
     );
   };
-
 }
 
 export default Currency;

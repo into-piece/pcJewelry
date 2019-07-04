@@ -24,10 +24,10 @@ class TriggerException extends PureComponent {
     });
   };
 
-  onChangePage = (key) =>{
-    const {onHandlePage} = this.props.location;
-    onHandlePage({key});
-  }
+  onChangePage = key => {
+    const { onHandlePage } = this.props.location;
+    onHandlePage({ key });
+  };
 
   render() {
     const { isloading } = this.state;

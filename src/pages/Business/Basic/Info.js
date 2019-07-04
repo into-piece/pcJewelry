@@ -22,36 +22,25 @@ class Info extends Component {
     super(props);
     const { match, location } = props;
     const menuMap = {
-      brand: <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="Brand"/>,
+      brand: <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="Brand" />,
       requested: (
-        <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="Requirements"/>
+        <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="Requirements" />
       ),
-      sendWay: <FormattedMessage id="app.basic.menuMap.way" defaultMessage="Shipping Method"/>,
+      sendWay: <FormattedMessage id="app.basic.menuMap.way" defaultMessage="Shipping Method" />,
       royalty: (
-        <FormattedMessage
-          id="app.basic.menuMap.royalty"
-          defaultMessage="Commission Setting"
-        />
+        <FormattedMessage id="app.basic.menuMap.royalty" defaultMessage="Commission Setting" />
       ),
-      ring: (
-        <FormattedMessage id="app.basic.menuMap.num" defaultMessage="Ring Around"/>
-      ),
-      currency: (
-        <FormattedMessage
-          id="app.basic.menuMap.currency"
-          defaultMessage="Currency"
-        />
-      ),
+      ring: <FormattedMessage id="app.basic.menuMap.num" defaultMessage="Ring Around" />,
+      currency: <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="Currency" />,
     };
     const key = location.pathname.replace(`${match.path}/`, '');
     this.state = {
       mode: 'inline',
       menuMap,
       selectKey: menuMap[key] ? key : 'brand',
-      Component: <Brand/>,
+      Component: <Brand />,
     };
   }
-
 
   // static getDerivedStateFromProps(props, state) {
   //   const { match, location } = props;
@@ -76,9 +65,10 @@ class Info extends Component {
     const { menuMap } = this.state;
     return Object.keys(menuMap).map(item => (
       <Item key={item} style={{ textAlign: 'vertical-center' }}>
-        <span style={{ display: 'flex', alignItems: 'center' }}><Icon style={{ width: 25, height: 25 }}
-                                                                      component={this.getMenuIcon(item)}/>
-          {menuMap[item]}</span>
+        <span style={{ display: 'flex', alignItems: 'center' }}>
+          <Icon style={{ width: 25, height: 25 }} component={this.getMenuIcon(item)} />
+          {menuMap[item]}
+        </span>
       </Item>
     ));
   };
@@ -99,16 +89,15 @@ class Info extends Component {
   };
 
   selectKey = ({ key }) => {
-
     // router.push(`/business/basic/${key}`);
     let Component;
-    if (key === 'ring') Component = <RingNum/>;
-    else if (key === 'brand') Component = <Brand/>;
-    else if (key === 'requested') Component = <Requested/>;
-    else if (key === 'sendWay') Component = <SendWay/>;
-    else if (key === 'royalty') Component = <Royalty/>;
+    if (key === 'ring') Component = <RingNum />;
+    else if (key === 'brand') Component = <Brand />;
+    else if (key === 'requested') Component = <Requested />;
+    else if (key === 'sendWay') Component = <SendWay />;
+    else if (key === 'royalty') Component = <Royalty />;
     else if (key === 'currency') {
-      Component = <Currency/>;
+      Component = <Currency />;
     }
     this.setState({
       selectKey: key,
@@ -128,24 +117,20 @@ class Info extends Component {
     let mode = 'inline';
     const { offsetWidth } = this.main;
 
-
     if (mode !== currentMode) {
       requestAnimationFrame(() => this.setState({ mode }));
     }
   };
 
   render() {
-
     const { children } = this.props;
     const { mode, selectKey, Component } = this.state;
 
     console.log('select key ', selectKey);
     return (
-      <div
-        className={styles.page}
-      >
+      <div className={styles.page}>
         <div className={styles.nav}>
-          <Breadcrumb style={{display:'none'}}>
+          <Breadcrumb style={{ display: 'none' }}>
             <Breadcrumb.Item>主页</Breadcrumb.Item>
             <Breadcrumb.Item>
               <a href="">业务</a>
@@ -153,38 +138,27 @@ class Info extends Component {
             <Breadcrumb.Item>
               <a href="/business/basic/base#/business/basic/base">基础数据</a>
             </Breadcrumb.Item>
-
           </Breadcrumb>
         </div>
         <div className={styles.center_content}>
           {/*lg={17} md={24}*/}
           <div className={styles.main}>
-
-
             <div
               className={styles.leftmenu}
               ref={ref => {
                 this.main = ref;
               }}
             >
-              <Menu
-                mode={mode}
-                selectedKeys={[selectKey]}
-                onClick={this.selectKey}
-              >
+              <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.selectKey}>
                 {this.getmenu()}
               </Menu>
             </div>
-            <div className={styles.right}>
-              {Component}
-            </div>
+            <div className={styles.right}>{Component}</div>
           </div>
-
         </div>
       </div>
     );
   }
-
 
   /* <Card bordered={false} style={{ minHeight: window.innerHeight, marginBottom: 24,padding:0 }} loading={false}>*/
 }

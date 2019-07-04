@@ -29,9 +29,7 @@ const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
-
 const ringNumContentColumns = [
-
   {
     title: '中文名称',
     dataIndex: 'zhName',
@@ -55,7 +53,6 @@ const ringNumContentColumns = [
     key: 'status',
   },
 ];
-
 
 const subringNumContentColumns = [
   {
@@ -102,7 +99,6 @@ class RingNum extends PureComponent {
     wrapperCol: { span: 13 },
   };
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -129,15 +125,14 @@ class RingNum extends PureComponent {
       tabType: 'standard',
       refreshList: 'standard',
       standardRowData: [],
-      standarRowKeys:[],
+      standarRowKeys: [],
       numberRowData: [],
-      numberRowKeys:[],
+      numberRowKeys: [],
       rowData: [],
-      rowNumberData:[],
+      rowNumberData: [],
       fristLoad: true,
     };
   }
-
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -145,25 +140,18 @@ class RingNum extends PureComponent {
       type: 'ringnum/fetchListRingNum',
     });
     this.state.data2 = [];
-
   }
-
 
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form, rtnCode = {} } = this.props;
 
-
     const { showItem, isAdd } = this.state;
 
     form.validateFields((err, fieldsValue) => {
-
       if (err) return;
 
-
       if (isAdd) {
-
-
         dispatch({
           type: 'ringnum/addRingNum',
           payload: {
@@ -177,7 +165,6 @@ class RingNum extends PureComponent {
           showItem: false,
           isEdit: true,
         });
-
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showItem };
@@ -185,13 +172,9 @@ class RingNum extends PureComponent {
         data.enName = temp.enName;
         data.marks = temp.marks;
         this.state.current = { ...data };
-        if (data.status === '冻结')
-          data.status = 2;
-        else if (data.status === '使用中')
-          data.status = 1;
-        else if (data.status === '草稿')
-          data.status = 0;
-
+        if (data.status === '冻结') data.status = 2;
+        else if (data.status === '使用中') data.status = 1;
+        else if (data.status === '草稿') data.status = 0;
 
         // console.log('update ' + Object.keys(current));
         dispatch({
@@ -200,43 +183,35 @@ class RingNum extends PureComponent {
             ...data,
           },
         });
-
       }
       this.setState({
         visible: false,
-
       });
     });
   };
 
   handleNumberSubmit = e => {
-
     console.log('handleNumberSubmit');
     e.preventDefault();
     const { dispatch, form, rtnCode = {} } = this.props;
 
-
     const { showItem, isAdd, showNumberItem } = this.state;
 
     form.validateFields((err, fieldsValue) => {
-
       if (err) return;
 
-
       if (isAdd) {
-
         let params = {};
         params.sizeCode = fieldsValue.sizeCode;
-        params.ringAroundStId = showItem.id,
-
+        (params.ringAroundStId = showItem.id),
           // console.log('params data = ' + Object.keys(params));
 
-        dispatch({
-          type: 'ringnum/addSonRingNum',
-          payload: {
-            ...params,
-          },
-        });
+          dispatch({
+            type: 'ringnum/addSonRingNum',
+            payload: {
+              ...params,
+            },
+          });
 
         this.setState({
           // selectedRowKeys: '',
@@ -244,19 +219,14 @@ class RingNum extends PureComponent {
           showNumberItem: false,
           isEditNumber: true,
         });
-
       } else {
         const temp = { ...fieldsValue };
         const data = { ...showNumberItem };
         data.sizeCode = temp.sizeCode;
         this.state.currentNumber = { ...temp };
-        if (data.status === '冻结')
-          data.status = 2;
-        else if (data.status === '使用中')
-          data.status = 1;
-        else if (data.status === '草稿')
-          data.status = 0;
-
+        if (data.status === '冻结') data.status = 2;
+        else if (data.status === '使用中') data.status = 1;
+        else if (data.status === '草稿') data.status = 0;
 
         dispatch({
           type: 'ringnum/updateSonRingNum',
@@ -264,11 +234,9 @@ class RingNum extends PureComponent {
             ...data,
           },
         });
-
       }
       this.setState({
         visible: false,
-
       });
     });
   };
@@ -307,7 +275,6 @@ class RingNum extends PureComponent {
     }
   };
 
-
   handleCancel = () => {
     this.setState({
       visible: false,
@@ -315,18 +282,33 @@ class RingNum extends PureComponent {
   };
 
   render() {
-
     const {
       standardSelectedRowKeys = [],
-      current = {}, currentNumber = {},
-      update, updateNumber, isEdit,
-      modalType, fristLoad, tabType,numberSelectedRowKeys
+      current = {},
+      currentNumber = {},
+      update,
+      updateNumber,
+      isEdit,
+      modalType,
+      fristLoad,
+      tabType,
+      numberSelectedRowKeys,
     } = this.state;
 
-
     const {
-      listLoading, istLoading2, body = {}, body2 = {}, addloading, deleteloading, upateloading, freezing,
-      addsonloading, deletesonloading, upatesonloading, sonfreezing, form: { getFieldDecorator },
+      listLoading,
+      istLoading2,
+      body = {},
+      body2 = {},
+      addloading,
+      deleteloading,
+      upateloading,
+      freezing,
+      addsonloading,
+      deletesonloading,
+      upatesonloading,
+      sonfreezing,
+      form: { getFieldDecorator },
     } = this.props;
 
     this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
@@ -338,7 +320,6 @@ class RingNum extends PureComponent {
       }
     } else {
       if (update) {
-
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
         } else {
@@ -354,10 +335,10 @@ class RingNum extends PureComponent {
           this.state.showItem = { ...current };
         }
       }
-
     }
 
-    this.state.isSonLoading = addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2;
+    this.state.isSonLoading =
+      addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2;
 
     // console.log('addsonloading =' + addsonloading + ',deletesonloading=' + deletesonloading + ',upatesonloading=' + upatesonloading + ',sonfreezing=' + sonfreezing + ',istLoading2=' + istLoading2);
 
@@ -368,7 +349,6 @@ class RingNum extends PureComponent {
       }
     } else {
       if (updateNumber) {
-
         if (body2.rtnCode === '000000') {
           this.state.requestState = 'success';
         } else {
@@ -385,12 +365,10 @@ class RingNum extends PureComponent {
           // console.log('number update ' + this.state.showNumberItem);
         }
       }
-
     }
 
-
     if (listLoading && body && body.data && body.data.length > 0) {
-      const newdata = body.data.map((value) => {
+      const newdata = body.data.map(value => {
         const s = value.status;
         if (s == 0) {
           value.status = '草稿';
@@ -407,8 +385,8 @@ class RingNum extends PureComponent {
 
     this.state.data2 = [];
     // if (sonListLoading && body2 && body2.sonData && body2.sonData.length > 0) {
-    if ((!fristLoad) && body2 && body2.sonData && body2.sonData.length > 0) {
-      const newdata2 = body2.sonData.map((value) => {
+    if (!fristLoad && body2 && body2.sonData && body2.sonData.length > 0) {
+      const newdata2 = body2.sonData.map(value => {
         const s = value.status;
         if (s == 0) {
           value.status = '草稿';
@@ -423,7 +401,6 @@ class RingNum extends PureComponent {
       this.state.data2 = newdata2;
     }
 
-
     if (this.state.done) {
       if (this.state.requestState == 'success') {
         message.success(this.state.requestMes);
@@ -432,7 +409,6 @@ class RingNum extends PureComponent {
       }
       this.handleDone();
     }
-
 
     // console.log('rntCode2=' + body2.rtnCode + ',data2 = ' + (this.state.data2));
 
@@ -443,64 +419,52 @@ class RingNum extends PureComponent {
       onSelect: this.selectChange,
     };
 
-
     const rowNumberSelection = {
       selectedRowKeys: numberSelectedRowKeys,
       type: 'checkbox',
       onChange: this.onSelectNumberChange,
     };
 
-
     const getModalContent = () => {
-
       const { modalType } = this.state;
 
       if (modalType === 'number') {
-
         return (
-          <Form
-            size={'small'}
-            onSubmit={this.handleNumberSubmit}>
-            <FormItem label="戒围号"
-                      help="手寸输入用逗号'.'分割，如7.8.9录后请按回车健"
-                      validateStatus="success"
-                      {...this.formLayout}>
+          <Form size={'small'} onSubmit={this.handleNumberSubmit}>
+            <FormItem
+              label="戒围号"
+              help="手寸输入用逗号'.'分割，如7.8.9录后请按回车健"
+              validateStatus="success"
+              {...this.formLayout}
+            >
               {getFieldDecorator('sizeCode', {
                 rules: [{ required: true, message: '请输入戒围标准编号' }],
                 initialValue: currentNumber.sizeCode,
-              })(<Input placeholder="请输入"/>)}
+              })(<Input placeholder="请输入" />)}
             </FormItem>
           </Form>
         );
       } else if (modalType === 'standard') {
         return (
-          <Form
-            size={'small'}
-            onSubmit={this.handleSubmit}>
-
+          <Form size={'small'} onSubmit={this.handleSubmit}>
             <FormItem label="中文名称" {...this.formLayout}>
               {getFieldDecorator('zhName', {
                 rules: [{ required: true, message: '请输入中文名称' }],
                 initialValue: current.zhName,
-              })(
-                <Input placeholder="请输入"/>,
-              )}
+              })(<Input placeholder="请输入" />)}
             </FormItem>
             <FormItem label="英文名称" {...this.formLayout}>
               {getFieldDecorator('enName', {
                 rules: [{ required: true, message: '请输入英文名称' }],
                 initialValue: current.enName,
-              })(
-                <Input placeholder="请输入"/>,
-              )}
-            </FormItem> <FormItem label="备注" {...this.formLayout}>
-            {getFieldDecorator('marks', {
-              rules: [{ message: '请输入备注' }],
-              initialValue: current.marks,
-            })(
-              <TextArea placeholder="请输入"/>,
-            )}
-          </FormItem>
+              })(<Input placeholder="请输入" />)}
+            </FormItem>{' '}
+            <FormItem label="备注" {...this.formLayout}>
+              {getFieldDecorator('marks', {
+                rules: [{ message: '请输入备注' }],
+                initialValue: current.marks,
+              })(<TextArea placeholder="请输入" />)}
+            </FormItem>
           </Form>
         );
       }
@@ -509,11 +473,10 @@ class RingNum extends PureComponent {
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
       : {
-        okText: '保存',
-        onOk: this.state.modalType === 'standard' ? this.handleSubmit : this.handleNumberSubmit,
-        onCancel: this.handleCancel,
-      };
-
+          okText: '保存',
+          onOk: this.state.modalType === 'standard' ? this.handleSubmit : this.handleNumberSubmit,
+          onCancel: this.handleCancel,
+        };
 
     // console.log('modalType ' + modalType);
 
@@ -524,23 +487,24 @@ class RingNum extends PureComponent {
             <div className={styles.view_left_content}>
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
-                  style={{ width: 50, height: 50, paddingRight: 10, paddingTop: 10, paddingLeft: 10 }}
-                  component={SvgUtil.ring}/>
-                <FormattedMessage id="app.basic.menuMap.num" defaultMessage="戒围标准"/>
+                  style={{
+                    width: 50,
+                    height: 50,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingLeft: 10,
+                  }}
+                  component={SvgUtil.ring}
+                />
+                <FormattedMessage id="app.basic.menuMap.num" defaultMessage="戒围标准" />
               </div>
-              <Card
-                bordered={false}
-                loading={false}
-
-              >
+              <Card bordered={false} loading={false}>
                 <Table
                   loading={this.state.isLoading}
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   rowSelection={rowSelection}
-                  rowKey={record =>
-                    record.id
-                  }
+                  rowKey={record => record.id}
                   bordered={false}
                   onRow={record => {
                     return {
@@ -550,7 +514,7 @@ class RingNum extends PureComponent {
                     };
                   }}
                   rowClassName={this.onSelectRowClass}
-                  size='middle'
+                  size="middle"
                   columns={ringNumContentColumns}
                 />
                 <Table
@@ -560,9 +524,7 @@ class RingNum extends PureComponent {
                   bordered={false}
                   rowClassName={this.onSelectRowNumberClass}
                   rowSelection={rowNumberSelection}
-                  rowKey={record =>
-                    record.id
-                  }
+                  rowKey={record => record.id}
                   onRow={record => {
                     return {
                       onClick: event => {
@@ -570,12 +532,9 @@ class RingNum extends PureComponent {
                       },
                     };
                   }}
-                  size='middle'
+                  size="middle"
                   columns={subringNumContentColumns}
-
-
                 />
-
 
                 <Modal
                   // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
@@ -588,7 +547,6 @@ class RingNum extends PureComponent {
                 >
                   {getModalContent()}
                 </Modal>
-
               </Card>
             </div>
           </Col>
@@ -604,10 +562,20 @@ class RingNum extends PureComponent {
                     value={modalType}
                     buttonStyle="solid"
                   >
-                    <Radio.Button value="standard" className={styles.right_radio_tab}
-                                  onClick={this.switchTabStandrad}>戒围标准</Radio.Button>
-                    <Radio.Button value="number" className={styles.right_radio_tab}
-                                  onClick={this.switchTabNumber}>戒围号</Radio.Button>
+                    <Radio.Button
+                      value="standard"
+                      className={styles.right_radio_tab}
+                      onClick={this.switchTabStandrad}
+                    >
+                      戒围标准
+                    </Radio.Button>
+                    <Radio.Button
+                      value="number"
+                      className={styles.right_radio_tab}
+                      onClick={this.switchTabNumber}
+                    >
+                      戒围号
+                    </Radio.Button>
                   </RadioGroup>
                 </div>
               </div>
@@ -619,8 +587,7 @@ class RingNum extends PureComponent {
     );
   }
 
-
-  clickStandardRowItem = (record) => {
+  clickStandardRowItem = record => {
     const { standardSelectedRowKeys, standardRowData } = this.state;
     let rowData = this.state.rowData;
     const selects = standardSelectedRowKeys ? standardSelectedRowKeys : [];
@@ -628,15 +595,12 @@ class RingNum extends PureComponent {
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
-      if (rowData.includes(record))
-        rowData = [];
+      if (rowData.includes(record)) rowData = [];
 
       if (standardRowData.includes(record)) {
         standardRowData.splice(standardRowData.findIndex(item => item.id === id), 1);
       }
     } else {
-
-
       if (rowData.length > 0) {
         selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
       }
@@ -655,9 +619,9 @@ class RingNum extends PureComponent {
       this.setState({
         showItem: false,
         data2: [],
-        fristLoad:true,
-        numberSelectedRowKeys:[],
-        numberRowData:[],
+        fristLoad: true,
+        numberSelectedRowKeys: [],
+        numberRowData: [],
         isEditNumber: true,
         isEdit: true,
         current: false,
@@ -666,28 +630,23 @@ class RingNum extends PureComponent {
 
     this.setState({
       standardSelectedRowKeys: [].concat(selects),
-      rowData
+      rowData,
     });
-
   };
 
-
-  clickRowNumberItem = (record) => {
-    const { numberSelectedRowKeys , numberRowData} = this.state;
+  clickRowNumberItem = record => {
+    const { numberSelectedRowKeys, numberRowData } = this.state;
     let rowNumberData = this.state.rowNumberData;
-    const selects = numberSelectedRowKeys?numberSelectedRowKeys:[];
-    const id = record.id
-
+    const selects = numberSelectedRowKeys ? numberSelectedRowKeys : [];
+    const id = record.id;
 
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index=>index===id),1)
+      selects.splice(selects.findIndex(index => index === id), 1);
 
-      if (rowNumberData.includes(record))
-        rowNumberData = [];
+      if (rowNumberData.includes(record)) rowNumberData = [];
 
-      if(numberRowData.includes(record))
-      {
-        numberRowData.splice(numberRowData.findIndex(item=>item.id===id),1)
+      if (numberRowData.includes(record)) {
+        numberRowData.splice(numberRowData.findIndex(item => item.id === id), 1);
       }
     } else {
       // console.log("record is ",rowData)
@@ -697,17 +656,15 @@ class RingNum extends PureComponent {
       rowNumberData = [];
       rowNumberData.push({ ...record });
 
-      selects.push(id)
-      numberRowData.push(record)
+      selects.push(id);
+      numberRowData.push(record);
     }
 
-    if(selects.length>0)
-    {
+    if (selects.length > 0) {
       const recordK = selects[selects.length - 1];
       const r = numberRowData.filter(value => value.id == recordK);
-      this.showSelectNumberItem(r[0])
-    }else
-    {
+      this.showSelectNumberItem(r[0]);
+    } else {
       this.setState({
         showNumberItem: false,
         isEditNumber: true,
@@ -717,118 +674,170 @@ class RingNum extends PureComponent {
 
     this.setState({
       numberSelectedRowKeys: [].concat(selects),
-      rowNumberData
+      rowNumberData,
     });
-
   };
 
-
   switchTabStandrad = () => {
-
     this.setState({
       tabType: 'standard',
       modalType: 'standard',
     });
-
   };
 
   switchTabNumber = () => {
-
     this.setState({
       tabType: 'number',
       modalType: 'number',
     });
-
   };
-
 
   getRingStandrad = () => {
     const { isEdit } = this.state;
-    return (<div className={styles.view_dwon}>
+    return (
+      <div className={styles.view_dwon}>
         <div className={clientStyle.list_info}>
           {/*{this.getRingStandrad()}*/}
-          <Card
-            bordered={false}
-            className={styles.rignum_right_card_view}
-          >
+          <Card bordered={false} className={styles.rignum_right_card_view}>
             <div>
-              <span title="戒围标准"
-                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
-              戒围标准信息
+              <span
+                title="戒围标准"
+                style={{
+                  marginBottom: 32,
+                  paddingLeft: 10,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: '#35B0F4',
+                }}
+              >
+                戒围标准信息
               </span>
-              <Divider/>
-              {(this.state.showItem) ? this.getRenderitem(this.state.showItem) : ''}
-
+              <Divider />
+              {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
             </div>
           </Card>
         </div>
 
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
-                    onClick={this.clickNewFrom}>新增</Button>
-            <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
-                    onClick={this.clickDeleteFrom}
-                    disabled={isEdit}>删除</Button>
-            <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickEditFrom}
-                    disabled={isEdit} icon="edit">编辑</Button>
-            <Button className={styles.buttomControl} size={'small'} type="primary" icon="lock"
-                    onClick={this.clickFreezeFrom}
-                    disabled={isEdit}>冻结</Button>
+            <Button
+              className={styles.buttomControl}
+              type="primary"
+              icon="plus"
+              size={'small'}
+              onClick={this.clickNewFrom}
+            >
+              新增
+            </Button>
+            <Button
+              className={styles.buttomControl}
+              type="danger"
+              icon="delete"
+              size={'small'}
+              onClick={this.clickDeleteFrom}
+              disabled={isEdit}
+            >
+              删除
+            </Button>
+            <Button
+              className={styles.buttomControl}
+              type="primary"
+              size={'small'}
+              onClick={this.clickEditFrom}
+              disabled={isEdit}
+              icon="edit"
+            >
+              编辑
+            </Button>
+            <Button
+              className={styles.buttomControl}
+              size={'small'}
+              type="primary"
+              icon="lock"
+              onClick={this.clickFreezeFrom}
+              disabled={isEdit}
+            >
+              冻结
+            </Button>
           </div>
-
         </Card>
       </div>
     );
-
   };
 
-
   getRingNumber = () => {
-
     const { isEditNumber, isEdit } = this.state;
-    return (<div className={styles.view_dwon}>
+    return (
+      <div className={styles.view_dwon}>
         <div className={clientStyle.list_info}>
           {/*{this.getRingStandrad()}*/}
-          <Card
-            className={styles.rignum_right_card_view}
-            bordered={false}
-          >
+          <Card className={styles.rignum_right_card_view} bordered={false}>
             <div>
-              <span title="戒围号"
-                    style={{ marginBottom: 32, paddingLeft: 10, fontSize: 20, fontWeight: 'bold', color: '#35B0F4' }}>
-              戒围号信息
+              <span
+                title="戒围号"
+                style={{
+                  marginBottom: 32,
+                  paddingLeft: 10,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: '#35B0F4',
+                }}
+              >
+                戒围号信息
               </span>
-              <Divider/>
-              {(this.state.showNumberItem) ? this.getRenderSonitem(this.state.showNumberItem) : ''}
-
+              <Divider />
+              {this.state.showNumberItem ? this.getRenderSonitem(this.state.showNumberItem) : ''}
             </div>
           </Card>
         </div>
 
-        <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}
-        >
-
+        <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Button className={styles.buttomControl} type="primary" icon="plus" size={'small'}
-                    onClick={this.clickNewSonFrom} disabled={isEdit}>新增</Button>
-            <Button className={styles.buttomControl} type="danger" icon="delete" size={'small'}
-                    onClick={this.clickNumberDeleteFrom}
-                    disabled={isEditNumber}>删除</Button>
-            <Button className={styles.buttomControl} type="primary" size={'small'} onClick={this.clickNumberEditFrom}
-                    disabled={isEditNumber} icon="edit">编辑</Button>
-            <Button className={styles.buttomControl} size={'small'} type="primary" icon="lock"
-                    onClick={this.clickNumberFreezeFrom}
-                    disabled={isEditNumber}>冻结</Button>
+            <Button
+              className={styles.buttomControl}
+              type="primary"
+              icon="plus"
+              size={'small'}
+              onClick={this.clickNewSonFrom}
+              disabled={isEdit}
+            >
+              新增
+            </Button>
+            <Button
+              className={styles.buttomControl}
+              type="danger"
+              icon="delete"
+              size={'small'}
+              onClick={this.clickNumberDeleteFrom}
+              disabled={isEditNumber}
+            >
+              删除
+            </Button>
+            <Button
+              className={styles.buttomControl}
+              type="primary"
+              size={'small'}
+              onClick={this.clickNumberEditFrom}
+              disabled={isEditNumber}
+              icon="edit"
+            >
+              编辑
+            </Button>
+            <Button
+              className={styles.buttomControl}
+              size={'small'}
+              type="primary"
+              icon="lock"
+              onClick={this.clickNumberFreezeFrom}
+              disabled={isEditNumber}
+            >
+              冻结
+            </Button>
           </div>
-
         </Card>
       </div>
     );
-
   };
-
 
   onSelectRowClass = (record, index) => {
     let color = '';
@@ -865,10 +874,9 @@ class RingNum extends PureComponent {
     dispatch({
       type: 'ringnum/deleteRingNum',
       payload: {
-        'list':standardSelectedRowKeys,
+        list: standardSelectedRowKeys,
       },
     });
-
 
     this.setState({
       standardSelectedRowKeys: '',
@@ -877,31 +885,26 @@ class RingNum extends PureComponent {
       showNumberItem: false,
       isEditNumber: true,
       fristLoad: true,
-      numberSelectedRowKeys:[],
-      numberRowData:[],
+      numberSelectedRowKeys: [],
+      numberRowData: [],
       data2: [],
     });
-
   };
 
-
   clickNumberDeleteFrom = () => {
-    const  { numberSelectedRowKeys } = this.state;
+    const { numberSelectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
       type: 'ringnum/deleteSonRingNumber',
-      payload: {'list':numberSelectedRowKeys},
+      payload: { list: numberSelectedRowKeys },
     });
-
 
     this.setState({
       showNumberItem: false,
       isEditNumber: true,
     });
-
   };
-
 
   clickEditFrom = () => {
     this.state.isAdd = false;
@@ -909,9 +912,7 @@ class RingNum extends PureComponent {
       current: this.state.showItem,
       visible: true,
     });
-
   };
-
 
   clickNumberEditFrom = () => {
     this.state.isAdd = false;
@@ -919,36 +920,32 @@ class RingNum extends PureComponent {
       currentNumber: this.state.showNumberItem,
       visible: true,
     });
-
   };
 
   clickFreezeFrom = () => {
     // const ringNumNo = this.state.showItem;
-    const {standardSelectedRowKeys} = this.state
+    const { standardSelectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
       type: 'ringnum/freezeRingNum',
-      payload: {'list':standardSelectedRowKeys},
+      payload: { list: standardSelectedRowKeys },
     });
   };
 
   clickNumberFreezeFrom = () => {
-    const {numberSelectedRowKeys} = this.state
+    const { numberSelectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
       type: 'ringnum/freezeSonRingNum',
-      payload: {'list':numberSelectedRowKeys},
+      payload: { list: numberSelectedRowKeys },
     });
   };
 
-  selectChange = (record, index) => {
+  selectChange = (record, index) => {};
 
-  };
-
-
-  loadNumList = (record) => {
+  loadNumList = record => {
     const params = {
       ring_around_st_id: { ...record }.id,
     };
@@ -962,14 +959,11 @@ class RingNum extends PureComponent {
     });
   };
 
-
   selectSonChange = (record, index) => {
-
     let edit = false;
     if (record === '') {
       edit = true;
     }
-
 
     this.setState({
       showNumberItem: { ...record },
@@ -981,7 +975,6 @@ class RingNum extends PureComponent {
   };
 
   selectRowChange = (record, index) => {
-
     let edit = false;
     if (record === '') {
       edit = true;
@@ -998,15 +991,14 @@ class RingNum extends PureComponent {
         showItem: false,
         isEdit: true,
         data2: [],
-        fristLoad:true,
-        numberSelectedRowKeys:[],
-        numberRowData:[],
+        fristLoad: true,
+        numberSelectedRowKeys: [],
+        numberRowData: [],
         isEditNumber: true,
         current: false,
         currentNumber: false,
       });
     }
-
 
     this.setState({
       standardSelectedRowKeys,
@@ -1014,9 +1006,7 @@ class RingNum extends PureComponent {
     });
   };
 
-
   onSelectNumberChange = (numberSelectedRowKeys, selectRows) => {
-
     // console.log('num '+numberSelectedRowKeys.length)
     if (numberSelectedRowKeys.length > 0) {
       const recordK = numberSelectedRowKeys[numberSelectedRowKeys.length - 1];
@@ -1039,7 +1029,6 @@ class RingNum extends PureComponent {
         currentNumber: false,
       });
     }
-
 
     this.setState({
       numberSelectedRowKeys,
@@ -1068,13 +1057,11 @@ class RingNum extends PureComponent {
     });
   };
 
-
   showSelectNumberItem = record => {
     let edit = false;
     if (record === '') {
       edit = true;
     }
-
 
     this.setState({
       showNumberItem: { ...record },
@@ -1089,35 +1076,30 @@ class RingNum extends PureComponent {
     // console.log('select the item');
   };
 
-  getRenderSonitem = (item) => {
+  getRenderSonitem = item => {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }}>
-        <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='戒围号'>{item.sizeCode}</Description>
+        <DescriptionList className={styles.headerList} size="small" col="1">
+          <Description term="戒围号">{item.sizeCode}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
-        </span>
-
+      </span>
     );
   };
 
-
-  getRenderitem = (item) => {
+  getRenderitem = item => {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
-        <DescriptionList className={styles.headerList} size='small' col='1'>
-        <Description term='中文名称'>{item.zhName}</Description>
-        <Description term='英文名称'>{item.enName}</Description>
-        <Description term='备注'>{item.marks}</Description>
-        <Description term='状态'>{item.status}</Description>
+        <DescriptionList className={styles.headerList} size="small" col="1">
+          <Description term="中文名称">{item.zhName}</Description>
+          <Description term="英文名称">{item.enName}</Description>
+          <Description term="备注">{item.marks}</Description>
+          <Description term="状态">{item.status}</Description>
         </DescriptionList>
         {/* <Divider/>*/}
-        </span>
-
+      </span>
     );
   };
-
-
 }
 
 export default RingNum;

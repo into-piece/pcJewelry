@@ -35,28 +35,23 @@ import TerminalSelected from './components/TerminalSelected';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
-const listdata = [{
-
-  code: '8009',
-  clientName: 'App',
-  country: 'Thailand',
-
-},
+const listdata = [
   {
-
     code: '8009',
     clientName: 'App',
     country: 'Thailand',
-
   },
   {
-
     code: '8009',
     clientName: 'App',
     country: 'Thailand',
-
-  }];
-
+  },
+  {
+    code: '8009',
+    clientName: 'App',
+    country: 'Thailand',
+  },
+];
 
 @connect(({ loading, mark }) => {
   return {
@@ -70,12 +65,9 @@ const listdata = [{
     markDeleteloading: loading.effects['mark/deleteMark'],
     markFreezeloading: loading.effects['mark/freezeMark'],
   };
-
 })
 @Form.create()
 class Mark extends PureComponent {
-
-
   formLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
@@ -84,10 +76,6 @@ class Mark extends PureComponent {
       // sm: { span: 12 },
     },
   };
-
-
-
-
 
   constructor(props) {
     super(props);
@@ -104,19 +92,19 @@ class Mark extends PureComponent {
     };
   }
 
-
   render() {
-
     const {
-      location, body = {}, markSaveloading,
-      markUpdateloading, markDeleteloading, markFreezeloading, markListloading, params,
+      location,
+      body = {},
+      markSaveloading,
+      markUpdateloading,
+      markDeleteloading,
+      markFreezeloading,
+      markListloading,
+      params,
     } = this.props;
 
-
-   const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-
-
+    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const { selectedItem, visible, current = {}, update, fileList } = this.state;
 
@@ -128,6 +116,9 @@ class Mark extends PureComponent {
       }
     } else {
       if (update) {
+        this.setState({
+          terminalShotName: false,
+        });
         // console.log('code '+body.rtnCode)
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
@@ -138,7 +129,6 @@ class Mark extends PureComponent {
         }
         this.handleDone();
 
-
         this.state.update = false;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
@@ -147,104 +137,144 @@ class Mark extends PureComponent {
       }
     }
 
-
     if (params) {
       const data = { ...params };
       if (data.customerId !== this.state.customerId) {
         this.state.customerId = data.customerId;
-        if (data.customerId !== '')
-          this.loadMarklList();
+        if (data.customerId !== '') this.loadMarklList();
       }
 
-      if (data.customerId && data.customerId !== '')
-        this.state.isAddEdit = false;
-      else
-        this.state.isAddEdit = true;
+      if (data.customerId && data.customerId !== '') this.state.isAddEdit = false;
+      else this.state.isAddEdit = true;
 
-      if (selectedItem !== '')
-        this.state.isEdit = false;
-      else
-        this.state.isEdit = true;
-
-
+      if (selectedItem !== '') this.state.isEdit = false;
+      else this.state.isEdit = true;
     } else {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
-
     }
 
-
-    return (<div className={styles.content}>
-      <div className={styles.right_info}>
-        <List
-          loading={isUpdate || markListloading}
-          dataSource={(isUpdate || markListloading) ? [] : (!this.state.isAddEdit) ? body.data : []}
-          renderItem={this.getContantItem2}
-          size="small"
-          bordered={false}
-          split={true}
-
-        />
-
-      </div>
-      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
-            className={styles.cardconrtll}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            flexDirection: 'column',
-          }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Button className={clientStyle.buttomControl} type="primary" icon="plus"
-                    size={'small'} onClick={this.clickNewFrom} disabled={this.state.isAddEdit}>新增</Button>
-            <Button className={clientStyle.buttomControl} type="danger" icon="delete" size={'small'}
-                    onClick={this.clickDeleteFrom} disabled={this.state.isEdit || this.state.isAddEdit}>删除</Button>
-            <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="edit" onClick={this.clickEditFrom}
-                    disabled={this.state.isEdit || this.state.isAddEdit}>编辑</Button>
-            <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="lock"
-                    onClick={this.clickFreezeFrom} disabled={this.state.isEdit || this.state.isAddEdit}>冻结</Button>
-          </div>
-
-
-          <div
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10 }}>
-            <Button className={clientStyle.buttomControl} type="primary" size={'small'}
-                    icon="copy" disabled>复制</Button>
-            <Button className={clientStyle.buttomControl} size={'small'} type="primary" icon="rollback"
-                    disabled>撤销</Button>
-          </div>
+    return (
+      <div className={styles.content}>
+        <div className={styles.right_info}>
+          <List
+            loading={isUpdate || markListloading}
+            dataSource={isUpdate || markListloading ? [] : !this.state.isAddEdit ? body.data : []}
+            renderItem={this.getContantItem2}
+            size="small"
+            bordered={false}
+            split={true}
+          />
         </div>
+        <Card
+          bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
+          className={styles.cardconrtll}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Button
+                className={clientStyle.buttomControl}
+                type="primary"
+                icon="plus"
+                size={'small'}
+                onClick={this.clickNewFrom}
+                disabled={this.state.isAddEdit}
+              >
+                新增
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                type="danger"
+                icon="delete"
+                size={'small'}
+                onClick={this.clickDeleteFrom}
+                disabled={this.state.isEdit || this.state.isAddEdit}
+              >
+                删除
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                type="primary"
+                size={'small'}
+                icon="edit"
+                onClick={this.clickEditFrom}
+                disabled={this.state.isEdit || this.state.isAddEdit}
+              >
+                编辑
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                size={'small'}
+                type="primary"
+                icon="lock"
+                onClick={this.clickFreezeFrom}
+                disabled={this.state.isEdit || this.state.isAddEdit}
+              >
+                冻结
+              </Button>
+            </div>
 
-      </Card>
-      <Modal
-        width={640}
-        className={styles.standardListForm}
-        destroyOnClose
-        visible={visible}
-        {...modalFooter}
-      >
-        {this.getModalContent()}
-      </Modal>
-    </div>);
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingTop: 10,
+              }}
+            >
+              <Button
+                className={clientStyle.buttomControl}
+                type="primary"
+                size={'small'}
+                icon="copy"
+                disabled
+              >
+                复制
+              </Button>
+              <Button
+                className={clientStyle.buttomControl}
+                size={'small'}
+                type="primary"
+                icon="rollback"
+                disabled
+              >
+                撤销
+              </Button>
+            </div>
+          </div>
+        </Card>
+        <Modal
+          width={640}
+          className={styles.standardListForm}
+          destroyOnClose
+          visible={visible}
+          {...modalFooter}
+        >
+          {this.getModalContent()}
+        </Modal>
+      </div>
+    );
   }
-
 
   handleCropSubmit = () => {
     // console.log('handleCropSubmit');
     const { cropImage, uploadFileUid, fileList } = this.state;
 
-    fileList.forEach(((v, i) => {
+    fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
         fileList[i].name = 'crop' + Date.parse(new Date()) + fileList[i].name;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
       }
-      ;
-    }));
+    });
 
     this.setState({
       cropperVisible: false,
@@ -252,19 +282,14 @@ class Mark extends PureComponent {
     });
   };
 
-
   handleCropCancle = () => {
     console.log('handleCropCancle');
     this.setState({
       cropperVisible: false,
       cropImage: '',
       uploadFileUid: '',
-
     });
-
-
   };
-
 
   handleCropDone = () => {
     console.log('handleCropDone');
@@ -275,58 +300,65 @@ class Mark extends PureComponent {
     });
   };
 
-
-  getContantItem = (item) => {
-
+  getContantItem = item => {
     const { selectedItem } = this.state;
 
     return (
-
       <Card
         hoverable
-        className={selectedItem === item ? styles.list_selected_content : ''} onClick={() => {
-        this.changeSelectItem(item);
-      }}
-        cover={<img alt="example"
-                    src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559223238&di=bd3da77adf53b2475750e850b6106117&imgtype=jpg&er=1&src=http%3A%2F%2Fres.cngoldres.com%2Fupload%2F2014%2F1029%2F3c1910541d8059177e7d3f598611c859.jpg%3F_%3D1414568255062"/>}
+        className={selectedItem === item ? styles.list_selected_content : ''}
+        onClick={() => {
+          this.changeSelectItem(item);
+        }}
+        cover={
+          <img
+            alt="example"
+            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559223238&di=bd3da77adf53b2475750e850b6106117&imgtype=jpg&er=1&src=http%3A%2F%2Fres.cngoldres.com%2Fupload%2F2014%2F1029%2F3c1910541d8059177e7d3f598611c859.jpg%3F_%3D1414568255062"
+          />
+        }
       >
         <div>
-          <DescriptionList size='small' col='2'>
-            <Description size="small" term='终客编号'>{item.endNo}</Description>
-            <Description size="small" term='终客简称'>{item.endShotName}</Description>
-            <Description size="small" term='字印编号'>{item.markingNo}</Description>
-            <Description term='字印价'>{item.endNo}</Description>
+          <DescriptionList size="small" col="2">
+            <Description size="small" term="终客编号">
+              {item.endNo}
+            </Description>
+            <Description size="small" term="终客简称">
+              {item.endShotName}
+            </Description>
+            <Description size="small" term="字印编号">
+              {item.markingNo}
+            </Description>
+            <Description term="字印价">{item.endNo}</Description>
           </DescriptionList>
-          <DescriptionList size='small' col='1'>
-            <Description term='字印英文名'>{item.enName}</Description>
-            <Description term='字印中文名'>{item.zhName}</Description>
-            <Description term='字印说明'>{item.markingExplain}</Description>
+          <DescriptionList size="small" col="1">
+            <Description term="字印英文名">{item.enName}</Description>
+            <Description term="字印中文名">{item.zhName}</Description>
+            <Description term="字印说明">{item.markingExplain}</Description>
           </DescriptionList>
         </div>
       </Card>
-
     );
   };
 
-
-  getContantItem2 = (item) => {
-
+  getContantItem2 = item => {
     const { selectedItem } = this.state;
 
     return (
-
-      <div onClick={() => {
-        this.changeSelectItem(item);
-      }}>
-        <MarkListItem item={item} callbackUrl={this.callbackUrl}
-                      isSelected={selectedItem === item}
+      <div
+        onClick={() => {
+          this.changeSelectItem(item);
+        }}
+      >
+        <MarkListItem
+          item={item}
+          callbackUrl={this.callbackUrl}
+          isSelected={selectedItem === item}
         />
       </div>
     );
   };
 
-
-  changeSelectItem = (item) => {
+  changeSelectItem = item => {
     // console.log('changeSelectItem');
 
     const { selectedItem } = this.state;
@@ -335,33 +367,26 @@ class Mark extends PureComponent {
     this.setState({
       selectedItem: selectitem,
     });
-
   };
-
 
   loadMarklList = () => {
     // console.log('loadMarkList');
     const { dispatch } = this.props;
     dispatch({
       type: 'mark/fetchListMark',
-      payload: { 'customerId': this.state.customerId },
+      payload: { customerId: this.state.customerId },
     });
-
   };
 
-
-  callbackUrl = (item) => {
-
+  callbackUrl = item => {
     let fileList = [];
     if (item) {
-      fileList = item.map(v => (
-        {
-          uid: v.id,
-          name: v.fileName,
-          status: 'done',
-          url: v.path,
-        }
-      ));
+      fileList = item.map(v => ({
+        uid: v.id,
+        name: v.fileName,
+        status: 'done',
+        url: v.path,
+      }));
       this.state.imageUrl = item.map(v => {
         return v.path;
       });
@@ -377,9 +402,7 @@ class Mark extends PureComponent {
     this.setState({
       fileList,
     });
-
   };
-
 
   clickNewFrom = () => {
     this.setState({
@@ -388,7 +411,6 @@ class Mark extends PureComponent {
       current: {},
       fileList: [],
     });
-
   };
 
   clickEditFrom = () => {
@@ -407,7 +429,6 @@ class Mark extends PureComponent {
       },
     *
     * */
-
   };
 
   clickDeleteFrom = () => {
@@ -420,7 +441,7 @@ class Mark extends PureComponent {
       // console.log('delet', keys, id);
       dispatch({
         type: 'mark/deleteMark',
-        payload: { 'list': keys },
+        payload: { list: keys },
       });
     }
 
@@ -428,12 +449,9 @@ class Mark extends PureComponent {
       showItem: false,
       isEdit: true,
     });
-
-
   };
 
   clickFreezeFrom = () => {
-
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
@@ -443,10 +461,9 @@ class Mark extends PureComponent {
       keys.push(id);
       dispatch({
         type: 'mark/freezeMark',
-        payload: { 'list': keys },
+        payload: { list: keys },
       });
     }
-
   };
 
   handleCancel = () => {
@@ -459,7 +476,7 @@ class Mark extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'mark/fetchListMark',
-      payload: { 'customerId': this.state.customerId },
+      payload: { customerId: this.state.customerId },
     });
     this.setState({
       visible: false,
@@ -468,27 +485,18 @@ class Mark extends PureComponent {
     });
   };
 
-
   handleSubmit = () => {
-
-
     const { dispatch, form } = this.props;
     const { isAdd, customerId, selectedItem, imageUrl, imageName, fileList } = this.state;
 
-
     form.validateFields((err, fieldsValue) => {
-
       if (err) return;
       let params = {};
       const fiedls = { ...fieldsValue };
 
-      const urls = fileList.map(v => (
-        v.url
-      ));
+      const urls = fileList.map(v => v.url);
 
-      const names = fileList.map(v => (
-        v.name
-      ));
+      const names = fileList.map(v => v.name);
 
       let marking = {};
       marking = fiedls;
@@ -508,11 +516,8 @@ class Mark extends PureComponent {
           ...params,
         },
       });
-
-
     });
   };
-
 
   getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -520,8 +525,7 @@ class Mark extends PureComponent {
     reader.readAsDataURL(img);
   };
 
-
-  getBase64_2 = (file) => {
+  getBase64_2 = file => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -530,17 +534,16 @@ class Mark extends PureComponent {
     });
   };
 
-
   getModalContent = () => {
-
-    const modalCropperFooter = { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
+    const modalCropperFooter = {
+      okText: '保存',
+      onOk: this.handleCropSubmit,
+      onCancel: this.handleCropCancle,
+    };
     const handleChange = info => {
-
-
-      const {current } = this.state;
+      const { current } = this.state;
 
       let fileList = [...info.fileList];
-
 
       // const imageUrl = this.state.imageUrl;
 
@@ -549,13 +552,12 @@ class Mark extends PureComponent {
       console.log('handleChange = ', file);
 
       if (file.type) {
-        const isJPG = (file.type.indexOf('image') != -1);
+        const isJPG = file.type.indexOf('image') != -1;
         if (!isJPG) {
           message.error('只能上传图片格式的文件');
           return;
         }
       }
-
 
       fileList = fileList.slice(-10);
       fileList = fileList.map(file => {
@@ -565,9 +567,7 @@ class Mark extends PureComponent {
         }
         if (!file.url) {
           this.getBase64(file.originFileObj, imageUrl => {
-
-            fileList.forEach(((v, i) => {
-
+            fileList.forEach((v, i) => {
               if (v.uid === info.file.uid) {
                 fileList[i].url = imageUrl;
                 // console.log("change file name =  ", v.name, info.file)
@@ -578,20 +578,14 @@ class Mark extends PureComponent {
                   uploadFileUid: v.uid,
                 });
               }
-              ;
-
-            }));
+            });
           });
-
-
         }
 
         return file;
       });
 
-
       this.setState({ fileList });
-
     };
     const openCutImageModal = () => {
       const crop = () => {
@@ -601,7 +595,6 @@ class Mark extends PureComponent {
         this.setState({
           cropImage: cropi,
         });
-
       };
 
       const { cropImage, uploadFile } = this.state;
@@ -613,43 +606,40 @@ class Mark extends PureComponent {
             src={uploadFile}
             className={styles.cropper}
             style={{ height: 400 }}
-            preview='.cropper-preview'
+            preview=".cropper-preview"
             viewMode={1} //定义cropper的视图模式
             zoomable={true} //是否允许放大图像
             guides={true}
             background={true}
             crop={crop}
           />
-          <img className={styles.cropper_preview} src={cropImage}/>
+          <img className={styles.cropper_preview} src={cropImage} />
         </div>
       );
     };
-    const { form: { getFieldDecorator , setFieldsValue } } = this.props;
+    const {
+      form: { getFieldDecorator, setFieldsValue },
+    } = this.props;
 
-    const { cropperVisible ,current={},terminalShotName} = this.state;
+    const { cropperVisible, current = {}, terminalShotName } = this.state;
     // if(terminalShotName&&terminalShotName!=='')
     // setFieldsValue({"endShotName":terminalShotName})
     // setFieldsValue({'endShotName':terminalShotName})
 
     return (
-
       <div className={clientStyle.list_info}>
         <span className={clientStyle.sun_title_info}>字印</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form
           layout="inline"
           size={'small'}
           className={styles.from_content}
           labelAlign="left"
-          onSubmit={this.handleSubmit}>
-
-
+          onSubmit={this.handleSubmit}
+        >
           <Row gutter={2}>
-
             <Col lg={24} md={24} sm={24} xs={24}>
-
               <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
-
                 <Upload
                   accept="image/*"
                   name="avatar"
@@ -668,15 +658,13 @@ class Mark extends PureComponent {
                 >
                   {/*{imageUrl?'':uploadButton}*/}
                   <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
                     <div className="ant-upload-text">上传图片</div>
                   </div>
-                </Upload>,
-
+                </Upload>
+                ,
               </FormItem>
             </Col>
-
-
           </Row>
 
           <Row gutter={2} justify="start">
@@ -686,24 +674,30 @@ class Mark extends PureComponent {
                   rules: [{ message: '请输入终客编号' }],
                   initialValue: current.endNo,
                 })(
-                  <TerminalSelected content={current.endNo} onSelectEndName={(file) => {
-                    console.log('end name ', file);
+                  <TerminalSelected
+                    content={current.endNo}
+                    onSelectEndName={file => {
+                      // console.log('end name ', file);
                       this.setState({
-                        terminalShotName:file
-                      })
-                  }}/>,
+                        terminalShotName: file,
+                      });
+                    }}
+                  />
                 )}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
-
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
                   rules: [{ message: '请输入终客简称' }],
-                  initialValue: terminalShotName?terminalShotName:current.endShotName,
+                  initialValue: terminalShotName ? terminalShotName : current.endShotName,
                 })(
                   <div>
-                  <Input placeholder="请输入" value={terminalShotName?terminalShotName:current.endShotName}></Input>,
+                    <Input
+                      placeholder="请输入"
+                      value={terminalShotName ? terminalShotName : current.endShotName}
+                    />
+                    ,
                   </div>
                 )}
               </FormItem>
@@ -716,24 +710,17 @@ class Mark extends PureComponent {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入中文名' }],
                   initialValue: current.zhName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
-
               <FormItem label="英文名" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('enName', {
                   rules: [{ required: true, message: '请输入英文名' }],
                   initialValue: current.enName,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
-
-
           </Row>
           <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
@@ -741,38 +728,23 @@ class Mark extends PureComponent {
                 {getFieldDecorator('markingPrice', {
                   rules: [{ message: '字印价' }],
                   initialValue: current.markingPrice,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
-
               <FormItem label="字印说明" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('markingExplain', {
                   rules: [{ message: '请输入字印说明' }],
                   initialValue: current.markingExplain,
-                })(
-                  <Input placeholder="请输入"/>,
-                )}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
-
-
           </Row>
-
-
         </Form>
-        <Modal
-          {...modalCropperFooter}
-          width={740}
-          destroyOnClose
-          visible={cropperVisible}
-        >
+        <Modal {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
           {openCutImageModal()}
         </Modal>
       </div>
-
     );
   };
 
@@ -795,8 +767,6 @@ class Mark extends PureComponent {
   //     },
   //   );
   // };
-
-
 }
 
 export default Mark;

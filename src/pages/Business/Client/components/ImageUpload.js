@@ -1,27 +1,20 @@
 import React, { PureComponent } from 'react';
-import { Icon, message, Upload ,Form} from 'antd'
-import DescriptionList from '@/components/DescriptionList';;
+import { Icon, message, Upload, Form } from 'antd';
+import DescriptionList from '@/components/DescriptionList';
 const { Description } = DescriptionList;
 
 @Form.create()
 class ImageUpload extends PureComponent {
-
-
   constructor(props) {
     super(props);
-    this.state={
-      loading:false,
-      innerFileList:[]
-    }
+    this.state = {
+      loading: false,
+      innerFileList: [],
+    };
   }
 
-
   render() {
-
-
-
     const handleChange = info => {
-
       console.log('info = ', info);
       let innerFileList = [...info.fileList];
       this.state.imageUrl = false;
@@ -29,24 +22,21 @@ class ImageUpload extends PureComponent {
 
       if (info.file.status === 'done') {
         getBase64(info.file.originFileObj, imageUrl => {
-            let imageName;
-            if (info.file)
-              imageName = info.file.name;
-            this.setState({
-              imageUrl,
-              imageName,
-              loading: false,
-            });
-            this.state.imageUrl = imageUrl;
-            this.state.fileName = imageName;
-          },
-        );
+          let imageName;
+          if (info.file) imageName = info.file.name;
+          this.setState({
+            imageUrl,
+            imageName,
+            loading: false,
+          });
+          this.state.imageUrl = imageUrl;
+          this.state.fileName = imageName;
+        });
       }
-
 
       const file = info.file;
 
-      const isJPG = (file.type.indexOf('image') != -1);
+      const isJPG = file.type.indexOf('image') != -1;
       if (!isJPG) {
         message.error('只能上传图片格式的文件');
         return;
@@ -67,43 +57,44 @@ class ImageUpload extends PureComponent {
       });
 
       this.setState({ innerFileList });
-
     };
 
-
-    const getBase64=(img, callback)=>{
+    const getBase64 = (img, callback) => {
       const reader = new FileReader();
       reader.addEventListener('load', () => callback(reader.result));
       reader.readAsDataURL(img);
-    }
+    };
 
+    const {
+      fileList,
+      form: { getFieldDecorator },
+    } = this.props;
 
+    const { loading = false, innerFileList } = this.state;
 
-    const { fileList ,form: { getFieldDecorator }} = this.props;
+    const list = fileList ? fileList : innerFileList;
 
-    const {loading=false,innerFileList} = this.state;
-
-    const list=fileList?fileList:innerFileList;
-
-
-    return  (<Form.Item label="包装图片">
-      {getFieldDecorator('upload', {
-        valuePropName: 'fileList',
-        getValueFromEvent: this.normFile,
-      })(<Upload
-      name="avatar"
-      listType="picture-card"
-      className="avatar-uploader"
-      fileList={list}
-      onChange={handleChange}
-    >
-      <div>
-        <Icon type={loading ? 'loading' : 'plus'}/>
-        <div className="ant-upload-text">上传图片</div>
-      </div>
-    </Upload>)}
-    </Form.Item>);
-
+    return (
+      <Form.Item label="包装图片">
+        {getFieldDecorator('upload', {
+          valuePropName: 'fileList',
+          getValueFromEvent: this.normFile,
+        })(
+          <Upload
+            name="avatar"
+            listType="picture-card"
+            className="avatar-uploader"
+            fileList={list}
+            onChange={handleChange}
+          >
+            <div>
+              <Icon type={loading ? 'loading' : 'plus'} />
+              <div className="ant-upload-text">上传图片</div>
+            </div>
+          </Upload>
+        )}
+      </Form.Item>
+    );
   }
 
   handlePreview = async file => {
@@ -124,7 +115,6 @@ class ImageUpload extends PureComponent {
     }
     return e && e.fileList;
   };
-
 }
 
-export  default ImageUpload;
+export default ImageUpload;
