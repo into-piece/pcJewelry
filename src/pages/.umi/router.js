@@ -430,7 +430,10 @@ models: () => [
             "name": "Product",
             "icon": "shopping",
             "component": _dvaDynamic({
-  
+  app: window.g_app,
+models: () => [
+  import(/* webpackChunkName: 'p__Business__Product__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Product/models/product.js').then(m => { return { namespace: 'product',...m.default}})
+],
   component: () => import(/* webpackChunkName: "p__Business__Product__Product" */'../Business/Product/Product'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),

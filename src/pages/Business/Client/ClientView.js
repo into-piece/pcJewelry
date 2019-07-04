@@ -20,7 +20,6 @@ import {
   message,
   Drawer,
 } from 'antd';
-import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { connect } from 'dva';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
@@ -260,6 +259,9 @@ class ClientView extends PureComponent {
       searchCustomerParams: {},
       radioType: 'show_clientlist',
       contactsPage: 1,
+      contactsItem: '',
+      contactsData: [],
+      contactsLoading: false,
     };
   }
 
@@ -270,7 +272,7 @@ class ClientView extends PureComponent {
       type: 'client/fetchListClient',
       payload: { size: defaultPageSize },
     });
-    router.replace('/business/client/emptyView');
+    // router.replace('/business/client/emptyView');
   }
 
   renderSimpleForm() {
@@ -283,12 +285,12 @@ class ClientView extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="中文名称">
-              {getFieldDecorator('selectZhName')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('selectZhName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="英文名称">
-              {getFieldDecorator('selectEnName')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('selectEnName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
 
@@ -378,7 +380,6 @@ class ClientView extends PureComponent {
       onSelect: this.selectChange,
     };
 
-    let { children } = this.props;
 
     const {
       clientListloading,
@@ -488,157 +489,9 @@ class ClientView extends PureComponent {
       }
     }
 
-    const getModalContent = () => {
-      return (
-        <div>
-          <span className={clientStyle.sun_title_info}>类型</span>
-          <Divider className={clientStyle.divder} />
-          <Form size={'small'} onSubmit={this.handleSubmit}>
-            <FormItem label="中文名称" {...this.formLayout}>
-              {getFieldDecorator('zhName', {
-                rules: [{ required: true, message: '请输入中文名称' }],
-                initialValue: current.zhName,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-            <FormItem label="英文名称" {...this.formLayout}>
-              {getFieldDecorator('enName', {
-                rules: [{ message: '请输入英文名称' }],
-                initialValue: current.enName,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Form>
-        </div>
-      );
-    };
-    const getMaintainerContent = () => {
-      return (
-        <div>
-          <span className={clientStyle.sun_title_info}>共同维护人</span>
-          <Divider className={clientStyle.divder} />
-          <Form size={'small'} onSubmit={this.handleSubmit}>
-            <FormItem label="共同维护人" {...this.formLayout}>
-              {getFieldDecorator('salesmanId', {
-                rules: [{ required: true, message: '请输入共同维护人' }],
-                initialValue: current.salesmanId,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Form>
-        </div>
-      );
-    };
-    const getContactsContent = () => {
-      return (
-        <div>
-          <span className={clientStyle.sun_title_info}>联系人</span>
-          <Divider className={clientStyle.divder} />
-          <Form
-            size={'small'}
-            labelAlign="left"
-            layout="inline"
-            className={clientStyle.from_content}
-            onSubmit={this.handleContactsSubmit}
-          >
-            <Row>
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="联系人姓名"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('contacts', {
-                    rules: [{ required: true, message: '请输入姓名' }],
-                    // initialValue: current.customerNo,
-                  })(<Input type="string" placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="手机"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('tel', {
-                    rules: [{ required: true, message: '请输入手机' }],
-                    // initialValue: current.shotName,
-                  })(<Input type="integer" placeholder="请输入" />)}
-                </FormItem>
-              </Col>
 
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="电话"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('phone', {
-                    rules: [{ message: '请输入电话' }],
-                    // initialValue: current.customerChannels,
-                  })(<Input type="number" placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-            </Row>
+    const { contactsItem } = this.state;
 
-            <Row>
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="email"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('email', {
-                    rules: [
-                      {
-                        type: 'email',
-                        message: '请输入正确邮箱格式',
-                      },
-                      { message: '请输入姓名' },
-                    ],
-                    // initialValue: current.customerNo,
-                  })(<Input type="email" placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="QQ"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('qq', {
-                    rules: [{ message: '请输入QQ' }],
-                    // initialValue: current.shotName,
-                  })(<Input type="number" placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="wechat"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('wechat', {
-                    rules: [{ message: '请输入微信' }],
-                    // initialValue: current.customerChannels,
-                  })(<Input placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col lg={12} md={12} sm={12} xs={12}>
-                <FormItem
-                  label="是否关联客户"
-                  {...this.centerFormLayout}
-                  className={clientStyle.from_content_col}
-                >
-                  {getFieldDecorator('isPrimaryContact', { valuePropName: 'checked' })(<Switch />)}
-                </FormItem>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      );
-    };
 
     return (
       <div className={clientStyle.page}>
@@ -678,14 +531,6 @@ class ClientView extends PureComponent {
                     }}
                     onSelectRow={this.handleSelectRows}
                   />
-                  {/*<JewelryTable*/}
-                  {/*onSelectItem={(item)=>{*/}
-                  {/*console.log("select item ",item)*/}
-                  {/*}}*/}
-                  {/*isLoading={clientListloading || isUpdate}*/}
-                  {/*body={body}*/}
-                  {/*columns={clientColumns}*/}
-                  {/*/>*/}
 
                   <Radio.Group defaultValue="show_clientlist" value={radioType} buttonStyle="solid">
                     <Radio.Button value="show_clientlist" onClick={this.selectClients}>
@@ -705,13 +550,12 @@ class ClientView extends PureComponent {
                       display: selectType === 'client' ? '' : 'none',
                     }}
                   >
-                    {/*{this.renderCustomerForm()}*/}
                     <CustomerSearchFrom
                       onCustomerSearch={this.handleCustomerSearch}
                       onCustomerReset={this.handleCustomerFormReset}
                     />
                   </div>
-                  <Divider className={clientStyle.divder} />
+                  <Divider className={clientStyle.divder}/>
 
                   {/*<Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({*/}
                   {/*maintainerAddVisible: true,*/}
@@ -720,17 +564,55 @@ class ClientView extends PureComponent {
                   <Button
                     icon="plus"
                     type="primary"
-                    style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
+                    style={{ marginBottom: 10, marginRight: 20, display: selectType === 'contacts' ? '' : 'none' }}
                     onClick={() =>
                       this.setState({
+                        contactsCurrent: {},
                         contactsAddVisible: true,
                       })
                     }
                     disabled={!selectCustomerItem || selectCustomerItem === ''}
                   >
-                    {' '}
                     新建
                   </Button>
+
+                  <Button
+                    icon="edit"
+                    type="primary"
+                    style={{ marginBottom: 10, marginRight: 20, display: selectType === 'contacts' ? '' : 'none' }}
+                    onClick={() => {
+                      let contacts = contactsItem;
+                      if (contactsTableBody && contactsTableBody.records) {
+                        const showcons = contactsTableBody.records.filter(v => {
+                          if (v.id === contactsItem.id)
+                            return v;
+                        });
+                        contacts = showcons[0] ? showcons[0] : contactsItem;
+                      }
+
+                      this.setState({
+                        contactsCurrent: contacts,
+                        contactsAddVisible: true,
+                      });
+                    }
+                    }
+                    disabled={!contactsItem || contactsItem === ''}
+                  >
+                    编辑
+                  </Button>
+
+
+                  <Button
+                    icon="delete"
+                    type="danger"
+                    style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
+                    onClick={this.deleteContactsList
+                    }
+                    disabled={!contactsItem || contactsItem === ''}
+                  >
+                    删除
+                  </Button>
+
 
                   <Table
                     style={{ display: selectType === 'client' ? '' : 'none' }}
@@ -762,25 +644,17 @@ class ClientView extends PureComponent {
                     columns={maintainsColumn}
                   />
 
-                  {/*<Table*/}
-                  {/*style={{ display: selectType === 'contacts' ? '' : 'none' }}*/}
-                  {/*loading={contactsLoading}*/}
-                  {/*dataSource={contactsTableContent}*/}
-                  {/*size="middle"*/}
-                  {/*rowKey={record =>*/}
-                  {/*record.id*/}
-                  {/*}*/}
-                  {/*rowSelection={rowContactsSelection}*/}
-                  {/*rowClassName={this.onSelectRowClass}*/}
-                  {/*columns={contactsColumn}*/}
-                  {/*/>*/}
 
                   <JewelryTable
                     style={{ display: selectType === 'contacts' ? '' : 'none' }}
-                    onSelectItem={item => {
-                      console.log('select item ', item);
+                    onSelectItem={(item, rows) => {
+                      this.setState({
+                        contactsItem: item,
+                        contactsData: rows,
+                      });
                     }}
                     isLoading={contactsLoading}
+                    loading={contactsLoading}
                     body={contactsTableBody}
                     columns={contactsColumn}
                     pageChange={this.pageContactsChange}
@@ -804,7 +678,7 @@ class ClientView extends PureComponent {
           visible={visible}
           {...modalFooter}
         >
-          {getModalContent()}
+          {this.getModalContent()}
         </Modal>
 
         <Modal
@@ -814,7 +688,7 @@ class ClientView extends PureComponent {
           visible={maintainerAddVisible}
           {...maintainermodalFooter}
         >
-          {getMaintainerContent()}
+          {this.getMaintainerContent()}
         </Modal>
 
         <Modal
@@ -824,18 +698,183 @@ class ClientView extends PureComponent {
           visible={contactsAddVisible}
           {...contactsModalFooter}
         >
-          {getContactsContent()}
+          {this.getContactsContent()}
         </Modal>
       </div>
     );
   }
+
+
+  getModalContent = () => {
+
+    const { form: { getFieldDecorator } } = this.props;
+    const { current = {} } = this.state;
+
+    return (
+      <div>
+        <span className={clientStyle.sun_title_info}>类型</span>
+        <Divider className={clientStyle.divder}/>
+        <Form size={'small'} onSubmit={this.handleSubmit}>
+          <FormItem label="中文名称" {...this.formLayout}>
+            {getFieldDecorator('zhName', {
+              rules: [{ required: true, message: '请输入中文名称' }],
+              initialValue: current.zhName,
+            })(<Input placeholder="请输入"/>)}
+          </FormItem>
+          <FormItem label="英文名称" {...this.formLayout}>
+            {getFieldDecorator('enName', {
+              rules: [{ message: '请输入英文名称' }],
+              initialValue: current.enName,
+            })(<Input placeholder="请输入"/>)}
+          </FormItem>
+        </Form>
+      </div>
+    );
+  };
+  getMaintainerContent = () => {
+    const { form: { getFieldDecorator } } = this.props;
+    const { current = {} } = this.state;
+    return (
+      <div>
+        <span className={clientStyle.sun_title_info}>共同维护人</span>
+        <Divider className={clientStyle.divder}/>
+        <Form size={'small'} onSubmit={this.handleSubmit}>
+          <FormItem label="共同维护人" {...this.formLayout}>
+            {getFieldDecorator('salesmanId', {
+              rules: [{ required: true, message: '请输入共同维护人' }],
+              initialValue: current.salesmanId,
+            })(<Input placeholder="请输入"/>)}
+          </FormItem>
+        </Form>
+      </div>
+    );
+  };
+  getContactsContent = () => {
+
+    const { form: { getFieldDecorator } } = this.props;
+    const { contactsCurrent = {} } = this.state;
+
+    return (
+      <div>
+        <span className={clientStyle.sun_title_info}>联系人</span>
+        <Divider className={clientStyle.divder}/>
+        <Form
+          size={'small'}
+          labelAlign="left"
+          layout="inline"
+          className={clientStyle.from_content}
+          onSubmit={this.handleContactsSubmit}
+        >
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="联系人姓名"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('contacts', {
+                  rules: [{ required: true, message: '请输入姓名' }],
+                  initialValue: contactsCurrent.contacts,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="手机"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('tel', {
+                  rules: [{ required: true, message: '请输入手机' }],
+                  initialValue: contactsCurrent.tel,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="电话"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('phone', {
+                  rules: [{ message: '请输入电话' }],
+                  initialValue: contactsCurrent.phone,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="email"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('email', {
+                  rules: [
+                    {
+                      type: 'email',
+                      message: '请输入正确邮箱格式',
+                    },
+                  ],
+                  initialValue: contactsCurrent.email,
+                })(<Input type="email" placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="QQ"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('qq', {
+                  rules: [{ message: '请输入QQ' }],
+                  initialValue: contactsCurrent.qq,
+                })(<Input type="number" placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="wechat"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('wechat', {
+                  rules: [{ message: '请输入微信' }],
+                  initialValue: contactsCurrent.wechat,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg={12} md={12} sm={12} xs={12}>
+              <FormItem
+                label="是否关联客户"
+                {...this.centerFormLayout}
+                className={clientStyle.from_content_col}
+              >
+                {getFieldDecorator('isPrimaryContact', {
+                  valuePropName: 'checked',
+                  initialValue: contactsCurrent.isPrimaryContact,
+                })(<Switch/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    );
+  };
+
 
   clickToggleDrawer = () => {
     const { drawVisible } = this.state;
 
     if (!drawVisible) this.showDrawer();
 
-    console.log('- toggle ');
   };
 
   showDrawer = () => {
@@ -864,7 +903,7 @@ class ClientView extends PureComponent {
               <Description term="创建日期">{showItem.createTime}</Description>
             </DescriptionList>
           ) : (
-            <div />
+            <div/>
           )}
         </div>
 
@@ -994,14 +1033,15 @@ class ClientView extends PureComponent {
           <span className={clientStyle.title_info} onClick={this.clickToggleDrawer}>
             {selectTitle}
           </span>
-          <Divider className={clientStyle.divder} />
+          <Divider className={clientStyle.divder}/>
 
           {/*{*/}
           {/*selectTitle === '类型' ? this.getAddType() : children*/}
           {/*}*/}
 
           {selectTitle === '类型' ? this.getAddType() : Component}
-        </div>
+
+          </div>
       </div>
     );
   };
@@ -1053,6 +1093,7 @@ class ClientView extends PureComponent {
       rowCustomerData: [],
       customerPageCurrent: 1,
       contactsPage: 1,
+      contactsTableBody: {},
       rowCustomerSelectedData: [],
     });
     this.selectClients();
@@ -1073,7 +1114,7 @@ class ClientView extends PureComponent {
       if (rowCustomerSelectedData.includes(record)) {
         rowCustomerSelectedData.splice(
           rowCustomerSelectedData.findIndex(item => item.id === id),
-          1
+          1,
         );
       }
     } else {
@@ -1187,7 +1228,7 @@ class ClientView extends PureComponent {
    * 更新右视图
    */
   startShowTab = () => {
-    console.log('startShowTab');
+    // console.log('startShowTab');
     const { selectTitle } = this.state;
     if (selectTitle === '终客') {
       this.startTerminal();
@@ -1213,6 +1254,10 @@ class ClientView extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) console.log(err);
+
+      this.setState({
+        contactsLoading: true,
+      });
 
       this.saveContactsList({ ...fieldsValue });
 
@@ -1244,6 +1289,8 @@ class ClientView extends PureComponent {
           rowData: [],
           fristLoad: true,
           customerSelectedRowKeys: '',
+          contactsTableBody: [],
+          contactsItem: '',
           selectCustomerItem: '',
         });
       } else {
@@ -1326,6 +1373,8 @@ class ClientView extends PureComponent {
       isEdit: true,
       pageCurrent: 1,
       rowData: [],
+      contactsTableBody: [],
+      contactsItem: '',
       rowSelectedData: [],
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
@@ -1379,6 +1428,8 @@ class ClientView extends PureComponent {
       showItem: false,
       // selectPage:page,
       pageCurrent: page,
+      contactsTableBody: [],
+      contactsItem: '',
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
       customerPageCurrent: 1,
@@ -1409,6 +1460,7 @@ class ClientView extends PureComponent {
       customerPageCurrent: page,
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
+      contactsTableBody: [],
     });
     this.state.selectCustomerItem = '';
     this.startShowTab();
@@ -1442,6 +1494,8 @@ class ClientView extends PureComponent {
       customerPageCurrent: 1,
       selectCustomerItem: '',
       rowCustomerData: [],
+      contactsTableBody: [],
+      contactsItem: '',
       rowCustomerSelectedData: [],
     });
     this.state.customerPageCurrent = 1;
@@ -1464,6 +1518,8 @@ class ClientView extends PureComponent {
         selectCustomerItem,
         rowCustomerData: selectedRows,
         customerSelectedRowKeys: selectedRowKeys,
+        contactsTableBody: [],
+        contactsItem: '',
         contactsPage: 1,
       });
       this.state.selectCustomerItem = selectCustomerItem;
@@ -1477,6 +1533,8 @@ class ClientView extends PureComponent {
         rowCustomerData: selectedRows,
         customerSelectedRowKeys: selectedRowKeys,
         contactsPage: 1,
+        contactsTableBody: [],
+        contactsItem: '',
         current: false,
       });
       // this.clearClient();
@@ -1582,7 +1640,7 @@ class ClientView extends PureComponent {
     // console.log('keys ', customerSelectedRowKeys, selectCustomerItem);
     // router.replace({ pathname: '/business/client/client', params: params });
     this.setState({
-      Component: <ClientInfo params={params} />,
+      Component: <ClientInfo params={params}/>,
     });
   };
 
@@ -1600,7 +1658,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <TerminalClient params={params} />,
+      Component: <TerminalClient params={params}/>,
     });
     // console.log('select customer t', selectCustomerItem, params);
     // router.replace({ pathname: '/business/client/terminal', params: params });
@@ -1649,7 +1707,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <Mark params={params} />,
+      Component: <Mark params={params}/>,
     });
     // router.replace({ pathname: '/business/client/marking', params: params });
   };
@@ -1661,7 +1719,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <Product />,
+      Component: <Product/>,
     });
     // router.replace({ pathname: '/business/client/product', query: { id: 3 } });
   };
@@ -1680,7 +1738,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <PackageInfo params={params} />,
+      Component: <PackageInfo params={params}/>,
     });
     // router.replace({ pathname: '/business/client/package', params: params });
   };
@@ -1692,13 +1750,13 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <History />,
+      Component: <History/>,
     });
     // router.replace({ pathname: '/business/client/history', query: { id: 5 } });
   };
 
   onChange = e => {
-    console.log('select radio=' + e.target.value);
+    // console.log('select radio=' + e.target.value);
   };
 
   handleSelectRows = rows => {
@@ -1746,7 +1804,7 @@ class ClientView extends PureComponent {
         console.log('result ', d);
       })
       .catch(function(ex) {
-        console.log('parsing failed', ex);
+        // console.log('parsing failed', ex);
         message.error('加载失败！');
         _this.setState({
           maintainsLoading: false,
@@ -1855,7 +1913,7 @@ class ClientView extends PureComponent {
   };
 
   saveContactsList = item => {
-    const { selectCustomerItem } = this.state;
+    const { selectCustomerItem, contactsCurrent = {} } = this.state;
     const _this = this;
     // console.log('saveContactsList （', selectCustomerItem);
     if (!selectCustomerItem || selectCustomerItem === '') {
@@ -1869,13 +1927,13 @@ class ClientView extends PureComponent {
 
     if (item.isPrimaryContact == true) item.isPrimaryContact = '1';
     else item.isPrimaryContact = '0';
-    // item.isConnecCustomer
+
+    if (contactsCurrent.id)
+      params.id = contactsCurrent.id;
+
     console.log(' 关联客户', item.isPrimaryContact);
     params.customerId = selectCustomerItem.id;
-    // let params = {
-    //   customerId: selectCustomerItem.id,
-    //   salesmanId: item.salesmanId,
-    // };
+
 
     fetch('/server/business.customer/business-contact-information/saveOrUpdate', {
       method: 'POST',
@@ -1895,6 +1953,56 @@ class ClientView extends PureComponent {
         }
         _this.setState({
           contactsLoading: false,
+          contactsCurrent: '',
+        });
+
+        this.loadContactsList();
+        // console.log('result ', d);
+      })
+      .catch(function(ex) {
+        message.error('保存数据失败！ 请重试');
+        _this.setState({
+          contactsLoading: false,
+        });
+      });
+    // }
+  };
+
+  deleteContactsList = () => {
+    const { selectCustomerItem, contactsData } = this.state;
+    const _this = this;
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      this.setState({
+        contactsLoading: false,
+      });
+      return;
+    }
+
+
+    const id = contactsData.map(v => {
+      return v.id;
+    });
+
+
+    fetch('/server/business.customer/business-contact-information/delete', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(id),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const head = d.head;
+
+        if (!head) message.error('删除失败！');
+        else {
+          message.success(head.rtnMsg);
+        }
+        _this.setState({
+          contactsLoading: false,
+          contactsItem: '',
         });
 
         this.loadContactsList();

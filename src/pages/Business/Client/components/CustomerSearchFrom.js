@@ -4,6 +4,7 @@ import clientStyle from '../Client.less';
 import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
+
 @Form.create()
 class CustomerSearchFrom extends Component {
   constructor(props) {
@@ -22,7 +23,13 @@ class CustomerSearchFrom extends Component {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form onSubmit={this.handleCustomerSearch} layout="inline" size="small" labelAlign="left">
+      <Form
+        onSubmit={this.handleCustomerSearch}
+        layout="inline"
+        size="small"
+        labelAlign="right"
+        labelCol={{ span: 7 }}
+      >
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="客户编号" className={clientStyle.from_content_col}>
@@ -119,17 +126,16 @@ class CustomerSearchFrom extends Component {
 
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="送货方式">
+            <FormItem label="送货方式" className={clientStyle.from_content_col}>
               {getFieldDecorator('deliveryMethod')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="备注">
+            <FormItem label="备注" className={clientStyle.from_content_col}>
               {getFieldDecorator('remarks')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
-
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col lg={8}>
             <span className={styles.submitButtons}>
@@ -140,7 +146,7 @@ class CustomerSearchFrom extends Component {
                 重置
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                收回 <Icon type="up" />
+                收起 <Icon type="up" />
               </a>
             </span>
           </Col>
@@ -154,8 +160,10 @@ class CustomerSearchFrom extends Component {
     return expandForm ? this.renderCustomerAdvancedForm() : this.renderCustomerSimpleForm();
   }
 
-  handleCustomerSearch = () => {
+  handleCustomerSearch = e => {
     const { form, onCustomerSearch } = this.props;
+    //禁止表单提交，采用Ajax提交
+    e.preventDefault();
     form.validateFields((err, fieldsValue) => {
       if (onCustomerSearch) onCustomerSearch({ ...fieldsValue });
     });
