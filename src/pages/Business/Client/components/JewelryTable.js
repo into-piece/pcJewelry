@@ -14,7 +14,7 @@ class JewelryTable extends Component {
   }
 
   render() {
-    const { body = {}, isLoading, onSelectItem } = this.props;
+    const { body = {}, isLoading } = this.props;
 
     const { pageCurrent, selectedRowKeys } = this.state;
 
@@ -25,6 +25,10 @@ class JewelryTable extends Component {
       total: body ? body.total : 0,
       onChange: this.pageChange,
     };
+
+
+    console.log("jeweler data ",body)
+
 
     const rowSelection = {
       selectedRowKeys,
@@ -62,7 +66,7 @@ class JewelryTable extends Component {
     const selects = selectedRowKeys ? selectedRowKeys : [];
     const id = record.id;
 
-    let selectItem = '';
+    let selectItem = record;
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
       if (rowData.includes(record)) rowData = [];
@@ -85,7 +89,7 @@ class JewelryTable extends Component {
       const r = rowSelectedData.filter(value => value.id == recordK);
 
       // this.showSelectItem(r[0]);
-      selectItem = r[0];
+
     } else {
       this.setState({
         showItem: false,
@@ -107,7 +111,7 @@ class JewelryTable extends Component {
       // customerPageCurrent: 1,
       // rowCustomerSelectedData: [],
     });
-    if (onSelectItem) onSelectItem(selectItem);
+    if (onSelectItem) onSelectItem(selectItem,rowData);
 
     // this.clearClient();
     // this.startShowTab();
@@ -118,6 +122,12 @@ class JewelryTable extends Component {
   pageChange = (page, pageSize) => {
     const { pageChange } = this.props;
     if (pageChange) pageChange(page, pageSize);
+
+
+    this.setState({
+      pageCurrent:page
+    })
+
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -146,7 +156,7 @@ class JewelryTable extends Component {
     });
     this.state.selectCustomerItem = '';
 
-    if (onSelectItem) onSelectItem(jewItem);
+    if (onSelectItem) onSelectItem(jewItem,selectedRows);
   };
 
   onSelectRowClass = (record, index) => {
