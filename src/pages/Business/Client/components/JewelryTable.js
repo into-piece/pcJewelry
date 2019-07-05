@@ -30,7 +30,11 @@ class JewelryTable extends Component {
     };
 
 
+<<<<<<< HEAD
     // console.log("jeweler data ",body)
+=======
+    console.log("jeweler data ",body)
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
 
 
     const rowSelection = {
@@ -124,6 +128,7 @@ class JewelryTable extends Component {
   pageChange = (page, pageSize) => {
     const { pageChange } = this.props;
     if (pageChange) pageChange(page, pageSize);
+<<<<<<< HEAD
     if (this.props.onSelectItem) this.props.onSelectItem(false,[]);
 
 
@@ -132,6 +137,12 @@ class JewelryTable extends Component {
       selectedRowKeys:[],
       rowSelectedData:[],
 
+=======
+
+
+    this.setState({
+      pageCurrent:page
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
     })
 
   };

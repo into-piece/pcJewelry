@@ -261,7 +261,11 @@ class ClientView extends PureComponent {
       contactsPage: 1,
       contactsItem: '',
       contactsData: [],
+<<<<<<< HEAD
       contactsLoading: false,
+=======
+      contactsLoading:false
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
     };
   }
 
@@ -580,6 +584,7 @@ class ClientView extends PureComponent {
                     icon="edit"
                     type="primary"
                     style={{ marginBottom: 10, marginRight: 20, display: selectType === 'contacts' ? '' : 'none' }}
+<<<<<<< HEAD
                     onClick={() => {
                       let contacts = contactsItem;
                       if (contactsTableBody && contactsTableBody.records) {
@@ -595,6 +600,13 @@ class ClientView extends PureComponent {
                         contactsAddVisible: true,
                       });
                     }
+=======
+                    onClick={() =>
+                      this.setState({
+                        contactsCurrent: { ...contactsItem },
+                        contactsAddVisible: true,
+                      })
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
                     }
                     disabled={!contactsItem || contactsItem === ''}
                   >
@@ -775,7 +787,11 @@ class ClientView extends PureComponent {
                 {getFieldDecorator('contacts', {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: contactsCurrent.contacts,
+<<<<<<< HEAD
                 })(<Input placeholder="请输入"/>)}
+=======
+                })(<Input type="string" placeholder="请输入"/>)}
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
               </FormItem>
             </Col>
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -787,7 +803,11 @@ class ClientView extends PureComponent {
                 {getFieldDecorator('tel', {
                   rules: [{ required: true, message: '请输入手机' }],
                   initialValue: contactsCurrent.tel,
+<<<<<<< HEAD
                 })(<Input placeholder="请输入"/>)}
+=======
+                })(<Input type="integer" placeholder="请输入"/>)}
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
               </FormItem>
             </Col>
 
@@ -800,7 +820,11 @@ class ClientView extends PureComponent {
                 {getFieldDecorator('phone', {
                   rules: [{ message: '请输入电话' }],
                   initialValue: contactsCurrent.phone,
+<<<<<<< HEAD
                 })(<Input placeholder="请输入"/>)}
+=======
+                })(<Input type="number" placeholder="请输入"/>)}
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
               </FormItem>
             </Col>
           </Row>
@@ -818,6 +842,10 @@ class ClientView extends PureComponent {
                       type: 'email',
                       message: '请输入正确邮箱格式',
                     },
+<<<<<<< HEAD
+=======
+                    { message: '请输入姓名' },
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
                   ],
                   initialValue: contactsCurrent.email,
                 })(<Input type="email" placeholder="请输入"/>)}
@@ -1256,8 +1284,13 @@ class ClientView extends PureComponent {
       if (err) console.log(err);
 
       this.setState({
+<<<<<<< HEAD
         contactsLoading: true,
       });
+=======
+        contactsLoading:true
+      })
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
 
       this.saveContactsList({ ...fieldsValue });
 
@@ -1953,7 +1986,11 @@ class ClientView extends PureComponent {
         }
         _this.setState({
           contactsLoading: false,
+<<<<<<< HEAD
           contactsCurrent: '',
+=======
+          contactsCurrent:'',
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
         });
 
         this.loadContactsList();
@@ -1979,6 +2016,10 @@ class ClientView extends PureComponent {
     }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
     const id = contactsData.map(v => {
       return v.id;
     });
@@ -1990,7 +2031,11 @@ class ClientView extends PureComponent {
       headers: {
         'Content-Type': 'application/json',
       },
+<<<<<<< HEAD
       body: JSON.stringify(id),
+=======
+      body: JSON.stringify(id ),
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
     })
       .then(response => response.json())
       .then(d => {
@@ -2002,7 +2047,11 @@ class ClientView extends PureComponent {
         }
         _this.setState({
           contactsLoading: false,
+<<<<<<< HEAD
           contactsItem: '',
+=======
+          contactsItem:'',
+>>>>>>> e950c92078796756a2d121a3e735951d0e73bd0f
         });
 
         this.loadContactsList();
