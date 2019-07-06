@@ -5,6 +5,7 @@ import querystring from 'querystring';
 const { Option } = Select;
 
 import { connect } from 'dva';
+import HttpFetch from '../../../../utils/HttpFetch';
 
 // import { connect } from 'dva';
 @connect(({ dict, loading }) => {
@@ -111,7 +112,8 @@ class Dict extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     console.log('dict params is ', params);
-    fetch('/server/sys/mst-wordbook/listMstWordbook', {
+    // fetch('/server/sys/mst-wordbook/listMstWordbook', {
+    fetch(HttpFetch.queryMstWordList, {
       method: 'POST',
       credentials: 'include',
       headers: {

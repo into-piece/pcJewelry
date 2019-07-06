@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
+import { queryTerminalList } from '../../../../utils/HttpFetch';
 
 const { Option } = Select;
 
@@ -102,7 +103,8 @@ class TerminalSelected extends PureComponent {
     params.endNo = item;
     params.size = 10;
     const mythis = this;
-    fetch('/server/business/end-customer/listEndCustomer', {
+    // fetch('/server/business/end-customer/listEndCustomer', {
+    fetch(queryTerminalList, {
       method: 'POST',
       credentials: 'include',
       headers: {

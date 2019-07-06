@@ -5,6 +5,7 @@ import querystring from 'querystring';
 const { Option } = Select;
 
 import { connect } from 'dva';
+import HttpFetch, { queryDelivery } from '../../../../utils/HttpFetch';
 
 class DeliveryMethods extends PureComponent {
   state = {
@@ -82,7 +83,7 @@ class DeliveryMethods extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     console.log('dict params is ', params);
-    fetch('/server/basic/delivery-method/listDeliveryMethods', {
+    fetch(HttpFetch.queryDelivery, {
       method: 'POST',
       credentials: 'include',
       headers: {

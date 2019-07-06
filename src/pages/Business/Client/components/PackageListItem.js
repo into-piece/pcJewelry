@@ -7,13 +7,14 @@ const { Description } = DescriptionList;
 
 import jsonp from 'fetch-jsonp';
 import Zmage from 'react-zmage';
+import HttpFetch from '../../../../utils/HttpFetch';
 
 class PackageListItem extends PureComponent {
   fetch = item => {
     const _this = this;
     let params = {};
     params.dataNo = item.packNo;
-    fetch('/server/business/upload-img/listUploadImg', {
+    fetch(HttpFetch.queryMarkImage, {
       method: 'POST',
       credentials: 'include',
       headers: {

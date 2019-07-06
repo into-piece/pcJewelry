@@ -43,6 +43,8 @@ import baseStyles from './base.less';
 import maintainer from './models/maintainer';
 import JewelryTable from './components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
+import HttpFetch from '../../../utils/HttpFetch';
+import ContactsModalForm from './components/form/ContactsModalForm';
 
 const { Description } = DescriptionList;
 
@@ -324,7 +326,7 @@ class ClientView extends PureComponent {
 
     const contactsModalFooter = {
       okText: '保存',
-      onOk: this.handleContactsSubmit,
+      onOk:this.handleContactsSubmit,
       onCancel: this.handleCancel,
     };
 
@@ -691,15 +693,21 @@ class ClientView extends PureComponent {
           {this.getMaintainerContent()}
         </Modal>
 
-        <Modal
-          width={720}
-          className={styles.standardListForm}
-          destroyOnClose
+        <ContactsModalForm
+          contactsCurrent={this.state.contactsCurrent}
           visible={contactsAddVisible}
-          {...contactsModalFooter}
-        >
-          {this.getContactsContent()}
-        </Modal>
+          handleCancel={this.handleCancel}
+          contactsSubmit={this.handleContactsSubmit}
+        />
+        {/*<Modal*/}
+          {/*width={720}*/}
+          {/*className={styles.standardListForm}*/}
+          {/*destroyOnClose*/}
+          {/*visible={contactsAddVisible}*/}
+          {/*{...contactsModalFooter}*/}
+        {/*>*/}
+          {/*{this.getContactsContent()}*/}
+        {/*</Modal>*/}
       </div>
     );
   }
@@ -731,6 +739,7 @@ class ClientView extends PureComponent {
       </div>
     );
   };
+
   getMaintainerContent = () => {
     const { form: { getFieldDecorator } } = this.props;
     const { current = {} } = this.state;
@@ -749,125 +758,9 @@ class ClientView extends PureComponent {
       </div>
     );
   };
-  getContactsContent = () => {
 
-    const { form: { getFieldDecorator } } = this.props;
-    const { contactsCurrent = {} } = this.state;
 
-    return (
-      <div>
-        <span className={clientStyle.sun_title_info}>联系人</span>
-        <Divider className={clientStyle.divder}/>
-        <Form
-          size={'small'}
-          labelAlign="left"
-          layout="inline"
-          className={clientStyle.from_content}
-          onSubmit={this.handleContactsSubmit}
-        >
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="联系人姓名"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('contacts', {
-                  rules: [{ required: true, message: '请输入姓名' }],
-                  initialValue: contactsCurrent.contacts,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="手机"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('tel', {
-                  rules: [{ required: true, message: '请输入手机' }],
-                  initialValue: contactsCurrent.tel,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="电话"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('phone', {
-                  rules: [{ message: '请输入电话' }],
-                  initialValue: contactsCurrent.phone,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="email"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('email', {
-                  rules: [
-                    {
-                      type: 'email',
-                      message: '请输入正确邮箱格式',
-                    },
-                  ],
-                  initialValue: contactsCurrent.email,
-                })(<Input type="email" placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="QQ"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('qq', {
-                  rules: [{ message: '请输入QQ' }],
-                  initialValue: contactsCurrent.qq,
-                })(<Input type="number" placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="wechat"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('wechat', {
-                  rules: [{ message: '请输入微信' }],
-                  initialValue: contactsCurrent.wechat,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem
-                label="是否关联客户"
-                {...this.centerFormLayout}
-                className={clientStyle.from_content_col}
-              >
-                {getFieldDecorator('isPrimaryContact', {
-                  valuePropName: 'checked',
-                  initialValue: contactsCurrent.isPrimaryContact,
-                })(<Switch/>)}
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
-      </div>
-    );
-  };
 
 
   clickToggleDrawer = () => {
@@ -1250,21 +1143,23 @@ class ClientView extends PureComponent {
       });
     });
   };
-  handleContactsSubmit = () => {
-    const { form } = this.props;
-    form.validateFields((err, fieldsValue) => {
-      if (err) console.log(err);
+
+  handleContactsSubmit = (contacts) => {
+
+      // if (err) console.log(err);
+
+    console.log("handle   ",contacts)
 
       this.setState({
         contactsLoading: true,
       });
 
-      this.saveContactsList({ ...fieldsValue });
+      this.saveContactsList({ ...contacts });
 
       this.setState({
         contactsAddVisible: false,
       });
-    });
+
   };
 
   handleSubmit = () => {
@@ -1778,7 +1673,7 @@ class ClientView extends PureComponent {
 
     let params = { customerId: selectCustomerItem.id };
 
-    fetch('/server/business/co-maintainer/listCoMaintainer', {
+    fetch(HttpFetch.loadMaintainer, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1824,7 +1719,7 @@ class ClientView extends PureComponent {
 
     let params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
 
-    fetch('/server/business.customer/business-contact-information/listContact', {
+    fetch(HttpFetch.loadContacts, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1881,7 +1776,7 @@ class ClientView extends PureComponent {
       salesmanId: item.salesmanId,
     };
 
-    fetch('/server/business/co-maintainer/saveCoMaintainer', {
+    fetch(HttpFetch.saveMaintainer, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1935,7 +1830,7 @@ class ClientView extends PureComponent {
     params.customerId = selectCustomerItem.id;
 
 
-    fetch('/server/business.customer/business-contact-information/saveOrUpdate', {
+    fetch(HttpFetch.saveContacts, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1984,7 +1879,7 @@ class ClientView extends PureComponent {
     });
 
 
-    fetch('/server/business.customer/business-contact-information/delete', {
+    fetch(HttpFetch.deleteContacts, {
       method: 'POST',
       credentials: 'include',
       headers: {

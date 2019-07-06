@@ -29,6 +29,7 @@ import City from './components/City';
 import Dict from './components/Dict';
 import QualityRequirements from './components/QualityRequirements';
 import DeliveryMethods from './components/DeliveryMethods';
+import HttpFetch, { loadCustomerList } from '../../../utils/HttpFetch';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
@@ -557,7 +558,7 @@ class ClientInfo extends PureComponent {
     this.state.isLoading = true;
     const _this = this;
     let params = { id };
-    fetch('/server/business/customer/listCustomer', {
+    fetch(HttpFetch.loadCustomerList, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -670,7 +671,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.qualityRequirements) {
       let params = { id: showItem.qualityRequirements };
-      fetch('/server/basic/quality-requirements/listQualityRequirementss', {
+      fetch(HttpFetch.queryQuality, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -701,7 +702,8 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.settlementCurrency) {
       let params = { wordbookCode: showItem.settlementCurrency };
-      fetch('/server/sys/mst-wordbook/listMstWordbook', {
+      // fetch('/server/sys/mst-wordbook/listMstWordbook', {
+      fetch(HttpFetch.queryMstWordList, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -732,7 +734,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.deliveryMethod) {
       let params = { id: showItem.deliveryMethod };
-      fetch('/server/basic/delivery-method/listDeliveryMethods', {
+      fetch(HttpFetch.queryDelivery, {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -5,6 +5,7 @@ import querystring from 'querystring';
 const { Option } = Select;
 
 import { connect } from 'dva';
+import HttpFetch from '../../../../utils/HttpFetch';
 
 // import { connect } from 'dva';
 @connect(({ dict, loading }) => {
@@ -89,7 +90,7 @@ class QualityRequirements extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch('/server/basic/quality-requirements/listQualityRequirementss', {
+    fetch(HttpFetch.queryQuality, {
       method: 'POST',
       credentials: 'include',
       headers: {

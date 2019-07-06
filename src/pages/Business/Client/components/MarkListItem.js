@@ -10,6 +10,7 @@ const { Description } = DescriptionList;
 import { connect } from 'dva';
 import querystring from 'querystring';
 import jsonp from 'fetch-jsonp';
+import HttpFetch, { queryMarkImage } from '../../../../utils/HttpFetch';
 
 @connect(({ image, loading }) => {
   return {
@@ -22,7 +23,7 @@ class MarkListItem extends PureComponent {
     const _this = this;
     let params = {};
     params.dataNo = item.markingNo;
-    fetch('/server/business/upload-img/listUploadImg', {
+    fetch(HttpFetch.queryMarkImage, {
       method: 'POST',
       credentials: 'include',
       headers: {
