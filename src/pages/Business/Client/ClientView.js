@@ -20,6 +20,7 @@ import {
   message,
   Drawer,
 } from 'antd';
+import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { connect } from 'dva';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
@@ -94,8 +95,8 @@ const clientContentColumns = [
   },
   {
     title: '手机',
-    dataIndex: 'companyPhone',
-    key: 'companyPhone',
+    dataIndex: 'tel',
+    key: 'tel',
   },
 
   {
@@ -106,14 +107,14 @@ const clientContentColumns = [
 
   {
     title: '中文地址',
-    dataIndex: 'zh_address',
-    key: 'zh_address',
+    dataIndex: 'zhAddress',
+    key: 'zhAddress',
   },
 
   {
     title: '英文地址',
-    dataIndex: 'en_address',
-    key: 'en_address',
+    dataIndex: 'enAddress',
+    key: 'enAddress',
   },
 ];
 
@@ -157,7 +158,7 @@ const contactsColumn = [
     key: 'wechat',
   },
   {
-    title: '是否主联系人',
+    title: '主联系人',
     dataIndex: 'isPrimaryContact',
     key: 'isPrimaryContact',
   },
@@ -287,12 +288,12 @@ class ClientView extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="中文名称">
-              {getFieldDecorator('selectZhName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('selectZhName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="英文名称">
-              {getFieldDecorator('selectEnName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('selectEnName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
 
@@ -326,7 +327,7 @@ class ClientView extends PureComponent {
 
     const contactsModalFooter = {
       okText: '保存',
-      onOk:this.handleContactsSubmit,
+      onOk: this.handleContactsSubmit,
       onCancel: this.handleCancel,
     };
 
@@ -381,7 +382,6 @@ class ClientView extends PureComponent {
       onChange: this.selectCustomerChange,
       onSelect: this.selectChange,
     };
-
 
     const {
       clientListloading,
@@ -491,9 +491,7 @@ class ClientView extends PureComponent {
       }
     }
 
-
     const { contactsItem } = this.state;
-
 
     return (
       <div className={clientStyle.page}>
@@ -544,6 +542,7 @@ class ClientView extends PureComponent {
                     <Radio.Button value="show_contacts" onClick={this.selectContacts}>
                       联系人
                     </Radio.Button>
+                    <Radio.Button value="">圈戒资料</Radio.Button>
                   </Radio.Group>
                   <div
                     style={{
@@ -557,7 +556,7 @@ class ClientView extends PureComponent {
                       onCustomerReset={this.handleCustomerFormReset}
                     />
                   </div>
-                  <Divider className={clientStyle.divder}/>
+                  <Divider className={clientStyle.divder} />
 
                   {/*<Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({*/}
                   {/*maintainerAddVisible: true,*/}
@@ -566,7 +565,11 @@ class ClientView extends PureComponent {
                   <Button
                     icon="plus"
                     type="primary"
-                    style={{ marginBottom: 10, marginRight: 20, display: selectType === 'contacts' ? '' : 'none' }}
+                    style={{
+                      marginBottom: 10,
+                      marginRight: 20,
+                      display: selectType === 'contacts' ? '' : 'none',
+                    }}
                     onClick={() =>
                       this.setState({
                         contactsCurrent: {},
@@ -603,18 +606,15 @@ class ClientView extends PureComponent {
                     编辑
                   </Button>
 
-
                   <Button
                     icon="delete"
                     type="danger"
                     style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
-                    onClick={this.deleteContactsList
-                    }
+                    onClick={this.deleteContactsList}
                     disabled={!contactsItem || contactsItem === ''}
                   >
                     删除
                   </Button>
-
 
                   <Table
                     style={{ display: selectType === 'client' ? '' : 'none' }}
@@ -712,7 +712,6 @@ class ClientView extends PureComponent {
     );
   }
 
-
   getModalContent = () => {
 
     const { form: { getFieldDecorator } } = this.props;
@@ -721,32 +720,33 @@ class ClientView extends PureComponent {
     return (
       <div>
         <span className={clientStyle.sun_title_info}>类型</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form size={'small'} onSubmit={this.handleSubmit}>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('zhName', {
               rules: [{ required: true, message: '请输入中文名称' }],
               initialValue: current.zhName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('enName', {
               rules: [{ message: '请输入英文名称' }],
               initialValue: current.enName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
         </Form>
       </div>
     );
   };
-
   getMaintainerContent = () => {
-    const { form: { getFieldDecorator } } = this.props;
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
     const { current = {} } = this.state;
     return (
       <div>
         <span className={clientStyle.sun_title_info}>共同维护人</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form size={'small'} onSubmit={this.handleSubmit}>
           <FormItem label="共同维护人" {...this.formLayout}>
             {getFieldDecorator('salesmanId', {
@@ -796,7 +796,7 @@ class ClientView extends PureComponent {
               <Description term="创建日期">{showItem.createTime}</Description>
             </DescriptionList>
           ) : (
-            <div/>
+            <div />
           )}
         </div>
 
@@ -926,15 +926,14 @@ class ClientView extends PureComponent {
           <span className={clientStyle.title_info} onClick={this.clickToggleDrawer}>
             {selectTitle}
           </span>
-          <Divider className={clientStyle.divder}/>
+          <Divider className={clientStyle.divder} />
 
           {/*{*/}
           {/*selectTitle === '类型' ? this.getAddType() : children*/}
           {/*}*/}
 
           {selectTitle === '类型' ? this.getAddType() : Component}
-
-          </div>
+        </div>
       </div>
     );
   };
@@ -1007,7 +1006,7 @@ class ClientView extends PureComponent {
       if (rowCustomerSelectedData.includes(record)) {
         rowCustomerSelectedData.splice(
           rowCustomerSelectedData.findIndex(item => item.id === id),
-          1,
+          1
         );
       }
     } else {
@@ -1148,7 +1147,7 @@ class ClientView extends PureComponent {
 
       // if (err) console.log(err);
 
-    console.log("handle   ",contacts)
+    // console.log("handle   ",contacts)
 
       this.setState({
         contactsLoading: true,
@@ -1535,7 +1534,7 @@ class ClientView extends PureComponent {
     // console.log('keys ', customerSelectedRowKeys, selectCustomerItem);
     // router.replace({ pathname: '/business/client/client', params: params });
     this.setState({
-      Component: <ClientInfo params={params}/>,
+      Component: <ClientInfo params={params} />,
     });
   };
 
@@ -1553,7 +1552,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <TerminalClient params={params}/>,
+      Component: <TerminalClient params={params} />,
     });
     // console.log('select customer t', selectCustomerItem, params);
     // router.replace({ pathname: '/business/client/terminal', params: params });
@@ -1602,7 +1601,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <Mark params={params}/>,
+      Component: <Mark params={params} />,
     });
     // router.replace({ pathname: '/business/client/marking', params: params });
   };
@@ -1614,7 +1613,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <Product/>,
+      Component: <Product />,
     });
     // router.replace({ pathname: '/business/client/product', query: { id: 3 } });
   };
@@ -1633,7 +1632,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <PackageInfo params={params}/>,
+      Component: <PackageInfo params={params} />,
     });
     // router.replace({ pathname: '/business/client/package', params: params });
   };
@@ -1645,7 +1644,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <History/>,
+      Component: <History />,
     });
     // router.replace({ pathname: '/business/client/history', query: { id: 5 } });
   };
@@ -1872,7 +1871,6 @@ class ClientView extends PureComponent {
       });
       return;
     }
-
 
     const id = contactsData.map(v => {
       return v.id;
