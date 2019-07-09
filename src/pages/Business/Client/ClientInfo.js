@@ -604,7 +604,7 @@ class ClientInfo extends PureComponent {
     const { settlementCurrency, qualityRequirements, deliveryMethod } = this.state;
 
     return (
-      <div>
+      <div style={{paddingLeft:10,paddingRight:10}}>
         <Spin spinning={isload}>
           <DescriptionList size="small" col="2">
             <Description size="small" term="客户编号">

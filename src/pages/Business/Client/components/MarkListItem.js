@@ -12,12 +12,7 @@ import querystring from 'querystring';
 import jsonp from 'fetch-jsonp';
 import HttpFetch, { queryMarkImage } from '../../../../utils/HttpFetch';
 
-@connect(({ image, loading }) => {
-  return {
-    body: image.body,
-    loading: loading.effects['image/fetchImageUrl'],
-  };
-})
+
 class MarkListItem extends PureComponent {
   fetch2 = item => {
     const _this = this;

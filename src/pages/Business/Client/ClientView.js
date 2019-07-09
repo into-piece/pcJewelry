@@ -790,7 +790,7 @@ class ClientView extends PureComponent {
       <div className={baseStyles.content}>
         <div className={baseStyles.right_info}>
           {showItem ? (
-            <DescriptionList size="small" col="1">
+            <DescriptionList size="small" col="1" style={{paddingLeft:10,paddingRight:10}}>
               <Description term="英文名">{showItem.enName}</Description>
               <Description term="中文名">{showItem.zhName}</Description>
               <Description term="创建日期">{showItem.createTime}</Description>

@@ -162,6 +162,7 @@ class Mark extends PureComponent {
             dataSource={isUpdate || markListloading ? [] : !this.state.isAddEdit ? body.data : []}
             renderItem={this.getContantItem2}
             size="small"
+            style={{paddingLeft:10,paddingRight:10}}
             bordered={false}
             split={true}
           />

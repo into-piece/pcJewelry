@@ -24,8 +24,6 @@ import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
 import styles from './base.less';
 import { connect } from 'dva';
-import ImageUpload from './components/ImageUpload';
-import MarkListItem from './components/MarkListItem';
 import PackageListItem from './components/PackageListItem';
 
 import Cropper from 'react-cropper';
@@ -143,6 +141,7 @@ class PackageInfo extends PureComponent {
             dataSource={
               isUpdate || packageListloading ? [] : !this.state.isAddEdit ? body.data : []
             }
+            style={{paddingLeft:10,paddingRight:10}}
             renderItem={this.getContantItem2}
             size="small"
             bordered={false}

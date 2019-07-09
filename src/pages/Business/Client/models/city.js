@@ -1,4 +1,4 @@
-import { queryAllCity, queryProvince, queryAreas, queryCity } from '@/services/city';
+import { queryAllCity} from '@/services/api';
 
 export default {
   namespace: 'city',
@@ -19,32 +19,7 @@ export default {
       });
       if (callback) callback();
     },
-    *fetchProvinces({ payload, callback }, { call, put }) {
-      const response = yield call(queryProvince, payload);
-      yield put({
-        type: 'province',
-        payload: response,
-      });
-      if (callback) callback();
-    },
 
-    *fetchAreas({ payload, callback }, { call, put }) {
-      const response = yield call(queryAreas, payload);
-      yield put({
-        type: 'areas',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *fetchCity({ payload, callback }, { call, put }) {
-      const response = yield call(queryCity, payload);
-      yield put({
-        type: 'citys',
-        payload: response,
-      });
-      if (callback) callback();
-    },
   },
 
   reducers: {

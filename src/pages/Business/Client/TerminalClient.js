@@ -428,6 +428,8 @@ class TerminalClient extends PureComponent {
         onClick={() => {
           this.changeSelectItem(item);
         }}
+        style={{paddingLeft:10,paddingRight:10}}
+
       >
         <DescriptionList size="small" col="2">
           <Description term="终客编号">{item.endNo}</Description>

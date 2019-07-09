@@ -782,6 +782,15 @@ export async function queryListWordbook(params) {
   });
 }
 
+export async function queryAllCity(parmas) {
+  return request('/server/basic/ht-location/listHtLocation', {
+    method: 'POST',
+    data: {
+      ...parmas,
+    },
+  });
+}
+
 
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
