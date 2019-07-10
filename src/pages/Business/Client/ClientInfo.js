@@ -641,26 +641,26 @@ class ClientInfo extends PureComponent {
             <Description term="">{this.state.showItem.remarks}</Description>
           </DescriptionList>
           <Divider className={styles.divder} />
-          <span
-            style={{
-              marginBottom: 10,
-              paddingLeft: 10,
-              fontSize: 20,
-              fontWeight: 'bold',
-              color: '#35B0F4',
-            }}
-          >
-            联络信息
-          </span>
-          <Divider className={styles.divder} />
-          <List
-            loading={false}
-            dataSource={listdata}
-            renderItem={this.getContantItem}
-            size="small"
-            bordered={false}
-            split={true}
-          />
+          {/*<span*/}
+            {/*style={{*/}
+              {/*marginBottom: 10,*/}
+              {/*paddingLeft: 10,*/}
+              {/*fontSize: 20,*/}
+              {/*fontWeight: 'bold',*/}
+              {/*color: '#35B0F4',*/}
+            {/*}}*/}
+          {/*>*/}
+            {/*联络信息*/}
+          {/*</span>*/}
+          {/*<Divider className={styles.divder} />*/}
+          {/*<List*/}
+            {/*loading={false}*/}
+            {/*dataSource={listdata}*/}
+            {/*renderItem={this.getContantItem}*/}
+            {/*size="small"*/}
+            {/*bordered={false}*/}
+            {/*split={true}*/}
+          {/*/>*/}
         </Spin>
       </div>
     );
