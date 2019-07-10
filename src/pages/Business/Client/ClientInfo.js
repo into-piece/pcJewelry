@@ -640,7 +640,7 @@ class ClientInfo extends PureComponent {
           <DescriptionList size="small" col="1">
             <Description term="">{this.state.showItem.remarks}</Description>
           </DescriptionList>
-          <Divider className={styles.divder} />
+          {/*<Divider className={styles.divder} />*/}
           {/*<span*/}
             {/*style={{*/}
               {/*marginBottom: 10,*/}

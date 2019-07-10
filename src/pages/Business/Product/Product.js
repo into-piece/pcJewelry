@@ -18,7 +18,7 @@ import {
   Modal,
   Breadcrumb,
   message,
-  Drawer,
+  Drawer, Upload,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -37,6 +37,8 @@ import router from 'umi/router';
 import styles from '../../Account/Center/Center.less';
 import JewelryTable from '../Client/components/JewelryTable';
 import ProductSearchFrom from './components/ProductSearchFrom';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 
 const { Description } = DescriptionList;
 
@@ -47,39 +49,85 @@ const productColumns = [
     key: 'custoerProductNo',
   },
   {
-    title: '模具号',
-    dataIndex: 'mouldNo',
-    key: 'mouldNo',
+    title: '类别名称',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
-    title: '客户产品描述',
-    dataIndex: 'productDesc',
-    key: 'productDesc',
+    title: '颜色',
+    dataIndex: 'color',
+    key: 'color',
   },
   {
-    title: '产品编号',
-    dataIndex: 'productNo',
-    key: 'productNo',
+    title: '成色',
+    dataIndex: 'color1',
+    key: 'color1',
   },
   {
-    title: '类型',
-    dataIndex: 'productType',
-    key: 'productType',
+    title: '电镀颜色',
+    dataIndex: 'color2',
+    key: 'color2',
   },
+
   {
-    title: '产品来源',
-    dataIndex: 'sourceOfProduct',
-    key: 'sourceOfProduct',
+    title: '客户编号',
+    dataIndex: 'customerNo',
+    key: 'customerNo',
   },
+
   {
-    title: '规格',
-    dataIndex: 'specification',
-    key: 'specification',
+    title: '客户货号',
+    dataIndex: 'goodsNo',
+    key: 'goodsNo',
   },
+
+  {
+    title: '供应商编号',
+    dataIndex: 'supplierNo',
+    key: 'supplierNo',
+  },
+
+  {
+    title: '供应商名称',
+    dataIndex: 'supplierName',
+    key: 'supplierName',
+  },
+
+
+  // {
+  //   title: '模具号',
+  //   dataIndex: 'mouldNo',
+  //   key: 'mouldNo',
+  // },
+  // {
+  //   title: '客户产品描述',
+  //   dataIndex: 'productDesc',
+  //   key: 'productDesc',
+  // },
+  // {
+  //   title: '产品编号',
+  //   dataIndex: 'productNo',
+  //   key: 'productNo',
+  // },
+  // {
+  //   title: '类型',
+  //   dataIndex: 'productType',
+  //   key: 'productType',
+  // },
+  // {
+  //   title: '产品来源',
+  //   dataIndex: 'sourceOfProduct',
+  //   key: 'sourceOfProduct',
+  // },
+  // {
+  //   title: '规格',
+  //   dataIndex: 'specification',
+  //   key: 'specification',
+  // },
 
 ];
 
-const  defaultPageSize=1
+const defaultPageSize = 1;
 
 @Form.create()
 @connect(({ product, loading }) => {
@@ -104,11 +152,11 @@ class Product extends Component {
       rightlg: 16,
       leftlg: 8,
       drawVisible: false,
-      isEdit:true,
-      visible:false,
-      pageCurrent:1,
-      selectProductItem:{},
-      selectProductData:[],
+      isEdit: true,
+      visible: false,
+      pageCurrent: 1,
+      selectProductItem: {},
+      selectProductData: [],
 
     };
   }
@@ -125,7 +173,7 @@ class Product extends Component {
 
 
   render() {
-    const { leftlg, rightlg, drawVisible,visible } = this.state;
+    const { leftlg, rightlg, drawVisible, visible } = this.state;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const {
@@ -185,7 +233,7 @@ class Product extends Component {
           {this.getDetailInfo()}
         </Drawer>
         <Modal
-          width={640}
+          width={720}
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
@@ -200,7 +248,7 @@ class Product extends Component {
 
   getDetailInfo = () => {
 
-    const { showItem ,isEdit} = this.state;
+    const { showItem, isEdit } = this.state;
 
 
     return (<div className={business.right_info}>
@@ -309,7 +357,7 @@ class Product extends Component {
     </div>);
   };
 
-  handleSubmit=()=>{
+  handleSubmit = () => {
 
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
@@ -344,15 +392,15 @@ class Product extends Component {
     });
 
     this.setState({
-      visible:false
-    })
-  }
+      visible: false,
+    });
+  };
 
-  handleCancel=()=>{
+  handleCancel = () => {
     this.setState({
-      visible:false
-    })
-  }
+      visible: false,
+    });
+  };
 
   handleNewProduct = () => {
     this.setState({
@@ -424,9 +472,9 @@ class Product extends Component {
     });
   };
 
-  pageProductChange =(page,pageSize)=>{
+  pageProductChange = (page, pageSize) => {
 
-  }
+  };
   clickToggleDrawer = () => {
     const { drawVisible } = this.state;
 
@@ -445,8 +493,86 @@ class Product extends Component {
       drawVisible: false,
     });
   };
+
   getProductModalContent = () => {
 
+    const handleChange = info => {
+      const { current } = this.state;
+
+      let fileList = [...info.fileList];
+
+      // const imageUrl = this.state.imageUrl;
+
+      const file = info.file;
+
+      console.log('handleChange = ', file);
+
+      if (file.type) {
+        const isJPG = file.type.indexOf('image') != -1;
+        if (!isJPG) {
+          message.error('只能上传图片格式的文件');
+          return;
+        }
+      }
+
+      fileList = fileList.slice(-10);
+      fileList = fileList.map(file => {
+        // console.log('image is the ', file);
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        if (!file.url) {
+          this.getBase64(file.originFileObj, imageUrl => {
+            fileList.forEach((v, i) => {
+              if (v.uid === info.file.uid) {
+                fileList[i].url = imageUrl;
+                // console.log("change file name =  ", v.name, info.file)
+                this.setState({
+                  fileList,
+                  cropperVisible: true,
+                  uploadFile: imageUrl,
+                  uploadFileUid: v.uid,
+                });
+              }
+            });
+          });
+        }
+
+        return file;
+      });
+
+      this.setState({ fileList });
+    };
+    const openCutImageModal = () => {
+      const crop = () => {
+        // image in dataUrl
+        const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
+        // console.log("crop image "+cropi);
+        this.setState({
+          cropImage: cropi,
+        });
+      };
+
+      const { cropImage, uploadFile } = this.state;
+
+      return (
+        <div className={styles.cropper_view}>
+          <Cropper
+            ref="cropper"
+            src={uploadFile}
+            className={styles.cropper}
+            style={{ height: 400 }}
+            preview=".cropper-preview"
+            viewMode={1} //定义cropper的视图模式
+            zoomable={true} //是否允许放大图像
+            guides={true}
+            background={true}
+            crop={crop}
+          />
+          <img className={styles.cropper_preview} src={cropImage}/>
+        </div>
+      );
+    };
     const { form: { getFieldDecorator } } = this.props;
     const { current = {} } = this.state;
 
@@ -464,22 +590,23 @@ class Product extends Component {
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
-                label="客户货号"
+                label="产品编号"
                 className={business.from_content_col}
               >
-                {getFieldDecorator('custoerProductNo', {
+                {getFieldDecorator('productNo', {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.custoerProductNo,
+                // })(<text>系统自动生成</text>)}
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
-                label="模具号"
+                label="中文名称"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('mouldNo', {
+                {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入手机' }],
                   initialValue: current.mouldNo,
                 })(<Input placeholder="请输入"/>)}
@@ -488,12 +615,12 @@ class Product extends Component {
 
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
-                label="客户产品描述"
+                label="英文名称"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('productDesc', {
-                  rules: [{ message: '请输入电话' }],
+                {getFieldDecorator('enName', {
+                  rules: [{ required: true,message: '请输入英文名称' }],
                   initialValue: current.productDesc,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -503,48 +630,102 @@ class Product extends Component {
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
-                label="产品编号"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('productNo', {
-                  rules: [
-                    {
-                      message: '请输入正确邮箱格式',
-                    },
-                  ],
-                  initialValue: current.productNo,
-                })(<Input type="email" placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="类型"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('productType', {
-                  rules: [{ message: '请输入类型' }],
-                  initialValue: current.productType,
-                })(<Input  placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
                 label="产品来源"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 {getFieldDecorator('sourceOfProduct', {
-                  rules: [{ message: '请输入微信' }],
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入产品来源',
+                    },
+                  ],
                   initialValue: current.sourceOfProduct,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="品牌"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('brand', {
+                  rules: [{ required: true, message: '请输入类型' }],
+                  initialValue: current.brand,
+                })(<Radio.Group>
+                  <Radio.Button value="YIHANG">YIHANG</Radio.Button>
+                  <Radio.Button value="GOOSA">GOOSA</Radio.Button>
+                </Radio.Group>)}
+              </FormItem>
+            </Col>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="类别"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('productType', {
+                  rules: [{ message: '请输入' }],
+                  initialValue: current.productType,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
 
           <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="模具号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('mouldNo', {
+                  rules: [{ message: '请输入' }],
+                  initialValue: current.mouldNo,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="成色"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('productColor', {
+                  rules: [{ required: true, message: '请输入成色' }],
+                  initialValue: current.productColor,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="宝石颜色"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('gemColor', {
+                  rules: [{ required: true, message: '请输入规格' }],
+                  initialValue: current.gemColor,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="电镀颜色"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('platingColor', {
+                  rules: [{ required: true, message: '请输入电镀颜色' }],
+                  initialValue: current.platingColor,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
                 label="规格"
@@ -557,8 +738,169 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="计量单位"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('unitOfMeasurement', {
+                  rules: [{ message: '请输入计量单位' }],
+                  initialValue: current.unitOfMeasurement,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="重量单位"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('unitOfWeight', {
+                  rules: [{ message: '请输入' }],
+                  initialValue: current.unitOfWeight,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="成品重量"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('finishedWeight', {
+                  rules: [{ message: '请输入规格' }],
+                  initialValue: current.finishedWeight,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="客户产品描述"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('productDesc', {
+                  rules: [{ message: '请输入规格' }],
+                  initialValue: current.productDesc,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="备注"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('marks', {
+                  rules: [{ message: '请输入规格' }],
+                  initialValue: current.marks,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+            <Col lg={16} md={16} sm={16} xs={16}>
+              <FormItem
+                label=""
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                <Upload
+                  accept="image/*"
+                  name="avatar"
+                  beforeUpload={file => {
+                    return false;
+                  }}
+                  listType="picture-card"
+                  fileList={this.state.fileList ? this.state.fileList : []}
+                  onChange={handleChange}
+                >
+                  <div>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <div className="ant-upload-text">上传图片</div>
+                  </div>
+                </Upload>
+              </FormItem>
+            </Col>
+
           </Row>
         </Form>
+        <span className={business.sun_title_info}>客户信息</span>
+        <Divider className={business.divder}/>
+        <Form
+          size={'small'}
+          labelAlign="left"
+          layout="inline"
+          className={business.from_content}
+        >
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="客户简称"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('customerShotName', {
+                  rules: [{ required: true, message: '请输入手机' }],
+                  initialValue: current.customerShotName,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="客户货号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('custoerProductNo', {
+                  rules: [{ message: '请输入电话' }],
+                  initialValue: current.custoerProductNo,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+        <span className={business.sun_title_info}>供应商信息</span>
+        <Divider className={business.divder}/>
+        <Form
+          size={'small'}
+          labelAlign="left"
+          layout="inline"
+          className={business.from_content}
+        >
+          <Row>
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="供应商编号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('supplierId', {
+                  rules: [{ required: true, message: '请输入手机' }],
+                  initialValue: current.supplierId,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="供应商货号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('supplierProductNo', {
+                  rules: [{ message: '请输入电话' }],
+                  initialValue: current.supplierProductNo,
+                })(<Input placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+
       </div>
     );
   };

@@ -37,43 +37,91 @@ class ProductSearchFrom extends Component {
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="模具号" className={business.from_content_col}>
-              {getFieldDecorator('mouldNo')(<Input placeholder="请输入" />)}
+            <FormItem label="类别名称" className={business.from_content_col}>
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="产品描述" className={business.from_content_col}>
-              {getFieldDecorator('productDesc')(<Input laceholder="请输入" />)}
+            <FormItem label="颜色" className={business.from_content_col}>
+              {getFieldDecorator('color')(<Input laceholder="请输入" />)}
             </FormItem>
           </Col>
+          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
+            {/*<FormItem label="模具号" className={business.from_content_col}>*/}
+              {/*{getFieldDecorator('mouldNo')(<Input placeholder="请输入" />)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
+          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
+            {/*<FormItem label="产品描述" className={business.from_content_col}>*/}
+              {/*{getFieldDecorator('productDesc')(<Input laceholder="请输入" />)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
         </Row>
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="产品编号" className={business.from_content_col}>
-              {getFieldDecorator('productNo', {
+            <FormItem label="成色" className={business.from_content_col}>
+              {getFieldDecorator('color1', {
                 initialValue: '',
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="类型" className={business.from_content_col}>
-              {getFieldDecorator('productType', {
+            <FormItem label="电镀颜色" className={business.from_content_col}>
+              {getFieldDecorator('color2', {
                 initialValue: '',
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="产品来源" className={business.from_content_col}>
-              {getFieldDecorator('sourceOfProduct')(<Input placeholder="请输入" />)}
+            <FormItem label="客户编号" className={business.from_content_col}>
+              {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
+          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
+            {/*<FormItem label="产品编号" className={business.from_content_col}>*/}
+              {/*{getFieldDecorator('productNo', {*/}
+                {/*initialValue: '',*/}
+              {/*})(<Input placeholder="请输入" />)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
+          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
+            {/*<FormItem label="类型" className={business.from_content_col}>*/}
+              {/*{getFieldDecorator('productType', {*/}
+                {/*initialValue: '',*/}
+              {/*})(<Input placeholder="请输入" />)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
+          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
+            {/*<FormItem label="产品来源" className={business.from_content_col}>*/}
+              {/*{getFieldDecorator('sourceOfProduct')(<Input placeholder="请输入" />)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
         </Row>
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="规格" className={business.from_content_col}>
-              {getFieldDecorator('specification')(<Input placeholder="请输入" />)}
-            </FormItem>
+          <FormItem label="客户货号" className={business.from_content_col}>
+          {getFieldDecorator('goodsNo', {
+          initialValue: '',
+          })(<Input placeholder="请输入" />)}
+          </FormItem>
           </Col>
+          <Col lg={8} md={8} sm={8} xs={8}>
+          <FormItem label="供应商编号" className={business.from_content_col}>
+          {getFieldDecorator('supplierNo', {
+          initialValue: '',
+          })(<Input placeholder="请输入" />)}
+          </FormItem>
+          </Col>
+          <Col lg={8} md={8} sm={8} xs={8}>
+          <FormItem label="供应商名称" className={business.from_content_col}>
+          {getFieldDecorator('supplierName')(<Input placeholder="请输入" />)}
+          </FormItem>
+          </Col>
+          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
+            {/*<FormItem label="规格" className={business.from_content_col}>*/}
+              {/*{getFieldDecorator('specification')(<Input placeholder="请输入" />)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
 
         </Row>
 

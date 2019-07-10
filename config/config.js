@@ -29,20 +29,20 @@ const plugins = [
       },
       pwa: pwa
         ? {
-          workboxPluginMode: 'InjectManifest',
-          workboxOptions: {
-            importWorkboxFrom: 'local',
-          },
-        }
+            workboxPluginMode: 'InjectManifest',
+            workboxOptions: {
+              importWorkboxFrom: 'local',
+            },
+          }
         : false,
       ...(!TEST && os.platform() === 'darwin'
         ? {
-          dll: {
-            include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
-            exclude: ['@babel/runtime', 'netlify-lambda'],
-          },
-          hardSource: false,
-        }
+            dll: {
+              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
+              exclude: ['@babel/runtime', 'netlify-lambda'],
+            },
+            hardSource: false,
+          }
         : {}),
     },
   ],
@@ -85,13 +85,13 @@ export default {
       pathRewrite: { '^/server': '' },
     },
   },
-    // proxy: {
-    //   '/api/': {
-    //     target: 'https://preview.pro.ant.design/',
-    //     changeOrigin: true,
-    //     pathRewrite: { '^/server': '' },
-    //   },
-    // },
+  // proxy: {
+  //   '/api/': {
+  //     target: 'https://preview.pro.ant.design/',
+  //     changeOrigin: true,
+  //     pathRewrite: { '^/server': '' },
+  //   },
+  // },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
@@ -122,7 +122,7 @@ export default {
   manifest: {
     basePath: './',
   },
-  history:'hash',
+  history: 'hash',
   base: './',
   exportStatic: {
     // dynamicRoot: true,

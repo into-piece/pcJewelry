@@ -738,6 +738,7 @@ class ClientView extends PureComponent {
       </div>
     );
   };
+
   getMaintainerContent = () => {
     const {
       form: { getFieldDecorator },

@@ -114,34 +114,34 @@ class History extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
-          <Form layout="inline">
-            <FormItem label="订单号码">{<Input placeholder="请输入" />}</FormItem>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-          </Form>
-          <Table
-            // style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}}
-            style={{ marginBottom: 5 }}
-            pagination={false}
-            loading={false}
-            dataSource={tempHistory}
-            rowClassName={this.onSelectRowClass}
-            onRow={(record, index) => {
-              return {
-                onClick: event => {
-                  this.setState({
-                    selectIndexAt: index,
-                  });
-                },
-                onMouseEnter: event => {
-                  // console.log('mouse '+index);
-                },
-              };
-            }}
-            columns={historyColumn}
-            rowKey="id"
-          />
+          {/*<Form layout="inline">*/}
+            {/*<FormItem label="订单号码">{<Input placeholder="请输入" />}</FormItem>*/}
+            {/*<Button type="primary" htmlType="submit">*/}
+              {/*查询*/}
+            {/*</Button>*/}
+          {/*</Form>*/}
+          {/*<Table*/}
+            {/*// style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}}*/}
+            {/*style={{ marginBottom: 5 }}*/}
+            {/*pagination={false}*/}
+            {/*loading={false}*/}
+            {/*dataSource={tempHistory}*/}
+            {/*rowClassName={this.onSelectRowClass}*/}
+            {/*onRow={(record, index) => {*/}
+              {/*return {*/}
+                {/*onClick: event => {*/}
+                  {/*this.setState({*/}
+                    {/*selectIndexAt: index,*/}
+                  {/*});*/}
+                {/*},*/}
+                {/*onMouseEnter: event => {*/}
+                  {/*// console.log('mouse '+index);*/}
+                {/*},*/}
+              {/*};*/}
+            {/*}}*/}
+            {/*columns={historyColumn}*/}
+            {/*rowKey="id"*/}
+          {/*/>*/}
         </div>
         <Card
           bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}

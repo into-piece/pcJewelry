@@ -103,24 +103,24 @@ class Product extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
-          <DescriptionList size="small" col="2">
-            <Description size="small" term="产品序列编号" />
-            <Description size="small" term="产品系列名称">
-              A系列
-            </Description>
-            <Description size="small" term="产品报价系数">
-              98%
-            </Description>
-          </DescriptionList>
-          <List
-            loading={false}
-            dataSource={listdata}
-            className={styles.product_list}
-            renderItem={this.getListItem}
-            size="small"
-            bordered={false}
-            split={true}
-          />
+          {/*<DescriptionList size="small" col="2">*/}
+            {/*<Description size="small" term="产品序列编号" />*/}
+            {/*<Description size="small" term="产品系列名称">*/}
+              {/*A系列*/}
+            {/*</Description>*/}
+            {/*<Description size="small" term="产品报价系数">*/}
+              {/*98%*/}
+            {/*</Description>*/}
+          {/*</DescriptionList>*/}
+          {/*<List*/}
+            {/*loading={false}*/}
+            {/*dataSource={listdata}*/}
+            {/*className={styles.product_list}*/}
+            {/*renderItem={this.getListItem}*/}
+            {/*size="small"*/}
+            {/*bordered={false}*/}
+            {/*split={true}*/}
+          {/*/>*/}
         </div>
         <Card
           bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}

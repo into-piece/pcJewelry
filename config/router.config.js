@@ -96,13 +96,13 @@ export default [
 
       {
         path: '/business',
-        icon:'form',
+        icon: 'form',
         name: 'business',
         routes: [
           {
             path: '/business/client',
             name: 'Client',
-            icon:'user',
+            icon: 'user',
             component: './Business/Client/ClientView',
             routes: [
               {
@@ -143,7 +143,7 @@ export default [
           {
             path: '/business/basic',
             name: 'Basic',
-            icon:'bulb',
+            icon: 'bulb',
             component: './Business/Basic/Info',
             routes: [
               {
@@ -201,59 +201,56 @@ export default [
           {
             path: '/business/product',
             name: 'Product',
-            icon:'shopping',
+            icon: 'shopping',
             component: './Business/Product/Product',
-            routes: [
-            ],
+            routes: [],
           },
 
           {
-            path:'/business/specimen',
-            name:'Specimen',
-            icon:'form',
-            component:'./Business/Specimen/Specimen',
-            routes:[],
+            path: '/business/specimen',
+            name: 'Specimen',
+            icon: 'form',
+            component: './Business/Specimen/Specimen',
+            routes: [],
           },
           {
-            path:'/business/quote',
-            name:'Quote',
-            icon:'form',
-            component:'./Business/Quote/Quote',
-            routes:[]
+            path: '/business/quote',
+            name: 'Quote',
+            icon: 'form',
+            component: './Business/Quote/Quote',
+            routes: [],
           },
           {
-            path:'/business/proforminvoice',
-            name:'Proform Invoice',
-            icon:'form',
-            component:'./Business/Proforminvoice/Proforminvoice',
-            routes:[]
+            path: '/business/proforminvoice',
+            name: 'Proform Invoice',
+            icon: 'form',
+            component: './Business/Proforminvoice/Proforminvoice',
+            routes: [],
           },
 
           {
             path: '/business/deliver',
             name: 'Deliver',
-            icon:'form',
+            icon: 'form',
             component: './Business/Deliver/Deliver',
-            routes: [
-            ],
+            routes: [],
           },
 
           {
-            path:'/business/Receiving',
-            name:'Receiving',
-            icon:'form',
-            component:'./Business/Receiving/Receiving',
-            routes:[]
+            path: '/business/Receiving',
+            name: 'Receiving',
+            icon: 'form',
+            component: './Business/Receiving/Receiving',
+            routes: [],
           },
 
           {
-            path:'/business/report',
-            name:'Report',
-            icon:'form',
-            component:'./Business/Report/Report',
-            routes:[]
+            path: '/business/report',
+            name: 'Report',
+            icon: 'form',
+            component: './Business/Report/Report',
+            routes: [],
           },
-
         ],
       },
 
