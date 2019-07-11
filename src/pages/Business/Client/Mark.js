@@ -266,7 +266,9 @@ class Mark extends PureComponent {
 
   handleCropSubmit = () => {
     // console.log('handleCropSubmit');
-    const { cropImage, uploadFileUid, fileList } = this.state;
+    const {  uploadFileUid, fileList } = this.state;
+
+    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
@@ -280,11 +282,14 @@ class Mark extends PureComponent {
     this.setState({
       cropperVisible: false,
       fileList,
+      cropImage,
     });
   };
 
   handleCropCancle = () => {
     console.log('handleCropCancle');
+
+
     this.setState({
       cropperVisible: false,
       cropImage: '',
@@ -329,7 +334,7 @@ class Mark extends PureComponent {
             <Description size="small" term="字印编号">
               {item.markingNo}
             </Description>
-            <Description term="字印价">{item.endNo}</Description>
+            <Description term="字印价">{item.markingPrice}</Description>
           </DescriptionList>
           <DescriptionList size="small" col="1">
             <Description term="字印英文名">{item.enName}</Description>
@@ -596,9 +601,10 @@ class Mark extends PureComponent {
         this.setState({
           cropImage: cropi,
         });
+          // this.state.cropImage = cropi;
       };
 
-      const { cropImage, uploadFile } = this.state;
+      const {  uploadFile } = this.state;
 
       return (
         <div className={styles.cropper_view}>
@@ -607,14 +613,17 @@ class Mark extends PureComponent {
             src={uploadFile}
             className={styles.cropper}
             style={{ height: 400 }}
-            preview=".cropper-preview"
+            preview=".img-preview"
+            aspectRatio={800 / 800}
             viewMode={1} //定义cropper的视图模式
             zoomable={true} //是否允许放大图像
             guides={true}
             background={true}
-            crop={crop}
+            // crop={this.crop}
           />
-          <img className={styles.cropper_preview} src={cropImage} />
+          <div className={styles.cropper_preview}>
+          <div className="img-preview"   style={{width:'100%',height:'100%'}}/>
+          </div>
         </div>
       );
     };
@@ -663,7 +672,6 @@ class Mark extends PureComponent {
                     <div className="ant-upload-text">上传图片</div>
                   </div>
                 </Upload>
-                ,
               </FormItem>
             </Col>
           </Row>
@@ -698,7 +706,6 @@ class Mark extends PureComponent {
                       placeholder="请输入"
                       value={terminalShotName ? terminalShotName : current.endShotName}
                     />
-                    ,
                   </div>
                 )}
               </FormItem>
@@ -749,25 +756,20 @@ class Mark extends PureComponent {
     );
   };
 
-  // parseImage = () => {
-  //
-  //   const { fileList } = this.state;
-  //   const lenght = fileList.lenght;
-  //   getBase64(info.file.originFileObj, imageUrl => {
-  //       let imageName;
-  //       if (info.file)
-  //         imageName = info.file.name;
-  //       this.setState({
-  //         imageUrl,
-  //         imageName,
-  //         loading: false,
-  //       });
-  //       // console.log("上传的图片 ",imageUrl)
-  //       this.state.imageUrl = imageUrl;
-  //       this.state.fileName = imageName;
-  //     },
-  //   );
-  // };
+
+    crop = () => {
+      console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+      // const _this =this;
+      // const c = new  Promise(function(resolve, reject) {
+      //   const cropi = _this.refs.cropper.getCroppedCanvas().toDataURL();
+      //   _this.setState({
+      //     cropImage: cropi,
+      //   });
+      // })
+
+  };
+
+
 }
 
 export default Mark;

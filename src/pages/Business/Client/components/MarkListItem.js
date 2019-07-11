@@ -11,6 +11,7 @@ import { connect } from 'dva';
 import querystring from 'querystring';
 import jsonp from 'fetch-jsonp';
 import HttpFetch, { queryMarkImage } from '../../../../utils/HttpFetch';
+import clientStyle from '../Client.less';
 
 
 class MarkListItem extends PureComponent {
@@ -105,21 +106,21 @@ class MarkListItem extends PureComponent {
       >
         <div>
           <DescriptionList size="small" col="2">
-            <Description size="small" term="终客编号">
+            <Description size="small" term="终客编号" className={clientStyle.small_description}>
               {item.endNo}
             </Description>
-            <Description size="small" term="终客简称">
+            <Description size="small" term="终客简称" className={clientStyle.small_description}>
               {item.endShotName}
             </Description>
-            <Description size="small" term="字印编号">
+            <Description size="small" term="字印编号" className={clientStyle.small_description}>
               {item.markingNo}
             </Description>
-            <Description term="字印价">{item.endNo}</Description>
+            <Description term="字印价" className={clientStyle.small_description}>{item.markingPrice}</Description>
           </DescriptionList>
           <DescriptionList size="small" col="1">
-            <Description term="字印英文名">{item.enName}</Description>
-            <Description term="字印中文名">{item.zhName}</Description>
-            <Description term="字印说明">{item.markingExplain}</Description>
+            <Description term="字印英文名" className={clientStyle.small_description}>{item.enName}</Description>
+            <Description term="字印中文名" className={clientStyle.small_description}>{item.zhName}</Description>
+            <Description term="字印说明" className={clientStyle.small_description}>{item.markingExplain}</Description>
           </DescriptionList>
         </div>
       </Card>

@@ -267,7 +267,7 @@ class PackageInfo extends PureComponent {
         });
       };
 
-      const { cropImage, uploadFile } = this.state;
+      const { uploadFile } = this.state;
 
       return (
         <div className={styles.cropper_view}>
@@ -276,14 +276,17 @@ class PackageInfo extends PureComponent {
             src={uploadFile}
             className={styles.cropper}
             style={{ height: 400 }}
-            preview=".cropper-preview"
+            preview=".img-preview"
+            aspectRatio={800 / 800}
             viewMode={1} //定义cropper的视图模式
             zoomable={true} //是否允许放大图像
             guides={true}
             background={true}
-            crop={crop}
+            // crop={this.crop}
           />
-          <img className={styles.cropper_preview} src={cropImage} />
+          <div className={styles.cropper_preview}>
+            <div className="img-preview"   style={{width:'100%',height:'100%'}}/>
+        </div>
         </div>
       );
     };
@@ -428,7 +431,9 @@ class PackageInfo extends PureComponent {
 
   handleCropSubmit = () => {
     // console.log('handleCropSubmit');
-    const { cropImage, uploadFileUid, fileList } = this.state;
+    const {  uploadFileUid, fileList } = this.state;
+
+    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
@@ -442,6 +447,7 @@ class PackageInfo extends PureComponent {
     this.setState({
       cropperVisible: false,
       fileList,
+      cropImage
     });
   };
 

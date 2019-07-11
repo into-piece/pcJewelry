@@ -187,16 +187,16 @@ class CustomerSearchFrom extends Component {
       <Form onSubmit={this.handleCustomerSearch} layout="inline">
         <Row>
           <Col lg={8}>
-            <FormItem label="客户编号">
-              {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
+            <FormItem label="客户编号" className={clientStyle.small_font}>
+              {getFieldDecorator('customerNo')(<Input size="small" placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
+              <Button size="small" type="primary" htmlType="submit">
                 查询
               </Button>
-              <Button style={{ marginLeft: 5 }} onClick={this.handleCustomerFormReset}>
+              <Button  size="small" style={{ marginLeft: 5 }} onClick={this.handleCustomerFormReset}>
                 重置
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>

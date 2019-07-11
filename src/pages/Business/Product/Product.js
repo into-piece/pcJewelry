@@ -45,13 +45,13 @@ const { Description } = DescriptionList;
 const productColumns = [
   {
     title: '客户货号',
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
+    dataIndex: 'customerId',
+    key: 'customerId',
   },
   {
     title: '类别名称',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'productType',
+    key: 'productType',
   },
   {
     title: '颜色',
@@ -60,37 +60,37 @@ const productColumns = [
   },
   {
     title: '成色',
-    dataIndex: 'color1',
-    key: 'color1',
+    dataIndex: 'productColor',
+    key: 'productColor',
   },
   {
     title: '电镀颜色',
-    dataIndex: 'color2',
-    key: 'color2',
+    dataIndex: 'platingColor',
+    key: 'platingColor',
   },
 
   {
     title: '客户编号',
-    dataIndex: 'customerNo',
-    key: 'customerNo',
+    dataIndex: 'customerId',
+    key: 'customerId',
   },
 
   {
     title: '客户货号',
-    dataIndex: 'goodsNo',
-    key: 'goodsNo',
+    dataIndex: 'custoerProductNo',
+    key: 'custoerProductNo',
   },
 
   {
     title: '供应商编号',
-    dataIndex: 'supplierNo',
-    key: 'supplierNo',
+    dataIndex: 'supplierId',
+    key: 'supplierId',
   },
 
   {
     title: '供应商名称',
-    dataIndex: 'supplierName',
-    key: 'supplierName',
+    dataIndex: 'supplierProductNo',
+    key: 'supplierProductNo',
   },
 
 
@@ -233,7 +233,7 @@ class Product extends Component {
           {this.getDetailInfo()}
         </Drawer>
         <Modal
-          width={720}
+          width={800}
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
@@ -261,11 +261,38 @@ class Product extends Component {
         <div className={baseStyles.content}>
           <div className={baseStyles.right_info}>
             {showItem ? (
+              <div>
               <DescriptionList size="small" col="1">
-                <Description term="英文名">{showItem.enName}</Description>
-                <Description term="中文名">{showItem.zhName}</Description>
-                <Description term="创建日期">{showItem.createTime}</Description>
+                <Description term="名称">{showItem.name}</Description>
+                <Description term="编号">{showItem.productNo}</Description>
+                <Description term="类别">{showItem.productType}</Description>
+                <Description term="重量">{showItem.finishedWeight}</Description>
+                <Description term="工价">{showItem.createTime}</Description>
               </DescriptionList>
+                <span className={business.title_info}>
+            参数详情
+          </span>
+                <Divider className={business.divder}/>
+                <DescriptionList size="small" col="2">
+                  <Description term="颜色">{showItem.color}</Description>
+                  <Description term="单位件数">{showItem.unitOfMeasurement}</Description>
+                  <Description term="报价重量">{showItem.finishedWeight}</Description>
+                  <Description term="成色重量">{showItem.weight}</Description>
+                  <Description term="电镀">{showItem.productNo}</Description>
+                  <Description term="成色">{showItem.productNo}</Description>
+                  <Description term="产品来源">{showItem.sourceOfProduct}</Description>
+                  <Description term="模具">{showItem.mouldNo}</Description>
+                  <Description term="客户货号">{showItem.customerId}</Description>
+                  <Description term="客户">{showItem.custoer}</Description>
+                  <Description term="供应商货号">{showItem.supplierId}</Description>
+                  <Description term="供应商">{showItem.supplierProductNo}</Description>
+                  <Description term="品牌">{showItem.brand}</Description>
+                </DescriptionList>
+                <span className={business.title_info}>
+            备注
+          </span>
+                <Divider className={business.divder}/>
+              </div>
             ) : (
               <div/>
             )}
@@ -362,6 +389,7 @@ class Product extends Component {
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
     form.validateFields((err, fieldsValue) => {
+      if (err) return;
       if (isAdd) {
         dispatch({
           type: 'product/addProduct',
@@ -494,6 +522,13 @@ class Product extends Component {
     });
   };
 
+
+  getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
   getProductModalContent = () => {
 
     const handleChange = info => {
@@ -543,6 +578,8 @@ class Product extends Component {
 
       this.setState({ fileList });
     };
+
+
     const openCutImageModal = () => {
       const crop = () => {
         // image in dataUrl
@@ -588,7 +625,7 @@ class Product extends Component {
           onSubmit={this.handleContactsSubmit}
         >
           <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="产品编号"
                 className={business.from_content_col}
@@ -596,11 +633,11 @@ class Product extends Component {
                 {getFieldDecorator('productNo', {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.custoerProductNo,
-                // })(<text>系统自动生成</text>)}
+                  // })(<text>系统自动生成</text>)}
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="中文名称"
                 {...this.centerFormLayout}
@@ -613,22 +650,20 @@ class Product extends Component {
               </FormItem>
             </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="英文名称"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 {getFieldDecorator('enName', {
-                  rules: [{ required: true,message: '请输入英文名称' }],
+                  rules: [{ required: true, message: '请输入英文名称' }],
                   initialValue: current.productDesc,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-          </Row>
 
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="产品来源"
                 {...this.centerFormLayout}
@@ -645,7 +680,11 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+          </Row>
+
+          <Row>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="品牌"
                 {...this.centerFormLayout}
@@ -661,7 +700,7 @@ class Product extends Component {
               </FormItem>
             </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="类别"
                 {...this.centerFormLayout}
@@ -673,10 +712,7 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-          </Row>
-
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="模具号"
                 {...this.centerFormLayout}
@@ -688,7 +724,7 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="成色"
                 {...this.centerFormLayout}
@@ -700,7 +736,11 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+          </Row>
+
+          <Row>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="宝石颜色"
                 {...this.centerFormLayout}
@@ -712,9 +752,8 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="电镀颜色"
                 {...this.centerFormLayout}
@@ -726,7 +765,7 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="规格"
                 {...this.centerFormLayout}
@@ -738,7 +777,7 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="计量单位"
                 {...this.centerFormLayout}
@@ -752,7 +791,7 @@ class Product extends Component {
             </Col>
           </Row>
           <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="重量单位"
                 {...this.centerFormLayout}
@@ -764,7 +803,7 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="成品重量"
                 {...this.centerFormLayout}
@@ -776,7 +815,7 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="客户产品描述"
                 {...this.centerFormLayout}
@@ -788,9 +827,8 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="备注"
                 {...this.centerFormLayout}
@@ -802,7 +840,11 @@ class Product extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={16} md={16} sm={16} xs={16}>
+          </Row>
+
+          <Row>
+
+            <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
                 label=""
                 {...this.centerFormLayout}

@@ -287,13 +287,13 @@ class ClientView extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="中文名称">
-              {getFieldDecorator('selectZhName')(<Input placeholder="请输入" />)}
+            <FormItem label="中文名称" className={clientStyle.small_font}>
+              {getFieldDecorator('selectZhName')(<Input size="small" placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="英文名称">
-              {getFieldDecorator('selectEnName')(<Input placeholder="请输入" />)}
+            <FormItem label="英文名称" className={clientStyle.small_font}>
+              {getFieldDecorator('selectEnName')(<Input size="small" placeholder="请输入" />)}
             </FormItem>
           </Col>
 
