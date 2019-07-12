@@ -141,7 +141,7 @@ class PackageInfo extends PureComponent {
             dataSource={
               isUpdate || packageListloading ? [] : !this.state.isAddEdit ? body.data : []
             }
-            style={{paddingLeft:10,paddingRight:10}}
+            style={{ paddingLeft: 10, paddingRight: 10 }}
             renderItem={this.getContantItem2}
             size="small"
             bordered={false}
@@ -285,8 +285,8 @@ class PackageInfo extends PureComponent {
             // crop={this.crop}
           />
           <div className={styles.cropper_preview}>
-            <div className="img-preview"   style={{width:'100%',height:'100%'}}/>
-        </div>
+            <div className="img-preview" style={{ width: '100%', height: '100%' }} />
+          </div>
         </div>
       );
     };
@@ -370,7 +370,6 @@ class PackageInfo extends PureComponent {
                     <div className="ant-upload-text">上传图片</div>
                   </div>
                 </Upload>
-                ,
               </FormItem>
             </Col>
           </Row>
@@ -379,7 +378,6 @@ class PackageInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endNo', {
-                  rules: [{ message: '请输入终客编号' }],
                   initialValue: current.endNo,
                 })(
                   <TerminalSelected
@@ -396,15 +394,14 @@ class PackageInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
-                  rules: [{ required: true, message: '请输入终客简称' }],
                   initialValue: terminalShotName ? terminalShotName : current.endShotName,
                 })(
                   <div>
                     <Input
                       placeholder="请输入"
+                      readOnly="true"
                       value={terminalShotName ? terminalShotName : current.endShotName}
                     />
-                    ,
                   </div>
                 )}
               </FormItem>
@@ -412,12 +409,12 @@ class PackageInfo extends PureComponent {
           </Row>
 
           <Row gutter={2}>
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={24} md={24} sm={24} xs={24}>
               <FormItem label="包装说明" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('packExplain', {
                   rules: [{ required: true, message: '请输入包装说明' }],
                   initialValue: current.packExplain,
-                })(<Input placeholder="请输入" />)}
+                })(<TextArea placeholder="请输入" style={{height:200}} />)}
               </FormItem>
             </Col>
           </Row>
@@ -431,7 +428,7 @@ class PackageInfo extends PureComponent {
 
   handleCropSubmit = () => {
     // console.log('handleCropSubmit');
-    const {  uploadFileUid, fileList } = this.state;
+    const { uploadFileUid, fileList } = this.state;
 
     const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
 
@@ -447,7 +444,7 @@ class PackageInfo extends PureComponent {
     this.setState({
       cropperVisible: false,
       fileList,
-      cropImage
+      cropImage,
     });
   };
 

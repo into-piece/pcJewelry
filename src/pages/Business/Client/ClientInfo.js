@@ -270,9 +270,9 @@ class ClientInfo extends PureComponent {
               </Col>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="中文地址" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('zh_address', {
+                  {getFieldDecorator('zhAddress', {
                     rules: [{ message: '请输入中文地址' }],
-                    initialValue: current.qualityZhName,
+                    initialValue: current.zhAddress,
                   })(<Input placeholder="请输入" />)}
                 </FormItem>
               </Col>
@@ -280,9 +280,9 @@ class ClientInfo extends PureComponent {
             <Row gutter={2}>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('en_address', {
+                  {getFieldDecorator('enAddress', {
                     rules: [{ message: '请输入英文地址' }],
-                    initialValue: current.qualityEnName,
+                    initialValue: current.enAddress,
                   })(<Input placeholder="请输入" />)}
                 </FormItem>
               </Col>
@@ -604,7 +604,7 @@ class ClientInfo extends PureComponent {
     const { settlementCurrency, qualityRequirements, deliveryMethod } = this.state;
 
     return (
-      <div style={{paddingLeft:10,paddingRight:10}}>
+      <div style={{ paddingLeft: 10, paddingRight: 10 }}>
         <Spin spinning={isload}>
           <DescriptionList size="small" col="2">
             <Description size="small" term="客户编号">
@@ -622,8 +622,8 @@ class ClientInfo extends PureComponent {
             <Description term="客户渠道">{this.state.showItem.customerChannels}</Description>
           </DescriptionList>
           <DescriptionList size="small" col="1">
-            <Description term="中文地址">{this.state.showItem.zh_address}</Description>
-            <Description term="英文地址">{this.state.showItem.en_address}</Description>
+            <Description term="中文地址">{this.state.showItem.zhAddress}</Description>
+            <Description term="英文地址">{this.state.showItem.enAddress}</Description>
           </DescriptionList>
           <DescriptionList size="small" col="2">
             <Description term="电话">{this.state.showItem.companyPhone}</Description>

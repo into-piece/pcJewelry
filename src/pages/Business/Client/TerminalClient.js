@@ -296,6 +296,14 @@ class TerminalClient extends PureComponent {
             </Row>
             <Row gutter={2}>
               <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem label="手机" {...this.formLayout} className={styles.from_content_col}>
+                  {getFieldDecorator('tel', {
+                    rules: [{ message: '请输入手机号' }],
+                    initialValue: current.tel,
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
+              </Col>
+              <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('remarks', {
                     rules: [{ message: '请输入备注' }],
@@ -428,8 +436,7 @@ class TerminalClient extends PureComponent {
         onClick={() => {
           this.changeSelectItem(item);
         }}
-        style={{paddingLeft:10,paddingRight:10}}
-
+        style={{ paddingLeft: 10, paddingRight: 10 }}
       >
         <DescriptionList size="small" col="2">
           <Description term="终客编号">{item.endNo}</Description>
@@ -447,8 +454,8 @@ class TerminalClient extends PureComponent {
         </DescriptionList>
         <DescriptionList size="small" col="2">
           <Description term="联络人姓名  ">{item.contactName}</Description>
-          <Description term="手机">{item.phone}</Description>
-          <Description term="电话">{item.tel}</Description>
+          <Description term="手机">{item.tel}</Description>
+          <Description term="电话">{item.phone}</Description>
           <Description term="Email">{item.email}</Description>
           <Description term="QQ">{item.qq}</Description>
           <Description term="微信">{item.wechat}</Description>

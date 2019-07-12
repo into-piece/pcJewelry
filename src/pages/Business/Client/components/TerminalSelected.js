@@ -52,6 +52,7 @@ class TerminalSelected extends PureComponent {
     if (isFirst) {
       showValue = content;
       if (!showValue) this.fetchList('');
+      // else this.fetchListParams(showValue)
     } else {
       showValue = value;
     }
@@ -92,7 +93,7 @@ class TerminalSelected extends PureComponent {
     }
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item} value={item.endNo}>
+      <Option key={item.id} value={item.endNo}>
         {item.endNo}
       </Option>
     ));
@@ -102,6 +103,56 @@ class TerminalSelected extends PureComponent {
     let params = {};
     params.endNo = item;
     params.size = 10;
+    const mythis = this;
+    // fetch('/server/business/end-customer/listEndCustomer', {
+    fetch(queryTerminalList, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const body = d.body;
+        if (body && body.records) {
+          // if (body.records.length > 0) {
+          let records = body.records;
+          // console.log("terminal records ",records)
+          if (!records) records = [];
+          console.log('list update ', records);
+          mythis.setState({
+            records,
+            loading: false,
+            isFirst: false,
+          });
+          // console.log('image  data ', imageObject);
+          // return;
+        } else {
+          // }
+          mythis.setState({
+            loading: false,
+            records: [],
+            isFirst: false,
+          });
+        }
+      })
+      .catch(function(ex) {
+        console.log('parsing failed', ex);
+        // message.error('加载图片失败！');
+        mythis.setState({
+          loading: false,
+          records: [],
+          isFirst: false,
+        });
+      });
+
+    // }
+  };
+  fetchListParams = item => {
+    let params = {};
+    params.id = item;
     const mythis = this;
     // fetch('/server/business/end-customer/listEndCustomer', {
     fetch(queryTerminalList, {

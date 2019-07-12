@@ -5,14 +5,9 @@ import styles from './../../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
 
-
 @Form.create()
 class ContactsModalForm extends Component {
-
-
   render() {
-
-
     const { handleCancel } = this.props;
 
     const contactsModalFooter = {
@@ -21,7 +16,8 @@ class ContactsModalForm extends Component {
       onCancel: handleCancel,
     };
 
-    return (<Modal
+    return (
+      <Modal
         {...this.props}
         width={720}
         className={styles.standardListForm}
@@ -31,21 +27,18 @@ class ContactsModalForm extends Component {
         {this.getContactsContent()}
       </Modal>
     );
-
   }
 
-
   getContactsContent = () => {
-
-
-
-    const { form: { getFieldDecorator }, contactsCurrent = {} } = this.props;
-
+    const {
+      form: { getFieldDecorator },
+      contactsCurrent = {},
+    } = this.props;
 
     return (
       <div>
         <span className={clientStyle.sun_title_info}>联系人</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form
           size={'small'}
           labelAlign="left"
@@ -63,7 +56,7 @@ class ContactsModalForm extends Component {
                 {getFieldDecorator('contacts', {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: contactsCurrent.contacts,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -75,7 +68,7 @@ class ContactsModalForm extends Component {
                 {getFieldDecorator('tel', {
                   rules: [{ required: true, message: '请输入手机' }],
                   initialValue: contactsCurrent.tel,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
 
@@ -88,7 +81,7 @@ class ContactsModalForm extends Component {
                 {getFieldDecorator('phone', {
                   rules: [{ message: '请输入电话' }],
                   initialValue: contactsCurrent.phone,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -108,7 +101,7 @@ class ContactsModalForm extends Component {
                     },
                   ],
                   initialValue: contactsCurrent.email,
-                })(<Input type="email" placeholder="请输入"/>)}
+                })(<Input type="email" placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -120,7 +113,7 @@ class ContactsModalForm extends Component {
                 {getFieldDecorator('qq', {
                   rules: [{ message: '请输入QQ' }],
                   initialValue: contactsCurrent.qq,
-                })(<Input type="number" placeholder="请输入"/>)}
+                })(<Input type="number" placeholder="请输入" />)}
               </FormItem>
             </Col>
 
@@ -133,7 +126,7 @@ class ContactsModalForm extends Component {
                 {getFieldDecorator('wechat', {
                   rules: [{ message: '请输入微信' }],
                   initialValue: contactsCurrent.wechat,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -141,14 +134,14 @@ class ContactsModalForm extends Component {
           <Row>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
-                label="是否关联客户"
+                label="主要联系人"
                 {...this.centerFormLayout}
                 className={clientStyle.from_content_col}
               >
                 {getFieldDecorator('isPrimaryContact', {
                   valuePropName: 'checked',
                   initialValue: contactsCurrent.isPrimaryContact,
-                })(<Switch/>)}
+                })(<Switch />)}
               </FormItem>
             </Col>
           </Row>
@@ -156,7 +149,6 @@ class ContactsModalForm extends Component {
       </div>
     );
   };
-
 
   handleContactsSubmit = () => {
     const { form, contactsSubmit } = this.props;

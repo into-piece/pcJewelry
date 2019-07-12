@@ -594,15 +594,6 @@ class Mark extends PureComponent {
       this.setState({ fileList });
     };
     const openCutImageModal = () => {
-      const crop = () => {
-        // image in dataUrl
-        const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
-        // console.log("crop image "+cropi);
-        this.setState({
-          cropImage: cropi,
-        });
-          // this.state.cropImage = cropi;
-      };
 
       const {  uploadFile } = this.state;
 
@@ -680,7 +671,6 @@ class Mark extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endNo', {
-                  rules: [{ message: '请输入终客编号' }],
                   initialValue: current.endNo,
                 })(
                   <TerminalSelected
@@ -698,12 +688,12 @@ class Mark extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
-                  rules: [{ message: '请输入终客简称' }],
                   initialValue: terminalShotName ? terminalShotName : current.endShotName,
                 })(
                   <div>
                     <Input
                       placeholder="请输入"
+                      readOnly="true"
                       value={terminalShotName ? terminalShotName : current.endShotName}
                     />
                   </div>
