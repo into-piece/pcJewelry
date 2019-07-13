@@ -172,7 +172,7 @@ class RingNum extends PureComponent {
         data.enName = temp.enName;
         data.marks = temp.marks;
         this.state.current = { ...data };
-        if (data.status === '冻结') data.status = 2;
+        if (data.status === '审批') data.status = 2;
         else if (data.status === '使用中') data.status = 1;
         else if (data.status === '草稿') data.status = 0;
 
@@ -224,7 +224,7 @@ class RingNum extends PureComponent {
         const data = { ...showNumberItem };
         data.sizeCode = temp.sizeCode;
         this.state.currentNumber = { ...temp };
-        if (data.status === '冻结') data.status = 2;
+        if (data.status === '审批') data.status = 2;
         else if (data.status === '使用中') data.status = 1;
         else if (data.status === '草稿') data.status = 0;
 
@@ -375,7 +375,7 @@ class RingNum extends PureComponent {
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {
-          value.status = '冻结';
+          value.status = '审批';
         }
         return value;
       });
@@ -393,7 +393,7 @@ class RingNum extends PureComponent {
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {
-          value.status = '冻结';
+          value.status = '审批';
         }
         return value;
       });
@@ -757,7 +757,7 @@ class RingNum extends PureComponent {
               onClick={this.clickFreezeFrom}
               disabled={isEdit}
             >
-              冻结
+              审批
             </Button>
           </div>
         </Card>
@@ -831,7 +831,7 @@ class RingNum extends PureComponent {
               onClick={this.clickNumberFreezeFrom}
               disabled={isEditNumber}
             >
-              冻结
+              审批
             </Button>
           </div>
         </Card>

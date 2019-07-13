@@ -63,13 +63,14 @@ class MarkListItem extends PureComponent {
       loading: true,
       imageObject: [],
       isFirst: true,
+      isFristLoadValue:true
     };
   }
 
   render() {
     const { item, isSelected, callbackUrl } = this.props;
 
-    const { loading, imageObject, isFirst } = this.state;
+    const { loading, imageObject, isFirst, endNo, endShotName ,isFristLoadValue } = this.state;
 
     // if (isFirst && item) {
     if (item) {
@@ -92,6 +93,8 @@ class MarkListItem extends PureComponent {
     if (!paths) paths = [];
 
     // console.log('image Object ', paths);
+      if(isFristLoadValue)
+      this.feathMarkToId(item.endNo);
 
     return (
       <Card
@@ -107,10 +110,10 @@ class MarkListItem extends PureComponent {
         <div>
           <DescriptionList size="small" col="2">
             <Description size="small" term="终客编号" className={clientStyle.small_description}>
-              {item.endNo}
+              {endNo}
             </Description>
             <Description size="small" term="终客简称" className={clientStyle.small_description}>
-              {item.endShotName}
+              {endShotName}
             </Description>
             <Description size="small" term="字印编号" className={clientStyle.small_description}>
               {item.markingNo}
@@ -129,7 +132,7 @@ class MarkListItem extends PureComponent {
 
   getImages = paths => {
     return paths.map((
-      v // src={v}
+      v, // src={v}
     ) => (
       <div className={styles.carousel_image_ground}>
         <Zmage
@@ -143,13 +146,67 @@ class MarkListItem extends PureComponent {
     ));
   };
 
-  // shouldComponentUpdate(nextProps, nextState, nextContext) {
-  //   const { item } = this.props;
-  //   console.log("refresh")
-  //   if(item)
-  //   this.fetch2(item);
-  //   return true;
-  // }
+  feathMarkToId = (id) => {
+
+
+    this.setState({
+      loading: true,
+    });
+    let params = {};
+    params.id = id;
+
+    const mythis = this;
+    fetch(HttpFetch.queryTerminalList, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const body = d.body;
+        if (body && body.records) {
+          let records = body.records;
+
+
+          // console.log("terminal records ",records)
+          if (records && records.length > 0) {
+            const item = records[0];
+            const endNo = item.endNo;
+            const endShotName = item.endShotName;
+            // console.log(" end item ",item)
+
+            // console.log('list update ', records);
+            mythis.setState({
+              endNo,
+              endShotName,
+              loading: false,
+              isFristLoadValue:false
+            });
+            // console.log('image  data ', imageObject);
+            // return;
+          } else {
+            // }
+            mythis.setState({
+              loading: false,
+              records: [],
+              isFristLoadValue:false
+            });
+          }
+        }
+      })
+      .catch(function(ex) {
+        console.log('parsing failed', ex);
+        // message.error('加载图片失败！');
+        mythis.setState({
+          loading: false,
+          records: [],
+          isFristLoadValue:false
+        });
+      });
+  };
 }
 
 export default MarkListItem;

@@ -445,7 +445,7 @@ class ClientView extends PureComponent {
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {
-          value.status = '冻结';
+          value.status = '审批';
         }
         return value;
       });
@@ -848,7 +848,7 @@ class ClientView extends PureComponent {
                 disabled={isEdit}
                 onClick={this.handleFreezeClients}
               >
-                冻结
+                审批
               </Button>
             </div>
 

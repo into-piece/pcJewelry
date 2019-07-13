@@ -16,7 +16,7 @@ const extra = (
     </div>
     <div style={{ marginBottom: 16 }}>
       <Icon style={{ color: '#f5222d', marginRight: 8 }} type="close-circle" />
-      您的账户已被冻结
+      您的账户已被审批
       <a style={{ marginLeft: 16 }}>
         立即解冻 <Icon type="right" />
       </a>

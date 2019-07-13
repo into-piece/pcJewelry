@@ -133,7 +133,7 @@ class Currency extends PureComponent {
         data.cashSellingPrice = temp.cashSellingPrice;
         data.spotSellingPrice = temp.spotSellingPrice;
         this.state.current = { ...data };
-        if (data.status === '冻结') data.status = 2;
+        if (data.status === '审批') data.status = 2;
         else if (data.status === '使用中') data.status = 1;
         else if (data.status === '草稿') data.status = 0;
 
@@ -218,7 +218,7 @@ class Currency extends PureComponent {
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {
-          value.status = '冻结';
+          value.status = '审批';
         }
         return value;
       });
@@ -403,7 +403,7 @@ class Currency extends PureComponent {
                     onClick={this.clickFreezeFrom}
                     disabled={true}
                   >
-                    冻结
+                    审批
                   </Button>
                 </div>
               </Card>

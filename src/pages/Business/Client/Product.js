@@ -165,7 +165,7 @@ class Product extends PureComponent {
                 type="primary"
                 icon="lock"
               >
-                冻结
+                审批
               </Button>
             </div>
 

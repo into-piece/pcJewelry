@@ -345,7 +345,7 @@ class Product extends Component {
                   disabled={isEdit}
                   onClick={this.handleFreezeProduct}
                 >
-                  冻结
+                  审批
                 </Button>
               </div>
 

@@ -137,7 +137,7 @@ class Brand extends Component {
         data.brandZhName = temp.brandZhName;
         data.brandEnName = temp.brandEnName;
         this.state.current = { ...data };
-        if (data.status === '冻结') data.status = 2;
+        if (data.status === '审批') data.status = 2;
         else if (data.status === '使用中') data.status = 1;
         else if (data.status === '草稿') data.status = 0;
 
@@ -236,7 +236,7 @@ class Brand extends Component {
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {
-          value.status = '冻结';
+          value.status = '审批';
         }
         return value;
       });
@@ -376,7 +376,7 @@ class Brand extends Component {
                                                                        disabled={isEdit} icon="edit">编辑</Button></Col>
                   <Col lg={6} style={{ textAlign: 'center' }}> <Button size={'small'} type="primary" icon="lock"
                                                                        onClick={this.clickFreezeFrom}
-                                                                       disabled={isEdit}>冻结</Button></Col>
+                                                                       disabled={isEdit}>审批</Button></Col>
                 </Row>*/}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Button
@@ -415,7 +415,7 @@ class Brand extends Component {
                     onClick={this.clickFreezeFrom}
                     disabled={isEdit}
                   >
-                    冻结
+                    审批
                   </Button>
                 </div>
               </Card>

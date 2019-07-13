@@ -200,7 +200,7 @@ class PackageInfo extends PureComponent {
                 onClick={this.clickFreezeFrom}
                 disabled={this.state.isEdit || this.state.isAddEdit}
               >
-                冻结
+                审批
               </Button>
             </div>
 
@@ -383,6 +383,7 @@ class PackageInfo extends PureComponent {
                   <TerminalSelected
                     content={current.endNo}
                     onSelectEndName={file => {
+                      console.log("onselect name ",file)
                       this.setState({
                         terminalShotName: file,
                       });
@@ -588,7 +589,7 @@ class PackageInfo extends PureComponent {
     if (id) {
       let keys = [];
       keys.push(id);
-      console.log('delet', keys, id);
+      // console.log('delet', keys, id);
       dispatch({
         type: 'packageinfo/deletePackage',
         payload: { list: keys },

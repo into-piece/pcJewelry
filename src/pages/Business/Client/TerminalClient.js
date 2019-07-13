@@ -381,7 +381,7 @@ class TerminalClient extends PureComponent {
                 disabled={this.state.isEdit}
                 onClick={this.clickFreezeFrom}
               >
-                冻结
+                审批
               </Button>
             </div>
 

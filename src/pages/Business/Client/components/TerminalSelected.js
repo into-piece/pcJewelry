@@ -17,13 +17,18 @@ class TerminalSelected extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    const { content } = this.props;
+     this.fetchListParams(content);
+  }
+
   handleSearch = value => {
     // fetch(value, data => this.setState({ data }));
     this.fetchList(value);
   };
 
   handleChange = value => {
-    console.log('handleChange', value);
+    // console.log('handleChange', value);
     const { onChange, onSelectEndName } = this.props;
     const { records } = this.state;
     this.setState({
@@ -34,12 +39,11 @@ class TerminalSelected extends PureComponent {
     if (onSelectEndName) {
       let endName = '';
       const r = records.filter((v, index) => {
-        if (v.endNo === value) {
+        if (v.id === value) {
           return true;
         }
       });
       if (r.length > 0) endName = r[0];
-
       onSelectEndName(endName.endShotName);
     }
   };
@@ -51,12 +55,14 @@ class TerminalSelected extends PureComponent {
     let showValue;
     if (isFirst) {
       showValue = content;
-      if (!showValue) this.fetchList('');
-      // else this.fetchListParams(showValue)
+      // if (!showValue) this.fetchList('');
+      // if (showValue) this.fetchListParams(showValue)
     } else {
       showValue = value;
+      // showValue = '';
     }
 
+    // console.log('ts ... value ', showValue);
     return (
       <Select
         showSearch
@@ -78,22 +84,35 @@ class TerminalSelected extends PureComponent {
 
   getEndNo() {
     const { records } = this.state;
-    console.log('endNo is ', records);
+    // console.log('endNo is ', records);
     return this.getOption(records);
   }
 
   getOption = list => {
     if (!list || list.length < 1) {
-      console.log('empity');
+      // console.log('empity');
       return (
         <Option key={0} value={0}>
           没有找到选项
         </Option>
       );
     }
+
+    const empty = {
+      id: '',
+      endNo: '无',
+      endShotName: '无',
+    };
+
+    if(list.filter(v => {
+      if (v.id == '')
+        return true;
+    }).length==0)
+    list.unshift(empty);
+
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.id} value={item.endNo}>
+      <Option key={item.id} value={item.id}>
         {item.endNo}
       </Option>
     ));
@@ -120,12 +139,15 @@ class TerminalSelected extends PureComponent {
           // if (body.records.length > 0) {
           let records = body.records;
           // console.log("terminal records ",records)
+          let value = '';
           if (!records) records = [];
+
+
           console.log('list update ', records);
           mythis.setState({
             records,
+            value,
             loading: false,
-            isFirst: false,
           });
           // console.log('image  data ', imageObject);
           // return;
@@ -134,7 +156,6 @@ class TerminalSelected extends PureComponent {
           mythis.setState({
             loading: false,
             records: [],
-            isFirst: false,
           });
         }
       })
@@ -144,14 +165,15 @@ class TerminalSelected extends PureComponent {
         mythis.setState({
           loading: false,
           records: [],
-          isFirst: false,
         });
       });
 
     // }
   };
+
   fetchListParams = item => {
     let params = {};
+    if(item)
     params.id = item;
     const mythis = this;
     // fetch('/server/business/end-customer/listEndCustomer', {
@@ -167,15 +189,26 @@ class TerminalSelected extends PureComponent {
       .then(d => {
         const body = d.body;
         if (body && body.records) {
-          // if (body.records.length > 0) {
           let records = body.records;
-          // console.log("terminal records ",records)
           if (!records) records = [];
-          console.log('list update ', records);
+          else {
+            const { onSelectEndName } = this.props;
+            const id = records[0].id;
+            if (onSelectEndName) {
+              let endName = '';
+              const r = records.filter((v) => {
+                if (v.id === id) {
+                  return true;
+                }
+              });
+              if (r.length > 0) endName = r[0];
+
+              onSelectEndName(endName.endShotName);
+            }
+          }
           mythis.setState({
             records,
             loading: false,
-            isFirst: false,
           });
           // console.log('image  data ', imageObject);
           // return;
@@ -184,7 +217,6 @@ class TerminalSelected extends PureComponent {
           mythis.setState({
             loading: false,
             records: [],
-            isFirst: false,
           });
         }
       })
@@ -194,18 +226,17 @@ class TerminalSelected extends PureComponent {
         mythis.setState({
           loading: false,
           records: [],
-          isFirst: false,
         });
       });
 
     // }
   };
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    console.log('shouldComponentUpdate');
-
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState, nextContext) {
+  //   console.log('shouldComponentUpdate');
+  //
+  //   return true;
+  // }
 }
 
 export default TerminalSelected;

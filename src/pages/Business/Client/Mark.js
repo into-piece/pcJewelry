@@ -218,7 +218,7 @@ class Mark extends PureComponent {
                 onClick={this.clickFreezeFrom}
                 disabled={this.state.isEdit || this.state.isAddEdit}
               >
-                冻结
+                审批
               </Button>
             </div>
 
@@ -306,45 +306,7 @@ class Mark extends PureComponent {
     });
   };
 
-  getContantItem = item => {
-    const { selectedItem } = this.state;
 
-    return (
-      <Card
-        hoverable
-        className={selectedItem === item ? styles.list_selected_content : ''}
-        onClick={() => {
-          this.changeSelectItem(item);
-        }}
-        cover={
-          <img
-            alt="example"
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559223238&di=bd3da77adf53b2475750e850b6106117&imgtype=jpg&er=1&src=http%3A%2F%2Fres.cngoldres.com%2Fupload%2F2014%2F1029%2F3c1910541d8059177e7d3f598611c859.jpg%3F_%3D1414568255062"
-          />
-        }
-      >
-        <div>
-          <DescriptionList size="small" col="2">
-            <Description size="small" term="终客编号">
-              {item.endNo}
-            </Description>
-            <Description size="small" term="终客简称">
-              {item.endShotName}
-            </Description>
-            <Description size="small" term="字印编号">
-              {item.markingNo}
-            </Description>
-            <Description term="字印价">{item.markingPrice}</Description>
-          </DescriptionList>
-          <DescriptionList size="small" col="1">
-            <Description term="字印英文名">{item.enName}</Description>
-            <Description term="字印中文名">{item.zhName}</Description>
-            <Description term="字印说明">{item.markingExplain}</Description>
-          </DescriptionList>
-        </div>
-      </Card>
-    );
-  };
 
   getContantItem2 = item => {
     const { selectedItem } = this.state;
@@ -425,16 +387,6 @@ class Mark extends PureComponent {
       current: this.state.selectedItem,
       visible: true,
     });
-    /*
-    *
-    * {
-        uid: '-1',
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-    *
-    * */
   };
 
   clickDeleteFrom = () => {
@@ -531,14 +483,6 @@ class Mark extends PureComponent {
     reader.readAsDataURL(img);
   };
 
-  getBase64_2 = file => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  };
 
   getModalContent = () => {
     const modalCropperFooter = {
@@ -623,9 +567,6 @@ class Mark extends PureComponent {
     } = this.props;
 
     const { cropperVisible, current = {}, terminalShotName } = this.state;
-    // if(terminalShotName&&terminalShotName!=='')
-    // setFieldsValue({"endShotName":terminalShotName})
-    // setFieldsValue({'endShotName':terminalShotName})
 
     return (
       <div className={clientStyle.list_info}>
@@ -645,11 +586,6 @@ class Mark extends PureComponent {
                   accept="image/*"
                   name="avatar"
                   beforeUpload={file => {
-                    // await getBase64(file.originFileObj,async imageUrl =>{
-                    //   file.url = imageUrl;
-                    //   console.log('getBase64>', file);
-                    // })
-                    // console.log('beforeUpload>', file);
                     return false;
                   }}
                   // customRequest={this.customRequest}
@@ -747,17 +683,7 @@ class Mark extends PureComponent {
   };
 
 
-    crop = () => {
-      console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-      // const _this =this;
-      // const c = new  Promise(function(resolve, reject) {
-      //   const cropi = _this.refs.cropper.getCroppedCanvas().toDataURL();
-      //   _this.setState({
-      //     cropImage: cropi,
-      //   });
-      // })
 
-  };
 
 
 }

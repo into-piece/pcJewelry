@@ -42,8 +42,9 @@ class QualityRequirements extends PureComponent {
     if (isFirst) showValue = content;
     else {
       showValue = value;
+      // console.log(" show value ",showValue)
     }
-
+    // console.log("qre ... value ",showValue)
     return (
       <Select
         placeholder={this.props.placeholder}

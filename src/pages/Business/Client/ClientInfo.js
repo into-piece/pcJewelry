@@ -452,7 +452,7 @@ class ClientInfo extends PureComponent {
                 disabled={this.state.isEdit}
                 onClick={this.clickFreezeFrom}
               >
-                冻结
+                审批
               </Button>
             </div>
 
@@ -851,7 +851,7 @@ class ClientInfo extends PureComponent {
         console.log('assign params = ', updateCustomer);
         this.state.updateCustomer = updateCustomer;
         params.id = info.content.id;
-        if (params.status === '冻结') params.status = 2;
+        if (params.status === '审批') params.status = 2;
         else if (params.status === '使用中') params.status = 1;
         else if (params.status === '草稿') params.status = 0;
       }
