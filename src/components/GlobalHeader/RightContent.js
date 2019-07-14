@@ -99,6 +99,7 @@ export default class GlobalHeaderRight extends PureComponent {
     if (theme === 'dark') {
       className = `${styles.right}  ${styles.dark}`;
     }
+    
     return (
       <div className={className}>
         <HeaderSearch

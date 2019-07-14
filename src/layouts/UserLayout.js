@@ -30,7 +30,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2019 蚂蚁金服体验技术部出品
+    Copyright <Icon type="copyright" /> 2019  广州格尚珠宝有限公司
   </Fragment>
 );
 
@@ -62,11 +62,11 @@ class UserLayout extends Component {
             <div className={styles.top}>
               <div className={styles.header}>
                 <Link to="/">
-                  <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>Ant Design</span>
+                  <img alt="logo" className={styles.big_logo} src={logo} />
+                  {/*<span className={styles.title}>GOOSA格尚</span>*/}
                 </Link>
               </div>
-              <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+              <div className={styles.desc}>心态：把自己当做老板来工作！方法：用心做好每一件事！坚持：习惯成为自然！愿景：活在希望中！</div>
             </div>
             {children}
           </div>

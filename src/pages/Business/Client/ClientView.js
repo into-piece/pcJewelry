@@ -46,7 +46,7 @@ import JewelryTable from './components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
-
+import {  pingYincompare ,encompare} from './../../../utils/utils';
 const { Description } = DescriptionList;
 
 const clientColumns = [
@@ -54,11 +54,19 @@ const clientColumns = [
     title: '中文名称',
     dataIndex: 'zhName',
     key: 'zhName',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName,b.zhName)
+    },
   },
   {
     title: '英文名称',
     dataIndex: 'enName',
     key: 'enName',
+    onFilter: (value, record) => record.enName.includes(value),
+    sorter: (a, b) => {
+      if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName>b.enName?1:(a.enName==b.enName?0:-1);
+      return a.enName>b.enName?-1:(a.enName==b.enName?0:1)
+    },
   },
   {
     title: '创建时间',
@@ -67,11 +75,15 @@ const clientColumns = [
   },
 ];
 
+
+
 const clientContentColumns = [
   {
     title: '客户编号',
     dataIndex: 'customerNo',
     key: 'customerNo',
+    defaultSortOrder: 'descend',
+    sorter: (a, b) => a.age - b.age,
   },
   {
     title: '简称',
@@ -82,16 +94,30 @@ const clientContentColumns = [
     title: '英文名称',
     dataIndex: 'enName',
     key: 'enName',
+    onFilter: (value, record) => record.enName.includes(value),
+    // sorter: (a, b) => {
+    //   if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName>b.enName?1:(a.enName==b.enName?0:-1);
+    //   return a.enName>b.enName?-1:(a.enName==b.enName?0:1)
+    // },
+
+    sorter:(a,b)=>{encompare(a.enName,b.enName)}
+    // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
   },
   {
     title: '中文名称',
     dataIndex: 'zhName',
     key: 'zhName',
+    sorter:(a,b)=>{
+      return pingYincompare(a.zhName,b.zhName)
+    }
   },
   {
     title: '联系人',
     dataIndex: 'contacts',
     key: 'contacts',
+    sorter:(a,b)=>{
+      return pingYincompare(a.zhName,b.zhName)
+    }
   },
   {
     title: '手机',
@@ -109,12 +135,16 @@ const clientContentColumns = [
     title: '中文地址',
     dataIndex: 'zhAddress',
     key: 'zhAddress',
+    sorter:(a,b)=>{
+      return pingYincompare(a.zhName,b.zhName)
+    }
   },
 
   {
     title: '英文地址',
     dataIndex: 'enAddress',
     key: 'enAddress',
+    sorter:(a,b)=>{encompare(a.enAddress,b.enAddress)}
   },
 ];
 

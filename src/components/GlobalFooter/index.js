@@ -23,6 +23,7 @@ const GlobalFooter = ({ className, links, copyright }) => {
       {copyright && <div className={styles.copyright}>{copyright}</div>}
     </footer>
   );
+  //2019广州格尚珠宝有限公司
 };
 
 export default GlobalFooter;
