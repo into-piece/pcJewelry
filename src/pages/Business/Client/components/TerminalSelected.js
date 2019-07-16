@@ -5,13 +5,18 @@ import { queryTerminalList } from '../../../../utils/HttpFetch';
 
 const { Option } = Select;
 
+const empty = {
+  id: '',
+  endNo: '---请选择---',
+  endShotName: '---请选择---',
+};
 // import { connect } from 'dva';
 
 class TerminalSelected extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      value: undefined,
+      value: '',
       isFirst: true,
       records: [],
     };
@@ -19,7 +24,7 @@ class TerminalSelected extends PureComponent {
 
   componentDidMount() {
     const { content } = this.props;
-     this.fetchListParams(content);
+    this.fetchListParams(content);
   }
 
   handleSearch = value => {
@@ -28,7 +33,7 @@ class TerminalSelected extends PureComponent {
   };
 
   handleChange = value => {
-    // console.log('handleChange', value);
+    console.log('terminalSelected handleChange', value);
     const { onChange, onSelectEndName } = this.props;
     const { records } = this.state;
     this.setState({
@@ -55,10 +60,14 @@ class TerminalSelected extends PureComponent {
     let showValue;
     if (isFirst) {
       showValue = content;
+      if(!showValue)
+      showValue=''
       // if (!showValue) this.fetchList('');
       // if (showValue) this.fetchListParams(showValue)
     } else {
+
       showValue = value;
+
       // showValue = '';
     }
 
@@ -98,17 +107,13 @@ class TerminalSelected extends PureComponent {
       );
     }
 
-    const empty = {
-      id: '',
-      endNo: '无',
-      endShotName: '无',
-    };
 
-    if(list.filter(v => {
+
+    if (list.filter(v => {
       if (v.id == '')
         return true;
-    }).length==0)
-    list.unshift(empty);
+    }).length == 0)
+      list.unshift(empty);
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
@@ -143,7 +148,7 @@ class TerminalSelected extends PureComponent {
           if (!records) records = [];
 
 
-          console.log('list update ', records);
+          // console.log('list update ', records);
           mythis.setState({
             records,
             value,
@@ -172,9 +177,10 @@ class TerminalSelected extends PureComponent {
   };
 
   fetchListParams = item => {
+    console.log(" the fetchListParams ",item)
     let params = {};
-    if(item)
-    params.id = item;
+    if (item)
+      params.id = item;
     const mythis = this;
     // fetch('/server/business/end-customer/listEndCustomer', {
     fetch(queryTerminalList, {
@@ -195,17 +201,28 @@ class TerminalSelected extends PureComponent {
             const { onSelectEndName } = this.props;
             const id = records[0].id;
             if (onSelectEndName) {
-              let endName = '';
-              const r = records.filter((v) => {
-                if (v.id === id) {
-                  return true;
-                }
-              });
-              if (r.length > 0) endName = r[0];
+              if (item) {
+                let endName = '';
+                const r = records.filter((v) => {
+                  if (v.id === id) {
+                    return true;
+                  }
+                });
+                if (r.length > 0) endName = r[0];
 
-              onSelectEndName(endName.endShotName);
+
+                onSelectEndName(endName.endShotName);
+              }
+              else {
+                console.log("设置默认值 ")
+                onSelectEndName(empty.endShotName);
+              }
             }
-          }
+
+
+
+
+              }
           mythis.setState({
             records,
             loading: false,

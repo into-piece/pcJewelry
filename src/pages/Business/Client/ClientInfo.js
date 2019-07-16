@@ -853,7 +853,7 @@ class ClientInfo extends PureComponent {
         params.id = info.content.id;
         if (params.status === '审批') params.status = 2;
         else if (params.status === '使用中') params.status = 1;
-        else if (params.status === '草稿') params.status = 0;
+        else if (params.status === '输入') params.status = 0;
       }
 
       dispatch({

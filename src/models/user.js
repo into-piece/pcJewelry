@@ -1,5 +1,6 @@
 import { query as queryUsers, queryCurrent } from '@/services/user';
-
+import { queryAllCity} from '@/services/api';
+import { testCurrentUser } from '../utils/utils';
 export default {
   namespace: 'user',
 
@@ -10,6 +11,7 @@ export default {
 
   effects: {
     *fetch(_, { call, put }) {
+
       const response = yield call(queryUsers);
       yield put({
         type: 'save',
@@ -17,11 +19,15 @@ export default {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      // const response = yield call(queryCurrent);
+      const response = yield call(queryAllCity);
       yield put({
-        type: 'saveCurrentUser',
+        type: 'saveCurrentUserTest',
         payload: response,
       });
+
+
+
     },
   },
 
@@ -36,6 +42,12 @@ export default {
       return {
         ...state,
         currentUser: action.payload || {},
+      };
+    },
+    saveCurrentUserTest(state) {
+      return {
+        ...state,
+        currentUser: testCurrentUser(),
       };
     },
     changeNotifyCount(state, action) {

@@ -10,12 +10,13 @@ const { Description } = DescriptionList;
 import { connect } from 'dva';
 import querystring from 'querystring';
 import jsonp from 'fetch-jsonp';
-import HttpFetch, { queryMarkImage } from '../../../../utils/HttpFetch';
+import HttpFetch from '../../../../utils/HttpFetch';
 import clientStyle from '../Client.less';
 
 
 class MarkListItem extends PureComponent {
   fetch2 = item => {
+    // console.log("test load image")
     const _this = this;
     let params = {};
     params.dataNo = item.markingNo;
@@ -38,6 +39,7 @@ class MarkListItem extends PureComponent {
               imageObject,
               loading: false,
             });
+            // console.log("test load finish")
             // console.log('image  data ', imageObject);
             return;
           }

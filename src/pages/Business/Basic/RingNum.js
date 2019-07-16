@@ -174,7 +174,7 @@ class RingNum extends PureComponent {
         this.state.current = { ...data };
         if (data.status === '审批') data.status = 2;
         else if (data.status === '使用中') data.status = 1;
-        else if (data.status === '草稿') data.status = 0;
+        else if (data.status === '输入') data.status = 0;
 
         // console.log('update ' + Object.keys(current));
         dispatch({
@@ -226,7 +226,7 @@ class RingNum extends PureComponent {
         this.state.currentNumber = { ...temp };
         if (data.status === '审批') data.status = 2;
         else if (data.status === '使用中') data.status = 1;
-        else if (data.status === '草稿') data.status = 0;
+        else if (data.status === '输入') data.status = 0;
 
         dispatch({
           type: 'ringnum/updateSonRingNum',
@@ -371,7 +371,7 @@ class RingNum extends PureComponent {
       const newdata = body.data.map(value => {
         const s = value.status;
         if (s == 0) {
-          value.status = '草稿';
+          value.status = '输入';
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {
@@ -389,7 +389,7 @@ class RingNum extends PureComponent {
       const newdata2 = body2.sonData.map(value => {
         const s = value.status;
         if (s == 0) {
-          value.status = '草稿';
+          value.status = '输入';
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {

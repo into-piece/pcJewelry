@@ -383,7 +383,7 @@ class PackageInfo extends PureComponent {
                   <TerminalSelected
                     content={current.endNo}
                     onSelectEndName={file => {
-                      console.log("onselect name ",file)
+                      // console.log("onselect name ",file)
                       this.setState({
                         terminalShotName: file,
                       });

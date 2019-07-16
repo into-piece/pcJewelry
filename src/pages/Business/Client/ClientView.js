@@ -46,7 +46,7 @@ import JewelryTable from './components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
-import {  pingYincompare ,encompare} from './../../../utils/utils';
+import {  pingYincompare ,encompare,formDatecompare} from './../../../utils/utils';
 const { Description } = DescriptionList;
 
 const clientColumns = [
@@ -72,6 +72,9 @@ const clientColumns = [
     title: '创建时间',
     dataIndex: 'createTime',
     key: 'createTime',
+    sorter: (a, b) => {
+      return formDatecompare(a.createTime,b.createTime)
+    },
   },
 ];
 
@@ -471,7 +474,7 @@ class ClientView extends PureComponent {
       customerBody.data.map(value => {
         const s = value.status;
         if (s == 0) {
-          value.status = '草稿';
+          value.status = '输入';
         } else if (s == 1) {
           value.status = '使用中';
         } else if (s == 2) {

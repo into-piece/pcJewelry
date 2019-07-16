@@ -265,7 +265,7 @@ class Mark extends PureComponent {
   }
 
   handleCropSubmit = () => {
-    // console.log('handleCropSubmit');
+    console.log('handleCropSubmit');
     const {  uploadFileUid, fileList } = this.state;
 
     const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
@@ -347,6 +347,7 @@ class Mark extends PureComponent {
   };
 
   callbackUrl = item => {
+    console.log("callbackUrl")
     let fileList = [];
     if (item) {
       fileList = item.map(v => ({
@@ -376,6 +377,7 @@ class Mark extends PureComponent {
     this.setState({
       visible: true,
       isAdd: true,
+      terminalShotName:'',
       current: {},
       fileList: [],
     });
@@ -485,12 +487,14 @@ class Mark extends PureComponent {
 
 
   getModalContent = () => {
+
     const modalCropperFooter = {
       okText: '保存',
       onOk: this.handleCropSubmit,
       onCancel: this.handleCropCancle,
     };
     const handleChange = info => {
+      // console.log("handleChange")
       const { current } = this.state;
 
       let fileList = [...info.fileList];
