@@ -39,6 +39,9 @@ import JewelryTable from '../Client/components/JewelryTable';
 import ProductSearchFrom from './components/ProductSearchFrom';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
+import BrandListSelect from './components/BrandListSelect';
+import Dict from '../Client/components/Dict';
+import ProductTypeListSelect from './components/ProductTypeListSelect';
 
 const { Description } = DescriptionList;
 
@@ -69,11 +72,11 @@ const productColumns = [
     key: 'platingColor',
   },
 
-  {
-    title: '客户编号',
-    dataIndex: 'customerId',
-    key: 'customerId',
-  },
+  // {
+  //   title: '客户编号',
+  //   dataIndex: 'customerId',
+  //   key: 'customerId',
+  // },
 
   {
     title: '客户货号',
@@ -145,7 +148,7 @@ const defaultPageSize = 1;
 })
 
 
-class Product extends Component {
+class ProductInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -614,17 +617,17 @@ class Product extends Component {
     const { current = {} } = this.state;
 
     return (
-      <div>
+      <div className={clientStyle.list_info}>
         <span className={business.sun_title_info}>类型</span>
         <Divider className={business.divder}/>
         <Form
           size={'small'}
           labelAlign="left"
           layout="inline"
-          className={business.from_content}
+          className={clientStyle.from_content}
           onSubmit={this.handleContactsSubmit}
         >
-          <Row>
+          <Row gutter={2}>
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="产品编号"
@@ -665,19 +668,10 @@ class Product extends Component {
 
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label="产品来源"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
+                label="产品来源"{...this.centerFormLayout} className={business.from_content_col}>
                 {getFieldDecorator('sourceOfProduct', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入产品来源',
-                    },
-                  ],
                   initialValue: current.sourceOfProduct,
-                })(<Input placeholder="请输入"/>)}
+                })(<Dict dict="H005" content={current.sourceOfProduct} placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -691,12 +685,13 @@ class Product extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('brand', {
-                  rules: [{ required: true, message: '请输入类型' }],
                   initialValue: current.brand,
-                })(<Radio.Group>
-                  <Radio.Button value="YIHANG">YIHANG</Radio.Button>
-                  <Radio.Button value="GOOSA">GOOSA</Radio.Button>
-                </Radio.Group>)}
+                })
+                (<BrandListSelect
+                  placeholder="请输入"
+                  content={current.brand}
+                />)
+                }
               </FormItem>
             </Col>
 
@@ -707,9 +702,8 @@ class Product extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('productType', {
-                  rules: [{ message: '请输入' }],
                   initialValue: current.productType,
-                })(<Input placeholder="请输入"/>)}
+                })(<ProductTypeListSelect content={current.productType}/>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
@@ -949,4 +943,4 @@ class Product extends Component {
 
 }
 
-export default Product;
+export default ProductInfo;

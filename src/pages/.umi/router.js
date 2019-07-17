@@ -500,7 +500,7 @@ models: () => [
 models: () => [
   import(/* webpackChunkName: 'p__Business__Product__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Product/models/product.js').then(m => { return { namespace: 'product',...m.default}})
 ],
-  component: () => import(/* webpackChunkName: "p__Business__Product__Product" */'../Business/Product/Product'),
+  component: () => import(/* webpackChunkName: "p__Business__Product__ProductInfo" */'../Business/Product/ProductInfo'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
             "routes": [

@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-  const priefx =  '/server/'
+  const priefx =  '/server'
 
 /**
  * 加载共同维护人
@@ -60,6 +60,24 @@ export const queryDelivery =priefx+'/basic/delivery-method/listDeliveryMethods'
  */
   export const queryMstWordList = priefx+'/sys/mst-wordbook/listMstWordbook'
 
+/**
+ * 加载字段类型
+ * @type {string}
+ */
+  export const queryBrands = priefx+'/basic/brand/listBrands'
+
+/**
+ * 加载字段类型
+ * @type {string}
+ */
+export const queryproductDropDown = priefx+'/develop.basic/finished-product/listFinishedProductDropDown'
+
+/**
+ * 加载字段类型
+ * @type {string}
+ */
+export const queryProductMaterial = priefx+'/develop/basic/colour-set/listBasicColourSetDropDown'
+
 export default {
   loadMaintainer,
   loadContacts,
@@ -72,6 +90,9 @@ export default {
   queryTerminalList,
   loadCustomerList,
   queryMstWordList,
+  queryBrands,
+  queryproductDropDown,
+  queryProductMaterial
 
 
 };

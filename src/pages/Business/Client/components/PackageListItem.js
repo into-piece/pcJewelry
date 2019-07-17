@@ -22,19 +22,24 @@ class PackageListItem extends PureComponent {
       },
       body: JSON.stringify(params),
     })
-      .then(response => response.json())
+      .then(response => {
+        // console.log("response package ",response)
+        return response.json();
+      })
       .then(d => {
         const body = d.body;
         if (body && body.records) {
           if (body.records.length > 0) {
             const imageObject = body.records;
             this.state.imageObject = imageObject;
-            _this.setState({
+            this.setState({
               imageObject,
               loading: false,
             });
+            console.log("image object ",imageObject)
             return;
           }
+
         }
         _this.setState({
           loading: false,
@@ -42,7 +47,7 @@ class PackageListItem extends PureComponent {
         // console.log('result ', d);
       })
       .catch(function(ex) {
-        console.log('parsing failed', ex);
+        // console.log('parsing failed', ex);
         message.error('加载图片失败！');
         _this.setState({
           loading: false,
@@ -57,24 +62,35 @@ class PackageListItem extends PureComponent {
       loading: true,
       imageObject: [],
       isFirst: true,
-      isFristLoadValue:true
+      isFristLoadValue: true,
     };
   }
+
+  componentDidMount() {
+    const { item } = this.props;
+    this.fetch(item);
+    this.feathPackageToId(item.endNo);
+  }
+
 
   render() {
     const { item, isSelected, callbackUrl } = this.props;
 
-    const { loading, imageObject, isFirst, endNo, endShotName,isFristLoadValue } = this.state;
+    const { loading, imageObject, endNo, endShotName, isFristLoadValue } = this.state;
 
-    if (isFirst && item) {
-      // if (item) {
-      this.fetch(item);
-      this.state.isFirst = false;
-    }
+    console.log('render package list');
+
+    // if (this.state.isFirst && item) {
+    //   // if (item) {
+    //   console.log("isFirest ")
+    //   this.fetch(item);
+    //   this.state.isFirst = false;
+    // }
     let paths = [];
 
     if (isSelected && callbackUrl) {
       callbackUrl(imageObject);
+      // console.log("callbackUrl")
     }
 
     if (imageObject.length > 0) {
@@ -83,10 +99,14 @@ class PackageListItem extends PureComponent {
       });
     }
 
-    if (!paths) paths = [];
+    // if (!paths) paths = [];
 
-    if(isFristLoadValue)
-      this.feathPackageToId(item.endNo);
+    // if (isFristLoadValue){
+    //   this.feathPackageToId(item.endNo);
+    //   // console.log("isFristLoadValue")
+    // }
+
+    console.log('package path is ', imageObject,paths);
 
     return (
       <Card
@@ -124,7 +144,7 @@ class PackageListItem extends PureComponent {
 
   getImages = paths => {
     return paths.map((
-      v // src={v}
+      v, // src={v}
     ) => (
       <div className={styles.carousel_image_ground}>
         <Zmage
@@ -137,6 +157,10 @@ class PackageListItem extends PureComponent {
       </div>
     ));
   };
+
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return true;
+  }
 
   feathPackageToId = (id) => {
 
@@ -175,7 +199,7 @@ class PackageListItem extends PureComponent {
               endNo,
               endShotName,
               loading: false,
-              isFristLoadValue:false,
+              isFristLoadValue: false,
             });
             // console.log('image  data ', imageObject);
             // return;
@@ -184,18 +208,18 @@ class PackageListItem extends PureComponent {
             mythis.setState({
               loading: false,
               records: [],
-              isFristLoadValue:false,
+              isFristLoadValue: false,
             });
           }
         }
       })
       .catch(function(ex) {
-        console.log('parsing failed', ex);
+        // console.log('parsing failed', ex);
         // message.error('加载图片失败！');
         mythis.setState({
           loading: false,
           records: [],
-          isFristLoadValue:false,
+          isFristLoadValue: false,
         });
       });
   };

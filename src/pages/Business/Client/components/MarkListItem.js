@@ -59,26 +59,38 @@ class MarkListItem extends PureComponent {
     // }
   };
 
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return true;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       imageObject: [],
       isFirst: true,
-      isFristLoadValue:true
+      isFristLoadValue: true,
     };
+  }
+
+  componentDidMount() {
+    const { item } = this.props;
+    if (item) {
+      this.fetch2(item);
+      this.feathMarkToId(item.endNo);
+    }
   }
 
   render() {
     const { item, isSelected, callbackUrl } = this.props;
 
-    const { loading, imageObject, isFirst, endNo, endShotName ,isFristLoadValue } = this.state;
+    const { loading, imageObject, isFirst, endNo, endShotName, isFristLoadValue } = this.state;
 
     // if (isFirst && item) {
-    if (item) {
-      this.fetch2(item);
-      this.state.isFirst = false;
-    }
+    // if (item) {
+    //   this.fetch2(item);
+    //   this.state.isFirst = false;
+    // }
     let paths = [];
 
     if (isSelected && callbackUrl) {
@@ -95,8 +107,8 @@ class MarkListItem extends PureComponent {
     if (!paths) paths = [];
 
     // console.log('image Object ', paths);
-      if(isFristLoadValue)
-      this.feathMarkToId(item.endNo);
+    //   if(isFristLoadValue)
+    //   this.feathMarkToId(item.endNo);
 
     return (
       <Card
@@ -185,7 +197,7 @@ class MarkListItem extends PureComponent {
               endNo,
               endShotName,
               loading: false,
-              isFristLoadValue:false
+              isFristLoadValue: false,
             });
             // console.log('image  data ', imageObject);
             // return;
@@ -194,7 +206,7 @@ class MarkListItem extends PureComponent {
             mythis.setState({
               loading: false,
               records: [],
-              isFristLoadValue:false
+              isFristLoadValue: false,
             });
           }
         }
@@ -205,7 +217,7 @@ class MarkListItem extends PureComponent {
         mythis.setState({
           loading: false,
           records: [],
-          isFristLoadValue:false
+          isFristLoadValue: false,
         });
       });
   };
