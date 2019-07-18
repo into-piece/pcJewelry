@@ -42,6 +42,10 @@ import 'cropperjs/dist/cropper.css';
 import BrandListSelect from './components/BrandListSelect';
 import Dict from '../Client/components/Dict';
 import ProductTypeListSelect from './components/ProductTypeListSelect';
+import UnitColorListSelect from './components/UnitColorListSelect';
+import PlatingColorListSelect from './components/PlatingColorListSelect';
+import TerminalSelected from '../Client/components/TerminalSelected';
+import TerminalListSelected from './components/TerminalListSelected';
 
 const { Description } = DescriptionList;
 
@@ -160,8 +164,34 @@ class ProductInfo extends Component {
       pageCurrent: 1,
       selectProductItem: {},
       selectProductData: [],
+      cNoBrandNo: '',
+      cNofCode: '',
+      cNoUnitCode: '',
+      cNoColorCode: '',
+      productNo: '',
+      cNoCustomerCombine:''
+
 
     };
+  }
+
+  centerFormLayout = {
+    labelCol: { span: 12 },
+    wrapperCol: {
+      span: 24,
+    },
+  };
+
+
+  resetParse=()=>{
+    this.setState({
+      cNoBrandNo: '',
+      cNofCode: '',
+      cNoUnitCode: '',
+      cNoColorCode: '',
+      productNo: '',
+      cNoCustomerCombine:''
+    })
   }
 
   componentDidMount() {
@@ -265,13 +295,13 @@ class ProductInfo extends Component {
           <div className={baseStyles.right_info}>
             {showItem ? (
               <div>
-              <DescriptionList size="small" col="1">
-                <Description term="名称">{showItem.name}</Description>
-                <Description term="编号">{showItem.productNo}</Description>
-                <Description term="类别">{showItem.productType}</Description>
-                <Description term="重量">{showItem.finishedWeight}</Description>
-                <Description term="工价">{showItem.createTime}</Description>
-              </DescriptionList>
+                <DescriptionList size="small" col="1">
+                  <Description term="名称">{showItem.name}</Description>
+                  <Description term="编号">{showItem.productNo}</Description>
+                  <Description term="类别">{showItem.productType}</Description>
+                  <Description term="重量">{showItem.finishedWeight}</Description>
+                  <Description term="工价">{showItem.createTime}</Description>
+                </DescriptionList>
                 <span className={business.title_info}>
             参数详情
           </span>
@@ -434,6 +464,7 @@ class ProductInfo extends Component {
   };
 
   handleNewProduct = () => {
+    this.resetParse();
     this.setState({
       visible: true,
       isAdd: true,
@@ -519,6 +550,15 @@ class ProductInfo extends Component {
     });
   };
 
+  parseProductNo = () => {
+    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '',cNoCustomerCombine='' } = this.state;
+
+    this.setState({
+      productNo: cNoBrandNo + cNofCode +'-'+ cNoUnitCode + cNoColorCode+cNoCustomerCombine,
+    });
+
+  };
+
   onClose = () => {
     this.setState({
       drawVisible: false,
@@ -593,7 +633,7 @@ class ProductInfo extends Component {
         });
       };
 
-      const { cropImage, uploadFile } = this.state;
+      const { cropImage, uploadFile,terminalShotName='' } = this.state;
 
       return (
         <div className={styles.cropper_view}>
@@ -614,7 +654,7 @@ class ProductInfo extends Component {
       );
     };
     const { form: { getFieldDecorator } } = this.props;
-    const { current = {} } = this.state;
+    const { current = {}, productNo ,customerShotName=''} = this.state;
 
     return (
       <div className={clientStyle.list_info}>
@@ -632,12 +672,13 @@ class ProductInfo extends Component {
               <FormItem
                 label="产品编号"
                 className={business.from_content_col}
+                {...this.centerFormLayout}
               >
                 {getFieldDecorator('productNo', {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.custoerProductNo,
                   // })(<text>系统自动生成</text>)}
-                })(<Input placeholder="请输入"/>)}
+                })(<text>{productNo}</text>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
@@ -671,7 +712,7 @@ class ProductInfo extends Component {
                 label="产品来源"{...this.centerFormLayout} className={business.from_content_col}>
                 {getFieldDecorator('sourceOfProduct', {
                   initialValue: current.sourceOfProduct,
-                })(<Dict dict="H005" content={current.sourceOfProduct} placeholder="请输入" />)}
+                })(<Dict dict="H005" content={current.sourceOfProduct} placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -689,6 +730,13 @@ class ProductInfo extends Component {
                 })
                 (<BrandListSelect
                   placeholder="请输入"
+                  onSelect={(v) => {
+                    if(v.brandNo) {
+                      this.state.cNoBrandNo = v.brandNo;
+                      this.parseProductNo();
+                    }
+                  }
+                  }
                   content={current.brand}
                 />)
                 }
@@ -703,7 +751,15 @@ class ProductInfo extends Component {
               >
                 {getFieldDecorator('productType', {
                   initialValue: current.productType,
-                })(<ProductTypeListSelect content={current.productType}/>)}
+                })(<ProductTypeListSelect
+                  content={current.productType}
+                  onSelect={(v) => {
+                    if(v.fCode) {
+                      this.state.cNofCode = v.fCode;
+                      this.parseProductNo();
+                    }
+                  }
+                  }/>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
@@ -743,7 +799,16 @@ class ProductInfo extends Component {
                 {getFieldDecorator('gemColor', {
                   rules: [{ required: true, message: '请输入规格' }],
                   initialValue: current.gemColor,
-                })(<Input placeholder="请输入"/>)}
+                })(<UnitColorListSelect
+                  placeholder="请输入"
+                  onSelect={(v) => {
+                    if(v.unitCode) {
+                      this.state.cNoUnitCode = v.unitCode;
+                      this.parseProductNo();
+                    }
+                  }
+                  }
+                />)}
               </FormItem>
             </Col>
 
@@ -756,7 +821,14 @@ class ProductInfo extends Component {
                 {getFieldDecorator('platingColor', {
                   rules: [{ required: true, message: '请输入电镀颜色' }],
                   initialValue: current.platingColor,
-                })(<Input placeholder="请输入"/>)}
+                })(<PlatingColorListSelect
+                  placeholder="请输入"
+                  onSelect={(v) => {
+                    if(v.colorCode) {
+                      this.state.cNoColorCode = v.colorCode;
+                      this.parseProductNo();
+                    }
+                  }}/>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
@@ -811,7 +883,7 @@ class ProductInfo extends Component {
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label="客户产品描述"
+                label="产品描述"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
@@ -873,6 +945,34 @@ class ProductInfo extends Component {
           className={business.from_content}
         >
           <Row>
+
+            <Col lg={8} md={8} sm={8} xs={8}>
+              <FormItem
+                label="客户编号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('customerShotName', {
+                  rules: [{ required: true, message: '请输入手机' }],
+                  initialValue: current.customerId,
+                })(<TerminalListSelected
+                  content={current.customerId}
+                  onSelectEndName={(file,customerCombine) => {
+
+                    if(file&&customerCombine){
+                    // console.log('end name ', file);
+                    this.setState({
+                      customerShotName: customerCombine,
+
+                    });
+                    this.state.cNoCustomerCombine=file+'-'+customerCombine,
+                    this.parseProductNo();
+                    }
+                  }}
+                />)}
+              </FormItem>
+            </Col>
+
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
                 label="客户简称"
@@ -881,8 +981,14 @@ class ProductInfo extends Component {
               >
                 {getFieldDecorator('customerShotName', {
                   rules: [{ required: true, message: '请输入手机' }],
-                  initialValue: current.customerShotName,
-                })(<Input placeholder="请输入"/>)}
+                  initialValue: current.endShotName,
+                })( <div>
+                  <Input
+                    placeholder="请输入"
+                    readOnly="true"
+                    value={customerShotName ? customerShotName : current.endShotName}
+                  />
+                </div>)}
               </FormItem>
             </Col>
 

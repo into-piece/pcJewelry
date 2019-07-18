@@ -250,7 +250,6 @@ class BasicLayout extends React.Component {
 
   // 切换 tab页 router.push(key);
   onChange = key => {
-    console.log('change tab');
     this.setState({ activeKey: key });
     router.push(key);
   };

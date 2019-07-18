@@ -169,32 +169,42 @@ const contactsColumn = [
     dataIndex: 'contacts',
     key: 'contacts',
     sorter: true,
-    field:'contacts'
+    field: 'contacts',
   },
   {
     title: '手机',
     dataIndex: 'tel',
     key: 'tel',
+    sorter: true,
+    field: 'tel',
   },
   {
     title: 'tel',
     dataIndex: 'phone',
     key: 'phone',
+    sorter: true,
+    field: 'phone',
   },
   {
     title: 'email',
     dataIndex: 'email',
     key: 'email',
+    sorter: true,
+    field: 'email',
   },
   {
     title: 'qq',
     dataIndex: 'qq',
     key: 'qq',
+    sorter: true,
+    field: 'qq',
   },
   {
     title: 'wechat',
     dataIndex: 'wechat',
     key: 'wechat',
+    sorter: true,
+    field: 'wechat',
   },
   {
     title: '主联系人',
@@ -1370,10 +1380,10 @@ class ClientView extends PureComponent {
   };
 
   handleContactsTableChange = (pagination, filters, sorter) => {
-    console.log("hanlde contacts pagination :",pagination,", filters :",filters,"sorter is ",sorter);
+    console.log('hanlde contacts pagination :', pagination, ', filters :', filters, 'sorter is ', sorter);
     this.setState({
       contactsPage: pagination.current,
-      contactsSorter:sorter
+      contactsSorter: sorter,
     });
     this.state.contactsPage = pagination.current;
     this.state.contactsSorter = sorter;
@@ -1761,7 +1771,7 @@ class ClientView extends PureComponent {
     // }
   };
   loadContactsList = () => {
-    const { selectCustomerItem, contactsPage ,contactsSorter} = this.state;
+    const { selectCustomerItem, contactsPage, contactsSorter } = this.state;
     const _this = this;
     if (!selectCustomerItem || selectCustomerItem === '') {
       _this.setState({
@@ -1773,19 +1783,17 @@ class ClientView extends PureComponent {
 
     let params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
 
-    if(contactsSorter)
-    {
-      console.log("request sorter ",contactsSorter,contactsSorter.order)
-       if(contactsSorter.order==='ascend')
-       {
-         params.orderByAsc=contactsSorter.column.field
-       }else
-         // (contactsSorter.order=='descend'){
-         params.orderByDesc=contactsSorter.column.field
-       // }
+    if (contactsSorter) {
+      console.log('request sorter ', contactsSorter, contactsSorter.order);
+      if (contactsSorter.order === 'ascend') {
+        params.orderByAsc = contactsSorter.column.field;
+      } else
+      // (contactsSorter.order=='descend'){
+        params.orderByDesc = contactsSorter.column.field;
+      // }
     }
 
-    console.log(params )
+    console.log(params);
 
     fetch(HttpFetch.loadContacts, {
       method: 'POST',
@@ -1799,6 +1807,19 @@ class ClientView extends PureComponent {
       .then(d => {
         const body = d.body;
         if (body && body.records) {
+
+          //tcontactsTableBody
+
+          const contactsRes = body.records.map(value => {
+            const s = value.isPrimaryContact;
+            if (s == 0) {
+              value.isPrimaryContact = '非主联系人';
+            } else if (s == 1) {
+              value.isPrimaryContact = '主联系人';
+            }
+            return value;
+          });
+          body.records = contactsRes;
           if (body.records.length > 0) {
             _this.setState({
               contactsTableContent: body.records,

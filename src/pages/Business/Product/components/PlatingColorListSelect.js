@@ -7,7 +7,7 @@ const { Option } = Select;
 import HttpFetch from '../../../../utils/HttpFetch';
 
 
-class BrandListSelect extends PureComponent {
+class PlatingColorListSelect extends PureComponent {
   state = {
     dicts: [],
     value: undefined,
@@ -15,9 +15,8 @@ class BrandListSelect extends PureComponent {
   };
 
   handleChange = value => {
-
-    const { onChange ,onSelect} = this.props;
-    const { dicts } = this.state;
+    const { onChange ,onSelect } = this.props;
+    const {dicts} = this.state;
     this.setState({
       value,
       isFirst: false,
@@ -29,6 +28,7 @@ class BrandListSelect extends PureComponent {
         if(v.id===value)
           return v;
       })
+      if(selectItem.length>0)
       onSelect(selectItem[0])
 
     }
@@ -51,7 +51,7 @@ class BrandListSelect extends PureComponent {
       <Select
         placeholder={this.props.placeholder}
         defaultActiveFirstOption={false}
-        style={this.props.style}
+        style={{width:'100%',height:'100%'}}
         showArrow={false}
         value={showValue}
         filterOption={false}
@@ -80,8 +80,8 @@ class BrandListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.brandNo} value={item.id}>
-        {item.brandNo}
+      <Option key={item.zhName} value={item.id}>
+        {item.zhName}
       </Option>
     ));
   };
@@ -93,7 +93,7 @@ class BrandListSelect extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch(HttpFetch.queryBrands, {
+    fetch(HttpFetch.queryPlatingColor, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -117,4 +117,4 @@ class BrandListSelect extends PureComponent {
   };
 }
 
-export default BrandListSelect;
+export default PlatingColorListSelect;

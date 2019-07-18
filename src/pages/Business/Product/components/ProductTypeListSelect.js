@@ -15,12 +15,23 @@ class ProductTypeListSelect extends PureComponent {
   };
 
   handleChange = value => {
-    const { onChange } = this.props;
+    const { onChange ,onSelect } = this.props;
+    const {dicts} = this.state;
     this.setState({
       value,
       isFirst: false,
     });
     onChange(value);
+
+    if(onSelect){
+      const selectItem =  dicts.filter((v)=>{
+        if(v.id===value)
+          return v;
+      })
+      if(selectItem.length>0)
+      onSelect(selectItem[0])
+
+    }
   };
 
   componentDidMount() {

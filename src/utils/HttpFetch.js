@@ -61,22 +61,39 @@ export const queryDelivery =priefx+'/basic/delivery-method/listDeliveryMethods'
   export const queryMstWordList = priefx+'/sys/mst-wordbook/listMstWordbook'
 
 /**
- * 加载字段类型
+ *
  * @type {string}
  */
   export const queryBrands = priefx+'/basic/brand/listBrands'
 
 /**
- * 加载字段类型
+ *
  * @type {string}
  */
 export const queryproductDropDown = priefx+'/develop.basic/finished-product/listFinishedProductDropDown'
 
 /**
- * 加载字段类型
+ * 加载宝石材料
  * @type {string}
  */
 export const queryProductMaterial = priefx+'/develop/basic/colour-set/listBasicColourSetDropDown'
+
+/**
+ * 加载宝石颜色
+ * @type {string}
+ */
+export const queryunitColor = priefx+'/develop/basic/colour-settings/listBasicColourSettingsDropDown'
+/**
+ * 加载电镀颜色
+ * @type {string}
+ */
+export const queryPlatingColor = priefx+'/develop/basic/plating-color-setting/listBasicPlatingColorSettingDropDown'
+
+/**
+ * 加载电镀颜色
+ * @type {string}
+ */
+export const queryTerminalNoList = priefx+'/business/customer/listCustomerDropDown'
 
 export default {
   loadMaintainer,
@@ -92,7 +109,11 @@ export default {
   queryMstWordList,
   queryBrands,
   queryproductDropDown,
-  queryProductMaterial
+  queryProductMaterial,
+  queryunitColor,
+  queryPlatingColor,
+  queryTerminalNoList
+
 
 
 };

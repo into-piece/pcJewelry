@@ -202,7 +202,7 @@ export default [
             path: '/business/product',
             name: 'Product',
             icon: 'shopping',
-            component: './Business/Product/Product',
+            component: './Business/Product/ProductInfo',
             routes: [],
           },
 

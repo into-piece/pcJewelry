@@ -80,8 +80,8 @@ class BrandListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.brandNo} value={item.id}>
-        {item.brandNo}
+      <Option key={item.customerNo} value={item.id}>
+        {item.customerNo}
       </Option>
     ));
   };
@@ -93,7 +93,7 @@ class BrandListSelect extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch(HttpFetch.queryBrands, {
+    fetch(HttpFetch.queryTerminalNoList, {
       method: 'POST',
       credentials: 'include',
       headers: {
