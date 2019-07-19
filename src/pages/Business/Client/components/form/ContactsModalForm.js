@@ -140,7 +140,7 @@ class ContactsModalForm extends Component {
               >
                 {getFieldDecorator('isPrimaryContact', {
                   valuePropName: 'checked',
-                  initialValue: contactsCurrent.isPrimaryContact,
+                  initialValue: contactsCurrent.isPrimaryContact==='主联系人',
                 })(<Switch />)}
               </FormItem>
             </Col>
@@ -149,6 +149,7 @@ class ContactsModalForm extends Component {
       </div>
     );
   };
+
 
   handleContactsSubmit = () => {
     const { form, contactsSubmit } = this.props;

@@ -180,7 +180,7 @@ class TerminalSelected extends PureComponent {
   };
 
   fetchListParams = item => {
-    console.log(" the fetchListParams ",item)
+    // console.log(" the fetchListParams ",item)
     let params = {};
     if (item)
       params.id = item;

@@ -568,7 +568,7 @@ class Mark extends PureComponent {
       );
     };
     const {
-      form: { getFieldDecorator, setFieldsValue },
+      form: { getFieldDecorator },
     } = this.props;
 
     const { cropperVisible, current = {}, terminalShotName } = this.state;

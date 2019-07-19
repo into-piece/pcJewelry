@@ -3,17 +3,13 @@ import {
   Card,
   Row,
   Col,
-  Table,
   Icon,
   Form,
   Select,
-  InputNumber,
-  DatePicker,
   Tabs,
   Radio,
   Button,
   Input,
-  Switch,
   Divider,
   Modal,
   Breadcrumb,
@@ -23,17 +19,16 @@ import {
 import { connect } from 'dva';
 
 const FormItem = Form.Item;
-const { Option } = Select;
-const { TabPane } = Tabs;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
+// const { Option } = Select;
+// const { TabPane } = Tabs;
+// const RadioButton = Radio.Button;
+// const RadioGroup = Radio.Group;
 
 import business from '../business.less';
 import listStyles from '../Client/TableList.less';
 import clientStyle from '../Client/Client.less';
 import baseStyles from '../Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
-import router from 'umi/router';
 import styles from '../../Account/Center/Center.less';
 import JewelryTable from '../Client/components/JewelryTable';
 import ProductSearchFrom from './components/ProductSearchFrom';
@@ -44,7 +39,6 @@ import Dict from '../Client/components/Dict';
 import ProductTypeListSelect from './components/ProductTypeListSelect';
 import UnitColorListSelect from './components/UnitColorListSelect';
 import PlatingColorListSelect from './components/PlatingColorListSelect';
-import TerminalSelected from '../Client/components/TerminalSelected';
 import TerminalListSelected from './components/TerminalListSelected';
 
 const { Description } = DescriptionList;
@@ -169,7 +163,7 @@ class ProductInfo extends Component {
       cNoUnitCode: '',
       cNoColorCode: '',
       productNo: '',
-      cNoCustomerCombine:''
+      cNoCustomerCombine: '',
 
 
     };
@@ -183,16 +177,17 @@ class ProductInfo extends Component {
   };
 
 
-  resetParse=()=>{
+  resetParse = () => {
     this.setState({
       cNoBrandNo: '',
       cNofCode: '',
       cNoUnitCode: '',
       cNoColorCode: '',
       productNo: '',
-      cNoCustomerCombine:''
-    })
-  }
+      cNoCustomerCombine: '',
+      customerShotName:'',
+    });
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -206,7 +201,7 @@ class ProductInfo extends Component {
 
 
   render() {
-    const { leftlg, rightlg, drawVisible, visible } = this.state;
+    const { leftlg, rightlg, drawVisible, visible,update } = this.state;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const {
@@ -221,6 +216,34 @@ class ProductInfo extends Component {
 
     let isUpdate =
       productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading;
+
+
+    if (isUpdate) {
+      this.state.update = true;
+      if (productUpdateloading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else {
+      console.log(" upload date ",update,body)
+      if (update) {
+
+        // console.log('code '+body.rtnCode)
+        if (body.rtnCode === '000000') {
+          this.state.requestState = 'success';
+          message.success(body.rtnMsg);
+        } else {
+          message.error(body.rtnMsg);
+          this.state.requestState = 'error';
+        }
+        // this.handleDone();
+
+        this.state.update = false;
+        if (this.state.isUpdateFrom) {
+          this.state.isUpdateFrom = false;
+          // this.state.showItem = { ...current };
+        }
+      }
+    }
 
     return (
       <div className={business.page}>
@@ -242,12 +265,12 @@ class ProductInfo extends Component {
                 <div style={{ marginBottom: 16 }}/>
                 <ProductSearchFrom/>
                 <JewelryTable
-                  onSelectItem={(item, rows) => {
-                    this.setState({
-                      selectProductItem: item,
-                      selectProductData: rows,
-                    });
-                  }}
+                  // onSelectItem={(item, rows) => {
+                  //   this.setState({
+                  //     selectProductItem: item,
+                  //     selectProductData: rows,
+                  //   });
+                  // }}
                   loading={productListloading || isUpdate}
                   columns={productColumns}
                   body={body.data}
@@ -274,6 +297,7 @@ class ProductInfo extends Component {
         >
           {this.getProductModalContent()}
         </Modal>
+
       </div>
 
     );
@@ -422,7 +446,11 @@ class ProductInfo extends Component {
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
+
+      if (err) {
+        return;
+
+      }
       if (isAdd) {
         dispatch({
           type: 'product/addProduct',
@@ -450,11 +478,12 @@ class ProductInfo extends Component {
           },
         });
       }
+      this.setState({
+        visible: false,
+      });
     });
 
-    this.setState({
-      visible: false,
-    });
+
   };
 
   handleCancel = () => {
@@ -551,11 +580,16 @@ class ProductInfo extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '',cNoCustomerCombine='' } = this.state;
-
+    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '' } = this.state;
+    const { form: { setFieldsValue } } = this.props;
+    const productNo = cNoBrandNo + cNofCode + '-' + cNoUnitCode + cNoColorCode + cNoCustomerCombine;
     this.setState({
-      productNo: cNoBrandNo + cNofCode +'-'+ cNoUnitCode + cNoColorCode+cNoCustomerCombine,
+      productNo,
     });
+    setFieldsValue({
+      productNo,
+    });
+    // setFieldsValue('productNo', productNo);
 
   };
 
@@ -575,15 +609,11 @@ class ProductInfo extends Component {
   getProductModalContent = () => {
 
     const handleChange = info => {
-      const { current } = this.state;
 
       let fileList = [...info.fileList];
 
-      // const imageUrl = this.state.imageUrl;
-
       const file = info.file;
 
-      console.log('handleChange = ', file);
 
       if (file.type) {
         const isJPG = file.type.indexOf('image') != -1;
@@ -623,38 +653,13 @@ class ProductInfo extends Component {
     };
 
 
-    const openCutImageModal = () => {
-      const crop = () => {
-        // image in dataUrl
-        const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
-        // console.log("crop image "+cropi);
-        this.setState({
-          cropImage: cropi,
-        });
-      };
-
-      const { cropImage, uploadFile,terminalShotName='' } = this.state;
-
-      return (
-        <div className={styles.cropper_view}>
-          <Cropper
-            ref="cropper"
-            src={uploadFile}
-            className={styles.cropper}
-            style={{ height: 400 }}
-            preview=".cropper-preview"
-            viewMode={1} //定义cropper的视图模式
-            zoomable={true} //是否允许放大图像
-            guides={true}
-            background={true}
-            crop={crop}
-          />
-          <img className={styles.cropper_preview} src={cropImage}/>
-        </div>
-      );
-    };
     const { form: { getFieldDecorator } } = this.props;
-    const { current = {}, productNo ,customerShotName=''} = this.state;
+    const { current = {}, productNo, customerShotName = '' } = this.state;
+
+    // if(productNo)
+    //   setFieldsValue({
+    //     productNo
+    //   })
 
     return (
       <div className={clientStyle.list_info}>
@@ -676,9 +681,11 @@ class ProductInfo extends Component {
               >
                 {getFieldDecorator('productNo', {
                   rules: [{ required: true, message: '请输入姓名' }],
-                  initialValue: current.custoerProductNo,
+                  initialValue: current.productNo,
                   // })(<text>系统自动生成</text>)}
-                })(<text>{productNo}</text>)}
+                })(<Input placeholder="自动生成编号"
+                          readOnly={true}
+                />)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
@@ -688,7 +695,7 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('zhName', {
-                  rules: [{ required: true, message: '请输入手机' }],
+                  rules: [{ required: true, message: '请输入中文名称' }],
                   initialValue: current.mouldNo,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -696,7 +703,7 @@ class ProductInfo extends Component {
 
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label="英文名称"
+                label='英文名称'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
@@ -711,8 +718,9 @@ class ProductInfo extends Component {
               <FormItem
                 label="产品来源"{...this.centerFormLayout} className={business.from_content_col}>
                 {getFieldDecorator('sourceOfProduct', {
+                  rules: [{ required: true, message: '请输入产品来源' }],
                   initialValue: current.sourceOfProduct,
-                })(<Dict dict="H005" content={current.sourceOfProduct} placeholder="请输入"/>)}
+                })(<Dict dict="H005"  defaultValue="工厂" content={current.sourceOfProduct} placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -726,12 +734,13 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('brand', {
+                  rules: [{ required: true, message: '请输入品牌' }],
                   initialValue: current.brand,
                 })
                 (<BrandListSelect
                   placeholder="请输入"
                   onSelect={(v) => {
-                    if(v.brandNo) {
+                    if (v.brandNo) {
                       this.state.cNoBrandNo = v.brandNo;
                       this.parseProductNo();
                     }
@@ -751,10 +760,11 @@ class ProductInfo extends Component {
               >
                 {getFieldDecorator('productType', {
                   initialValue: current.productType,
+                  rules: [{ required: true, message: '请输入类别' }],
                 })(<ProductTypeListSelect
                   content={current.productType}
                   onSelect={(v) => {
-                    if(v.fCode) {
+                    if (v.fCode) {
                       this.state.cNofCode = v.fCode;
                       this.parseProductNo();
                     }
@@ -792,17 +802,17 @@ class ProductInfo extends Component {
 
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label="宝石颜色"
+                label='宝石颜色'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 {getFieldDecorator('gemColor', {
-                  rules: [{ required: true, message: '请输入规格' }],
+                  rules: [{ required: true, message: '请输入宝石颜色' }],
                   initialValue: current.gemColor,
                 })(<UnitColorListSelect
                   placeholder="请输入"
                   onSelect={(v) => {
-                    if(v.unitCode) {
+                    if (v.unitCode) {
                       this.state.cNoUnitCode = v.unitCode;
                       this.parseProductNo();
                     }
@@ -824,16 +834,17 @@ class ProductInfo extends Component {
                 })(<PlatingColorListSelect
                   placeholder="请输入"
                   onSelect={(v) => {
-                    if(v.colorCode) {
+                    if (v.colorCode) {
                       this.state.cNoColorCode = v.colorCode;
                       this.parseProductNo();
                     }
-                  }}/>)}
+                  }}
+                />)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label="规格"
+                label='规格'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
@@ -901,7 +912,7 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('marks', {
-                  rules: [{ message: '请输入规格' }],
+                  rules: [{ required: true, message: '请输入备注' }],
                   initialValue: current.marks,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -912,17 +923,17 @@ class ProductInfo extends Component {
 
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
-                label=""
+                label=''
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 <Upload
-                  accept="image/*"
-                  name="avatar"
-                  beforeUpload={file => {
+                  accept='image/*'
+                  name='avatar'
+                  beforeUpload={() => {
                     return false;
                   }}
-                  listType="picture-card"
+                  listType='picture-card'
                   fileList={this.state.fileList ? this.state.fileList : []}
                   onChange={handleChange}
                 >
@@ -939,34 +950,39 @@ class ProductInfo extends Component {
         <span className={business.sun_title_info}>客户信息</span>
         <Divider className={business.divder}/>
         <Form
-          size={'small'}
-          labelAlign="left"
-          layout="inline"
+          size='small'
+          labelAlign='left'
+          layout='inline'
           className={business.from_content}
         >
           <Row>
 
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
-                label="客户编号"
+                label='客户编号'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('customerShotName', {
-                  rules: [{ required: true, message: '请输入手机' }],
+                {getFieldDecorator('customerId', {
+                  rules: [{ required: true, message: '请输入客户编号' }],
                   initialValue: current.customerId,
                 })(<TerminalListSelected
                   content={current.customerId}
-                  onSelectEndName={(file,customerCombine) => {
+                  onSelectEndName={(file, customerCombine) => {
 
-                    if(file&&customerCombine){
-                    // console.log('end name ', file);
-                    this.setState({
-                      customerShotName: customerCombine,
+                    if (file && customerCombine) {
+                      // console.log('end name ', file);
+                      this.setState({
+                        customerShotName: customerCombine,
 
-                    });
-                    this.state.cNoCustomerCombine=file+'-'+customerCombine,
-                    this.parseProductNo();
+                      });
+
+                      // setFieldsValue({
+                      //   customerShotName: customerCombine,
+                      // });
+
+                      this.state.cNoCustomerCombine = file + '-' + customerCombine,
+                        this.parseProductNo();
                     }
                   }}
                 />)}
@@ -980,12 +996,12 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('customerShotName', {
-                  rules: [{ required: true, message: '请输入手机' }],
-                  initialValue: current.endShotName,
-                })( <div>
+                  rules: [{ message: '请输入客户简称' }],
+                  initialValue: current.customerShotName,
+                })(<div>
                   <Input
                     placeholder="请输入"
-                    readOnly="true"
+                    readOnly={true}
                     value={customerShotName ? customerShotName : current.endShotName}
                   />
                 </div>)}
@@ -994,12 +1010,12 @@ class ProductInfo extends Component {
 
             <Col lg={8} md={8} sm={8} xs={8}>
               <FormItem
-                label="客户货号"
+                label='客户货号'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 {getFieldDecorator('custoerProductNo', {
-                  rules: [{ message: '请输入电话' }],
+                  rules: [{ message: '请输入货号' }],
                   initialValue: current.custoerProductNo,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -1022,7 +1038,7 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('supplierId', {
-                  rules: [{ required: true, message: '请输入手机' }],
+                  rules: [{ required: true, message: '请输入供应商编号' }],
                   initialValue: current.supplierId,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -1035,7 +1051,7 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('supplierProductNo', {
-                  rules: [{ message: '请输入电话' }],
+                  rules: [{ message: '请输入供应商货号' }],
                   initialValue: current.supplierProductNo,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>

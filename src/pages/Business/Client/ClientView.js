@@ -85,7 +85,7 @@ const clientContentColumns = [
     title: '客户编号',
     dataIndex: 'customerNo',
     key: 'customerNo',
-    defaultSortOrder: 'descend',
+    // defaultSortOrder: 'descend',
     sorter: (a, b) => a.age - b.age,
   },
   {
