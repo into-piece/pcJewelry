@@ -42,11 +42,12 @@ const RadioGroup = Radio.Group;
 import listStyles from './TableList.less';
 import baseStyles from './base.less';
 import maintainer from './models/maintainer';
-import JewelryTable from './components/JewelryTable';
+import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
 import { pingYincompare, encompare, formDatecompare } from './../../../utils/utils';
+import TableSortView from '../../components/TableSortView';
 
 const { Description } = DescriptionList;
 
@@ -163,55 +164,7 @@ const maintainsColumn = [
   },
 ];
 
-const contactsColumn = [
-  {
-    title: '联系人',
-    dataIndex: 'contacts',
-    key: 'contacts',
-    sorter: true,
-    field: 'contacts',
-  },
-  {
-    title: '手机',
-    dataIndex: 'tel',
-    key: 'tel',
-    sorter: true,
-    field: 'tel',
-  },
-  {
-    title: 'tel',
-    dataIndex: 'phone',
-    key: 'phone',
-    sorter: true,
-    field: 'phone',
-  },
-  {
-    title: 'email',
-    dataIndex: 'email',
-    key: 'email',
-    sorter: true,
-    field: 'email',
-  },
-  {
-    title: 'qq',
-    dataIndex: 'qq',
-    key: 'qq',
-    sorter: true,
-    field: 'qq',
-  },
-  {
-    title: 'wechat',
-    dataIndex: 'wechat',
-    key: 'wechat',
-    sorter: true,
-    field: 'wechat',
-  },
-  {
-    title: '主联系人',
-    dataIndex: 'isPrimaryContact',
-    key: 'isPrimaryContact',
-  },
-];
+
 
 const operationTabList = [
   {
@@ -274,6 +227,117 @@ class ClientView extends PureComponent {
     },
   };
 
+    contactsColumn = [
+    {
+      // title: '联系人',
+      title: () => {
+        return (
+          <TableSortView
+            column={'联系人'}
+            field={'contacts'}
+            sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      dataIndex: 'contacts',
+      key: 'contacts',
+      // sorter: true,
+      // field: 'contacts',
+    },
+    {
+      // title: '手机',
+      title: () => {
+        return (
+          <TableSortView
+            column={'电话'}
+            field={'tel'}
+              sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      dataIndex: 'tel',
+      key: 'tel',
+      field: 'tel',
+    },
+    {
+      // title: 'phone',
+      title: () => {
+        return (
+          <TableSortView
+            column={'手机'}
+            field={'phone'}
+            sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      dataIndex: 'phone',
+      key: 'phone',
+      // sorter: true,
+    },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column={'email'}
+            field={'email'}
+            sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      // title: 'email',
+      dataIndex: 'email',
+      key: 'email',
+      // sorter: true,
+      // field: 'email',
+    },
+    {
+      // title: 'qq',
+      title: () => {
+        return (
+          <TableSortView
+            column={'qq'}
+            field={'qq'}
+            sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      dataIndex: 'qq',
+      key: 'qq',
+      // sorter: true,
+      // field: 'qq',
+    },
+    {
+      // title: 'wechat',
+      title: () => {
+        return (
+          <TableSortView
+            column={'wechat'}
+            field={'wechat'}
+            sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      dataIndex: 'wechat',
+      key: 'wechat',
+      // sorter: true,
+      // field: 'wechat',
+    },
+    {
+      // title: '主联系人',
+      title: () => {
+        return (
+          <TableSortView
+            column={'主联系人'}
+            field={'is_primary_contact'}
+            sortChange={this.contactsSortFilter}
+          />
+        )
+      },
+      dataIndex: 'isPrimaryContact',
+      key: 'isPrimaryContact',
+    },
+  ];
+
   constructor(props) {
     super(props);
 
@@ -314,6 +378,7 @@ class ClientView extends PureComponent {
       contactsItem: '',
       contactsData: [],
       contactsLoading: false,
+      contactsSorts:[],
     };
   }
 
@@ -707,7 +772,7 @@ class ClientView extends PureComponent {
                     isLoading={contactsLoading}
                     loading={contactsLoading}
                     body={contactsTableBody}
-                    columns={contactsColumn}
+                    columns={this.contactsColumn}
                     onChange={this.handleContactsTableChange}
                     pageChange={this.pageContactsChange}
                   />
@@ -762,6 +827,9 @@ class ClientView extends PureComponent {
     );
   }
 
+
+
+
   getModalContent = () => {
 
     const { form: { getFieldDecorator } } = this.props;
@@ -810,6 +878,48 @@ class ClientView extends PureComponent {
     );
   };
 
+
+  contactsSortFilter=(field,sort)=>{
+
+
+    const { contactsSorts } = this.state;
+
+    console.log("contactsSortFilter ",field,sort,contactsSorts)
+    let newContacts=[...contactsSorts];
+    const findColumn = newContacts.find(item=>item.field===field);
+
+    console.log("sort find ",findColumn)
+
+    if(findColumn)
+    {
+      if(sort!=='normal'){
+        newContacts = newContacts.map(v=>{
+          if(v.field===field)
+          {
+            v.sort = sort;
+          }
+          return v;
+        })
+
+      }else
+      {
+        newContacts.splice(newContacts.findIndex(v=>v.field===field),1);
+      }
+
+    }else
+    {
+      if(sort!=='normal')
+      {
+        newContacts.push({
+          field,
+          sort
+        })
+      }
+    }
+    this.state.contactsSorts = newContacts;
+    console.log("change cantacts ",newContacts)
+    this.loadContactsList();
+  }
 
   clickToggleDrawer = () => {
     const { drawVisible } = this.state;
@@ -1770,8 +1880,9 @@ class ClientView extends PureComponent {
       });
     // }
   };
+
   loadContactsList = () => {
-    const { selectCustomerItem, contactsPage, contactsSorter } = this.state;
+    const { selectCustomerItem, contactsPage } = this.state;
     const _this = this;
     if (!selectCustomerItem || selectCustomerItem === '') {
       _this.setState({
@@ -1783,17 +1894,46 @@ class ClientView extends PureComponent {
 
     let params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
 
-    if (contactsSorter) {
-      console.log('request sorter ', contactsSorter, contactsSorter.order);
-      if (contactsSorter.order === 'ascend') {
-        params.orderByAsc = contactsSorter.column.field;
-      } else
-      // (contactsSorter.order=='descend'){
-        params.orderByDesc = contactsSorter.column.field;
-      // }
+    if(this.state.contactsSorts.length>0) {
+      let orderByAsc;
+      let orderByDesc;
+      this.state.contactsSorts.forEach(v=>{
+        if(v.sort==='ascend'){
+          if(orderByAsc)
+          {
+            orderByAsc+=","+v.field;
+          }else
+          {
+            orderByAsc = v.field;
+          }
+          // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
+        }else if(v.sort==='descend')
+        {
+          if(orderByDesc)
+            orderByDesc+=","+v.field;
+          else
+            orderByDesc = v.field;
+
+          // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
+        }
+      })
+      if(orderByAsc)
+        params.orderByAsc= orderByAsc;
+
+      if(orderByDesc)
+        params.orderByDesc= orderByDesc;
     }
 
-    console.log(params);
+    // if (contactsSorter) {
+    //   // console.log('request sorter ', contactsSorter, contactsSorter.order);
+    //   if(contactsSorter.column)
+    //   if (contactsSorter.order === 'ascend') {
+    //     params.orderByAsc = contactsSorter.column.field;
+    //   } else
+    //     params.orderByDesc = contactsSorter.column.field;
+    // }
+
+    // console.log(params);
 
     fetch(HttpFetch.loadContacts, {
       method: 'POST',

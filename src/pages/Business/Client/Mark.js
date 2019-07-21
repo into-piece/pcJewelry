@@ -367,10 +367,10 @@ class Mark extends PureComponent {
       this.state.fileName = [];
     }
     // console.log('upload edit list ',fileList)
-    // this.state.fileList = this.state.fileList;
-    this.setState({
-      fileList,
-    });
+    this.state.fileList = fileList;
+    // this.setState({
+    //   fileList,
+    // });
   };
 
   clickNewFrom = () => {

@@ -60,7 +60,7 @@ export default {
     },
 
     *freeBrand({ payload, callback }, { call, put }) {
-      console.log('model freeBrand');
+      // console.log('model freeBrand');
       const response = yield call(freezeTheBrand, payload);
       yield put({
         type: 'saveBrand',

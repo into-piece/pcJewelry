@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import clientStyle from '../Client.less';
+import clientStyle from '../Business/Client/Client.less';
 
 class JewelryTable extends Component {
   constructor(props) {

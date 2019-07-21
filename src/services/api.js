@@ -388,7 +388,7 @@ export async function updateTheSonRingNum(params) {
 export async function freezeTheSonRingNum(params) {
 
   // return request('/server/basic/ring-around/freeze', {
-  return request('/basic/ring-around/freeze', {
+  return request('/server/basic/ring-around/freeze', {
     method: 'POST',
     data: params.list,
   });

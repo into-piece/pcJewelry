@@ -181,10 +181,11 @@ class Brand extends Component {
     });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+  }
 
   render() {
-    const { addSuccessData, selectedRowKeys, current = {}, isEdit, update } = this.state;
+    const { addSuccessData, selectedRowKeys, current = {}, isEdit, update, showItem } = this.state;
 
     const {
       listLoading,
@@ -198,16 +199,40 @@ class Brand extends Component {
 
     this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
 
+
+
+
+    if(listLoading)
+    {
+      this.state.isLoadList = true;
+    }else{
+      if(this.state.isLoadList){
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
+
+        this.state.data = newdata;
+        this.updateSelectDatas();
+        this.state.isLoadList = false;
+      }
+    }
+
+
     if (addloading || deleteloading || upateloading || freezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
       }
 
-      // if(addloading)
-      // {
-      //   this.state.isAddFrom = true;
-      // }
+
     } else {
       if (update) {
         // console.log('rntCode=' + body.rtnCode);
@@ -223,28 +248,15 @@ class Brand extends Component {
         this.state.done = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
+          // this.state.showItem = { ...current };
         }
       }
+
     }
 
-    if (listLoading && body && body.data && body.data.length > 0) {
-      const newdata = body.data.map(value => {
-        const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
-        return value;
-      });
 
-      this.state.data = newdata;
-    }
 
-    // console.log('rntCode=' + body.rtnCode);
+
 
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
@@ -266,13 +278,13 @@ class Brand extends Component {
             {getFieldDecorator('brandEnName', {
               rules: [{ required: true, message: '请输入品牌编号' }],
               initialValue: current.brandEnName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('brandZhName', {
               rules: [{ message: '请输入中文名称' }],
               initialValue: current.brandZhName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
         </Form>
       );
@@ -288,6 +300,7 @@ class Brand extends Component {
     const {
       form: { getFieldDecorator },
     } = this.props;
+
 
     return (
       <GridContent>
@@ -305,7 +318,7 @@ class Brand extends Component {
                   }}
                   component={SvgUtil.diamond}
                 />
-                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
+                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌"/>
               </div>
               <Card bordered={false} loading={false}>
                 <Table
@@ -344,7 +357,6 @@ class Brand extends Component {
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
               <Card bordered={false}>
-                {/*<div style={{ overflow: 'scroll', minHeight: window.innerHeight * 0.7, display: 'inline' }}>*/}
                 <div>
                   <span
                     style={{
@@ -357,27 +369,13 @@ class Brand extends Component {
                   >
                     品牌信息
                   </span>
-                  <Divider />
+                  <Divider/>
                   {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
 
               {/*</Card>*/}
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                {/*    <Row gutter={2}>
-                  <Col lg={6} style={{ textAlign: 'center' }}>
-                    <Button type="primary" icon="plus" size={'small'}
-                            onClick={this.clickNewFrom}>新增</Button> </Col>
-                  <Col lg={6} style={{ textAlign: 'center' }}><Button type="danger" icon="delete" size={'small'}
-                                                                      onClick={this.clickDeleteFrom}
-                                                                      disabled={isEdit}>删除</Button></Col>
-                  <Col lg={6} style={{ textAlign: 'center' }}> <Button type="primary" size={'small'}
-                                                                       onClick={this.clickEditFrom}
-                                                                       disabled={isEdit} icon="edit">编辑</Button></Col>
-                  <Col lg={6} style={{ textAlign: 'center' }}> <Button size={'small'} type="primary" icon="lock"
-                                                                       onClick={this.clickFreezeFrom}
-                                                                       disabled={isEdit}>审批</Button></Col>
-                </Row>*/}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Button
                     className={styles.buttomControl}
@@ -393,7 +391,7 @@ class Brand extends Component {
                     type="danger"
                     icon="delete"
                     size={'small'}
-                    disabled={isEdit}
+                    disabled={isEdit || (showItem && showItem.status === '审批')}
                   >
                     删除
                   </Button>
@@ -402,12 +400,21 @@ class Brand extends Component {
                     type="primary"
                     size={'small'}
                     onClick={this.clickEditFrom}
-                    disabled={isEdit}
+                    disabled={isEdit || (showItem && showItem.status === '审批')}
                     icon="edit"
                   >
                     编辑
                   </Button>
-                  <Button
+                  {showItem.status === '审批' ? (<Button
+                    className={styles.buttomControl}
+                    size={'small'}
+                    type="danger"
+                    icon="unlock"
+                    onClick={this.clickFreezeFrom}
+                    disabled={isEdit}
+                  >
+                    取消审批
+                  </Button>) : (<Button
                     className={styles.buttomControl}
                     size={'small'}
                     type="primary"
@@ -416,7 +423,8 @@ class Brand extends Component {
                     disabled={isEdit}
                   >
                     审批
-                  </Button>
+                  </Button>)}
+
                 </div>
               </Card>
             </div>
@@ -425,6 +433,50 @@ class Brand extends Component {
       </GridContent>
     );
   }
+
+
+
+  /***
+   *
+   *
+   * 通过最新列表更新选择的值
+   * */
+  updateSelectDatas =()=>{
+
+    const { rowSelectedData, showItem } = this.state;
+    // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
+    if (rowSelectedData && rowSelectedData.length > 0) {
+      const newRowSelected = this.state.data.filter(v => {
+        const rs = rowSelectedData.filter(v1 => {
+          if (v1.id === v.id)
+            return v;
+        });
+        if (rs.length > 0) return rs[0];
+      });
+      // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected)
+      if (newRowSelected && newRowSelected.length > 0) {
+        this.state.rowSelectedData = newRowSelected;
+        // this.setState({
+        //   rowSelectedData: newRowSelected,
+        // });
+      }
+    }
+
+    if (showItem && this.state.rowSelectedData) {
+      const newShowItem = this.state.rowSelectedData.filter(v => {
+        if (showItem.id === v.id)
+          return v;
+      });
+      // console.log(" updateSelectDatas  showItem ",newShowItem)
+      if (newShowItem && newShowItem[0]) {
+        this.state.showItem = newShowItem[0];
+        // this.setState({
+        //   showItem: newShowItem[0],
+        // });
+      }
+    }
+  }
+
 
   onSelectRowClass = (record, index) => {
     let color = '';
@@ -570,6 +622,7 @@ class Brand extends Component {
   };
 
   getRenderitem = item => {
+    // console.log(" renderitem  ",item)
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">

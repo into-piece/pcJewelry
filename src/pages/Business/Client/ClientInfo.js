@@ -62,7 +62,7 @@ const listdata = [
 ];
 
 const validatorGeographic = (rule, value, callback) => {
-  console.log('validatorGeographic = ', value);
+  // console.log('validatorGeographic = ', value);
   //   if(value)
   //   {}
   // if (!value.name) {
@@ -151,10 +151,7 @@ class ClientInfo extends PureComponent {
       else this.state.isAddEdit = true;
 
       if (data.content && data.content !== '') {
-        // if(!isDelete)
-        // {
-        //   this.state.isEdit = false;
-        // }
+
         this.state.isEdit = false;
       } else {
         this.state.isEdit = true;
@@ -323,7 +320,7 @@ class ClientInfo extends PureComponent {
                 <FormItem label="币种" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('settlementCurrency', {
                     initialValue: current.settlementCurrency,
-                  })(<Dict dict="H006" defaultValue="美元" content={current.settlementCurrency} />)}
+                  })(<Dict dict="H006" defaultValue="H006003" content={current.settlementCurrency} />)}
                 </FormItem>
               </Col>
             </Row>
@@ -389,12 +386,6 @@ class ClientInfo extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
-          {/*{(body.data&&body.data.length>0) === '' ? '' : (*/}
-          {/*this.showCustomer({ ...body.data[0] })*/}
-          {/*)} */}
-          {/*{(!this.state.showItem) ? '' : (*/}
-          {/*this.showCustomer(isCurstomerUpdate || customerListloading)*/}
-          {/*)}*/}
           {isload
             ? this.showCustomer(isload)
             : !this.state.showItem
@@ -575,6 +566,7 @@ class ClientInfo extends PureComponent {
           this.setState({
             showItem,
           });
+          this.resetState();
           this.featQuality();
           this.featCurrency();
           this.featDelivery();
@@ -599,6 +591,15 @@ class ClientInfo extends PureComponent {
       visible: false,
     });
   };
+
+  resetState =()=>{
+    this.setState({
+      settlementCurrency:'',
+      qualityRequirements:'',
+      deliveryMethod:''
+    })
+  }
+
 
   showCustomer = isload => {
     const { settlementCurrency, qualityRequirements, deliveryMethod } = this.state;

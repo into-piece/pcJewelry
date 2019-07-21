@@ -36,7 +36,7 @@ class PackageListItem extends PureComponent {
               imageObject,
               loading: false,
             });
-            console.log("image object ",imageObject)
+            // console.log("image object ",imageObject)
             return;
           }
 
@@ -78,7 +78,7 @@ class PackageListItem extends PureComponent {
 
     const { loading, imageObject, endNo, endShotName, isFristLoadValue } = this.state;
 
-    console.log('render package list');
+    // console.log('render package list');
 
     // if (this.state.isFirst && item) {
     //   // if (item) {
@@ -106,7 +106,6 @@ class PackageListItem extends PureComponent {
     //   // console.log("isFristLoadValue")
     // }
 
-    console.log('package path is ', imageObject,paths);
 
     return (
       <Card

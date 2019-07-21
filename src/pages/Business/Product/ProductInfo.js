@@ -30,7 +30,7 @@ import clientStyle from '../Client/Client.less';
 import baseStyles from '../Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
 import styles from '../../Account/Center/Center.less';
-import JewelryTable from '../Client/components/JewelryTable';
+import JewelryTable from '../../components/JewelryTable';
 import ProductSearchFrom from './components/ProductSearchFrom';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
@@ -40,6 +40,10 @@ import ProductTypeListSelect from './components/ProductTypeListSelect';
 import UnitColorListSelect from './components/UnitColorListSelect';
 import PlatingColorListSelect from './components/PlatingColorListSelect';
 import TerminalListSelected from './components/TerminalListSelected';
+import BasicMeasureListSelect from './components/BasicMeasureListSelect';
+import PercentageSelect from './components/ProcentageSelect';
+import ProductMaterialSelect from './components/ProductMaterialSelect';
+import MoldListSelect from './components/MoldListSelect';
 
 const { Description } = DescriptionList;
 
@@ -164,9 +168,13 @@ class ProductInfo extends Component {
       cNoColorCode: '',
       productNo: '',
       cNoCustomerCombine: '',
+      cNozhNameUniCode: '',
+      cNoPercentageZhName: '',
+      cNoPercentageEnName: '',
 
 
     };
+
   }
 
   centerFormLayout = {
@@ -185,7 +193,9 @@ class ProductInfo extends Component {
       cNoColorCode: '',
       productNo: '',
       cNoCustomerCombine: '',
-      customerShotName:'',
+      customerShotName: '',
+      cNoenNameUniCode: '',
+      cNozhNameUniCode: '',
     });
   };
 
@@ -201,7 +211,7 @@ class ProductInfo extends Component {
 
 
   render() {
-    const { leftlg, rightlg, drawVisible, visible,update } = this.state;
+    const { leftlg, rightlg, drawVisible, visible, update } = this.state;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const {
@@ -224,7 +234,7 @@ class ProductInfo extends Component {
         this.state.isUpdateFrom = true;
       }
     } else {
-      console.log(" upload date ",update,body)
+      // console.log(' upload date ', update, body);
       if (update) {
 
         // console.log('code '+body.rtnCode)
@@ -580,15 +590,25 @@ class ProductInfo extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '' } = this.state;
+    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName, cNoPercentageEnName } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const productNo = cNoBrandNo + cNofCode + '-' + cNoUnitCode + cNoColorCode + cNoCustomerCombine;
+    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCode;
+    const enName = cNoPercentageZhName + cNoenNameUniCode + cNofCode;
+    //成色+宝石颜色+类别
     this.setState({
       productNo,
+      zhName,
+      enName,
     });
     setFieldsValue({
       productNo,
+      zhName,
+      enName,
     });
+
+    console.log("zhName ",zhName,cNofCode)
+
     // setFieldsValue('productNo', productNo);
 
   };
@@ -653,13 +673,17 @@ class ProductInfo extends Component {
     };
 
 
-    const { form: { getFieldDecorator } } = this.props;
+    const { form: { getFieldDecorator , getFieldValue } } = this.props;
     const { current = {}, productNo, customerShotName = '' } = this.state;
 
     // if(productNo)
     //   setFieldsValue({
     //     productNo
     //   })
+
+    const sourceOfProduct = getFieldValue("sourceOfProduct");
+    // const supplierId = getFieldValue("supplierId");
+    const productType = getFieldValue("productType");
 
     return (
       <div className={clientStyle.list_info}>
@@ -672,7 +696,7 @@ class ProductInfo extends Component {
           className={clientStyle.from_content}
           onSubmit={this.handleContactsSubmit}
         >
-          <Row gutter={2}>
+          <Row>
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="产品编号"
@@ -688,45 +712,6 @@ class ProductInfo extends Component {
                 />)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
-              <FormItem
-                label="中文名称"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('zhName', {
-                  rules: [{ required: true, message: '请输入中文名称' }],
-                  initialValue: current.mouldNo,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
-              <FormItem
-                label='英文名称'
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('enName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
-                  initialValue: current.productDesc,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
-              <FormItem
-                label="产品来源"{...this.centerFormLayout} className={business.from_content_col}>
-                {getFieldDecorator('sourceOfProduct', {
-                  rules: [{ required: true, message: '请输入产品来源' }],
-                  initialValue: current.sourceOfProduct,
-                })(<Dict dict="H005"  defaultValue="工厂" content={current.sourceOfProduct} placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="品牌"
@@ -751,7 +736,6 @@ class ProductInfo extends Component {
                 }
               </FormItem>
             </Col>
-
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="类别"
@@ -764,42 +748,16 @@ class ProductInfo extends Component {
                 })(<ProductTypeListSelect
                   content={current.productType}
                   onSelect={(v) => {
+                    console.log(" select  ",v)
                     if (v.fCode) {
                       this.state.cNofCode = v.fCode;
+
                       this.parseProductNo();
                     }
                   }
                   }/>)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
-              <FormItem
-                label="模具号"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('mouldNo', {
-                  rules: [{ message: '请输入' }],
-                  initialValue: current.mouldNo,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
-              <FormItem
-                label="成色"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('productColor', {
-                  rules: [{ required: true, message: '请输入成色' }],
-                  initialValue: current.productColor,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label='宝石颜色'
@@ -814,6 +772,9 @@ class ProductInfo extends Component {
                   onSelect={(v) => {
                     if (v.unitCode) {
                       this.state.cNoUnitCode = v.unitCode;
+                      this.state.cNozhNameUniCode = v.zhName;
+                      this.state.cNoenNameUniCode = v.enName;
+                      console.log(' cNozhNameUniCode ', v.zhName,v.enName);
                       this.parseProductNo();
                     }
                   }
@@ -821,6 +782,11 @@ class ProductInfo extends Component {
                 />)}
               </FormItem>
             </Col>
+
+
+          </Row>
+
+          <Row>
 
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
@@ -842,6 +808,91 @@ class ProductInfo extends Component {
                 />)}
               </FormItem>
             </Col>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
+              <FormItem
+                label="中文名称"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('zhName', {
+                  rules: [{ required: true, message: '请输入中文名称' }],
+                  initialValue: current.mouldNo,
+                })(<Input placeholder="自动生成" readOnly={'true'}/>,
+                )}
+              </FormItem>
+            </Col>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
+              <FormItem
+                label='英文名称'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('enName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                  initialValue: current.productDesc,
+                })(<Input placeholder="自动生成" readOnly={'true'}
+                />)}
+              </FormItem>
+            </Col>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
+              <FormItem
+                label='产品来源'{...this.centerFormLayout} className={business.from_content_col}>
+                {getFieldDecorator('sourceOfProduct', {
+                  rules: [{ required: true, message: '请输入产品来源' }],
+                })(<Dict dict="H005" content={current.sourceOfProduct?current.sourceOfProduct:'工厂'} placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+
+
+          </Row>
+
+          <Row>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
+              <FormItem
+                label='模具号'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('mouldNo', {
+                  rules: [{ required: true, message: '请输入' }],
+                  initialValue: current.mouldNo,
+                })(<MoldListSelect content={current.mouldNo} placeholder="请输入"/>)}
+              </FormItem>
+            </Col>
+
+            <Col lg={6} md={6} sm={6} xs={6}>
+              <FormItem
+                label="成色"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('productColor', {
+                  rules: [{ required: true, message: '请输入成色' }],
+                  initialValue: current.productColor,
+                })(<PercentageSelect
+                  placeholder="请输入"
+                  content={current.productColor}
+                  onSelect={(v) => {
+                    if (v.zhName)
+                      this.state.cNoPercentageZhName = v.zhName;
+
+                    if (v.enName)
+                      this.state.cNoPercentageEnName = v.enName;
+
+
+                    this.parseProductNo();
+
+
+                  }}
+                />)}
+              </FormItem>
+            </Col>
+
+
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label='规格'
@@ -849,7 +900,7 @@ class ProductInfo extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('specification', {
-                  rules: [{ message: '请输入规格' }],
+                  rules: [{required:productType==='B'||productType==='C', message: '请输入规格' }],
                   initialValue: current.specification,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -863,7 +914,7 @@ class ProductInfo extends Component {
                 {getFieldDecorator('unitOfMeasurement', {
                   rules: [{ message: '请输入计量单位' }],
                   initialValue: current.unitOfMeasurement,
-                })(<Input placeholder="请输入"/>)}
+                })(<BasicMeasureListSelect content={current.unitOfMeasurement} placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -877,7 +928,7 @@ class ProductInfo extends Component {
                 {getFieldDecorator('unitOfWeight', {
                   rules: [{ message: '请输入' }],
                   initialValue: current.unitOfWeight,
-                })(<Input placeholder="请输入"/>)}
+                })(<BasicMeasureListSelect content={current.unitOfWeight} placeholder="请输入"/>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={6} xs={6}>
@@ -947,14 +998,15 @@ class ProductInfo extends Component {
 
           </Row>
         </Form>
-        <span className={business.sun_title_info}>客户信息</span>
-        <Divider className={business.divder}/>
+
         <Form
           size='small'
           labelAlign='left'
           layout='inline'
           className={business.from_content}
         >
+          <span className={business.sun_title_info}>客户信息</span>
+          <Divider className={business.divder}/>
           <Row>
 
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -1022,46 +1074,53 @@ class ProductInfo extends Component {
             </Col>
           </Row>
         </Form>
-        <span className={business.sun_title_info}>供应商信息</span>
-        <Divider className={business.divder}/>
-        <Form
-          size={'small'}
-          labelAlign="left"
-          layout="inline"
-          className={business.from_content}
-        >
-          <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="供应商编号"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('supplierId', {
-                  rules: [{ required: true, message: '请输入供应商编号' }],
-                  initialValue: current.supplierId,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="供应商货号"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('supplierProductNo', {
-                  rules: [{ message: '请输入供应商货号' }],
-                  initialValue: current.supplierProductNo,
-                })(<Input placeholder="请输入"/>)}
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
+        {
+          sourceOfProduct==='H005005'? <Form
+            size={'small'}
+            labelAlign="left"
+            layout="inline"
+            style={{width:'100%'}}
+            className={business.from_content}
+          >
+            <span className={business.sun_title_info}>供应商信息</span>
+            <Divider className={business.divder}/>
+            <Row style={{width:'100%'}}>
+              <Col lg={8} md={8} sm={8} xs={8}>
+                <FormItem
+                  label="供应商编号"
+                  {...this.centerFormLayout}
+                  className={business.from_content_col}
+                >
+                  {getFieldDecorator('supplierId', {
+                    rules: [{   message: '请输入供应商编号' }],
+                    initialValue: current.supplierId,
+                  })(<Input placeholder="请输入"/>)}
+                </FormItem>
+              </Col>
+
+              <Col lg={8} md={8} sm={8} xs={8} >
+                <FormItem
+                  label="供应商货号"
+                  {...this.centerFormLayout}
+
+                  className={business.from_content_col}
+                >
+                  {getFieldDecorator('supplierProductNo', {
+                    rules: [{ message: '请输入供应商货号' }],
+                    initialValue: current.supplierProductNo,
+                  })(<Input placeholder="请输入"/>)}
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>:''
+        }
+
 
       </div>
     );
   };
+  // style={{display:(supplierId&&supplierId!='')?'':'none'}}
 
 }
 

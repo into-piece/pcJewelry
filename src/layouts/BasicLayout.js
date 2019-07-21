@@ -213,7 +213,6 @@ class BasicLayout extends React.Component {
     //点击左侧菜单
     let { menuData } = this.props,
       { key } = e;
-    console.log(' menu list is ', menuData);
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;
     if (tabListArr.includes(key)) {

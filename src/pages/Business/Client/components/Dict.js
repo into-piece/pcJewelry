@@ -7,6 +7,12 @@ const { Option } = Select;
 import { connect } from 'dva';
 import HttpFetch from '../../../../utils/HttpFetch';
 
+const empty = {
+  wordbookCode: '',
+  wordbookContentCode: '---请选择---',
+  wordbookContentZh: '---请选择---',
+};
+
 // import { connect } from 'dva';
 @connect(({ dict, loading }) => {
   return {
@@ -37,7 +43,9 @@ class Dict extends PureComponent {
 
   componentDidMount() {
     this.loadDict();
-    const { dict } = this.props;
+    const { content , onChange} = this.props;
+    onChange(content);
+    // const { dict } = this.props;
     // console.log('dict ', dict);
   }
 
@@ -86,6 +94,12 @@ class Dict extends PureComponent {
         </Option>
       );
     }
+
+    if (list.filter(v => {
+      if (v.wordbookCode === '')
+        return true;
+    }).length == 0)
+      list.unshift(empty);
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn

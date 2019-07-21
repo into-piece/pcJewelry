@@ -165,7 +165,7 @@ class Requested extends PureComponent {
   };
 
   render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update } = this.state;
+    const { selectedRowKeys = [], current = {}, isEdit, showItem,update } = this.state;
 
     const {
       listLoading,
@@ -199,25 +199,34 @@ class Requested extends PureComponent {
         this.state.done = true;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
+          // this.state.showItem = { ...current };
+          // console.log(" update result ",this.state.showItem)
+
         }
       }
     }
 
-    if (listLoading && body && body.data && body.data.length > 0) {
-      const newdata = body.data.map(value => {
-        const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
-        return value;
-      });
+    if(listLoading)
+    {
+      this.state.isLoadList = true;
+    }else{
+      if(this.state.isLoadList){
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
 
-      this.state.data = newdata;
+        this.state.data = newdata;
+        this.updateSelectDatas();
+        this.state.isLoadList = false;
+      }
     }
 
     if (this.state.done) {
@@ -350,7 +359,7 @@ class Requested extends PureComponent {
                     icon="delete"
                     size={'small'}
                     onClick={this.clickDeleteFrom}
-                    disabled={isEdit}
+                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                   >
                     删除
                   </Button>
@@ -359,12 +368,21 @@ class Requested extends PureComponent {
                     type="primary"
                     size={'small'}
                     onClick={this.clickEditFrom}
-                    disabled={isEdit}
+                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                     icon="edit"
                   >
                     编辑
                   </Button>
-                  <Button
+                  {this.state.showItem.status === '审批' ? (<Button
+                    className={styles.buttomControl}
+                    size={'small'}
+                    type="danger"
+                    icon="unlock"
+                    onClick={this.clickFreezeFrom}
+                    disabled={isEdit}
+                  >
+                    取消审批
+                  </Button>) : (<Button
                     className={styles.buttomControl}
                     size={'small'}
                     type="primary"
@@ -373,7 +391,7 @@ class Requested extends PureComponent {
                     disabled={isEdit}
                   >
                     审批
-                  </Button>
+                  </Button>)}
                 </div>
               </Card>
             </div>
@@ -390,6 +408,47 @@ class Requested extends PureComponent {
     }
     return color;
   };
+
+
+  /***
+   * 通过最新列表更新选择的值
+   * */
+  updateSelectDatas =()=>{
+
+    const { rowSelectedData, showItem } = this.state;
+    // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
+    if (rowSelectedData && rowSelectedData.length > 0) {
+      const newRowSelected = this.state.data.filter(v => {
+        const rs = rowSelectedData.filter(v1 => {
+          if (v1.id === v.id)
+            return v;
+        });
+        if (rs.length > 0) return rs[0];
+      });
+      // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected)
+      if (newRowSelected && newRowSelected.length > 0) {
+        this.state.rowSelectedData = newRowSelected;
+        // this.setState({
+        //   rowSelectedData: newRowSelected,
+        // });
+      }
+    }
+
+    if (showItem && this.state.rowSelectedData) {
+      const newShowItem = this.state.rowSelectedData.filter(v => {
+        if (showItem.id === v.id)
+          return v;
+      });
+      console.log(" updateSelectDatas  showItem ",newShowItem)
+      if (newShowItem && newShowItem[0]) {
+        this.state.showItem = newShowItem[0];
+        // this.setState({
+        //   showItem: newShowItem[0],
+        // });
+      }
+    }
+  }
+
 
   clickNewFrom = () => {
     this.state.isAdd = true;

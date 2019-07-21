@@ -7,7 +7,7 @@ const { Option } = Select;
 import HttpFetch from '../../../../utils/HttpFetch';
 
 
-class ProductTypeListSelect extends PureComponent {
+class BrandListSelect extends PureComponent {
   state = {
     dicts: [],
     value: undefined,
@@ -15,23 +15,12 @@ class ProductTypeListSelect extends PureComponent {
   };
 
   handleChange = value => {
-    const { onChange ,onSelect } = this.props;
-    const {dicts} = this.state;
+    const { onChange } = this.props;
     this.setState({
       value,
       isFirst: false,
     });
     onChange(value);
-
-    if(onSelect){
-      const selectItem =  dicts.filter((v)=>{
-        if(v.fCode===value)
-          return v;
-      })
-      if(selectItem.length>0)
-      onSelect(selectItem[0])
-
-    }
   };
 
   componentDidMount() {
@@ -80,8 +69,8 @@ class ProductTypeListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.fCode} value={item.fCode}>
-        {item.fCode}
+      <Option key={item.mainMold+'-'+item.zhName} value={item.id}>
+        {item.mainMold+'-'+item.zhName}
       </Option>
     ));
   };
@@ -93,7 +82,7 @@ class ProductTypeListSelect extends PureComponent {
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch(HttpFetch.queryproductDropDown, {
+    fetch(HttpFetch.queryMoldList, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -117,4 +106,4 @@ class ProductTypeListSelect extends PureComponent {
   };
 }
 
-export default ProductTypeListSelect;
+export default BrandListSelect;

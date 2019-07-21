@@ -7,7 +7,7 @@ const { Option } = Select;
 import HttpFetch from '../../../../utils/HttpFetch';
 
 
-class ProductTypeListSelect extends PureComponent {
+class UnitColorListSelect extends PureComponent {
   state = {
     dicts: [],
     value: undefined,
@@ -25,7 +25,7 @@ class ProductTypeListSelect extends PureComponent {
 
     if(onSelect){
       const selectItem =  dicts.filter((v)=>{
-        if(v.fCode===value)
+        if(v.id===value)
           return v;
       })
       if(selectItem.length>0)
@@ -80,20 +80,20 @@ class ProductTypeListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.fCode} value={item.fCode}>
-        {item.fCode}
+      <Option key={item.zhName} value={item.id}>
+        {item.zhName}
       </Option>
     ));
   };
 
   loadDict = () => {
-    const { dict } = this.props;
+    // const { dict } = this.props;
 
     let params = {};
     const _this = this;
-    params.wordbookTypeCode = dict;
+    // params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch(HttpFetch.queryproductDropDown, {
+    fetch(HttpFetch.queryMeasureUniList, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -117,4 +117,4 @@ class ProductTypeListSelect extends PureComponent {
   };
 }
 
-export default ProductTypeListSelect;
+export default UnitColorListSelect;

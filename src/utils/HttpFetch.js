@@ -95,6 +95,21 @@ export const queryPlatingColor = priefx+'/develop/basic/plating-color-setting/li
  */
 export const queryTerminalNoList = priefx+'/business/customer/listCustomerDropDown'
 
+/**
+ * 加载模具号
+ * @type {string}
+ */
+export const queryMoldList = priefx+'/develop.die/set/listDieSetDropDown'
+
+/**
+ * 加载重量单位
+ * @type {string}
+ */
+export const queryMeasureUniList = priefx+'/develop/basic/measure-unit/listBasicMeasureUnitDropDown'
+
+
+
+
 export default {
   loadMaintainer,
   loadContacts,
@@ -112,8 +127,9 @@ export default {
   queryProductMaterial,
   queryunitColor,
   queryPlatingColor,
-  queryTerminalNoList
-
+  queryTerminalNoList,
+  queryMoldList,
+  queryMeasureUniList
 
 
 };
