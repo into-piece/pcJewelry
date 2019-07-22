@@ -165,6 +165,7 @@ class ProductInfo extends Component {
       cNoBrandNo: '',
       cNofCode: '',
       cNoUnitCode: '',
+      cNomainMold:'',
       cNoColorCode: '',
       productNo: '',
       cNoCustomerCombine: '',
@@ -196,6 +197,7 @@ class ProductInfo extends Component {
       customerShotName: '',
       cNoenNameUniCode: '',
       cNozhNameUniCode: '',
+      cNomainMold:'',
     });
   };
 
@@ -299,7 +301,7 @@ class ProductInfo extends Component {
           {this.getDetailInfo()}
         </Drawer>
         <Modal
-          width={800}
+          width={900}
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
@@ -590,9 +592,9 @@ class ProductInfo extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName, cNoPercentageEnName } = this.state;
+    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '',cNomainMold='', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName, cNoPercentageEnName } = this.state;
     const { form: { setFieldsValue } } = this.props;
-    const productNo = cNoBrandNo + cNofCode + '-' + cNoUnitCode + cNoColorCode + cNoCustomerCombine;
+    const productNo = cNoBrandNo + cNofCode + '-' + cNomainMold+cNoUnitCode + cNoColorCode + cNoCustomerCombine;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCode;
     const enName = cNoPercentageZhName + cNoenNameUniCode + cNofCode;
     //成色+宝石颜色+类别
@@ -606,8 +608,6 @@ class ProductInfo extends Component {
       zhName,
       enName,
     });
-
-    console.log("zhName ",zhName,cNofCode)
 
     // setFieldsValue('productNo', productNo);
 
@@ -748,7 +748,7 @@ class ProductInfo extends Component {
                 })(<ProductTypeListSelect
                   content={current.productType}
                   onSelect={(v) => {
-                    console.log(" select  ",v)
+                    // console.log(" select  ",v)
                     if (v.fCode) {
                       this.state.cNofCode = v.fCode;
 
@@ -774,8 +774,9 @@ class ProductInfo extends Component {
                       this.state.cNoUnitCode = v.unitCode;
                       this.state.cNozhNameUniCode = v.zhName;
                       this.state.cNoenNameUniCode = v.enName;
-                      console.log(' cNozhNameUniCode ', v.zhName,v.enName);
+                      // console.log(' cNozhNameUniCode ', v.zhName,v.enName);
                       this.parseProductNo();
+
                     }
                   }
                   }
@@ -853,14 +854,22 @@ class ProductInfo extends Component {
 
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label='模具号'
+                label='流水号'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 {getFieldDecorator('mouldNo', {
                   rules: [{ required: true, message: '请输入' }],
                   initialValue: current.mouldNo,
-                })(<MoldListSelect content={current.mouldNo} placeholder="请输入"/>)}
+                })(<MoldListSelect content={current.mouldNo} placeholder="请输入"
+                    onSelect={(v)=>{
+
+                      // console.log(" select mold ",v)
+                      if(v&&v.mainMold)
+                        this.state.cNomainMold = v.mainMold;
+                      this.parseProductNo()
+                    }}
+                />)}
               </FormItem>
             </Col>
 

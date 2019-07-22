@@ -14,13 +14,25 @@ class BrandListSelect extends PureComponent {
     isFirst: true,
   };
 
+
   handleChange = value => {
-    const { onChange } = this.props;
+    const { onChange ,onSelect } = this.props;
+    const { dicts } = this.state;
+
     this.setState({
       value,
       isFirst: false,
     });
     onChange(value);
+
+    if(onSelect){
+      const selectItem =  dicts.filter((v)=>{
+        if(v.id===value)
+          return v;
+      })
+      onSelect(selectItem[0])
+
+    }
   };
 
   componentDidMount() {
@@ -69,7 +81,7 @@ class BrandListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.mainMold+'-'+item.zhName} value={item.id}>
+      <Option key={item.id} value={item.id}>
         {item.mainMold+'-'+item.zhName}
       </Option>
     ));
