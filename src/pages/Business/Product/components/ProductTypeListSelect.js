@@ -81,7 +81,7 @@ class ProductTypeListSelect extends PureComponent {
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
       <Option key={item.fCode} value={item.fCode}>
-        {item.fCode}
+        {item.zhName}
       </Option>
     ));
   };

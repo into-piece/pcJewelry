@@ -319,8 +319,7 @@ class ClientInfo extends PureComponent {
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="币种" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('settlementCurrency', {
-                    initialValue: current.settlementCurrency,
-                  })(<Dict dict="H006" defaultValue="H006003" content={current.settlementCurrency} />)}
+                  })(<Dict dict="H006" content={current.settlementCurrency?current.settlementCurrency:'H006003'} />)}
                 </FormItem>
               </Col>
             </Row>

@@ -26,7 +26,7 @@ class BrandListSelect extends PureComponent {
 
     if(onSelect){
       const selectItem =  dicts.filter((v)=>{
-        if(v.id===value)
+        if(v.brandNo===value)
           return v;
       })
       onSelect(selectItem[0])
@@ -80,8 +80,8 @@ class BrandListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.brandNo} value={item.id}>
-        {item.brandNo}
+      <Option key={item.brandNo} value={item.brandNo}>
+        {item.brandZhName}
       </Option>
     ));
   };

@@ -1033,7 +1033,7 @@ class ProductInfo extends Component {
                       //   customerShotName: customerCombine,
                       // });
 
-                      this.state.cNoCustomerCombine = file + '-' + customerCombine,
+                      this.state.cNoCustomerCombine = customerCombine,
                         this.parseProductNo();
                     }
                   }}

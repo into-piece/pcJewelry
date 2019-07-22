@@ -760,7 +760,6 @@ class ClientView extends PureComponent {
                     columns={maintainsColumn}
                   />
 
-
                   <JewelryTable
                     style={{ display: selectType === 'contacts' ? '' : 'none' }}
                     onSelectItem={(item, rows) => {
@@ -769,7 +768,6 @@ class ClientView extends PureComponent {
                         contactsData: rows,
                       });
                     }}
-                    isLoading={contactsLoading}
                     loading={contactsLoading}
                     body={contactsTableBody}
                     columns={this.contactsColumn}
@@ -1889,6 +1887,10 @@ class ClientView extends PureComponent {
         contactsLoading: false,
       });
       return;
+    }else{
+      _this.setState({
+        contactsLoading: true,
+      });
     }
 
 
@@ -2045,6 +2047,10 @@ class ClientView extends PureComponent {
         contactsLoading: false,
       });
       return;
+    }else{
+      this.setState({
+        contactsLoading: true,
+      });
     }
 
     let params = item;
