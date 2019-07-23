@@ -116,7 +116,7 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body: {
           ...state.body,
-          data: action.payload.body.records,
+          records: action.payload.body.records,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,
           size: action.payload.body.size,

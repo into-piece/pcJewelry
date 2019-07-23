@@ -67,10 +67,10 @@ export const queryDelivery =priefx+'/basic/delivery-method/listDeliveryMethods'
   export const queryBrands = priefx+'/basic/brand/listBrands'
 
 /**
- *
+ * 查询客户类别
  * @type {string}
  */
-export const queryproductDropDown = priefx+'/develop.basic/finished-product/listFinishedProductDropDown'
+export const queryproductDropDown = priefx+'/develop/basic/finished-product/listFinishedProductDropDown'
 
 /**
  * 加载宝石材料

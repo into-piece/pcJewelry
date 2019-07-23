@@ -41,7 +41,6 @@ class JewelryTable extends Component {
     return (
       <Table
         {...this.props}
-        size="middle"
         dataSource={body.records}
         rowSelection={rowSelection}
         pagination={paginationProps}

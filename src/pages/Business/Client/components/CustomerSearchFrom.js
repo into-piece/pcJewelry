@@ -59,7 +59,7 @@ class CustomerSearchFrom extends Component {
             <FormItem label="英文名" className={clientStyle.from_content_col}>
               {getFieldDecorator('enName', {
                 initialValue: '',
-              })(<Input placeholder="请输入" />)}
+              })(<Input placeholder="请输入"  size="small"/>)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
@@ -91,7 +91,7 @@ class CustomerSearchFrom extends Component {
             <FormItem label="电话" className={clientStyle.from_content_col}>
               {getFieldDecorator('companyPhone', {
                 initialValue: '',
-              })(<Input placeholder="请输入" />)}
+              })(<Input placeholder="请输入"  size="small"/>)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>

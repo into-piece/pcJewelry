@@ -25,7 +25,7 @@ class ProductTypeListSelect extends PureComponent {
 
     if(onSelect){
       const selectItem =  dicts.filter((v)=>{
-        if(v.fCode===value)
+        if(v.id===value)
           return v;
       })
       if(selectItem.length>0)
@@ -80,7 +80,7 @@ class ProductTypeListSelect extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.fCode} value={item.fCode}>
+      <Option key={item.fCode} value={item.id}>
         {item.zhName}
       </Option>
     ));

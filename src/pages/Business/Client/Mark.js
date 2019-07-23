@@ -265,7 +265,6 @@ class Mark extends PureComponent {
   }
 
   handleCropSubmit = () => {
-    console.log('handleCropSubmit');
     const {  uploadFileUid, fileList } = this.state;
 
     const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
@@ -287,9 +286,6 @@ class Mark extends PureComponent {
   };
 
   handleCropCancle = () => {
-    console.log('handleCropCancle');
-
-
     this.setState({
       cropperVisible: false,
       cropImage: '',
