@@ -217,7 +217,7 @@ class TerminalSelected extends PureComponent {
                 onSelectEndName(endName.endShotName);
               }
               else {
-                console.log("设置默认值 ")
+                // console.log("设置默认值 ")
                 onSelectEndName(empty.endShotName);
               }
             }

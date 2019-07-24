@@ -70,19 +70,19 @@ const productColumns = [
     title: '颜色',
     dataIndex: 'productColor',
     key: 'productColor',
-    width: 100,
+    width: 200,
   },
   {
     title: '成色',
     dataIndex: 'gemColor',
     key: 'gemColor',
-    width: 100,
+    width: 200,
   },
   {
     title: '电镀颜色',
     dataIndex: 'platingColor',
     key: 'platingColor',
-    width: 100,
+    width: 200,
   },
 
 
@@ -221,9 +221,10 @@ class ProductInfo extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
+
     dispatch({
       type: 'product/fetchListProduct',
-      payload: { size: defaultPageSize },
+      payload: { size: defaultPageSize},
     });
     // router.replace('/business/client/emptyView');
   }
@@ -273,6 +274,18 @@ class ProductInfo extends Component {
         }
       }
     }
+
+
+    if(productListloading){
+      this.state.isLoadList = true;
+    }else{
+      if(this.state.isLoadList){
+
+        this.refs.productTable.updateSelectDatas(body)
+        this.state.isLoadList = false;
+      }
+    }
+
     // console.log("bod ",body.data)
 
     return (
@@ -296,12 +309,13 @@ class ProductInfo extends Component {
                 <ProductSearchFrom/>
                 <JewelryTable
                   onSelectItem={(item, rows) => {
-                    // console.log(" select item ",item)
+                    // console.log(" select item ",item,rows)
                     this.setState({
                       showItem: item?{...item}:false,
                       selectProductData: [...rows],
                     });
                   }}
+                  ref="productTable"
                   loading={productListloading || isUpdate}
                   columns={productColumns}
                   className={business.small_table}
@@ -485,18 +499,29 @@ class ProductInfo extends Component {
   handleSubmit = () => {
 
     const { dispatch, form } = this.props;
-    const { showItem, isAdd } = this.state;
+    const { showItem, isAdd ,fileList} = this.state;
     form.validateFields((err, fieldsValue) => {
 
       if (err) {
         return;
 
       }
+
+      const urls = fileList.map(v => v.url);
+
+      const names = fileList.map(v => v.name);
+
+      let params = {...fieldsValue}
+
+      params.imgStr = urls;
+      // params.imgStr = this.state.urls;
+      params.fileName = names;
+
       if (isAdd) {
         dispatch({
           type: 'product/addProduct',
           payload: {
-            ...fieldsValue,
+            ...params
           },
         });
 
@@ -561,7 +586,7 @@ class ProductInfo extends Component {
     data.push(selectedRowKeys);
 
     dispatch({
-      type: 'client/deleteClient',
+      type: 'product/deleteProduct',
       payload: { list: selectedRowKeys },
     });
 
@@ -580,29 +605,35 @@ class ProductInfo extends Component {
   };
 
   handleFreezeProduct = () => {
-    const { selectedRowKeys } = this.state;
+
+    const {selectProductData } = this.state;
+    const ids = selectProductData.map(v => {
+      return v.id;
+    });
+
+    console.log(" freeze ",ids)
 
     const { dispatch } = this.props;
     const data = [];
-    data.push(selectedRowKeys);
+    // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'client/deleteClient',
-      payload: { list: selectedRowKeys },
+      type: 'product/freezeProduct',
+      payload: { list: ids },
     });
 
-    this.setState({
-      selectedRowKeys: '',
-      showItem: false,
-      isEdit: true,
-      pageCurrent: 1,
-      rowData: [],
-      contactsTableBody: [],
-      contactsItem: '',
-      rowSelectedData: [],
-      customerSelectedRowKeys: '',
-      selectCustomerItem: '',
-    });
+    // this.setState({
+      // selectedRowKeys: '',
+      // showItem: false,
+      // isEdit: true,
+      // pageCurrent: 1,
+      // rowData: [],
+      // contactsTableBody: [],
+      // contactsItem: '',
+      // rowSelectedData: [],
+      // customerSelectedRowKeys: '',
+      // selectCustomerItem: '',
+    // });
   };
 
   pageProductChange = (page, pageSize) => {
@@ -624,7 +655,9 @@ class ProductInfo extends Component {
   parseProductNo = () => {
     const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '',cNomainMold='', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName, cNoPercentageEnName } = this.state;
     const { form: { setFieldsValue } } = this.props;
-    const productNo = cNoBrandNo + cNofCode + '-' + cNomainMold+cNoUnitCode + cNoColorCode + cNoCustomerCombine;
+    const showMold = cNomainMold!==''?cNomainMold.substr(2,cNomainMold.length):''
+    // console.log(" showMold ",cNomainMold,showMold)
+    const productNo = cNoBrandNo + cNofCode + '-' + showMold+cNoUnitCode + cNoColorCode + cNoCustomerCombine;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCode;
     const enName = cNoPercentageZhName + cNoenNameUniCode + cNofCode;
     //成色+宝石颜色+类别
@@ -759,13 +792,13 @@ class ProductInfo extends Component {
                 (<BrandListSelect
                   placeholder="请输入"
                   onSelect={(v) => {
-                    if (v.brandNo) {
+                    if (v&&v.brandNo) {
                       this.state.cNoBrandNo = v.brandNo;
                       this.parseProductNo();
                     }
                   }
                   }
-                  content={current.brand}
+                  content={current.brandNo}
                 />)
                 }
               </FormItem>
@@ -853,7 +886,7 @@ class ProductInfo extends Component {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入中文名称' }],
                   initialValue: current.zhName,
-                })(<Input placeholder="自动生成" readOnly={'true'}/>,
+                })(<Input placeholder="自动生成" readOnly={true}/>,
                 )}
               </FormItem>
             </Col>
@@ -867,7 +900,7 @@ class ProductInfo extends Component {
                 {getFieldDecorator('enName', {
                   rules: [{ required: true, message: '请输入英文名称' }],
                   initialValue: current.enName,
-                })(<Input placeholder="自动生成" readOnly={'true'}
+                })(<Input placeholder="自动生成" readOnly={true}
                 />)}
               </FormItem>
             </Col>
@@ -888,7 +921,7 @@ class ProductInfo extends Component {
 
             <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
-                label='流水号'
+                label='模具号'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >

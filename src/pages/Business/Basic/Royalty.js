@@ -72,6 +72,7 @@ const { Description } = DescriptionList;
     deleteloading: loading.effects['royalty/deleteRoyalty'],
     upateloading: loading.effects['royalty/updateRoyalty'],
     freezing: loading.effects['royalty/freezeRoyalty'],
+    unfreezing: loading.effects['royalty/unfreezeRoyalty'],
     body: royalty.body,
     rtnCode,
     rtnMsg,
@@ -195,11 +196,12 @@ class Royalty extends PureComponent {
       deleteloading,
       upateloading,
       freezing,
+      unfreezing,
       form: { getFieldDecorator },
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
-    if (addloading || deleteloading || upateloading || freezing) {
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
+    if (addloading || deleteloading || upateloading || freezing||unfreezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
@@ -412,7 +414,7 @@ class Royalty extends PureComponent {
                     size={'small'}
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={this.clickUnFreezeFrom}
                     disabled={isEdit}
                   >
                     取消审批
@@ -476,6 +478,9 @@ class Royalty extends PureComponent {
       // console.log(" updateSelectDatas  rowSelecteData ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showItem = newShowItem[0];
+        this.setState({
+          showItem: newShowItem[0],
+        });
       }
     }
   }
@@ -562,6 +567,16 @@ class Royalty extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'royalty/freezeRoyalty',
+      payload: { list: selectedRowKeys },
+    });
+  };
+
+  clickUnFreezeFrom = () => {
+    const { selectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'royalty/unfreezeRoyalty',
       payload: { list: selectedRowKeys },
     });
   };

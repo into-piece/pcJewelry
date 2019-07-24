@@ -4,6 +4,7 @@ import {
   deleteTheRoyalty,
   updateTheRoyalty,
   freezeTheRoyalty,
+  unfreezeTheRoyalty,
 } from '@/services/api';
 
 export default {
@@ -54,6 +55,13 @@ export default {
 
     *freezeRoyalty({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheRoyalty, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    }, *unfreezeRoyalty({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeTheRoyalty, payload);
       yield put({
         type: 'save',
         payload: response,

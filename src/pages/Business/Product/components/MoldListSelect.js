@@ -82,7 +82,7 @@ class BrandListSelect extends PureComponent {
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
       <Option key={item.id} value={item.id}>
-        {item.mainMold+'-'+item.zhName}
+        {item.zhName}
       </Option>
     ));
   };

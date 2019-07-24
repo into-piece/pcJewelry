@@ -117,6 +117,48 @@ class JewelryTable extends Component {
 
   selectChange = (record, index) => {};
 
+
+  /***
+   *
+   * 通过最新列表更新选择的值
+   * */
+  updateSelectDatas =(body)=>{
+
+    // console.log(" updateSelectDatas  :",body)
+
+    const { rowSelectedData, showItem } = this.state;
+    if (rowSelectedData && rowSelectedData.length > 0) {
+      const newRowSelected = body.records.filter(v => {
+        const rs = rowSelectedData.filter(v1 => {
+          if (v1.id === v.id)
+            return v;
+        });
+        if (rs.length > 0) return rs[0];
+      });
+      // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected)
+      if (newRowSelected && newRowSelected.length > 0) {
+        this.state.rowSelectedData = newRowSelected;
+        // this.setState({
+        //   rowSelectedData: newRowSelected,
+        // });
+      }
+    }
+
+    if (showItem && this.state.rowSelectedData) {
+      const newShowItem = this.state.rowSelectedData.filter(v => {
+        if (showItem.id === v.id)
+          return v;
+      });
+      // console.log(" updateSelectDatas  showItem ",newShowItem)
+      if (newShowItem && newShowItem[0]) {
+        this.state.showItem = newShowItem[0];
+        // this.setState({
+        //   showItem: newShowItem[0],
+        // });
+      }
+    }
+  }
+
   pageChange = (page, pageSize) => {
     const { pageChange } = this.props;
     if (pageChange) pageChange(page, pageSize);

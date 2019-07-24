@@ -4,6 +4,7 @@ import {
   deleteTheBrand,
   updateTheBrand,
   freezeTheBrand,
+  unfreezeTheBrand,
   querylistRoyalty,
   saveTheRoyalty,
   deleteTheRoyalty,
@@ -62,6 +63,16 @@ export default {
     *freeBrand({ payload, callback }, { call, put }) {
       // console.log('model freeBrand');
       const response = yield call(freezeTheBrand, payload);
+      yield put({
+        type: 'saveBrand',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *unfreeBrand({ payload, callback }, { call, put }) {
+      // console.log('model freeBrand');
+      const response = yield call(unfreezeTheBrand, payload);
       yield put({
         type: 'saveBrand',
         payload: response,

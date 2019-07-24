@@ -126,7 +126,7 @@ class Info extends Component {
     const { children } = this.props;
     const { mode, selectKey, Component } = this.state;
 
-    console.log('select key ', selectKey);
+    // console.log('select key ', selectKey);
     return (
       <div className={styles.page}>
         <div className={styles.nav}>

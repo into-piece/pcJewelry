@@ -60,6 +60,7 @@ const paginationProps = {
     deleteloading: loading.effects['basic/deleteBrand'],
     upateloading: loading.effects['basic/updateBrand'],
     freezing: loading.effects['basic/freeBrand'],
+    unfreeze: loading.effects['basic/unfreeBrand'],
     body: basic.body,
     rtnCode,
     head,
@@ -195,9 +196,10 @@ class Brand extends Component {
       deleteloading,
       upateloading,
       freezing,
+      unfreeze
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading ||unfreeze;
 
 
 
@@ -207,6 +209,7 @@ class Brand extends Component {
       this.state.isLoadList = true;
     }else{
       if(this.state.isLoadList){
+
         const newdata = body.data.map(value => {
           const s = value.status;
           if (s == 0) {
@@ -226,7 +229,7 @@ class Brand extends Component {
     }
 
 
-    if (addloading || deleteloading || upateloading || freezing) {
+    if (addloading || deleteloading || upateloading || freezing||unfreeze) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
@@ -410,7 +413,7 @@ class Brand extends Component {
                     size={'small'}
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={this.clickUnFreezeFrom}
                     disabled={isEdit}
                   >
                     取消审批
@@ -437,7 +440,6 @@ class Brand extends Component {
 
 
   /***
-   *
    *
    * 通过最新列表更新选择的值
    * */
@@ -470,9 +472,9 @@ class Brand extends Component {
       // console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showItem = newShowItem[0];
-        // this.setState({
-        //   showItem: newShowItem[0],
-        // });
+        this.setState({
+          showItem: newShowItem[0],
+        });
       }
     }
   }
@@ -573,6 +575,16 @@ class Brand extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/freeBrand',
+      payload: { list: selectedRowKeys },
+    });
+  };
+
+  clickUnFreezeFrom = () => {
+    const { selectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'basic/unfreeBrand',
       payload: { list: selectedRowKeys },
     });
   };

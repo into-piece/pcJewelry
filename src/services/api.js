@@ -65,6 +65,18 @@ export async function freezeTheBrand(params) {
   });
 }
 
+export async function unfreezeTheBrand(params) {
+
+  return request('/server/basic/brand/cancelApproval', {
+    // return request('/basic/brand/freeze', {
+    method: 'POST',
+    data: params.list,
+    // data: {
+    //   ...params
+    // },
+  });
+}
+
 
 export async function querylistRoyalty() {
 
@@ -113,6 +125,15 @@ export async function updateTheRoyalty(params) {
 export async function freezeTheRoyalty(params) {
 
   return request('/server/basic/business-commission-setting/freeze', {
+    // return request('/basic/business-commission-setting/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function unfreezeTheRoyalty(params) {
+
+  return request('/server/basic/business-commission-setting/cancelApproval', {
     // return request('/basic/business-commission-setting/freeze', {
     method: 'POST',
     data: params.list,
@@ -388,7 +409,7 @@ export async function updateTheSonRingNum(params) {
 export async function freezeTheSonRingNum(params) {
 
   // return request('/server/basic/ring-around/freeze', {
-  return request('/server/basic/ring-around/freeze', {
+  return request('/basic/ring-around/freeze', {
     method: 'POST',
     data: params.list,
   });
