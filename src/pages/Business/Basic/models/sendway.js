@@ -4,6 +4,7 @@ import {
   deleteTheSendWay,
   updateTheSendWay,
   freezeTheSendWay,
+  unfreezeTheSendWay
 } from '@/services/api';
 
 export default {
@@ -60,7 +61,21 @@ export default {
       });
       if (callback) callback();
     },
+
+    *unfreezeSendWay({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeTheSendWay, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
   },
+
+
+
+
 
   reducers: {
     list(state, action) {

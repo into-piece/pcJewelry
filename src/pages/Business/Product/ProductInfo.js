@@ -14,7 +14,7 @@ import {
   Modal,
   Breadcrumb,
   message,
-  Drawer, Upload,
+  Drawer, Upload, Carousel,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -44,6 +44,7 @@ import BasicMeasureListSelect from './components/BasicMeasureListSelect';
 import PercentageSelect from './components/ProcentageSelect';
 import ProductMaterialSelect from './components/ProductMaterialSelect';
 import MoldListSelect from './components/MoldListSelect';
+import Zmage from 'react-zmage';
 
 const { Description } = DescriptionList;
 
@@ -56,32 +57,22 @@ const productColumns = [
     width: 300,
   },
 
-  // {
-  //   title: '客户货号',
-  //   dataIndex: 'customerId',
-  //   key: 'customerId',
-  // },
-  // {
-  //   title: '类别名称',
-  //   dataIndex: 'productType',
-  //   key: 'productType',
-  // },
   {
     title: '颜色',
-    dataIndex: 'productColor',
-    key: 'productColor',
+    dataIndex: 'gemColorName',
+    key: 'gemColorName',
     width: 200,
   },
   {
     title: '成色',
-    dataIndex: 'gemColor',
-    key: 'gemColor',
+    dataIndex: 'productColorName',
+    key: 'productColorName',
     width: 200,
   },
   {
     title: '电镀颜色',
-    dataIndex: 'platingColor',
-    key: 'platingColor',
+    dataIndex: 'platingColorName',
+    key: 'platingColorName',
     width: 200,
   },
 
@@ -89,8 +80,8 @@ const productColumns = [
 
   {
     title: '客户编号',
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
+    dataIndex: 'customerNo',
+    key: 'customerNo',
     width: 100,
   },
 
@@ -109,41 +100,7 @@ const productColumns = [
   },
 
 
-  // {
-  //   title: '模具号',
-  //   dataIndex: 'mouldNo',
-  //   key: 'mouldNo',
-  // },
-  // {
-  //   title: '客户货号',
-  //   dataIndex: 'custoerProductNo',
-  //   key: 'custoerProductNo',
-  // },
-  // {
-  //   title: '客户产品描述',
-  //   dataIndex: 'productDesc',
-  //   key: 'productDesc',
-  // },
-  // {
-  //   title: '产品编号',
-  //   dataIndex: 'productNo',
-  //   key: 'productNo',
-  // },
-  // {
-  //   title: '类型',
-  //   dataIndex: 'productType',
-  //   key: 'productType',
-  // },
-  // {
-  //   title: '产品来源',
-  //   dataIndex: 'sourceOfProduct',
-  //   key: 'sourceOfProduct',
-  // },
-  // {
-  //   title: '规格',
-  //   dataIndex: 'specification',
-  //   key: 'specification',
-  // },
+
 
 ];
 
@@ -188,6 +145,7 @@ class ProductInfo extends Component {
       cNozhNameUniCode: '',
       cNoPercentageZhName: '',
       cNoPercentageEnName: '',
+      imageObject:[],
 
 
 
@@ -352,9 +310,18 @@ class ProductInfo extends Component {
 
   getDetailInfo = () => {
 
-    const { showItem   } = this.state;
-    // console.log("showi ",showItem)
-    // if(showItem&&showItem!=='')
+    const { showItem ,imageObject  } = this.state;
+
+    let paths = [];
+
+    if (imageObject.length > 0) {
+      paths = imageObject.map(v => {
+        return v.path;
+      });
+      // paths = imageObject.path;
+    }
+
+    if (!paths) paths = [];
 
       return (<div className={business.right_info}>
           <div className={business.list_info}>
@@ -363,35 +330,39 @@ class ProductInfo extends Component {
             产品
           </span>
             <Divider className={business.divder}/>
+
             <div className={baseStyles.content}>
               <div className={baseStyles.right_info}>
                 {(showItem&&showItem!=='') ? (
                   <div>
+                    <Carousel className={business.carousel_content} autoplay>
+                      {this.getImages(paths)}
+                    </Carousel>
                     <DescriptionList size="small" col="1">
-                      <Description term="名称">{showItem.name}</Description>
+                      <Description term="名称">{showItem.zhName}</Description>
                       <Description term="编号">{showItem.productNo}</Description>
-                      <Description term="类别">{showItem.productType}</Description>
+                      <Description term="类别">{showItem.productTypeName}</Description>
                       <Description term="重量">{showItem.finishedWeight}</Description>
-                      <Description term="工价">{showItem.createTime}</Description>
+                      <Description term="工价"></Description>
                     </DescriptionList>
                     <span className={business.title_info}>
             参数详情
           </span>
                     <Divider className={business.divder}/>
                     <DescriptionList size="small" col="2">
-                      <Description term="颜色">{showItem.color}</Description>
-                      <Description term="单位件数">{showItem.unitOfMeasurement}</Description>
+                      <Description term="颜色">{showItem.gemColorName}</Description>
+                      <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
                       <Description term="报价重量">{showItem.finishedWeight}</Description>
-                      <Description term="成色重量">{showItem.weight}</Description>
-                      <Description term="电镀">{showItem.productNo}</Description>
-                      <Description term="成色">{showItem.productNo}</Description>
-                      <Description term="产品来源">{showItem.sourceOfProduct}</Description>
-                      <Description term="模具">{showItem.mouldNo}</Description>
-                      <Description term="客户货号">{showItem.customerId}</Description>
-                      <Description term="客户">{showItem.custoer}</Description>
+                      <Description term="成色重量">{showItem.unitOfWeightName}</Description>
+                      <Description term="电镀">{showItem.platingColorName}</Description>
+                      <Description term="成色">{showItem.productColorName}</Description>
+                      <Description term="产品来源">{showItem.sourceOfProductName}</Description>
+                      <Description term="模具">{showItem.mouldNoName}</Description>
+                      <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                      <Description term="客户">{showItem.customerNo}</Description>
                       <Description term="供应商货号">{showItem.supplierId}</Description>
                       <Description term="供应商">{showItem.supplierProductNo}</Description>
-                      <Description term="品牌">{showItem.brand}</Description>
+                      <Description term="品牌">{showItem.brandNo}</Description>
                     </DescriptionList>
                     <span className={business.title_info}>
             备注
@@ -570,7 +541,7 @@ class ProductInfo extends Component {
 
   handleEditProduct = () => {
     const { showItem } = this.state;
-
+    this.resetParse();
     this.setState({
       current: showItem,
       visible: true,
@@ -579,15 +550,19 @@ class ProductInfo extends Component {
   };
 
   handleDeleteProduct = () => {
-    const { selectedRowKeys } = this.state;
+    const { selectProductData} = this.state;
+
+
+    const ids = selectProductData.map(v => {
+      return v.id;
+    });
 
     const { dispatch } = this.props;
-    const data = [];
-    data.push(selectedRowKeys);
+
 
     dispatch({
       type: 'product/deleteProduct',
-      payload: { list: selectedRowKeys },
+      payload: { list: ids },
     });
 
     this.setState({
@@ -611,7 +586,7 @@ class ProductInfo extends Component {
       return v.id;
     });
 
-    console.log(" freeze ",ids)
+    // console.log(" freeze ",ids)
 
     const { dispatch } = this.props;
     const data = [];
@@ -639,12 +614,32 @@ class ProductInfo extends Component {
   pageProductChange = (page, pageSize) => {
 
   };
+
+  getImages = paths => {
+    return paths.map((
+      v, // src={v}
+    ) => (
+      <div className={business.carousel_image_ground}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image }))}
+        />
+      </div>
+    ));
+  };
+
   clickToggleDrawer = () => {
     const { drawVisible } = this.state;
 
     if (!drawVisible) this.showDrawer();
 
   };
+
+
+
 
   showDrawer = () => {
     this.setState({
@@ -798,7 +793,7 @@ class ProductInfo extends Component {
                     }
                   }
                   }
-                  content={current.brandNo}
+                  content={current.brand}
                 />)
                 }
               </FormItem>
@@ -818,7 +813,6 @@ class ProductInfo extends Component {
                     // console.log(" select  ",v)
                     if (v.fCode) {
                       this.state.cNofCode = v.fCode;
-
                       this.parseProductNo();
                     }
                   }
@@ -836,6 +830,7 @@ class ProductInfo extends Component {
                   initialValue: current.gemColor,
                 })(<UnitColorListSelect
                   placeholder="请输入"
+                  content={current.gemColor}
                   onSelect={(v) => {
                     if (v.unitCode) {
                       this.state.cNoUnitCode = v.unitCode;
@@ -873,6 +868,7 @@ class ProductInfo extends Component {
                       this.parseProductNo();
                     }
                   }}
+                  content={current.platingColor}
                 />)}
               </FormItem>
             </Col>

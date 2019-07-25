@@ -195,6 +195,20 @@ export async function freezeTheSendWay(params) {
 }
 
 
+
+export async function unfreezeTheSendWay(params) {
+
+  return request('/server/basic/delivery-method/cancelApproval', {
+    // return request('/basic/delivery-method/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+
+
+
 export async function querylistRequested() {
 
   return request('/server/basic/quality-requirements/listQualityRequirementss', {
@@ -244,6 +258,15 @@ export async function updateTheRequested(params) {
 export async function freezeTheRequested(params) {
 
   return request('/server/basic/quality-requirements/freeze', {
+    // return request('/basic/quality-requirements/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+export async function unfreezeTheRequested(params) {
+
+  return request('/server/basic/quality-requirements/cancelApproval', {
     // return request('/basic/quality-requirements/freeze', {
     method: 'POST',
     data: params.list,
@@ -360,6 +383,15 @@ export async function freezeTheRingNum(params) {
   });
 }
 
+export async function unfreezeTheRingNum(params) {
+
+  return request('/server/basic/ring-around/cancelApproval', {
+    // return request('/basic/ring-around-the-standard/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
 
 export async function querylistSonRingNum(params) {
 
@@ -408,8 +440,18 @@ export async function updateTheSonRingNum(params) {
 
 export async function freezeTheSonRingNum(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
-  return request('/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
+  return request('/server/basic/ring-around/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+export async function unfreezeTheSonRingNum(params) {
+
+  return request('/server/basic/ring-around/cancelApproval', {
+    // return request('/basic/ring-around-the-standard/freeze', {
     method: 'POST',
     data: params.list,
   });
@@ -465,8 +507,8 @@ export async function updateTheClient(params) {
 
 export async function freezeTheClient(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
-  return request('/basic/business/customer/freeze', {
+  // return request('/basic/ring-around/freeze', {
+  return request('/server/basic/business/customer/freeze', {
     method: 'POST',
     data: params.list,
   });
@@ -519,7 +561,7 @@ export async function updateTheCustomer(params) {
 
 export async function freezeTheCustomer(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/business/customer/freeze', {
     method: 'POST',
     data: params.list,
@@ -573,7 +615,7 @@ export async function updateTheTerminal(params) {
 
 export async function freezeTheTerminal(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/business/end-customer/freeze', {
     method: 'POST',
     data: params.list,
@@ -625,7 +667,7 @@ export async function updateTheMark(params) {
 
 export async function freezeTheMark(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/business/marking/freeze', {
     method: 'POST',
     data: params.list,
@@ -679,7 +721,7 @@ export async function updateThePackage(params) {
 
 export async function freezeThePackage(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/business/pack/freeze', {
     method: 'POST',
     data: params.list,
@@ -733,7 +775,7 @@ export async function updateTheProduct(params) {
 
 export async function freezeTheProduct(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/business/product/freeze', {
     method: 'POST',
     data: params.list,
@@ -787,7 +829,7 @@ export async function updateTheProductSeries(params) {
 
 export async function freezeTheProductSeries(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/business/product-line/freeze', {
     method: 'POST',
     data: params.list,
@@ -796,7 +838,7 @@ export async function freezeTheProductSeries(params) {
 
 export async function queryListWordbook(params) {
 
-  // return request('/server/basic/ring-around/freeze', {
+  // return request('/basic/ring-around/freeze', {
   return request('/server/sys/mst-wordbook/listMstWordbook', {
     method: 'POST',
     data: { ...params },

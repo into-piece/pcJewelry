@@ -12,6 +12,7 @@ class BrandListSelect extends PureComponent {
     dicts: [],
     value: undefined,
     isFirst: true,
+    firstSelected:true
   };
 
   handleChange = value => {
@@ -91,11 +92,11 @@ class BrandListSelect extends PureComponent {
   };
 
   loadDict = () => {
-    const { dict } = this.props;
-
+    const { content ,onSelect } = this.props;
+    const { firstSelected } = this.state;
     let params = {};
+
     const _this = this;
-    params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
     fetch(HttpFetch.queryProductMaterial, {
       method: 'POST',
@@ -109,11 +110,25 @@ class BrandListSelect extends PureComponent {
       .then(d => {
         const body = d.body;
 
-        if (body.records)
+        if (body.records) {
           _this.setState({
             loading: false,
             dicts: body.records,
           });
+          if (firstSelected && content) {
+            if (onSelect) {
+              const selectItem = body.records.filter((v) => {
+                if (v.id === content)
+                  return v;
+              });
+              if (selectItem.length > 0)
+                onSelect(selectItem[0]);
+
+            }
+
+          }
+        }
+        this.state.firstSelected = false
       })
       .catch(function(ex) {
         // message.error('加载图片失败！');

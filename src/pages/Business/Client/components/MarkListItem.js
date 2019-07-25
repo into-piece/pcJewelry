@@ -86,11 +86,6 @@ class MarkListItem extends PureComponent {
 
     const { loading, imageObject, isFirst, endNo, endShotName, isFristLoadValue } = this.state;
 
-    // if (isFirst && item) {
-    // if (item) {
-    //   this.fetch2(item);
-    //   this.state.isFirst = false;
-    // }
     let paths = [];
 
     if (isSelected && callbackUrl) {
@@ -106,9 +101,6 @@ class MarkListItem extends PureComponent {
 
     if (!paths) paths = [];
 
-    // console.log('image Object ', paths);
-    //   if(isFristLoadValue)
-    //   this.feathMarkToId(item.endNo);
 
     return (
       <Card

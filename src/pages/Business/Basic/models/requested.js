@@ -4,6 +4,7 @@ import {
   deleteTheRequested,
   updateTheRequested,
   freezeTheRequested,
+  unfreezeTheRequested,
 } from '@/services/api';
 
 export default {
@@ -60,7 +61,19 @@ export default {
       });
       if (callback) callback();
     },
+
+    *unfreezeRequested({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeTheRequested, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
   },
+
+
 
   reducers: {
     list(state, action) {

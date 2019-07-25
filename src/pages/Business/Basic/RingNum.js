@@ -75,7 +75,7 @@ const paginationProps = {
 
 const { Description } = DescriptionList;
 
-@connect(({ loading, ringnum }) => {
+@connect(({ loading, ringnum,ringnum2 }) => {
   // const { rtnCode, rtnMsg } = ringnum;
   return {
     listLoading: loading.effects['ringnum/fetchListRingNum'],
@@ -83,12 +83,14 @@ const { Description } = DescriptionList;
     deleteloading: loading.effects['ringnum/deleteRingNum'],
     upateloading: loading.effects['ringnum/updateRingNum'],
     freezing: loading.effects['ringnum/freezeRingNum'],
-    istLoading2: loading.effects['ringnum/fetchListSonRingNum'],
-    addsonloading: loading.effects['ringnum/addSonRingNum'],
-    deletesonloading: loading.effects['ringnum/deleteSonRingNumber'],
-    upatesonloading: loading.effects['ringnum/updateSonRingNum'],
-    sonfreezing: loading.effects['ringnum/freezeSonRingNum'],
-    body2: ringnum.body2,
+    unfreezing: loading.effects['ringnum/unfreezeRingNum'],
+    istLoading2: loading.effects['ringnum2/fetchListSonRingNum'],
+    addsonloading: loading.effects['ringnum2/addSonRingNum'],
+    deletesonloading: loading.effects['ringnum2/deleteSonRingNumber'],
+    upatesonloading: loading.effects['ringnum2/updateSonRingNum'],
+    sonfreezing: loading.effects['ringnum2/freezeSonRingNum'],
+    sonunfreezing: loading.effects['ringnum2/unfreezeSonRingNum'],
+    body2: ringnum2.body2,
     body: ringnum.body,
   };
 })
@@ -207,7 +209,7 @@ class RingNum extends PureComponent {
           // console.log('params data = ' + Object.keys(params));
 
           dispatch({
-            type: 'ringnum/addSonRingNum',
+            type: 'ringnum2/addSonRingNum',
             payload: {
               ...params,
             },
@@ -229,7 +231,7 @@ class RingNum extends PureComponent {
         else if (data.status === '输入') data.status = 0;
 
         dispatch({
-          type: 'ringnum/updateSonRingNum',
+          type: 'ringnum2/updateSonRingNum',
           payload: {
             ...data,
           },
@@ -262,7 +264,7 @@ class RingNum extends PureComponent {
         ring_around_st_id: showItem.id,
       };
       dispatch({
-        type: 'ringnum/fetchListSonRingNum',
+        type: 'ringnum2/fetchListSonRingNum',
         payload: {
           ...params,
         },
@@ -292,7 +294,7 @@ class RingNum extends PureComponent {
       modalType,
       fristLoad,
       tabType,
-
+      showItem,
       numberSelectedRowKeys,
     } = this.state;
 
@@ -305,16 +307,19 @@ class RingNum extends PureComponent {
       deleteloading,
       upateloading,
       freezing,
+      unfreezing,
       addsonloading,
       deletesonloading,
       upatesonloading,
       sonfreezing,
+      sonunfreezing,
       form: { getFieldDecorator },
+      dispatch
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
 
-    if (addloading || deleteloading || upateloading || freezing) {
+    if (addloading || deleteloading || upateloading || freezing || unfreezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
@@ -323,11 +328,13 @@ class RingNum extends PureComponent {
       if (update) {
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
+          message.success(body.rtnMsg)
         } else {
           this.state.requestState = 'error';
+          message.error(body.rtnMsg)
         }
 
-        this.state.requestMes = body.rtnMsg;
+        // this.state.requestMes = body.rtnMsg;
         this.state.update = false;
         this.state.done = true;
         this.state.refreshList = 'standard';
@@ -339,22 +346,35 @@ class RingNum extends PureComponent {
     }
 
     this.state.isSonLoading =
-      addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2;
+      addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2 ||sonunfreezing;
 
-    if (addsonloading || deletesonloading || upatesonloading || sonfreezing) {
+    if (addsonloading || deletesonloading || upatesonloading || sonfreezing || sonunfreezing) {
       this.state.updateNumber = true;
       if (upatesonloading) {
         this.state.isUpdateNumberFrom = true;
       }
     } else {
       if (updateNumber) {
-        if (body2.rtnCode === '000000') {
-          this.state.requestState = 'success';
+
+        // console.log(" save body ",body2)
+
+        if (body2.rtnCode2 === '000000') {
+          // this.state.requestState = 'success';
+          message.success(body2.rtnMsg2)
         } else {
           this.state.requestState = 'error';
+          message.error(body2.rtnMsg2)
         }
-
-        this.state.requestMes = body2.rtnMsg;
+        const params = {
+          ring_around_st_id: showItem.id,
+        };
+        dispatch({
+          type: 'ringnum2/fetchListSonRingNum',
+          payload: {
+            ...params,
+          },
+        });
+        // this.state.requestMes = body2.rtnMsg;
         this.state.updateNumber = false;
         this.state.done = true;
         this.state.refreshList = 'number';
@@ -390,6 +410,7 @@ class RingNum extends PureComponent {
     }
 
     this.state.data2 = [];
+    // console.log("   data ",body2.sonData)
     if (!fristLoad && body2 && body2.sonData && body2.sonData.length > 0) {
       const newdata2 = body2.sonData.map(value => {
         const s = value.status;
@@ -403,6 +424,7 @@ class RingNum extends PureComponent {
         return value;
       });
 
+      // console.log(" new data ",newdata2)
       this.state.data2 = newdata2;
     }
 
@@ -426,17 +448,19 @@ class RingNum extends PureComponent {
         this.state.data2 = newdata;
         this.updateSelectRingNumDatas();
         this.state.isRingNumLoadList = false;
+        // console.log(" new data  updateSelectRingNumDatas",this.state.data2)
+
       }
     }
 
-    if (this.state.done) {
-      if (this.state.requestState == 'success') {
-        message.success(this.state.requestMes);
-      } else {
-        message.error(this.state.requestMes);
-      }
-      this.handleDone();
-    }
+    // if (this.state.done) {
+    //   if (this.state.requestState == 'success') {
+    //     message.success(this.state.requestMes);
+    //   } else {
+    //     message.error(this.state.requestMes);
+    //   }
+    //   this.handleDone();
+    // }
 
     // console.log('rntCode2=' + body2.rtnCode + ',data2 = ' + (this.state.data2));
 
@@ -498,9 +522,7 @@ class RingNum extends PureComponent {
       }
     };
 
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : {
+    const modalFooter = {
           okText: '保存',
           onOk: this.state.modalType === 'standard' ? this.handleSubmit : this.handleNumberSubmit,
           onCancel: this.handleCancel,
@@ -782,7 +804,7 @@ class RingNum extends PureComponent {
               size={'small'}
               type="danger"
               icon="unlock"
-              onClick={this.clickFreezeFrom}
+              onClick={this.clickUnFreezeFrom}
               disabled={isEdit}
             >
               取消审批
@@ -865,7 +887,7 @@ class RingNum extends PureComponent {
               size={'small'}
               type="danger"
               icon="unlock"
-              onClick={this.clickNumberFreezeFrom}
+              onClick={this.clickUnNumberFreezeFrom}
               disabled={isEditNumber}
             >
               取消审批
@@ -934,9 +956,9 @@ class RingNum extends PureComponent {
       console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showItem = newShowItem[0];
-        // this.setState({
-        //   showItem: newShowItem[0],
-        // });
+        this.setState({
+          showItem: newShowItem[0],
+        });
       }
     }
   }
@@ -955,7 +977,7 @@ class RingNum extends PureComponent {
         });
         if (rs.length > 0) return rs[0];
       });
-      console.log(" updateSelectDatas  rowSelecteData ",newRowSelected)
+      // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected)
       if (newRowSelected && newRowSelected.length > 0) {
         this.state.numberRowData = newRowSelected;
         // this.setState({
@@ -969,12 +991,12 @@ class RingNum extends PureComponent {
         if (showNumberItem.id === v.id)
           return v;
       });
-      console.log(" updateSelectDatas  newShowItem ",newShowItem)
+      // console.log(" updateSelectDatas  newShowItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showNumberItem = newShowItem[0];
-        // this.setState({
-        //   showItem: newShowItem[0],
-        // });
+        this.setState({
+          showNumberItem: newShowItem[0],
+        });
       }
     }
   }
@@ -1020,7 +1042,7 @@ class RingNum extends PureComponent {
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'ringnum/deleteSonRingNumber',
+      type: 'ringnum2/deleteSonRingNumber',
       payload: { list: numberSelectedRowKeys },
     });
 
@@ -1057,15 +1079,39 @@ class RingNum extends PureComponent {
     });
   };
 
+  clickUnFreezeFrom =() =>{
+    const { standardSelectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+
+    dispatch({
+      type:'ringnum/unfreezeRingNum',
+      payload: { list: standardSelectedRowKeys },
+    })
+  }
+
+
+
   clickNumberFreezeFrom = () => {
     const { numberSelectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'ringnum/freezeSonRingNum',
+      type: 'ringnum2/freezeSonRingNum',
       payload: { list: numberSelectedRowKeys },
     });
   };
+
+  clickUnNumberFreezeFrom = () => {
+    const { numberSelectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ringnum2/unfreezeSonRingNum',
+      payload: { list: numberSelectedRowKeys },
+    });
+  };
+
 
   selectChange = (record, index) => {};
 
@@ -1076,7 +1122,7 @@ class RingNum extends PureComponent {
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'ringnum/fetchListSonRingNum',
+      type: 'ringnum2/fetchListSonRingNum',
       payload: {
         ...params,
       },

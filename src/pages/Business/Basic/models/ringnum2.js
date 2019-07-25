@@ -13,7 +13,7 @@ import {
 } from '@/services/api';
 
 export default {
-  namespace: 'ringnum',
+  namespace: 'ringnum2',
 
   state: {
     province: [],
@@ -23,61 +23,6 @@ export default {
   },
 
   effects: {
-    *fetchListRingNum(_, { call, put }) {
-      const response = yield call(querylistRingNum);
-      yield put({
-        type: 'list',
-        payload: response,
-      });
-    },
-
-    *addRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheRingNum, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *updateRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheRingNum, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *deleteRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheRingNum, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *freezeRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheRingNum, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *unfreezeRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheRingNum, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-
-
 
     *fetchListSonRingNum({ payload, callback }, { call, put }) {
       const response = yield call(querylistSonRingNum, payload);
@@ -135,35 +80,32 @@ export default {
   },
 
   reducers: {
-    list(state, action) {
+
+    sublist(state, action) {
+
       return {
         ...state,
-        head: action.payload,
+        head2: action.payload,
         // rtnCode:action.payload.head.rtnCode,
-        body: {
+        body2: {
           ...state.body,
-          data: action.payload.body.records,
-          rtnCode: action.payload.head.rtnCode,
-          rtnMsg: action.payload.head.rtnMsg,
+          sonData: action.payload.body.records,
+          rtnCode2: action.payload.head.rtnCode,
+          rtnMsg2: action.payload.head.rtnMsg,
         },
       };
     },
 
-    save(state, action) {
-
-      console.log(" save ",action)
-
+    saveitem(state, action2) {
       return {
         ...state,
-        result: action.payload,
-        body: {
+        head2: action2.payload,
+        body2: {
           ...state.body,
-          rtnCode: action.payload.head.rtnCode,
-          rtnMsg: action.payload.head.rtnMsg,
+          rtnCode2: action2.payload.head.rtnCode,
+          rtnMsg2: action2.payload.head.rtnMsg,
         },
       };
     },
-
-
   },
 };

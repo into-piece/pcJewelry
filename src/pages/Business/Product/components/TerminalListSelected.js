@@ -19,6 +19,7 @@ class TerminalSelected extends PureComponent {
       value: '',
       isFirst: true,
       records: [],
+      firstSelected:true
     };
   }
 
@@ -180,6 +181,9 @@ class TerminalSelected extends PureComponent {
   };
 
   fetchListParams = item => {
+
+
+
     // console.log(" the fetchListParams ",item)
     let params = {};
     if (item)

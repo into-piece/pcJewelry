@@ -56,6 +56,7 @@ const { Description } = DescriptionList;
     addloading: loading.effects['requested/addRequested'],
     deleteloading: loading.effects['requested/deleteRequested'],
     upateloading: loading.effects['requested/updateRequested'],
+    unfreezing: loading.effects['requested/unfreezeRequested'],
     freezing: loading.effects['requested/freezeRequested'],
     body: requested.body,
     rtnCode,
@@ -177,13 +178,14 @@ class Requested extends PureComponent {
       addloading,
       deleteloading,
       upateloading,
+      unfreezing,
       freezing,
       form: { getFieldDecorator },
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading  ||unfreezing;
 
-    if (addloading || deleteloading || upateloading || freezing) {
+    if (addloading || deleteloading || upateloading || freezing || unfreezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
@@ -380,7 +382,7 @@ class Requested extends PureComponent {
                     size={'small'}
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={this.clickUnFreezeFrom}
                     disabled={isEdit}
                   >
                     取消审批
@@ -445,6 +447,9 @@ class Requested extends PureComponent {
       // console.log(" updateSelectDatas  rowSelecteData ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showItem = newShowItem[0];
+        this.setState({
+          showItem: newShowItem[0],
+        });
       }
     }
   }
@@ -539,6 +544,16 @@ class Requested extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'requested/freezeRequested',
+      payload: { list: selectedRowKeys },
+    });
+  };
+
+  clickUnFreezeFrom = () => {
+    const { selectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'requested/unfreezeRequested',
       payload: { list: selectedRowKeys },
     });
   };

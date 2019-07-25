@@ -54,6 +54,7 @@ const { Description } = DescriptionList;
     addloading: loading.effects['sendway/addSendWay'],
     deleteloading: loading.effects['sendway/deleteSendWay'],
     upateloading: loading.effects['sendway/updateSendWay'],
+    unfreezing: loading.effects['sendway/unfreezeSendWay'],
     freezing: loading.effects['sendway/freezeSendWay'],
     body: sendway.body,
     rtnCode,
@@ -175,12 +176,13 @@ class Requested extends PureComponent {
       deleteloading,
       upateloading,
       freezing,
+      unfreezing,
       form: { getFieldDecorator },
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading ||unfreezing;
 
-    if (addloading || deleteloading || upateloading || freezing) {
+    if (addloading || deleteloading || upateloading || freezing ||unfreezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
@@ -378,7 +380,7 @@ class Requested extends PureComponent {
                     size={'small'}
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={this.clickUnFreezeFrom}
                     disabled={isEdit}
                   >
                     取消审批
@@ -439,12 +441,12 @@ class Requested extends PureComponent {
         if (showItem.id === v.id)
           return v;
       });
-      console.log(" updateSelectDatas  showItem ",newShowItem)
+      // console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showItem = newShowItem[0];
-        // this.setState({
-        //   showItem: newShowItem[0],
-        // });
+        this.setState({
+          showItem: newShowItem[0],
+        });
       }
     }
   }
@@ -487,6 +489,15 @@ class Requested extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'sendway/freezeSendWay',
+      payload: { list: selectedRowKeys },
+    });
+  };
+
+  clickUnFreezeFrom = () => {
+    const { selectedRowKeys } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'sendway/unfreezeSendWay',
       payload: { list: selectedRowKeys },
     });
   };
