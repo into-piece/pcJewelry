@@ -41,6 +41,8 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 import listStyles from './TableList.less';
 import baseStyles from './base.less';
+import business from './../business.less';
+import clientInfoStyle from './../Client/ClientInfo.less';
 import maintainer from './models/maintainer';
 import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
@@ -83,19 +85,19 @@ const clientColumns = [
 
 const clientContentColumns = [
   {
-    title: '客户编号',
+    title: <div className={clientInfoStyle.row_normal2}>客户编号</div>,
     dataIndex: 'customerNo',
     key: 'customerNo',
     // defaultSortOrder: 'descend',
     sorter: (a, b) => a.age - b.age,
   },
   {
-    title: '简称',
+    title: <div className={clientInfoStyle.row_normal2}>简称</div>,
     dataIndex: 'shotName',
     key: 'shotName',
   },
   {
-    title: '英文名称',
+    title: <div className={clientInfoStyle.row_normal2}>英文名称</div>,
     dataIndex: 'enName',
     key: 'enName',
     onFilter: (value, record) => record.enName.includes(value),
@@ -110,7 +112,7 @@ const clientContentColumns = [
     // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
   },
   {
-    title: '中文名称',
+    title: <div className={clientInfoStyle.row_normal2}>中文名称</div>,
     dataIndex: 'zhName',
     key: 'zhName',
     sorter: (a, b) => {
@@ -118,7 +120,7 @@ const clientContentColumns = [
     },
   },
   {
-    title: '联系人',
+    title: <div className={clientInfoStyle.row_normal2}>联系人</div>,
     dataIndex: 'contacts',
     key: 'contacts',
     sorter: (a, b) => {
@@ -126,19 +128,19 @@ const clientContentColumns = [
     },
   },
   {
-    title: '手机',
+    title: <div className={clientInfoStyle.row_normal2}>手机</div>,
     dataIndex: 'tel',
     key: 'tel',
   },
 
   {
-    title: '电话',
+    title: <div className={clientInfoStyle.row_normal2}>电话</div>,
     dataIndex: 'phone',
     key: 'phone',
   },
 
   {
-    title: '中文地址',
+    title: <div className={clientInfoStyle.row_normal2}>中文地址</div>,
     dataIndex: 'zhAddress',
     key: 'zhAddress',
     sorter: (a, b) => {
@@ -147,12 +149,18 @@ const clientContentColumns = [
   },
 
   {
-    title: '英文地址',
+    title: <div className={clientInfoStyle.row_normal2}>英文地址</div>,
     dataIndex: 'enAddress',
     key: 'enAddress',
     sorter: (a, b) => {
       encompare(a.enAddress, b.enAddress);
     },
+  },
+  {
+    title: <div className={clientInfoStyle.row_normal2}>状态</div>,
+    dataIndex: 'status',
+    key: 'status',
+
   },
 ];
 
@@ -206,6 +214,7 @@ const defaultPageSize = 5;
     clientUpdateloading: loading.effects['client/updateClient'],
     clientDeleteloading: loading.effects['client/deleteClient'],
     clientFreezeloading: loading.effects['client/freezeClient'],
+    clientunFreezeloading: loading.effects['client/unfreezeClient'],
     customerListloading: loading.effects['customer/fetchListCustomer'],
     customerSaveloading: loading.effects['customer/addCustomer'],
     customerUpdateloading: loading.effects['customer/updateCustomer'],
@@ -502,6 +511,7 @@ class ClientView extends PureComponent {
       clientUpdateloading,
       clientSaveloading,
       clientFreezeloading,
+      clientunFreezeloading,
       clientDeleteloading,
       customerBody = {},
       body = {},
@@ -530,7 +540,7 @@ class ClientView extends PureComponent {
     };
 
     let isUpdate =
-      clientUpdateloading || clientSaveloading || clientDeleteloading || clientFreezeloading;
+      clientUpdateloading || clientSaveloading || clientDeleteloading || clientFreezeloading ||clientunFreezeloading;
     let isCurstomerUpdate =
       customerDeleteloading ||
       customerSaveloading ||
@@ -745,7 +755,8 @@ class ClientView extends PureComponent {
                       };
                     }}
                     pagination={paginationCustomerProps}
-                    rowClassName={this.onSelectRowClass}
+                    rowClassName={this.onSelectCustomerRowClass}
+                    className={business.small2_table}
                     columns={clientContentColumns}
                   />
 
@@ -882,11 +893,11 @@ class ClientView extends PureComponent {
 
     const { contactsSorts } = this.state;
 
-    console.log("contactsSortFilter ",field,sort,contactsSorts)
+    // console.log("contactsSortFilter ",field,sort,contactsSorts)
     let newContacts=[...contactsSorts];
     const findColumn = newContacts.find(item=>item.field===field);
 
-    console.log("sort find ",findColumn)
+    // console.log("sort find ",findColumn)
 
     if(findColumn)
     {
@@ -995,16 +1006,31 @@ class ClientView extends PureComponent {
               >
                 编辑
               </Button>
-              <Button
-                className={clientStyle.buttomControl}
-                size={'small'}
-                type="primary"
-                icon="lock"
-                disabled={isEdit}
-                onClick={this.handleFreezeClients}
-              >
-                审批
-              </Button>
+
+              {
+
+                showItem.status === '审批' ?
+                  <Button
+                    className={clientStyle.buttomControl}
+                    size={'small'}
+                    type="danger"
+                    icon="unlock"
+                    disabled={isEdit}
+                    onClick={this.handleUnFreezeClients}
+                  >
+                    取消审批
+                  </Button>: <Button
+                    className={clientStyle.buttomControl}
+                    size={'small'}
+                    type="primary"
+                    icon="lock"
+                    disabled={isEdit}
+                    onClick={this.handleFreezeClients}
+                  >
+                    审批
+                  </Button>
+              }
+
             </div>
 
             <div
@@ -1452,6 +1478,27 @@ class ClientView extends PureComponent {
     });
   };
 
+  handleUnFreezeClients = () => {
+    const { selectedRowKeys } = this.state;
+
+    const { dispatch } = this.props;
+    const data = [];
+    data.push(selectedRowKeys);
+
+    dispatch({
+      type: 'client/unfreezeClient',
+      payload: { list: selectedRowKeys },
+    });
+
+    this.setState({
+      selectedRowKeys: '',
+      showItem: false,
+      customerSelectedRowKeys: '',
+      selectCustomerItem: '',
+      isEdit: true,
+    });
+  };
+
   selectChange = (record, index) => {
     console.log('selectChange');
   };
@@ -1488,7 +1535,6 @@ class ClientView extends PureComponent {
   };
 
   handleContactsTableChange = (pagination, filters, sorter) => {
-    console.log('hanlde contacts pagination :', pagination, ', filters :', filters, 'sorter is ', sorter);
     this.setState({
       contactsPage: pagination.current,
       contactsSorter: sorter,
@@ -1669,6 +1715,14 @@ class ClientView extends PureComponent {
     let color = '';
     if (index % 2 == 0) {
       color = clientStyle.row_normal;
+    }
+    return color;
+  };
+
+  onSelectCustomerRowClass = (record, index) => {
+    let color = clientInfoStyle.row_normal2;
+    if (index % 2 == 0) {
+      color = clientInfoStyle.row_normal;
     }
     return color;
   };
@@ -1926,16 +1980,7 @@ class ClientView extends PureComponent {
         params.orderByDesc= orderByDesc;
     }
 
-    // if (contactsSorter) {
-    //   // console.log('request sorter ', contactsSorter, contactsSorter.order);
-    //   if(contactsSorter.column)
-    //   if (contactsSorter.order === 'ascend') {
-    //     params.orderByAsc = contactsSorter.column.field;
-    //   } else
-    //     params.orderByDesc = contactsSorter.column.field;
-    // }
 
-    // console.log(params);
 
     fetch(HttpFetch.loadContacts, {
       method: 'POST',
@@ -1949,8 +1994,6 @@ class ClientView extends PureComponent {
       .then(d => {
         const body = d.body;
         if (body && body.records) {
-
-          //tcontactsTableBody
 
           const contactsRes = body.records.map(value => {
             const s = value.isPrimaryContact;

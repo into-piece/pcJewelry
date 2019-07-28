@@ -9,6 +9,8 @@ import {
   deleteTheProductSeries,
   updateTheProductSeries,
   freezeTheProductSeries,
+  queryTheProductLock,
+  updateTheProductUnLock,
 } from '@/services/api';
 
 export default {
@@ -55,6 +57,24 @@ export default {
 
     *freezeProduct({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheProduct, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *queryProductLock({ payload, callback }, { call, put }) {
+      const response = yield call(queryTheProductLock, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *updateProductUnLock({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheProductUnLock, payload);
       yield put({
         type: 'save',
         payload: response,

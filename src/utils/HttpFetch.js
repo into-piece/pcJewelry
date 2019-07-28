@@ -45,6 +45,24 @@ export const queryDelivery =priefx+'/basic/delivery-method/listDeliveryMethods'
   export const queryMarkImage =priefx+'/business/upload-img/listUploadImg'
 
 /**
+ * 加载图片
+ * @type {string}
+ */
+  export const queryImage =priefx+'/business/upload-img/listUploadImg'
+
+/**
+ * 加载产品图片
+ * @type {string}
+ */
+export const queryProductImage =priefx+'/business/product-picture/listProductPicture'
+
+/**
+ * 保存产品图片
+ * @type {string}
+ */
+export const saveProductImage =priefx+'/business/product-picture/saveProductPicture'
+
+/**
  * 加载品质要求
  * @type {string}
  */
@@ -115,7 +133,17 @@ export const queryMoldList = priefx+'/develop.die/set/listDieSetDropDown'
  */
 export const queryMeasureUniList = priefx+'/develop/basic/measure-unit/listBasicMeasureUnitDropDown'
 
+/**
+ * 查询锁定状态
+ * @type {string}
+ */
+export const queryProductLock = priefx+'/business/product/checkIsEdit'
 
+/**
+ * 加载产品
+ * @type {string}
+ */
+export const queryProductList = priefx+'/business/product/listProduct'
 
 
 export default {
@@ -126,6 +154,7 @@ export default {
   deleteContacts,
   queryDelivery,
   queryMarkImage,
+  queryImage,
   queryQuality,
   queryTerminalList,
   loadCustomerList,
@@ -137,7 +166,11 @@ export default {
   queryPlatingColor,
   queryTerminalNoList,
   queryMoldList,
-  queryMeasureUniList
+  queryMeasureUniList,
+  queryProductLock,
+  queryProductImage,
+  saveProductImage,
+  queryProductList,
 
 
 };

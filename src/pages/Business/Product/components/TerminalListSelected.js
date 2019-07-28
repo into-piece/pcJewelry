@@ -218,7 +218,7 @@ class TerminalSelected extends PureComponent {
                 if (r.length > 0) endName = r[0];
 
 
-                onSelectEndName(endName.endShotName);
+                onSelectEndName(endName.customerNo,endName.shotName);
               }
               else {
                 // console.log("设置默认值 ")

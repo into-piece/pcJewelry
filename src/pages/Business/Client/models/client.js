@@ -4,6 +4,7 @@ import {
   deleteTheClient,
   updateTheClient,
   freezeTheClient,
+  unfreezeTheClient,
 } from '@/services/api';
 
 export default {
@@ -55,6 +56,15 @@ export default {
 
     *freezeClient({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheClient, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *unfreezeClient({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeTheClient, payload);
       yield put({
         type: 'save',
         payload: response,

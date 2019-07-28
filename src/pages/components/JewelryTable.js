@@ -10,6 +10,7 @@ class JewelryTable extends Component {
       pageCurrent: 1,
       rowSelectedData: [],
       rowData: [],
+
     };
   }
 
@@ -44,7 +45,7 @@ class JewelryTable extends Component {
         dataSource={body.records}
         rowSelection={rowSelection}
         pagination={paginationProps}
-        rowClassName={this.onSelectRowClass}
+        rowClassName={this.props.rowClassName?this.props.rowClassName:this.onSelectRowClass}
         rowKey={record => record.id}
         onRow={record => {
           return {
@@ -64,7 +65,7 @@ class JewelryTable extends Component {
     const selects = selectedRowKeys ? selectedRowKeys : [];
     const id = record.id;
 
-    let selectItem = record;
+    let selectItem = {...record};
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
       if (rowData.includes(record)) rowData = [];
@@ -82,33 +83,41 @@ class JewelryTable extends Component {
       rowSelectedData.push(record);
     }
 
-    if (selects.length > 0) {
-      const recordK = selects[selects.length - 1];
-      const r = rowSelectedData.filter(value => value.id == recordK);
-
+    if (selects.length === 0) {
+      // const recordK = selects[selects.length - 1];
+      // const r = rowSelectedData.filter(value => value.id == recordK);
+      // selectItem = r[0];
       // this.showSelectItem(r[0]);
 
-    } else {
+    // } else {
       this.setState({
         showItem: false,
+        selectItem: false,
         // isEdit: true,
         // current: false,
         // fristLoad: true,
       });
-      this.state.showItem = false;
+      // this.state.showItem = false;
+      // this.state.selectItem = false;
       selectItem = false;
     }
+
+    this.state.selectItem = selectItem;
 
     this.state.selectCustomerItem = '';
     this.setState({
       selectedRowKeys: [].concat(selects),
       rowData,
+      selectItem
       // customerSelectedRowKeys: [],
       // selectCustomerItem: '',
       // rowCustomerData: [],
       // customerPageCurrent: 1,
       // rowCustomerSelectedData: [],
     });
+
+    // console.log(" select the data  ",selectItem)
+
     if (onSelectItem) onSelectItem(selectItem,rowData);
 
     // this.clearClient();
@@ -123,10 +132,10 @@ class JewelryTable extends Component {
    * 通过最新列表更新选择的值
    * */
   updateSelectDatas =(body)=>{
-
+    const { onSelectItem } = this.props;
     // console.log(" updateSelectDatas  :",body)
 
-    const { rowSelectedData, showItem } = this.state;
+    const { rowSelectedData, selectItem } = this.state;
     if (rowSelectedData && rowSelectedData.length > 0) {
       const newRowSelected = body.records.filter(v => {
         const rs = rowSelectedData.filter(v1 => {
@@ -135,7 +144,7 @@ class JewelryTable extends Component {
         });
         if (rs.length > 0) return rs[0];
       });
-      // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected)
+      // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected,selectItem)
       if (newRowSelected && newRowSelected.length > 0) {
         this.state.rowSelectedData = newRowSelected;
         // this.setState({
@@ -144,19 +153,23 @@ class JewelryTable extends Component {
       }
     }
 
-    if (showItem && this.state.rowSelectedData) {
+    if (selectItem && this.state.rowSelectedData) {
+      // console.log("   showItem ",this.state.selectItem)
       const newShowItem = this.state.rowSelectedData.filter(v => {
-        if (showItem.id === v.id)
+        if (selectItem.id === v.id)
           return v;
       });
       // console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
-        this.state.showItem = newShowItem[0];
-        // this.setState({
-        //   showItem: newShowItem[0],
-        // });
+        this.state.selectItem = newShowItem[0];
+        this.setState({
+          selectItem: newShowItem[0],
+        });
       }
+
+      if (onSelectItem) onSelectItem(this.state.selectItem,this.state.rowSelectedData);
     }
+
   }
 
   pageChange = (page, pageSize) => {
@@ -167,6 +180,7 @@ class JewelryTable extends Component {
 
     this.setState({
       pageCurrent:page,
+      selectItem:false,
       selectedRowKeys:[],
       rowSelectedData:[],
 
@@ -176,31 +190,35 @@ class JewelryTable extends Component {
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     const { onSelectItem } = this.props;
-    let jewItem = false;
+    let selectItem = false;
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
       // this.showSelectItem(record[0]);
-      jewItem = record[0];
-    } else {
-      this.setState({
-        showItem: false,
-        // isEdit: true,
-        // current: false,
-        // fristLoad: true,
-      });
-      this.state.showItem = false;
-      jewItem = false;
+      selectItem = record[0];
+    }
+    else {
+      // this.setState({
+      //   // showItem: false,
+      //   selectItem: false,
+      //   // isEdit: true,
+      //   // current: false,
+      //   // fristLoad: true,
+      // });
+      // this.state.showItem = false;
+      selectItem = false;
+
     }
 
     this.setState({
+      selectItem,
       selectedRowKeys,
       rowSelectedData: selectedRows,
       selectCustomerItem: '',
     });
     this.state.selectCustomerItem = '';
 
-    if (onSelectItem) onSelectItem(jewItem,selectedRows);
+    if (onSelectItem) onSelectItem(selectItem,selectedRows);
   };
 
   onSelectRowClass = (record, index) => {

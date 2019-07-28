@@ -4,10 +4,8 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-import HttpFetch from '../../../../utils/HttpFetch';
 
-
-class ProductTypeListSelect extends PureComponent {
+class JewelrySelect extends PureComponent {
   state = {
     dicts: [],
     value: undefined,
@@ -36,25 +34,7 @@ class ProductTypeListSelect extends PureComponent {
   };
 
   componentDidMount() {
-    this.loadDict();
-
-    // const { onChange ,onSelect, content } = this.props;
-    //
-    // if(content)
-    // {
-    //   onChange(value);
-    //
-    //   if(onSelect){
-    //     const selectItem =  dicts.filter((v)=>{
-    //       if(v.id===value)
-    //         return v;
-    //     })
-    //     if(selectItem.length>0)
-    //       onSelect(content)
-    //
-    //   }
-    // }
-
+    this.loadSelect();
   }
 
   render() {
@@ -79,42 +59,29 @@ class ProductTypeListSelect extends PureComponent {
         onChange={this.handleChange}
         notFoundContent={null}
       >
-        {this.getBrands()}
+        {this.getData()}
       </Select>
     );
   }
 
-  getBrands() {
+  getData() {
     const { dicts } = this.state;
-
     return this.getOption(dicts);
   }
 
   getOption = list => {
-    if (!list || list.length < 1) {
-      return (
-        <Option key={0} value={0}>
-          没有找到选项
-        </Option>
-      );
-    }
+    return this.getOptionList(list);
 
-    return list.map(item => (
-      // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.fCode} value={item.id}>
-        {item.zhName}
-      </Option>
-    ));
   };
 
-  loadDict = () => {
+  loadSelect = () => {
     const { content ,onSelect } = this.props;
     const { firstSelected } = this.state;
     let params = {};
     const _this = this;
-    // params.wordbookTypeCode = dict;
-    // console.log('dict params is ',params)
-    fetch(HttpFetch.queryproductDropDown, {
+    const url = this.getUrl();
+    if(url){
+    fetch(url, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -125,8 +92,6 @@ class ProductTypeListSelect extends PureComponent {
       .then(response => response.json())
       .then(d => {
         const body = d.body;
-
-
         if (body.records) {
           _this.setState({
             loading: false,
@@ -150,7 +115,8 @@ class ProductTypeListSelect extends PureComponent {
       }).catch(function(ex) {
         // message.error('加载图片失败！');
       });
+    }
   };
 }
 
-export default ProductTypeListSelect;
+export default JewelrySelect;

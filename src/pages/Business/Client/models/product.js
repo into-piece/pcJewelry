@@ -9,6 +9,8 @@ import {
   deleteTheProductSeries,
   updateTheProductSeries,
   freezeTheProductSeries,
+  queryTheProductLock,
+  updateTheProductUnLock,
 } from '@/services/api';
 
 export default {
@@ -67,6 +69,24 @@ export default {
       if (callback) callback();
     },
 
+    *queryProductLock({ payload, callback }, { call, put }) {
+      const response = yield call(queryTheProductLock, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *updateProductUnLock({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheProductUnLock, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
     *fetchListProductSeries({ payload, callback }, { call, put }) {
       const response = yield call(querylistProductSeries, payload);
       yield put({
@@ -111,6 +131,9 @@ export default {
       });
       if (callback) callback();
     },
+
+
+
   },
 
   reducers: {

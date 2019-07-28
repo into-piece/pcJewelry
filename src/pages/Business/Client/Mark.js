@@ -499,7 +499,6 @@ class Mark extends PureComponent {
 
       const file = info.file;
 
-      console.log('handleChange = ', file);
 
       if (file.type) {
         const isJPG = file.type.indexOf('image') != -1;

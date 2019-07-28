@@ -4,19 +4,17 @@ import querystring from 'querystring';
 
 const { Option } = Select;
 
-import HttpFetch from '../../../../utils/HttpFetch';
 import JewelrySelect from '../../../components/JewelrySelect';
+import HttpFetch from '../../../../utils/HttpFetch';
 
 
-class PlatingColorListSelect extends JewelrySelect {
+class ProductTypeSelect extends JewelrySelect {
 
-
-
-  getUrl =()=>{
-    return HttpFetch.queryPlatingColor
+  getUrl=()=>{
+    return HttpFetch.queryproductDropDown;
   }
 
-  getOptionList = list => {
+  getOptionList =(list)=>{
     if (!list || list.length < 1) {
       return (
         <Option key={0} value={0}>
@@ -27,12 +25,14 @@ class PlatingColorListSelect extends JewelrySelect {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.zhName} value={item.id}>
+      <Option key={item.fCode} value={item.id}>
         {item.zhName}
       </Option>
     ));
-  };
+  }
+
+
 
 }
 
-export default PlatingColorListSelect;
+export default ProductTypeSelect;

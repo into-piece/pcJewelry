@@ -80,6 +80,7 @@ const validatorGeographic = (rule, value, callback) => {
     customerUpdateloading: loading.effects['customer/updateCustomer'],
     customerDeleteloading: loading.effects['customer/deleteCustomer'],
     customerFreezeloading: loading.effects['customer/freezeCustomer'],
+    customerUnFreezeloading: loading.effects['customer/unfreezeCustomer'],
   };
 })
 @Form.create()
@@ -120,6 +121,7 @@ class ClientInfo extends PureComponent {
       customerUpdateloading,
       customerDeleteloading,
       customerFreezeloading,
+      customerUnFreezeloading,
       customerListloading,
       isSuccess,
       params,
@@ -169,6 +171,7 @@ class ClientInfo extends PureComponent {
       customerDeleteloading ||
       customerSaveloading ||
       customerUpdateloading ||
+      customerUnFreezeloading ||
       customerFreezeloading;
 
     if (isCurstomerUpdate) {
@@ -419,7 +422,7 @@ class ClientInfo extends PureComponent {
                 type="danger"
                 icon="delete"
                 size={'small'}
-                disabled={this.state.isEdit}
+                disabled={this.state.isEdit|| (this.state.showItem && this.state.showItem.status === '2')}
                 onClick={this.clickDeleteFrom}
               >
                 删除
@@ -429,21 +432,33 @@ class ClientInfo extends PureComponent {
                 type="primary"
                 size={'small'}
                 icon="edit"
-                disabled={this.state.isEdit}
+                disabled={this.state.isEdit|| (this.state.showItem && this.state.showItem.status === '2')}
                 onClick={this.clickEditFrom}
               >
                 编辑
               </Button>
-              <Button
-                className={clientStyle.buttomControl}
-                size={'small'}
-                type="primary"
-                icon="lock"
-                disabled={this.state.isEdit}
-                onClick={this.clickFreezeFrom}
-              >
-                审批
-              </Button>
+              {
+                this.state.showItem.status==='2'?<Button
+                  className={clientStyle.buttomControl}
+                  size={'small'}
+                  type="danger"
+                  icon="unlock"
+                  disabled={this.state.isEdit}
+                  onClick={this.clickUnFreezeFrom}
+                >
+                  取消审批
+                </Button>:  <Button
+                  className={clientStyle.buttomControl}
+                  size={'small'}
+                  type="primary"
+                  icon="lock"
+                  disabled={this.state.isEdit}
+                  onClick={this.clickFreezeFrom}
+                >
+                  审批
+                </Button>
+              }
+
             </div>
 
             <div
@@ -538,6 +553,17 @@ class ClientInfo extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'customer/freezeCustomer',
+      payload: { list: keys },
+    });
+  };
+
+  clickUnFreezeFrom = () => {
+    const { info } = this.state;
+
+    const keys = info.ckeys;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customer/unfreezeCustomer',
       payload: { list: keys },
     });
   };

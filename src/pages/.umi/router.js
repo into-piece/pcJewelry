@@ -295,6 +295,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -316,6 +317,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -333,6 +335,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -350,6 +353,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -367,6 +371,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -384,6 +389,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -410,6 +416,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -427,6 +434,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -444,6 +452,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -461,6 +470,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],
@@ -478,6 +488,7 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/currency.js').then(m => { return { namespace: 'currency',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/requested.js').then(m => { return { namespace: 'requested',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum.js').then(m => { return { namespace: 'ringnum',...m.default}}),
+  import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/ringnum2.js').then(m => { return { namespace: 'ringnum2',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/royalty.js').then(m => { return { namespace: 'royalty',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Basic/models/sendway.js').then(m => { return { namespace: 'sendway',...m.default}})
 ],

@@ -508,11 +508,23 @@ export async function updateTheClient(params) {
 export async function freezeTheClient(params) {
 
   // return request('/basic/ring-around/freeze', {
-  return request('/server/basic/business/customer/freeze', {
+  return request('/server/business/customer-type/freeze', {
     method: 'POST',
     data: params.list,
   });
+
 }
+
+
+  export async function unfreezeTheClient(params) {
+
+    // return request('/basic/ring-around/freeze', {
+    return request('/server/business/customer-type/cancelApproval', {
+      method: 'POST',
+      data: params.list,
+    });
+
+  }
 
 
 export async function querylistCustomer(parmas) {
@@ -563,6 +575,16 @@ export async function freezeTheCustomer(params) {
 
   // return request('/basic/ring-around/freeze', {
   return request('/server/business/customer/freeze', {
+    method: 'POST',
+    data: params.list,
+  });
+}
+
+
+export async function unfreezeTheCustomer(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request('/server/business/customer/cancelApproval', {
     method: 'POST',
     data: params.list,
   });
@@ -778,10 +800,33 @@ export async function freezeTheProduct(params) {
   // return request('/basic/ring-around/freeze', {
   return request('/server/business/product/freeze', {
     method: 'POST',
-    data: params.list,
+    data: {
+      ...params,
+    },
   });
 }
 
+export async function queryTheProductLock(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request('/server/business/product/checkIsEdit', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function updateTheProductUnLock(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request('/server/business/product/unLockEdit', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
 
 export async function querylistProductSeries(parmas) {
 
@@ -835,6 +880,10 @@ export async function freezeTheProductSeries(params) {
     data: params.list,
   });
 }
+
+
+
+
 
 export async function queryListWordbook(params) {
 
