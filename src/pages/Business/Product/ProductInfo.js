@@ -50,7 +50,7 @@ import TableSortView from '../../components/TableSortView';
 const { Description } = DescriptionList;
 
 
-const defaultPageSize = 5;
+const defaultPageSize = 10;
 
 @Form.create()
 @connect(({ product, loading }) => {
@@ -344,6 +344,7 @@ class ProductInfo extends Component {
     return <ProductDetail item={showItem}
                           isProductUpdate={isProductUpdate}
                           selectProductData={selectProductData}
+                          key={'556'}
                           isloading={(isLoad) => {
                             this.setState({
                               isLoad,

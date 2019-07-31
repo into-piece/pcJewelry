@@ -4,6 +4,7 @@ import {
   deleteTheProduct,
   updateTheProduct,
   freezeTheProduct,
+  unFreezeTheProduct,
   querylistProductSeries,
   saveTheProductSeries,
   deleteTheProductSeries,
@@ -16,7 +17,12 @@ import {
 export default {
   namespace: 'product',
 
-
+  state: {
+    province: [],
+    city: [],
+    head: [],
+    isLoading: false,
+  },
 
   effects: {
     *fetchListProduct({ payload, callback }, { call, put }) {
@@ -63,6 +69,17 @@ export default {
       });
       if (callback) callback();
     },
+
+    *unfreezeProduct({ payload, callback }, { call, put }) {
+      const response = yield call(unFreezeTheProduct, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+
 
     *queryProductLock({ payload, callback }, { call, put }) {
       const response = yield call(queryTheProductLock, payload);
@@ -126,6 +143,9 @@ export default {
       });
       if (callback) callback();
     },
+
+
+
   },
 
   reducers: {

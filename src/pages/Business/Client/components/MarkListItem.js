@@ -15,6 +15,13 @@ import clientStyle from '../Client.less';
 
 
 class MarkListItem extends PureComponent {
+
+
+  carouselsettings = {
+    speed: 150,
+    initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
+  }
+
   fetch2 = item => {
     // console.log("test load image")
     const _this = this;
@@ -108,7 +115,7 @@ class MarkListItem extends PureComponent {
         loading={loading}
         className={isSelected ? styles.list_selected_content : ''}
         cover={
-          <Carousel className={styles.carousel_content} autoplay>
+          <Carousel  {...this.carouselsettings}  className={styles.carousel_content} autoplay>
             {this.getImages(paths)}
           </Carousel>
         }

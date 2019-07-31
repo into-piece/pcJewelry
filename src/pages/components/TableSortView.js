@@ -33,12 +33,13 @@ class TableSortView extends Component {
 
     const { sort } = this.state;
     const { column } = this.props;
-
-    return (<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+    //ant-table-column-has-actions ant-table-column-has-sorters ant-table-column-sort
+    //backgroundColor:sort==='normal'?'':'#ccc'
+    return (<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center',height:'100%',width:'100%' }}  onClick={this.toggleSort}>
 
         <span className="ant-table-column-title">{column} </span>
 
-        <span className="ant-table-column-sorter" onClick={this.toggleSort}>
+        <span className="ant-table-column-sorter" >
           <div title="排序" className="ant-table-column-sorter-inner ant-table-column-sorter-inner-full">
 
             <i aria-label="图标: caret-up"
@@ -66,7 +67,7 @@ class TableSortView extends Component {
 
   sortAscend = () => {
     const { sort } = this.state;
-    console.log(' sort asc ', sort);
+    // console.log(' sort asc ', sort);
     let sorter = sort === 'ascend' ? 'normal' : 'ascend';
 
     this.setState({
@@ -76,7 +77,7 @@ class TableSortView extends Component {
 
   sortDescend = () => {
     const { sort } = this.state;
-    console.log(' sort desc ', sort);
+    // console.log(' sort desc ', sort);
     let sorter = sort === 'descend' ? 'normal' : 'descend';
     this.setState({
       sort: sorter,
@@ -89,7 +90,7 @@ class TableSortView extends Component {
 
   toggleSort = () => {
 
-    console.log("toggleSort")
+    // console.log("toggleSort")
 
     const { sortChange , field} = this.props;
 

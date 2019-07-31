@@ -52,6 +52,7 @@ const FormItem = Form.Item;
     productUpdateloading: loading.effects['product/updateProduct'],
     productDeleteloading: loading.effects['product/deleteProduct'],
     productFreezeloading: loading.effects['product/freezeProduct'],
+    productUnFreezeloading: loading.effects['product/unfreezeProduct'],
     queryProductLocking: loading.effects['product/queryProductLock'],
     updateProductUnLocking: loading.effects['product/updateProductUnLock'],
   };
@@ -66,6 +67,12 @@ class ProductDetail extends Component {
       span: 24,
     },
   };
+
+
+    carouselsettings = {
+    speed: 150,
+    initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
+  }
 
   constructor(props) {
     super(props);
@@ -89,6 +96,7 @@ class ProductDetail extends Component {
       isLoad: false,
       isLoadImage:true,
       productParams:{},
+      isEditItem:false,
     };
   }
 
@@ -106,6 +114,7 @@ class ProductDetail extends Component {
       productUpdateloading,
       productSaveloading,
       productFreezeloading,
+      productUnFreezeloading,
       productDeleteloading,
       queryProductLocking,
       body = {},
@@ -123,7 +132,7 @@ class ProductDetail extends Component {
 
 
     let isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading;
+      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading ||productUnFreezeloading;
 
     if (isUpdate) {
       this.state.update = true;
@@ -234,7 +243,8 @@ class ProductDetail extends Component {
       });
     }
 
-    // console.log(" fetch isload ",isLoading)
+    // console.log(" fetch isload ",showItem)
+    // console.log(" data status ",showItem?showItem.status:'nudefine')
 
     if (!paths) paths = [];
 
@@ -251,7 +261,7 @@ class ProductDetail extends Component {
             {(showItem && showItem !== '') ? (
               <div>
                 <Spin spinning={isLoading}>
-                <Carousel className={business.carousel_content} autoplay>
+                <Carousel {...this.carouselsettings} className={business.carousel_content} initialSlide={0} autoplay>
                   {this.getImages(paths)}
                 </Carousel>
                 <DescriptionList size="small" col="1">
@@ -642,7 +652,7 @@ class ProductDetail extends Component {
                 label='产品来源'{...this.centerFormLayout} className={business.from_content_col}>
                 {getFieldDecorator('sourceOfProduct', {
                   rules: [{ required: true, message: '请输入产品来源' }],
-                })(<Dict dict="H005" content={current.sourceOfProduct ? current.sourceOfProduct : '工厂'}
+                })(<Dict dict="H005" content={current.sourceOfProduct ? current.sourceOfProduct : 'H005001'}
                          placeholder="请输入"/>)}
               </FormItem>
             </Col>
@@ -945,8 +955,8 @@ class ProductDetail extends Component {
 
   handleSubmit = () => {
 
-    const { dispatch, item, form } = this.props;
-    const { isAdd ,fileList} = this.state;
+    const { dispatch, form } = this.props;
+    const { isAdd ,fileList,showItem} = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
@@ -976,8 +986,8 @@ class ProductDetail extends Component {
           update: true,
         });
       } else {
-        params.product.id = item.id;
-        params.product.version = item.version;
+        params.product.id = showItem.id;
+        params.product.version = showItem.version;
         dispatch({
           type: 'product/updateProduct',
           payload: {
@@ -1041,15 +1051,12 @@ class ProductDetail extends Component {
 
   productRefresh=()=>{
 
-    // console.log("refresh product ",this.state.showItem)
-
-    // const { item } = this.props;
     const item = this.state.showItem;
 
-
-
+    const isEditItem = this.state.isEditItem;
 
     if(!item.id) return;
+
     const _this = this;
     _this.setState({
       isLoading: true,
@@ -1075,9 +1082,17 @@ class ProductDetail extends Component {
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
+
+
+         const current=isEditItem?{...showItem}:this.state.current;
+
+            console.log(" cur is ",current,isEditItem)
+
           this.setState({
             showItem,
+            current,
           });
+          // console.log(" update data ",showItem)
         }
         this.fetchImages(showItem)
 
@@ -1107,6 +1122,7 @@ class ProductDetail extends Component {
       isAdd: true,
       current: {},
       fileList: [],
+      isEditItem:false,
     });
   };
 
@@ -1121,7 +1137,11 @@ class ProductDetail extends Component {
       visible: true,
       isAdd: false,
       fileList: this.state.fileList,//测试真实数据重接口获取
+      isEditItem:true
     });
+
+    this.state.isEditItem = true;
+    this.productRefresh();
   };
 
 
@@ -1145,7 +1165,7 @@ class ProductDetail extends Component {
       this.state.imageUrl = [];
       this.state.fileName = [];
     }
-    console.log("parse file list ",this.state.fileList,this.state.fileName,item)
+    // console.log("parse file list ",this.state.fileList,this.state.fileName,item)
     // console.log('upload edit list ',fileList)
     this.state.fileList = fileList;
     // this.setState({
@@ -1171,12 +1191,13 @@ class ProductDetail extends Component {
 
     this.setState({
       isEdit: true,
+      showItem:false,
     });
   };
 
   handleUnFreezeProduct = () => {
 
-    const { selectProductData } = this.state;
+    const { selectProductData=[] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
@@ -1188,14 +1209,14 @@ class ProductDetail extends Component {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/freezeProduct',
+      type: 'product/unfreezeProduct',
       payload: { list: ids },
     });
   };
 
   handleFreezeProduct = () => {
 
-    const { selectProductData } = this.state;
+    const { selectProductData=[] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
@@ -1203,7 +1224,6 @@ class ProductDetail extends Component {
     // console.log(" freeze ",ids)
 
     const { dispatch } = this.props;
-    const data = [];
     // data.push(selectedRowKeys);
 
     dispatch({

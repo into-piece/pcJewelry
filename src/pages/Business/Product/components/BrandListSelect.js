@@ -18,7 +18,7 @@ class BrandListSelect extends JewelrySelect {
   getOptionList = list => {
     if (!list || list.length < 1) {
       return (
-        <Option key={0} value={0}>
+        <Option key={0} value={''}>
           没有找到选项
         </Option>
       );

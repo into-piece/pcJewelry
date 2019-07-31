@@ -120,7 +120,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/ClientView'),
@@ -145,7 +144,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/EmptyView'),
@@ -166,7 +164,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/ClientInfo'),
@@ -187,7 +184,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/TerminalClient'),
@@ -208,7 +204,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/Product'),
@@ -229,7 +224,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/Mark'),
@@ -250,7 +244,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/PackageInfo'),
@@ -271,7 +264,6 @@ models: () => [
   import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/maintainer.js').then(m => { return { namespace: 'maintainer',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/mark.js').then(m => { return { namespace: 'mark',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__package.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/package.js').then(m => { return { namespace: 'package',...m.default}}),
-  import(/* webpackChunkName: 'p__Business__Client__models__product.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/product.js').then(m => { return { namespace: 'product',...m.default}}),
   import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */'G:/htmlproject/jewelry5_g/src/pages/Business/Client/models/terminal.js').then(m => { return { namespace: 'terminal',...m.default}})
 ],
   component: () => import(/* webpackChunkName: "p__Business__Client__ClientView" */'../Business/Client/History'),

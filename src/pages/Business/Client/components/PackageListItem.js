@@ -10,6 +10,13 @@ import Zmage from 'react-zmage';
 import HttpFetch from '../../../../utils/HttpFetch';
 
 class PackageListItem extends PureComponent {
+
+
+  carouselsettings = {
+    speed: 150,
+    initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
+  }
+
   fetch = item => {
     const _this = this;
     let params = {};
@@ -113,7 +120,7 @@ class PackageListItem extends PureComponent {
         loading={loading}
         className={isSelected ? styles.list_selected_content : ''}
         cover={
-          <Carousel className={styles.carousel_content} autoplay>
+          <Carousel {...this.carouselsettings} className={styles.carousel_content} autoplay>
             {this.getImages(paths)}
           </Carousel>
         }

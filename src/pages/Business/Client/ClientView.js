@@ -53,34 +53,36 @@ import TableSortView from '../../components/TableSortView';
 
 const { Description } = DescriptionList;
 
-const clientColumns = [
-  {
-    title: '中文名称',
-    dataIndex: 'zhName',
-    key: 'zhName',
-    sorter: (a, b) => {
-      return pingYincompare(a.zhName, b.zhName);
-    },
-  },
-  {
-    title: '英文名称',
-    dataIndex: 'enName',
-    key: 'enName',
-    onFilter: (value, record) => record.enName.includes(value),
-    sorter: (a, b) => {
-      if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName > b.enName ? 1 : (a.enName == b.enName ? 0 : -1);
-      return a.enName > b.enName ? -1 : (a.enName == b.enName ? 0 : 1);
-    },
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-    sorter: (a, b) => {
-      return formDatecompare(a.createTime, b.createTime);
-    },
-  },
-];
+// const clientColumns = [
+//   {
+//     title: '中文名称',
+//     dataIndex: 'zhName',
+//     key: 'zhName',
+{/*sorter: (a, b) => {*/
+}
+//       return pingYincompare(a.zhName, b.zhName);
+//     },
+//   },
+{/*{*/
+}
+//     title: '英文名称',
+//     dataIndex: 'enName',
+//     key: 'enName',
+//     onFilter: (value, record) => record.enName.includes(value),
+//     sorter: (a, b) => {
+//       if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName > b.enName ? 1 : (a.enName == b.enName ? 0 : -1);
+//       return a.enName > b.enName ? -1 : (a.enName == b.enName ? 0 : 1);
+//     },
+//   },
+//   {
+//     title: '创建时间',
+//     dataIndex: 'createTime',
+//     key: 'createTime',
+//     sorter: (a, b) => {
+//       return formDatecompare(a.createTime, b.createTime);
+//     },
+//   },
+// ];
 
 
 const clientContentColumns = [
@@ -173,7 +175,6 @@ const maintainsColumn = [
 ];
 
 
-
 const operationTabList = [
   {
     key: 'client',
@@ -236,9 +237,51 @@ class ClientView extends PureComponent {
     },
   };
 
-    contactsColumn = [
+  clientColumns = [
     {
-      // title: '联系人',
+      title: () => {
+        return (
+          <TableSortView
+            column={'中文名称'}
+            field={'zh_name'}
+            sortChange={this.clientSortFilter}
+          />
+        );
+      },
+      dataIndex: 'zhName',
+      key: 'zhName',
+
+    },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column={'英文名称'}
+            field={'en_name'}
+            sortChange={this.clientSortFilter}
+          />
+        );
+      },
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column={'创建时间'}
+            field={'create_time'}
+            sortChange={this.clientSortFilter}
+          />
+        );
+      },
+      dataIndex: 'createTime',
+      key: 'createTime',
+    },
+  ];
+
+  contactsColumn = [
+    {
       title: () => {
         return (
           <TableSortView
@@ -246,30 +289,26 @@ class ClientView extends PureComponent {
             field={'contacts'}
             sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
       dataIndex: 'contacts',
       key: 'contacts',
-      // sorter: true,
-      // field: 'contacts',
     },
     {
-      // title: '手机',
       title: () => {
         return (
           <TableSortView
             column={'电话'}
             field={'tel'}
-              sortChange={this.contactsSortFilter}
+            sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
       dataIndex: 'tel',
       key: 'tel',
       field: 'tel',
     },
     {
-      // title: 'phone',
       title: () => {
         return (
           <TableSortView
@@ -277,11 +316,10 @@ class ClientView extends PureComponent {
             field={'phone'}
             sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
       dataIndex: 'phone',
       key: 'phone',
-      // sorter: true,
     },
     {
       title: () => {
@@ -291,16 +329,12 @@ class ClientView extends PureComponent {
             field={'email'}
             sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
-      // title: 'email',
       dataIndex: 'email',
       key: 'email',
-      // sorter: true,
-      // field: 'email',
     },
     {
-      // title: 'qq',
       title: () => {
         return (
           <TableSortView
@@ -308,15 +342,12 @@ class ClientView extends PureComponent {
             field={'qq'}
             sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
       dataIndex: 'qq',
       key: 'qq',
-      // sorter: true,
-      // field: 'qq',
     },
     {
-      // title: 'wechat',
       title: () => {
         return (
           <TableSortView
@@ -324,15 +355,12 @@ class ClientView extends PureComponent {
             field={'wechat'}
             sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
       dataIndex: 'wechat',
       key: 'wechat',
-      // sorter: true,
-      // field: 'wechat',
     },
     {
-      // title: '主联系人',
       title: () => {
         return (
           <TableSortView
@@ -340,12 +368,168 @@ class ClientView extends PureComponent {
             field={'is_primary_contact'}
             sortChange={this.contactsSortFilter}
           />
-        )
+        );
       },
       dataIndex: 'isPrimaryContact',
       key: 'isPrimaryContact',
     },
   ];
+
+
+  clientContentColumns = [
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>客户编号</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'客户编号'}
+            field={'customer_no'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+
+    },
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>简称</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'简称'}
+            field={'shot_name'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'shotName',
+      key: 'shotName',
+    },
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>英文名称</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'英文名称'}
+            field={'en_name'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'enName',
+      key: 'enName',
+
+
+    },
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>中文名称</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'中文名称'}
+            field={'zh_name'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'zhName',
+      key: 'zhName',
+
+    },
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>联系人</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'联系人'}
+            field={'contacts'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'contacts',
+      key: 'contacts',
+
+    },
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>手机</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'手机'}
+            field={'tel'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'tel',
+      key: 'tel',
+    },
+
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>电话</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'电话'}
+            field={'phone'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>中文地址</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'中文地址'}
+            field={'zh_address'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'zhAddress',
+      key: 'zhAddress',
+
+    },
+
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>英文地址</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'英文地址'}
+            field={'en_address'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'enAddress',
+      key: 'enAddress',
+
+    },
+    {
+      // title: <div className={clientInfoStyle.row_normal2}>状态</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column={'状态'}
+            field={'status'}
+            sortChange={this.customerSortFilter}
+          />
+        );
+      },
+      dataIndex: 'status',
+      key: 'status',
+
+    },
+  ];
+
 
   constructor(props) {
     super(props);
@@ -387,7 +571,9 @@ class ClientView extends PureComponent {
       contactsItem: '',
       contactsData: [],
       contactsLoading: false,
-      contactsSorts:[],
+      contactsSorts: [],
+      clientSorts: [],
+      customerSorts: [],
     };
   }
 
@@ -533,14 +719,14 @@ class ClientView extends PureComponent {
 
     const paginationCustomerProps = {
       showQuickJumper: true,
-      pageSize: 5,
+      pageSize: customerBody.size,
       current: customerPageCurrent,
       total: customerBody.total,
       onChange: this.pageCustomerChange,
     };
 
     let isUpdate =
-      clientUpdateloading || clientSaveloading || clientDeleteloading || clientFreezeloading ||clientunFreezeloading;
+      clientUpdateloading || clientSaveloading || clientDeleteloading || clientFreezeloading || clientunFreezeloading;
     let isCurstomerUpdate =
       customerDeleteloading ||
       customerSaveloading ||
@@ -645,7 +831,7 @@ class ClientView extends PureComponent {
                     pagination={paginationProps}
                     rowClassName={this.onSelectRowClass}
                     rowKey={record => record.id}
-                    columns={clientColumns}
+                    columns={this.clientColumns}
                     onRow={record => {
                       return {
                         onClick: event => {
@@ -757,7 +943,7 @@ class ClientView extends PureComponent {
                     pagination={paginationCustomerProps}
                     rowClassName={this.onSelectCustomerRowClass}
                     className={business.small2_table}
-                    columns={clientContentColumns}
+                    columns={this.clientContentColumns}
                   />
 
                   <Table
@@ -837,8 +1023,6 @@ class ClientView extends PureComponent {
   }
 
 
-
-
   getModalContent = () => {
 
     const { form: { getFieldDecorator } } = this.props;
@@ -888,47 +1072,66 @@ class ClientView extends PureComponent {
   };
 
 
-  contactsSortFilter=(field,sort)=>{
+  contactsSortFilter = (field, sort) => {
 
 
     const { contactsSorts } = this.state;
+    let newContacts = this.parseOrder(contactsSorts, field, sort);
+    this.state.contactsSorts = newContacts;
+    // console.log('change cantacts ', newContacts);
+    this.loadContactsList();
+  };
 
-    // console.log("contactsSortFilter ",field,sort,contactsSorts)
-    let newContacts=[...contactsSorts];
-    const findColumn = newContacts.find(item=>item.field===field);
 
-    // console.log("sort find ",findColumn)
+  customerSortFilter = (field, sort) => {
+    const { customerSorts, showItem } = this.state;
+    let newCustomer = this.parseOrder(customerSorts, field, sort);
+    this.state.customerSorts = newCustomer;
+    console.log('change  customer ', newCustomer);
+    this.loadCustomerList(showItem.id);
+  };
 
-    if(findColumn)
-    {
-      if(sort!=='normal'){
-        newContacts = newContacts.map(v=>{
-          if(v.field===field)
-          {
+
+  parseOrder = (oldSort, field, sort) => {
+    let newSort = [...oldSort];
+    const findColumn = newSort.find(item => item.field === field);
+
+    if (findColumn) {
+      if (sort !== 'normal') {
+        newSort = newSort.map(v => {
+          if (v.field === field) {
             v.sort = sort;
           }
           return v;
-        })
+        });
 
-      }else
-      {
-        newContacts.splice(newContacts.findIndex(v=>v.field===field),1);
+      } else {
+        newSort.splice(newSort.findIndex(v => v.field === field), 1);
       }
 
-    }else
-    {
-      if(sort!=='normal')
-      {
-        newContacts.push({
+    } else {
+      if (sort !== 'normal') {
+        newSort.push({
           field,
-          sort
-        })
+          sort,
+        });
       }
     }
-    this.state.contactsSorts = newContacts;
-    console.log("change cantacts ",newContacts)
-    this.loadContactsList();
-  }
+
+    return newSort;
+  };
+
+
+  clientSortFilter = (field, sort) => {
+
+
+    const { clientSorts } = this.state;
+
+    let newClients = this.parseOrder(clientSorts, field, sort);
+    this.state.clientSorts = newClients;
+    // console.log('change cantacts ', clientSorts);
+    this.loadClientList();
+  };
 
   clickToggleDrawer = () => {
     const { drawVisible } = this.state;
@@ -1019,7 +1222,7 @@ class ClientView extends PureComponent {
                     onClick={this.handleUnFreezeClients}
                   >
                     取消审批
-                  </Button>: <Button
+                  </Button> : <Button
                     className={clientStyle.buttomControl}
                     size={'small'}
                     type="primary"
@@ -1239,6 +1442,7 @@ class ClientView extends PureComponent {
       params.enName = data.selectEnName;
       params.size = defaultPageSize;
       params.current = 1;
+      this.getTabOrderBy(params, this.state.clientSorts);
       // console.log(params);
       dispatch({
         type: 'client/fetchListClient',
@@ -1262,39 +1466,29 @@ class ClientView extends PureComponent {
   handleCustomerSearch = customerParams => {
     const { dispatch } = this.props;
     const { showItem } = this.state;
-    // form.validateFields((err, fieldsValue) => {
-    // console.log(err);
     if (showItem) {
       const data = { ...customerParams };
 
-      data.typeId = showItem.id;
+      // data.typeId = showItem.id;
       this.state.searchCustomerParams = data;
-      data.size = defaultPageSize;
-      data.current = 0;
-      // console.log("search data ", data);
-      dispatch({
-        type: 'customer/fetchListCustomer',
-        payload: {
-          ...data,
-        },
-      });
+      // data.size = defaultPageSize;
+      // data.current = 0;
+      // this.getTabOrderBy(data, this.state.customerSorts);
+      // dispatch({
+      //   type: 'customer/fetchListCustomer',
+      //   payload: {
+      //     ...data,
+      //   },
+      // });
+
+      this.state.customerPageCurrent = 1;
+
+      this.loadCustomerList(showItem.id)
 
       this.setState({
         customerPageCurrent: 0,
       });
 
-      // form.resetFields();
-
-      // this.setState({
-      //   selectZhName: data.selectZhName,
-      //   selectEnName: data.selectEnName,
-      //   pageCurrent: 1,
-      //   selectedRowKeys: '',
-      //   showItem: false,
-      //   selectCustomerItem: '',
-      //   customerSelectedRowKeys: '',
-      //
-      // });
     }
   };
 
@@ -1405,6 +1599,7 @@ class ClientView extends PureComponent {
     });
   };
 
+
   handleCancel = () => {
     this.setState({
       visible: false,
@@ -1500,7 +1695,7 @@ class ClientView extends PureComponent {
   };
 
   selectChange = (record, index) => {
-    console.log('selectChange');
+    // console.log('selectChange');
   };
 
   pageChange = (page, pageSize) => {
@@ -1510,14 +1705,16 @@ class ClientView extends PureComponent {
     const { selectZhName, selectEnName } = this.state;
     const zhName = selectZhName ? selectZhName : undefined;
     const enName = selectEnName ? selectEnName : undefined;
+    let params = {
+      size: defaultPageSize,
+      current: page,
+      zhName,
+      enName,
+    };
+    this.getTabOrderBy(params, this.state.clientSorts);
     dispatch({
       type: 'client/fetchListClient',
-      payload: {
-        size: defaultPageSize,
-        current: page,
-        zhName,
-        enName,
-      },
+      payload: { ...params },
     });
 
     this.setState({
@@ -1548,23 +1745,36 @@ class ClientView extends PureComponent {
 
   pageCustomerChange = (page, pageSize) => {
     // console.log(page, pageSize);
-    const { dispatch } = this.props;
+    // const { dispatch } = this.props;
 
     const { showItem, searchCustomerParams = {} } = this.state;
-    searchCustomerParams.size = defaultPageSize;
-    searchCustomerParams.current = page;
-    searchCustomerParams.typeId = showItem.id;
-    dispatch({
-      type: 'customer/fetchListCustomer',
-      payload: {
-        size: defaultPageSize,
-        current: page,
-        typeId: showItem.id,
-      },
-    });
+    // searchCustomerParams.size = defaultPageSize;
+    // searchCustomerParams.current = page;
+    // searchCustomerParams.typeId = showItem.id;
+    //
+
+
+    // let params = {
+    //   size: defaultPageSize,
+    //   current: page,
+    //   typeId: showItem.id,
+    // };
+    //
+    // this.getTabOrderBy(params, this.state.customerSorts);
+    //
+    // dispatch({
+    //   type: 'customer/fetchListCustomer',
+    //   payload: {
+    //     ...params,
+    //   },
+    // });
 
     // const { form } = this.props;
     // form.resetFields();
+
+    this.state.customerPageCurrent = page;
+
+    this.loadCustomerList(showItem.id)
 
     this.setState({
       customerPageCurrent: page,
@@ -1584,6 +1794,7 @@ class ClientView extends PureComponent {
     this.state.contactsPage = page;
     this.loadContactsList();
   };
+
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
@@ -1655,16 +1866,25 @@ class ClientView extends PureComponent {
   };
 
   loadCustomerList = typeId => {
-    console.log('loadCustomerList');
     const { dispatch } = this.props;
     const { customerPageCurrent } = this.state;
+
+    const tyid = typeId ? typeId : ' ';
+
+    let params = this.state.searchCustomerParams;
+
+    params.size = defaultPageSize;
+    params.typeId = tyid;
+    params.current = customerPageCurrent;
+
+
+    this.getTabOrderBy(params, this.state.customerSorts);
+
+    console.log(' tab custom', params, this.state.customerSorts);
+
     dispatch({
       type: 'customer/fetchListCustomer',
-      payload: {
-        size: defaultPageSize,
-        typeId,
-        current: customerPageCurrent,
-      },
+      payload: { ...params },
     });
 
     // const { form } = this.props;
@@ -1933,6 +2153,62 @@ class ClientView extends PureComponent {
     // }
   };
 
+  getTabOrderBy = (params, sorts) => {
+
+    if (sorts && sorts.length > 0) {
+      let orderByAsc;
+      let orderByDesc;
+      sorts.forEach(v => {
+        if (v.sort === 'ascend') {
+          if (orderByAsc) {
+            orderByAsc += ',' + v.field;
+          } else {
+            orderByAsc = v.field;
+          }
+          // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
+        } else if (v.sort === 'descend') {
+          if (orderByDesc)
+            orderByDesc += ',' + v.field;
+          else
+            orderByDesc = v.field;
+
+          // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
+        }
+      });
+      if (orderByAsc)
+        params.orderByAsc = orderByAsc;
+      else
+        params.orderByAsc = undefined;
+
+      if (orderByDesc)
+        params.orderByDesc = orderByDesc;
+      else
+        params.orderByDesc = undefined;
+    } else {
+      params.orderByAsc = undefined;
+      params.orderByDesc = undefined;
+    }
+
+
+  };
+
+  loadClientList = () => {
+    const { dispatch } = this.props;
+    const { pageCurrent, selectZhName, selectEnName } = this.state;
+    /*
+    * selectZhName: data.selectZhName,
+        selectEnName: data.selectEnName,
+    * */
+    let params = { size: defaultPageSize, current: pageCurrent };
+    params.zhName = selectZhName ? selectZhName : undefined;
+    params.enName = selectEnName ? selectEnName : undefined;
+    this.getTabOrderBy(params, this.state.clientSorts);
+    dispatch({
+      type: 'client/fetchListClient',
+      payload: { ...params },
+    });
+  };
+
   loadContactsList = () => {
     const { selectCustomerItem, contactsPage } = this.state;
     const _this = this;
@@ -1941,7 +2217,7 @@ class ClientView extends PureComponent {
         contactsLoading: false,
       });
       return;
-    }else{
+    } else {
       _this.setState({
         contactsLoading: true,
       });
@@ -1950,36 +2226,32 @@ class ClientView extends PureComponent {
 
     let params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
 
-    if(this.state.contactsSorts.length>0) {
+    if (this.state.contactsSorts.length > 0) {
       let orderByAsc;
       let orderByDesc;
-      this.state.contactsSorts.forEach(v=>{
-        if(v.sort==='ascend'){
-          if(orderByAsc)
-          {
-            orderByAsc+=","+v.field;
-          }else
-          {
+      this.state.contactsSorts.forEach(v => {
+        if (v.sort === 'ascend') {
+          if (orderByAsc) {
+            orderByAsc += ',' + v.field;
+          } else {
             orderByAsc = v.field;
           }
           // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
-        }else if(v.sort==='descend')
-        {
-          if(orderByDesc)
-            orderByDesc+=","+v.field;
+        } else if (v.sort === 'descend') {
+          if (orderByDesc)
+            orderByDesc += ',' + v.field;
           else
             orderByDesc = v.field;
 
           // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
         }
-      })
-      if(orderByAsc)
-        params.orderByAsc= orderByAsc;
+      });
+      if (orderByAsc)
+        params.orderByAsc = orderByAsc;
 
-      if(orderByDesc)
-        params.orderByDesc= orderByDesc;
+      if (orderByDesc)
+        params.orderByDesc = orderByDesc;
     }
-
 
 
     fetch(HttpFetch.loadContacts, {
@@ -2033,6 +2305,7 @@ class ClientView extends PureComponent {
       });
     // }
   };
+
 
   saveMaintainerList = item => {
     const { selectCustomerItem } = this.state;
@@ -2090,7 +2363,7 @@ class ClientView extends PureComponent {
         contactsLoading: false,
       });
       return;
-    }else{
+    } else {
       this.setState({
         contactsLoading: true,
       });

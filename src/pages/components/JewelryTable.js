@@ -159,12 +159,14 @@ class JewelryTable extends Component {
         if (selectItem.id === v.id)
           return v;
       });
-      // console.log(" updateSelectDatas  showItem ",newShowItem)
+      console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.selectItem = newShowItem[0];
         this.setState({
           selectItem: newShowItem[0],
         });
+      }else{
+        this.state.selectItem=false
       }
 
       if (onSelectItem) onSelectItem(this.state.selectItem,this.state.rowSelectedData);
