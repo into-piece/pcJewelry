@@ -7,6 +7,7 @@ import router from 'umi/router';
 import GlobalHeader from '@/components/GlobalHeader';
 import TopNavHeader from '@/components/TopNavHeader';
 import styles from './Header.less';
+import { getAuthority } from '../utils/authority';
 
 const { Header } = Layout;
 
@@ -158,7 +159,10 @@ class HeaderView extends Component {
 }
 
 export default connect(({ user, global, setting, loading }) => ({
-  currentUser: user.currentUser,
+  currentUser: {
+    name:getAuthority(),
+
+  },
   collapsed: global.collapsed,
   fetchingMoreNotices: loading.effects['global/fetchMoreNotices'],
   fetchingNotices: loading.effects['global/fetchNotices'],

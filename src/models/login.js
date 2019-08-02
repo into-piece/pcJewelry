@@ -1,6 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
 import { fakeAccountLogin, getFakeCaptcha,queryAllCity } from '@/services/api';
+import { login } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery ,testCurrentUser} from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
@@ -14,13 +15,15 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(queryAllCity, payload);
+      const response = yield call(login, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
+      // console.log("login ",response)
       // Login successfully
-      // if (response.status === 'ok') {
+
+      if (response.head&&response.head.rtnCode === '000000') {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -37,7 +40,7 @@ export default {
           }
         }
         yield put(routerRedux.replace(redirect || '/'));
-      // }
+      }
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -71,13 +74,12 @@ export default {
   reducers: {
     changeLoginStatus(state, { payload }) {
       // setAuthority(payload.currentAuthority);
-      setAuthority(['admin']);
+      if( payload.head&& payload.head.rtnCode==='000000')
+      setAuthority(payload.body[0].userName);
       return {
         ...state,
-        // status: payload.status,
-        // type: payload.type,
-        status: "ok",
-        type: "login",
+        rtnCode: payload.head.rtnCode,
+        rtnMsg: payload.head.rtnMsg,
       };
     },
   },

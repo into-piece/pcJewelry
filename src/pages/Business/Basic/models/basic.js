@@ -51,7 +51,7 @@ export default {
     },
 
     *deleteBrand({ payload, callback }, { call, put }) {
-      console.log('model deleteBrand');
+      // console.log('model deleteBrand');
       const response = yield call(deleteTheBrand, payload);
       yield put({
         type: 'saveBrand',

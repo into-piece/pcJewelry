@@ -213,19 +213,21 @@ class Requested extends PureComponent {
       this.state.isLoadList = true;
     }else{
       if(this.state.isLoadList){
-        const newdata = body.data.map(value => {
-          const s = value.status;
-          if (s == 0) {
-            value.status = '输入';
-          } else if (s == 1) {
-            value.status = '使用中';
-          } else if (s == 2) {
-            value.status = '审批';
-          }
-          return value;
-        });
+        if ( body && body.data && body.data.length > 0) {
+          const newdata = body.data.map(value => {
+            const s = value.status;
+            if (s == 0) {
+              value.status = '输入';
+            } else if (s == 1) {
+              value.status = '使用中';
+            } else if (s == 2) {
+              value.status = '审批';
+            }
+            return value;
+          });
 
-        this.state.data = newdata;
+          this.state.data = newdata;
+        }
         this.updateSelectDatas();
         this.state.isLoadList = false;
       }

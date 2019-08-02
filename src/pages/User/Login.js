@@ -54,6 +54,9 @@ class LoginPage extends Component {
           type,
         },
       });
+      this.setState({
+        isFrist:false,
+      })
     }
   };
 
@@ -69,7 +72,10 @@ class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
-    const { type, autoLogin } = this.state;
+    const { type, autoLogin,isFrist=true } = this.state;
+
+    // console.log(" logi response  ",login)
+
     return (
       <div className={styles.main}>
         <Login
@@ -80,11 +86,14 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
+
           {/*<Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>*/}
-            {login.status === 'error' &&
-              login.type === 'account' &&
+            {login &&
+             login.rtnCode !== '000000' &&
+             !isFrist &&
               !submitting &&
-              this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
+              // this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
+              this.renderMessage(login.rtnMsg)}
             <UserName
               name="userName"
               placeholder={`${formatMessage({ id: 'app.login.userName' })}`}

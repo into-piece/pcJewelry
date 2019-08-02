@@ -11,7 +11,7 @@ let routes = [
   {
     "path": "/user",
     "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "layouts__UserLayout" */'../../layouts/UserLayout'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -62,7 +62,7 @@ models: () => [
       },
       {
         "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__404" */'../404'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -76,7 +76,7 @@ models: () => [
   {
     "path": "/",
     "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "layouts__BasicLayout" */'../../layouts/BasicLayout'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -87,6 +87,7 @@ models: () => [
         "redirect": "/business/client",
         "authority": [
           "admin",
+          "chents",
           "user"
         ],
         "exact": true
@@ -96,7 +97,8 @@ models: () => [
         "redirect": "/business/client",
         "authority": [
           "admin",
-          "user"
+          "user",
+          "chents"
         ],
         "exact": true
       },
@@ -517,7 +519,7 @@ models: () => [
             "name": "Specimen",
             "icon": "form",
             "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__Business__Specimen__Specimen" */'../Business/Specimen/Specimen'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -532,7 +534,7 @@ models: () => [
             "name": "Quote",
             "icon": "form",
             "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__Business__Quote__Quote" */'../Business/Quote/Quote'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -547,7 +549,7 @@ models: () => [
             "name": "Proform Invoice",
             "icon": "form",
             "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__Business__Proforminvoice__Proforminvoice" */'../Business/Proforminvoice/Proforminvoice'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -562,7 +564,7 @@ models: () => [
             "name": "Deliver",
             "icon": "form",
             "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__Business__Deliver__Deliver" */'../Business/Deliver/Deliver'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -577,7 +579,7 @@ models: () => [
             "name": "Receiving",
             "icon": "form",
             "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__Business__Receiving__Receiving" */'../Business/Receiving/Receiving'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -592,7 +594,7 @@ models: () => [
             "name": "Report",
             "icon": "form",
             "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__Business__Report__Report" */'../Business/Report/Report'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),
@@ -609,7 +611,7 @@ models: () => [
       },
       {
         "component": _dvaDynamic({
-  
+
   component: () => import(/* webpackChunkName: "p__404" */'../404'),
   LoadingComponent: require('G:/htmlproject/jewelry5_g/src/components/PageLoading/index').default,
 }),

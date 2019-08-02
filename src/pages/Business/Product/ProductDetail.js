@@ -71,7 +71,7 @@ class ProductDetail extends Component {
 
     carouselsettings = {
     speed: 150,
-    initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
+    initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
   }
 
   constructor(props) {
@@ -398,7 +398,7 @@ class ProductDetail extends Component {
               </div>
             </div>
             <Modal
-              width={900}
+              width={1200}
               className={styles.standardListForm}
               destroyOnClose
               visible={visible}
@@ -504,8 +504,8 @@ class ProductDetail extends Component {
           className={clientStyle.from_content}
           onSubmit={this.handleContactsSubmit}
         >
-          <Row>
-            <Col lg={6} md={6} sm={6} xs={6}>
+          <Row gutter={4}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="产品编号"
                 className={business.from_content_col}
@@ -520,7 +520,7 @@ class ProductDetail extends Component {
                 />)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="品牌"
                 {...this.centerFormLayout}
@@ -544,7 +544,7 @@ class ProductDetail extends Component {
                 }
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="类别"
                 {...this.centerFormLayout}
@@ -565,7 +565,7 @@ class ProductDetail extends Component {
                   }/>)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='宝石颜色'
                 {...this.centerFormLayout}
@@ -591,13 +591,7 @@ class ProductDetail extends Component {
                 />)}
               </FormItem>
             </Col>
-
-
-          </Row>
-
-          <Row>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="电镀颜色"
                 {...this.centerFormLayout}
@@ -618,8 +612,7 @@ class ProductDetail extends Component {
                 />)}
               </FormItem>
             </Col>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="中文名称"
                 {...this.centerFormLayout}
@@ -632,8 +625,12 @@ class ProductDetail extends Component {
                 )}
               </FormItem>
             </Col>
+          </Row>
 
-            <Col lg={6} md={6} sm={6} xs={6}>
+          <Row>
+
+
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='英文名称'
                 {...this.centerFormLayout}
@@ -646,8 +643,7 @@ class ProductDetail extends Component {
                 />)}
               </FormItem>
             </Col>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='产品来源'{...this.centerFormLayout} className={business.from_content_col}>
                 {getFieldDecorator('sourceOfProduct', {
@@ -656,13 +652,7 @@ class ProductDetail extends Component {
                          placeholder="请输入"/>)}
               </FormItem>
             </Col>
-
-
-          </Row>
-
-          <Row>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='模具号'
                 {...this.centerFormLayout}
@@ -682,8 +672,7 @@ class ProductDetail extends Component {
                 />)}
               </FormItem>
             </Col>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="成色"
                 {...this.centerFormLayout}
@@ -710,9 +699,7 @@ class ProductDetail extends Component {
                 />)}
               </FormItem>
             </Col>
-
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='规格'
                 {...this.centerFormLayout}
@@ -724,7 +711,7 @@ class ProductDetail extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="计量单位"
                 {...this.centerFormLayout}
@@ -739,8 +726,9 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
+
           <Row>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
                 label="重量单位"
                 {...this.centerFormLayout}
@@ -754,7 +742,7 @@ class ProductDetail extends Component {
                   placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
                 label="成品重量"
                 {...this.centerFormLayout}
@@ -765,7 +753,7 @@ class ProductDetail extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
                 label="产品描述"
                 {...this.centerFormLayout}
@@ -777,8 +765,7 @@ class ProductDetail extends Component {
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
-
-            <Col lg={6} md={6} sm={6} xs={6}>
+            <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
                 label="备注"
                 {...this.centerFormLayout}
@@ -793,8 +780,7 @@ class ProductDetail extends Component {
           </Row>
 
           <Row>
-
-            <Col lg={12} md={12} sm={12} xs={12}>
+            <Col lg={24} md={24} sm={24} xs={24}>
               <FormItem
                 label=''
                 {...this.centerFormLayout}
@@ -817,8 +803,8 @@ class ProductDetail extends Component {
                 </Upload>
               </FormItem>
             </Col>
-
           </Row>
+
         </Form>
 
         <Form
@@ -1086,7 +1072,7 @@ class ProductDetail extends Component {
 
          const current=isEditItem?{...showItem}:this.state.current;
 
-            console.log(" cur is ",current,isEditItem)
+            // console.log(" cur is ",current,isEditItem)
 
           this.setState({
             showItem,
