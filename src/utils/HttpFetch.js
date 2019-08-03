@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-  export const priefx = '/server'
+  export const priefx = ''
 
 /**
  * 加载共同维护人
@@ -84,13 +84,13 @@ export const saveProductImage =priefx+'/business/business/product-picture/savePr
  * 加载字段类型
  * @type {string}
  */
-  export const queryMstWordList = priefx+'/business/business/sys/mst-wordbook/listMstWordbook'
+  export const queryMstWordList = priefx+'/business/sys/mst-wordbook/listMstWordbook'
 
 /**
  *
  * @type {string}
  */
-  export const queryBrands = priefx+'/business/business/basic/brand/listBrands'
+  export const queryBrands = priefx+'/business/basic/brand/listBrands'
 
 /**
  * 查询客户类别

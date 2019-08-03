@@ -3,7 +3,7 @@ export function getAuthority(str) {
   // return localStorage.getItem('antd-pro-authority') || ['admin', 'user'];
 
   const authorityString =
-    typeof str === 'undefined' ? localStorage.getItem('antd-pro-authority') : str;
+    typeof str === 'undefined' ? localStorage.getItem('jewelry_antd-pro-authority') : str;
 
   // console.log("authority ",str,authorityString)
 
@@ -27,5 +27,16 @@ export function getAuthority(str) {
 }
 export function setAuthority(authority) {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  return localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority));
+  return localStorage.setItem('jewelry_antd-pro-authority', JSON.stringify(proAuthority));
+}
+
+export function setCurrentUser(authority) {
+  // const proAuthority = typeof authority === 'string' ? [authority] : authority;
+  return localStorage.setItem('jewelay_antd-pro_user', JSON.stringify(authority));
+}
+
+
+export function getCurrentUser() {
+  // const proAuthority = typeof authority === 'string' ? [authority] : authority;
+  return localStorage.getItem('jewelay_antd-pro_user');
 }
