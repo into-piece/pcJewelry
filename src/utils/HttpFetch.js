@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-  export const priefx = ''
+  export const priefx = '/server'
 
 /**
  * 加载共同维护人

@@ -46,14 +46,15 @@ import ProductTypeSelect from './components/ProductTypeSelect';
 import SpecimenDetaill from './SpecimenDetaill';
 import clientStyle from '../Client/Client.less';
 import TableSortView from '../../components/TableSortView';
+import { getCurrentUser } from '../../../utils/authority';
 
 
 const defaultPageSize = 10;
 
 @Form.create()
-@connect(({ product, loading }) => {
+@connect(({ specimen, loading }) => {
   return {
-    body: product.body,
+    body: specimen.body,
     productListloading: loading.effects['product/fetchListProduct'],
     productSaveloading: loading.effects['product/addProduct'],
     productUpdateloading: loading.effects['product/updateProduct'],
@@ -243,6 +244,7 @@ class Specimen extends Component {
     const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
+
     const {
       queryProductLocking,
       body = {},
@@ -430,7 +432,7 @@ class Specimen extends Component {
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'product/fetchListProduct',
+      type: 'specimen/fetchListSpecimen',
       payload: { ...params },
     });
   };
@@ -487,7 +489,7 @@ class Specimen extends Component {
     const { isProductUpdate } = this.state;
     if (isProductUpdate)
       dispatch({
-        type: 'product/updateProductUnLock',
+        type: 'specimen/updateSpecimenUnLock',
         payload: { id: item.id },
       });
   };

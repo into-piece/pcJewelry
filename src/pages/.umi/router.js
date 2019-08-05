@@ -85,21 +85,11 @@ models: () => [
       {
         "path": "/index.html",
         "redirect": "/business/client",
-        "authority": [
-          "admin",
-          "user",
-          "chents"
-        ],
         "exact": true
       },
       {
         "path": "/",
         "redirect": "/business/client",
-        "authority": [
-          "admin",
-          "user",
-          "chents"
-        ],
         "exact": true
       },
       {

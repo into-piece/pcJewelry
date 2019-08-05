@@ -5,6 +5,7 @@ import { login } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery ,testCurrentUser} from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
+import { setCurrentUser } from '../utils/authority';
 
 export default {
   namespace: 'login',
@@ -25,6 +26,7 @@ export default {
 
       if (response.head&&response.head.rtnCode === '000000') {
         reloadAuthorized();
+
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -76,6 +78,8 @@ export default {
       // setAuthority(payload.currentAuthority);
       if( payload.head&& payload.head.rtnCode==='000000')
       setAuthority(payload.body[0].userName);
+      console.log(" save user ",payload.body[0])
+      setCurrentUser(payload.body[0])
       return {
         ...state,
         rtnCode: payload.head.rtnCode,

@@ -23,7 +23,7 @@ class MoldListSelect extends JewelrySelect {
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
       <Option key={item.id} value={item.id}>
-        {item.zhName}
+        {item.mainMold}
       </Option>
     ));
   };

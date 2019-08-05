@@ -24,7 +24,9 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/business/client', authority: ['admin', 'user'] },
+      { path: '/', redirect: '/business/client',
+        // authority: ['admin', 'user','chents']
+      },
       // {
       //   path: '/dashboard',
       //   name: 'dashboard',
@@ -98,6 +100,7 @@ export default [
         path: '/business',
         icon: 'form',
         name: 'business',
+
         routes: [
           {
             path: '/business/client',

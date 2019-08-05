@@ -1,21 +1,16 @@
 import {
-  querylistProduct,
-  saveTheProduct,
-  deleteTheProduct,
-  updateTheProduct,
-  freezeTheProduct,
-  unFreezeTheProduct,
-  querylistProductSeries,
-  saveTheProductSeries,
-  deleteTheProductSeries,
-  updateTheProductSeries,
-  freezeTheProductSeries,
-  queryTheProductLock,
-  updateTheProductUnLock,
+  querylistSpecimen,
+  saveTheSpecimen,
+  deleteTheSpecimen,
+  updateTheSpecimen,
+  freezeTheSpecimen,
+  unFreezeTheSpecimen,
+  queryTheSpecimenLock,
+  updateTheSpecimenUnLock,
 } from '@/services/api';
 
 export default {
-  namespace: 'product',
+  namespace: 'specimen',
 
   state: {
     province: [],
@@ -25,8 +20,8 @@ export default {
   },
 
   effects: {
-    *fetchListProduct({ payload, callback }, { call, put }) {
-      const response = yield call(querylistProduct, payload);
+    *fetchListSpecimen({ payload, callback }, { call, put }) {
+      const response = yield call(querylistSpecimen, payload);
       yield put({
         type: 'list',
         payload: response,
@@ -34,8 +29,8 @@ export default {
       if (callback) callback();
     },
 
-    *addProduct({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheProduct, payload);
+    *addSpecimen({ payload, callback }, { call, put }) {
+      const response = yield call(saveTheSpecimen, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -43,8 +38,8 @@ export default {
       if (callback) callback();
     },
 
-    *updateProduct({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheProduct, payload);
+    *updateSpecimen({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheSpecimen, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -52,8 +47,8 @@ export default {
       if (callback) callback();
     },
 
-    *deleteProduct({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheProduct, payload);
+    *deleteSpecimen({ payload, callback }, { call, put }) {
+      const response = yield call(deleteTheSpecimen, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -61,8 +56,8 @@ export default {
       if (callback) callback();
     },
 
-    *freezeProduct({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheProduct, payload);
+    *freezeSpecimen({ payload, callback }, { call, put }) {
+      const response = yield call(freezeTheSpecimen, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -70,8 +65,8 @@ export default {
       if (callback) callback();
     },
 
-    *unfreezeProduct({ payload, callback }, { call, put }) {
-      const response = yield call(unFreezeTheProduct, payload);
+    *unfreezeSpecimen({ payload, callback }, { call, put }) {
+      const response = yield call(unFreezeTheSpecimen, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -81,8 +76,8 @@ export default {
 
 
 
-    *queryProductLock({ payload, callback }, { call, put }) {
-      const response = yield call(queryTheProductLock, payload);
+    *querySpecimenLock({ payload, callback }, { call, put }) {
+      const response = yield call(queryTheSpecimenLock, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -90,60 +85,14 @@ export default {
       if (callback) callback();
     },
 
-    *updateProductUnLock({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheProductUnLock, payload);
+    *updateSpecimenUnLock({ payload, callback }, { call, put }) {
+      const response = yield call(updateTheSpecimenUnLock, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
-    *fetchListProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(querylistProductSeries, payload);
-      yield put({
-        type: 'list',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *addProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *updateProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *deleteProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *freezeProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
 
 
   },

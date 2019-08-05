@@ -11,7 +11,7 @@ export default {
   'menu.business.Proform Invoice': 'Proform Invoice',
   'menu.business.Quote': '报价',
   'menu.business.Receiving': '收付款',
-  'menu.business.Specimen': '样品',
+  'menu.business.Specimen': '新款输入',
   'menu.business.Report': '报表',
 
   'menu.dashboard': 'Dashboard',

@@ -25,18 +25,33 @@ export function getAuthority(str) {
 
   return authority;
 }
+
 export function setAuthority(authority) {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   return localStorage.setItem('jewelry_antd-pro-authority', JSON.stringify(proAuthority));
 }
 
 export function setCurrentUser(authority) {
-  // const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  return localStorage.setItem('jewelay_antd-pro_user', JSON.stringify(authority));
+
+  const proAuthority = typeof authority === 'string' ? [authority] : authority;
+  console.log(' save CurrentUser ', (authority));
+  return localStorage.setItem('jewelay_antd-pro_user', JSON.stringify(proAuthority));
 }
 
 
 export function getCurrentUser() {
+  // console.log(" get Current User ",localStorage.getItem('jewelay_antd-pro_user'))
   // const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  return localStorage.getItem('jewelay_antd-pro_user');
+
+  const authorityString = localStorage.getItem('jewelay_antd-pro_user');
+  let authority;
+  try {
+    authority = JSON.parse(authorityString);
+  } catch (e) {
+    authority = authorityString;
+  }
+  if (typeof authority === 'string') {
+    return [authority];
+  }
+  return authority;
 }

@@ -23,15 +23,15 @@ import DescriptionList from '@/components/DescriptionList';
 import styles from './specimen.less'
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '../Client/Client.less';
-import BrandListSelect from './components/BrandListSelect';
-import ProductTypeSelect from './components/ProductTypeSelect';
-import UnitColorListSelect from './components/UnitColorListSelect';
-import PlatingColorListSelect from './components/PlatingColorListSelect';
+import BrandListSelect from './../Product/components/BrandListSelect';
+import ProductTypeSelect from './../Product/components/ProductTypeSelect';
+import UnitColorListSelect from './../Product/components/UnitColorListSelect';
+import PlatingColorListSelect from './../Product/components/PlatingColorListSelect';
 import Dict from '../Client/components/Dict';
-import MoldListSelect from './components/MoldListSelect';
-import PercentageSelect from './components/ProcentageSelect';
-import BasicMeasureListSelect from './components/BasicMeasureListSelect';
-import TerminalListSelected from './components/TerminalListSelected';
+import MoldListSelect from './../Product/components/MoldListSelect';
+import PercentageSelect from './../Product/components/ProcentageSelect';
+import BasicMeasureListSelect from './../Product/components/BasicMeasureListSelect';
+import TerminalListSelected from './../Product/components/TerminalListSelected';
 import Cropper from 'react-cropper';
 import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
@@ -41,20 +41,20 @@ import { connect } from 'dva';
 
 const FormItem = Form.Item;
 
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ specimen, loading }) => {
+  const { rtnCode, rtnMsg } = specimen;
   return {
-    body: product.body,
+    body: specimen.body,
     rtnCode,
     rtnMsg,
-    productListloading: loading.effects['product/fetchListProduct'],
-    productSaveloading: loading.effects['product/addProduct'],
-    productUpdateloading: loading.effects['product/updateProduct'],
-    productDeleteloading: loading.effects['product/deleteProduct'],
-    productFreezeloading: loading.effects['product/freezeProduct'],
-    productUnFreezeloading: loading.effects['product/unfreezeProduct'],
-    queryProductLocking: loading.effects['product/queryProductLock'],
-    updateProductUnLocking: loading.effects['product/updateProductUnLock'],
+    productListloading: loading.effects['specimen/fetchListSpecimen'],
+    productSaveloading: loading.effects['specimen/addSpecimen'],
+    productUpdateloading: loading.effects['specimen/updateSpecimen'],
+    productDeleteloading: loading.effects['specimen/deleteSpecimen'],
+    productFreezeloading: loading.effects['specimen/freezeSpecimen'],
+    productUnFreezeloading: loading.effects['specimen/unfreezeSpecimen'],
+    queryProductLocking: loading.effects['specimen/querySpecimenLock'],
+    updateProductUnLocking: loading.effects['specimen/updateSpecimenUnLock'],
   };
 })
 @Form.create()
@@ -83,6 +83,7 @@ class SpecimenDetaill extends Component {
       imageObject: [],
       cNoBrandNo: '',
       cNofCode: '',
+      cNofCodezhName: '',
       cNoUnitCode: '',
       cNoColorCode: '',
       productNo: '',
@@ -184,6 +185,7 @@ class SpecimenDetaill extends Component {
       cNoBrandNo: '',
       cNofCode: '',
       cNoUnitCode: '',
+      cNofCodezhName: '',
       cNoColorCode: '',
       productNo: '',
       cNoCustomerCombine: '',
@@ -252,7 +254,7 @@ class SpecimenDetaill extends Component {
       <div className={business.list_info}>
 
       <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            产品
+            新款输入
           </span>
         <Divider className={business.divder}/>
 
@@ -495,7 +497,7 @@ class SpecimenDetaill extends Component {
 
     return (
       <div className={clientStyle.list_info}>
-        <span className={business.sun_title_info}>类型</span>
+        <span className={business.sun_title_info}>新款输入</span>
         <Divider className={business.divder}/>
         <Form
           size={'small'}
@@ -507,7 +509,7 @@ class SpecimenDetaill extends Component {
           <Row gutter={4}>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="产品编号"
+                label="流水号"
                 className={business.from_content_col}
                 {...this.centerFormLayout}
               >
@@ -515,7 +517,7 @@ class SpecimenDetaill extends Component {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.productNo,
                   // })(<text>系统自动生成</text>)}
-                })(<Input placeholder="自动生成编号"
+                })(<Input placeholder="自动生成流水号"
                           readOnly={true}
                 />)}
               </FormItem>
@@ -557,7 +559,8 @@ class SpecimenDetaill extends Component {
                   content={current.productType}
                   onSelect={(v) => {
                     // console.log(" select  ",v)
-                    if (v.fCode) {
+                    if (v.zhName) {
+                      this.state.cNofCodezhName = v.zhName;
                       this.state.cNofCode = v.fCode;
                       this.parseProductNo();
                     }
@@ -706,7 +709,10 @@ class SpecimenDetaill extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('specification', {
-                  rules: [{ required:  productType === '92b321ddd20e52326e8e01c6cf5d5b92', message: '请输入规格' }],
+                  rules: [{
+                    required: (this.state.cNofCodezhName === '耳环' || this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链'),
+                    message: '请输入规格',
+                  }],
                   initialValue: current.specification,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -772,7 +778,6 @@ class SpecimenDetaill extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('marks', {
-                  rules: [{ required: true, message: '请输入备注' }],
                   initialValue: current.marks,
                 })(<Input placeholder="请输入"/>)}
               </FormItem>
@@ -960,7 +965,7 @@ class SpecimenDetaill extends Component {
       // params.product = item;
       if (isAdd) {
         dispatch({
-          type: 'product/addProduct',
+          type: 'specimen/addSpecimen',
           payload: {
             ...params,
           },
@@ -975,7 +980,7 @@ class SpecimenDetaill extends Component {
         params.product.id = showItem.id;
         params.product.version = showItem.version;
         dispatch({
-          type: 'product/updateProduct',
+          type: 'specimen/updateSpecimen',
           payload: {
             ...params,
           },
@@ -1171,7 +1176,7 @@ class SpecimenDetaill extends Component {
 
 
     dispatch({
-      type: 'product/deleteProduct',
+      type: 'specimen/deleteSpecimen',
       payload: { list: ids },
     });
 
@@ -1195,7 +1200,7 @@ class SpecimenDetaill extends Component {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/unfreezeProduct',
+      type: 'specimen/unfreezeSpecimen',
       payload: { list: ids },
     });
   };
@@ -1213,7 +1218,7 @@ class SpecimenDetaill extends Component {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/freezeProduct',
+      type: 'specimen/freezeSpecimen',
       payload: { list: ids },
     });
   };
@@ -1325,12 +1330,12 @@ class SpecimenDetaill extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
     const productNo = cNoBrandNo + cNofCode + '-' + showMold + cNoUnitCode + cNoColorCode + cNoCustomerCombine;
-    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCode;
+    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
     const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
     //成色+宝石颜色+类别
     this.setState({

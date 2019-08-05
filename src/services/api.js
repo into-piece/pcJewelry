@@ -914,6 +914,121 @@ export async function queryAllCity(parmas) {
   });
 }
 
+/*===========样品===============*/
+
+export async function querylistSpecimen(parmas) {
+
+  return request(priefx+'/business/business/product/sample/listSample', {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {/business/product/listProduct
+    method: 'POST',
+    data: {
+      ...parmas,
+    },
+  });
+}
+
+export async function saveTheSpecimen(params) {
+
+  return request(priefx+'/business/business/product/sample/saveSample', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: {
+      ...params,
+
+    },
+  });
+}
+
+export async function deleteTheSpecimen(params) {
+
+  return request(priefx+'/business/business/product/sample/deleteSample', {
+    // return request('/basic/ring-around/delete', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: params.list,
+  });
+}
+
+export async function updateTheSpecimen(params) {
+
+  return request(priefx+'/business/business/product/saveProduct', {
+    // return request('/basic/ring-around/saveOrUpdateRingAround', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
+
+export async function freezeTheSpecimen(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/product/sample/freeze', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: params.list,
+  });
+}
+
+
+export async function unFreezeTheSpecimen(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/product/sample/revoke', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: params.list,
+  });
+}
+
+
+
+export async function queryTheSpecimenLock(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/product/sample/checkIsEdit', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function updateTheSpecimenUnLock(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/product/sample/unLockEdit', {
+    method: 'POST',
+    headers: {
+      token: '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
+
+/*==========样品接口结束=============*/
+
+
+
 
 export async function queryRule(params) {
   return request(`/api/rule?${stringify(params)}`);
