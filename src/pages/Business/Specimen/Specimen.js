@@ -448,11 +448,12 @@ class Specimen extends Component {
     let params = {};
     params.id = item.id;
     params.dataNo = item.markingNo;
-    fetch(HttpFetch.queryProductLock, {
+    fetch(HttpFetch.querySpecimenList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

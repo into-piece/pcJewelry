@@ -38,6 +38,7 @@ import Zmage from 'react-zmage';
 
 const { Description } = DescriptionList;
 import { connect } from 'dva';
+import { getCurrentUser } from '../../../utils/authority';
 
 const FormItem = Form.Item;
 
@@ -954,7 +955,7 @@ class SpecimenDetaill extends Component {
       }
 
       let params = {};
-      params.product={ ...fieldsValue }
+      params.sample={ ...fieldsValue }
 
       const urls = fileList.map(v => v.url);
       const names = fileList.map(v => v.name);
@@ -977,8 +978,8 @@ class SpecimenDetaill extends Component {
           update: true,
         });
       } else {
-        params.product.id = showItem.id;
-        params.product.version = showItem.version;
+        params.sample.id = showItem.id;
+        params.sample.version = showItem.version;
         dispatch({
           type: 'specimen/updateSpecimen',
           payload: {
@@ -1010,15 +1011,16 @@ class SpecimenDetaill extends Component {
     // params.imgStr = this.state.urls;
     params.fileName = names;
     // params.productId = item.productNo;
-    params.product = item;
+    params.sample = item;
 
 
 
     fetch(HttpFetch.saveProductImage, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -1058,11 +1060,12 @@ class SpecimenDetaill extends Component {
     params.id = item.id;
 
 
-    fetch(HttpFetch.queryProductList, {
+    fetch(HttpFetch.querySpecimenList, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -1258,8 +1261,9 @@ class SpecimenDetaill extends Component {
     fetch(HttpFetch.queryProductImage, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

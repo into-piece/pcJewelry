@@ -6,6 +6,7 @@ const { Option } = Select;
 
 import { connect } from 'dva';
 import HttpFetch from '../../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../../utils/authority';
 
 // import { connect } from 'dva';
 @connect(({ dict, loading }) => {
@@ -96,6 +97,7 @@ class QualityRequirements extends PureComponent {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

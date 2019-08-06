@@ -46,6 +46,7 @@ import ProductTypeSelect from './components/ProductTypeSelect';
 import ProductDetail from './ProductDetail';
 import clientStyle from '../Client/Client.less';
 import TableSortView from '../../components/TableSortView';
+import { getCurrentUser } from '../../../utils/authority';
 
 const { Description } = DescriptionList;
 
@@ -454,8 +455,9 @@ class ProductInfo extends Component {
     fetch(HttpFetch.queryProductLock, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

@@ -50,8 +50,13 @@ export function getCurrentUser() {
   } catch (e) {
     authority = authorityString;
   }
+
+
   if (typeof authority === 'string') {
     return [authority];
   }
+
+  // console.log(" auth",authority)
+
   return authority;
 }

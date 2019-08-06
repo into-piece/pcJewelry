@@ -12,6 +12,7 @@ import querystring from 'querystring';
 import jsonp from 'fetch-jsonp';
 import HttpFetch from '../../../../utils/HttpFetch';
 import clientStyle from '../Client.less';
+import { getCurrentUser } from '../../../../utils/authority';
 
 
 class MarkListItem extends PureComponent {
@@ -30,8 +31,9 @@ class MarkListItem extends PureComponent {
     fetch(HttpFetch.queryMarkImage, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -172,8 +174,9 @@ class MarkListItem extends PureComponent {
     fetch(HttpFetch.queryTerminalList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

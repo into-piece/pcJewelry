@@ -2121,8 +2121,9 @@ class ClientView extends PureComponent {
     fetch(HttpFetch.loadMaintainer, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -2257,8 +2258,9 @@ class ClientView extends PureComponent {
     fetch(HttpFetch.loadContacts, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -2326,8 +2328,9 @@ class ClientView extends PureComponent {
     fetch(HttpFetch.saveMaintainer, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -2384,8 +2387,9 @@ class ClientView extends PureComponent {
     fetch(HttpFetch.saveContacts, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -2432,8 +2436,9 @@ class ClientView extends PureComponent {
     fetch(HttpFetch.deleteContacts, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(id),
     })

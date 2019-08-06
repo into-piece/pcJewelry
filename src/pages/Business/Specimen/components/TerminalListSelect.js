@@ -5,6 +5,7 @@ import querystring from 'querystring';
 const { Option } = Select;
 
 import HttpFetch from '../../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../../utils/authority';
 
 
 class BrandListSelect extends PureComponent {
@@ -98,8 +99,9 @@ class BrandListSelect extends PureComponent {
     fetch(HttpFetch.queryTerminalNoList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

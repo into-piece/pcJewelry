@@ -30,6 +30,7 @@ import Dict from './components/Dict';
 import QualityRequirements from './components/QualityRequirements';
 import DeliveryMethods from './components/DeliveryMethods';
 import HttpFetch, { loadCustomerList } from '../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../utils/authority';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
@@ -577,8 +578,9 @@ class ClientInfo extends PureComponent {
     fetch(HttpFetch.loadCustomerList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -700,9 +702,10 @@ class ClientInfo extends PureComponent {
       fetch(HttpFetch.queryQuality, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  headers: {
+        'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
+      },
         body: JSON.stringify(params),
       })
         .then(response => response.json())
@@ -732,9 +735,10 @@ class ClientInfo extends PureComponent {
       fetch(HttpFetch.queryMstWordList, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  headers: {
+        'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
+      },
         body: JSON.stringify(params),
       })
         .then(response => response.json())
@@ -763,9 +767,10 @@ class ClientInfo extends PureComponent {
       fetch(HttpFetch.queryDelivery, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  headers: {
+        'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
+      },
         body: JSON.stringify(params),
       })
         .then(response => response.json())

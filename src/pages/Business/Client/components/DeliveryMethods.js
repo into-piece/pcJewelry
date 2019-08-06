@@ -6,6 +6,7 @@ const { Option } = Select;
 
 import { connect } from 'dva';
 import HttpFetch, { queryDelivery } from '../../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../../utils/authority';
 
 class DeliveryMethods extends PureComponent {
   state = {
@@ -86,8 +87,9 @@ class DeliveryMethods extends PureComponent {
     fetch(HttpFetch.queryDelivery, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

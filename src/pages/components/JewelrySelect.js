@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
+import { getCurrentUser } from '../../utils/authority';
 
 const { Option } = Select;
 
@@ -84,8 +85,9 @@ class JewelrySelect extends PureComponent {
     fetch(url, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 import { queryTerminalList, queryTerminalNoList } from '../../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../../utils/authority';
 
 const { Option } = Select;
 
@@ -136,8 +137,9 @@ class TerminalSelected extends PureComponent {
     fetch(queryTerminalNoList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -193,8 +195,9 @@ class TerminalSelected extends PureComponent {
     fetch(queryTerminalNoList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

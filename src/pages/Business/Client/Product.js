@@ -67,21 +67,21 @@ const listdata = [
   },
 ];
 
-@connect(({ loading, product }) => {
-  return {
-    body: product.body,
-    productListloading: loading.effects['product/fetchListProduct'],
-    productSaveloading: loading.effects['product/addProduct'],
-    productUpdateloading: loading.effects['product/updateProduct'],
-    productDeleteloading: loading.effects['product/deleteProduct'],
-    productFreezeloading: loading.effects['product/freezeProduct'],
-    productSeriesListloading: loading.effects['product/fetchListProductSeries'],
-    productSeriesSaveloading: loading.effects['product/addProductSeries'],
-    productSeriesUpdateloading: loading.effects['product/updateProductSeries'],
-    productSeriesDeleteloading: loading.effects['product/deleteProductSeries'],
-    productSeriesFreezeloading: loading.effects['product/freezeProductSeries'],
-  };
-})
+// @connect(({ loading, product }) => {
+//   return {
+//     body: product.body,
+//     productListloading: loading.effects['product/fetchListProduct'],
+//     productSaveloading: loading.effects['product/addProduct'],
+//     productUpdateloading: loading.effects['product/updateProduct'],
+//     productDeleteloading: loading.effects['product/deleteProduct'],
+//     productFreezeloading: loading.effects['product/freezeProduct'],
+//     productSeriesListloading: loading.effects['product/fetchListProductSeries'],
+//     productSeriesSaveloading: loading.effects['product/addProductSeries'],
+//     productSeriesUpdateloading: loading.effects['product/updateProductSeries'],
+//     productSeriesDeleteloading: loading.effects['product/deleteProductSeries'],
+//     productSeriesFreezeloading: loading.effects['product/freezeProductSeries'],
+//   };
+// })
 @Form.create()
 class Product extends PureComponent {
   constructor(props) {

@@ -8,6 +8,7 @@ const { Description } = DescriptionList;
 import jsonp from 'fetch-jsonp';
 import Zmage from 'react-zmage';
 import HttpFetch from '../../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../../utils/authority';
 
 class PackageListItem extends PureComponent {
 
@@ -24,8 +25,9 @@ class PackageListItem extends PureComponent {
     fetch(HttpFetch.queryMarkImage, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -181,8 +183,9 @@ class PackageListItem extends PureComponent {
     fetch(HttpFetch.queryTerminalList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

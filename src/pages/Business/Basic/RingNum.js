@@ -955,7 +955,7 @@ class RingNum extends PureComponent {
         if (showItem.id === v.id)
           return v;
       });
-      console.log(" updateSelectDatas  showItem ",newShowItem)
+      // console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
         this.state.showItem = newShowItem[0];
         this.setState({

@@ -6,6 +6,7 @@ const { Option } = Select;
 
 import { connect } from 'dva';
 import HttpFetch from '../../../../utils/HttpFetch';
+import { getCurrentUser } from '../../../../utils/authority';
 
 const empty = {
   wordbookCode: '',
@@ -130,8 +131,9 @@ class Dict extends PureComponent {
     fetch(HttpFetch.queryMstWordList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

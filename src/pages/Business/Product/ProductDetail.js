@@ -38,6 +38,7 @@ import Zmage from 'react-zmage';
 
 const { Description } = DescriptionList;
 import { connect } from 'dva';
+import { getCurrentUser } from '../../../utils/authority';
 
 const FormItem = Form.Item;
 
@@ -1013,8 +1014,9 @@ class ProductDetail extends Component {
     fetch(HttpFetch.saveProductImage, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -1056,8 +1058,9 @@ class ProductDetail extends Component {
     fetch(HttpFetch.queryProductList, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })
@@ -1252,8 +1255,9 @@ class ProductDetail extends Component {
     fetch(HttpFetch.queryProductImage, {
       method: 'POST',
       credentials: 'include',
-      headers: {
+headers: {
         'Content-Type': 'application/json',
+        'token': getCurrentUser()?getCurrentUser().token:'',
       },
       body: JSON.stringify(params),
     })

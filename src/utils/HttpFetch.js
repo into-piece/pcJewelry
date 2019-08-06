@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-  export const priefx = '/server'
+  export const priefx = ''
 
 /**
  * 加载共同维护人
@@ -146,6 +146,44 @@ export const queryProductLock = priefx+'/business/business/product/checkIsEdit'
 export const queryProductList = priefx+'/business/business/product/listProduct'
 
 
+
+/**
+ * 保存样品图片
+ * @type {string}
+ */
+export const saveSpecimentImage =priefx+'/business/business/product-picture/listProductPicture'
+
+/**
+ * 保存样品图片
+ * @type {string}
+ */
+export const querySpecimentImage =priefx+'/business/business/product-picture/listProductPicture'
+
+
+/**
+ * 加载样品
+ * @type {string}
+ */
+export const saveSpecimenList = priefx+'/business/business/product/sample/saveSample'
+/**
+ * 查询锁定状态
+ * @type {string}
+ */
+export const querSpecimentLock = priefx+'/business/business/product/sample/checkIsEdit'
+/**
+ * 查询锁定状态
+ * @type {string}
+ */
+export const querSpecimentUnLock = priefx+'/business/business/product/sample/unLockEdit'
+
+/**
+ * 加载产品
+ * @type {string}
+ */
+export const querySpecimenList = priefx+'/business/business/product/sample/listSample'
+
+
+
 export default {
   priefx,
   loadMaintainer,
@@ -172,6 +210,11 @@ export default {
   queryProductImage,
   saveProductImage,
   queryProductList,
+  querSpecimentLock,
+  querSpecimentUnLock,
+  querySpecimenList,
+  saveSpecimenList,
+  saveSpecimentImage,
 
 
 };
