@@ -24,7 +24,7 @@ class ProductSearchFrom extends Component {
     } = this.props;
     return (
       <Form
-        onSubmit={this.handleCustomerSearch}
+        onSubmit={this.handleSearch}
         layout="inline"
         size="small"
         labelAlign="right"
@@ -131,7 +131,7 @@ class ProductSearchFrom extends Component {
               <Button type="primary" htmlType="submit">
                 查询
               </Button>
-              <Button style={{ marginLeft: 5 }} onClick={this.handleCustomerFormReset}>
+              <Button style={{ marginLeft: 5 }} onClick={this.handleReset}>
                 重置
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
@@ -149,16 +149,16 @@ class ProductSearchFrom extends Component {
     return expandForm ? this.renderCustomerAdvancedForm() : this.renderCustomerSimpleForm();
   }
 
-  handleCustomerSearch = e => {
-    const { form, onCustomerSearch } = this.props;
+  handleSearch = e => {
+    const { form, onSearch } = this.props;
     //禁止表单提交，采用Ajax提交
     e.preventDefault();
     form.validateFields((err, fieldsValue) => {
-      if (onCustomerSearch) onCustomerSearch({ ...fieldsValue });
+      if (onSearch) onSearch({ ...fieldsValue });
     });
   };
 
-  handleCustomerFormReset = () => {
+  handleReset = () => {
     const { onCustomerReset, form } = this.props;
     form.resetFields();
     this.setState({
@@ -173,7 +173,7 @@ class ProductSearchFrom extends Component {
     } = this.props;
 
     return (
-      <Form onSubmit={this.handleCustomerSearch} layout="inline">
+      <Form onSubmit={this.handleSearch} layout="inline">
         <Row>
           <Col lg={8}>
             <FormItem label="客户编号">
@@ -185,7 +185,7 @@ class ProductSearchFrom extends Component {
               <Button type="primary" htmlType="submit">
                 查询
               </Button>
-              <Button style={{ marginLeft: 5 }} onClick={this.handleCustomerFormReset}>
+              <Button style={{ marginLeft: 5 }} onClick={this.handleReset}>
                 重置
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>

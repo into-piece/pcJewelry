@@ -1471,15 +1471,6 @@ class ClientView extends PureComponent {
 
       // data.typeId = showItem.id;
       this.state.searchCustomerParams = data;
-      // data.size = defaultPageSize;
-      // data.current = 0;
-      // this.getTabOrderBy(data, this.state.customerSorts);
-      // dispatch({
-      //   type: 'customer/fetchListCustomer',
-      //   payload: {
-      //     ...data,
-      //   },
-      // });
 
       this.state.customerPageCurrent = 1;
 

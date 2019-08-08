@@ -78,7 +78,7 @@ export default {
       // setAuthority(payload.currentAuthority);
       if( payload.head&& payload.head.rtnCode==='000000')
       setAuthority(payload.body[0].userName);
-      console.log(" save user ",payload.body[0])
+      // console.log(" save user ",payload.body[0])
       setCurrentUser(payload.body[0])
       return {
         ...state,

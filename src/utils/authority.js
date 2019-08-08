@@ -34,7 +34,7 @@ export function setAuthority(authority) {
 export function setCurrentUser(authority) {
 
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  console.log(' save CurrentUser ', (authority));
+  // console.log(' save CurrentUser ', (authority));
   return localStorage.setItem('jewelay_antd-pro_user', JSON.stringify(proAuthority));
 }
 

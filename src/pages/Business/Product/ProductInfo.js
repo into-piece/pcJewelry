@@ -208,10 +208,9 @@ class ProductInfo extends Component {
       productPage: 1,
       isLoad: false,
       productSorts: [],
-
+      searchProductParams: {},
 
     };
-
   }
 
   centerFormLayout = {
@@ -233,7 +232,8 @@ class ProductInfo extends Component {
         this.updateProductLock(showItem);
       }
     };
-  };
+  }
+  ;
 
   // router.replace('/business/client/emptyView');
 
@@ -286,7 +286,10 @@ class ProductInfo extends Component {
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
                 <div style={{ marginBottom: 16 }}/>
-                <ProductSearchFrom/>
+                <ProductSearchFrom
+                  onSearch={this.handleProductSearch}
+                  onCustomerReset={this.handleProductFormReset}
+                />
                 <JewelryTable
 
                   onSelectItem={(item, rows) => {
@@ -302,7 +305,7 @@ class ProductInfo extends Component {
                       // this.fetchImages(item);
                         this.loadProductLock(item);
                     }
-                    this.state.showItem = item ? { ...item } : false
+                    this.state.showItem = item ? { ...item } : false;
                     this.setState({
                       showItem: this.state.showItem,
                       selectProductData: [...rows],
@@ -353,8 +356,8 @@ class ProductInfo extends Component {
                           }}
                           refarshList={() => {
                             this.loadProduct();
-                          }}/>
-      ;
+                          }}/>;
+
   };
 
 
@@ -402,36 +405,36 @@ class ProductInfo extends Component {
 
   loadProduct = () => {
 
-    const { productPage } = this.state;
-    let params = { current: productPage, size: defaultPageSize };
+    const { productPage, searchProductParams } = this.state;
+    // let params = { current: productPage, size: defaultPageSize };
 
-    if(this.state.productSorts.length>0) {
+    let params = { ...searchProductParams };
+    params.current = productPage;
+    params.size = defaultPageSize;
+
+    if (this.state.productSorts.length > 0) {
       let orderByAsc;
       let orderByDesc;
-      this.state.productSorts.forEach(v=>{
-        if(v.sort==='ascend'){
-          if(orderByAsc)
-          {
-            orderByAsc+=","+v.field;
-          }else
-          {
+      this.state.productSorts.forEach(v => {
+        if (v.sort === 'ascend') {
+          if (orderByAsc) {
+            orderByAsc += ',' + v.field;
+          } else {
             orderByAsc = v.field;
           }
-        }else if(v.sort==='descend')
-        {
-          if(orderByDesc)
-            orderByDesc+=","+v.field;
+        } else if (v.sort === 'descend') {
+          if (orderByDesc)
+            orderByDesc += ',' + v.field;
           else
             orderByDesc = v.field;
         }
-      })
-      if(orderByAsc)
-        params.orderByAsc= orderByAsc;
+      });
+      if (orderByAsc)
+        params.orderByAsc = orderByAsc;
 
-      if(orderByDesc)
-        params.orderByDesc= orderByDesc;
+      if (orderByDesc)
+        params.orderByDesc = orderByDesc;
     }
-
 
 
     const { dispatch } = this.props;
@@ -439,6 +442,26 @@ class ProductInfo extends Component {
       type: 'product/fetchListProduct',
       payload: { ...params },
     });
+  };
+
+
+  handleProductSearch = (productParams) => {
+
+      // data.typeId = showItem.id;
+      this.state.searchProductParams = { ...productParams };
+
+      this.state.current = 1;
+
+      this.loadProduct();
+
+  };
+
+  handleProductFormReset = () => {
+    this.state.searchProductParams = {};
+    this.setState({
+      searchProductParams: {},
+    });
+
   };
 
 
@@ -455,9 +478,9 @@ class ProductInfo extends Component {
     fetch(HttpFetch.queryProductLock, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })

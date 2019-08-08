@@ -28,28 +28,54 @@ const codeMessage = {
  * 异常处理程序
  */
 const errorHandler = error => {
+
   const { response = {} } = error;
   const errortext = codeMessage[response.status] || response.statusText;
   const { status, url } = response;
 
+
   if (status === 401) {
+
+    notification.error({
+      message: '该操作未授权。',
+    });
+  }
+
+
+  if (status === 403) {
+    // router.push('/exception/403');
+      window.g_app._store.dispatch({
+        type: 'login/logout',
+      });
     notification.error({
       message: '未登录或登录已过期，请重新登录。',
     });
-    // @HACK
-    /* eslint-disable no-underscore-dangle */
-    window.g_app._store.dispatch({
-      type: 'login/logout',
-    });
     return;
   }
-  notification.error({
-    message: `请求错误 ${status}: ${url}`,
-    description: errortext,
-  });
+
+  // if (status === 401) {
+  //   notification.error({
+  //     message: '未登录或登录已过期，请重新登录。',
+  //   });
+  //
+  //   }
+  //   // @HACK
+  //   /* eslint-disable no-underscore-dangle */
+  //   window.g_app._store.dispatch({
+  //     type: 'login/logout',
+  //   });
+  //   return;
+  // }
+  // notification.error({
+  //   message: `请求错误 ${status}: ${url}`,
+  //   description: errortext,
+  // });
   // environment should not be used
   // if (status === 403) {
-  //   router.push('/exception/403');
+  //   // router.push('/exception/403');
+  //   notification.error({
+  //     message: '该操作未授权。',
+  //   });
   //   return;
   // }
   // if (status <= 504 && status >= 500) {
@@ -61,12 +87,17 @@ const errorHandler = error => {
   // }
 };
 
+const interceptor = () =>{
+  console.log('拦截！');
+}
+
 /**
  * 配置request请求时的默认参数
  */
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+  interceptor
 });
 
 export default request;

@@ -27,26 +27,15 @@ const FormItem = Form.Item;
 import business from '../business.less';
 import DescriptionList from '@/components/DescriptionList';
 import specimen from './specimen.less';
-import JewelryTable from '../../components/JewelryTable';
-import ProductSearchFrom from './components/ProductSearchFrom';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-import BrandListSelect from './components/BrandListSelect';
-import Dict from '../Client/components/Dict';
-import UnitColorListSelect from './components/UnitColorListSelect';
-import PlatingColorListSelect from './components/PlatingColorListSelect';
-import TerminalListSelected from './components/TerminalListSelected';
-import BasicMeasureListSelect from './components/BasicMeasureListSelect';
-import PercentageSelect from './components/ProcentageSelect';
-import ProductMaterialSelect from './components/ProductMaterialSelect';
-import MoldListSelect from './components/MoldListSelect';
 import Zmage from 'react-zmage';
 import HttpFetch from '../../../utils/HttpFetch';
-import ProductTypeSelect from './components/ProductTypeSelect';
 import SpecimenDetaill from './SpecimenDetaill';
-import clientStyle from '../Client/Client.less';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
+import ProductSearchFrom from '../Product/components/ProductSearchFrom';
+import JewelryTable from '../../components/JewelryTable';
 
 
 const defaultPageSize = 10;
@@ -203,6 +192,7 @@ class Specimen extends Component {
       productPage: 1,
       isLoad: false,
       productSorts: [],
+      searchProductParams:{},
 
 
     };
@@ -282,7 +272,10 @@ class Specimen extends Component {
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
                 <div style={{ marginBottom: 16 }}/>
-                <ProductSearchFrom/>
+                <ProductSearchFrom
+                  onSearch={this.handleSpecimenSearch}
+                  onCustomerReset={this.handleSpecimenFormReset}
+                />
                 <JewelryTable
 
                   onSelectItem={(item, rows) => {
@@ -398,8 +391,12 @@ class Specimen extends Component {
 
   loadProduct = () => {
 
-    const { productPage } = this.state;
-    let params = { current: productPage, size: defaultPageSize };
+    const { productPage , searchProductParams} = this.state;
+    // let params = { current: productPage, size: defaultPageSize };
+
+    let params = {...searchProductParams};
+    params.current = productPage;
+    params.size = defaultPageSize;
 
     if(this.state.productSorts.length>0) {
       let orderByAsc;
@@ -437,6 +434,27 @@ class Specimen extends Component {
     });
   };
 
+
+  handleSpecimenSearch = (productParams) =>{
+
+      // data.typeId = showItem.id;
+      this.state.searchProductParams = { ...productParams };
+
+      this.state.current = 1;
+
+      this.loadProduct()
+
+
+
+  }
+
+  handleSpecimenFormReset = () => {
+    this.state.searchProductParams = {};
+    this.setState({
+      searchProductParams:{}
+    })
+
+  }
 
   /**
    * 获取锁定状态
