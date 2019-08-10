@@ -395,6 +395,7 @@ class Brand extends Component {
                     type="danger"
                     icon="delete"
                     size={'small'}
+                    onClick={this.clickDeleteFrom}
                     disabled={isEdit || (showItem && showItem.status === '审批')}
                   >
                     删除
@@ -545,6 +546,7 @@ class Brand extends Component {
   };
 
   clickDeleteFrom = () => {
+
     const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
