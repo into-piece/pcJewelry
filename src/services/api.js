@@ -763,6 +763,20 @@ export async function freezeTheTerminal(params) {
   });
 }
 
+
+export async function unfreezeTheTerminal(params) {
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/end-customer/cancelApproval', {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: params.list,
+  });
+}
+
+
+
 export async function querylistMark(parmas) {
   return request(priefx + '/business/business/marking/listMarking', {
     // return request('/basic/ring-around/listRingAroundByStandardId', {
@@ -815,6 +829,19 @@ export async function updateTheMark(params) {
 export async function freezeTheMark(params) {
   // return request('/basic/ring-around/freeze', {
   return request(priefx + '/business/business/marking/freeze', {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: params.list,
+  });
+}
+
+
+export async function unfreezeTheMark(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/marking/revoke', {
     method: 'POST',
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
@@ -884,6 +911,19 @@ export async function freezeThePackage(params) {
     data: params.list,
   });
 }
+
+export async function unfreezeThePackage(params) {
+
+  // return request('/basic/ring-around/freeze', {
+  return request(priefx+'/business/business/pack/revoke', {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: params.list,
+  });
+}
+
 
 export async function querylistProduct(parmas) {
   return request(priefx + '/business/business/product/listProduct', {
@@ -1113,9 +1153,6 @@ export async function updateTheSpecimen(params) {
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
-    headers: {
-      token: '',
-    },
     data: {
       ...params,
     },
@@ -1156,12 +1193,6 @@ export async function queryTheSpecimenLock(params) {
     method: 'POST',
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
-    },
-    headers: {
-      token: '',
-    },
-    headers: {
-      token: '',
     },
     data: {
       ...params,

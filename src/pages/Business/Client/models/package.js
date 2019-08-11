@@ -4,6 +4,7 @@ import {
   deleteThePackage,
   updateThePackage,
   freezeThePackage,
+  unfreezeThePackage,
 } from '@/services/api';
 
 export default {
@@ -55,6 +56,15 @@ export default {
 
     *freezePackage({ payload, callback }, { call, put }) {
       const response = yield call(freezeThePackage, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *unfreezePackage({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeThePackage, payload);
       yield put({
         type: 'save',
         payload: response,

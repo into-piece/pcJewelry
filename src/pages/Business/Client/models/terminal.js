@@ -4,6 +4,7 @@ import {
   deleteTheTerminal,
   updateTheTerminal,
   freezeTheTerminal,
+  unfreezeTheTerminal,
 } from '@/services/api';
 
 export default {
@@ -55,6 +56,15 @@ export default {
 
     *freezeTerminal({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheTerminal, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *unfreezeTerminal({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeTheTerminal, payload);
       yield put({
         type: 'save',
         payload: response,

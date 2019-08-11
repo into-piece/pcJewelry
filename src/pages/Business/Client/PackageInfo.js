@@ -41,6 +41,7 @@ import TerminalSelected from './components/TerminalSelected';
     packageUpdateloading: loading.effects['packageinfo/updatePackage'],
     packageDeleteloading: loading.effects['packageinfo/deletePackage'],
     packageFreezeloading: loading.effects['packageinfo/freezePackage'],
+    packageunFreezeloading: loading.effects['packageinfo/unfreezePackage'],
   };
 })
 @Form.create()
@@ -76,6 +77,7 @@ class PackageInfo extends PureComponent {
       packageUpdateloading,
       packageDeleteloading,
       packageFreezeloading,
+      packageunFreezeloading,
       packageListloading,
       params,
     } = this.props;
@@ -83,7 +85,7 @@ class PackageInfo extends PureComponent {
     const { selectedItem, visible, current = {}, update, fileList } = this.state;
 
     const isUpdate =
-      packageUpdateloading || packageSaveloading || packageDeleteloading || packageFreezeloading;
+      packageUpdateloading || packageSaveloading || packageDeleteloading || packageFreezeloading ||packageunFreezeloading;
     if (isUpdate) {
       this.state.update = true;
       if (packageUpdateloading) {
@@ -119,11 +121,15 @@ class PackageInfo extends PureComponent {
         if (data.customerId !== '') this.loadPackagelList();
       }
 
-      if (data.customerId && data.customerId !== '') this.state.isAddEdit = false;
-      else this.state.isAddEdit = true;
-
-      if (selectedItem !== '') this.state.isEdit = false;
-      else this.state.isEdit = true;
+      if (data.customerId && data.customerId !== '') {
+        this.state.isAddEdit = false;
+        if (selectedItem !== '') this.state.isEdit = false;
+        else this.state.isEdit = true;
+      } else {
+        this.state.isAddEdit = true;
+        this.state.isEdit = true;
+        this.state.selectedItem = '';
+      }
     } else {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
@@ -132,6 +138,8 @@ class PackageInfo extends PureComponent {
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+    const isFreeze = (selectedItem&&selectedItem.status==='2');
 
     return (
       <div className={styles.content}>
@@ -178,7 +186,7 @@ class PackageInfo extends PureComponent {
                 icon="delete"
                 size={'small'}
                 onClick={this.clickDeleteFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit}
+                disabled={this.state.isEdit || this.state.isAddEdit||isFreeze}
               >
                 删除
               </Button>
@@ -188,20 +196,31 @@ class PackageInfo extends PureComponent {
                 size={'small'}
                 icon="edit"
                 onClick={this.clickEditFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit}
+                disabled={this.state.isEdit || this.state.isAddEdit||isFreeze}
               >
                 编辑
               </Button>
-              <Button
-                className={clientStyle.buttomControl}
-                size={'small'}
-                type="primary"
-                icon="lock"
-                onClick={this.clickFreezeFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit}
-              >
-                审批
-              </Button>
+              {
+                isFreeze? <Button
+                  className={clientStyle.buttomControl}
+                  size={'small'}
+                  type="danger"
+                  icon="unlock"
+                  onClick={this.clickUnFreezeFrom}
+                  disabled={this.state.isEdit || this.state.isAddEdit}
+                >
+                  取消审批
+                </Button>: <Button
+                  className={clientStyle.buttomControl}
+                  size={'small'}
+                  type="primary"
+                  icon="lock"
+                  onClick={this.clickFreezeFrom}
+                  disabled={this.state.isEdit || this.state.isAddEdit}
+                >
+                  审批
+                </Button>
+              }
             </div>
 
             <div
@@ -558,7 +577,7 @@ class PackageInfo extends PureComponent {
   };
 
   loadPackagelList = () => {
-    console.log('loadPackageList');
+    // console.log('loadPackageList');
     const { dispatch } = this.props;
     dispatch({
       type: 'packageinfo/fetchListPackage',
@@ -613,6 +632,21 @@ class PackageInfo extends PureComponent {
       keys.push(id);
       dispatch({
         type: 'packageinfo/freezePackage',
+        payload: { list: keys },
+      });
+    }
+  };
+
+  clickUnFreezeFrom = () => {
+    const { selectedItem } = this.state;
+    const { dispatch } = this.props;
+
+    const id = selectedItem.id;
+    if (id) {
+      let keys = [];
+      keys.push(id);
+      dispatch({
+        type: 'packageinfo/unfreezePackage',
         payload: { list: keys },
       });
     }

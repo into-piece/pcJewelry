@@ -1794,7 +1794,7 @@ class ClientView extends PureComponent {
 
     this.getTabOrderBy(params, this.state.customerSorts);
 
-    console.log(' tab custom', params, this.state.customerSorts);
+    // console.log(' tab custom', params, this.state.customerSorts);
 
     dispatch({
       type: 'customer/fetchListCustomer',
@@ -2056,7 +2056,7 @@ class ClientView extends PureComponent {
         _this.setState({
           maintainsLoading: false,
         });
-        console.log('result ', d);
+        // console.log('result ', d);
       })
       .catch(function(ex) {
         // console.log('parsing failed', ex);

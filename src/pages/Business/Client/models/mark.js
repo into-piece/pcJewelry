@@ -4,6 +4,7 @@ import {
   deleteTheMark,
   updateTheMark,
   freezeTheMark,
+  unfreezeTheMark,
 } from '@/services/api';
 
 export default {
@@ -55,6 +56,15 @@ export default {
 
     *freezeMark({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheMark, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *unfreezeMark({ payload, callback }, { call, put }) {
+      const response = yield call(unfreezeTheMark, payload);
       yield put({
         type: 'save',
         payload: response,

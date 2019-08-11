@@ -751,7 +751,7 @@ headers: {
               settlementCurrency,
             });
           }
-          console.log('settlementCurrency value ', settlementCurrency);
+          // console.log('settlementCurrency value ', settlementCurrency);
         })
         .catch(function(ex) {
           // message.error('加载图片失败！');

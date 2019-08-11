@@ -66,6 +66,7 @@ const validatorCounTry = (rule, value, callback) => {
     terminalUpdateloading: loading.effects['terminal/updateTerminal'],
     terminalDeleteloading: loading.effects['terminal/deleteTerminal'],
     terminalFreezeloading: loading.effects['terminal/freezeTerminal'],
+    terminalUnFreezeloading: loading.effects['terminal/unfreezeTerminal'],
   };
 })
 @Form.create()
@@ -98,6 +99,7 @@ class TerminalClient extends PureComponent {
       terminalUpdateloading,
       terminalDeleteloading,
       terminalFreezeloading,
+      terminalUnFreezeloading,
       terminalListloading,
       params,
     } = this.props;
@@ -108,7 +110,8 @@ class TerminalClient extends PureComponent {
       terminalUpdateloading ||
       terminalSaveloading ||
       terminalDeleteloading ||
-      terminalFreezeloading;
+      terminalFreezeloading||
+      terminalUnFreezeloading;
     if (isUpdate) {
       this.state.update = true;
       if (terminalUpdateloading) {
@@ -151,6 +154,8 @@ class TerminalClient extends PureComponent {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
     }
+
+
 
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
@@ -317,6 +322,7 @@ class TerminalClient extends PureComponent {
       );
     };
 
+    const isFreeze = (selectedItem&&selectedItem.status==='2');
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
@@ -358,7 +364,7 @@ class TerminalClient extends PureComponent {
                 type="danger"
                 icon="delete"
                 size={'small'}
-                disabled={this.state.isEdit}
+                disabled={this.state.isEdit||isFreeze}
                 onClick={this.clickDeleteFrom}
               >
                 删除
@@ -368,21 +374,33 @@ class TerminalClient extends PureComponent {
                 type="primary"
                 size={'small'}
                 icon="edit"
-                disabled={this.state.isEdit}
+                disabled={this.state.isEdit||isFreeze}
                 onClick={this.clickEditFrom}
               >
                 编辑
               </Button>
-              <Button
-                className={clientStyle.buttomControl}
-                size={'small'}
-                type="primary"
-                icon="lock"
-                disabled={this.state.isEdit}
-                onClick={this.clickFreezeFrom}
-              >
-                审批
-              </Button>
+              {
+                isFreeze?<Button
+                  className={clientStyle.buttomControl}
+                  size={'small'}
+                  type="danger"
+                  icon="unlock"
+                  disabled={this.state.isEdit}
+                  onClick={this.clickUnFreezeFrom}
+                >
+                  取消审批
+                </Button>:<Button
+                  className={clientStyle.buttomControl}
+                  size={'small'}
+                  type="primary"
+                  icon="lock"
+                  disabled={this.state.isEdit}
+                  onClick={this.clickFreezeFrom}
+                >
+                  审批
+                </Button>
+              }
+
             </div>
 
             <div
@@ -530,6 +548,21 @@ class TerminalClient extends PureComponent {
       keys.push(id);
       dispatch({
         type: 'terminal/freezeTerminal',
+        payload: { list: keys },
+      });
+    }
+  };
+
+  clickUnFreezeFrom = () => {
+    const { selectedItem } = this.state;
+    const { dispatch } = this.props;
+
+    const id = selectedItem.id;
+    if (id) {
+      let keys = [];
+      keys.push(id);
+      dispatch({
+        type: 'terminal/unfreezeTerminal',
         payload: { list: keys },
       });
     }
