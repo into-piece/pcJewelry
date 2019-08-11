@@ -38,7 +38,8 @@ const errorHandler = error => {
     });
   }
 
-  if (status === 403) {
+
+  if (status === 402) {
     // router.push('/exception/403');
     window.g_app._store.dispatch({
       type: 'login/logout',
