@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import SvgUtil from '../../../utils/SvgUtil';
+import { award } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import Result from '@/components/Result';
@@ -169,7 +169,7 @@ class Requested extends PureComponent {
   };
 
   render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update,showItem } = this.state;
+    const { selectedRowKeys = [], current = {}, isEdit, update, showItem } = this.state;
 
     const {
       listLoading,
@@ -183,7 +183,7 @@ class Requested extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading  ||unfreezing;
+    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
 
     if (addloading || deleteloading || upateloading || freezing || unfreezing) {
       this.state.update = true;
@@ -209,12 +209,11 @@ class Requested extends PureComponent {
       }
     }
 
-    if(listLoading)
-    {
+    if (listLoading) {
       this.state.isLoadList = true;
-    }else{
-      if(this.state.isLoadList){
-        if ( body && body.data && body.data.length > 0) {
+    } else {
+      if (this.state.isLoadList) {
+        if (body && body.data && body.data.length > 0) {
           const newdata = body.data.map(value => {
             const s = value.status;
             if (s == 0) {
@@ -290,7 +289,7 @@ class Requested extends PureComponent {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={SvgUtil.award}
+                  component={award}
                 />
                 <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
               </div>
@@ -389,14 +388,14 @@ class Requested extends PureComponent {
                   >
                     取消审批
                   </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size={'small'}
-                    type="primary"
-                    icon="lock"
-                    onClick={this.clickFreezeFrom}
-                    disabled={isEdit}
-                  >
-                    审批
+                      className={styles.buttomControl}
+                      size={'small'}
+                      type="primary"
+                      icon="lock"
+                      onClick={this.clickFreezeFrom}
+                      disabled={isEdit}
+                    >
+                      审批
                   </Button>)}
                 </div>
               </Card>
@@ -423,7 +422,7 @@ class Requested extends PureComponent {
    *
    * 通过最新列表更新选择的值
    * */
-  updateSelectDatas =()=>{
+  updateSelectDatas = () => {
 
     const { rowSelectedData, showItem } = this.state;
     // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)

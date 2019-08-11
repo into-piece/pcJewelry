@@ -6,7 +6,7 @@ import { Menu, Card, Row, Col, Icon } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './Info.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import SvgUtil from '../../../utils/SvgUtil';
+import { ring, euro, delivery, award, percentage } from '@/utils/SvgUtil';
 
 const { Item } = Menu;
 
@@ -84,13 +84,12 @@ class Info extends Component {
   };
 
   getMenuIcon = key => {
-    const { ring, euro, delivery, award, percentage } = SvgUtil;
     if (key === 'ring') return ring;
     if (key === 'brand') return award;
     if (key === 'requested') return delivery;
     if (key === 'sendWay') return delivery;
-    else if (key === 'royalty') return percentage;
-    else if (key === 'currency') return euro;
+    if (key === 'royalty') return percentage;
+    if (key === 'currency') return euro;
   };
 
   selectKey = ({ key }) => {

@@ -18,7 +18,7 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './brand.less';
-import SvgUtil from './../../../utils/SvgUtil';
+import { diamond } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
@@ -207,24 +207,24 @@ class Brand extends Component {
     if (listLoading) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
-        if (body && body.data && body.data.length > 0) {
-          const newdata = body.data.map(value => {
-            const s = value.status;
-            if (s == 0) {
-              value.status = '输入';
-            } else if (s == 1) {
-              value.status = '使用中';
-            } else if (s == 2) {
-              value.status = '审批';
-            }
-            return value;
-          });
+      if (body && body.data && body.data.length > 0) {
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
 
-          this.state.data = newdata;
-        }
-        this.updateSelectDatas();
-        this.state.isLoadList = false;
+        this.state.data = newdata;
       }
+      this.updateSelectDatas();
+      this.state.isLoadList = false;
+    }
 
 
     if (addloading || deleteloading || upateloading || freezing || unfreeze) {
@@ -235,22 +235,22 @@ class Brand extends Component {
 
 
     } else if (update) {
-        // console.log('rntCode=' + body.rtnCode);
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-        } else {
-          this.state.requestState = 'error';
-        }
-
-        this.state.requestMes = body.rtnMsg;
-        // console.log('result = ' + this.state.requestMes);
-        this.state.update = false;
-        this.state.done = true;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          // this.state.showItem = { ...current };
-        }
+      // console.log('rntCode=' + body.rtnCode);
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+      } else {
+        this.state.requestState = 'error';
       }
+
+      this.state.requestMes = body.rtnMsg;
+      // console.log('result = ' + this.state.requestMes);
+      this.state.update = false;
+      this.state.done = true;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        // this.state.showItem = { ...current };
+      }
+    }
 
 
 
@@ -314,7 +314,7 @@ class Brand extends Component {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={SvgUtil.diamond}
+                  component={diamond}
                 />
                 <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
               </div>
@@ -372,7 +372,7 @@ class Brand extends Component {
                 </div>
               </Card>
 
-              {/*</Card> */}
+              {/* </Card> */}
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Button
@@ -422,7 +422,7 @@ class Brand extends Component {
                     disabled={isEdit}
                   >
                       审批
-                                </Button>)}
+                  </Button>)}
 
                 </div>
               </Card>
@@ -753,7 +753,7 @@ class Brand extends Component {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={SvgUtil.diamond}
+                  component={diamond}
                 />
                 <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
               </div>

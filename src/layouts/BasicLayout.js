@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Layout, Menu, Tabs, Dropdown, Icon } from 'antd';
 import router from 'umi/router';
 import DocumentTitle from 'react-document-title';
-// import { Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';

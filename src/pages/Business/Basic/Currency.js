@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divider } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import SvgUtil from '../../../utils/SvgUtil';
+import { euro } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import Result from '@/components/Result';
 import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
@@ -189,24 +189,22 @@ class Currency extends PureComponent {
       if (upateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
-        // console.log('rntCode=' + body.rtnCode);
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-        } else {
-          this.state.requestState = 'error';
-        }
+    } else if (update) {
+      // console.log('rntCode=' + body.rtnCode);
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+      } else {
+        this.state.requestState = 'error';
+      }
 
-        this.state.requestMes = body.rtnMsg;
-        // console.log('result = '+this.state.requestMes)
-        this.state.update = false;
-        this.state.done = true;
-        this.state.visible = true;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
-        }
+      this.state.requestMes = body.rtnMsg;
+      // console.log('result = '+this.state.requestMes)
+      this.state.update = false;
+      this.state.done = true;
+      this.state.visible = true;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        this.state.showItem = { ...current };
       }
     }
 
@@ -252,7 +250,7 @@ class Currency extends PureComponent {
         );
       }
       return (
-        <Form size={'small'} onSubmit={this.handleSubmit}>
+        <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="币种" {...this.formLayout}>
             {getFieldDecorator('currency', {
               rules: [{ required: true, message: '请输入币种' }],
@@ -305,7 +303,7 @@ class Currency extends PureComponent {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={SvgUtil.euro}
+                  component={euro}
                 />
                 <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="业务提成设当" />
               </div>
@@ -369,9 +367,9 @@ class Currency extends PureComponent {
                     className={styles.buttomControl}
                     type="primary"
                     icon="plus"
-                    size={'small'}
+                    size="small"
                     onClick={this.clickNewFrom}
-                    disabled={true}
+                    disabled
                   >
                     新增
                   </Button>
@@ -379,29 +377,29 @@ class Currency extends PureComponent {
                     className={styles.buttomControl}
                     type="danger"
                     icon="delete"
-                    size={'small'}
+                    size="small"
                     onClick={this.clickDeleteFrom}
-                    disabled={true}
+                    disabled
                   >
                     删除
                   </Button>
                   <Button
                     className={styles.buttomControl}
                     type="primary"
-                    size={'small'}
+                    size="small"
                     onClick={this.clickEditFrom}
-                    disabled={true}
+                    disabled
                     icon="edit"
                   >
                     编辑
                   </Button>
                   <Button
                     className={styles.buttomControl}
-                    size={'small'}
+                    size="small"
                     type="primary"
                     icon="lock"
                     onClick={this.clickFreezeFrom}
-                    disabled={true}
+                    disabled
                   >
                     审批
                   </Button>
@@ -505,7 +503,7 @@ class Currency extends PureComponent {
           <Description term="现金销售价格">{item.cashSellingPrice}</Description>
           <Description term="现货销售价格">{item.spotSellingPrice}</Description>
         </DescriptionList>
-        {/* <Divider/>*/}
+        {/* <Divider/> */}
       </span>
     );
   };

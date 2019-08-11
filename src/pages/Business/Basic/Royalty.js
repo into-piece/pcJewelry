@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import SvgUtil from '../../../utils/SvgUtil';
+import { percentage } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import Result from '@/components/Result';
@@ -186,7 +186,7 @@ class Royalty extends PureComponent {
   };
 
   render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update,showItem } = this.state;
+    const { selectedRowKeys = [], current = {}, isEdit, update, showItem } = this.state;
 
     const {
       listLoading,
@@ -201,7 +201,7 @@ class Royalty extends PureComponent {
     } = this.props;
 
     this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
-    if (addloading || deleteloading || upateloading || freezing||unfreezing) {
+    if (addloading || deleteloading || upateloading || freezing || unfreezing) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
@@ -226,12 +226,11 @@ class Royalty extends PureComponent {
       }
     }
 
-    if(listLoading)
-    {
+    if (listLoading) {
       this.state.isLoadList = true;
-    }else{
-      if(this.state.isLoadList){
-        if ( body && body.data && body.data.length > 0) {
+    } else {
+      if (this.state.isLoadList) {
+        if (body && body.data && body.data.length > 0) {
           const newdata = body.data.map(value => {
             const s = value.status;
             if (s == 0) {
@@ -322,7 +321,7 @@ class Royalty extends PureComponent {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={SvgUtil.percentage}
+                  component={percentage}
                 />
                 <FormattedMessage id="app.basic.menuMap.royalty" defaultMessage="业务提成设当" />
               </div>
@@ -397,7 +396,7 @@ class Royalty extends PureComponent {
                     icon="delete"
                     size={'small'}
                     onClick={this.clickDeleteFrom}
-                    disabled={isEdit|| (this.state.showItem && this.state.showItem.status === '审批')}
+                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                   >
                     删除
                   </Button>
@@ -406,7 +405,7 @@ class Royalty extends PureComponent {
                     type="primary"
                     size={'small'}
                     onClick={this.clickEditFrom}
-                    disabled={isEdit|| (this.state.showItem && this.state.showItem.status === '审批')}
+                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                     icon="edit"
                   >
                     编辑
@@ -421,14 +420,14 @@ class Royalty extends PureComponent {
                   >
                     取消审批
                   </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size={'small'}
-                    type="primary"
-                    icon="lock"
-                    onClick={this.clickFreezeFrom}
-                    disabled={isEdit}
-                  >
-                    审批
+                      className={styles.buttomControl}
+                      size={'small'}
+                      type="primary"
+                      icon="lock"
+                      onClick={this.clickFreezeFrom}
+                      disabled={isEdit}
+                    >
+                      审批
                   </Button>)}
                 </div>
               </Card>
@@ -454,7 +453,7 @@ class Royalty extends PureComponent {
    *
    * 通过最新列表更新选择的值
    * */
-  updateSelectDatas =()=>{
+  updateSelectDatas = () => {
 
     const { rowSelectedData, showItem } = this.state;
     // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
@@ -534,7 +533,7 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record, index) => {};
+  selectChange = (record, index) => { };
 
   clickDeleteFrom = () => {
     const { selectedRowKeys } = this.state;
@@ -583,7 +582,7 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record, index) => {};
+  selectChange = (record, index) => { };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {

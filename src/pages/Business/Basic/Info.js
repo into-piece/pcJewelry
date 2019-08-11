@@ -7,7 +7,6 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Basic.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import SvgUtil from '../../../utils/SvgUtil';
 import Brand from './Brand';
 import RingNum from './RingNum';
 import Requested from './Requested';
