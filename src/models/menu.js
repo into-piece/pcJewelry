@@ -8,6 +8,7 @@ const { check } = Authorized;
 
 // Conversion router to menu.
 function formatter(data, parentAuthority, parentName) {
+  // console.log(data, parentAuthority, parentName, '==============')
   if (!data) {
     return undefined;
   }

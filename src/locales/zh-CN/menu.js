@@ -14,6 +14,17 @@ export default {
   'menu.business.Specimen': '新款输入',
   'menu.business.Report': '报表',
 
+  'menu.dev': '开发',
+  'menu.dev.Client': '客户资料',
+  'menu.dev.Basic': '基础数据',
+  'menu.dev.Deliver': '出货',
+  'menu.dev.Product': '产品',
+  'menu.dev.Proform Invoice': 'Proform Invoice',
+  'menu.dev.Quote': '报价',
+  'menu.dev.Receiving': '收付款',
+  'menu.dev.Specimen': '新款输入',
+  'menu.dev.Report': '报表',
+
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',

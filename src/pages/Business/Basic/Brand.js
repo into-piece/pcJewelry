@@ -14,17 +14,17 @@ import {
   List,
   message,
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
+import { formatMessage } from 'umi/locale';
 import styles from './brand.less';
 import SvgUtil from './../../../utils/SvgUtil';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
-import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-
-const FormItem = Form.Item;
 import DescriptionList from '@/components/DescriptionList';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
+
+const FormItem = Form.Item;
 
 const { Description } = DescriptionList;
 
@@ -182,277 +182,19 @@ class Brand extends Component {
     });
   }
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
-  render() {
-    const { addSuccessData, selectedRowKeys, current = {}, isEdit, update, showItem } = this.state;
-
-    const {
-      listLoading,
-      body = {},
-      dispatch,
-      addloading,
-      deleteloading,
-      upateloading,
-      freezing,
-      unfreeze
-    } = this.props;
-
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading ||unfreeze;
-
-
-
-
-    if(listLoading)
-    {
-      this.state.isLoadList = true;
-    }else{
-      if(this.state.isLoadList){
-        if ( body && body.data && body.data.length > 0) {
-          const newdata = body.data.map(value => {
-            const s = value.status;
-            if (s == 0) {
-              value.status = '输入';
-            } else if (s == 1) {
-              value.status = '使用中';
-            } else if (s == 2) {
-              value.status = '审批';
-            }
-            return value;
-          });
-
-          this.state.data = newdata;
-        }
-        this.updateSelectDatas();
-        this.state.isLoadList = false;
-      }
-    }
-
-
-    if (addloading || deleteloading || upateloading || freezing||unfreeze) {
-      this.state.update = true;
-      if (upateloading) {
-        this.state.isUpdateFrom = true;
-      }
-
-
-    } else {
-      if (update) {
-        // console.log('rntCode=' + body.rtnCode);
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-        } else {
-          this.state.requestState = 'error';
-        }
-
-        this.state.requestMes = body.rtnMsg;
-        // console.log('result = ' + this.state.requestMes);
-        this.state.update = false;
-        this.state.done = true;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          // this.state.showItem = { ...current };
-        }
-      }
-
-    }
-
-
-
-
-
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-    if (this.state.done) {
-      if (this.state.requestState == 'success') {
-        message.success(this.state.requestMes);
-      } else {
-        message.error(this.state.requestMes);
-      }
-      this.handleDone();
-    }
-
-    const getModalContent = () => {
-      return (
-        <Form size={'small'} onSubmit={this.handleSubmit}>
-          <FormItem label="英文名称" {...this.formLayout}>
-            {getFieldDecorator('brandEnName', {
-              rules: [{ required: true, message: '请输入品牌编号' }],
-              initialValue: current.brandEnName,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem>
-          <FormItem label="中文名称" {...this.formLayout}>
-            {getFieldDecorator('brandZhName', {
-              rules: [{ message: '请输入中文名称' }],
-              initialValue: current.brandZhName,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem>
-        </Form>
-      );
-    };
-
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkbox',
-      onChange: this.onSelectChange,
-      onSelect: this.selectChange,
-    };
-
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-
-
-    return (
-      <GridContent>
-        <Row gutter={24} className={styles.row_content}>
-          <Col lg={16} md={24}>
-            <div className={styles.view_left_content}>
-              <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
-                <Icon
-                  style={{
-                    width: 50,
-                    height: 50,
-                    paddingRight: 10,
-                    paddingTop: 10,
-                    paddingLeft: 10,
-                  }}
-                  component={SvgUtil.diamond}
-                />
-                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌"/>
-              </div>
-              <Card bordered={false} loading={false}>
-                <Table
-                  loading={this.state.isLoading}
-                  pagination={paginationProps}
-                  dataSource={this.state.data}
-                  rowSelection={rowSelection}
-                  rowKey={record => record.id}
-                  bordered={false}
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickRowItem(record);
-                      },
-                    };
-                  }}
-                  rowClassName={this.onSelectRowClass}
-                  size="middle"
-                  columns={clientContentColumns}
-                />
-
-                <Modal
-                  title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}
-                  className={styles.standardListForm}
-                  width={640}
-                  bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
-                  destroyOnClose
-                  visible={this.state.visible}
-                  {...modalFooter}
-                >
-                  {getModalContent()}
-                </Modal>
-              </Card>
-            </div>
-          </Col>
-          <Col lg={8} md={24}>
-            <div className={styles.view_right_content}>
-              <Card bordered={false}>
-                <div>
-                  <span
-                    style={{
-                      marginBottom: 32,
-                      paddingLeft: 10,
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                      color: '#35B0F4',
-                    }}
-                  >
-                    品牌信息
-                  </span>
-                  <Divider/>
-                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
-                </div>
-              </Card>
-
-              {/*</Card>*/}
-              <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Button
-                    className={styles.buttomControl}
-                    type="primary"
-                    icon="plus"
-                    size={'small'}
-                    onClick={this.clickNewFrom}
-                  >
-                    新增
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    type="danger"
-                    icon="delete"
-                    size={'small'}
-                    disabled={isEdit || (showItem && showItem.status === '审批')}
-                  >
-                    删除
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    type="primary"
-                    size={'small'}
-                    onClick={this.clickEditFrom}
-                    disabled={isEdit || (showItem && showItem.status === '审批')}
-                    icon="edit"
-                  >
-                    编辑
-                  </Button>
-                  {showItem.status === '审批' ? (<Button
-                    className={styles.buttomControl}
-                    size={'small'}
-                    type="danger"
-                    icon="unlock"
-                    onClick={this.clickUnFreezeFrom}
-                    disabled={isEdit}
-                  >
-                    取消审批
-                  </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size={'small'}
-                    type="primary"
-                    icon="lock"
-                    onClick={this.clickFreezeFrom}
-                    disabled={isEdit}
-                  >
-                    审批
-                  </Button>)}
-
-                </div>
-              </Card>
-            </div>
-          </Col>
-        </Row>
-      </GridContent>
-    );
-  }
-
-
-
-  /***
+  /** *
    *
    * 通过最新列表更新选择的值
    * */
-  updateSelectDatas =()=>{
-
+  updateSelectDatas = () => {
     const { rowSelectedData, showItem } = this.state;
     // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
     if (rowSelectedData && rowSelectedData.length > 0) {
       const newRowSelected = this.state.data.filter(v => {
         const rs = rowSelectedData.filter(v1 => {
-          if (v1.id === v.id)
-            return v;
+          if (v1.id === v.id) return v;
         });
         if (rs.length > 0) return rs[0];
       });
@@ -467,8 +209,7 @@ class Brand extends Component {
 
     if (showItem && this.state.rowSelectedData) {
       const newShowItem = this.state.rowSelectedData.filter(v => {
-        if (showItem.id === v.id)
-          return v;
+        if (showItem.id === v.id) return v;
       });
       // console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
@@ -478,8 +219,7 @@ class Brand extends Component {
         });
       }
     }
-  }
-
+  };
 
   onSelectRowClass = (record, index) => {
     let color = '';
@@ -496,10 +236,10 @@ class Brand extends Component {
 
   clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let rowData = this.state.rowData;
+    let { rowData } = this.state;
     // const selects = selectedRowKeys ? selectedRowKeys : [];
-    const selects = selectedRowKeys ? selectedRowKeys : [];
-    const id = record.id;
+    const selects = selectedRowKeys || [];
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -642,10 +382,246 @@ class Brand extends Component {
           <Description term="品牌英文">{item.brandEnName}</Description>
           <Description term="品牌中文">{item.brandZhName}</Description>
         </DescriptionList>
-        {/* <Divider/>*/}
+        {/* <Divider/> */}
       </span>
     );
   };
+
+  render() {
+    const { addSuccessData, selectedRowKeys, current = {}, isEdit, update, showItem } = this.state;
+
+    const {
+      listLoading,
+      body = {},
+      dispatch,
+      addloading,
+      deleteloading,
+      upateloading,
+      freezing,
+      unfreeze,
+    } = this.props;
+
+    this.state.isLoading =
+      addloading || deleteloading || upateloading || freezing || listLoading || unfreeze;
+
+    if (listLoading) {
+      this.state.isLoadList = true;
+    } else if (this.state.isLoadList) {
+      if (body && body.data && body.data.length > 0) {
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
+
+        this.state.data = newdata;
+      }
+      this.updateSelectDatas();
+      this.state.isLoadList = false;
+    }
+
+    if (addloading || deleteloading || upateloading || freezing || unfreeze) {
+      this.state.update = true;
+      if (upateloading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else if (update) {
+      // console.log('rntCode=' + body.rtnCode);
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+      } else {
+        this.state.requestState = 'error';
+      }
+
+      this.state.requestMes = body.rtnMsg;
+      // console.log('result = ' + this.state.requestMes);
+      this.state.update = false;
+      this.state.done = true;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        // this.state.showItem = { ...current };
+      }
+    }
+    const modalFooter = this.state.done
+      ? { footer: null, onCancel: this.handleDone }
+      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+    if (this.state.done) {
+      if (this.state.requestState == 'success') {
+        message.success(this.state.requestMes);
+      } else {
+        message.error(this.state.requestMes);
+      }
+      this.handleDone();
+    }
+    const getModalContent = () => {
+      return (
+        <Form size="small" onSubmit={this.handleSubmit}>
+          <FormItem label="英文名称" {...this.formLayout}>
+            {getFieldDecorator('brandEnName', {
+              rules: [{ required: true, message: '请输入品牌编号' }],
+              initialValue: current.brandEnName,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="中文名称" {...this.formLayout}>
+            {getFieldDecorator('brandZhName', {
+              rules: [{ message: '请输入中文名称' }],
+              initialValue: current.brandZhName,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+        </Form>
+      );
+    };
+    const rowSelection = {
+      selectedRowKeys,
+      type: 'checkbox',
+      onChange: this.onSelectChange,
+      onSelect: this.selectChange,
+    };
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+
+    return (
+      <GridContent>
+        <Row gutter={24} className={styles.row_content}>
+          <Col lg={16} md={24}>
+            <div className={styles.view_left_content}>
+              <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
+                <Icon
+                  style={{
+                    width: 50,
+                    height: 50,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingLeft: 10,
+                  }}
+                  component={SvgUtil.diamond}
+                />
+                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
+              </div>
+              <Card bordered={false} loading={false}>
+                <Table
+                  loading={this.state.isLoading}
+                  pagination={paginationProps}
+                  dataSource={this.state.data}
+                  rowSelection={rowSelection}
+                  rowKey={record => record.id}
+                  bordered={false}
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowItem(record);
+                      },
+                    };
+                  }}
+                  rowClassName={this.onSelectRowClass}
+                  size="middle"
+                  columns={clientContentColumns}
+                />
+
+                <Modal
+                  title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}
+                  className={styles.standardListForm}
+                  width={640}
+                  bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
+                  destroyOnClose
+                  visible={this.state.visible}
+                  {...modalFooter}
+                >
+                  {getModalContent()}
+                </Modal>
+              </Card>
+            </div>
+          </Col>
+          <Col lg={8} md={24}>
+            <div className={styles.view_right_content}>
+              <Card bordered={false}>
+                <div>
+                  <span
+                    style={{
+                      marginBottom: 32,
+                      paddingLeft: 10,
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#35B0F4',
+                    }}
+                  >
+                    品牌信息
+                  </span>
+                  <Divider />
+                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+                </div>
+              </Card>
+
+              {/* </Card> */}
+              <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    icon="plus"
+                    size="small"
+                    onClick={this.clickNewFrom}
+                  >
+                    新增
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="danger"
+                    icon="delete"
+                    size="small"
+                    disabled={isEdit || (showItem && showItem.status === '审批')}
+                  >
+                    删除
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    size="small"
+                    onClick={this.clickEditFrom}
+                    disabled={isEdit || (showItem && showItem.status === '审批')}
+                    icon="edit"
+                  >
+                    编辑
+                  </Button>
+                  {showItem.status === '审批' ? (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="danger"
+                      icon="unlock"
+                      onClick={this.clickUnFreezeFrom}
+                      disabled={isEdit}
+                    >
+                      取消审批
+                    </Button>
+                  ) : (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      onClick={this.clickFreezeFrom}
+                      disabled={isEdit}
+                    >
+                      审批
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </Col>
+        </Row>
+      </GridContent>
+    );
+  }
 }
 
 export default Brand;

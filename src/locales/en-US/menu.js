@@ -42,4 +42,15 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
+
+  'menu.dev': 'development',
+  'menu.dev.Client': 'Client',
+  'menu.dev.Basic': 'Basic',
+  'menu.dev.Deliver': 'Deliver',
+  'menu.dev.Product': 'Product',
+  'menu.dev.Proform Invoice': 'Proform Invoice',
+  'menu.dev.Quote': 'Quote',
+  'menu.dev.Receiving': 'Receiving',
+  'menu.dev.Specimen': 'Specimen',
+  'menu.dev.Report': 'Report',
 };

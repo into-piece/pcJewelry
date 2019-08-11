@@ -117,11 +117,13 @@ export default class BaseMenu extends PureComponent {
     }
     return `/${path || ''}`.replace(/\/+/g, '/');
   };
+
   handleClick = e => {
-    //点击左侧菜单
+    // 点击左侧菜单
     const { onHandlePage } = this.props;
     onHandlePage(e);
   };
+
   render() {
     const {
       openKeys,

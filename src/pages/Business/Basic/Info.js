@@ -7,7 +7,7 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Basic.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import SvgUtil from './../../../utils/SvgUtil';
+import SvgUtil from '../../../utils/SvgUtil';
 import Brand from './Brand';
 import RingNum from './RingNum';
 import Requested from './Requested';
@@ -79,13 +79,12 @@ class Info extends Component {
   };
 
   getMenuIcon = key => {
-    const { ring, euro, delivery, award, percentage, diamond } = SvgUtil;
-    if (key === 'ring') return ring;
-    else if (key === 'brand') return diamond;
-    else if (key === 'requested') return award;
-    else if (key === 'sendWay') return delivery;
-    else if (key === 'royalty') return percentage;
-    else if (key === 'currency') return euro;
+    // if (key === 'ring') return ring;
+    // else if (key === 'brand') return diamond;
+    // else if (key === 'requested') return award;
+    // else if (key === 'sendWay') return delivery;
+    // else if (key === 'royalty') return percentage;
+    // else if (key === 'currency') return euro;
   };
 
   selectKey = ({ key }) => {
@@ -114,7 +113,7 @@ class Info extends Component {
 
     const { mode: currentMode } = this.state;
 
-    let mode = 'inline';
+    const mode = 'inline';
     const { offsetWidth } = this.main;
 
     if (mode !== currentMode) {
@@ -141,7 +140,7 @@ class Info extends Component {
           </Breadcrumb>
         </div>
         <div className={styles.center_content}>
-          {/*lg={17} md={24}*/}
+          {/* lg={17} md={24} */}
           <div className={styles.main}>
             <div
               className={styles.leftmenu}
@@ -160,7 +159,7 @@ class Info extends Component {
     );
   }
 
-  /* <Card bordered={false} style={{ minHeight: window.innerHeight, marginBottom: 24,padding:0 }} loading={false}>*/
+  /* <Card bordered={false} style={{ minHeight: window.innerHeight, marginBottom: 24,padding:0 }} loading={false}> */
 }
 
 export default Info;

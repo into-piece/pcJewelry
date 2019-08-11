@@ -6,7 +6,7 @@ import { Menu, Card, Row, Col, Icon } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './Info.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import SvgUtil from './../../../utils/SvgUtil';
+import SvgUtil from '../../../utils/SvgUtil';
 
 const { Item } = Menu;
 
@@ -86,9 +86,9 @@ class Info extends Component {
   getMenuIcon = key => {
     const { ring, euro, delivery, award, percentage } = SvgUtil;
     if (key === 'ring') return ring;
-    else if (key === 'brand') return award;
-    else if (key === 'requested') return delivery;
-    else if (key === 'sendWay') return delivery;
+    if (key === 'brand') return award;
+    if (key === 'requested') return delivery;
+    if (key === 'sendWay') return delivery;
     else if (key === 'royalty') return percentage;
     else if (key === 'currency') return euro;
   };
@@ -123,6 +123,22 @@ class Info extends Component {
     }
   };
 
+  _getSubChildRen = () => {
+    const { children } = this.props;
+    if (children) {
+      console.log('is true children');
+      if (children.props) {
+        console.log('is true children props');
+        if (children.props.children) {
+          console.log(`is true children props children${children.props.children}`);
+          return children.props.children;
+        }
+      }
+    }
+
+    return children;
+  };
+
   render() {
     const { children, currentUser } = this.props;
     if (!currentUser.userid) {
@@ -132,7 +148,7 @@ class Info extends Component {
     const { mode, selectKey } = this.state;
     return (
       <PageHeaderWrapper title="基础数据">
-        {/*lg={17} md={24}*/}
+        {/* lg={17} md={24} */}
         <div className={styles.main}>
           <div
             className={styles.leftmenu}
@@ -140,7 +156,7 @@ class Info extends Component {
               this.main = ref;
             }}
           >
-            <Menu mode={mode} selectedKeys={[selectKey]} size={'small'} onClick={this.selectKey}>
+            <Menu mode={mode} selectedKeys={[selectKey]} size="small" onClick={this.selectKey}>
               {this.getmenu()}
             </Menu>
           </div>
@@ -149,24 +165,7 @@ class Info extends Component {
       </PageHeaderWrapper>
     );
   }
-
-  _getSubChildRen = () => {
-    const { children } = this.props;
-    if (children) {
-      console.log('is true children');
-      if (children.props) {
-        console.log('is true children props');
-        if (children.props.children) {
-          console.log('is true children props children' + children.props.children);
-          return children.props.children;
-        }
-      }
-    }
-
-    return children;
-  };
-
-  /* <Card bordered={false} style={{ minHeight: window.innerHeight, marginBottom: 24,padding:0 }} loading={false}>*/
+  /* <Card bordered={false} style={{ minHeight: window.innerHeight, marginBottom: 24,padding:0 }} loading={false}> */
 }
 
 export default Info;

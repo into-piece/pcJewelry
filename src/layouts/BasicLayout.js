@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Layout, Menu, Tabs, Dropdown, Icon } from 'antd';
 import router from 'umi/router';
 import DocumentTitle from 'react-document-title';
-import { Route } from 'react-router-dom';
+// import { Route } from 'react-router-dom';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
@@ -11,8 +11,8 @@ import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
 import Media from 'react-media';
 import logo from '../assets/logo_img.png';
-import Footer from './Footer';
-import Authorized from '@/utils/Authorized';
+// import Footer from './Footer';
+// import Authorized from '@/utils/Authorized';
 import Header from './Header';
 import Context from './MenuContext';
 import SiderMenu from '@/components/SiderMenu';
@@ -53,13 +53,13 @@ const query = {
 class BasicLayout extends React.Component {
   constructor(props) {
     super(props);
-    const { routes } = props.route,
-      routeKey = '/business/client',
-      tabName = '客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    const { routes } = props.route;
+    const routeKey = '/business/client';
+    const tabName = '客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabLists = this.updateTree(routes);
-    let tabList = [],
-      tabListArr = [];
-    tabLists.map(v => {
+    const tabList = [];
+    const tabListArr = [];
+    tabLists.forEach(v => {
       if (v.key === routeKey) {
         if (tabList.length === 0) {
           v.closable = false;
@@ -71,9 +71,9 @@ class BasicLayout extends React.Component {
         tabListArr.push(v.key);
       }
     });
-    //获取所有已存在key值
+    // 获取所有已存在key值
     this.state = {
-      tabList: tabList,
+      tabList,
       tabListKey: [routeKey],
       activeKey: routeKey,
       tabListArr,
@@ -100,32 +100,6 @@ class BasicLayout extends React.Component {
       payload: { routes, path, authority },
     });
   }
-
-  updateTree = data => {
-    const treeData = data;
-    const treeList = [];
-    // 递归获取树列表
-    const getTreeList = data => {
-      data.forEach(node => {
-        if (!node.level) {
-          treeList.push({
-            icon: node.icon,
-            tab: node.name,
-            key: node.path,
-            locale: node.locale,
-            closable: true,
-            content: node.component,
-          });
-        }
-        if (node.routes && node.routes.length > 0) {
-          //!node.hideChildrenInMenu &&
-          getTreeList(node.routes);
-        }
-      });
-    };
-    getTreeList(treeData);
-    return treeList;
-  };
 
   componentDidUpdate(preProps) {
     // After changing to phone mode,
@@ -210,9 +184,9 @@ class BasicLayout extends React.Component {
   };
 
   onHandlePage = e => {
-    //点击左侧菜单
-    let { menuData } = this.props,
-      { key } = e;
+    // 点击左侧菜单
+    const { menuData } = this.props;
+    let { key } = e;
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;
     if (tabListArr.includes(key)) {
@@ -232,13 +206,11 @@ class BasicLayout extends React.Component {
           this.setState({
             tabList: [...tabList, v],
           });
-        } else {
-          if (!tabListKey.includes(v.key)) {
-            this.setState({
-              tabList: [...tabList, v],
-              tabListKey: [...tabListKey, v.key],
-            });
-          }
+        } else if (!tabListKey.includes(v.key)) {
+          this.setState({
+            tabList: [...tabList, v],
+            tabListKey: [...tabListKey, v.key],
+          });
         }
       }
     });
@@ -265,8 +237,8 @@ class BasicLayout extends React.Component {
         lastIndex = i - 1;
       }
     });
-    const tabList = [],
-      tabListKey = [];
+    const tabList = [];
+    const tabListKey = [];
     this.state.tabList.map(pane => {
       if (pane.key !== targetKey) {
         tabList.push(pane);
@@ -297,8 +269,34 @@ class BasicLayout extends React.Component {
           });
         }
         if (node.children && node.children.length > 0) {
-          //!node.hideChildrenInMenu &&
+          //! node.hideChildrenInMenu &&
           getTreeList(node.children);
+        }
+      });
+    };
+    getTreeList(treeData);
+    return treeList;
+  };
+
+  updateTree = data => {
+    const treeData = data;
+    const treeList = [];
+    // 递归获取树列表
+    const getTreeList = data => {
+      data.forEach(node => {
+        if (!node.level) {
+          treeList.push({
+            icon: node.icon,
+            tab: node.name,
+            key: node.path,
+            locale: node.locale,
+            closable: true,
+            content: node.component,
+          });
+        }
+        if (node.routes && node.routes.length > 0) {
+          //! node.hideChildrenInMenu &&
+          getTreeList(node.routes);
         }
       });
     };
@@ -308,8 +306,8 @@ class BasicLayout extends React.Component {
 
   onClickHover = e => {
     // message.info(`Click on item ${key}`);
-    let { key } = e,
-      { activeKey, tabList, tabListKey, routeKey } = this.state;
+    const { key } = e;
+    let { activeKey, tabList, tabListKey, routeKey } = this.state;
 
     if (key === '1') {
       tabList = tabList.filter(v => v.key !== activeKey || v.key === routeKey);
@@ -353,7 +351,7 @@ class BasicLayout extends React.Component {
     } = this.props;
 
     const isTop = PropsLayout === 'topmenu';
-    let { activeKey, routeKey } = this.state;
+    const { activeKey, routeKey, tabList } = this.state;
     if (pathname === '/') {
       // router.push(routeKey)
       activeKey = routeKey;
@@ -404,40 +402,40 @@ class BasicLayout extends React.Component {
             isMobile={isMobile}
           />
           <Content className={styles.content} style={contentStyle}>
-            {hidenAntTabs ? (
-              { children }
-            ) : this.state.tabList && this.state.tabList.length ? (
-              <Tabs
-                // className={styles.tabs}
-                activeKey={activeKey}
-                onChange={this.onChange}
-                hideAdd
-                type="editable-card"
-                onEdit={this.onEdit}
-              >
-                {this.state.tabList.map(item => (
-                  <TabPane
-                    tab={
-                      <span>
-                        <Icon type={item.icon} />
-
-                        {item.tab}
-                      </span>
-                    }
-                    key={item.key}
-                    closable={item.closable}
-                  >
-                    {/*{item.content}*/}
-                    <Route
+            {hidenAntTabs
+              ? children
+              : tabList &&
+              tabList.length && (
+                <Tabs
+                  // className={styles.tabs}
+                  activeKey={activeKey}
+                  onChange={this.onChange}
+                  hideAdd
+                  type="editable-card"
+                  onEdit={this.onEdit}
+                >
+                  {tabList.map(item => (
+                    <TabPane
+                      tab={
+                        <span>
+                          <Icon type={item.icon} />
+                          {item.tab}
+                        </span>
+                      }
                       key={item.key}
-                      path={item.path}
-                      component={item.content}
-                      exact={item.exact}
-                    />
-                  </TabPane>
-                ))}
-              </Tabs>
-            ) : null}
+                      closable={item.closable}
+                    >
+                      {/* {item.content} */}
+                      <Route
+                        key={item.key}
+                        path={item.path}
+                        component={item.content}
+                        exact={item.exact}
+                      />
+                    </TabPane>
+                  ))}
+                </Tabs>
+              )}
           </Content>
         </Layout>
       </Layout>
