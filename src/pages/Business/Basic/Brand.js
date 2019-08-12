@@ -18,7 +18,7 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './brand.less';
-import { diamond } from '@/utils/SvgUtil';
+import { brand as Brand } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
@@ -68,7 +68,7 @@ const paginationProps = {
   };
 })
 @Form.create()
-class Brand extends Component {
+class BrandCompoenet extends Component {
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -314,7 +314,7 @@ class Brand extends Component {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={diamond}
+                  component={Brand}
                 />
                 <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
               </div>
@@ -413,16 +413,16 @@ class Brand extends Component {
                     disabled={isEdit}
                   >
                     取消审批
-                                               </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={this.clickFreezeFrom}
-                    disabled={isEdit}
-                  >
+                  </Button>) : (<Button
+                                                 className={styles.buttomControl}
+                                                 size="small"
+                                                 type="primary"
+                                                 icon="lock"
+                                                 onClick={this.clickFreezeFrom}
+                                                 disabled={isEdit}
+                                               >
                       审批
-                  </Button>)}
+                                               </Button>)}
 
                 </div>
               </Card>
@@ -753,7 +753,7 @@ class Brand extends Component {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={diamond}
+                  component={Brand}
                 />
                 <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
               </div>
@@ -875,4 +875,4 @@ class Brand extends Component {
   }
 }
 
-export default Brand;
+export default BrandCompoenet;

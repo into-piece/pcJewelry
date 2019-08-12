@@ -14,13 +14,13 @@ import {
   Divider,
   message,
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
+import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import { award } from '@/utils/SvgUtil';
+import { requested as Requested } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import Result from '@/components/Result';
-import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 
 const FormItem = Form.Item;
@@ -64,7 +64,7 @@ const { Description } = DescriptionList;
   };
 })
 @Form.create()
-class Requested extends PureComponent {
+class RequestedComponent extends PureComponent {
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -190,47 +190,43 @@ class Requested extends PureComponent {
       if (upateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-        } else {
-          this.state.requestState = 'error';
-        }
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+      } else {
+        this.state.requestState = 'error';
+      }
 
-        this.state.requestMes = body.rtnMsg;
-        this.state.update = false;
-        this.state.done = true;
-        // this.state.visible = true;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          // this.state.showItem = { ...current };
-        }
+      this.state.requestMes = body.rtnMsg;
+      this.state.update = false;
+      this.state.done = true;
+      // this.state.visible = true;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        // this.state.showItem = { ...current };
       }
     }
 
     if (listLoading) {
       this.state.isLoadList = true;
-    } else {
-      if (this.state.isLoadList) {
-        if (body && body.data && body.data.length > 0) {
-          const newdata = body.data.map(value => {
-            const s = value.status;
-            if (s == 0) {
-              value.status = '输入';
-            } else if (s == 1) {
-              value.status = '使用中';
-            } else if (s == 2) {
-              value.status = '审批';
-            }
-            return value;
-          });
+    } else if (this.state.isLoadList) {
+      if (body && body.data && body.data.length > 0) {
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
 
-          this.state.data = newdata;
-        }
-        this.updateSelectDatas();
-        this.state.isLoadList = false;
+        this.state.data = newdata;
       }
+      this.updateSelectDatas();
+      this.state.isLoadList = false;
     }
 
 
@@ -254,7 +250,7 @@ class Requested extends PureComponent {
     const getModalContent = () => {
 
       return (
-        <Form size={'small'} onSubmit={this.handleSubmit}>
+        <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="品质要求英文名称" {...this.formLayout}>
             {getFieldDecorator('qualityEnName', {
               rules: [{ required: true, message: '请输入英文名称' }],
@@ -289,7 +285,7 @@ class Requested extends PureComponent {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={award}
+                  component={Requested}
                 />
                 <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
               </div>
@@ -353,7 +349,7 @@ class Requested extends PureComponent {
                     className={styles.buttomControl}
                     type="primary"
                     icon="plus"
-                    size={'small'}
+                    size="small"
                     onClick={this.clickNewFrom}
                   >
                     新增
@@ -362,7 +358,7 @@ class Requested extends PureComponent {
                     className={styles.buttomControl}
                     type="danger"
                     icon="delete"
-                    size={'small'}
+                    size="small"
                     onClick={this.clickDeleteFrom}
                     disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                   >
@@ -371,7 +367,7 @@ class Requested extends PureComponent {
                   <Button
                     className={styles.buttomControl}
                     type="primary"
-                    size={'small'}
+                    size="small"
                     onClick={this.clickEditFrom}
                     disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                     icon="edit"
@@ -380,23 +376,23 @@ class Requested extends PureComponent {
                   </Button>
                   {this.state.showItem.status === '审批' ? (<Button
                     className={styles.buttomControl}
-                    size={'small'}
+                    size="small"
                     type="danger"
                     icon="unlock"
                     onClick={this.clickUnFreezeFrom}
                     disabled={isEdit}
                   >
                     取消审批
-                  </Button>) : (<Button
-                      className={styles.buttomControl}
-                      size={'small'}
-                      type="primary"
-                      icon="lock"
-                      onClick={this.clickFreezeFrom}
-                      disabled={isEdit}
-                    >
+                                                          </Button>) : (<Button
+                    className={styles.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    onClick={this.clickFreezeFrom}
+                    disabled={isEdit}
+                  >
                       审批
-                  </Button>)}
+                                </Button>)}
                 </div>
               </Card>
             </div>
@@ -417,7 +413,7 @@ class Requested extends PureComponent {
     // return index == this.state.selectIndexAt ? styles.row_select :"";
   };
 
-  /***
+  /** *
    *
    *
    * 通过最新列表更新选择的值
@@ -499,9 +495,9 @@ class Requested extends PureComponent {
 
   clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let rowData = this.state.rowData;
-    const selects = selectedRowKeys ? selectedRowKeys : [];
-    const id = record.id;
+    let { rowData } = this.state;
+    const selects = selectedRowKeys || [];
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -608,10 +604,10 @@ class Requested extends PureComponent {
           <Description term="品质要求英文名">{item.qualityEnName}</Description>
           <Description term="状态">{item.status}</Description>
         </DescriptionList>
-        {/* <Divider/>*/}
+        {/* <Divider/> */}
       </span>
     );
   };
 }
 
-export default Requested;
+export default RequestedComponent;

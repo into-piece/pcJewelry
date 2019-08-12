@@ -32,13 +32,14 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import(
-                  /* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js'
-                ).then(m => {
-                  return { namespace: 'register', ...m.default };
-                }),
+                import(/* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js').then(
+                  m => {
+                    return { namespace: 'register', ...m.default };
+                  },
+                ),
               ],
-              component: () => import(/* webpackChunkName: "p__User__Login" */ '../User/Login'),
+              component: () =>
+                import(/* webpackChunkName: "p__User__Login" */ '../User/Login'),
               LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
@@ -52,11 +53,11 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import(
-                  /* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js'
-                ).then(m => {
-                  return { namespace: 'register', ...m.default };
-                }),
+                import(/* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js').then(
+                  m => {
+                    return { namespace: 'register', ...m.default };
+                  },
+                ),
               ],
               component: () =>
                 import(/* webpackChunkName: "p__User__Register" */ '../User/Register'),
@@ -73,11 +74,11 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import(
-                  /* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js'
-                ).then(m => {
-                  return { namespace: 'register', ...m.default };
-                }),
+                import(/* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js').then(
+                  m => {
+                    return { namespace: 'register', ...m.default };
+                  },
+                ),
               ],
               component: () =>
                 import(/* webpackChunkName: "p__User__RegisterResult" */ '../User/RegisterResult'),
@@ -90,7 +91,8 @@ const routes = [
       {
         component: __IS_BROWSER
           ? _dvaDynamic({
-              component: () => import(/* webpackChunkName: "p__404" */ '../404'),
+              component: () =>
+                import(/* webpackChunkName: "p__404" */ '../404'),
               LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
@@ -102,7 +104,7 @@ const routes = [
           React.createElement(
             require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
-            { pagesPath: 'src/pages', hasRoutesInConfig: true }
+            { pagesPath: 'src/pages', hasRoutesInConfig: true },
           ),
       },
     ],
@@ -142,56 +144,54 @@ const routes = [
               ? _dvaDynamic({
                   app: require('@tmp/dva').getApp(),
                   models: () => [
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                    ).then(m => {
-                      return { namespace: 'city', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                    ).then(m => {
-                      return { namespace: 'client', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                    ).then(m => {
-                      return { namespace: 'customer', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                    ).then(m => {
-                      return { namespace: 'dict', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                    ).then(m => {
-                      return { namespace: 'geographic', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                    ).then(m => {
-                      return { namespace: 'maintainer', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                    ).then(m => {
-                      return { namespace: 'mark', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                    ).then(m => {
-                      return { namespace: 'package', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                    ).then(m => {
-                      return { namespace: 'terminal', ...m.default };
-                    }),
+                    import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                      m => {
+                        return { namespace: 'city', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                      m => {
+                        return { namespace: 'client', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                      m => {
+                        return { namespace: 'customer', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                      m => {
+                        return { namespace: 'dict', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                      m => {
+                        return { namespace: 'geographic', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                      m => {
+                        return { namespace: 'maintainer', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                      m => {
+                        return { namespace: 'mark', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                      m => {
+                        return { namespace: 'package', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                      m => {
+                        return { namespace: 'terminal', ...m.default };
+                      },
+                    ),
                   ],
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/ClientView'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/ClientView'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -208,56 +208,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/EmptyView'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/EmptyView'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -270,56 +268,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/ClientInfo'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/ClientInfo'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -332,56 +328,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/TerminalClient'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/TerminalClient'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -394,56 +388,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/Product'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/Product'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -456,56 +448,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/Mark'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/Mark'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -518,56 +508,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/PackageInfo'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/PackageInfo'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -580,56 +568,54 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js'
-                        ).then(m => {
-                          return { namespace: 'city', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js'
-                        ).then(m => {
-                          return { namespace: 'client', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js'
-                        ).then(m => {
-                          return { namespace: 'customer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js'
-                        ).then(m => {
-                          return { namespace: 'dict', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js'
-                        ).then(m => {
-                          return { namespace: 'geographic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js'
-                        ).then(m => {
-                          return { namespace: 'maintainer', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js'
-                        ).then(m => {
-                          return { namespace: 'mark', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js'
-                        ).then(m => {
-                          return { namespace: 'package', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js'
-                        ).then(m => {
-                          return { namespace: 'terminal', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Client__models__city.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/city.js').then(
+                          m => {
+                            return { namespace: 'city', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__client.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/client.js').then(
+                          m => {
+                            return { namespace: 'client', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__customer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/customer.js').then(
+                          m => {
+                            return { namespace: 'customer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__dict.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/dict.js').then(
+                          m => {
+                            return { namespace: 'dict', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__geographic.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/geographic.js').then(
+                          m => {
+                            return { namespace: 'geographic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__maintainer.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/maintainer.js').then(
+                          m => {
+                            return { namespace: 'maintainer', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__mark.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/mark.js').then(
+                          m => {
+                            return { namespace: 'mark', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__package.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/package.js').then(
+                          m => {
+                            return { namespace: 'package', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Client__models__terminal.js' */ 'D:/workplace/jewelry/src/pages/Business/Client/models/terminal.js').then(
+                          m => {
+                            return { namespace: 'terminal', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/History'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Client__ClientView" */ '../Business/Client/History'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -641,7 +627,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -654,46 +640,44 @@ const routes = [
               ? _dvaDynamic({
                   app: require('@tmp/dva').getApp(),
                   models: () => [
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                    ).then(m => {
-                      return { namespace: 'basic', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                    ).then(m => {
-                      return { namespace: 'currency', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                    ).then(m => {
-                      return { namespace: 'requested', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                    ).then(m => {
-                      return { namespace: 'ringnum', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                    ).then(m => {
-                      return { namespace: 'ringnum2', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                    ).then(m => {
-                      return { namespace: 'royalty', ...m.default };
-                    }),
-                    import(
-                      /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                    ).then(m => {
-                      return { namespace: 'sendway', ...m.default };
-                    }),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                      m => {
+                        return { namespace: 'basic', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                      m => {
+                        return { namespace: 'currency', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                      m => {
+                        return { namespace: 'requested', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                      m => {
+                        return { namespace: 'ringnum', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                      m => {
+                        return { namespace: 'ringnum2', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                      m => {
+                        return { namespace: 'royalty', ...m.default };
+                      },
+                    ),
+                    import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                      m => {
+                        return { namespace: 'sendway', ...m.default };
+                      },
+                    ),
                   ],
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Info'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Info'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -710,46 +694,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Brand'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Brand'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -762,46 +744,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/SecurityView'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/SecurityView'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -814,46 +794,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/BindingView'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/BindingView'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -866,46 +844,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/NotificationView'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/NotificationView'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -918,46 +894,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Brand'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Brand'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -973,7 +947,7 @@ const routes = [
                       React.createElement(
                         require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                           .default,
-                        { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                        { pagesPath: 'src/pages', hasRoutesInConfig: true },
                       ),
                   },
                 ],
@@ -984,46 +958,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Requested'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Requested'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -1036,46 +1008,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/SendWay'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/SendWay'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -1088,46 +1058,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Royalty'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Royalty'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -1140,46 +1108,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/RingNum'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/RingNum'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -1192,46 +1158,44 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js'
-                        ).then(m => {
-                          return { namespace: 'basic', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js'
-                        ).then(m => {
-                          return { namespace: 'currency', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js'
-                        ).then(m => {
-                          return { namespace: 'requested', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js'
-                        ).then(m => {
-                          return { namespace: 'ringnum2', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js'
-                        ).then(m => {
-                          return { namespace: 'royalty', ...m.default };
-                        }),
-                        import(
-                          /* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js'
-                        ).then(m => {
-                          return { namespace: 'sendway', ...m.default };
-                        }),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__basic.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/basic.js').then(
+                          m => {
+                            return { namespace: 'basic', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__currency.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/currency.js').then(
+                          m => {
+                            return { namespace: 'currency', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__requested.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/requested.js').then(
+                          m => {
+                            return { namespace: 'requested', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum.js').then(
+                          m => {
+                            return { namespace: 'ringnum', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__ringnum2.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/ringnum2.js').then(
+                          m => {
+                            return { namespace: 'ringnum2', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__royalty.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/royalty.js').then(
+                          m => {
+                            return { namespace: 'royalty', ...m.default };
+                          },
+                        ),
+                        import(/* webpackChunkName: 'p__Business__Basic__models__sendway.js' */ 'D:/workplace/jewelry/src/pages/Business/Basic/models/sendway.js').then(
+                          m => {
+                            return { namespace: 'sendway', ...m.default };
+                          },
+                        ),
                       ],
                       component: () =>
-                        import(
-                          /* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Currency'
-                        ),
+                        import(/* webpackChunkName: "p__Business__Basic__Info" */ '../Business/Basic/Currency'),
                       LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                         .default,
                     })
@@ -1243,7 +1207,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1256,16 +1220,14 @@ const routes = [
               ? _dvaDynamic({
                   app: require('@tmp/dva').getApp(),
                   models: () => [
-                    import(
-                      /* webpackChunkName: 'p__Business__Product__models__product.js' */ 'D:/workplace/jewelry/src/pages/Business/Product/models/product.js'
-                    ).then(m => {
-                      return { namespace: 'product', ...m.default };
-                    }),
+                    import(/* webpackChunkName: 'p__Business__Product__models__product.js' */ 'D:/workplace/jewelry/src/pages/Business/Product/models/product.js').then(
+                      m => {
+                        return { namespace: 'product', ...m.default };
+                      },
+                    ),
                   ],
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Product__ProductInfo" */ '../Business/Product/ProductInfo'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Product__ProductInfo" */ '../Business/Product/ProductInfo'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1276,7 +1238,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1289,16 +1251,14 @@ const routes = [
               ? _dvaDynamic({
                   app: require('@tmp/dva').getApp(),
                   models: () => [
-                    import(
-                      /* webpackChunkName: 'p__Business__Specimen__models__specimen.js' */ 'D:/workplace/jewelry/src/pages/Business/Specimen/models/specimen.js'
-                    ).then(m => {
-                      return { namespace: 'specimen', ...m.default };
-                    }),
+                    import(/* webpackChunkName: 'p__Business__Specimen__models__specimen.js' */ 'D:/workplace/jewelry/src/pages/Business/Specimen/models/specimen.js').then(
+                      m => {
+                        return { namespace: 'specimen', ...m.default };
+                      },
+                    ),
                   ],
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Specimen__Specimen" */ '../Business/Specimen/Specimen'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Specimen__Specimen" */ '../Business/Specimen/Specimen'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1309,7 +1269,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1321,9 +1281,7 @@ const routes = [
             component: __IS_BROWSER
               ? _dvaDynamic({
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Quote__Quote" */ '../Business/Quote/Quote'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Quote__Quote" */ '../Business/Quote/Quote'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1334,7 +1292,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1346,9 +1304,7 @@ const routes = [
             component: __IS_BROWSER
               ? _dvaDynamic({
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Proforminvoice__Proforminvoice" */ '../Business/Proforminvoice/Proforminvoice'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Proforminvoice__Proforminvoice" */ '../Business/Proforminvoice/Proforminvoice'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1359,7 +1315,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1371,9 +1327,7 @@ const routes = [
             component: __IS_BROWSER
               ? _dvaDynamic({
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Deliver__Deliver" */ '../Business/Deliver/Deliver'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Deliver__Deliver" */ '../Business/Deliver/Deliver'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1384,7 +1338,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1396,9 +1350,7 @@ const routes = [
             component: __IS_BROWSER
               ? _dvaDynamic({
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Receiving__Receiving" */ '../Business/Receiving/Receiving'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Receiving__Receiving" */ '../Business/Receiving/Receiving'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1409,7 +1361,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1421,9 +1373,7 @@ const routes = [
             component: __IS_BROWSER
               ? _dvaDynamic({
                   component: () =>
-                    import(
-                      /* webpackChunkName: "p__Business__Report__Report" */ '../Business/Report/Report'
-                    ),
+                    import(/* webpackChunkName: "p__Business__Report__Report" */ '../Business/Report/Report'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1434,7 +1384,7 @@ const routes = [
                   React.createElement(
                     require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                       .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
                   ),
               },
             ],
@@ -1444,7 +1394,7 @@ const routes = [
               React.createElement(
                 require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                   .default,
-                { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                { pagesPath: 'src/pages', hasRoutesInConfig: true },
               ),
           },
         ],
@@ -1460,7 +1410,8 @@ const routes = [
             icon: 'bulb',
             component: __IS_BROWSER
               ? _dvaDynamic({
-                  component: () => import(/* webpackChunkName: "p__dev__Basic" */ '../dev/Basic'),
+                  component: () =>
+                    import(/* webpackChunkName: "p__dev__Basic" */ '../dev/Basic'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
@@ -1472,7 +1423,7 @@ const routes = [
               React.createElement(
                 require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                   .default,
-                { pagesPath: 'src/pages', hasRoutesInConfig: true }
+                { pagesPath: 'src/pages', hasRoutesInConfig: true },
               ),
           },
         ],
@@ -1480,7 +1431,8 @@ const routes = [
       {
         component: __IS_BROWSER
           ? _dvaDynamic({
-              component: () => import(/* webpackChunkName: "p__404" */ '../404'),
+              component: () =>
+                import(/* webpackChunkName: "p__404" */ '../404'),
               LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
@@ -1492,7 +1444,7 @@ const routes = [
           React.createElement(
             require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
-            { pagesPath: 'src/pages', hasRoutesInConfig: true }
+            { pagesPath: 'src/pages', hasRoutesInConfig: true },
           ),
       },
     ],
@@ -1502,7 +1454,7 @@ const routes = [
       React.createElement(
         require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
           .default,
-        { pagesPath: 'src/pages', hasRoutesInConfig: true }
+        { pagesPath: 'src/pages', hasRoutesInConfig: true },
       ),
   },
 ];
