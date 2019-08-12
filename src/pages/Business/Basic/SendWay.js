@@ -14,12 +14,12 @@ import {
   message,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import { requested } from '@/utils/SvgUtil';
+import { sendWay } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
-import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 
 const FormItem = Form.Item;
@@ -63,7 +63,7 @@ const { Description } = DescriptionList;
   };
 })
 @Form.create()
-class Requested extends PureComponent {
+class SendWay extends PureComponent {
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -189,45 +189,45 @@ class Requested extends PureComponent {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
-        // console.log('rntCode=' + body.rtnCode);
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-        } else {
-          this.state.requestState = 'error';
-        }
-
-        this.state.requestMes = body.rtnMsg;
-        this.state.update = false;
-        this.state.done = true;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          // this.state.showItem = { ...current };
-          // console.log(" update result ",this.state.showItem)
-
-        }
+      // console.log('rntCode=' + body.rtnCode);
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+      } else {
+        this.state.requestState = 'error';
       }
+
+      this.state.requestMes = body.rtnMsg;
+      this.state.update = false;
+      this.state.done = true;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        // this.state.showItem = { ...current };
+        // console.log(" update result ",this.state.showItem)
+
+      }
+    }
 
     if (listLoading) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
-        if (body && body.data && body.data.length > 0) {
-          const newdata = body.data.map(value => {
-            const s = value.status;
-            if (s == 0) {
-              value.status = '输入';
-            } else if (s == 1) {
-              value.status = '使用中';
-            } else if (s == 2) {
-              value.status = '审批';
-            }
-            return value;
-          });
+      if (body && body.data && body.data.length > 0) {
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
 
-          this.state.data = newdata;
-        }
-        this.updateSelectDatas();
-        this.state.isLoadList = false;
+        this.state.data = newdata;
       }
+      this.updateSelectDatas();
+      this.state.isLoadList = false;
+    }
 
     if (this.state.done) {
       if (this.state.requestState == 'success') {
@@ -284,7 +284,7 @@ class Requested extends PureComponent {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={requested}
+                  component={sendWay}
                 />
                 <FormattedMessage id="app.basic.menuMap.way" defaultMessage="配送方式" />
               </div>
@@ -382,16 +382,16 @@ class Requested extends PureComponent {
                     disabled={isEdit}
                   >
                     取消审批
-                                                          </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={this.clickFreezeFrom}
-                    disabled={isEdit}
-                  >
+                  </Button>) : (<Button
+                                                            className={styles.buttomControl}
+                                                            size="small"
+                                                            type="primary"
+                                                            icon="lock"
+                                                            onClick={this.clickFreezeFrom}
+                                                            disabled={isEdit}
+                                                          >
                       审批
-                                </Button>)}
+                                                                        </Button>)}
                 </div>
               </Card>
             </div>
@@ -502,9 +502,9 @@ class Requested extends PureComponent {
 
   clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let {rowData} = this.state;
+    let { rowData } = this.state;
     const selects = selectedRowKeys || [];
-    const {id} = record;
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -611,4 +611,4 @@ class Requested extends PureComponent {
   };
 }
 
-export default Requested;
+export default SendWay;

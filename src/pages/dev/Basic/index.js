@@ -1,13 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Breadcrumb, Row, Col, Card, Button, Modal, Form, Input } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import { measureUnit, lockTag } from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
+import Bread from '@/components/BreadCrumb'
 
+// 面包屑数据
+const breadData = [
+  {
+    name: '主页', link: '/'
+  },
+  {
+    name: '开发', link: '/dev/basic'
+  },
+  {
+    name: '基础数据', link: ''
+  }
+]
+
+// 各menu数据
 const iconObject = { measureUnit };
 const { Description } = DescriptionList;
 // const manuArr = ['measureUnit', 'categorySetting', 'colorPercentage', 'colorSetting', 'electroplateSetting', 'shapeSetting', 'specificationSetting', 'materialsGrade', 'stoneCutter', 'insertStoneTechnology', 'rubberMouldSetting', 'mouldPosition']
@@ -20,6 +35,7 @@ const menuMap = manuArr.map(item => ({
   key: item,
 }));
 
+// 弹窗form表单样式
 const formLayout = {
   labelCol: { span: 7 },
   wrapperCol: {
@@ -47,6 +63,7 @@ class Info extends Component {
     this.getList();
   }
 
+  // 默认列表请求
   getList = () => {
     const { dispatch, pagination } = this.props;
     dispatch({
@@ -55,6 +72,7 @@ class Info extends Component {
     });
   };
 
+  // 获取对应menu
   getmenu = () => {
     return menuMap.map(({ key, value }) => (
       <Item key={key} style={{ textAlign: 'vertical-center' }}>
@@ -65,6 +83,7 @@ class Info extends Component {
       </Item>
     ));
   };
+
 
   getRightTitle = () => {
     const { selectKey } = this.props;
@@ -83,6 +102,7 @@ class Info extends Component {
     });
   };
 
+  // 列表对应操作button回调
   btnFn = modalType => {
     switch (modalType) {
       case 'add':
@@ -97,6 +117,7 @@ class Info extends Component {
     }
   };
 
+  // button操作Modal的内容
   getModalContent = () => {
     const {
       form: { getFieldDecorator },
@@ -119,6 +140,7 @@ class Info extends Component {
     );
   };
 
+  // 获取Modal的标题
   returnTitle = () => {
     const { modalType } = this.state;
     let text = '';
@@ -138,25 +160,11 @@ class Info extends Component {
   render() {
     const { state, props, btnFn, getModalContent, returnTitle } = this;
     const { mode, modalType } = state;
-    const { list, pagination, selectKey, choosenRowData } = props;
-    console.log('================???', pagination, choosenRowData);
-    // const { match, location } = props;
-    // const key = location.pathname.replace(`${match.path}/`, '');
-    // console.log('select key ', selectKey);
+    const { list, selectKey, choosenRowData } = props;
 
     return (
       <div className={styles.page}>
-        <div className={styles.nav}>
-          <Breadcrumb style={{ display: 'none' }}>
-            <Breadcrumb.Item>主页</Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">业务</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="/business/basic/base#/business/basic/base">基础数据</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-        </div>
+        <Bread data={breadData} />
         <div className={styles.center_content}>
           {/* lg={17} md={24} */}
           <div className={styles.main}>
@@ -184,7 +192,7 @@ class Info extends Component {
           title={returnTitle()}
           width={640}
           className={styles.standardListForm}
-          bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
+          bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
           visible={modalType !== ''}
           onCancel={() => {
@@ -256,52 +264,49 @@ const columnsArr = { measureUnit: measureUnitColumns };
 const RightContent = ({ type, choosenRowData, btnFn }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
-      <Col lg={choosenRowData.id ? 16 : 24} md={24}>
+      <Col lg={16} md={24}>
         <CenterInfo type={type} />
       </Col>
-      {choosenRowData.id && (
-        <Col lg={8} md={24}>
-          <div className={styles.view_right_content}>
-            <Card bordered={false}>
-              <div>
-                <span
-                  style={{
-                    marginBottom: 32,
-                    paddingLeft: 10,
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    color: '#35B0F4',
-                  }}
-                >
-                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-                </span>
-                <GetRenderitem data={choosenRowData} />
-              </div>
-            </Card>
 
-            {/* </Card> */}
-            <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {btnGroup.map(({ name, tag }) => (
-                  <Button
-                    key={tag}
-                    className={styles.buttomControl}
-                    type="primary"
-                    icon={tag}
-                    size="small"
-                    disabled={!choosenRowData.id && tag !== 'add'}
-                    onClick={() => {
-                      btnFn(tag);
-                    }}
-                  >
-                    {name}
-                  </Button>
-                ))}
-              </div>
-            </Card>
-          </div>
-        </Col>
-      )}
+      <Col lg={8} md={24}>
+        <div className={styles.view_right_content}>
+          <Card bordered={false}>
+            <div>
+              <span
+                style={{
+                  marginBottom: 32,
+                  paddingLeft: 10,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: '#35B0F4',
+                }}
+              >
+                <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
+              </span>
+              <GetRenderitem data={choosenRowData} />
+            </div>
+          </Card>
+
+          {/* </Card> */}
+          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {btnGroup.map(({ name, tag }) => (
+                <Button
+                  key={tag}
+                  className={styles.buttomControl}
+                  type="primary"
+                  icon={tag}
+                  size="small"
+                  disabled={!choosenRowData.id && tag !== 'add'}
+                  onClick={() => { btnFn(tag) }}
+                >
+                  {name}
+                </Button>
+              ))}
+            </div>
+          </Card>
+        </div>
+      </Col>
     </Row>
   </GridContent>
 );

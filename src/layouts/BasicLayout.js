@@ -230,8 +230,9 @@ class BasicLayout extends React.Component {
   };
 
   remove = targetKey => {
-    let { activeKey } = this.state;
+    const { activeKey } = this.state;
     let lastIndex;
+
     this.state.tabList.forEach((pane, i) => {
       if (pane.key === targetKey) {
         lastIndex = i - 1;
@@ -245,11 +246,9 @@ class BasicLayout extends React.Component {
         tabListKey.push(pane.key);
       }
     });
-    if (lastIndex >= 0 && activeKey === targetKey) {
-      activeKey = tabList[lastIndex].key;
-    }
-    router.push(activeKey);
-    this.setState({ tabList, activeKey, tabListKey });
+    const newActiveKey = lastIndex >= 0 && activeKey === targetKey ? tabList[lastIndex].key : activeKey
+    router.push(newActiveKey);
+    this.setState({ tabList, activeKey: newActiveKey, tabListKey });
   };
 
   updateTreeList = data => {
@@ -352,10 +351,7 @@ class BasicLayout extends React.Component {
 
     const isTop = PropsLayout === 'topmenu';
     const { activeKey, routeKey, tabList } = this.state;
-    if (pathname === '/') {
-      // router.push(routeKey)
-      activeKey = routeKey;
-    }
+    const newActiveKey = pathname === '/' ? routeKey : activeKey
     const menu = (
       <Menu onClick={this.onClickHover}>
         <Menu.Item key="1">关闭当前标签页</Menu.Item>
@@ -408,7 +404,7 @@ class BasicLayout extends React.Component {
               tabList.length && (
                 <Tabs
                   // className={styles.tabs}
-                  activeKey={activeKey}
+                  activeKey={newActiveKey}
                   onChange={this.onChange}
                   hideAdd
                   type="editable-card"

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './index.less';
 import { Table } from 'antd';
+import styles from './index.less';
 
 class MyTable extends Component {
   state = {
@@ -37,9 +37,14 @@ class MyTable extends Component {
     });
   };
 
+  onSelectRowClass = (record, index) => {
+    const color = index % 2 === 0 ? styles.row_normal : ''
+    return color;
+  };
+
   render() {
-    const { clickRowItem, props, pageChange } = this;
-    const { body = {}, rowClassName, columns, pagination } = props;
+    const { clickRowItem, props, pageChange, onSelectRowClass } = this;
+    const { body = {}, columns, pagination } = props;
     const { selectedRowKeys } = this.state;
     const { current, size } = pagination;
     const paginationProps = {
@@ -64,8 +69,8 @@ class MyTable extends Component {
         dataSource={body.records}
         rowSelection={rowSelection}
         pagination={paginationProps}
-        rowClassName={rowClassName}
         rowKey={record => record.id}
+        rowClassName={onSelectRowClass}
         onRow={record => ({
           onClick: () => {
             clickRowItem(record);
