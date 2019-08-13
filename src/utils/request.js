@@ -105,6 +105,12 @@ request.interceptors.response.use(async response => {
     });
   }
   return response;
+
+  // if (response.status === 200 && data.head.rtnCode === '000000') {
+  //   notification.success({
+  //     message: data.head.rtnMsg,
+  //   });
+  // }
 });
 
 export default request;

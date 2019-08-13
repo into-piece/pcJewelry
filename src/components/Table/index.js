@@ -3,15 +3,11 @@ import { Table } from 'antd';
 import styles from './index.less';
 
 class MyTable extends Component {
-  state = {
-    selectedRowKeys: [],
-  };
 
   clickRowItem = record => {
-    const { changeChoosenRow } = this.props;
+    const { changeChoosenRow, onSelectChange } = this.props;
     let selectedRow = [];
-    const { selectedRowKeys } = this.state
-    console.log(record.id, selectedRowKeys);
+    const { selectedRowKeys } = this.props
     if (selectedRowKeys.includes(record.id)) {
       selectedRow = selectedRowKeys.filter(item => item !== record.id);
       // selectedRowKeys = []
@@ -19,9 +15,8 @@ class MyTable extends Component {
       // selectedRowKeys = [... this.state.selectedRowKeys, record.id]
       selectedRow = [record.id];
     }
-    this.setState({
-      selectedRowKeys: selectedRow,
-    });
+
+    onSelectChange(selectedRow)
     changeChoosenRow(record);
   };
 
@@ -30,12 +25,7 @@ class MyTable extends Component {
     changePagination({ current: page, size: pageSize });
   };
 
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRowKeys, selectedRows);
-    this.setState({
-      selectedRowKeys,
-    });
-  };
+
 
   onSelectRowClass = (record, index) => {
     const color = index % 2 === 0 ? styles.row_normal : ''
@@ -44,24 +34,24 @@ class MyTable extends Component {
 
   render() {
     const { clickRowItem, props, pageChange, onSelectRowClass } = this;
-    const { body = {}, columns, pagination } = props;
-    const { selectedRowKeys } = this.state;
+    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange } = props;
     const { current, size } = pagination;
     const paginationProps = {
       showQuickJumper: true,
       pageSize: size,
       current,
-      // total: body ? body.total : 0,
-      total: 100,
+      total: body ? body.total : 0,
       onChange: pageChange,
     };
 
     const rowSelection = {
       selectedRowKeys,
       type: 'checkbox',
-      onChange: this.onSelectChange,
+      onChange: onSelectChange,
       // onSelect: this.selectChange,
     };
+
+    console.log(body, body.records)
 
     return (
       <Table

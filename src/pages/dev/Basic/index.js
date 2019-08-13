@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
-import { measureUnit, lockTag } from '@/utils/SvgUtil';
+import { measureUnit, lockTag, colorSetting } from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
-import Bread from '@/components/BreadCrumb'
+import serviceObj from '@/services/dev';
+// import Bread from '@/components/BreadCrumb'
 
 // 面包屑数据
-const breadData = [
-  {
-    name: '主页', link: '/'
-  },
-  {
-    name: '开发', link: '/dev/basic'
-  },
-  {
-    name: '基础数据', link: ''
-  }
-]
+// const breadData = [
+//   {
+//     name: '主页', link: '/'
+//   },
+//   {
+//     name: '开发', link: '/dev/basic'
+//   },
+//   {
+//     name: '基础数据', link: ''
+//   }
+// ]
 
 // 各menu数据
-const iconObject = { measureUnit };
+const iconObject = { measureUnit, colorSetting };
 const { Description } = DescriptionList;
 // const manuArr = ['measureUnit', 'categorySetting', 'colorPercentage', 'colorSetting', 'electroplateSetting', 'shapeSetting', 'specificationSetting', 'materialsGrade', 'stoneCutter', 'insertStoneTechnology', 'rubberMouldSetting', 'mouldPosition']
-const manuArr = ['measureUnit'];
+const manuArr = ['measureUnit', 'colorSetting'];
 const { Item } = Menu;
 const FormItem = Form.Item;
 
@@ -50,6 +51,8 @@ const formLayout = {
     pagination: dev.pagination,
     selectKey: dev.selectKey,
     choosenRowData: dev.choosenRowData,
+    colorSetList: dev.colorSetList,
+    selectedRowKeys: dev.selectedRowKeys
     // listLoading: loading.effects['ringnum/fetchListRingNum'],
   };
 })
@@ -57,20 +60,21 @@ class Info extends Component {
   state = {
     mode: 'inline',
     modalType: '',
+    addData: {
+      measureUnit: {
+        unitCode: '',
+        zhName: '',
+        enName: ''
+      },
+      colorSetting: {}
+    }
   };
 
   componentDidMount() {
     this.getList();
   }
 
-  // 默认列表请求
-  getList = () => {
-    const { dispatch, pagination } = this.props;
-    dispatch({
-      type: 'dev/getDevList',
-      payload: pagination,
-    });
-  };
+
 
   // 获取对应menu
   getmenu = () => {
@@ -95,12 +99,27 @@ class Info extends Component {
   };
 
   handleSelectKey = ({ key }) => {
-    const { dispatch } = this.props;
+    const { dispatch, pagination } = this.props;
     dispatch({
       type: 'dev/getSelectKey',
       payload: key,
     });
+    this.getList(key)
   };
+
+  getList = (key = this.props.selectKey) => {
+    const { dispatch, pagination } = this.props;
+    const arr = {
+      colorSetting: 'getColorSetList',
+      measureUnit: 'getMeasureUnit'
+    }
+    // getDevList
+    console.log(arr[key])
+    dispatch({
+      type: `dev/${arr[key]}`,
+      payload: pagination,
+    });
+  }
 
   // 列表对应操作button回调
   btnFn = modalType => {
@@ -111,31 +130,53 @@ class Info extends Component {
         this.setState({ modalType });
         break;
       case 'delete':
+        this.handleDelect()
         break;
       case 'lock':
         break;
     }
   };
 
+
+  // unitCode: '',
+  //       zhName: '',
+  //       enName: ''
   // button操作Modal的内容
+
   getModalContent = () => {
     const {
+      selectKey,
       form: { getFieldDecorator },
     } = this.props;
+    let content = ''
+    let dataArr = []
+    switch (selectKey) {
+      case 'measureUnit':
+        dataArr = [
+          { key: '单位代码', value: 'unitCode' },
+          { key: '中文名', value: 'zhName' },
+          { key: '英文名', value: 'enName' },
+        ]
+        break
+      default:
+        content = ''
+        break
+    }
     return (
       <Form size="small" onSubmit={this.handleSubmit}>
-        <FormItem label="英文名称" {...formLayout}>
-          {getFieldDecorator('brandEnName', {
-            rules: [{ required: true, message: '请输入品牌编号' }],
-            initialValue: '',
-          })(<Input placeholder="请输入" />)}
-        </FormItem>
-        <FormItem label="中文名称" {...formLayout}>
-          {getFieldDecorator('brandZhName', {
-            rules: [{ message: '请输入中文名称' }],
-            initialValue: '',
-          })(<Input placeholder="请输入" />)}
-        </FormItem>
+        {
+          dataArr.map(({ key, value }) => {
+            return (
+              <FormItem label={key} {...formLayout} key={key}>
+                {getFieldDecorator(value, {
+                  rules: [{ required: true, message: `请输入${key}` }],
+                  initialValue: '',
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+            )
+          })
+        }
+        {content}
       </Form>
     );
   };
@@ -157,14 +198,72 @@ class Info extends Component {
     return `任务${text}`;
   };
 
+  // 新增回调
+  handleAdd = () => {
+    const { selectKey, form } = this.props
+    const { addData } = this.state
+
+    form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        // this.setState({
+        //   [selectKey]
+        // })
+        console.log(serviceObj, selectKey, addData)
+        console.log(serviceObj[`addBasic${selectKey}`], addData[selectKey])
+        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
+        serviceObj[`addBasic${selectKey}`](values).then(res => {
+          const { rtnCode, rtnMsg } = res.head
+          if (rtnCode === '000000') {
+            notification.success({
+              message: rtnMsg,
+            });
+            this.getList()
+            this.btnFn('');
+          }
+        })
+      }
+    });
+  }
+
+  // 删除回调
+  handleDelect = () => {
+    const { selectKey, selectedRowKeys } = this.props
+    serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
+      const { rtnCode, rtnMsg } = res.head
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        this.getList()
+        this.btnFn('');
+      }
+    })
+  }
+
+
+  // 弹窗确定提交回调
+  handleModalOk = () => {
+    const { modalType } = this.state;
+    switch (modalType) {
+      case 'add':
+        this.handleAdd()
+        break;
+      case 'edit':
+        break;
+      default:
+        break;
+    }
+
+  }
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk } = this;
     const { mode, modalType } = state;
     const { list, selectKey, choosenRowData } = props;
-
     return (
       <div className={styles.page}>
-        <Bread data={breadData} />
+        {/* <Bread data={breadData} /> */}
         <div className={styles.center_content}>
           {/* lg={17} md={24} */}
           <div className={styles.main}>
@@ -194,10 +293,12 @@ class Info extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
+          onOk={handleModalOk}
           visible={modalType !== ''}
           onCancel={() => {
             btnFn('');
           }}
+
         >
           {getModalContent()}
         </Modal>
@@ -216,49 +317,6 @@ const btnGroup = [
   { name: '审批', tag: 'lock' },
 ];
 
-// 计量单位表头
-const measureUnitColumns = [
-  {
-    title: '单位代码',
-    dataIndex: 'unitCode',
-    key: 'unitCode',
-    render: data => (
-      <div className={styles.symbol}>
-        {/* <img src={logo} alt='logo' /> */}
-        <div className={styles.block}>
-          <Icon
-            style={{
-              width: 20,
-              height: 20,
-            }}
-            component={lockTag}
-          />
-        </div>
-        <span />
-        {data}
-      </div>
-    ),
-  },
-  {
-    title: '中文名称',
-    dataIndex: 'zhName',
-    key: 'zhName',
-  },
-  {
-    title: '英文名称',
-    dataIndex: 'enName',
-    key: 'enName',
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: data => (Number(data) === 2 ? '已审批' : data === 0 ? '输入' : ''),
-  },
-];
-
-// 各个menu列表的表头
-const columnsArr = { measureUnit: measureUnitColumns };
 
 // 右手边正文内容
 const RightContent = ({ type, choosenRowData, btnFn }) => (
@@ -311,12 +369,97 @@ const RightContent = ({ type, choosenRowData, btnFn }) => (
   </GridContent>
 );
 
+
+
+// 计量单位表头
+const measureUnitColumns = [
+  {
+    title: '单位代码',
+    dataIndex: 'unitCode',
+    key: 'unitCode',
+    render: data => (
+      <div className={styles.symbol}>
+        {/* <img src={logo} alt='logo' /> */}
+        <div className={styles.block}>
+          <Icon
+            style={{
+              width: 20,
+              height: 20,
+            }}
+            component={lockTag}
+          />
+        </div>
+        <span />
+        {data}
+      </div>
+    ),
+  },
+  {
+    title: '中文名称',
+    dataIndex: 'zhName',
+    key: 'zhName',
+  },
+  {
+    title: '英文名称',
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: data => (Number(data) === 2 ? '已审批' : data === 0 ? '输入' : ''),
+  },
+];
+
+
+const colorSettingColumns = [
+  {
+    title: '产品材料',
+    dataIndex: 'productMaterial',
+    key: 'productMaterial',
+  },
+  {
+    title: '中文名称',
+    dataIndex: 'zhName',
+    key: 'zhName',
+  },
+  {
+    title: '英文名',
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: '成色系列',
+    dataIndex: 'assayingTheCoefficient',
+    key: 'assayingTheCoefficient',
+  },
+  {
+    title: '返主材类别',
+    dataIndex: 'rtnMainMaterial',
+    key: 'rtnMainMaterial',
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: data => (Number(data) === 2 ? '已审批' : data === 0 ? '输入' : ''),
+  },
+]
+
+const columnsArr = {
+  measureUnit: measureUnitColumns,
+  colorSetting: colorSettingColumns
+};
+
+
 // Table 中间列表内容
 @connect(({ dev }) => {
   return {
-    list: dev.list,
+    dev,
     pagination: dev.pagination,
     choosenRowData: dev.choosenRowData,
+    selectedRowKeys: dev.selectedRowKeys
   };
 })
 class CenterInfo extends Component {
@@ -340,8 +483,20 @@ class CenterInfo extends Component {
     });
   };
 
+
+  // 更改table select数组
+  onSelectChange = (selectedRowKeys) => {
+    this.props.dispatch({
+      type: 'dev/changeSelectedRowKeys',
+      payload: selectedRowKeys,
+    })
+  };
+
   render() {
-    const { type, list, choosenRowData, pagination } = this.props;
+    const { onSelectChange, props } = this
+    const { type, choosenRowData, pagination, dev, selectedRowKeys } = props;
+    console.log(dev, type, dev[`${type}List`], columnsArr[type])
+    const list = dev[`${type}List`]
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
@@ -366,6 +521,8 @@ class CenterInfo extends Component {
             selectKey={choosenRowData.id}
             pagination={pagination}
             changePagination={this.changePagination}
+            selectedRowKeys={selectedRowKeys}
+            onSelectChange={onSelectChange}
           />
         </div>
       </div>

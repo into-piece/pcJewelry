@@ -1,34 +1,24 @@
-import { getDevDropDown, listBasicMeasureUnit } from '@/services/dev';
+import { getDevDropDown, listBasicMeasureUnit, listBasicColourSet } from '@/services/dev';
 
 export default {
   namespace: 'dev',
 
   state: {
-    list: [],
+    measureUnitList: [],
     dropDownList: [],
     pagination: {
       current: 1,
       size: 10,
     },
     selectKey: 'measureUnit',
-    choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' },
+    colorSettingList: [],
+    selectedRowKeys: [], // table select
+    choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
   },
 
   effects: {
-    *getUnitDropDown({ payload }, { call, put }) {
-      const response = yield call(getDevDropDown, payload);
-      yield put({
-        type: 'getData',
-        payload: response,
-      });
-    },
-    *getDevList({ payload }, { call, put }) {
-      const response = yield call(listBasicMeasureUnit, payload);
-      yield put({
-        type: 'getDevList2',
-        payload: response,
-      });
-    },
+
+    // table
     *getPagination({ payload }, { put }) {
       yield put({
         type: 'getPagination2',
@@ -47,6 +37,55 @@ export default {
         payload,
       });
     },
+    *changeSelectedRowKeys({ payload }, { put }) {
+      yield put({
+        type: 'changeSelectedRowKeys2',
+        payload,
+      });
+    },
+
+
+
+    // 计量单位
+    *getUnitDropDown({ payload }, { call, put }) {
+      const response = yield call(getDevDropDown, payload);
+      yield put({
+        type: 'getData',
+        payload: response,
+      });
+    },
+    *getMeasureUnit({ payload }, { call, put }) {
+      const response = yield call(listBasicMeasureUnit, payload);
+      yield put({
+        type: 'getDevList2',
+        payload: response,
+      });
+    },
+    // *addMeasureUnit({ payload }, { call, put }) {
+    //   const response = yield call(addBasicMeasureUnit, payload);
+    //   yield put({
+    //     type: 'addMeasureUnit2',
+    //     payload: response,
+    //   });
+    // },
+
+    // 成色设定
+    *getColorSetList({ payload }, { call, put }) {
+      const response = yield call(listBasicColourSet, payload);
+      yield put({
+        type: 'getColorSetList2',
+        payload: response,
+      });
+    },
+
+    // *getColorSetList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicColourSet, payload);
+    //   yield put({
+    //     type: 'getColorSetList2',
+    //     payload: response,
+    //   });
+    // },
+
   },
 
   reducers: {
@@ -61,16 +100,18 @@ export default {
       };
     },
     getDevList2(state, action) {
-      const list =
+      const measureUnitList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
           : [];
-      console.log(list);
+      console.log(measureUnitList);
       return {
         ...state,
-        list,
+        measureUnitList,
       };
     },
+
+    // table
     getPagination2(state, action) {
       return {
         ...state,
@@ -80,16 +121,46 @@ export default {
         },
       };
     },
+    changeSelectedRowKeys2(state, action) {
+      return {
+        ...state,
+        selectedRowKeys: [
+          ...action.payload,
+        ],
+      };
+    },
+
     getSelectKey2(state, action) {
       return {
         ...state,
         selectKey: action.payload,
       };
     },
+
     getChoosenRowData2(state, action) {
       return {
         ...state,
         choosenRowData: action.payload,
+      };
+    },
+    getColorSetList2(state, action) {
+      const colorSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        colorSettingList,
+      };
+    },
+    addMeasureUnit2(state, action) {
+      const colorSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        colorSettingList,
       };
     },
   },
