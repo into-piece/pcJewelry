@@ -13,6 +13,7 @@ import Requested from './Requested';
 import SendWay from './SendWay';
 import Royalty from './Royalty';
 import Currency from './Currency';
+import { ring, brand, requested, royalty, currency, sendWay } from '@/utils/SvgUtil';
 
 const { Item } = Menu;
 
@@ -77,13 +78,18 @@ class Info extends Component {
     return menuMap[selectKey];
   };
 
+
   getMenuIcon = key => {
-    // if (key === 'ring') return ring;
-    // else if (key === 'brand') return diamond;
-    // else if (key === 'requested') return award;
-    // else if (key === 'sendWay') return delivery;
-    // else if (key === 'royalty') return percentage;
-    // else if (key === 'currency') return euro;
+    const menuObj = {
+      ring,
+      brand,
+      requested,
+      sendWay,
+      royalty,
+      currency
+    }
+    console.log(key, menuObj[key], '================')
+    return menuObj[key]
   };
 
   selectKey = ({ key }) => {
