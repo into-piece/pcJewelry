@@ -828,6 +828,7 @@ class BrandCompoenet extends Component {
                     type="danger"
                     icon="delete"
                     size="small"
+                    onClick={this.clickDeleteFrom}
                     disabled={isEdit || (showItem && showItem.status === '审批')}
                   >
                     删除

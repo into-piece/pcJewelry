@@ -372,11 +372,11 @@ class ProductInfo extends Component {
   sortFilter = (field, sort) => {
     const { productSorts } = this.state;
 
-    console.log('contactsSortFilter ', field, sort, productSorts);
+    // console.log('contactsSortFilter ', field, sort, productSorts);
     let newContacts = [...productSorts];
     const findColumn = newContacts.find(item => item.field === field);
 
-    console.log('sort find ', findColumn);
+    // console.log('sort find ', findColumn);
 
     if (findColumn) {
       if (sort !== 'normal') {

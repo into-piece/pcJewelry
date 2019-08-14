@@ -17,6 +17,8 @@ import {
   Breadcrumb,
 } from 'antd';
 
+import business from './../Business/business.less'
+
 class TableSortView extends Component {
 
 
@@ -32,12 +34,12 @@ class TableSortView extends Component {
   render() {
 
     const { sort } = this.state;
-    const { column } = this.props;
+    const { column ,titleFontSize } = this.props;
     //ant-table-column-has-actions ant-table-column-has-sorters ant-table-column-sort
     //backgroundColor:sort==='normal'?'':'#ccc'
     return (<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center',height:'100%',width:'100%' }}  onClick={this.toggleSort}>
 
-        <span className="ant-table-column-title">{column} </span>
+        <span className={titleFontSize==='small'?" ant-table-column-title antd-pro-pages-business-business-small_font":"ant-table-column-title "} style={{fontSize: '0.9em!important'}}>{column} </span>
 
         <span className="ant-table-column-sorter" >
           <div title="排序" className="ant-table-column-sorter-inner ant-table-column-sorter-inner-full">
