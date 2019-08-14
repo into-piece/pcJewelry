@@ -48,7 +48,7 @@ import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
-import { pingYincompare, encompare, formDatecompare } from './../../../utils/utils';
+import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 import TableSortView from '../../components/TableSortView';
 
 const { Description } = DescriptionList;

@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
-import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import { currency } from '@/utils/SvgUtil';
+import { euro } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
+import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 
 const FormItem = Form.Item;
@@ -303,7 +303,7 @@ class Currency extends PureComponent {
                     paddingTop: 10,
                     paddingLeft: 10,
                   }}
-                  component={currency}
+                  component={euro}
                 />
                 <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="业务提成设当" />
               </div>
