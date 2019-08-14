@@ -29,20 +29,20 @@ const plugins = [
       },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false,
       ...(!TEST && os.platform() === 'darwin'
         ? {
-            dll: {
-              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
-              exclude: ['@babel/runtime', 'netlify-lambda'],
-            },
-            hardSource: false,
-          }
+          dll: {
+            include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
+            exclude: ['@babel/runtime', 'netlify-lambda'],
+          },
+          hardSource: false,
+        }
         : {}),
     },
   ],
@@ -65,6 +65,7 @@ export default {
   define: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
       ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+    DEFINE_DEV_SERVER: '/server'
   },
   treeShaking: true,
   targets: {
@@ -84,14 +85,12 @@ export default {
       changeOrigin: true,
       pathRewrite: { '^/server': '' },
     },
+    '/api/': {
+      target: 'https://preview.pro.ant.design/',
+      changeOrigin: true,
+      pathRewrite: { '^/server': '' },
+    },
   },
-  // proxy: {
-  //   '/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

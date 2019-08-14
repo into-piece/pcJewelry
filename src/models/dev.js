@@ -1,4 +1,4 @@
-import { getDevDropDown, listBasicMeasureUnit, listBasicColourSet } from '@/services/dev';
+import { getDevDropDown, listBasicMeasureUnit, listBasicColorPercentage } from '@/services/dev';
 
 export default {
   namespace: 'dev',
@@ -14,6 +14,7 @@ export default {
     colorSettingList: [],
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
+    colorPercentageList: []
   },
 
   effects: {
@@ -70,10 +71,10 @@ export default {
     // },
 
     // 成色设定
-    *getColorSetList({ payload }, { call, put }) {
-      const response = yield call(listBasicColourSet, payload);
+    *getColorPercentageList({ payload }, { call, put }) {
+      const response = yield call(listBasicColorPercentage, payload);
       yield put({
-        type: 'getColorSetList2',
+        type: 'getColorPercentage2',
         payload: response,
       });
     },
@@ -143,25 +144,26 @@ export default {
         choosenRowData: action.payload,
       };
     },
-    getColorSetList2(state, action) {
-      const colorSettingList =
+    getColorPercentage2(state, action) {
+      const colorPercentageList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
           : [];
+      console.log(colorPercentageList)
       return {
         ...state,
-        colorSettingList,
+        colorPercentageList,
       };
     },
-    addMeasureUnit2(state, action) {
-      const colorSettingList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : [];
-      return {
-        ...state,
-        colorSettingList,
-      };
-    },
+    // addMeasureUnit2(state, action) {
+    //   const colorSettingList =
+    //     action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+    //       ? action.payload.body
+    //       : [];
+    //   return {
+    //     ...state,
+    //     colorSettingList,
+    //   };
+    // },
   },
 };

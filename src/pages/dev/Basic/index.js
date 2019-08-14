@@ -3,13 +3,13 @@ import { connect } from 'dva';
 import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
-import { measureUnit, lockTag, colorSetting } from '@/utils/SvgUtil';
+import { measureUnit, lockTag, colorPercentage } from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 // import Bread from '@/components/BreadCrumb'
-
+import LockTag from '@/components/LockTag'
 // 面包屑数据
 // const breadData = [
 //   {
@@ -24,10 +24,10 @@ import serviceObj from '@/services/dev';
 // ]
 
 // 各menu数据
-const iconObject = { measureUnit, colorSetting };
+const iconObject = { measureUnit, colorPercentage };
 const { Description } = DescriptionList;
 // const manuArr = ['measureUnit', 'categorySetting', 'colorPercentage', 'colorSetting', 'electroplateSetting', 'shapeSetting', 'specificationSetting', 'materialsGrade', 'stoneCutter', 'insertStoneTechnology', 'rubberMouldSetting', 'mouldPosition']
-const manuArr = ['measureUnit', 'colorSetting'];
+const manuArr = ['measureUnit', 'colorPercentage'];
 const { Item } = Menu;
 const FormItem = Form.Item;
 
@@ -66,15 +66,13 @@ class Info extends Component {
         zhName: '',
         enName: ''
       },
-      colorSetting: {}
+      colorPercentage: {}
     }
   };
 
   componentDidMount() {
     this.getList();
   }
-
-
 
   // 获取对应menu
   getmenu = () => {
@@ -105,14 +103,22 @@ class Info extends Component {
       payload: key,
     });
     this.getList(key)
+
+    // 还要清空所选中项
+    dispatch({
+      type: 'dev/getChoosenRowData',
+      payload: {},
+    });
+
   };
 
   getList = (key = this.props.selectKey) => {
     const { dispatch, pagination } = this.props;
     const arr = {
-      colorSetting: 'getColorSetList',
+      colorPercentage: 'getColorPercentageList',
       measureUnit: 'getMeasureUnit'
     }
+    console.log(key)
     // getDevList
     console.log(arr[key])
     dispatch({
@@ -133,6 +139,7 @@ class Info extends Component {
         this.handleDelect()
         break;
       case 'lock':
+        this.handleLock()
         break;
     }
   };
@@ -146,8 +153,10 @@ class Info extends Component {
   getModalContent = () => {
     const {
       selectKey,
+      choosenRowData,
       form: { getFieldDecorator },
     } = this.props;
+    const { modalType } = this.state
     let content = ''
     let dataArr = []
     switch (selectKey) {
@@ -158,19 +167,29 @@ class Info extends Component {
           { key: '英文名', value: 'enName' },
         ]
         break
+      case 'colorPercentage':
+        dataArr = [
+          { key: '产品材料', value: 'productMaterial' },
+          { key: '中文名', value: 'zhName', },
+          { key: '英文名', value: 'enName', noNeed: true },
+          { key: '成色系数', value: 'assayingTheCoefficient' },
+          { key: '返主材类别', value: 'rtnMainMaterial', noNeed: true },
+        ]
+        break
       default:
         content = ''
         break
     }
+    const isEdit = modalType === 'edit'
     return (
-      <Form size="small" onSubmit={this.handleSubmit}>
+      <Form size="small">
         {
-          dataArr.map(({ key, value }) => {
+          dataArr.map(({ key, value, noNeed }) => {
             return (
               <FormItem label={key} {...formLayout} key={key}>
                 {getFieldDecorator(value, {
-                  rules: [{ required: true, message: `请输入${key}` }],
-                  initialValue: '',
+                  rules: [{ required: !noNeed, message: `请输入${key}` }],
+                  initialValue: isEdit ? choosenRowData[value] : '',
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             )
@@ -226,6 +245,34 @@ class Info extends Component {
     });
   }
 
+  handleEdit = () => {
+    const { selectKey, form } = this.props
+    const { addData } = this.state
+
+    form.validateFields((err, values) => {
+      if (!err) {
+        const { choosenRowData } = this.props
+        console.log(serviceObj, selectKey, addData)
+        console.log(serviceObj[`addBasic${selectKey}`], addData[selectKey], choosenRowData.id)
+        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
+        const params = {
+          ...values,
+          id: choosenRowData.id
+        }
+        serviceObj[`addBasic${selectKey}`](params).then(res => {
+          const { rtnCode, rtnMsg } = res.head
+          if (rtnCode === '000000') {
+            notification.success({
+              message: rtnMsg,
+            });
+            this.getList()
+            this.btnFn('');
+          }
+        })
+      }
+    });
+  }
+
   // 删除回调
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props
@@ -236,11 +283,25 @@ class Info extends Component {
           message: rtnMsg,
         });
         this.getList()
-        this.btnFn('');
       }
     })
   }
 
+  // 审批回调
+  handleLock = () => {
+    const { choosenRowData, selectKey, selectedRowKeys } = this.props
+    const isLock = Number(choosenRowData.status) === 0
+    const serviceType = isLock ? 'approve' : 'revoke'
+    serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
+      const { rtnCode, rtnMsg } = res.head
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        this.getList()
+      }
+    })
+  }
 
   // 弹窗确定提交回调
   handleModalOk = () => {
@@ -250,6 +311,7 @@ class Info extends Component {
         this.handleAdd()
         break;
       case 'edit':
+        this.handleEdit()
         break;
       default:
         break;
@@ -261,6 +323,7 @@ class Info extends Component {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk } = this;
     const { mode, modalType } = state;
     const { list, selectKey, choosenRowData } = props;
+    console.log(choosenRowData, '==========')
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -314,7 +377,7 @@ const btnGroup = [
   { name: '新增', tag: 'add' },
   { name: '删除', tag: 'delete' },
   { name: '编辑', tag: 'edit' },
-  { name: '审批', tag: 'lock' },
+  { name: '审批', name2: '撤销', tag: 'lock' },
 ];
 
 
@@ -348,7 +411,7 @@ const RightContent = ({ type, choosenRowData, btnFn }) => (
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag }) => (
+              {btnGroup.map(({ name, tag, name2 }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
@@ -358,7 +421,7 @@ const RightContent = ({ type, choosenRowData, btnFn }) => (
                   disabled={!choosenRowData.id && tag !== 'add'}
                   onClick={() => { btnFn(tag) }}
                 >
-                  {name}
+                  {Number(choosenRowData.status) === 2 && tag === 'lock' ? name2 : name}
                 </Button>
               ))}
             </div>
@@ -369,30 +432,19 @@ const RightContent = ({ type, choosenRowData, btnFn }) => (
   </GridContent>
 );
 
-
-
+const isLock = false
 // 计量单位表头
 const measureUnitColumns = [
   {
     title: '单位代码',
     dataIndex: 'unitCode',
     key: 'unitCode',
-    render: data => (
-      <div className={styles.symbol}>
-        {/* <img src={logo} alt='logo' /> */}
-        <div className={styles.block}>
-          <Icon
-            style={{
-              width: 20,
-              height: 20,
-            }}
-            component={lockTag}
-          />
-        </div>
-        <span />
+    render: data => isLock ? (
+      <LockTag>
         {data}
-      </div>
-    ),
+      </LockTag>
+    )
+      : (data)
   },
   {
     title: '中文名称',
@@ -408,12 +460,12 @@ const measureUnitColumns = [
     title: '状态',
     dataIndex: 'status',
     key: 'status',
-    render: data => (Number(data) === 2 ? '已审批' : data === 0 ? '输入' : ''),
+    render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
   },
 ];
 
 
-const colorSettingColumns = [
+const colorPercentageColumns = [
   {
     title: '产品材料',
     dataIndex: 'productMaterial',
@@ -443,13 +495,13 @@ const colorSettingColumns = [
     title: '状态',
     dataIndex: 'status',
     key: 'status',
-    render: data => (Number(data) === 2 ? '已审批' : data === 0 ? '输入' : ''),
+    render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
   },
 ]
 
 const columnsArr = {
   measureUnit: measureUnitColumns,
-  colorSetting: colorSettingColumns
+  colorPercentage: colorPercentageColumns
 };
 
 
@@ -459,7 +511,7 @@ const columnsArr = {
     dev,
     pagination: dev.pagination,
     choosenRowData: dev.choosenRowData,
-    selectedRowKeys: dev.selectedRowKeys
+    selectedRowKeys: dev.selectedRowKeys,
   };
 })
 class CenterInfo extends Component {
