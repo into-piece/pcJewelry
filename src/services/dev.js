@@ -34,6 +34,12 @@ const approvemeasureUnit = async (params) => request(`${priefx}/business/develop
   data: params,
 })
 
+// 计量单位-审批
+const revokemeasureUnit = async (params) => request(`${priefx}/business/develop/basic/measure-unit/revoke`, {
+  method: 'POST',
+  data: params,
+})
+
 
 // 成色设定列表
 export const listBasicColorPercentage = async (params) => request(`${priefx}/business/develop/basic/colour-set/listBasicColourSet`, {
@@ -73,5 +79,6 @@ export default {
   addBasiccolorPercentage,
   deleteBasiccolorPercentage,
   revokecolorPercentage,
-  approvecolorPercentage
+  approvecolorPercentage,
+  revokemeasureUnit
 }
