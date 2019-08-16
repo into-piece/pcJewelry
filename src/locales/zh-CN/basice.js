@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-16 23:48:54
+ * @LastEditTime: 2019-08-16 23:48:54
+ * @LastEditors: your name
+ */
 export default {
   'app.basic.menuMap.basice': '基础数据',
   'app.basic.menuMap.brand': '品牌',
@@ -8,7 +15,7 @@ export default {
   'app.basic.menuMap.currency': '币种',
 
   'app.dev.menuMap.measureUnit': '计量单位',
-  'app.dev.menuMap.categorySetting': '类别设定',
+  'app.dev.menuMap.categorySet': '类别设定',
   'app.dev.menuMap.colorPercentage': '成色设定',
   'app.dev.menuMap.colorSetting': '颜色设定',
   'app.dev.menuMap.electroplateSetting': '电镀颜色设定',

@@ -1,15 +1,35 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-16 23:48:54
+ * @LastEditTime: 2019-08-17 01:26:11
+ * @LastEditors: Please set LastEditors
+ */
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
-import { measureUnit, lockTag, colorPercentage } from '@/utils/SvgUtil';
+import { measureUnit, colorPercentage } from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
-// import Bread from '@/components/BreadCrumb'
 import LockTag from '@/components/LockTag'
+// import Bread from '@/components/BreadCrumb'
+
+const { Description } = DescriptionList;
+const { Item } = Menu;
+const FormItem = Form.Item;
+
+// 弹窗form表单样式
+const formLayout = {
+  labelCol: { span: 7 },
+  wrapperCol: {
+    span: 13,
+  },
+};
+
 // 面包屑数据
 // const breadData = [
 //   {
@@ -23,26 +43,95 @@ import LockTag from '@/components/LockTag'
 //   }
 // ]
 
-// 各menu数据
+// 各menu对应的icon配置
 const iconObject = { measureUnit, colorPercentage };
-const { Description } = DescriptionList;
-// const manuArr = ['measureUnit', 'categorySetting', 'colorPercentage', 'colorSetting', 'electroplateSetting', 'shapeSetting', 'specificationSetting', 'materialsGrade', 'stoneCutter', 'insertStoneTechnology', 'rubberMouldSetting', 'mouldPosition']
-const manuArr = ['measureUnit', 'colorPercentage'];
-const { Item } = Menu;
-const FormItem = Form.Item;
 
+// menu配置提供遍历
+const manuArr = ['measureUnit', 'categorySet', 'colorPercentage', 'colorSetting', 'electroplateSetting', 'shapeSetting', 'specificationSetting', 'materialsGrade', 'stoneCutter', 'insertStoneTechnology', 'rubberMouldSetting', 'mouldPosition']
+
+// 左边menu遍历配置
 const menuMap = manuArr.map(item => ({
   value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Basic Settings" />,
   key: item,
 }));
 
-// 弹窗form表单样式
-const formLayout = {
-  labelCol: { span: 7 },
-  wrapperCol: {
-    span: 13,
-  },
-};
+// 右手边按钮集合
+const btnGroup = [
+  { name: '新增', tag: 'plus' },
+  { name: '删除', tag: 'delete' },
+  { name: '编辑', tag: 'edit' },
+  { name: '审批', tag: 'lock' },
+];
+
+const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
+// table 当前页对应的表头配置
+const columnsArr = {
+  // 计量单位表头
+  measureUnitColumns: [
+    {
+      title: '单位代码',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
+      render: data => isLockList ? (
+        <LockTag>
+          {data}
+        </LockTag>
+      )
+        : (data)
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名称',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''
+    },
+  ],
+
+  // 成色设定表头
+  colorPercentageColumns: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ]
+}
 
 @Form.create()
 @connect(({ dev }) => {
@@ -72,6 +161,7 @@ class Info extends Component {
   };
 
   componentDidMount() {
+    // 获取初始表单数据
     this.getList();
   }
 
@@ -87,16 +177,12 @@ class Info extends Component {
     ));
   };
 
-
-  getRightTitle = () => {
-    const { selectKey } = this.props;
-    return menuMap[selectKey];
-  };
-
+  // 根据当前页面的key 返回对应的icon
   getMenuIcon = key => {
     return iconObject[key];
   };
 
+  // 点击menu 更换子页面回调 请求list数据
   handleSelectKey = ({ key }) => {
     const { dispatch, pagination } = this.props;
     dispatch({
@@ -113,15 +199,14 @@ class Info extends Component {
 
   };
 
+  // 获取对应key=》页面进行数据请求
   getList = (key = this.props.selectKey) => {
     const { dispatch, pagination } = this.props;
     const arr = {
       colorPercentage: 'getColorPercentageList',
       measureUnit: 'getMeasureUnit'
     }
-    console.log(key)
     // getDevList
-    console.log(arr[key])
     dispatch({
       type: `dev/${arr[key]}`,
       payload: pagination,
@@ -145,12 +230,7 @@ class Info extends Component {
     }
   };
 
-
-  // unitCode: '',
-  //       zhName: '',
-  //       enName: ''
-  // button操作Modal的内容
-
+  // 根据btn点击 返回对应弹窗内容
   getModalContent = () => {
     const {
       selectKey,
@@ -218,14 +298,13 @@ class Info extends Component {
     return `任务${text}`;
   };
 
-  // 新增回调
+  // 新增按钮事件回调
   handleAdd = () => {
     const { selectKey, form } = this.props
     const { addData } = this.state
 
     form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         // this.setState({
         //   [selectKey]
         // })
@@ -246,6 +325,7 @@ class Info extends Component {
     });
   }
 
+  // 编辑按钮回调
   handleEdit = () => {
     const { selectKey, form } = this.props
     const { addData } = this.state
@@ -274,7 +354,7 @@ class Info extends Component {
     });
   }
 
-  // 删除回调
+  // 删除按钮回调
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props
     serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
@@ -288,11 +368,10 @@ class Info extends Component {
     })
   }
 
-  // 审批回调
+  // 审批/撤销 按钮回调
   handleLock = () => {
-    const { choosenRowData, selectKey, selectedRowKeys } = this.props
-    // const isLock = Number(choosenRowData.status) === 0
-    const isLock = this.returnLockType().type === 1
+    const { selectKey, selectedRowKeys } = this.props
+    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke'
     serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head
@@ -305,29 +384,26 @@ class Info extends Component {
     })
   }
 
-  // 1为审批 2为撤销
+  /**
+   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
+   * return obj
+   * params: name 名称
+   * params: disabled 是否可点击
+   * params: type 1为审批 2为撤销
+   */
   returnLockType = () => {
     const { selectedRowKeys, dev, selectKey } = this.props
-    console.log(dev, selectKey)
-    console.log(dev[`${selectKey}List`], '==================')
     if (dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
     const isLock1 = selectedRowKeys.reduce((res, cur) => {
-      console.log(dev, selectKey, dev[`${selectKey}List`])
-      const singleObjcect = dev[`${selectKey}List`].records.find((subItem) => {
-        console.log(subItem, cur)
-        return subItem.id === cur
-      })
-      console.log(singleObjcect)
+      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur)
       if (singleObjcect) res.push(singleObjcect.status)
       return res
     }, [])
-    console.log(isLock1)
-    const isShenPi = isLock1.every((item) => Number(item) === 0)
-    const isChexiao = isLock1.every((item) => Number(item) === 2)
-    console.log(isShenPi, isChexiao)
+    const isShenPi = isLock1.every((item) => Number(item) === 0) // 是否全是0
+    const isChexiao = isLock1.every((item) => Number(item) === 2) // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1 }
     if (isChexiao) return { name: '撤销', disabled: false, type: 2 }
-    return { name: '审批', disabled: true, type: 1 }
+    return { name: '审批', disabled: true, type: 1 } // 当两种状态都有 禁止点击
   }
 
   // 弹窗确定提交回调
@@ -346,11 +422,20 @@ class Info extends Component {
 
   }
 
+  // 判断按钮是否禁止 返回boolean
+  returnSisabled = (tag) => {
+    const { choosenRowData } = this.props
+    if (tag === 'add') return false
+    if (tag === 'lock') {
+      return !choosenRowData.id || this.returnLockType().disabled
+    }
+    return !choosenRowData.id
+  }
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
     const { mode, modalType } = state;
     const { list, selectKey, choosenRowData } = props;
-    console.log(choosenRowData, '==========')
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -374,6 +459,7 @@ class Info extends Component {
                 choosenRowData={choosenRowData}
                 btnFn={btnFn}
                 returnLockType={returnLockType}
+                returnSisabled={returnSisabled}
               />
             </div>
           </div>
@@ -396,27 +482,17 @@ class Info extends Component {
       </div>
     );
   }
-
-  /* <Card bordered={false} style={{ minHeight: window.innerHeight, marginBottom: 24,padding:0 }} loading={false}> */
 }
 
-// 按钮集合
-const btnGroup = [
-  { name: '新增', tag: 'add' },
-  { name: '删除', tag: 'delete' },
-  { name: '编辑', tag: 'edit' },
-  { name: '审批', name2: '撤销', tag: 'lock' },
-];
-
-
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType }) => (
+const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
+      {/* 中间table组件 */}
       <Col lg={16} md={24}>
         <CenterInfo type={type} />
       </Col>
-
+      {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
           <Card bordered={false}>
@@ -446,7 +522,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType }) => (
                   type="primary"
                   icon={tag}
                   size="small"
-                  disabled={!choosenRowData.id && tag !== 'add'}
+                  disabled={returnSisabled(tag)}
                   onClick={() => { btnFn(tag) }}
                 >
                   {tag === 'lock' ? returnLockType().name : name}
@@ -459,78 +535,6 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType }) => (
     </Row>
   </GridContent>
 );
-
-const isLock = false
-// 计量单位表头
-const measureUnitColumns = [
-  {
-    title: '单位代码',
-    dataIndex: 'unitCode',
-    key: 'unitCode',
-    render: data => isLock ? (
-      <LockTag>
-        {data}
-      </LockTag>
-    )
-      : (data)
-  },
-  {
-    title: '中文名称',
-    dataIndex: 'zhName',
-    key: 'zhName',
-  },
-  {
-    title: '英文名称',
-    dataIndex: 'enName',
-    key: 'enName',
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
-  },
-];
-
-
-const colorPercentageColumns = [
-  {
-    title: '产品材料',
-    dataIndex: 'productMaterial',
-    key: 'productMaterial',
-  },
-  {
-    title: '中文名称',
-    dataIndex: 'zhName',
-    key: 'zhName',
-  },
-  {
-    title: '英文名',
-    dataIndex: 'enName',
-    key: 'enName',
-  },
-  {
-    title: '成色系列',
-    dataIndex: 'assayingTheCoefficient',
-    key: 'assayingTheCoefficient',
-  },
-  {
-    title: '返主材类别',
-    dataIndex: 'rtnMainMaterial',
-    key: 'rtnMainMaterial',
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
-  },
-]
-
-const columnsArr = {
-  measureUnit: measureUnitColumns,
-  colorPercentage: colorPercentageColumns
-};
 
 
 // Table 中间列表内容
@@ -575,19 +579,14 @@ class CenterInfo extends Component {
   render() {
     const { onSelectChange, props } = this
     const { type, choosenRowData, pagination, dev, selectedRowKeys } = props;
-    console.log(dev, type, dev[`${type}List`], columnsArr[type])
+    const columns = columnsArr[`${type}Columns`]
+    console.log(dev, type, dev[`${type}List`], columns)
     const list = dev[`${type}List`]
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
           <Icon
-            style={{
-              width: 50,
-              height: 50,
-              paddingRight: 10,
-              paddingTop: 10,
-              paddingLeft: 10,
-            }}
+            className={styles.titleIcon}
             component={iconObject[type]}
           />
           <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
@@ -595,7 +594,7 @@ class CenterInfo extends Component {
 
         <div className={styles.tableBox}>
           <Table
-            columns={columnsArr[type]}
+            columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}
             selectKey={choosenRowData.id}

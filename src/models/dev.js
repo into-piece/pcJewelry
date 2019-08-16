@@ -1,4 +1,11 @@
-import { getDevDropDown, listBasicMeasureUnit, listBasicColorPercentage } from '@/services/dev';
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-16 23:48:54
+ * @LastEditTime: 2019-08-17 00:53:31
+ * @LastEditors: Please set LastEditors
+ */
+import { getDevDropDown, listBasicMeasureUnit, listBasicColorPercentage, listBasicCategorySet } from '@/services/dev';
 
 export default {
   namespace: 'dev',
@@ -14,7 +21,8 @@ export default {
     colorSettingList: { records: [] },
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
-    colorPercentageList: { records: [] }
+    colorPercentageList: { records: [] },
+    categorySetList: { records: [] }
   },
 
   effects: {
@@ -86,6 +94,16 @@ export default {
     //     payload: response,
     //   });
     // },
+
+    //
+    *getCategorySetList({ payload }, { call, put }) {
+      const response = yield call(listBasicCategorySet, payload);
+      yield put({
+        type: 'getCategorySetList2',
+        payload: response,
+      });
+    },
+
 
   },
 
@@ -165,5 +183,17 @@ export default {
     //     colorSettingList,
     //   };
     // },
+
+    getCategorySetList2(state, action) {
+      const categorySetList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      console.log(categorySetList)
+      return {
+        ...state,
+        categorySetList,
+      };
+    },
   },
 };

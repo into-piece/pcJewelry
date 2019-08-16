@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-16 23:48:54
+ * @LastEditTime: 2019-08-17 00:49:50
+ * @LastEditors: Please set LastEditors
+ */
 import request from '@/utils/request';
 
 console.log(process.env.NODE_ENV)
@@ -69,6 +76,11 @@ const approvecolorPercentage = async (params) => request(`${priefx}/business/dev
   data: params,
 });
 
+// 类别设定
+export const listBasicCategorySet = async (params) => request(`${priefx}/business/develop/basic/category-set/listCategorySet`, {
+  method: 'POST',
+  data: params,
+});
 
 
 
@@ -80,5 +92,5 @@ export default {
   deleteBasiccolorPercentage,
   revokecolorPercentage,
   approvecolorPercentage,
-  revokemeasureUnit
+  revokemeasureUnit,
 }

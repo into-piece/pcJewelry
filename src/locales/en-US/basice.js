@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-16 23:48:54
+ * @LastEditTime: 2019-08-17 00:55:46
+ * @LastEditors: Please set LastEditors
+ */
 export default {
   'app.basic.menuMap.basice': 'Basic Data',
   'app.basic.menuMap.brand': 'Brand',
@@ -15,7 +22,7 @@ export default {
   'app.basic.menuMap.currency_info': 'Currency',
 
   'app.dev.menuMap.measureUnit': 'measure unit',
-  'app.dev.menuMap.categorySetting': 'category Setting',
+  'app.dev.menuMap.categorySet': 'category Setting',
   'app.dev.menuMap.colorPercentage': 'color Percentage',
   'app.dev.menuMap.colorSetting': 'color Setting',
   'app.dev.menuMap.electroplateSetting': 'electroplate Setting',
