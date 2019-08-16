@@ -4,17 +4,17 @@ export default {
   namespace: 'dev',
 
   state: {
-    measureUnitList: [],
+    measureUnitList: { records: [] },
     dropDownList: [],
     pagination: {
       current: 1,
       size: 10,
     },
     selectKey: 'measureUnit',
-    colorSettingList: [],
+    colorSettingList: { records: [] },
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
-    colorPercentageList: []
+    colorPercentageList: { records: [] }
   },
 
   effects: {

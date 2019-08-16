@@ -47,6 +47,7 @@ const formLayout = {
 @Form.create()
 @connect(({ dev }) => {
   return {
+    dev,
     list: dev.list,
     pagination: dev.pagination,
     selectKey: dev.selectKey,
@@ -290,7 +291,8 @@ class Info extends Component {
   // 审批回调
   handleLock = () => {
     const { choosenRowData, selectKey, selectedRowKeys } = this.props
-    const isLock = Number(choosenRowData.status) === 0
+    // const isLock = Number(choosenRowData.status) === 0
+    const isLock = this.returnLockType().type === 1
     const serviceType = isLock ? 'approve' : 'revoke'
     serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head
@@ -301,6 +303,31 @@ class Info extends Component {
         this.getList()
       }
     })
+  }
+
+  // 1为审批 2为撤销
+  returnLockType = () => {
+    const { selectedRowKeys, dev, selectKey } = this.props
+    console.log(dev, selectKey)
+    console.log(dev[`${selectKey}List`], '==================')
+    if (dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
+    const isLock1 = selectedRowKeys.reduce((res, cur) => {
+      console.log(dev, selectKey, dev[`${selectKey}List`])
+      const singleObjcect = dev[`${selectKey}List`].records.find((subItem) => {
+        console.log(subItem, cur)
+        return subItem.id === cur
+      })
+      console.log(singleObjcect)
+      if (singleObjcect) res.push(singleObjcect.status)
+      return res
+    }, [])
+    console.log(isLock1)
+    const isShenPi = isLock1.every((item) => Number(item) === 0)
+    const isChexiao = isLock1.every((item) => Number(item) === 2)
+    console.log(isShenPi, isChexiao)
+    if (isShenPi) return { name: '审批', disabled: false, type: 1 }
+    if (isChexiao) return { name: '撤销', disabled: false, type: 2 }
+    return { name: '审批', disabled: true, type: 1 }
   }
 
   // 弹窗确定提交回调
@@ -320,7 +347,7 @@ class Info extends Component {
   }
 
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType } = this;
     const { mode, modalType } = state;
     const { list, selectKey, choosenRowData } = props;
     console.log(choosenRowData, '==========')
@@ -346,6 +373,7 @@ class Info extends Component {
                 sourceList={list}
                 choosenRowData={choosenRowData}
                 btnFn={btnFn}
+                returnLockType={returnLockType}
               />
             </div>
           </div>
@@ -382,7 +410,7 @@ const btnGroup = [
 
 
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn }) => (
+const RightContent = ({ type, choosenRowData, btnFn, returnLockType }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       <Col lg={16} md={24}>
@@ -411,7 +439,7 @@ const RightContent = ({ type, choosenRowData, btnFn }) => (
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag, name2 }) => (
+              {btnGroup.map(({ name, tag }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
@@ -421,7 +449,7 @@ const RightContent = ({ type, choosenRowData, btnFn }) => (
                   disabled={!choosenRowData.id && tag !== 'add'}
                   onClick={() => { btnFn(tag) }}
                 >
-                  {Number(choosenRowData.status) === 2 && tag === 'lock' ? name2 : name}
+                  {tag === 'lock' ? returnLockType().name : name}
                 </Button>
               ))}
             </div>
