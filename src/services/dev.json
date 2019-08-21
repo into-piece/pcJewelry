@@ -1,0 +1,112 @@
+[
+  {
+    "name": "measureUnit",
+    "path": "measure-unit",
+    "arr": [
+      "listBasicMeasureUnit",
+      "saveBasicMeasureUnit",
+      "deleteBasicMeasureUnit",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "colorPercentage",
+    "path": "colour-set",
+    "arr": [
+      "listBasicColourSet",
+      "saveBasicColourSet",
+      "deleteBasicColourSet",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "colorSetting",
+    "path": "colour-settings",
+    "arr": [
+      "listBasicColourSettings",
+      "saveOrUpdate",
+      "deleteBasicColourSettings",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "electroplateSetting",
+    "path": "plating-color-setting",
+    "arr": [
+      "listBasicPlatingColorSetting",
+      "saveOrUpdate",
+      "deleteBasicPlatingColorSetting",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "shapeSetting",
+    "path": "shape-settings",
+    "arr": [
+      "listBasicShapeSettings",
+      "saveOrUpdate",
+      "deleteBasicShapeSettings",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "specificationSetting",
+    "path": "specification-settings",
+    "arr": [
+      "listBasicSpecificationSettings",
+      "saveBasicSpecificationSettings",
+      "deleteBasicSpecificationSettings",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "materialsGrade",
+    "path": "raw-material-grade-settings",
+    "arr": [
+      "listBasicRawMaterialGradeSettings",
+      "saveOrUpdate",
+      "deleteBasicColourSettings",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "stoneCutter",
+    "path": "stone-cutting-setting",
+    "arr": [
+      "listBasicStoneCuttingSetting",
+      "saveOrUpdate",
+      "deleteBasicColourSettings",
+      "approval",
+      "revoke"
+    ]
+  },
+  {
+    "name": "insertStoneTechnology",
+    "path": "gem-set-process",
+    "arr": ["listGemSetProcess", "saveOrUpdate", "deleteBasicColourSettings", "approval", "revoke"]
+  },
+
+  {
+    "name": "rubberMouldSetting",
+    "path": "film-settings",
+    "arr": ["listFilmSettings", "saveOrUpdate", "deleteBasicColourSettings", "approval", "revoke"]
+  },
+  {
+    "name": "mouldPosition",
+    "path": "mold-positioning-settings",
+    "arr": [
+      "listMoldPositioningSettings",
+      "saveOrUpdate",
+      "deleteBasicColourSettings",
+      "approval",
+      "revoke"
+    ]
+  }
+]

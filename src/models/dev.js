@@ -71,6 +71,7 @@ export default {
     },
     * getList({ payload }, { call, put }) {
       const { type, params } = payload
+      console.log(servicesConfig)
       console.log(type, params, servicesConfig[`listBasic${type}`])
       const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
@@ -242,7 +243,7 @@ export default {
       };
     },
 
-    //成色
+    // 成色
     getColorPercentage2(state, action) {
       const colorPercentageList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -268,7 +269,7 @@ export default {
       };
     },
 
-    //颜色
+    // 颜色
     getcolorSettingList2(state, action) {
       const colorSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -327,7 +328,7 @@ export default {
       };
     },
 
-    //规格
+    // 规格
     getstoneCutterList2(state, action) {
       const stoneCutterList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -339,7 +340,7 @@ export default {
       };
     },
 
-    //规格
+    // 规格
     getinsertStoneTechnologyList2(state, action) {
       const insertStoneTechnologyList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -351,7 +352,7 @@ export default {
       };
     },
 
-    //规格
+    // 规格
     getrubberMouldSettingList2(state, action) {
       const rubberMouldSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -363,7 +364,7 @@ export default {
       };
     },
 
-    //规格
+    // 规格
     getmouldPositionList2(state, action) {
       const mouldPositionList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'

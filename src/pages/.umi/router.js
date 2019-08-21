@@ -3,7 +3,7 @@ import { Router as DefaultRouter, Route, Switch } from 'react-router-dom';
 import dynamic from 'umi/dynamic';
 import renderRoutes from 'umi/lib/renderRoutes';
 import history from '@tmp/history';
-import RendererWrapper0 from '/Users/apple/Documents/workplace/jewelry/src/pages/.umi/LocaleWrapper.jsx';
+import RendererWrapper0 from 'D:/workplace/jewelry/src/pages/.umi/LocaleWrapper.jsx';
 import _dvaDynamic from 'dva/dynamic';
 
 const Router = require('dva/router').routerRedux.ConnectedRouter;
@@ -15,7 +15,7 @@ const routes = [
       ? _dvaDynamic({
           component: () =>
             import(/* webpackChunkName: "layouts__UserLayout" */ '../../layouts/UserLayout'),
-          LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+          LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
             .default,
         })
       : require('../../layouts/UserLayout').default,
@@ -32,7 +32,7 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import(/* webpackChunkName: 'p__User__models__register.js' */ '/Users/apple/Documents/workplace/jewelry/src/pages/User/models/register.js').then(
+                import(/* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js').then(
                   m => {
                     return { namespace: 'register', ...m.default };
                   },
@@ -40,7 +40,7 @@ const routes = [
               ],
               component: () =>
                 import(/* webpackChunkName: "p__User__Login" */ '../User/Login'),
-              LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+              LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
           : require('../User/Login').default,
@@ -53,7 +53,7 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import(/* webpackChunkName: 'p__User__models__register.js' */ '/Users/apple/Documents/workplace/jewelry/src/pages/User/models/register.js').then(
+                import(/* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js').then(
                   m => {
                     return { namespace: 'register', ...m.default };
                   },
@@ -61,7 +61,7 @@ const routes = [
               ],
               component: () =>
                 import(/* webpackChunkName: "p__User__Register" */ '../User/Register'),
-              LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+              LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
           : require('../User/Register').default,
@@ -74,7 +74,7 @@ const routes = [
           ? _dvaDynamic({
               app: require('@tmp/dva').getApp(),
               models: () => [
-                import(/* webpackChunkName: 'p__User__models__register.js' */ '/Users/apple/Documents/workplace/jewelry/src/pages/User/models/register.js').then(
+                import(/* webpackChunkName: 'p__User__models__register.js' */ 'D:/workplace/jewelry/src/pages/User/models/register.js').then(
                   m => {
                     return { namespace: 'register', ...m.default };
                   },
@@ -82,7 +82,7 @@ const routes = [
               ],
               component: () =>
                 import(/* webpackChunkName: "p__User__RegisterResult" */ '../User/RegisterResult'),
-              LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+              LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
           : require('../User/RegisterResult').default,
@@ -93,7 +93,7 @@ const routes = [
           ? _dvaDynamic({
               component: () =>
                 import(/* webpackChunkName: "p__404" */ '../404'),
-              LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+              LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
           : require('../404').default,
@@ -102,7 +102,7 @@ const routes = [
       {
         component: () =>
           React.createElement(
-            require('/Users/apple/Documents/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+            require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
             { pagesPath: 'src/pages', hasRoutesInConfig: true },
           ),
@@ -115,7 +115,7 @@ const routes = [
       ? _dvaDynamic({
           component: () =>
             import(/* webpackChunkName: "layouts__BasicLayout" */ '../../layouts/BasicLayout'),
-          LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+          LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
             .default,
         })
       : require('../../layouts/BasicLayout').default,
@@ -144,7 +144,7 @@ const routes = [
               ? _dvaDynamic({
                   component: () =>
                     import(/* webpackChunkName: "p__dev__Basic" */ '../dev/Basic'),
-                  LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+                  LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
               : require('../dev/Basic').default,
@@ -153,7 +153,7 @@ const routes = [
           {
             component: () =>
               React.createElement(
-                require('/Users/apple/Documents/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
                   .default,
                 { pagesPath: 'src/pages', hasRoutesInConfig: true },
               ),
@@ -165,7 +165,7 @@ const routes = [
           ? _dvaDynamic({
               component: () =>
                 import(/* webpackChunkName: "p__404" */ '../404'),
-              LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+              LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                 .default,
             })
           : require('../404').default,
@@ -174,7 +174,7 @@ const routes = [
       {
         component: () =>
           React.createElement(
-            require('/Users/apple/Documents/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+            require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
             { pagesPath: 'src/pages', hasRoutesInConfig: true },
           ),
@@ -184,7 +184,7 @@ const routes = [
   {
     component: () =>
       React.createElement(
-        require('/Users/apple/Documents/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+        require('D:/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
           .default,
         { pagesPath: 'src/pages', hasRoutesInConfig: true },
       ),

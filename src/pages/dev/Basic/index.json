@@ -1,0 +1,52 @@
+{
+  "manuArr": [
+    "measureUnit",
+    "categorySet",
+    "colorPercentage",
+    "colorSetting",
+    "electroplateSetting",
+    "shapeSetting",
+    "specificationSetting",
+    "materialsGrade",
+    "stoneCutter",
+    "insertStoneTechnology",
+    "rubberMouldSetting",
+    "mouldPosition"
+  ],
+  "modalContent": {
+    "measureUnit": [
+      { "key": "单位代码", "value": "unitCode" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" }
+    ],
+    "colorPercentage": [
+      { "key": "产品材料", "value": "productMaterial" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName", "noNeed": true },
+      { "key": "成色系数", "value": "assayingTheCoefficient" },
+      { "key": "返主材类别", "value": "rtnMainMaterial", "noNeed": true }
+    ],
+    "colorSetting": [
+      { "key": "颜色代码", "value": "unitCode" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" }
+    ],
+    "electroplateSetting": [
+      { "key": "电镀颜色代码", "value": "colorCode" },
+      { "key": "简称", "value": "shotName" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" },
+      { "key": "含镍", "value": "isNickel", "type": "check" }
+    ],
+    "shapeSetting": [
+      { "key": "形状代码", "value": "shapeCode" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" }
+    ],
+    "specificationSetting": [
+      { "key": "规格代码", "value": "specificationCode" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" }
+    ]
+  }
+}

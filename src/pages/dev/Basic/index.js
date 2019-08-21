@@ -16,11 +16,22 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag'
+import jsonData from './index.json'
 // import Bread from '@/components/BreadCrumb'
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
 const FormItem = Form.Item;
+
+// manuArr是 =》menu配置提供遍历
+// modalContent => 每个menu不同的增加弹窗填写信息
+const { manuArr, modalContent } = jsonData
+
+// 左边menu遍历配置
+const menuMap = manuArr.map(item => ({
+  value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Basic Settings" />,
+  key: item,
+}));
 
 // 弹窗form表单样式
 const formLayout = {
@@ -45,15 +56,6 @@ const formLayout = {
 
 // 各menu对应的icon配置
 const iconObject = { measureUnit, colorPercentage };
-
-// menu配置提供遍历
-const manuArr = ['measureUnit', 'categorySet', 'colorPercentage', 'colorSetting', 'electroplateSetting', 'shapeSetting', 'specificationSetting', 'materialsGrade', 'stoneCutter', 'insertStoneTechnology', 'rubberMouldSetting', 'mouldPosition']
-
-// 左边menu遍历配置
-const menuMap = manuArr.map(item => ({
-  value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Basic Settings" />,
-  key: item,
-}));
 
 // 右手边按钮集合
 const btnGroup = [
@@ -167,15 +169,15 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 颜色设定表头
   colorSetting: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '颜色代码',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
     },
     {
-      title: '中文名称',
+      title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
     },
@@ -185,16 +187,6 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
@@ -202,15 +194,20 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 电镀表头
   electroplateSetting: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '电镀颜色代码',
+      dataIndex: 'colorCode',
+      key: 'colorCode',
     },
     {
-      title: '中文名称',
+      title: '简称',
+      dataIndex: 'shotName',
+      key: 'shotName',
+    },
+    {
+      title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
     },
@@ -220,14 +217,10 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
+      title: '含镍',
+      dataIndex: 'isNickel',
+      key: 'isNickel',
+      render: (data) => (Number(data) === 1 ? '是' : '否')
     },
     {
       title: '状态',
@@ -237,15 +230,15 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 形状设定表头
   shapeSetting: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '形状代码',
+      dataIndex: 'shapeCode',
+      key: 'shapeCode',
     },
     {
-      title: '中文名称',
+      title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
     },
@@ -255,16 +248,6 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
@@ -272,12 +255,12 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 规格设定表头
   specificationSetting: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '规格代码',
+      dataIndex: 'specificationCode',
+      key: 'specificationCode',
     },
     {
       title: '中文名称',
@@ -290,16 +273,6 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
@@ -307,10 +280,10 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 原料等级设定表头
   materialsGrade: [
     {
-      title: '产品材料',
+      title: '登记代码',
       dataIndex: 'productMaterial',
       key: 'productMaterial',
     },
@@ -325,16 +298,6 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
@@ -342,12 +305,12 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 石头切工设定列表
   stoneCutter: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '切工代码',
+      dataIndex: 'cuttingCode',
+      key: 'cuttingCode',
     },
     {
       title: '中文名称',
@@ -360,16 +323,6 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
@@ -377,15 +330,20 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 镶石工艺
   insertStoneTechnology: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '成色',
+      dataIndex: 'cuttingCode',
+      key: 'cuttingCode',
     },
     {
-      title: '中文名称',
+      title: '类别',
+      dataIndex: 'category',
+      key: 'category',
+    },
+    {
+      title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
     },
@@ -395,14 +353,14 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
+      title: '公费',
+      dataIndex: 'costs',
+      key: 'costs',
     },
     {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
+      title: '备注',
+      dataIndex: 'remarks',
+      key: 'remarks',
     },
     {
       title: '状态',
@@ -412,11 +370,11 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 胶膜设定
   rubberMouldSetting: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
+      title: '胶膜代码',
+      dataIndex: 'productMaterial', // ????
       key: 'productMaterial',
     },
     {
@@ -430,14 +388,19 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
+      title: '胶膜尺寸',
+      dataIndex: 'filmSize',
+      key: 'filmSize',
     },
     {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
+      title: '胶膜片数',
+      dataIndex: 'filmNumber',
+      key: 'filmNumber',
+    },
+    {
+      title: '工费',
+      dataIndex: 'costs',
+      key: 'costs',
     },
     {
       title: '状态',
@@ -447,32 +410,32 @@ const columnsArr = {
     },
   ],
 
-  // 分类设定表头
+  // 模具仓位设定
   mouldPosition: [
     {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '仓位编号',
+      dataIndex: 'positionCode',
+      key: 'positionCode',
     },
     {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
+      title: '房间号',
+      dataIndex: 'roomNum',
+      key: 'roomNum',
     },
     {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
+      title: '橱柜号',
+      dataIndex: 'cabinetNum',
+      key: 'cabinetNum',
     },
     {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
+      title: '抽屉号',
+      dataIndex: 'drawerNum',
+      key: 'drawerNum',
     },
     {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
+      title: '备注',
+      dataIndex: 'remarks',
+      key: 'remarks',
     },
     {
       title: '状态',
@@ -557,7 +520,6 @@ class Info extends Component {
     manuArr.forEach(item => {
       obj[item] = `get${item}List`
     })
-    console.log(obj, key, obj.key)
     // getDevList
     dispatch({
       type: `dev/getList`,
@@ -582,6 +544,7 @@ class Info extends Component {
     }
   };
 
+
   // 根据btn点击 返回对应弹窗内容
   getModalContent = () => {
     const {
@@ -590,34 +553,13 @@ class Info extends Component {
       form: { getFieldDecorator },
     } = this.props;
     const { modalType } = this.state
-    let content = ''
-    let dataArr = []
-    switch (selectKey) {
-      case 'measureUnit':
-        dataArr = [
-          { key: '单位代码', value: 'unitCode' },
-          { key: '中文名', value: 'zhName' },
-          { key: '英文名', value: 'enName' },
-        ]
-        break
-      case 'colorPercentage':
-        dataArr = [
-          { key: '产品材料', value: 'productMaterial' },
-          { key: '中文名', value: 'zhName', },
-          { key: '英文名', value: 'enName', noNeed: true },
-          { key: '成色系数', value: 'assayingTheCoefficient' },
-          { key: '返主材类别', value: 'rtnMainMaterial', noNeed: true },
-        ]
-        break
-      default:
-        content = ''
-        break
-    }
+    const content = ''
+    const dataArr = modalContent[selectKey]
     const isEdit = modalType === 'edit'
     return (
       <Form size="small">
         {
-          dataArr.map(({ key, value, noNeed }) => {
+          dataArr && dataArr.map(({ key, value, noNeed }) => {
             return (
               <FormItem label={key} {...formLayout} key={key}>
                 {getFieldDecorator(value, {
@@ -660,8 +602,6 @@ class Info extends Component {
         // this.setState({
         //   [selectKey]
         // })
-        console.log(serviceObj, selectKey, addData)
-        console.log(serviceObj[`addBasic${selectKey}`], addData[selectKey])
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         serviceObj[`addBasic${selectKey}`](values).then(res => {
           const { rtnCode, rtnMsg } = res.head
@@ -685,8 +625,6 @@ class Info extends Component {
     form.validateFields((err, values) => {
       if (!err) {
         const { choosenRowData } = this.props
-        console.log(serviceObj, selectKey, addData)
-        console.log(serviceObj[`addBasic${selectKey}`], addData[selectKey], choosenRowData.id)
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         const params = {
           ...values,
@@ -933,9 +871,7 @@ class CenterInfo extends Component {
     const { onSelectChange, props } = this
     const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
     const columns = columnsArr[type]
-    console.log(dev, type, dev[`${type}List`], columns)
     const list = dev[`${type}List`]
-    console.log(listLoading)
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
