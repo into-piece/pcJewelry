@@ -2,11 +2,12 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-16 23:48:54
- * @LastEditTime: 2019-08-17 00:53:31
+ * @LastEditTime: 2019-08-17 15:15:50
  * @LastEditors: Please set LastEditors
  */
-import { getDevDropDown, listBasicMeasureUnit, listBasicColorPercentage, listBasicCategorySet } from '@/services/dev';
+import servicesConfig from '@/services/dev';
 
+const { getDevDropDown, addBasicMeasureUnit } = servicesConfig
 export default {
   namespace: 'dev',
 
@@ -22,70 +23,77 @@ export default {
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
     colorPercentageList: { records: [] },
-    categorySetList: { records: [] }
+    categorySetList: { records: [] },
+    electroplateSettingList: { records: [] },
+    shapeSettingList: { records: [] },
+    specificationSettingList: { records: [] },
+    materialsGradeList: { records: [] },
+    stoneCutterList: { records: [] },
+    insertStoneTechnologyList: { records: [] },
+    rubberMouldSettingList: { records: [] },
+    mouldPositionList: { records: [] },
   },
 
   effects: {
 
     // table
-    *getPagination({ payload }, { put }) {
+    * getPagination({ payload }, { put }) {
       yield put({
         type: 'getPagination2',
         payload,
       });
     },
-    *getSelectKey({ payload }, { put }) {
+    * getSelectKey({ payload }, { put }) {
       yield put({
         type: 'getSelectKey2',
         payload,
       });
     },
-    *getChoosenRowData({ payload }, { put }) {
+    * getChoosenRowData({ payload }, { put }) {
       yield put({
         type: 'getChoosenRowData2',
         payload,
       });
     },
-    *changeSelectedRowKeys({ payload }, { put }) {
+    * changeSelectedRowKeys({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeys2',
         payload,
       });
     },
-
-
-
     // 计量单位
-    *getUnitDropDown({ payload }, { call, put }) {
+    * getUnitDropDown({ payload }, { call, put }) {
       const response = yield call(getDevDropDown, payload);
       yield put({
         type: 'getData',
         payload: response,
       });
     },
-    *getMeasureUnit({ payload }, { call, put }) {
-      const response = yield call(listBasicMeasureUnit, payload);
+    * getList({ payload }, { call, put }) {
+      const { type, params } = payload
+      console.log(type, params, servicesConfig[`listBasic${type}`])
+      const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
         type: 'getDevList2',
+        payload: { response, type },
+      });
+    },
+    *addMeasureUnit({ payload }, { call, put }) {
+      const response = yield call(addBasicMeasureUnit, payload);
+      yield put({
+        type: 'addMeasureUnit2',
         payload: response,
       });
     },
-    // *addMeasureUnit({ payload }, { call, put }) {
-    //   const response = yield call(addBasicMeasureUnit, payload);
+
+    // // 成色设定
+    // * getcolorPercentageList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicColorPercentage, payload);
     //   yield put({
-    //     type: 'addMeasureUnit2',
+    //     type: 'getColorPercentage2',
     //     payload: response,
     //   });
     // },
-
-    // 成色设定
-    *getColorPercentageList({ payload }, { call, put }) {
-      const response = yield call(listBasicColorPercentage, payload);
-      yield put({
-        type: 'getColorPercentage2',
-        payload: response,
-      });
-    },
 
     // *getColorSetList({ payload }, { call, put }) {
     //   const response = yield call(listBasicColourSet, payload);
@@ -96,15 +104,83 @@ export default {
     // },
 
     //
-    *getCategorySetList({ payload }, { call, put }) {
-      const response = yield call(listBasicCategorySet, payload);
-      yield put({
-        type: 'getCategorySetList2',
-        payload: response,
-      });
-    },
+    // * getcategorySetList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getCategorySetList2',
+    //     payload: response,
+    //   });
+    // },
 
+    // * getcolorSettingList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getcolorSettingList2',
+    //     payload: response,
+    //   });
+    // },
 
+    // * getelectroplateSettingList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getelectroplateSettingList2',
+    //     payload: response,
+    //   });
+    // },
+
+    // * getshapeSettingList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getshapeSettingList2',
+    //     payload: response,
+    //   });
+    // },
+    // * getspecificationSettingList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getspecificationSettingList2',
+    //     payload: response,
+    //   });
+    // },
+    // * getmaterialsGradeList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getmaterialsGradeList2',
+    //     payload: response,
+    //   });
+    // },
+
+    // * getstoneCutterList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getstoneCutterList2',
+    //     payload: response,
+    //   });
+    // },
+
+    // * getinsertStoneTechnologyList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload.params);
+    //   yield put({
+    //     type: 'getinsertStoneTechnologyList2',
+    //     payload: response,
+    //   });
+    // },
+
+    // * getrubberMouldSettingList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getrubberMouldSettingList2',
+    //     payload: response,
+    //   });
+    // },
+
+    // * getmouldPositionList({ payload }, { call, put }) {
+    //   const response = yield call(listBasicCategorySet, payload);
+    //   yield put({
+    //     type: 'getmouldPositionList2',
+    //     payload: response,
+    //   });
+    // },
   },
 
   reducers: {
@@ -119,14 +195,17 @@ export default {
       };
     },
     getDevList2(state, action) {
-      const measureUnitList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
+      console.log(action.payload)
+      const { type, response } = action.payload
+      const listName = `${type}List`
+      const listData =
+        response && response.head && response.head.rtnCode === '000000'
+          ? response.body
           : [];
-      console.log(measureUnitList);
+      console.log(listData);
       return {
         ...state,
-        measureUnitList,
+        [listName]: listData,
       };
     },
 
@@ -162,6 +241,8 @@ export default {
         choosenRowData: action.payload,
       };
     },
+
+    //成色
     getColorPercentage2(state, action) {
       const colorPercentageList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -173,17 +254,8 @@ export default {
         colorPercentageList,
       };
     },
-    // addMeasureUnit2(state, action) {
-    //   const colorSettingList =
-    //     action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-    //       ? action.payload.body
-    //       : [];
-    //   return {
-    //     ...state,
-    //     colorSettingList,
-    //   };
-    // },
 
+    // 分类
     getCategorySetList2(state, action) {
       const categorySetList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -193,6 +265,113 @@ export default {
       return {
         ...state,
         categorySetList,
+      };
+    },
+
+    //颜色
+    getcolorSettingList2(state, action) {
+      const colorSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        colorSettingList,
+      };
+    },
+
+    // 电镀
+    getelectroplateSettingList2(state, action) {
+      const electroplateSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        electroplateSettingList,
+      };
+    },
+
+    // 形状
+    getshapeSettingList2(state, action) {
+      const shapeSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        shapeSettingList,
+      };
+    },
+
+    // 规格
+    getspecificationSettingList2(state, action) {
+      const specificationSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        specificationSettingList,
+      };
+    },
+    // 规格
+    getmaterialsGradeList2(state, action) {
+      const materialsGradeList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        materialsGradeList,
+      };
+    },
+
+    //规格
+    getstoneCutterList2(state, action) {
+      const stoneCutterList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        stoneCutterList,
+      };
+    },
+
+    //规格
+    getinsertStoneTechnologyList2(state, action) {
+      const insertStoneTechnologyList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        insertStoneTechnologyList,
+      };
+    },
+
+    //规格
+    getrubberMouldSettingList2(state, action) {
+      const rubberMouldSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        rubberMouldSettingList,
+      };
+    },
+
+    //规格
+    getmouldPositionList2(state, action) {
+      const mouldPositionList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body
+          : [];
+      return {
+        ...state,
+        mouldPositionList,
       };
     },
   },

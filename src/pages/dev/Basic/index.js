@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-16 23:48:54
- * @LastEditTime: 2019-08-17 01:26:11
+ * @LastEditTime: 2019-08-17 15:47:00
  * @LastEditors: Please set LastEditors
  */
 import React, { Component } from 'react';
@@ -67,7 +67,7 @@ const isLockList = false // table是否锁定=》显示锁定标签做判断 先
 // table 当前页对应的表头配置
 const columnsArr = {
   // 计量单位表头
-  measureUnitColumns: [
+  measureUnit: [
     {
       title: '单位代码',
       dataIndex: 'unitCode',
@@ -98,7 +98,7 @@ const columnsArr = {
   ],
 
   // 成色设定表头
-  colorPercentageColumns: [
+  colorPercentage: [
     {
       title: '产品材料',
       dataIndex: 'productMaterial',
@@ -130,7 +130,358 @@ const columnsArr = {
       key: 'status',
       render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
     },
-  ]
+  ],
+
+  // 分类设定表头
+  categorySet: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  colorSetting: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  electroplateSetting: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  shapeSetting: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  specificationSetting: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  materialsGrade: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  stoneCutter: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  insertStoneTechnology: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  rubberMouldSetting: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
+  // 分类设定表头
+  mouldPosition: [
+    {
+      title: '产品材料',
+      dataIndex: 'productMaterial',
+      key: 'productMaterial',
+    },
+    {
+      title: '中文名称',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '成色系列',
+      dataIndex: 'assayingTheCoefficient',
+      key: 'assayingTheCoefficient',
+    },
+    {
+      title: '返主材类别',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
+    },
+  ],
+
 }
 
 @Form.create()
@@ -142,8 +493,8 @@ const columnsArr = {
     selectKey: dev.selectKey,
     choosenRowData: dev.choosenRowData,
     colorSetList: dev.colorSetList,
-    selectedRowKeys: dev.selectedRowKeys
-    // listLoading: loading.effects['ringnum/fetchListRingNum'],
+    selectedRowKeys: dev.selectedRowKeys,
+
   };
 })
 class Info extends Component {
@@ -202,21 +553,22 @@ class Info extends Component {
   // 获取对应key=》页面进行数据请求
   getList = (key = this.props.selectKey) => {
     const { dispatch, pagination } = this.props;
-    const arr = {
-      colorPercentage: 'getColorPercentageList',
-      measureUnit: 'getMeasureUnit'
-    }
+    const obj = {}
+    manuArr.forEach(item => {
+      obj[item] = `get${item}List`
+    })
+    console.log(obj, key, obj.key)
     // getDevList
     dispatch({
-      type: `dev/${arr[key]}`,
-      payload: pagination,
+      type: `dev/getList`,
+      payload: { params: pagination, type: key },
     });
   }
 
   // 列表对应操作button回调
   btnFn = modalType => {
     switch (modalType) {
-      case 'add':
+      case 'plus':
       case 'edit':
       default:
         this.setState({ modalType });
@@ -286,7 +638,7 @@ class Info extends Component {
     const { modalType } = this.state;
     let text = '';
     switch (modalType) {
-      case 'add':
+      case 'plus':
         text = '添加';
         break;
       case 'edit':
@@ -410,7 +762,7 @@ class Info extends Component {
   handleModalOk = () => {
     const { modalType } = this.state;
     switch (modalType) {
-      case 'add':
+      case 'plus':
         this.handleAdd()
         break;
       case 'edit':
@@ -424,12 +776,12 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { choosenRowData } = this.props
-    if (tag === 'add') return false
+    const { selectedRowKeys } = this.props
+    if (tag === 'plus') return false
     if (tag === 'lock') {
-      return !choosenRowData.id || this.returnLockType().disabled
+      return selectedRowKeys.length === 0 || this.returnLockType().disabled
     }
-    return !choosenRowData.id
+    return selectedRowKeys.length === 0
   }
 
   render() {
@@ -538,9 +890,10 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 
 
 // Table 中间列表内容
-@connect(({ dev }) => {
+@connect(({ loading, dev }) => {
   return {
     dev,
+    listLoading: loading.effects['dev/getList'],
     pagination: dev.pagination,
     choosenRowData: dev.choosenRowData,
     selectedRowKeys: dev.selectedRowKeys,
@@ -578,10 +931,11 @@ class CenterInfo extends Component {
 
   render() {
     const { onSelectChange, props } = this
-    const { type, choosenRowData, pagination, dev, selectedRowKeys } = props;
-    const columns = columnsArr[`${type}Columns`]
+    const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
+    const columns = columnsArr[type]
     console.log(dev, type, dev[`${type}List`], columns)
     const list = dev[`${type}List`]
+    console.log(listLoading)
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
@@ -602,6 +956,7 @@ class CenterInfo extends Component {
             changePagination={this.changePagination}
             selectedRowKeys={selectedRowKeys}
             onSelectChange={onSelectChange}
+            listLoading={listLoading}
           />
         </div>
       </div>

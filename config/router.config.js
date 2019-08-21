@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-17 01:25:39
+ * @LastEditTime: 2019-08-17 10:55:56
+ * @LastEditors: Please set LastEditors
+ */
 export default [
   // user
   {
@@ -30,166 +37,167 @@ export default [
         // authority: ['admin', 'user','chents']
       },
       // bussiness route
-      {
-        path: '/business',
-        icon: 'code',
-        name: 'business',
+      // {
+      //   path: '/business',
+      //   icon: 'code',
+      //   name: 'business',
 
-        routes: [
-          {
-            path: '/business/client',
-            name: 'Client',
-            icon: 'user',
-            component: './Business/Client/ClientView',
-            routes: [
-              {
-                path: '/business/client',
-                redirect: '/business/client/emptyView',
-              },
-              {
-                path: '/business/client/emptyView',
-                component: './Business/Client/EmptyView',
-              },
-              {
-                path: '/business/client/client',
-                component: './Business/Client/ClientInfo',
-              },
-              {
-                path: '/business/client/terminal',
-                component: './Business/Client/TerminalClient',
-              },
-              {
-                path: '/business/client/product',
-                component: './Business/Client/Product',
-              },
+      //   routes: [
+      //     {
+      //       path: '/business/client',
+      //       name: 'Client',
+      //       icon: 'user',
+      //       component: './Business/Client/ClientView',
+      //       routes: [
+      //         {
+      //           path: '/business/client',
+      //           redirect: '/business/client/emptyView',
+      //         },
+      //         {
+      //           path: '/business/client/emptyView',
+      //           component: './Business/Client/EmptyView',
+      //         },
+      //         {
+      //           path: '/business/client/client',
+      //           component: './Business/Client/ClientInfo',
+      //         },
+      //         {
+      //           path: '/business/client/terminal',
+      //           component: './Business/Client/TerminalClient',
+      //         },
+      //         {
+      //           path: '/business/client/product',
+      //           component: './Business/Client/Product',
+      //         },
 
-              {
-                path: '/business/client/marking',
-                component: './Business/Client/Mark',
-              },
-              {
-                path: '/business/client/package',
-                component: './Business/Client/PackageInfo',
-              },
-              {
-                path: '/business/client/history',
-                component: './Business/Client/History',
-              },
-            ],
-          },
-          {
-            path: '/business/basic',
-            name: 'Basic',
-            icon: 'bulb',
-            component: './Business/Basic/Info',
-            routes: [
-              {
-                path: '/business/basic',
-                redirect: '/business/basic/base',
-              },
-              {
-                path: '/business/basic/base',
-                component: './Business/Basic/Brand',
-              },
-              {
-                path: '/business/basic/security',
-                component: './Business/Basic/SecurityView',
-              },
-              {
-                path: '/business/basic/binding',
-                component: './Business/Basic/BindingView',
-              },
-              {
-                path: '/business/basic/notification',
-                component: './Business/Basic/NotificationView',
-              },
-              {
-                path: '/business/basic/brand',
-                component: './Business/Basic/Brand',
-                routes: [
-                  {
-                    path: '/business/basic/brand',
-                    redirect: '/business/basic/brand/from',
-                  },
-                ],
-              },
-              {
-                path: '/business/basic/requested',
-                component: './Business/Basic/Requested',
-              },
-              {
-                path: '/business/basic/sendWay',
-                component: './Business/Basic/SendWay',
-              },
-              {
-                path: '/business/basic/royalty',
-                component: './Business/Basic/Royalty',
-              },
-              {
-                path: '/business/basic/ring',
-                component: './Business/Basic/RingNum',
-              },
-              {
-                path: '/business/basic/currency',
-                component: './Business/Basic/Currency',
-              },
-            ],
-          },
-          {
-            path: '/business/product',
-            name: 'Product',
-            icon: 'shopping',
-            component: './Business/Product/ProductInfo',
-            routes: [],
-          },
+      //         {
+      //           path: '/business/client/marking',
+      //           component: './Business/Client/Mark',
+      //         },
+      //         {
+      //           path: '/business/client/package',
+      //           component: './Business/Client/PackageInfo',
+      //         },
+      //         {
+      //           path: '/business/client/history',
+      //           component: './Business/Client/History',
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       path: '/business/basic',
+      //       name: 'Basic',
+      //       icon: 'bulb',
+      //       component: './Business/Basic/Info',
+      //       routes: [
+      //         {
+      //           path: '/business/basic',
+      //           redirect: '/business/basic/base',
+      //         },
+      //         {
+      //           path: '/business/basic/base',
+      //           component: './Business/Basic/Brand',
+      //         },
+      //         {
+      //           path: '/business/basic/security',
+      //           component: './Business/Basic/SecurityView',
+      //         },
+      //         {
+      //           path: '/business/basic/binding',
+      //           component: './Business/Basic/BindingView',
+      //         },
+      //         {
+      //           path: '/business/basic/notification',
+      //           component: './Business/Basic/NotificationView',
+      //         },
+      //         {
+      //           path: '/business/basic/brand',
+      //           component: './Business/Basic/Brand',
+      //           routes: [
+      //             {
+      //               path: '/business/basic/brand',
+      //               redirect: '/business/basic/brand/from',
+      //             },
+      //           ],
+      //         },
+      //         {
+      //           path: '/business/basic/requested',
+      //           component: './Business/Basic/Requested',
+      //         },
+      //         {
+      //           path: '/business/basic/sendWay',
+      //           component: './Business/Basic/SendWay',
+      //         },
+      //         {
+      //           path: '/business/basic/royalty',
+      //           component: './Business/Basic/Royalty',
+      //         },
+      //         {
+      //           path: '/business/basic/ring',
+      //           component: './Business/Basic/RingNum',
+      //         },
+      //         {
+      //           path: '/business/basic/currency',
+      //           component: './Business/Basic/Currency',
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       path: '/business/product',
+      //       name: 'Product',
+      //       icon: 'shopping',
+      //       component: './Business/Product/ProductInfo',
+      //       routes: [],
+      //     },
 
-          {
-            path: '/business/specimen',
-            name: 'Specimen',
-            icon: 'form',
-            component: './Business/Specimen/Specimen',
-            routes: [],
-          },
-          {
-            path: '/business/quote',
-            name: 'Quote',
-            icon: 'form',
-            component: './Business/Quote/Quote',
-            routes: [],
-          },
-          {
-            path: '/business/proforminvoice',
-            name: 'Proform Invoice',
-            icon: 'form',
-            component: './Business/Proforminvoice/Proforminvoice',
-            routes: [],
-          },
+      //     {
+      //       path: '/business/specimen',
+      //       name: 'Specimen',
+      //       icon: 'form',
+      //       component: './Business/Specimen/Specimen',
+      //       routes: [],
+      //     },
+      //     {
+      //       path: '/business/quote',
+      //       name: 'Quote',
+      //       icon: 'form',
+      //       component: './Business/Quote/Quote',
+      //       routes: [],
+      //     },
+      //     {
+      //       path: '/business/proforminvoice',
+      //       name: 'Proform Invoice',
+      //       icon: 'form',
+      //       component: './Business/Proforminvoice/Proforminvoice',
+      //       routes: [],
+      //     },
 
-          {
-            path: '/business/deliver',
-            name: 'Deliver',
-            icon: 'form',
-            component: './Business/Deliver/Deliver',
-            routes: [],
-          },
+      //     {
+      //       path: '/business/deliver',
+      //       name: 'Deliver',
+      //       icon: 'form',
+      //       component: './Business/Deliver/Deliver',
+      //       routes: [],
+      //     },
 
-          {
-            path: '/business/Receiving',
-            name: 'Receiving',
-            icon: 'form',
-            component: './Business/Receiving/Receiving',
-            routes: [],
-          },
+      //     {
+      //       path: '/business/Receiving',
+      //       name: 'Receiving',
+      //       icon: 'form',
+      //       component: './Business/Receiving/Receiving',
+      //       routes: [],
+      //     },
 
-          {
-            path: '/business/report',
-            name: 'Report',
-            icon: 'form',
-            component: './Business/Report/Report',
-            routes: [],
-          },
-        ],
-      },
+      //     {
+      //       path: '/business/report',
+      //       name: 'Report',
+      //       icon: 'form',
+      //       component: './Business/Report/Report',
+      //       routes: [],
+      //     },
+      //   ],
+      // },
+
       // dev route
       {
         path: '/dev',

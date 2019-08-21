@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-17 01:25:53
+ * @LastEditTime: 2019-08-17 15:24:31
+ * @LastEditors: Please set LastEditors
+ */
 import React, { Component } from 'react';
 import { Table } from 'antd';
 import styles from './index.less';
@@ -34,7 +41,7 @@ class MyTable extends Component {
 
   render() {
     const { clickRowItem, props, pageChange, onSelectRowClass } = this;
-    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange } = props;
+    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading } = props;
     const { current, size } = pagination;
     const paginationProps = {
       showQuickJumper: true,
@@ -61,6 +68,7 @@ class MyTable extends Component {
         pagination={paginationProps}
         rowKey={record => record.id}
         rowClassName={onSelectRowClass}
+        loading={listLoading}
         onRow={record => ({
           onClick: () => {
             clickRowItem(record);
