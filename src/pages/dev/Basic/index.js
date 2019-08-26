@@ -10,7 +10,7 @@ import { connect } from 'dva';
 import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
-import { measureUnit, colorPercentage } from '@/utils/SvgUtil';
+import SvgUtil from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
@@ -54,9 +54,6 @@ const formLayout = {
 //     name: '基础数据', link: ''
 //   }
 // ]
-
-// 各menu对应的icon配置
-const iconObject = { measureUnit, colorPercentage };
 
 // 右手边按钮集合
 const btnGroup = [
@@ -102,41 +99,6 @@ const columnsArr = {
 
   // 成色设定表头
   colorPercentage: [
-    {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => (Number(data) === 2 ? '已审批' : Number(data) === 0 ? '输入' : ''),
-    },
-  ],
-
-  // 分类设定表头
-  categorySet: [
     {
       title: '产品材料',
       dataIndex: 'productMaterial',
@@ -335,10 +297,10 @@ const columnsArr = {
   insertStoneTechnology: [
     {
       title: '成色',
-      dataIndex: 'cuttingCode',
-      key: 'cuttingCode',
+      dataIndex: 'basicColourSet',
+      key: 'basicColourSet',
       render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
       )
     },
     {
@@ -497,7 +459,8 @@ class Info extends Component {
 
   // 根据当前页面的key 返回对应的icon
   getMenuIcon = key => {
-    return iconObject[key];
+    console.log(SvgUtil)
+    return SvgUtil[key];
   };
 
   // 点击menu 更换子页面回调 请求list数据
@@ -821,7 +784,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               >
                 <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
               </span>
-              <GetRenderitem data={choosenRowData} />
+              <GetRenderitem data={choosenRowData} type={type} />
             </div>
           </Card>
 
@@ -900,7 +863,7 @@ class CenterInfo extends Component {
         <div className={styles.contentTitle}>
           <Icon
             className={styles.titleIcon}
-            component={iconObject[type]}
+            component={SvgUtil[type]}
           />
           <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
         </div>
@@ -923,18 +886,49 @@ class CenterInfo extends Component {
   }
 }
 
+const descriptionArr = {
+  measureUnit: [
+    {
+      term: '单位编号',
+      key: 'unitCode'
+    },
+    {
+      term: '中文名',
+      key: 'zhName'
+    },
+    {
+      term: '英文名',
+      key: 'enName'
+    },
+  ],
+  "colorPercentage": [],
+  "colorSetting": [],
+  "electroplateSetting": [],
+  "shapeSetting": [],
+  "specificationSetting": [],
+  "materialsGrade": [],
+  "stoneCutter": [],
+  "insertStoneTechnology": [],
+  "rubberMouldSetting": [],
+  "mouldPosition": []
+}
+
 // 右手边显示的详情信息
-const GetRenderitem = ({ data }) => {
-  const { zhName, enName, unitCode } = data;
+const GetRenderitem = ({ data, type }) => {
   const selectRowItem = () => {
     // console.log('select the item');
   };
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
-        <Description term="单位编号">{unitCode}</Description>
-        <Description term="中文名">{zhName}</Description>
-        <Description term="英文名">{enName}</Description>
+        {
+          descriptionArr[type] && descriptionArr[type].map(({ key, term }) => {
+            return (
+              <Description term={term}>{data[key]}</Description>
+
+            )
+          })
+        }
       </DescriptionList>
     </div>
   );
