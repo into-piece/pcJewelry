@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import { measureUnit, colorPercentage } from '@/utils/SvgUtil';
@@ -22,6 +22,7 @@ import jsonData from './index.json'
 const { Description } = DescriptionList;
 const { Item } = Menu;
 const FormItem = Form.Item;
+const { Option } = Select;
 
 // manuArr是 =》menu配置提供遍历
 // modalContent => 每个menu不同的增加弹窗填写信息
@@ -283,9 +284,9 @@ const columnsArr = {
   // 原料等级设定表头
   materialsGrade: [
     {
-      title: '登记代码',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
+      title: '等级代码',
+      dataIndex: 'gradeCode',
+      key: 'gradeCode',
     },
     {
       title: '中文名称',
@@ -336,6 +337,9 @@ const columnsArr = {
       title: '成色',
       dataIndex: 'cuttingCode',
       key: 'cuttingCode',
+      render: (data) => (
+        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+      )
     },
     {
       title: '类别',
@@ -457,7 +461,7 @@ const columnsArr = {
     choosenRowData: dev.choosenRowData,
     colorSetList: dev.colorSetList,
     selectedRowKeys: dev.selectedRowKeys,
-
+    gemSetProcessDropDown: dev.gemSetProcessDropDown
   };
 })
 class Info extends Component {
@@ -507,8 +511,8 @@ class Info extends Component {
 
     // 还要清空所选中项
     dispatch({
-      type: 'dev/getChoosenRowData',
-      payload: {},
+      type: 'dev/changeSelectedRowKeys',
+      payload: [],
     });
 
   };
@@ -529,10 +533,18 @@ class Info extends Component {
 
   // 列表对应操作button回调
   btnFn = modalType => {
+    const { selectKey, dispatch } = this.props
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
+        console.log(selectKey, '==============selectKey')
+        if (selectKey === 'insertStoneTechnology') {
+          dispatch({
+            type: 'dev/getGemDropDown',
+            payload: {},
+          });
+        }
         this.setState({ modalType });
         break;
       case 'delete':
@@ -543,7 +555,6 @@ class Info extends Component {
         break;
     }
   };
-
 
   // 根据btn点击 返回对应弹窗内容
   getModalContent = () => {
@@ -556,16 +567,27 @@ class Info extends Component {
     const content = ''
     const dataArr = modalContent[selectKey]
     const isEdit = modalType === 'edit'
+    const { dev } = this.props
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
+            console.log(list)
             return (
               <FormItem label={key} {...formLayout} key={key}>
-                {getFieldDecorator(value, {
-                  rules: [{ required: !noNeed, message: `请输入${key}` }],
-                  initialValue: isEdit ? choosenRowData[value] : '',
-                })(<Input placeholder="请输入" />)}
+                {
+                  getFieldDecorator(value, {
+                    rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
+                    initialValue: isEdit ? choosenRowData[value] : '',
+                  })(type && type === 2 ?
+                    <Select placeholder="请选择">
+                      {dev[list] && dev[list].map(({ id, zhName }) =>
+                        <Option value={id}>{zhName}</Option>
+                      )}
+                    </Select> :
+                    <Input placeholder="请输入" />
+                  )
+                }
               </FormItem>
             )
           })
@@ -683,7 +705,8 @@ class Info extends Component {
    */
   returnLockType = () => {
     const { selectedRowKeys, dev, selectKey } = this.props
-    if (dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
+    console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============')
+    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
     const isLock1 = selectedRowKeys.reduce((res, cur) => {
       const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur)
       if (singleObjcect) res.push(singleObjcect.status)

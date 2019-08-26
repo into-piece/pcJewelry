@@ -7,7 +7,7 @@
  */
 import servicesConfig from '@/services/dev';
 
-const { getDevDropDown, addBasicMeasureUnit } = servicesConfig
+const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown } = servicesConfig
 export default {
   namespace: 'dev',
 
@@ -32,6 +32,7 @@ export default {
     insertStoneTechnologyList: { records: [] },
     rubberMouldSettingList: { records: [] },
     mouldPositionList: { records: [] },
+    gemSetProcessDropDown: []
   },
 
   effects: {
@@ -86,102 +87,13 @@ export default {
         payload: response,
       });
     },
-
-    // // 成色设定
-    // * getcolorPercentageList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicColorPercentage, payload);
-    //   yield put({
-    //     type: 'getColorPercentage2',
-    //     payload: response,
-    //   });
-    // },
-
-    // *getColorSetList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicColourSet, payload);
-    //   yield put({
-    //     type: 'getColorSetList2',
-    //     payload: response,
-    //   });
-    // },
-
-    //
-    // * getcategorySetList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getCategorySetList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getcolorSettingList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getcolorSettingList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getelectroplateSettingList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getelectroplateSettingList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getshapeSettingList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getshapeSettingList2',
-    //     payload: response,
-    //   });
-    // },
-    // * getspecificationSettingList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getspecificationSettingList2',
-    //     payload: response,
-    //   });
-    // },
-    // * getmaterialsGradeList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getmaterialsGradeList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getstoneCutterList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getstoneCutterList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getinsertStoneTechnologyList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload.params);
-    //   yield put({
-    //     type: 'getinsertStoneTechnologyList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getrubberMouldSettingList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getrubberMouldSettingList2',
-    //     payload: response,
-    //   });
-    // },
-
-    // * getmouldPositionList({ payload }, { call, put }) {
-    //   const response = yield call(listBasicCategorySet, payload);
-    //   yield put({
-    //     type: 'getmouldPositionList2',
-    //     payload: response,
-    //   });
-    // },
+    *getGemDropDown({ payload }, { call, put }) {
+      const response = yield call(listGemSetProcessDropDown, payload);
+      yield put({
+        type: 'getGemDropDown2',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -373,6 +285,16 @@ export default {
       return {
         ...state,
         mouldPositionList,
+      };
+    },
+    getGemDropDown2(state, action) {
+      const gemSetProcessDropDown =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : [];
+      return {
+        ...state,
+        gemSetProcessDropDown,
       };
     },
   },

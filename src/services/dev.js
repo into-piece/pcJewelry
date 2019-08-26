@@ -28,9 +28,16 @@ const result = serviceArr.map(({ name, arr, path }) => (
   ))
 ))
 
+const resultArr = [
+  ...result.flat(),
+  { key: 'listGemSetProcessDropDown', path: '/colour-set/listBasicColourSetDropDown' }
+]
+
+console.log(resultArr, '============')
+
 // 请求url配置
 const outPutObject = {}
-result.flat().forEach(({ key, path }) => {
+resultArr.forEach(({ key, path }) => {
   outPutObject[key] = async (params) => {
     return request(priefx + path, {
       method: 'POST',
@@ -38,6 +45,6 @@ result.flat().forEach(({ key, path }) => {
     });
   }
 })
-
+console.log(outPutObject)
 
 export default outPutObject

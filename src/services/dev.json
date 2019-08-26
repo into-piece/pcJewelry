@@ -71,7 +71,7 @@
     "arr": [
       "listBasicRawMaterialGradeSettings",
       "saveOrUpdate",
-      "deleteBasicColourSettings",
+      "deleteBasicRawMaterialGradeSettings",
       "approval",
       "revoke"
     ]
@@ -79,24 +79,18 @@
   {
     "name": "stoneCutter",
     "path": "stone-cutting-setting",
-    "arr": [
-      "listBasicStoneCuttingSetting",
-      "saveOrUpdate",
-      "deleteBasicColourSettings",
-      "approval",
-      "revoke"
-    ]
+    "arr": ["listBasicStoneCuttingSetting", "saveOrUpdate", "delete", "approval", "revoke"]
   },
   {
     "name": "insertStoneTechnology",
     "path": "gem-set-process",
-    "arr": ["listGemSetProcess", "saveOrUpdate", "deleteBasicColourSettings", "approval", "revoke"]
+    "arr": ["listGemSetProcess", "saveOrUpdate", "deleteGemSetProcess", "approval", "revoke"]
   },
 
   {
     "name": "rubberMouldSetting",
     "path": "film-settings",
-    "arr": ["listFilmSettings", "saveOrUpdate", "deleteBasicColourSettings", "approval", "revoke"]
+    "arr": ["listFilmSettings", "saveOrUpdate", "deleteFilmSettings", "approval", "revoke"]
   },
   {
     "name": "mouldPosition",
@@ -104,7 +98,7 @@
     "arr": [
       "listMoldPositioningSettings",
       "saveOrUpdate",
-      "deleteBasicColourSettings",
+      "deleteMoldPositioningSettings",
       "approval",
       "revoke"
     ]

@@ -47,6 +47,39 @@
       { "key": "规格代码", "value": "specificationCode" },
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名", "value": "enName" }
+    ],
+    "materialsGrade": [
+      { "key": "等级代码", "value": "gradeCode" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" }
+    ],
+    "stoneCutter": [
+      { "key": "切工代码", "value": "cuttingCode" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" }
+    ],
+    "insertStoneTechnology": [
+      { "key": "切工代码", "value": "cuttingCode", "type": 2, "list": "gemSetProcessDropDown" },
+      { "key": "类别", "value": "category" },
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" },
+      { "key": "工费", "value": "costs" },
+      { "key": "备注", "value": "remarks" }
+    ],
+    "rubberMouldSetting": [
+      { "key": "中文名", "value": "zhName" },
+      { "key": "英文名", "value": "enName" },
+      { "key": "胶膜尺寸", "value": "filmSize" },
+      { "key": "胶膜片数", "value": "filmNumber" },
+      { "key": "工费", "value": "costs" },
+      { "key": "备注", "value": "remarks" }
+    ],
+    "mouldPosition": [
+      { "key": "仓位编号", "value": "positionCode" },
+      { "key": "房间号", "value": "room_num" },
+      { "key": "橱柜号", "value": "cabinet_num" },
+      { "key": "抽屉号", "value": "drawer_num" },
+      { "key": "备注", "value": "remarks" }
     ]
   }
 }
