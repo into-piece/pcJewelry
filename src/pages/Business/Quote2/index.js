@@ -26,7 +26,7 @@ import PackageInfo from "../client/PackageInfo";
 import Product from "../client/Product";
 import History from "../client/History";
 import business from "../business.less";
-import quote from './Quote.less';
+import quote from './index.less';
 import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from "../client/components/CustomerSearchFrom";
 import HttpFetch from '../../../utils/HttpFetch';
@@ -622,7 +622,7 @@ class Quote extends PureComponent {
     // router.replace('/business/client/emptyView');
   }
 
-  renderSimpleForm() {
+  renderSimpleForm = () => {
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -660,411 +660,7 @@ class Quote extends PureComponent {
     return this.renderSimpleForm();
   }
 
-  render() {
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
-    const maintainermodalFooter = {
-      okText: '保存',
-      onOk: this.handleMaintainerSubmit,
-      onCancel: this.handleCancel,
-    };
-
-    const contactsModalFooter = {
-      okText: '保存',
-      onOk: this.handleContactsSubmit,
-      onCancel: this.handleCancel,
-    };
-
-    let  {
-      selectTitle,
-      downTableColumn,
-      typeTableContent,
-      downTableContent,
-      rightlg,
-      leftlg,
-      visible,
-      current = {},
-      update,
-      contactsTableBody,
-      radioType,
-      pageCurrent,
-      customerPageCurrent,
-      customerPageSize,
-      customerPageTotal,
-      fristLoad,
-      selectType,
-      selectCustomerItem,
-      contactsAddVisible,
-      contactsLoading,
-      selectedRowKeys,
-      customerSelectedRowKeys,
-      maintainsLoading,
-      maintainTableContent,
-      maintainerAddVisible,
-      drawVisible,
-      contactsTableContent,
-      contactsSelectedRowKeys,
-    } = this.state;
-
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkbox',
-      onChange: this.onSelectChange,
-      onSelect: this.selectChange,
-    };
-
-    const rowCustomerSelection = {
-      selectedRowKeys: customerSelectedRowKeys,
-      type: 'checkbox',
-      onChange: this.selectCustomerChange,
-      onSelect: this.selectChange,
-    };
-
-    const rowMaintainerSelection = {
-      selectedRowKeys: customerSelectedRowKeys,
-      type: 'checkbox',
-      onChange: this.selectCustomerChange,
-      onSelect: this.selectChange,
-    };
-
-    const {
-      clientListloading,
-      clientUpdateloading,
-      clientSaveloading,
-      clientFreezeloading,
-      clientunFreezeloading,
-      clientDeleteloading,
-      customerBody = {},
-      body = {},
-      form: { getFieldDecorator },
-      customerListloading,
-      customerSaveloading,
-      customerUpdateloading,
-      customerDeleteloading,
-      customerFreezeloading,
-    } = this.props;
-
-    const paginationProps = {
-      showQuickJumper: true,
-      pageSize: body.size,
-      current: pageCurrent,
-      total: body.total,
-      onChange: this.pageChange,
-    };
-
-    const paginationCustomerProps = {
-      showQuickJumper: true,
-      pageSize: customerBody.size,
-      current: customerPageCurrent,
-      total: customerBody.total,
-      onChange: this.pageCustomerChange,
-    };
-
-    const isUpdate =
-      clientUpdateloading ||
-      clientSaveloading ||
-      clientDeleteloading ||
-      clientFreezeloading ||
-      clientunFreezeloading;
-    const isCurstomerUpdate =
-      customerDeleteloading ||
-      customerSaveloading ||
-      customerUpdateloading ||
-      customerDeleteloading;
-
-    if (body) {
-      typeTableContent = body.data;
-    }
-
-    if (customerListloading) {
-      this.state.customerLoad = true;
-    } else if (this.state.customerLoad) {
-        this.state.customerLoad = false;
-        const { rowCustomerData } = this.state;
-        // console.log('update list row ', rowCustomerData);
-      }
-
-    if (customerBody.data) {
-      customerBody.data.map(value => {
-        const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
-        return value;
-      });
-    }
-
-    if (isCurstomerUpdate) {
-      this.state.customerLoading = true;
-    } else if (this.state.customerLoading) {
-        // this.startShowTab();
-        this.state.customerLoading = false;
-      }
-
-    if (this.state.isDelete) {
-      this.setState({});
-      this.startShowTab();
-      this.state.isDelete = false;
-    }
-
-    if (isUpdate) {
-      this.state.update = true;
-      if (clientUpdateloading) {
-        this.state.isUpdateFrom = true;
-      }
-    } else if (update) {
-        // console.log('code '+body.rtnCode)
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-        this.handleDone();
-
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
-        }
-      }
-
-    const { contactsItem } = this.state;
-
-    return (
-      <div className={business.page}>
-        <div className={business.nav}>
-          <Breadcrumb style={{ display: 'none' }}>
-            <Breadcrumb.Item>主页</Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">业务</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="/business/basic/base#/business/client/">报价</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-        </div>
-        <div className={business.center_content}>
-          <Row gutter={24}>
-            <Col lg={rightlg} md={24}>
-              <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }}>
-                  <Radio.Group defaultValue="current_quote"   buttonStyle="solid">
-                    <Radio.Button value="current_quote">
-                      当前报价
-                    </Radio.Button>
-                    <Radio.Button value="history_quote">
-                      历史报价
-                    </Radio.Button>
-                  </Radio.Group>
-                  <ProductSearchFrom
-                  />
-                  <Table
-                    style={{ marginBottom: 20 }}
-                    loading={clientListloading || isUpdate}
-                    size="middle"
-                    dataSource={typeTableContent}
-                    rowSelection={rowSelection}
-                    pagination={paginationProps}
-                    rowClassName={this.onSelectRowClass}
-                    rowKey={record => record.id}
-                    columns={this.clientColumns}
-                    onRow={record => {
-                      return {
-                        onClick: event => {
-                          this.clickRowItem(record);
-                        },
-                      };
-                    }}
-                    onSelectRow={this.handleSelectRows}
-                  />
-
-                  <Radio.Group defaultValue="show_clientlist" value={radioType} buttonStyle="solid">
-                    <Radio.Button value="show_clientlist" onClick={this.selectClients}>
-                      客户列表
-                    </Radio.Button>
-                    <Radio.Button value="show_persion" onClick={this.selectMaintains}>
-                      共同维护人
-                    </Radio.Button>
-                    <Radio.Button value="show_contacts" onClick={this.selectContacts}>
-                      联系人
-                    </Radio.Button>
-                    <Radio.Button value="">圈戒资料</Radio.Button>
-                  </Radio.Group>
-                  <div
-                    style={{
-                      paddingTop: 5,
-                      width: '100%',
-                      display: selectType === 'client' ? '' : 'none',
-                    }}
-                  >
-                    <CustomerSearchFrom
-                      onCustomerSearch={this.handleCustomerSearch}
-                      onCustomerReset={this.handleCustomerFormReset}
-                    />
-                  </div>
-                  <Divider className={business.divder} />
-
-                  {/* <Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({ */}
-                  {/* maintainerAddVisible: true, */}
-                  {/* })} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button> */}
-
-                  <Button
-                    icon="plus"
-                    type="primary"
-                    style={{
-                      marginBottom: 10,
-                      marginRight: 20,
-                      display: selectType === 'contacts' ? '' : 'none',
-                    }}
-                    onClick={() =>
-                      this.setState({
-                        contactsCurrent: {},
-                        contactsAddVisible: true,
-                      })
-                    }
-                    disabled={!selectCustomerItem || selectCustomerItem === ''}
-                  >
-                    新建
-                  </Button>
-
-                  <Button
-                    icon="edit"
-                    type="primary"
-                    style={{
-                      marginBottom: 10,
-                      marginRight: 20,
-                      display: selectType === 'contacts' ? '' : 'none',
-                    }}
-                    onClick={() => {
-                      let contacts = contactsItem;
-                      if (contactsTableBody && contactsTableBody.records) {
-                        const showcons = contactsTableBody.records.filter(v => {
-                          if (v.id === contactsItem.id) return v;
-                        });
-                        contacts = showcons[0] ? showcons[0] : contactsItem;
-                      }
-
-                      this.setState({
-                        contactsCurrent: contacts,
-                        contactsAddVisible: true,
-                      });
-                    }}
-                    disabled={!contactsItem || contactsItem === ''}
-                  >
-                    编辑
-                  </Button>
-
-                  <Button
-                    icon="delete"
-                    type="danger"
-                    style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
-                    onClick={this.deleteContactsList}
-                    disabled={!contactsItem || contactsItem === ''}
-                  >
-                    删除
-                  </Button>
-
-                  <Table
-                    style={{ display: selectType === 'client' ? '' : 'none' }}
-                    loading={isCurstomerUpdate || customerListloading}
-                    dataSource={fristLoad ? [] : customerBody.data}
-                    size="middle"
-                    rowKey={record => record.id}
-                    rowSelection={rowCustomerSelection}
-                    onRow={record => {
-                      return {
-                        onClick: event => {
-                          this.clickCustomerRowItem(record);
-                        },
-                      };
-                    }}
-                    pagination={paginationCustomerProps}
-                    rowClassName={this.onSelectCustomerRowClass}
-                    className={business.small2_table}
-                    columns={this.clientContentColumns}
-                  />
-
-                  <Table
-                    style={{ display: selectType === 'maintains' ? '' : 'none' }}
-                    loading={maintainsLoading}
-                    dataSource={maintainTableContent}
-                    size="middle"
-                    rowKey={record => record.id}
-                    rowSelection={rowMaintainerSelection}
-                    rowClassName={this.onSelectRowClass}
-                    columns={maintainsColumn}
-                  />
-
-                  <JewelryTable
-                    style={{ display: selectType === 'contacts' ? '' : 'none' }}
-                    onSelectItem={(item, rows) => {
-                      this.setState({
-                        contactsItem: item,
-                        contactsData: rows,
-                      });
-                    }}
-                    loading={contactsLoading}
-                    body={contactsTableBody}
-                    columns={this.contactsColumn}
-                    onChange={this.handleContactsTableChange}
-                    pageChange={this.pageContactsChange}
-                  />
-                </div>
-              </Card>
-            </Col>
-            <Col lg={leftlg} md={24}>
-              {this.getDetailInfo()}
-            </Col>
-          </Row>
-        </div>
-        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
-          {this.getDetailInfo()}
-        </Drawer>
-
-        <Modal
-          width={640}
-          className={styles.standardListForm}
-          destroyOnClose
-          visible={visible}
-          {...modalFooter}
-        >
-          {this.getModalContent()}
-        </Modal>
-
-        <Modal
-          width={640}
-          className={styles.standardListForm}
-          destroyOnClose
-          visible={maintainerAddVisible}
-          {...maintainermodalFooter}
-        >
-          {this.getMaintainerContent()}
-        </Modal>
-
-        <ContactsModalForm
-          contactsCurrent={this.state.contactsCurrent}
-          visible={contactsAddVisible}
-          handleCancel={this.handleCancel}
-          contactsSubmit={this.handleContactsSubmit}
-        />
-        {/* <Modal */}
-        {/* width={720} */}
-        {/* className={styles.standardListForm} */}
-        {/* destroyOnClose */}
-        {/* visible={contactsAddVisible} */}
-        {/* {...contactsModalFooter} */}
-        {/* > */}
-        {/* {this.getContactsContent()} */}
-        {/* </Modal> */}
-      </div>
-    );
-  }
 
   getModalContent = () => {
     const {
@@ -1147,11 +743,11 @@ class Quote extends PureComponent {
         newSort.splice(newSort.findIndex(v => v.field === field), 1);
       }
     } else if (sort !== 'normal') {
-        newSort.push({
-          field,
-          sort,
-        });
-      }
+      newSort.push({
+        field,
+        sort,
+      });
+    }
 
     return newSort;
   };
@@ -1197,8 +793,8 @@ class Quote extends PureComponent {
               <Description term="创建日期">{showItem.createTime}</Description>
             </DescriptionList>
           ) : (
-            <div />
-          )}
+              <div />
+            )}
         </div>
 
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -1253,17 +849,17 @@ class Quote extends PureComponent {
                   取消审批
                 </Button>
               ) : (
-                <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="primary"
-                  icon="lock"
-                  disabled={isEdit}
-                  onClick={this.handleFreezeClients}
-                >
-                  审批
-                </Button>
-              )}
+                  <Button
+                    className={business.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    disabled={isEdit}
+                    onClick={this.handleFreezeClients}
+                  >
+                    审批
+                  </Button>
+                )}
             </div>
 
             <div
@@ -1355,9 +951,9 @@ class Quote extends PureComponent {
 
   clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let rowData = this.state.rowData;
+    let { rowData } = this.state;
     const selects = selectedRowKeys || [];
-    const id = record.id;
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -1410,10 +1006,10 @@ class Quote extends PureComponent {
 
   clickCustomerRowItem = record => {
     const { customerSelectedRowKeys, rowCustomerSelectedData } = this.state;
-    let rowCustomerData = this.state.rowCustomerData;
+    let { rowCustomerData } = this.state;
     // const selects = selectedRowKeys ? selectedRowKeys : [];
     const selects = customerSelectedRowKeys || [];
-    const id = record.id;
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -2141,7 +1737,7 @@ class Quote extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             _this.setState({
@@ -2156,7 +1752,7 @@ class Quote extends PureComponent {
         });
         // console.log('result ', d);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         // console.log('parsing failed', ex);
         message.error('加载失败！');
         _this.setState({
@@ -2173,13 +1769,13 @@ class Quote extends PureComponent {
       sorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += `,${  v.field}`;
+            orderByAsc += `,${v.field}`;
           } else {
             orderByAsc = v.field;
           }
           // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
         } else if (v.sort === 'descend') {
-          if (orderByDesc) orderByDesc += `,${  v.field}`;
+          if (orderByDesc) orderByDesc += `,${v.field}`;
           else orderByDesc = v.field;
 
           // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
@@ -2222,9 +1818,9 @@ class Quote extends PureComponent {
       });
       return;
     }
-      _this.setState({
-        contactsLoading: true,
-      });
+    _this.setState({
+      contactsLoading: true,
+    });
 
 
     const params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
@@ -2235,13 +1831,13 @@ class Quote extends PureComponent {
       this.state.contactsSorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += `,${  v.field}`;
+            orderByAsc += `,${v.field}`;
           } else {
             orderByAsc = v.field;
           }
           // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
         } else if (v.sort === 'descend') {
-          if (orderByDesc) orderByDesc += `,${  v.field}`;
+          if (orderByDesc) orderByDesc += `,${v.field}`;
           else orderByDesc = v.field;
 
           // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
@@ -2263,7 +1859,7 @@ class Quote extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const { body } = d;
         if (body && body.records) {
           const contactsRes = body.records.map(value => {
             const s = value.isPrimaryContact;
@@ -2283,10 +1879,10 @@ class Quote extends PureComponent {
             });
             return;
           }
-            _this.setState({
-              contactsTableBody: {},
-              contactsLoading: false,
-            });
+          _this.setState({
+            contactsTableBody: {},
+            contactsLoading: false,
+          });
 
         }
         _this.setState({
@@ -2294,7 +1890,7 @@ class Quote extends PureComponent {
         });
         // console.log('result ', d);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         // console.log('parsing failed', ex);
         message.error('加载失败！');
         _this.setState({
@@ -2331,17 +1927,17 @@ class Quote extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const { head } = d;
 
         if (!head) message.error('保存失败！');
         else if (head.rtnCode === '000000') message.success(head.rtnMsg);
-          else message.success(head.rtnMsg);
+        else message.success(head.rtnMsg);
         _this.setState({
           maintainsLoading: false,
         });
         // console.log('result ', d);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         message.error('保存数据失败！ 请重试');
         _this.setState({
           maintainsLoading: false,
@@ -2360,9 +1956,9 @@ class Quote extends PureComponent {
       });
       return;
     }
-      this.setState({
-        contactsLoading: true,
-      });
+    this.setState({
+      contactsLoading: true,
+    });
 
 
     const params = item;
@@ -2386,7 +1982,7 @@ class Quote extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const { head } = d;
 
         if (!head) message.error('保存失败！');
         else {
@@ -2400,7 +1996,7 @@ class Quote extends PureComponent {
         this.loadContactsList();
         // console.log('result ', d);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         message.error('保存数据失败！ 请重试');
         _this.setState({
           contactsLoading: false,
@@ -2434,7 +2030,7 @@ class Quote extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const { head } = d;
 
         if (!head) message.error('删除失败！');
         else {
@@ -2448,7 +2044,7 @@ class Quote extends PureComponent {
         this.loadContactsList();
         // console.log('result ', d);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         message.error('保存数据失败！ 请重试');
         _this.setState({
           contactsLoading: false,
@@ -2462,6 +2058,401 @@ class Quote extends PureComponent {
       searchCustomerParams: {},
     });
   };
+
+
+  render() {
+    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+    const maintainermodalFooter = {
+      okText: '保存',
+      onOk: this.handleMaintainerSubmit,
+      onCancel: this.handleCancel,
+    };
+
+    const contactsModalFooter = {
+      okText: '保存',
+      onOk: this.handleContactsSubmit,
+      onCancel: this.handleCancel,
+    };
+
+    let {
+      selectTitle,
+      downTableColumn,
+      typeTableContent,
+      downTableContent,
+      rightlg,
+      leftlg,
+      visible,
+      current = {},
+      update,
+      contactsTableBody,
+      radioType,
+      pageCurrent,
+      customerPageCurrent,
+      customerPageSize,
+      customerPageTotal,
+      fristLoad,
+      selectType,
+      selectCustomerItem,
+      contactsAddVisible,
+      contactsLoading,
+      selectedRowKeys,
+      customerSelectedRowKeys,
+      maintainsLoading,
+      maintainTableContent,
+      maintainerAddVisible,
+      drawVisible,
+      contactsTableContent,
+      contactsSelectedRowKeys,
+    } = this.state;
+
+    const rowSelection = {
+      selectedRowKeys,
+      type: 'checkbox',
+      onChange: this.onSelectChange,
+      onSelect: this.selectChange,
+    };
+
+    const rowCustomerSelection = {
+      selectedRowKeys: customerSelectedRowKeys,
+      type: 'checkbox',
+      onChange: this.selectCustomerChange,
+      onSelect: this.selectChange,
+    };
+
+    const rowMaintainerSelection = {
+      selectedRowKeys: customerSelectedRowKeys,
+      type: 'checkbox',
+      onChange: this.selectCustomerChange,
+      onSelect: this.selectChange,
+    };
+
+    const {
+      clientListloading,
+      clientUpdateloading,
+      clientSaveloading,
+      clientFreezeloading,
+      clientunFreezeloading,
+      clientDeleteloading,
+      customerBody = {},
+      body = {},
+      form: { getFieldDecorator },
+      customerListloading,
+      customerSaveloading,
+      customerUpdateloading,
+      customerDeleteloading,
+      customerFreezeloading,
+    } = this.props;
+
+    const paginationProps = {
+      showQuickJumper: true,
+      pageSize: body.size,
+      current: pageCurrent,
+      total: body.total,
+      onChange: this.pageChange,
+    };
+
+    const paginationCustomerProps = {
+      showQuickJumper: true,
+      pageSize: customerBody.size,
+      current: customerPageCurrent,
+      total: customerBody.total,
+      onChange: this.pageCustomerChange,
+    };
+
+    const isUpdate =
+      clientUpdateloading ||
+      clientSaveloading ||
+      clientDeleteloading ||
+      clientFreezeloading ||
+      clientunFreezeloading;
+    const isCurstomerUpdate =
+      customerDeleteloading ||
+      customerSaveloading ||
+      customerUpdateloading ||
+      customerDeleteloading;
+
+    if (body) {
+      typeTableContent = body.data;
+    }
+
+    if (customerListloading) {
+      this.state.customerLoad = true;
+    } else if (this.state.customerLoad) {
+      this.state.customerLoad = false;
+      const { rowCustomerData } = this.state;
+      // console.log('update list row ', rowCustomerData);
+    }
+
+    if (customerBody.data) {
+      customerBody.data.map(value => {
+        const s = value.status;
+        if (s == 0) {
+          value.status = '输入';
+        } else if (s == 1) {
+          value.status = '使用中';
+        } else if (s == 2) {
+          value.status = '审批';
+        }
+        return value;
+      });
+    }
+
+    if (isCurstomerUpdate) {
+      this.state.customerLoading = true;
+    } else if (this.state.customerLoading) {
+      // this.startShowTab();
+      this.state.customerLoading = false;
+    }
+
+    if (this.state.isDelete) {
+      this.setState({});
+      this.startShowTab();
+      this.state.isDelete = false;
+    }
+
+    if (isUpdate) {
+      this.state.update = true;
+      if (clientUpdateloading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else if (update) {
+      // console.log('code '+body.rtnCode)
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
+      }
+      this.handleDone();
+
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        this.state.showItem = { ...current };
+      }
+    }
+
+    const { contactsItem } = this.state;
+
+    return (
+      <div className={business.page}>
+        <div className={business.center_content}>
+          <Row gutter={24}>
+            <Col lg={rightlg} md={24}>
+              <Card bordered={false} className={business.left_content} loading={false}>
+                <div style={{ marginBottom: 16 }}>
+                  <Radio.Group defaultValue="current_quote" buttonStyle="solid">
+                    <Radio.Button value="current_quote">
+                      当前报价
+                    </Radio.Button>
+                    <Radio.Button value="history_quote">
+                      历史报价
+                    </Radio.Button>
+                  </Radio.Group>
+                  <ProductSearchFrom />
+                  <Table
+                    style={{ marginBottom: 20 }}
+                    loading={clientListloading || isUpdate}
+                    size="middle"
+                    dataSource={typeTableContent}
+                    rowSelection={rowSelection}
+                    pagination={paginationProps}
+                    rowClassName={this.onSelectRowClass}
+                    rowKey={record => record.id}
+                    columns={this.clientColumns}
+                    onRow={record => {
+                      return {
+                        onClick: event => {
+                          this.clickRowItem(record);
+                        },
+                      };
+                    }}
+                    onSelectRow={this.handleSelectRows}
+                  />
+
+                  <Radio.Group defaultValue="show_clientlist" value={radioType} buttonStyle="solid">
+                    <Radio.Button value="show_clientlist" onClick={this.selectClients}>
+                      客户列表
+                    </Radio.Button>
+                    <Radio.Button value="show_persion" onClick={this.selectMaintains}>
+                      共同维护人
+                    </Radio.Button>
+                    <Radio.Button value="show_contacts" onClick={this.selectContacts}>
+                      联系人
+                    </Radio.Button>
+                    <Radio.Button value="">圈戒资料</Radio.Button>
+                  </Radio.Group>
+                  <div
+                    style={{
+                      paddingTop: 5,
+                      width: '100%',
+                      display: selectType === 'client' ? '' : 'none',
+                    }}
+                  >
+                    <CustomerSearchFrom
+                      onCustomerSearch={this.handleCustomerSearch}
+                      onCustomerReset={this.handleCustomerFormReset}
+                    />
+                  </div>
+                  <Divider className={business.divder} />
+
+                  {/* <Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({ */}
+                  {/* maintainerAddVisible: true, */}
+                  {/* })} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button> */}
+
+                  <Button
+                    icon="plus"
+                    type="primary"
+                    style={{
+                      marginBottom: 10,
+                      marginRight: 20,
+                      display: selectType === 'contacts' ? '' : 'none',
+                    }}
+                    onClick={() =>
+                      this.setState({
+                        contactsCurrent: {},
+                        contactsAddVisible: true,
+                      })
+                    }
+                    disabled={!selectCustomerItem || selectCustomerItem === ''}
+                  >
+                    新建
+                  </Button>
+
+                  <Button
+                    icon="edit"
+                    type="primary"
+                    style={{
+                      marginBottom: 10,
+                      marginRight: 20,
+                      display: selectType === 'contacts' ? '' : 'none',
+                    }}
+                    onClick={() => {
+                      let contacts = contactsItem;
+                      if (contactsTableBody && contactsTableBody.records) {
+                        const showcons = contactsTableBody.records.filter(v => {
+                          if (v.id === contactsItem.id) return v;
+                        });
+                        contacts = showcons[0] ? showcons[0] : contactsItem;
+                      }
+
+                      this.setState({
+                        contactsCurrent: contacts,
+                        contactsAddVisible: true,
+                      });
+                    }}
+                    disabled={!contactsItem || contactsItem === ''}
+                  >
+                    编辑
+                  </Button>
+
+                  <Button
+                    icon="delete"
+                    type="danger"
+                    style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
+                    onClick={this.deleteContactsList}
+                    disabled={!contactsItem || contactsItem === ''}
+                  >
+                    删除
+                  </Button>
+
+                  <Table
+                    style={{ display: selectType === 'client' ? '' : 'none' }}
+                    loading={isCurstomerUpdate || customerListloading}
+                    dataSource={fristLoad ? [] : customerBody.data}
+                    size="middle"
+                    rowKey={record => record.id}
+                    rowSelection={rowCustomerSelection}
+                    onRow={record => {
+                      return {
+                        onClick: event => {
+                          this.clickCustomerRowItem(record);
+                        },
+                      };
+                    }}
+                    pagination={paginationCustomerProps}
+                    rowClassName={this.onSelectCustomerRowClass}
+                    className={business.small2_table}
+                    columns={this.clientContentColumns}
+                  />
+
+                  <Table
+                    style={{ display: selectType === 'maintains' ? '' : 'none' }}
+                    loading={maintainsLoading}
+                    dataSource={maintainTableContent}
+                    size="middle"
+                    rowKey={record => record.id}
+                    rowSelection={rowMaintainerSelection}
+                    rowClassName={this.onSelectRowClass}
+                    columns={maintainsColumn}
+                  />
+
+                  <JewelryTable
+                    style={{ display: selectType === 'contacts' ? '' : 'none' }}
+                    onSelectItem={(item, rows) => {
+                      this.setState({
+                        contactsItem: item,
+                        contactsData: rows,
+                      });
+                    }}
+                    loading={contactsLoading}
+                    body={contactsTableBody}
+                    columns={this.contactsColumn}
+                    onChange={this.handleContactsTableChange}
+                    pageChange={this.pageContactsChange}
+                  />
+                </div>
+              </Card>
+            </Col>
+            <Col lg={leftlg} md={24}>
+              {this.getDetailInfo()}
+            </Col>
+          </Row>
+        </div>
+        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
+          {this.getDetailInfo()}
+        </Drawer>
+
+        <Modal
+          width={640}
+          className={styles.standardListForm}
+          destroyOnClose
+          visible={visible}
+          {...modalFooter}
+        >
+          {this.getModalContent()}
+        </Modal>
+
+        <Modal
+          width={640}
+          className={styles.standardListForm}
+          destroyOnClose
+          visible={maintainerAddVisible}
+          {...maintainermodalFooter}
+        >
+          {this.getMaintainerContent()}
+        </Modal>
+
+        <ContactsModalForm
+          contactsCurrent={this.state.contactsCurrent}
+          visible={contactsAddVisible}
+          handleCancel={this.handleCancel}
+          contactsSubmit={this.handleContactsSubmit}
+        />
+        {/* <Modal */}
+        {/* width={720} */}
+        {/* className={styles.standardListForm} */}
+        {/* destroyOnClose */}
+        {/* visible={contactsAddVisible} */}
+        {/* {...contactsModalFooter} */}
+        {/* > */}
+        {/* {this.getContactsContent()} */}
+        {/* </Modal> */}
+      </div>
+    );
+  }
 }
 
 export default Quote;

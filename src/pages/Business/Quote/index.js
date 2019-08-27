@@ -425,8 +425,7 @@ const columnsArr = {
     choosenRowData: dev.choosenRowData,
     colorSetList: dev.colorSetList,
     selectedRowKeys: dev.selectedRowKeys,
-    gemSetProcessDropDown: dev.gemSetProcessDropDown,
-    listMstWordbookDrop: dev.listMstWordbookDrop
+    gemSetProcessDropDown: dev.gemSetProcessDropDown
   };
 })
 class Info extends Component {
@@ -517,13 +516,6 @@ class Info extends Component {
             payload: {},
           });
         }
-        // 成色设定
-        if (selectKey === 'colorPercentage') {
-          dispatch({
-            type: 'dev/getListMstWordbook',
-            payload: {},
-          });
-        }
         this.setState({ modalType });
         break;
       case 'delete':
@@ -560,8 +552,8 @@ class Info extends Component {
                     initialValue: isEdit ? choosenRowData[value] : '',
                   })(type && type === 2 ?
                     <Select placeholder="请选择">
-                      {dev[list] && dev[list].map(({ value, key }) =>
-                        <Option value={value}>{key}</Option>
+                      {dev[list] && dev[list].map(({ id, zhName }) =>
+                        <Option value={id}>{zhName}</Option>
                       )}
                     </Select> :
                     <Input placeholder="请输入" />
@@ -834,6 +826,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
   </GridContent>
 );
 
+
 // Table 中间列表内容
 @connect(({ loading, dev }) => {
   return {
@@ -906,6 +899,8 @@ class CenterInfo extends Component {
     );
   }
 }
+
+
 
 
 // 右手边显示的详情信息

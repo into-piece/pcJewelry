@@ -1281,11 +1281,11 @@ const routes = [
             component: __IS_BROWSER
               ? _dvaDynamic({
                   component: () =>
-                    import(/* webpackChunkName: "p__Business__Quote__Quote" */ '../Business/Quote/Quote'),
+                    import(/* webpackChunkName: "p__Business__Quote" */ '../Business/Quote'),
                   LoadingComponent: require('D:/workplace/jewelry/src/components/PageLoading/index')
                     .default,
                 })
-              : require('../Business/Quote/Quote').default,
+              : require('../Business/Quote').default,
             routes: [
               {
                 component: () =>

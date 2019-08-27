@@ -23,13 +23,7 @@
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名", "value": "enName", "noNeed": true },
       { "key": "成色系数", "value": "assayingTheCoefficient" },
-      {
-        "key": "返主材类别",
-        "value": "rtnMainMaterial",
-        "noNeed": true,
-        "type": 2,
-        "list": "listMstWordbookDrop"
-      }
+      { "key": "返主材类别", "value": "rtnMainMaterial", "noNeed": true }
     ],
     "colorSetting": [
       { "key": "颜色代码", "value": "unitCode" },

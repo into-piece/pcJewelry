@@ -7,32 +7,36 @@
  */
 import servicesConfig from '@/services/dev';
 
-const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown } = servicesConfig
+const initData = { records: [] }
+
+const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown, listMstWordbook } = servicesConfig
 export default {
   namespace: 'dev',
 
+
   state: {
-    measureUnitList: { records: [] },
+    measureUnitList: initData,
     dropDownList: [],
     pagination: {
       current: 1,
       size: 10,
     },
     selectKey: 'measureUnit',
-    colorSettingList: { records: [] },
+    colorSettingList: initData,
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
-    colorPercentageList: { records: [] },
-    categorySetList: { records: [] },
-    electroplateSettingList: { records: [] },
-    shapeSettingList: { records: [] },
-    specificationSettingList: { records: [] },
-    materialsGradeList: { records: [] },
-    stoneCutterList: { records: [] },
-    insertStoneTechnologyList: { records: [] },
-    rubberMouldSettingList: { records: [] },
-    mouldPositionList: { records: [] },
-    gemSetProcessDropDown: []
+    colorPercentageList: initData,
+    categorySetList: initData,
+    electroplateSettingList: initData,
+    shapeSettingList: initData,
+    specificationSettingList: initData,
+    materialsGradeList: initData,
+    stoneCutterList: initData,
+    insertStoneTechnologyList: initData,
+    rubberMouldSettingList: initData,
+    mouldPositionList: initData,
+    gemSetProcessDropDown: [],
+    listMstWordbookDrop: []
   },
 
   effects: {
@@ -94,6 +98,13 @@ export default {
         payload: response,
       });
     },
+    *getListMstWordbook({ payload }, { call, put }) {
+      const response = yield call(listMstWordbook, payload);
+      yield put({
+        type: 'getListMstWordbook2',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -101,7 +112,7 @@ export default {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         list,
@@ -114,7 +125,7 @@ export default {
       const listData =
         response && response.head && response.head.rtnCode === '000000'
           ? response.body
-          : [];
+          : initData;
       console.log(listData);
       return {
         ...state,
@@ -160,7 +171,7 @@ export default {
       const colorPercentageList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       console.log(colorPercentageList)
       return {
         ...state,
@@ -173,7 +184,7 @@ export default {
       const categorySetList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       console.log(categorySetList)
       return {
         ...state,
@@ -186,7 +197,7 @@ export default {
       const colorSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         colorSettingList,
@@ -198,7 +209,7 @@ export default {
       const electroplateSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         electroplateSettingList,
@@ -210,7 +221,7 @@ export default {
       const shapeSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         shapeSettingList,
@@ -222,7 +233,7 @@ export default {
       const specificationSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         specificationSettingList,
@@ -233,7 +244,7 @@ export default {
       const materialsGradeList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         materialsGradeList,
@@ -245,7 +256,7 @@ export default {
       const stoneCutterList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         stoneCutterList,
@@ -257,7 +268,7 @@ export default {
       const insertStoneTechnologyList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         insertStoneTechnologyList,
@@ -269,7 +280,7 @@ export default {
       const rubberMouldSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         rubberMouldSettingList,
@@ -281,21 +292,43 @@ export default {
       const mouldPositionList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : [];
+          : initData;
       return {
         ...state,
         mouldPositionList,
       };
     },
     getGemDropDown2(state, action) {
-      const gemSetProcessDropDown =
+      let gemSetProcessDropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : [];
+          : initData;
+      if (gemSetProcessDropDown.length > 0) {
+        gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
+          return { key: zhName, value: id }
+        })
+      }
       return {
         ...state,
         gemSetProcessDropDown,
       };
     },
+    getListMstWordbook2(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookTypeCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookTypeCode }
+        })
+      }
+
+      return {
+        ...state,
+        listMstWordbookDrop,
+      };
+    },
   },
+
 };

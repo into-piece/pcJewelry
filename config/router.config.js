@@ -161,7 +161,7 @@ export default [
             path: '/business/quote',
             name: 'Quote',
             icon: 'form',
-            component: './Business/Quote/Quote',
+            component: './Business/Quote',
             routes: [],
           },
           {
