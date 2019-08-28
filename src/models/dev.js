@@ -319,8 +319,8 @@ export default {
           ? action.payload.body.records
           : initData;
       if (listMstWordbookDrop.length > 0) {
-        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookTypeCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookTypeCode }
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookCode }
         })
       }
 

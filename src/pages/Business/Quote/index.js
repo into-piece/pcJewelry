@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select } from 'antd';
+import { Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -17,22 +17,17 @@ import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag'
 import jsonData from './index.json'
+import ProductSearchFrom from '../Product/components/ProductSearchFrom';
+import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 // import Bread from '@/components/BreadCrumb'
 
 const { Description } = DescriptionList;
-const { Item } = Menu;
 const FormItem = Form.Item;
 const { Option } = Select;
 
 // manuArr是 =》menu配置提供遍历
 // modalContent => 每个menu不同的增加弹窗填写信息
 const { manuArr, modalContent } = jsonData
-
-// 左边menu遍历配置
-const menuMap = manuArr.map(item => ({
-  value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Basic Settings" />,
-  key: item,
-}));
 
 // 弹窗form表单样式
 const formLayout = {
@@ -414,6 +409,88 @@ const columnsArr = {
 }
 
 
+const clientContentColumns = [
+  {
+    title: <div className={styles.row_normal2}>客户编号</div>,
+    dataIndex: 'customerNo',
+    key: 'customerNo',
+    // defaultSortOrder: 'descend',
+    sorter: (a, b) => a.age - b.age,
+  },
+  {
+    title: <div className={styles.row_normal2}>简称</div>,
+    dataIndex: 'shotName',
+    key: 'shotName',
+  },
+  {
+    title: <div className={styles.row_normal2}>英文名称</div>,
+    dataIndex: 'enName',
+    key: 'enName',
+    onFilter: (value, record) => record.enName.includes(value),
+    // sorter: (a, b) => {
+    //   if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName>b.enName?1:(a.enName==b.enName?0:-1);
+    //   return a.enName>b.enName?-1:(a.enName==b.enName?0:1)
+    // },
+
+    sorter: (a, b) => {
+      encompare(a.enName, b.enName);
+    },
+    // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
+  },
+  {
+    title: <div className={styles.row_normal2}>中文名称</div>,
+    dataIndex: 'zhName',
+    key: 'zhName',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+  {
+    title: <div className={styles.row_normal2}>联系人</div>,
+    dataIndex: 'contacts',
+    key: 'contacts',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+  {
+    title: <div className={styles.row_normal2}>手机</div>,
+    dataIndex: 'tel',
+    key: 'tel',
+  },
+
+  {
+    title: <div className={styles.row_normal2}>电话</div>,
+    dataIndex: 'phone',
+    key: 'phone',
+  },
+
+  {
+    title: <div className={styles.row_normal2}>中文地址</div>,
+    dataIndex: 'zhAddress',
+    key: 'zhAddress',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+
+  {
+    title: <div className={styles.row_normal2}>英文地址</div>,
+    dataIndex: 'enAddress',
+    key: 'enAddress',
+    sorter: (a, b) => {
+      encompare(a.enAddress, b.enAddress);
+    },
+  },
+  {
+    title: <div className={styles.row_normal2}>状态</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+];
+
+
+
 
 @Form.create()
 @connect(({ dev }) => {
@@ -430,7 +507,6 @@ const columnsArr = {
 })
 class Info extends Component {
   state = {
-    mode: 'inline',
     modalType: '',
     addData: {
       measureUnit: {
@@ -447,57 +523,13 @@ class Info extends Component {
     this.getList();
   }
 
-  // 获取对应menu
-  getmenu = () => {
-    return menuMap.map(({ key, value }) => (
-      <Item key={key} style={{ textAlign: 'vertical-center' }}>
-        <span style={{ display: 'flex', alignItems: 'center' }}>
-          <Icon style={{ width: 25, height: 25 }} component={this.getMenuIcon(key)} />
-          {value}
-        </span>
-      </Item>
-    ));
-  };
-
-  // 根据当前页面的key 返回对应的icon
-  getMenuIcon = key => {
-    console.log(SvgUtil)
-    return SvgUtil[key];
-  };
-
-  // 点击menu 更换子页面回调 请求list数据
-  handleSelectKey = ({ key }) => {
-    const { dispatch, pagination } = this.props;
-    dispatch({
-      type: 'dev/getSelectKey',
-      payload: key,
-    });
-    this.getList(key)
-
-    // 还要清空所选中项
-    dispatch({
-      type: 'dev/changeSelectedRowKeys',
-      payload: [],
-    });
-
-    dispatch({
-      type: 'dev/getChoosenRowData',
-      payload: { id: '', zhName: '', enName: '', unitCode: '' },
-    });
-
-  };
-
   // 获取对应key=》页面进行数据请求
-  getList = (key = this.props.selectKey) => {
+  getList = () => {
     const { dispatch, pagination } = this.props;
-    const obj = {}
-    manuArr.forEach(item => {
-      obj[item] = `get${item}List`
-    })
     // getDevList
     dispatch({
       type: `dev/getList`,
-      payload: { params: pagination, type: key },
+      payload: { params: pagination },
     });
   }
 
@@ -724,7 +756,7 @@ class Info extends Component {
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
-    const { mode, modalType } = state;
+    const { modalType } = state;
     const { list, selectKey, choosenRowData } = props;
     return (
       <div className={styles.page}>
@@ -732,16 +764,6 @@ class Info extends Component {
         <div className={styles.center_content}>
           {/* lg={17} md={24} */}
           <div className={styles.main}>
-            <div
-              className={styles.leftmenu}
-              ref={ref => {
-                this.main = ref;
-              }}
-            >
-              <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.handleSelectKey}>
-                {this.getmenu()}
-              </Menu>
-            </div>
             <div className={styles.right}>
               <RightContent
                 type={selectKey}
@@ -828,13 +850,15 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 
 
 // Table 中间列表内容
-@connect(({ loading, dev }) => {
+@Form.create()
+@connect(({ loading, quote }) => {
   return {
-    dev,
+    quote,
     listLoading: loading.effects['dev/getList'],
-    pagination: dev.pagination,
-    choosenRowData: dev.choosenRowData,
-    selectedRowKeys: dev.selectedRowKeys,
+    listCustomerTypeData: quote.listCustomerTypeData,
+    pagination: quote.pagination,
+    choosenRowData: quote.choosenRowData,
+    selectedRowKeys: quote.selectedRowKeys,
   };
 })
 class CenterInfo extends Component {
@@ -869,23 +893,24 @@ class CenterInfo extends Component {
 
   render() {
     const { onSelectChange, props } = this
-    const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
-    const columns = columnsArr[type]
-    const list = dev[`${type}List`]
+    const { choosenRowData, pagination, selectedRowKeys, listLoading, listCustomerTypeData } = props;
     return (
       <div className={styles.view_left_content}>
-        <div className={styles.contentTitle}>
-          <Icon
-            className={styles.titleIcon}
-            component={SvgUtil[type]}
-          />
-          <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-        </div>
-
+        <Radio.Group defaultValue="current_quote" buttonStyle="solid">
+          <Radio.Button value="current_quote">
+            当前报价
+            {/* <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" /> */}
+          </Radio.Button>
+          <Radio.Button value="history_quote">
+            历史报价
+            {/* <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" /> */}
+          </Radio.Button>
+        </Radio.Group>
+        <ProductSearchFrom />
         <div className={styles.tableBox}>
           <Table
-            columns={columns}
-            body={list}
+            columns={clientContentColumns}
+            body={listCustomerTypeData}
             changeChoosenRow={this.changeChoosenRow}
             selectKey={choosenRowData.id}
             pagination={pagination}

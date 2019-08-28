@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -556,7 +556,7 @@ class Info extends Component {
               <FormItem label={key} {...formLayout} key={key}>
                 {
                   getFieldDecorator(value, {
-                    rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
+                    rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
                     initialValue: isEdit ? choosenRowData[value] : '',
                   })(type && type === 2 ?
                     <Select placeholder="请选择">
@@ -564,7 +564,13 @@ class Info extends Component {
                         <Option value={value}>{key}</Option>
                       )}
                     </Select> :
-                    <Input placeholder="请输入" />
+                    type && type === 3 ?
+                        <Radio.Group value={value}>
+                          <Radio value={1}>是</Radio>
+                          <Radio value={2}>否</Radio>
+                        </Radio.Group>
+                      :
+                      <Input placeholder="请输入" />
                   )
                 }
               </FormItem>

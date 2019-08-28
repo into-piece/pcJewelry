@@ -41,7 +41,7 @@
       { "key": "简称", "value": "shotName" },
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名", "value": "enName" },
-      { "key": "含镍", "value": "isNickel", "type": "check" }
+      { "key": "含镍", "value": "isNickel", "type": 3 }
     ],
     "shapeSetting": [
       { "key": "形状代码", "value": "shapeCode" },
@@ -81,9 +81,9 @@
     ],
     "mouldPosition": [
       { "key": "仓位编号", "value": "positionCode" },
-      { "key": "房间号", "value": "room_num" },
-      { "key": "橱柜号", "value": "cabinet_num" },
-      { "key": "抽屉号", "value": "drawer_num" },
+      { "key": "房间号", "value": "roomNum" },
+      { "key": "橱柜号", "value": "cabinetNum" },
+      { "key": "抽屉号", "value": "drawerNum" },
       { "key": "备注", "value": "remarks" }
     ]
   }
