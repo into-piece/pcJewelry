@@ -8,10 +8,11 @@
 import request from '@/utils/request';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server'
-const priefx = `${env}/business/business/`;
+const priefx = `${env}/business/business/product/product-quote-header`;
 
 const resultArr = [
-  { key: 'listCustomerType', path: 'businesscustomer-type/listCustomerType' },
+  { key: 'queryProductQuoteHeadersAlreadyDone', path: '/queryProductQuoteHeadersAlreadyDone' },
+  { key: 'queryProductQuoteHeadersNotDone', path: '/queryProductQuoteHeadersNotDone' },
 ]
 
 console.log(resultArr, '============')

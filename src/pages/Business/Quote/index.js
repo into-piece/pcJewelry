@@ -14,10 +14,11 @@ import SvgUtil from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
-import serviceObj from '@/services/dev';
+import serviceObj from '@/services/quote';
 import LockTag from '@/components/LockTag'
 import jsonData from './index.json'
 import ProductSearchFrom from '../Product/components/ProductSearchFrom';
+import CustomerSearchFrom from "../Client/components/CustomerSearchFrom";
 import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 // import Bread from '@/components/BreadCrumb'
 
@@ -27,15 +28,15 @@ const { Option } = Select;
 
 // manuArr是 =》menu配置提供遍历
 // modalContent => 每个menu不同的增加弹窗填写信息
-const { manuArr, modalContent } = jsonData
+const { modalContent } = jsonData
 
 // 弹窗form表单样式
-const formLayout = {
-  labelCol: { span: 7 },
-  wrapperCol: {
-    span: 13,
-  },
-};
+// const formLayout = {
+//   labelCol: { span: 2 },
+//   wrapperCol: {
+//     span: 6,
+//   },
+// };
 
 // 面包屑数据
 // const breadData = [
@@ -43,7 +44,7 @@ const formLayout = {
 //     name: '主页', link: '/'
 //   },
 //   {
-//     name: '开发', link: '/dev/basic'
+//     name: '开发', link: '/quote/basic'
 //   },
 //   {
 //     name: '基础数据', link: ''
@@ -55,7 +56,7 @@ const btnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '删除', tag: 'delete' },
   { name: '编辑', tag: 'edit' },
-  { name: '审批', tag: 'lock' },
+  // { name: '审批', tag: 'lock' },
 ];
 
 const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
@@ -64,389 +65,115 @@ function returnStatus(v) {
   return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : ''
 }
 
-// table 当前页对应的表头配置
-const columnsArr = {
-  // 计量单位表头
-  measureUnit: [
-    {
-      title: '单位代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
-      render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
-        : (data)
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名称',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data)
-    },
-  ],
-
-  // 成色设定表头
-  colorPercentage: [
-    {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 颜色设定表头
-  colorSetting: [
-    {
-      title: '颜色代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 电镀表头
-  electroplateSetting: [
-    {
-      title: '电镀颜色代码',
-      dataIndex: 'colorCode',
-      key: 'colorCode',
-    },
-    {
-      title: '简称',
-      dataIndex: 'shotName',
-      key: 'shotName',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '含镍',
-      dataIndex: 'isNickel',
-      key: 'isNickel',
-      render: (data) => (Number(data) === 1 ? '是' : '否')
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 形状设定表头
-  shapeSetting: [
-    {
-      title: '形状代码',
-      dataIndex: 'shapeCode',
-      key: 'shapeCode',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 规格设定表头
-  specificationSetting: [
-    {
-      title: '规格代码',
-      dataIndex: 'specificationCode',
-      key: 'specificationCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 原料等级设定表头
-  materialsGrade: [
-    {
-      title: '等级代码',
-      dataIndex: 'gradeCode',
-      key: 'gradeCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 石头切工设定列表
-  stoneCutter: [
-    {
-      title: '切工代码',
-      dataIndex: 'cuttingCode',
-      key: 'cuttingCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 镶石工艺
-  insertStoneTechnology: [
-    {
-      title: '成色',
-      dataIndex: 'basicColourSet',
-      key: 'basicColourSet',
-      render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
-      )
-    },
-    {
-      title: '类别',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '公费',
-      dataIndex: 'costs',
-      key: 'costs',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remarks',
-      key: 'remarks',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 胶膜设定
-  rubberMouldSetting: [
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '胶膜尺寸',
-      dataIndex: 'filmSize',
-      key: 'filmSize',
-    },
-    {
-      title: '胶膜片数',
-      dataIndex: 'filmNumber',
-      key: 'filmNumber',
-    },
-    {
-      title: '工费',
-      dataIndex: 'costs',
-      key: 'costs',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 模具仓位设定
-  mouldPosition: [
-    {
-      title: '仓位编号',
-      dataIndex: 'positionCode',
-      key: 'positionCode',
-    },
-    {
-      title: '房间号',
-      dataIndex: 'roomNum',
-      key: 'roomNum',
-    },
-    {
-      title: '橱柜号',
-      dataIndex: 'cabinetNum',
-      key: 'cabinetNum',
-    },
-    {
-      title: '抽屉号',
-      dataIndex: 'drawerNum',
-      key: 'drawerNum',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remarks',
-      key: 'remarks',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-}
-
+// createTime: "2019-06-07 10:49:57"
+// createUser: "zengwl"
+// enName: "Strategic Customer"
+// id: "79066b803097ff4e6d28b0afbf20fed1"
+// modifier: "zengwl"
+// mtime: "2019-07-27 00:56:51"
+// status: "0"
+// zhName: "战略客户"
 
 const clientContentColumns = [
   {
     title: <div className={styles.row_normal2}>客户编号</div>,
+    dataIndex: 'customerId',
+    key: 'customerId',
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+    )
+  },
+  {
+    title: <div className={styles.row_normal2}>简称</div>,
+    dataIndex: 'customerShotName',
+    key: 'customerShotName',
+  },
+  {
+    title: <div className={styles.row_normal2}>报价单号</div>,
+    dataIndex: 'quoteNumber',
+    key: 'quoteNumber',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+  {
+    title: <div className={styles.row_normal2}>类别</div>, // ?
+    dataIndex: 'typeName',
+    key: 'typeName',
+  },
+
+  {
+    title: <div className={styles.row_normal2}>报价日期</div>,
+    dataIndex: 'quoteDate',
+    key: 'quoteDate',
+    render: (data) => (data)
+  },
+
+  {
+    title: <div className={styles.row_normal2}>数量</div>,
+    dataIndex: 'quoteTotalCount',
+    key: 'quoteTotalCount',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+
+  {
+    title: <div className={styles.row_normal2}>重量</div>,
+    dataIndex: 'quoteTotalWeight',
+    key: 'quoteTotalWeight',
+    sorter: (a, b) => {
+      encompare(a.enAddress, b.enAddress);
+    },
+  },
+  {
+    title: <div className={styles.row_normal2}>总额</div>,
+    dataIndex: 'quoteTotalAmount',
+    key: 'quoteTotalAmount',
+  },
+  {
+    title: <div className={styles.row_normal2}>终客号</div>,
+    dataIndex: 'endNo',
+    key: 'endNo',
+  },
+  {
+    title: <div className={styles.row_normal2}>终客简称</div>,
+    dataIndex: 'endShotName',
+    key: 'endShotName',
+  },
+  {
+    title: <div className={styles.row_normal2}>产品说明</div>,// ?
+    dataIndex: 'explains',
+    key: 'explains',
+  },
+];
+
+
+const customerColumns = [
+  {
+    title: <div className={styles.row_normal2}>产品编号</div>,
     dataIndex: 'customerNo',
     key: 'customerNo',
     // defaultSortOrder: 'descend',
     sorter: (a, b) => a.age - b.age,
   },
   {
-    title: <div className={styles.row_normal2}>简称</div>,
+    title: <div className={styles.row_normal2}>客户货号</div>,
     dataIndex: 'shotName',
     key: 'shotName',
   },
   {
-    title: <div className={styles.row_normal2}>英文名称</div>,
+    title: <div className={styles.row_normal2}>前次工费/克</div>,
     dataIndex: 'enName',
     key: 'enName',
-    onFilter: (value, record) => record.enName.includes(value),
-    // sorter: (a, b) => {
-    //   if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName>b.enName?1:(a.enName==b.enName?0:-1);
-    //   return a.enName>b.enName?-1:(a.enName==b.enName?0:1)
-    // },
-
-    sorter: (a, b) => {
-      encompare(a.enName, b.enName);
-    },
-    // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
   },
   {
-    title: <div className={styles.row_normal2}>中文名称</div>,
+    title: <div className={styles.row_normal2}>实际工费/克</div>,
     dataIndex: 'zhName',
     key: 'zhName',
-    sorter: (a, b) => {
-      return pingYincompare(a.zhName, b.zhName);
-    },
   },
   {
-    title: <div className={styles.row_normal2}>联系人</div>,
+    title: <div className={styles.row_normal2}>最高工费/克</div>,
     dataIndex: 'contacts',
     key: 'contacts',
     sorter: (a, b) => {
@@ -454,19 +181,19 @@ const clientContentColumns = [
     },
   },
   {
-    title: <div className={styles.row_normal2}>手机</div>,
+    title: <div className={styles.row_normal2}>此次工费/克</div>,
     dataIndex: 'tel',
     key: 'tel',
   },
 
   {
-    title: <div className={styles.row_normal2}>电话</div>,
+    title: <div className={styles.row_normal2}>字印价/件</div>,
     dataIndex: 'phone',
     key: 'phone',
   },
 
   {
-    title: <div className={styles.row_normal2}>中文地址</div>,
+    title: <div className={styles.row_normal2}>包装价/件</div>,
     dataIndex: 'zhAddress',
     key: 'zhAddress',
     sorter: (a, b) => {
@@ -475,34 +202,67 @@ const clientContentColumns = [
   },
 
   {
-    title: <div className={styles.row_normal2}>英文地址</div>,
+    title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'enAddress',
     key: 'enAddress',
     sorter: (a, b) => {
       encompare(a.enAddress, b.enAddress);
     },
   },
-  {
-    title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
 ];
 
 
+const addList = [
+  { key: '产品编号', value: '1' },
+  { key: '客户货号', value: '2' },
+  { key: '类别', value: '3' },
+  { key: '成色名称', value: '1' },
+  { key: '宝石颜色', value: '1' },
+  { key: '电镀颜色', value: '1' },
+  { key: '产品系列', value: '1' },
+  { key: '产品报价系数', value: '1' },
+  { key: '计量单位', value: '1' },
+  { key: '重量单位', value: '1' },
+  { key: '前次工费/克', value: '1' },
+  { key: '最高工费/克', value: '1' },
+  { key: '实际工费/克', value: '1' },
+  { key: '此次工费/克', value: '1' },
+  { key: '是否计石重', value: '1' },
+  { key: '石材重量', value: '1' },
+  { key: '主材重量', value: '1' },
+  { key: '石材价', value: '1' },
+  { key: '字印编码', value: '1' },
+  { key: '字印英文名', value: '1' },
+  { key: '自印价/件', value: '1' },
+  { key: '包装单价/件', value: '1' },
+  { key: '单价', value: '1' },
+  { key: '报价数量', value: '1' },
+  { key: '报价金额', value: '1' },
+  { key: '报价重量范围', value: '1' },
+  { key: '产品工费/件', value: '1' },
+  { key: '产品长度', value: '1' },
+  { key: '长度描述', value: '1' },
+  { key: '长度单位', value: '1' },
+  { key: '戒围标准', value: '1' },
+  { key: '戒围号', value: '1' },
+  { key: '备注', value: '1' },
+  { key: '客户要求', value: '1' }
+]
 
 
 @Form.create()
-@connect(({ dev }) => {
+@connect(({ loading, quote }) => {
   return {
-    dev,
-    list: dev.list,
-    pagination: dev.pagination,
-    selectKey: dev.selectKey,
-    choosenRowData: dev.choosenRowData,
-    colorSetList: dev.colorSetList,
-    selectedRowKeys: dev.selectedRowKeys,
-    gemSetProcessDropDown: dev.gemSetProcessDropDown
+    quote,
+    list: quote.list,
+    pagination: quote.pagination,
+    selectKey: quote.selectKey,
+    choosenRowData: quote.choosenRowData,
+    colorSetList: quote.colorSetList,
+    selectedRowKeys: quote.selectedRowKeys,
+    gemSetProcessDropDown: quote.gemSetProcessDropDown,
+    timeline: quote.timeline,
+    listLoading: loading.effects['quote/getList'],
   };
 })
 class Info extends Component {
@@ -515,21 +275,22 @@ class Info extends Component {
         enName: ''
       },
       colorPercentage: {}
-    }
+    },
+    rightMenu: 1
   };
 
   componentDidMount() {
     // 获取初始表单数据
-    this.getList();
+    this.getList({ sendReq: 'currentQuote' });
   }
 
   // 获取对应key=》页面进行数据请求
-  getList = () => {
+  getList = (args) => {
     const { dispatch, pagination } = this.props;
     // getDevList
     dispatch({
-      type: `dev/getList`,
-      payload: { params: pagination },
+      type: `quote/getList`,
+      payload: { params: pagination, ...args },
     });
   }
 
@@ -544,7 +305,7 @@ class Info extends Component {
         // 镶石工艺
         if (selectKey === 'insertStoneTechnology') {
           dispatch({
-            type: 'dev/getGemDropDown',
+            type: 'quote/getGemDropDown',
             payload: {},
           });
         }
@@ -568,30 +329,34 @@ class Info extends Component {
     } = this.props;
     const { modalType } = this.state
     const content = ''
-    const dataArr = modalContent[selectKey]
     const isEdit = modalType === 'edit'
-    const { dev } = this.props
+    const { quote } = this.props
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
-            console.log(list)
+          addList && addList.map(({ key, value, noNeed, type, list }) => {
             return (
-              <FormItem label={key} {...formLayout} key={key}>
-                {
-                  getFieldDecorator(value, {
-                    rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                    initialValue: isEdit ? choosenRowData[value] : '',
-                  })(type && type === 2 ?
-                    <Select placeholder="请选择">
-                      {dev[list] && dev[list].map(({ id, zhName }) =>
-                        <Option value={id}>{zhName}</Option>
-                      )}
-                    </Select> :
-                    <Input placeholder="请输入" />
-                  )
-                }
-              </FormItem>
+              <div className="addModal" key={key}>
+                <FormItem
+                  label={key}
+                  // {...formLayout}
+                  key={key}
+                >
+                  {
+                    getFieldDecorator(value, {
+                      rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
+                      initialValue: isEdit ? choosenRowData[value] : '',
+                    })(type && type === 2 ?
+                      <Select placeholder="请选择">
+                        {quote[list] && quote[list].map(({ id, zhName }) =>
+                          <Option value={id}>{zhName}</Option>
+                        )}
+                      </Select> :
+                      <Input style={{ width: '100' }} placeholder="请输入" />
+                    )
+                  }
+                </FormItem>
+              </div>
             )
           })
         }
@@ -649,7 +414,7 @@ class Info extends Component {
 
     // 还要清空所选中项
     this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'quote/changeSelectedRowKeys',
       payload: [],
     });
 
@@ -713,11 +478,11 @@ class Info extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const { selectedRowKeys, dev, selectKey } = this.props
-    console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============')
-    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
+    const { selectedRowKeys, quote, selectKey } = this.props
+    console.log(quote[`${selectKey}List`], quote[`${selectKey}List`].records, '============')
+    if (quote[`${selectKey}List`] && quote[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
     const isLock1 = selectedRowKeys.reduce((res, cur) => {
-      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur)
+      const singleObjcect = quote[`${selectKey}List`].records.find(subItem => subItem.id === cur)
       if (singleObjcect) res.push(singleObjcect.status)
       return res
     }, [])
@@ -754,9 +519,25 @@ class Info extends Component {
     return selectedRowKeys.length === 0
   }
 
+
+  handleRadio = (e) => {
+    console.log(e)
+    const v = e.target.value
+    debugger
+    this.props.dispatch({
+      type: `quote/getTimeline`,
+      payload: e.target.value,
+    })
+    this.getList({ sendReq: v })
+  }
+
+  changeRightMenu = () => {
+
+  }
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
-    const { modalType } = state;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu } = this;
+    const { modalType, rightMenu } = state;
     const { list, selectKey, choosenRowData } = props;
     return (
       <div className={styles.page}>
@@ -772,13 +553,16 @@ class Info extends Component {
                 btnFn={btnFn}
                 returnLockType={returnLockType}
                 returnSisabled={returnSisabled}
+                handleRadio={handleRadio}
+                changeRightMenu={changeRightMenu}
+                rightMenu={rightMenu}
               />
             </div>
           </div>
         </div>
         <Modal
           title={returnTitle()}
-          width={640}
+          width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
@@ -796,32 +580,45 @@ class Info extends Component {
   }
 }
 
+
+const radioArr = ['报价主页', '报价明细']
+
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled }) => (
+const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu }) => (
   <GridContent>
-    <Row gutter={24} className={styles.row_content}>
+    <Row gutter={24} className={styles.row_content}>\
+
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
-        <CenterInfo type={type} />
+        <CenterInfo type={type} handleRadio={handleRadio} />
       </Col>
+
+
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
           <Card bordered={false}>
-            <div>
-              <span
-                style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: '#35B0F4',
-                }}
-              >
-                <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-              </span>
-              <GetRenderitem data={choosenRowData} type={type} />
-            </div>
+            <Radio.Group
+              size="small"
+              className={styles.right_content_tabgroud}
+              onChange={changeRightMenu}
+              buttonStyle="solid"
+              value={rightMenu}
+              style={{ textAlign: 'center' }}
+            >
+              {
+                radioArr.map((item, index) => <Radio.Button
+                  style={{
+                    height: 40,
+                    width: 130,
+                    textalign: 'center',
+                    lineHeight: '40px'
+                  }}
+                  value={index + 1}
+                >{item}
+                </Radio.Button>)
+              }
+            </Radio.Group>
           </Card>
 
           {/* </Card> */}
@@ -849,35 +646,46 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 );
 
 
+const menuRadio2 = [
+  '客户列表', '共同维护人', '联系人', '圈戒资料',
+]
+
+
 // Table 中间列表内容
 @Form.create()
 @connect(({ loading, quote }) => {
   return {
     quote,
-    listLoading: loading.effects['dev/getList'],
-    listCustomerTypeData: quote.listCustomerTypeData,
+    listLoading: loading.effects['quote/getList'],
+    quotelist: quote.quotelist,
     pagination: quote.pagination,
     choosenRowData: quote.choosenRowData,
     selectedRowKeys: quote.selectedRowKeys,
+    timeline: quote.timeline
   };
 })
+
+
 class CenterInfo extends Component {
   changePagination = obj => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'dev/getDevList',
+      type: 'quote/getDevList',
       payload: obj,
     });
     dispatch({
-      type: 'dev/getPagination',
+      type: 'quote/getPagination',
       payload: obj,
     });
   };
 
-  changeChoosenRow = rowData => {
+  changeChoosenRow = (rowData, type) => {
     const { dispatch } = this.props;
+    const str = type === 1 ? '' : '2'
+    console.log(rowData, '============')
+    debugger
     dispatch({
-      type: 'dev/getChoosenRowData',
+      type: `quote/getChoosenRowData${str}`,
       payload: rowData,
     });
   };
@@ -886,32 +694,60 @@ class CenterInfo extends Component {
   // 更改table select数组
   onSelectChange = (selectedRowKeys) => {
     this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'quote/changeSelectedRowKeys',
       payload: selectedRowKeys,
     })
   };
 
+
   render() {
     const { onSelectChange, props } = this
-    const { choosenRowData, pagination, selectedRowKeys, listLoading, listCustomerTypeData } = props;
+    const { choosenRowData, pagination, selectedRowKeys, listLoading, listCustomerTypeData, timeline, handleRadio, quotelist } = props;
+    console.log(quotelist, choosenRowData, '================quotelist')
     return (
       <div className={styles.view_left_content}>
-        <Radio.Group defaultValue="current_quote" buttonStyle="solid">
-          <Radio.Button value="current_quote">
+        <Radio.Group value={timeline} buttonStyle="solid" onChange={handleRadio}>
+          <Radio.Button value="currentQuote">
             当前报价
-            {/* <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" /> */}
+            {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
           </Radio.Button>
-          <Radio.Button value="history_quote">
+          <Radio.Button value="historyQuote">
             历史报价
-            {/* <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" /> */}
+            {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
           </Radio.Button>
         </Radio.Group>
         <ProductSearchFrom />
         <div className={styles.tableBox}>
           <Table
             columns={clientContentColumns}
+            body={quotelist}
+            changeChoosenRow={record => { this.changeChoosenRow(record, 1) }}
+            selectKey={choosenRowData.id}
+            pagination={pagination}
+            changePagination={this.changePagination}
+            selectedRowKeys={selectedRowKeys}
+            onSelectChange={onSelectChange}
+            listLoading={listLoading}
+          />
+        </div>
+
+        <Radio.Group value={timeline} buttonStyle="solid" onChange={handleRadio}>
+          {
+            menuRadio2.map((item, index) => {
+              return (
+                <Radio.Button value={index + 1}>
+                  {item}
+                  {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+                </Radio.Button>
+              )
+            })
+          }
+        </Radio.Group>
+        <div className={styles.tableBox}>
+          <Table
+            columns={customerColumns}
             body={listCustomerTypeData}
-            changeChoosenRow={this.changeChoosenRow}
+            changeChoosenRow={record => { this.changeChoosenRow(record, 2) }}
             selectKey={choosenRowData.id}
             pagination={pagination}
             changePagination={this.changePagination}

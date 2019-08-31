@@ -122,6 +122,70 @@ const clientContentColumns = [
   },
 ];
 
+
+const customerColumns = [
+  {
+    title: <div className={quote.row_normal2}>产品编号</div>,
+    dataIndex: 'customerNo',
+    key: 'customerNo',
+    // defaultSortOrder: 'descend',
+    sorter: (a, b) => a.age - b.age,
+  },
+  {
+    title: <div className={quote.row_normal2}>客户货号</div>,
+    dataIndex: 'shotName',
+    key: 'shotName',
+  },
+  {
+    title: <div className={quote.row_normal2}>前次工费/克</div>,
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: <div className={quote.row_normal2}>实际工费/克</div>,
+    dataIndex: 'zhName',
+    key: 'zhName',
+  },
+  {
+    title: <div className={quote.row_normal2}>最高工费/克</div>,
+    dataIndex: 'contacts',
+    key: 'contacts',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+  {
+    title: <div className={quote.row_normal2}>此次工费/克</div>,
+    dataIndex: 'tel',
+    key: 'tel',
+  },
+
+  {
+    title: <div className={quote.row_normal2}>字印价/件</div>,
+    dataIndex: 'phone',
+    key: 'phone',
+  },
+
+  {
+    title: <div className={quote.row_normal2}>包装价/件</div>,
+    dataIndex: 'zhAddress',
+    key: 'zhAddress',
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
+  },
+
+  {
+    title: <div className={quote.row_normal2}>报价金额</div>,
+    dataIndex: 'enAddress',
+    key: 'enAddress',
+    sorter: (a, b) => {
+      encompare(a.enAddress, b.enAddress);
+    },
+  },
+];
+
+
 const maintainsColumn = [
   {
     title: '维护人',

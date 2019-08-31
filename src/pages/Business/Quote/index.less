@@ -45,6 +45,7 @@
 .tableBox {
   padding: 20px;
   padding-left: 0;
+  width: 1000px;
 }
 .view_left_content {
   background-color: #fff;
@@ -53,6 +54,7 @@
   max-height: 85vh;
   overflow: auto;
   padding: 24px;
+  overflow-x: scroll;
   //margin-bottom: 12px;
 }
 .contentTitle {
@@ -258,5 +260,27 @@
     .right {
       padding: 20px;
     }
+  }
+}
+
+:global {
+  .ant-modal-body .ant-form {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 20px;
+  }
+  .addModal {
+    width: 318px;
+    float: left;
+  }
+  .addModal .ant-form-item {
+    display: flex;
+  }
+  .addModal .ant-form-item label {
+    min-width: 120px;
+    text-align: right;
+  }
+  .addModal input {
+    width: 180px;
   }
 }
