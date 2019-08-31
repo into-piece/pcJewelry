@@ -583,10 +583,11 @@ class Info extends Component {
 
 const radioArr = ['报价主页', '报价明细']
 
+
 // 右手边正文内容
 const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu }) => (
   <GridContent>
-    <Row gutter={24} className={styles.row_content}>\
+    <Row gutter={24} className={styles.row_content}>
 
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
@@ -607,21 +608,23 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               style={{ textAlign: 'center' }}
             >
               {
-                radioArr.map((item, index) => <Radio.Button
-                  style={{
-                    height: 40,
-                    width: 130,
-                    textalign: 'center',
-                    lineHeight: '40px'
-                  }}
-                  value={index + 1}
-                >{item}
-                </Radio.Button>)
+                radioArr.map((item, index) =>
+                  <Radio.Button
+                    style={{
+                      height: 40,
+                      width: 130,
+                      textalign: 'center',
+                      lineHeight: '40px'
+                    }}
+                    value={index + 1}
+                  >{item}
+                  </Radio.Button>)
               }
             </Radio.Group>
+            <GetRenderitem data={choosenRowData} type={type} />
           </Card>
 
-          {/* </Card> */}
+          {/*  */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {btnGroup.map(({ name, tag }) => (
@@ -644,6 +647,39 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
     </Row>
   </GridContent>
 );
+
+const rowArr = [
+  { key: '报价单号', value: 'quoteNumber' }
+]
+
+// 右手边显示的详情信息
+const GetRenderitem = ({ data, type }) => {
+  const selectRowItem = () => {
+    // console.log('select the item');
+  };
+
+  // const arr = [
+  //   ...modalContent[type],
+  //   { "key": "状态", "value": "status" },
+  // ]
+
+  const arr = rowArr
+
+  return (
+    <div style={{ marginLeft: 10, marginTop: 10 }} className={styles.getRenderitem} onClick={selectRowItem}>
+      <DescriptionList className={styles.headerList} size="small" col="1">
+        {
+          arr.map(({ key, value }) => {
+            return (
+              <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
+            )
+          })
+        }
+      </DescriptionList>
+    </div>
+  );
+};
+
 
 
 const menuRadio2 = [
@@ -683,7 +719,6 @@ class CenterInfo extends Component {
     const { dispatch } = this.props;
     const str = type === 1 ? '' : '2'
     console.log(rowData, '============')
-    debugger
     dispatch({
       type: `quote/getChoosenRowData${str}`,
       payload: rowData,
@@ -761,32 +796,5 @@ class CenterInfo extends Component {
   }
 }
 
-
-
-
-// 右手边显示的详情信息
-const GetRenderitem = ({ data, type }) => {
-  const selectRowItem = () => {
-    // console.log('select the item');
-  };
-  const arr = [
-    ...modalContent[type],
-    { "key": "状态", "value": "status" },
-  ]
-
-  return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
-      <DescriptionList className={styles.headerList} size="small" col="1">
-        {
-          arr.map(({ key, value }) => {
-            return (
-              <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
-            )
-          })
-        }
-      </DescriptionList>
-    </div>
-  );
-};
 
 export default Info;

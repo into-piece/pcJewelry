@@ -27,7 +27,7 @@ export default {
       current: 1,
       size: 10,
     },
-    choosenRowData: { id: '' }, // select to show
+    choosenRowData: { quoteNumber: '' }, // select to show
     choosenRowData2: { id: '' }, // select to show
   },
 
