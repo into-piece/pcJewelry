@@ -217,6 +217,26 @@ export default [
             icon: 'bulb',
             component: './dev/Basic',
           },
+          //模具设定
+          {
+            path: '/dev/Mould',
+            name: 'Mould',
+            icon: 'inbox',
+            component: './dev/Mould',
+          },
+          //原料设定
+          {
+            path: '/dev/Raw',
+            name: 'Raw',
+            icon: 'inbox',
+            component: './dev/Raw',
+          },
+          {
+            path: '/dev/FinishedProduct',
+            name: 'FinishedProduct',
+            icon: 'deployment-unit',
+            component: './dev/FinishedProduct',
+          },
         ],
       },
 

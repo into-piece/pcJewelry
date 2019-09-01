@@ -3,7 +3,7 @@ import history from './history';
 import '../../global.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import findRoute from 'D:/workplace/jewelry/node_modules/umi-build-dev/lib/findRoute.js';
+import findRoute from 'E:/studio/frontEndWorkSpace/jewelry/node_modules/_umi-build-dev@1.10.20@umi-build-dev/lib/findRoute.js';
 
 // runtime plugins
 const plugins = require('umi/_runtimePlugin');
@@ -21,7 +21,9 @@ plugins.init({
     'locale',
   ],
 });
-plugins.use(require('../../../node_modules/umi-plugin-dva/lib/runtime'));
+plugins.use(
+  require('../../../node_modules/_umi-plugin-dva@1.7.9@umi-plugin-dva/lib/runtime'),
+);
 plugins.use(require('@/app'));
 
 const app = require('@tmp/dva')._onCreate();
