@@ -1442,6 +1442,48 @@ const routes = [
             exact: true,
           },
           {
+            path: '/dev/Mould',
+            name: 'Mould',
+            icon: 'inbox',
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  component: () =>
+                    import(/* webpackChunkName: "p__dev__Mould" */ '../dev/Mould'),
+                  LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../dev/Mould').default,
+            exact: true,
+          },
+          {
+            path: '/dev/Raw',
+            name: 'Raw',
+            icon: 'inbox',
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  component: () =>
+                    import(/* webpackChunkName: "p__dev__Raw" */ '../dev/Raw'),
+                  LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../dev/Raw').default,
+            exact: true,
+          },
+          {
+            path: '/dev/FinishedProduct',
+            name: 'FinishedProduct',
+            icon: 'deployment-unit',
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  component: () =>
+                    import(/* webpackChunkName: "p__dev__FinishedProduct" */ '../dev/FinishedProduct'),
+                  LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../dev/FinishedProduct').default,
+            exact: true,
+          },
+          {
             component: () =>
               React.createElement(
                 require('/Users/apple/Documents/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
