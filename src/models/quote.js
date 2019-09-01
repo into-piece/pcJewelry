@@ -9,38 +9,77 @@ import servicesConfig from '@/services/quote';
 
 const initData = { records: [] }
 
-const { queryProductQuoteHeadersNotDone, queryProductQuoteHeadersAlreadyDone } = servicesConfig
+const { queryProductQuoteHeadersNotDone, queryProductQuoteHeadersAlreadyDone, listProductQuoteDetail, deleteProductQuoteHeader, listProductNotCreateQoute, listMstWordbook, listCustomerDropDown, listMarkingDropDown } = servicesConfig
 export default {
   namespace: 'quote',
 
   state: {
     quotelist: initData,
+    quoteDatialList: initData,
     selectedRowKeys: [], // table1 select
-    selectedRowKeys2: [], // table2 select
+    selectedDetailRowKeys: [], // table2 select
     timeline: 'currentQuote',
+    detailChoosenType: 1,
     selectKey: '',
     pagination: {
       current: 1,
       size: 10,
     },
-    pagination2: {
+    detailPagination: {
       current: 1,
       size: 10,
     },
     choosenRowData: { quoteNumber: '' }, // select to show
-    choosenRowData2: { id: '' }, // select to show
+    choosenDetailRowData: { id: '' }, // select to show
+    rightMenu: 1,
+    productList: [],
+    productPagination: {
+      current: 1,
+      size: 10,
+    },
+    showProductModal: false,
+    wordbookdropdown: [{ key: '', value: '' }],
+    customerDropDownList: [{ key: '', value: '' }],
+    markinglist: []
   },
 
   effects: {
     * getList({ payload }, { call, put }) {
-      const { type, params, sendReq } = payload
+      const { params, sendReq } = payload
       const sendType = sendReq === 'currentQuote' ? queryProductQuoteHeadersNotDone : queryProductQuoteHeadersAlreadyDone
       const response = yield call(sendType, params);
+      const quotelist =
+        response.head && response.head.rtnCode === '000000'
+          ? response.body
+          : initData;
+
       yield put({
-        type: 'getData',
-        payload: { response, type },
+        type: 'changeState',
+        payload: { data: quotelist, typeName: 'quotelist' },
       });
     },
+
+    * getDetailList({ payload }, { call, put }) {
+      const { type, params } = payload
+      const response = yield call(listProductQuoteDetail, params);
+      const quoteDatialList =
+        response.head && response.head.rtnCode === '000000'
+          ? response.body
+          : initData;
+      debugger
+      yield put({
+        type: 'changeState',
+        payload: { data: quoteDatialList, typeName: 'quoteDatialList' },
+      });
+    },
+
+    * clearDetailList(data, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'quoteDatialList' },
+      });
+    },
+
     * getTimeline({ payload }, { put }) {
       yield put({
         type: 'getTimeline2',
@@ -48,42 +87,117 @@ export default {
       });
     },
     * getChoosenRowData({ payload }, { put }) {
-      debugger
       yield put({
         type: 'getChoosenRowData2',
         payload,
       });
     },
+    * getChoosenDetailRowData({ payload }, { put }) {
+      yield put({
+        type: 'getChoosenDetailRowData2',
+        payload,
+      });
+    },
+
     * changeSelectedRowKeys({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeys2',
         payload,
       });
     },
-    * changeSelectedRowKeys2({ payload }, { put }) {
+    * changeSelectedDetailRowKeys({ payload }, { put }) {
       yield put({
-        type: 'changeSelectedRowKeys3',
+        type: 'changeSelectedDetailRowKeys2',
         payload,
       });
     },
+    * changeRightMenu({ payload }, { put }) {
+      yield put({
+        type: 'changeRightMenu2',
+        payload,
+      });
+    },
+    * showProductModalFn({ payload }, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: payload, typeName: 'showProductModal' },
+      });
+    },
+    * getwordbookdropdown(data, { call, put }) {
+      const response = yield call(listMstWordbook, { "wordbookTypeCode": "H007" });
+      console.log(response)
+      let wordbookdropdown = response.body.records
+      wordbookdropdown = wordbookdropdown.map(({ wordbookContentZh, wordbookCode }) => {
+        return { value: wordbookCode, key: wordbookContentZh }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: 'wordbookdropdown' },
+      });
+    },
+    * getlistCustomerDropDown(data, { call, put }) {
+      const response = yield call(listCustomerDropDown, {});
+      console.log(response)
+      let customerDropDownList = response.body.records
+      customerDropDownList = customerDropDownList.map(({ customerNo }) => {
+        return { value: customerNo, key: customerNo }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: customerDropDownList, typeName: 'customerDropDownList' },
+      });
+    },
+    * getMarkinglistDropDown(data, { call, put }) {
+      const response = yield call(listMarkingDropDown, {});
+      console.log(response)
+      let markinglist = response.body.records
+      // markinglist = markinglist.map(({ customerNo }) => {
+      //   return { value: customerNo, key: customerNo }
+      // })
+      yield put({
+        type: 'changeState',
+        payload: { data: markinglist, typeName: 'markinglist' },
+      });
+    }
   },
 
   reducers: {
-    getData(state, action) {
-      const quotelist =
-        action.payload && action.payload.response.head && action.payload.response.head.rtnCode === '000000'
-          ? action.payload.response.body
-          : initData;
-
+    changeState(state, action) {
+      const { typeName, data } = action.payload
       return {
         ...state,
-        quotelist,
+        [typeName]: data,
       };
     },
+
     getTimeline2(state, action) {
       return {
         ...state,
         timeline: action.payload,
+      };
+    },
+
+    changeSelectedRowKeys2(state, action) {
+      return {
+        ...state,
+        selectedRowKeys: [
+          ...action.payload,
+        ],
+      };
+    },
+    changeSelectedDetailRowKeys2(state, action) {
+      return {
+        ...state,
+        selectedDetailRowKeys: [
+          ...action.payload,
+        ],
+      };
+    },
+    getChoosenDetailRowData2(state, action) {
+      console.log(state, '=========')
+      return {
+        ...state,
+        choosenDetailRowData: action.payload,
       };
     },
     getChoosenRowData2(state, action) {
@@ -93,23 +207,12 @@ export default {
         choosenRowData: action.payload,
       };
     },
-    changeSelectedRowKeys2(state, action) {
+    changeRightMenu2(state, action) {
       return {
         ...state,
-        selectedRowKeys: [
-          ...action.payload,
-        ],
+        rightMenu: action.payload,
       };
     },
-    changeSelectedRowKeys3(state, action) {
-      return {
-        ...state,
-        selectedRowKeys: [
-          ...action.payload,
-        ],
-      };
-    },
-
   },
 
 };

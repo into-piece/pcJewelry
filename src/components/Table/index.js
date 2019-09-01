@@ -12,17 +12,18 @@ import styles from './index.less';
 class MyTable extends Component {
 
   clickRowItem = record => {
-    const { changeChoosenRow, onSelectChange } = this.props;
+    const { changeChoosenRow, onSelectChange, clearFn } = this.props;
     let selectedRow = [];
     const { selectedRowKeys } = this.props
     if (selectedRowKeys.includes(record.id)) {
       selectedRow = selectedRowKeys.filter(item => item !== record.id);
+      clearFn && clearFn(this.props.type)
+      onSelectChange(selectedRow)
       // selectedRowKeys = []
-    } else {
-      // selectedRowKeys = [... this.state.selectedRowKeys, record.id]
-      selectedRow = [record.id];
+      return
     }
-
+    // selectedRowKeys = [... this.state.selectedRowKeys, record.id]
+    selectedRow = [record.id];
     onSelectChange(selectedRow)
     changeChoosenRow(record);
   };

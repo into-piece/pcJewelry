@@ -553,27 +553,29 @@ class Info extends Component {
           dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
             console.log(list)
             return (
-              <FormItem label={key} {...formLayout} key={key}>
-                {
-                  getFieldDecorator(value, {
-                    rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
-                    initialValue: isEdit ? choosenRowData[value] : '',
-                  })(type && type === 2 ?
-                    <Select placeholder="请选择">
-                      {dev[list] && dev[list].map(({ value, key }) =>
-                        <Option value={value}>{key}</Option>
-                      )}
-                    </Select> :
-                    type && type === 3 ?
+              <div className="adddevModal" key={key}>
+                <FormItem label={key} key={key}>
+                  {
+                    getFieldDecorator(value, {
+                      rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
+                      initialValue: isEdit ? choosenRowData[value] : '',
+                    })(type && type === 2 ?
+                      <Select placeholder="请选择">
+                        {dev[list] && dev[list].map(({ value, key }) =>
+                          <Option value={value}>{key}</Option>
+                        )}
+                      </Select> :
+                      type && type === 3 ?
                         <Radio.Group value={value}>
                           <Radio value={1}>是</Radio>
                           <Radio value={2}>否</Radio>
                         </Radio.Group>
-                      :
-                      <Input placeholder="请输入" />
-                  )
-                }
-              </FormItem>
+                        :
+                        <Input placeholder="请输入" />
+                    )
+                  }
+                </FormItem>
+              </div>
             )
           })
         }
