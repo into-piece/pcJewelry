@@ -165,13 +165,6 @@ export default [
             routes: [],
           },
           {
-            path: '/business/quote2',
-            name: 'Quote2',
-            icon: 'form',
-            component: './Business/Quote2',
-            routes: [],
-          },
-          {
             path: '/business/proforminvoice',
             name: 'Proform Invoice',
             icon: 'form',

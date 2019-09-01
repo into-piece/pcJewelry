@@ -1298,29 +1298,6 @@ const routes = [
             ],
           },
           {
-            path: '/business/quote2',
-            name: 'Quote2',
-            icon: 'form',
-            component: __IS_BROWSER
-              ? _dvaDynamic({
-                  component: () =>
-                    import(/* webpackChunkName: "p__Business__Quote2" */ '../Business/Quote2'),
-                  LoadingComponent: require('/Users/apple/Documents/workplace/jewelry/src/components/PageLoading/index')
-                    .default,
-                })
-              : require('../Business/Quote2').default,
-            routes: [
-              {
-                component: () =>
-                  React.createElement(
-                    require('/Users/apple/Documents/workplace/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
-                      .default,
-                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
-                  ),
-              },
-            ],
-          },
-          {
             path: '/business/proforminvoice',
             name: 'Proform Invoice',
             icon: 'form',
