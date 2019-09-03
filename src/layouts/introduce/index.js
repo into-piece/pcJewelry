@@ -3,11 +3,11 @@ import { formatMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import { Icon } from 'antd';
-import GlobalFooter from '@/components/GlobalFooter';
 import DocumentTitle from 'react-document-title';
+import GlobalFooter from '@/components/GlobalFooter';
 import SelectLang from '@/components/SelectLang';
-import styles from './UserLayout.less';
-import logo from '../assets/logo_img.png';
+import styles from './index.less';
+import logo from '../../assets/rowLogo.png';
 import getPageTitle from '@/utils/getPageTitle';
 
 const links = [
@@ -55,21 +55,15 @@ class UserLayout extends Component {
     return (
       <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>
         <div className={styles.container}>
+          <Header />
           <div>
-            <div className={styles.header}>
-              <Link to="/">
-                <img alt="logo" className={styles.big_logo} src={logo} />
-                {/*<span className={styles.title}>GOOSA格尚</span>*/}
-              </Link>
-            </div>
             <div className={styles.lang}>
               <SelectLang />
             </div>
           </div>
 
           <div className={styles.content}>
-            <div className={styles.top}>
-            </div>
+            <div className={styles.top} />
             {children}
           </div>
           <GlobalFooter links={links} copyright={copyright} />
@@ -78,6 +72,25 @@ class UserLayout extends Component {
     );
   }
 }
+
+const navData = [
+  { key: '基础资料', value: '' },
+  { key: '操作输入', value: '' },
+  { key: '数据分析', value: '' },
+]
+
+const Header = () => (
+  <div className={styles.header}>
+    <img alt="logo" className={styles.big_logo} src={logo} />
+    <ul className={styles.nav}>
+      {
+        navData.map(({ key, value }) => (
+          <li key={key}><Link to={value}>{key}</Link></li>
+        ))
+      }
+    </ul>
+  </div>
+)
 
 export default connect(({ menu: menuModel }) => ({
   menuData: menuModel.menuData,

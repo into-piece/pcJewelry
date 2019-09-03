@@ -1,9 +1,9 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha,queryAllCity } from '@/services/api';
+import { fakeAccountLogin, getFakeCaptcha, queryAllCity } from '@/services/api';
 import { login } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
-import { getPageQuery ,testCurrentUser} from '@/utils/utils';
+import { getPageQuery, testCurrentUser } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { setCurrentUser } from '../utils/authority';
 
@@ -17,6 +17,7 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(login, payload);
+      debugger
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -24,7 +25,7 @@ export default {
       // console.log("login ",response)
       // Login successfully
 
-      if (response.head&&response.head.rtnCode === '000000') {
+      if (response.head && response.head.rtnCode === '000000') {
         reloadAuthorized();
 
         const urlParams = new URL(window.location.href);
@@ -76,8 +77,8 @@ export default {
   reducers: {
     changeLoginStatus(state, { payload }) {
       // setAuthority(payload.currentAuthority);
-      if( payload.head&& payload.head.rtnCode==='000000')
-      setAuthority(payload.body[0].userName);
+      if (payload.head && payload.head.rtnCode === '000000')
+        setAuthority(payload.body[0].userName);
       // console.log(" save user ",payload.body[0])
       setCurrentUser(payload.body[0])
       return {
