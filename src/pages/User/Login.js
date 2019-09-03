@@ -47,7 +47,6 @@ class LoginPage extends Component {
     const { type } = this.state;
     if (!err) {
       const { dispatch } = this.props;
-      debugger
       dispatch({
         type: 'login/login',
         payload: {
@@ -122,9 +121,9 @@ class LoginPage extends Component {
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin} style={{ color: '#fff' }}>
               <FormattedMessage id="app.login.remember-me" />
             </Checkbox>
-            <a style={{ float: 'right', color: '#fff' }} href="">
+            {/* <a style={{ float: 'right', color: '#fff' }} href="">
               <FormattedMessage id="app.login.forgot-password" />
-            </a>
+            </a> */}
           </div>
           <Submit loading={submitting}>
             <FormattedMessage id="app.login.login" />

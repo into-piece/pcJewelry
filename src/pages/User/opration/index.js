@@ -8,9 +8,9 @@ import basicInfo from '../../../assets/basicInfo.png'
 import analysis from '../../../assets/analysis.png'
 
 const btnGroup = [
-  { key: '基础资料', value: basicInfo, path: '' },
-  { key: '操作输入', value: opration, path: '' },
-  { key: '数据分析', value: analysis, path: '' },
+  { key: '基础资料', value: basicInfo, path: '/' },
+  { key: '操作输入', value: opration, path: '/introduce' },
+  { key: '数据分析', value: analysis, path: '#' },
 ]
 
 @connect(({ login, loading }) => ({

@@ -56,17 +56,10 @@ class UserLayout extends Component {
       <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>
         <div className={styles.container}>
           <Header />
-          <div>
-            <div className={styles.lang}>
-              <SelectLang />
-            </div>
-          </div>
-
           <div className={styles.content}>
             <div className={styles.top} />
             {children}
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
         </div>
       </DocumentTitle>
     );
@@ -80,16 +73,24 @@ const navData = [
 ]
 
 const Header = () => (
-  <div className={styles.header}>
-    <img alt="logo" className={styles.big_logo} src={logo} />
-    <ul className={styles.nav}>
-      {
-        navData.map(({ key, value }) => (
-          <li key={key}><Link to={value}>{key}</Link></li>
-        ))
-      }
-    </ul>
-  </div>
+  <header className={styles.headerComponent}>
+    <div className={styles.header}>
+      <Link to="/"><img alt="logo" className={styles.big_logo} src={logo} /></Link>
+      <ul className={styles.nav}>
+        {
+          navData.map(({ key, value }) => (
+            <li key={key}><Link to={value}>{key}</Link></li>
+          ))
+        }
+      </ul>
+    </div>
+    <Link to="/user/login">
+      <div className={styles.logout}>
+        <Icon type="poweroff" />
+        退出登录
+      </div>
+    </Link>
+  </header>
 )
 
 export default connect(({ menu: menuModel }) => ({

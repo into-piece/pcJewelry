@@ -42,14 +42,12 @@
 }
 
 .header {
-  padding: 30px 100px;
   display: flex;
   align-items: center;
   height: 120px;
   line-height: 50px;
   text-align: left;
   position: relative;
-  border-bottom: 1px solid #4f5b7b;
   a {
     text-decoration: none;
     img {
@@ -80,12 +78,28 @@
   display: flex;
   align-items: center;
   li {
-    margin-right: 30px;
+    margin-right: 60px;
     a {
       color: #fff;
     }
     a:hover {
       color: ;
     }
+  }
+}
+.headerComponent {
+  display: flex;
+  border-bottom: 1px solid #4f5b7b;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 100px;
+}
+.logout {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 18px;
+  i {
+    margin-right: 20px;
   }
 }

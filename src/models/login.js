@@ -17,7 +17,6 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(login, payload);
-      debugger
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -42,7 +41,7 @@ export default {
             redirect = null;
           }
         }
-        yield put(routerRedux.replace(redirect || '/'));
+        yield put(routerRedux.replace('/opration'));
       }
     },
 
