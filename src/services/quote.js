@@ -33,6 +33,9 @@ const resultArr = [
   { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
   { key: 'listCustomerDropDown', path: '/business/customer/listCustomerDropDown', module: 4 }, // 获取为报价的产品参数
   { key: 'listMarkingDropDown', path: '/business/marking/listMarkingDropDown', module: 4 }, // 字印编码
+  { key: 'addquotelist', path: '/product-quote-header/saveProductQuoteHeader' },
+  { key: 'checkIsEdit', path: '/product-quote-header/checkIsEdit' },
+  { key: 'unLockEdit', path: '/product-quote-header/unLockEdit' },
 ]
 // /listMstWordbook
 

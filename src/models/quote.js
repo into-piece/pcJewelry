@@ -40,7 +40,8 @@ export default {
     showProductModal: false,
     wordbookdropdown: [{ key: '', value: '' }],
     customerDropDownList: [{ key: '', value: '' }],
-    markinglist: []
+    markinglist: [],
+    markingEnName: '',
   },
 
   effects: {
@@ -76,7 +77,7 @@ export default {
     * clearDetailList(data, { put }) {
       yield put({
         type: 'changeState',
-        payload: { data: [], typeName: 'quoteDatialList' },
+        payload: { data: initData, typeName: 'quoteDatialList' },
       });
     },
 
@@ -125,7 +126,6 @@ export default {
     },
     * getwordbookdropdown(data, { call, put }) {
       const response = yield call(listMstWordbook, { "wordbookTypeCode": "H007" });
-      console.log(response)
       let wordbookdropdown = response.body.records
       wordbookdropdown = wordbookdropdown.map(({ wordbookContentZh, wordbookCode }) => {
         return { value: wordbookCode, key: wordbookContentZh }
@@ -151,14 +151,23 @@ export default {
       const response = yield call(listMarkingDropDown, {});
       console.log(response)
       let markinglist = response.body.records
-      // markinglist = markinglist.map(({ customerNo }) => {
-      //   return { value: customerNo, key: customerNo }
-      // })
+      markinglist = markinglist.map(({ markingNo, id }) => {
+        return { value: id, key: markingNo }
+      })
       yield put({
         type: 'changeState',
         payload: { data: markinglist, typeName: 'markinglist' },
       });
-    }
+    },
+    * getProductList(data, { call, put }) {
+      const response = yield call(listMarkingDropDown, {});
+      console.log(response)
+      const productList = response.body.records
+      yield put({
+        type: 'changeState',
+        payload: { data: productList, typeName: 'productList' },
+      });
+    },
   },
 
   reducers: {

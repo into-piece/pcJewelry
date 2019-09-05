@@ -60,6 +60,7 @@ class UserLayout extends Component {
             <div className={styles.top} />
             {children}
           </div>
+          <GlobalFooter links={links} copyright={copyright} />
         </div>
       </DocumentTitle>
     );
@@ -68,7 +69,7 @@ class UserLayout extends Component {
 
 const navData = [
   { key: '基础资料', value: '' },
-  { key: '操作输入', value: '' },
+  { key: '操作输入', value: '/introduce' },
   { key: '数据分析', value: '' },
 ]
 

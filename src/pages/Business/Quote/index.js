@@ -18,7 +18,6 @@ import serviceObj from '@/services/quote';
 import LockTag from '@/components/LockTag'
 import jsonData from './index.json'
 import SearchForm from '@/components/SearchForm'
-import CustomerSearchFrom from "../Client/components/CustomerSearchFrom";
 import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 // import Bread from '@/components/BreadCrumb'
 import SelectProductModal from './SelectProductModal'
@@ -78,8 +77,8 @@ function returnStatus(v) {
 const clientContentColumns = [
   {
     title: <div className={styles.row_normal2}>客户编号</div>,
-    dataIndex: 'customerId',
-    key: 'customerId',
+    dataIndex: 'customerNo',
+    key: 'customerNo',
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     )
@@ -212,26 +211,22 @@ const customerColumns = [
   },
 ];
 
-// 筛选参数
+// 报价主页的筛选参数
 const searchParams = [
-  { key: '客户货号', value: 'custoerProductNo' },
-  { key: '类别名称', value: 'name' },
-  { key: '颜色', value: 'color' },
-  { key: '成色', value: 'color1' },
-  { key: '电镀颜色', value: 'color2' },
-  { key: '客户编号', value: 'customerNo' },
-  // { key: '客户货号', value: 'goodsNo' },
-  { key: '供应商编号', value: 'supplierNo' },
-  { key: '供应商名称', value: 'supplierName' },
+  { key: '客户编号', value: 'customerId' },
+  { key: '报价单号', value: 'quoteNumber' },
+  { key: '类别', value: 'type' },
+  { key: '报价日期', value: 'quoteDate' },
+  { key: '终客号', value: 'endId' },
+  { key: '产品说明', value: 'explains' },
 ]
 
-// 弹窗获取产品id传参数  产品编码、客户货号、宝石颜色、成色、颜色、中文名、英文名
-// 表头列表的产品编码productNo、客户货号supplierProductNo、宝石颜色gemColor、成色productColor、电镀颜色platingColor、中文名zhName、英文名enName
+// 新增 编辑 遍历配置
 const headList = [
-  { key: '报价单号', value: '系统自动生成', type: 4 },
-  { key: '报价日期', value: '系统自动生成', type: 4 },
+  { key: '报价单号', value: '系统自动生成', type: 4, noNeed: true },
+  { key: '报价日期', value: '系统自动生成', type: 4, noNeed: true },
   { key: '类别', value: 'custoerProductNo', "type": 2, "list": "wordbookdropdown" },
-  { key: '紧急程度', value: '紧急', type: 5 },
+  { key: '紧急程度', value: 'emergency', type: 5, noNeed: true },
   { key: '客户编号', value: 'customerNo', "type": 2, "list": "customerDropDownList" },
   { key: '客户简称', value: 'custoerProductNo' },
   { key: '终客编号', value: 'custoerProductNo' },
@@ -242,10 +237,10 @@ const headList = [
   { key: '主材价', value: 'quotePrice' },
   { key: '税率', value: 'taxRate' },
   { key: '字印编码', value: 'markingId', "type": 2, "list": "markinglist" },
-  { key: '字印英文名', value: 'markingEnName' },
+  { key: '字印英文名', value: 'markingEnName', type: 4, noNeed: true },
   { key: '包装单价', value: 'packPriceType', type: 6, arr: [{ key: '计收', value: 1 }, { key: '不计收', value: 2 }], initValue: 1 },
   { key: '客户备料', value: 'customerPreparation' },
-  { key: '向客户备料', value: 'custoerProductNo' }, //?
+  { key: '向客户备料', value: 'custoerProductNo' }, // ?
   { key: '说明', value: 'explains' },
   { key: '备注', value: 'remark' },
 ]
@@ -287,6 +282,7 @@ const detailList = [
   { key: '客户要求', value: '1' } // ?
 ]
 
+// 新增 产品 遍历配置
 const productSearchParams = [
   { key: '产品编码', value: 'productNo' },
   { key: '客户货号', value: 'supplierProductNo' },
@@ -317,6 +313,7 @@ const productSearchParams = [
     showProductModal: quote.showProductModal,
     quotelist: quote.quotelist,
     quoteDatialList: quote.quoteDatialList,
+    selectedDetailRowKeys: quote.selectedDetailRowKeys
   };
 })
 class Info extends Component {
@@ -373,12 +370,20 @@ class Info extends Component {
   }
 
   // 列表对应操作button回调
-  btnFn = modalType => {
-    const { selectKey, dispatch } = this.props
+  btnFn = async (modalType) => {
+    const { selectKey, dispatch, choosenRowData } = this.props
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
+
+        if (modalType === 'edit') {
+          const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
+            if (res.head.rtnCode !== '000000') return false
+            return true
+          })
+          if (!isEdit) return
+        }
         console.log(selectKey, '==============selectKey')
         this.openAddModal()
         this.setState({ modalType });
@@ -407,7 +412,9 @@ class Info extends Component {
   // type 2 下啦选择
   // type 3 点击事件
   // type 4 文字
-  // type 5 radio
+  // type 5 check
+  // type 6 radio
+  // type 7 被顺带出的文字
   getModalContent = () => {
     const {
       rightMenu,
@@ -424,20 +431,15 @@ class Info extends Component {
       <Form size="small">
         {
           addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue }) => {
-            if (type === 2) {
-              console.log(list, quote, quote[list])
-            }
             return (
               <div className="addModal" key={key}>
                 <FormItem
                   label={key}
-                  // {...formLayout}
-                  key={Math.random() + key}
                 >
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? choosenRowData[value] : initValue ? initValue : '',
+                      initialValue: isEdit ? choosenRowData[value] : initValue || '',
                     })(type === 2 ?
                       <Select style={{ width: 180 }} placeholder="请选择">
                         {quote[list] && quote[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>
@@ -450,7 +452,7 @@ class Info extends Component {
                           <span>{value}</span>
                           :
                           type === 5 ?
-                            <Checkbox checked={true}>{value}</Checkbox>
+                            <Checkbox checked>{value}</Checkbox>
                             :
                             type === 6 ?
                               <Radio.Group>
@@ -459,7 +461,8 @@ class Info extends Component {
                                     return <Radio value={value}>{key}</Radio>
                                   })
                                 }
-                              </Radio.Group> : <Input style={{ width: '100' }} placeholder="请输入" />
+                              </Radio.Group> : type === 7 ?
+                                <span>{quote[value]}</span> : <Input style={{ width: '100' }} placeholder="请输入" />
                     )
                   }
                 </FormItem>
@@ -493,16 +496,15 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
-
+    const { rightMenu, form } = this.props
+    const str = rightMenu === 1 ? 'quotelist' : 'quoteDatialList'
     form.validateFields((err, values) => {
       if (!err) {
         // this.setState({
         //   [selectKey]
         // })
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        serviceObj[`addBasic${selectKey}`](values).then(res => {
+        serviceObj[`add${str}`](values).then(res => {
           const { rtnCode, rtnMsg } = res.head
           if (rtnCode === '000000') {
             notification.success({
@@ -594,7 +596,7 @@ class Info extends Component {
     const { selectedRowKeys, selectedDetailRowKeys, quote, rightMenu, quotelist, quoteDatialList } = this.props
     const list = rightMenu === 1 ? quotelist : quoteDatialList
     const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys
-    console.log(list, '============')
+    console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============')
     if (list && list.records.length === 0) return { name: '审批', disabled: true, type: 1 }
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = list.records.find(subItem => subItem.id === cur)
@@ -679,20 +681,23 @@ class Info extends Component {
             </div>
           </div>
         </div>
-        {handleModalOk && <Modal
-          title={returnTitle()}
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          onOk={handleModalOk}
-          visible={modalType !== ''}
-          onCancel={() => {
-            btnFn('');
-          }}
-        >
-          {getModalContent()}
-        </Modal>
+        {handleModalOk &&
+          <Modal
+            title={returnTitle()}
+            width={1000}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            onOk={handleModalOk}
+            visible={modalType !== ''}
+            onCancel={() => {
+              btnFn('');
+              serviceObj.unLockEdit({ id: choosenRowData.id }).then(res => {
+              })
+            }}
+          >
+            {getModalContent()}
+          </Modal>
         }
 
         <Modal
@@ -784,6 +789,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
   </GridContent>
 );
 
+// 右手边详情显示
 const rowArr = [
   { key: '报价单号', value: 'quoteNumber' },
   { key: '报价日期', value: 'quoteDate' },
@@ -908,6 +914,7 @@ class CenterInfo extends Component {
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
     const str = type === 2 ? 'Detail' : ''
+    debugger
     this.props.dispatch({
       type: `quote/changeSelected${str}RowKeys`,
       payload: selectedRowKeys,
@@ -946,16 +953,18 @@ class CenterInfo extends Component {
     console.log(quotelist, quoteDatialList, choosenRowData, '================quotelist')
     return (
       <div className={styles.view_left_content}>
-        <Radio.Group value={timeline} buttonStyle="solid" onChange={handleRadio}>
-          <Radio.Button value="currentQuote">
-            当前报价
-            {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-          </Radio.Button>
-          <Radio.Button value="historyQuote">
-            历史报价
-            {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-          </Radio.Button>
-        </Radio.Group>
+        <div style={{ marginBottom: 20 }}>
+          <Radio.Group value={timeline} buttonStyle="solid" onChange={handleRadio}>
+            <Radio.Button value="currentQuote">
+              当前报价
+              {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+            </Radio.Button>
+            <Radio.Button value="historyQuote">
+              历史报价
+              {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+            </Radio.Button>
+          </Radio.Group>
+        </div>
         <SearchForm data={searchParams} onSearch={onSearch} />
         <div className={styles.tableBox}>
           <Table
