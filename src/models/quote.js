@@ -67,7 +67,6 @@ export default {
         response.head && response.head.rtnCode === '000000'
           ? response.body
           : initData;
-      debugger
       yield put({
         type: 'changeState',
         payload: { data: quoteDatialList, typeName: 'quoteDatialList' },

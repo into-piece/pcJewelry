@@ -225,11 +225,11 @@ const searchParams = [
 const headList = [
   { key: '报价单号', value: '系统自动生成', type: 4, noNeed: true },
   { key: '报价日期', value: '系统自动生成', type: 4, noNeed: true },
-  { key: '类别', value: 'custoerProductNo', "type": 2, "list": "wordbookdropdown" },
+  { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown" },
   { key: '紧急程度', value: 'emergency', type: 5, noNeed: true },
   { key: '客户编号', value: 'customerNo', "type": 2, "list": "customerDropDownList" },
-  { key: '客户简称', value: 'custoerProductNo' },
-  { key: '终客编号', value: 'custoerProductNo' },
+  { key: '客户简称', value: 'customerShotName' },
+  { key: '终客编号', value: 'endNo' },
   { key: '终客简称', value: 'endShotName' },
   { key: '报价方式', value: 'quoteMethod', type: 6, arr: [{ key: '计重', value: 1 }, { key: '计件', value: 2 }], initValue: 1 },
   { key: '是否计石重', value: 'isWeighStonesName', type: 6, arr: [{ key: '是', value: 1 }, { key: '否', value: 2 }], initValue: 1 },
@@ -329,7 +329,12 @@ class Info extends Component {
     },
   };
 
+  componentWillUnmount() {
+    this.unLockEdit()
+  }
+
   componentDidMount() {
+    this.unLockEdit("14ba2d13-3d78-4756-a0c2-055c917f271d")
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
   }
@@ -408,6 +413,13 @@ class Info extends Component {
     })
   }
 
+  handleSelectChange = value => {
+    console.log(value);
+    this.props.form.setFieldsValue({
+      markingEnName: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
+    });
+  };
+
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
   // type 3 点击事件
@@ -441,7 +453,7 @@ class Info extends Component {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
                       initialValue: isEdit ? choosenRowData[value] : initValue || '',
                     })(type === 2 ?
-                      <Select style={{ width: 180 }} placeholder="请选择">
+                      <Select style={{ width: 180 }} placeholder="请选择" onChange={this.handleSelectChange}>
                         {quote[list] && quote[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>
                         )}
                       </Select> :
@@ -654,8 +666,19 @@ class Info extends Component {
     });
   }
 
+  unLockEdit = (id) => {
+    const { choosenRowData } = this.props
+    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {
+    })
+  }
+
+  onCancel = () => {
+    this.btnFn('');
+    this.unLockEdit()
+  }
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel } = this;
     const { modalType, } = state;
     const { list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal } = props;
     console.log(showProductModal, '========showProductModal')
@@ -690,11 +713,7 @@ class Info extends Component {
             destroyOnClose
             onOk={handleModalOk}
             visible={modalType !== ''}
-            onCancel={() => {
-              btnFn('');
-              serviceObj.unLockEdit({ id: choosenRowData.id }).then(res => {
-              })
-            }}
+            onCancel={onCancel}
           >
             {getModalContent()}
           </Modal>
@@ -776,7 +795,9 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
-                  onClick={() => { btnFn(tag) }}
+                  onClick={() => {
+                    btnFn(tag)
+                  }}
                 >
                   {tag === 'lock' ? returnLockType().name : name}
                 </Button>
@@ -914,7 +935,6 @@ class CenterInfo extends Component {
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
     const str = type === 2 ? 'Detail' : ''
-    debugger
     this.props.dispatch({
       type: `quote/changeSelected${str}RowKeys`,
       payload: selectedRowKeys,
