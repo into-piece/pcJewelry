@@ -36,6 +36,13 @@ const resultArr = [
   { key: 'addquotelist', path: '/product-quote-header/saveProductQuoteHeader' },
   { key: 'checkIsEdit', path: '/product-quote-header/checkIsEdit' },
   { key: 'unLockEdit', path: '/product-quote-header/unLockEdit' },
+  { key: 'copyQuote', path: '/product-quote-header/copyQuote' }, // 复制
+  { key: 'listEndCustomerDropDown', path: '/business/end-customer/listEndCustomerDropDown', module: 4 }, // 终客编号
+  { key: 'approval', path: '/product-quote-header/approval' }, // 报价单审批
+  { key: 'cancelApproval', path: '/product-quote-header/cancelApproval' }, // 报价单审批
+  { key: 'deleteProductQuoteHeader', path: '/product-quote-header/deleteProductQuoteHeader' }, // 报价单审批
+  { key: 'listBrands', path: '/basic/brand//listBrands', module: 4 }, // 报价单审批
+  { key: 'listBasicColourSettingsDropDown', path: '/develop/basic/colour-settings/listBasicColourSettingsDropDown', module: 4 }, // 报价单审批
 ]
 // /listMstWordbook
 

@@ -18,13 +18,13 @@ class MyTable extends Component {
     if (selectedRowKeys.includes(record.id)) {
       selectedRow = selectedRowKeys.filter(item => item !== record.id);
       clearFn && clearFn(this.props.type)
-      onSelectChange(selectedRow)
+      onSelectChange && onSelectChange(selectedRow)
       // selectedRowKeys = []
       return
     }
     // selectedRowKeys = [... this.state.selectedRowKeys, record.id]
     selectedRow = [record.id];
-    onSelectChange(selectedRow)
+    onSelectChange && onSelectChange(selectedRow)
     changeChoosenRow(record);
   };
 
@@ -33,16 +33,20 @@ class MyTable extends Component {
     changePagination({ current: page, size: pageSize });
   };
 
-
-
   onSelectRowClass = (record, index) => {
     const color = index % 2 === 0 ? styles.row_normal : ''
     return color;
   };
 
+  onRow = record => ({
+    onClick: () => {
+      this.clickRowItem(record);
+    }, // 点击行
+  })
+
   render() {
-    const { clickRowItem, props, pageChange, onSelectRowClass } = this;
-    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading } = props;
+    const { props, pageChange, onSelectRowClass, onRow } = this;
+    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading, noSelect } = props;
     const { current, size } = pagination;
     const paginationProps = {
       showQuickJumper: true,
@@ -52,14 +56,14 @@ class MyTable extends Component {
       onChange: pageChange,
     };
 
-    const rowSelection = {
+    const rowSelection =
+    // noSelect ? null :
+    {
       selectedRowKeys,
       type: 'checkbox',
       onChange: onSelectChange,
       // onSelect: this.selectChange,
     };
-
-    console.log(body, body.records)
 
     return (
       <Table
@@ -70,11 +74,7 @@ class MyTable extends Component {
         rowKey={record => record.id}
         rowClassName={onSelectRowClass}
         loading={listLoading}
-        onRow={record => ({
-          onClick: () => {
-            clickRowItem(record);
-          }, // 点击行
-        })}
+        onRow={onRow}
       />
     );
   }

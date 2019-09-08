@@ -216,6 +216,9 @@
       border-radius: @border-radius-base;
     }
   }
+  .addModal .ant-row > .ant-col.ant-form-item-label {
+    width: 120px;
+  }
 
   // 密码强度
   font.strong {
@@ -260,23 +263,5 @@
     .right {
       padding: 20px;
     }
-  }
-}
-
-:global {
-  .ant-modal-body .ant-form {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 20px;
-  }
-  .addModal {
-    width: 318px;
-    float: left;
-  }
-  .addModal .ant-form-item {
-    display: flex;
-  }
-  .addModal input {
-    width: 180px;
   }
 }

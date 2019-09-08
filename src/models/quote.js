@@ -9,7 +9,7 @@ import servicesConfig from '@/services/quote';
 
 const initData = { records: [] }
 
-const { queryProductQuoteHeadersNotDone, queryProductQuoteHeadersAlreadyDone, listProductQuoteDetail, deleteProductQuoteHeader, listProductNotCreateQoute, listMstWordbook, listCustomerDropDown, listMarkingDropDown } = servicesConfig
+const { queryProductQuoteHeadersNotDone, queryProductQuoteHeadersAlreadyDone, listProductQuoteDetail, deleteProductQuoteHeader, listProductNotCreateQoute, listMstWordbook, listCustomerDropDown, listMarkingDropDown, listEndCustomerDropDown, listBrands, listBasicColourSettingsDropDown } = servicesConfig
 export default {
   namespace: 'quote',
 
@@ -33,15 +33,20 @@ export default {
     choosenDetailRowData: { id: '' }, // select to show
     rightMenu: 1,
     productList: [],
+    productselectedKeys: [],
+    productChoosenRowData: [],
     productPagination: {
       current: 1,
       size: 10,
     },
     showProductModal: false,
     wordbookdropdown: [{ key: '', value: '' }],
+    currencydropdown: [{ key: '', value: '' }],
     customerDropDownList: [{ key: '', value: '' }],
+    endCustomerList: [{ key: '', value: '' }],
     markinglist: [],
     markingEnName: '',
+    brandsList: [],
   },
 
   effects: {
@@ -98,7 +103,12 @@ export default {
         payload,
       });
     },
-
+    * getProductChoosenRowData({ payload }, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: payload, typeName: 'productChoosenRowData' },
+      });
+    },
     * changeSelectedRowKeys({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeys2',
@@ -109,6 +119,12 @@ export default {
       yield put({
         type: 'changeSelectedDetailRowKeys2',
         payload,
+      });
+    },
+    * changeProductselectedKeys({ payload }, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: payload, typeName: 'productselectedKeys' },
       });
     },
     * changeRightMenu({ payload }, { put }) {
@@ -125,21 +141,35 @@ export default {
     },
     * getwordbookdropdown(data, { call, put }) {
       const response = yield call(listMstWordbook, { "wordbookTypeCode": "H007" });
-      let wordbookdropdown = response.body.records
-      wordbookdropdown = wordbookdropdown.map(({ wordbookContentZh, wordbookCode }) => {
+      const wordbookData = response.body.records
+      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
         return { value: wordbookCode, key: wordbookContentZh }
       })
       yield put({
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: 'wordbookdropdown' },
       });
+
     },
+
+    * getcurrencydropdown(data, { call, put }) {
+      const response = yield call(listMstWordbook, { "wordbookTypeCode": "H006" });
+      let currencydropdown = response.body.records
+      currencydropdown = currencydropdown.map(({ wordbookContentEn }) => {
+        return { value: wordbookContentEn, key: wordbookContentEn }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: currencydropdown, typeName: 'currencydropdown' },
+      });
+    },
+
     * getlistCustomerDropDown(data, { call, put }) {
       const response = yield call(listCustomerDropDown, {});
       console.log(response)
       let customerDropDownList = response.body.records
-      customerDropDownList = customerDropDownList.map(({ customerNo }) => {
-        return { value: customerNo, key: customerNo }
+      customerDropDownList = customerDropDownList.map(({ customerNo, id, shotName }) => {
+        return { value: id, key: customerNo, shotName }
       })
       yield put({
         type: 'changeState',
@@ -150,23 +180,61 @@ export default {
       const response = yield call(listMarkingDropDown, {});
       console.log(response)
       let markinglist = response.body.records
-      markinglist = markinglist.map(({ markingNo, id }) => {
-        return { value: id, key: markingNo }
+      markinglist = markinglist.map(({ markingNo, id, enName }) => {
+        return { value: id, key: markingNo, enName }
       })
       yield put({
         type: 'changeState',
         payload: { data: markinglist, typeName: 'markinglist' },
       });
     },
+    * getEndCustomerListDropDown(data, { call, put }) {
+      const response = yield call(listEndCustomerDropDown, {});
+      let endCustomerList = response.body.records
+      endCustomerList = endCustomerList.map(({ id, endNo, }) => {
+        return { value: id, key: endNo }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: endCustomerList, typeName: 'endCustomerList' },
+      });
+    },
+
     * getProductList(data, { call, put }) {
-      const response = yield call(listMarkingDropDown, {});
+      const response = yield call(listProductNotCreateQoute, {});
       console.log(response)
-      const productList = response.body.records
+      const productList = response.body
       yield put({
         type: 'changeState',
         payload: { data: productList, typeName: 'productList' },
       });
     },
+
+    // 产品下拉
+    * getBrandsList(data, { call, put }) {
+      const response = yield call(listBrands, {});
+      let brandsList = response.body.records
+      brandsList = brandsList.map(({ id, brandNo, }) => {
+        return { value: id, key: brandNo }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: brandsList, typeName: 'brandsList' },
+      });
+    },
+    *getbasicColourSettingsList(data, { call, put }) {
+      const response = yield call(listBasicColourSettingsDropDown, {});
+      let basicColourSettingsList = response.body.records
+      basicColourSettingsList = basicColourSettingsList.map(({ id, zhName, }) => {
+        return { value: id, key: zhName }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: basicColourSettingsList, typeName: 'basicColourSettingsList' },
+      });
+    },
+
+
   },
 
   reducers: {

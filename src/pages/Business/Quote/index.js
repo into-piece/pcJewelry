@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Checkbox } from 'antd';
+import { Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Checkbox, DatePicker } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -22,6 +22,7 @@ import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 // import Bread from '@/components/BreadCrumb'
 import SelectProductModal from './SelectProductModal'
 
+const { TextArea } = Input;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -57,6 +58,7 @@ const btnGroup = [
   { name: '删除', tag: 'delete' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
+  { name: '复制', tag: 'copy' },
 ];
 
 const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
@@ -213,11 +215,11 @@ const customerColumns = [
 
 // 报价主页的筛选参数
 const searchParams = [
-  { key: '客户编号', value: 'customerId' },
+  { key: '客户编号', value: 'customerId', "type": 2, "list": "customerDropDownList" },
   { key: '报价单号', value: 'quoteNumber' },
-  { key: '类别', value: 'type' },
-  { key: '报价日期', value: 'quoteDate' },
-  { key: '终客号', value: 'endId' },
+  { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
+  { key: '报价日期', value: 'quoteDate', type: 9 },
+  { key: '终客编号', value: 'endId', "type": 2, "list": "endCustomerList" },
   { key: '产品说明', value: 'explains' },
 ]
 
@@ -225,52 +227,52 @@ const searchParams = [
 const headList = [
   { key: '报价单号', value: '系统自动生成', type: 4, noNeed: true },
   { key: '报价日期', value: '系统自动生成', type: 4, noNeed: true },
-  { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown" },
-  { key: '紧急程度', value: 'emergency', type: 5, noNeed: true },
-  { key: '客户编号', value: 'customerNo', "type": 2, "list": "customerDropDownList" },
-  { key: '客户简称', value: 'customerShotName' },
-  { key: '终客编号', value: 'endNo' },
+  { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
+  { key: '紧急程度', value: 'emergency', text: '紧急', type: 5, initValue: '1', noNeed: true },
+  { key: '客户编号', value: 'customerId', "type": 2, "list": "customerDropDownList" },
+  { key: '客户简称', value: 'customerShotName', type: 7, noNeed: true },
+  { key: '终客编号', value: 'endId', "type": 2, "list": "endCustomerList" },
   { key: '终客简称', value: 'endShotName' },
-  { key: '报价方式', value: 'quoteMethod', type: 6, arr: [{ key: '计重', value: 1 }, { key: '计件', value: 2 }], initValue: 1 },
-  { key: '是否计石重', value: 'isWeighStonesName', type: 6, arr: [{ key: '是', value: 1 }, { key: '否', value: 2 }], initValue: 1 },
-  { key: '结算币种', value: 'currency' },
-  { key: '主材价', value: 'quotePrice' },
-  { key: '税率', value: 'taxRate' },
-  { key: '字印编码', value: 'markingId', "type": 2, "list": "markinglist" },
-  { key: '字印英文名', value: 'markingEnName', type: 4, noNeed: true },
-  { key: '包装单价', value: 'packPriceType', type: 6, arr: [{ key: '计收', value: 1 }, { key: '不计收', value: 2 }], initValue: 1 },
-  { key: '客户备料', value: 'customerPreparation' },
-  { key: '向客户备料', value: 'custoerProductNo' }, // ?
-  { key: '说明', value: 'explains' },
-  { key: '备注', value: 'remark' },
+  { key: '报价方式', value: 'quoteMethod', type: 6, arr: [{ key: '计重', value: 'H008002' }, { key: '计件', value: 'H008001' }], initValue: 1 },
+  { key: '是否计石重', value: 'isWeighStones', type: 6, arr: [{ key: '是', value: 'H009001' }, { key: '否', value: 'H009002' }], initValue: 1 },
+  { key: '结算币种', value: 'currency', "type": 2, "list": "currencydropdown", noNeed: true }, // ?
+  { key: '主材价', value: 'quotePrice', noNeed: true },
+  { key: '税率 (%)', value: 'taxRate', noNeed: true },
+  { key: '字印编码', value: 'markingId', "type": 2, "list": "markinglist", noNeed: true },
+  { key: '字印英文名', value: 'markingEnName', type: 7, noNeed: true },
+  { key: '包装单价', value: 'packPriceType', type: 6, arr: [{ key: '计收', value: 'H011001' }, { key: '不计收', value: 'H011002' }], initValue: 1 },
+  { key: '客户备料', value: 'customerPreparation', text: '客户备料', type: 5, noNeed: true, initValue: '1' },
+  { key: '向客户采购用料', value: 'purchasingMaterialsFromCustomers', text: '向客户备料', type: 5, noNeed: true, initValue: '1' }, // ?
+  { key: '说明', value: 'explains', type: 8, noNeed: true },
+  { key: '备注', value: 'remark', type: 8, noNeed: true },
 ]
 
 const detailList = [
   { key: '产品编号', value: 'productNo', clickFn: 'showProductModalFunc', text: '选择产品编号', type: 3 },
-  { key: '客户货号', value: 'custoerProductNo' },
-  { key: '类别', value: 'type' },
-  { key: '成色名称', value: '1' }, // ?
-  { key: '宝石颜色', value: 'gemColorName' },
-  { key: '电镀颜色', value: 'platingColorName' },
-  { key: '产品系列', value: 'productLineName' },
-  { key: '产品报价系数', value: 'productLineCoefficientQuotation' },
-  { key: '计量单位', value: 'unitOfMeasurementName' },
-  { key: '重量单位', value: 'unitOfWeightName' },
-  { key: '前次工费/克', value: 'lastCount' },
-  { key: '最高工费/克', value: 'topCount' },
-  { key: '实际工费/克', value: 'actualCount' },
+  { key: '客户货号', value: 'custoerProductNo', noNeed: true, type: 7 },
+  { key: '类别', value: 'productTypeName', noNeed: true, type: 7 },
+  { key: '成色名称', value: 'productColorName', noNeed: true, type: 7 }, // ?
+  { key: '宝石颜色', value: 'gemColorName', noNeed: true, type: 7 },
+  { key: '电镀颜色', value: 'platingColorName', noNeed: true, type: 7 },
+  { key: '产品系列', value: 'productLineName', noNeed: true },
+  { key: '产品报价系数', value: 'productLineCoefficientQuotation', noNeed: true },
+  { key: '计量单位', value: 'unitOfMeasurementName', noNeed: true },
+  { key: '重量单位', value: 'unitOfWeightName', noNeed: true },
+  { key: '前次工费/克', value: 'lastCount', noNeed: true },
+  { key: '最高工费/克', value: 'topCount', noNeed: true },
+  { key: '实际工费/克', value: 'actualCount', noNeed: true },
   { key: '此次工费/克', value: 'nowCount' },
-  { key: '是否计石重', value: 'isWeighStonesName' },
-  { key: '石材重量', value: 'stonesWeight' },
-  { key: '主材重量', value: 'mainMaterialWeight' },
-  { key: '石材价', value: 'stonePrice' },
-  { key: '字印编码', value: 'markingId' },
-  { key: '字印英文名', value: 'markingEnName' },
-  { key: '字印价/件', value: 'markingPrice' },
-  { key: '包装单价/件', value: 'packPrice' },
-  { key: '单价', value: 'price' },
+  { key: '是否计石重', value: 'isWeighStonesName', noNeed: true },
+  { key: '石材重量', value: 'stonesWeight', noNeed: true },
+  { key: '主材重量', value: 'mainMaterialWeight', noNeed: true },
+  { key: '石材价', value: 'stonePrice', noNeed: true },
+  { key: '字印编码', value: 'markingId', noNeed: true },
+  { key: '字印英文名', value: 'markingEnName', noNeed: true },
+  { key: '字印价/件', value: 'markingPrice', noNeed: true },
+  { key: '包装单价/件', value: 'packPrice', noNeed: true },
+  { key: '单价', value: 'price', noNeed: true },
   { key: '报价数量', value: 'qty' },
-  { key: '报价金额', value: 'quotedAmount' },
+  { key: '报价金额', value: 'quotedAmount', noNeed: true },
   { key: '报价重量范围', value: 'quotedWeightRange' },
   { key: '产品工费/件', value: 'productCost' },
   { key: '产品长度', value: 'productLength' },
@@ -284,14 +286,17 @@ const detailList = [
 
 // 新增 产品 遍历配置
 const productSearchParams = [
-  { key: '产品编码', value: 'productNo' },
-  { key: '客户货号', value: 'supplierProductNo' },
-  { key: '宝石颜色', value: 'gemColor' },
-  { key: '成色', value: 'productColor' },
-  { key: '电镀颜色', value: 'platingColor' },
-  { key: '中文名', value: 'zhName' },
-  { key: '英文名', value: 'enName' },
+  { key: '品牌', value: 'brand', "type": 2, "list": "brandsList" },
+  { key: '客户编号', value: 'customerId', "type": 2, "list": "customerDropDownList" },
+  // { key: '产品编码', value: 'productNo' },
+  // { key: '客户货号', value: 'supplierProductNo' },
+  { key: '宝石颜色', value: 'gemColor', "type": 2, "list": "basicColourSettingsList" },
+  // { key: '成色', value: 'productColor' },
+  // { key: '电镀颜色', value: 'platingColor' },
+  // { key: '中文名', value: 'zhName' },
+  // { key: '英文名', value: 'enName' },
 ]
+
 
 @Form.create()
 @connect(({ loading, quote }) => {
@@ -313,30 +318,42 @@ const productSearchParams = [
     showProductModal: quote.showProductModal,
     quotelist: quote.quotelist,
     quoteDatialList: quote.quoteDatialList,
-    selectedDetailRowKeys: quote.selectedDetailRowKeys
+    selectedDetailRowKeys: quote.selectedDetailRowKeys,
+    productList: quote.productList,
+    productselectedKeys: quote.productselectedKeys,
+    productChoosenRowData: quote.productChoosenRowData,
   };
 })
 class Info extends Component {
   state = {
     modalType: '',
-    addData: {
-      measureUnit: {
-        unitCode: '',
-        zhName: '',
-        enName: ''
-      },
-      colorPercentage: {}
-    },
   };
+
+  componentDidMount() {
+    const { dispatch } = this.props
+    this.unLockEdit("14ba2d13-3d78-4756-a0c2-055c917f271d")
+
+    // 获取客户编号下拉
+    dispatch({
+      type: 'quote/getlistCustomerDropDown'
+    })
+
+    // 类别下拉
+    dispatch({
+      type: 'quote/getwordbookdropdown'
+    })
+
+    // 终客编号下拉
+    dispatch({
+      type: 'quote/getEndCustomerListDropDown'
+    })
+
+    // 获取初始表单数据
+    this.getList({ sendReq: 'currentQuote' });
+  }
 
   componentWillUnmount() {
     this.unLockEdit()
-  }
-
-  componentDidMount() {
-    this.unLockEdit("14ba2d13-3d78-4756-a0c2-055c917f271d")
-    // 获取初始表单数据
-    this.getList({ sendReq: 'currentQuote' });
   }
 
   // 获取对应key=》页面进行数据请求
@@ -363,15 +380,27 @@ class Info extends Component {
     const isHead = rightMenu === 1
     if (isHead) {
       dispatch({
-        type: 'quote/getwordbookdropdown'
-      })
-      dispatch({
-        type: 'quote/getlistCustomerDropDown'
+        type: 'quote/getcurrencydropdown'
       })
       dispatch({
         type: 'quote/getMarkinglistDropDown'
       })
     }
+  }
+
+  // 复制
+  handleCopy = () => {
+    const { id } = this.props.choosenRowData
+    serviceObj.copyQuote({ id }).then(res => {
+      const { rtnMsg, rtnCode } = res.head
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        this.getList({ sendReq: 'currentQuote' });
+      }
+    })
+
   }
 
   // 列表对应操作button回调
@@ -381,7 +410,6 @@ class Info extends Component {
       case 'plus':
       case 'edit':
       default:
-
         if (modalType === 'edit') {
           const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
             if (res.head.rtnCode !== '000000') return false
@@ -399,13 +427,25 @@ class Info extends Component {
       case 'lock':
         this.handleLock()
         break;
+      case 'copy':
+        this.handleCopy()
+        break;
     }
   };
 
+  // 控制产品弹窗 type = 1出现
   showProductModalFunc = (type = 1) => {
     const { dispatch } = this.props
     if (type === 1) {
       this.getProduct()
+
+      // 获取筛选参数下拉
+      dispatch({
+        type: 'quote/getBrandsList',
+      })
+      dispatch({
+        type: 'quote/getbasicColourSettingsList',
+      })
     }
     dispatch({
       type: 'quote/showProductModalFn',
@@ -413,12 +453,40 @@ class Info extends Component {
     })
   }
 
-  handleSelectChange = value => {
+  handleSelectChange = (value, type) => {
     console.log(value);
-    this.props.form.setFieldsValue({
-      markingEnName: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
-    });
+
+    // 自动带出字印英文名
+    if (type === 'markingId') {
+      const obj = this.props.quote.markinglist.find(item => {
+        return item.value === value
+      })
+      const { enName } = obj
+      this.props.form.setFieldsValue({
+        markingEnName: enName,
+      });
+    }
+
+    // 自动带出
+    if (type === 'customerId') {
+      const obj = this.props.quote.customerDropDownList.find(item => {
+        return item.value === value
+      })
+      const { shotName } = obj
+      this.props.form.setFieldsValue({
+        customerShotName: shotName,
+      });
+    }
   };
+
+  handleCheckChange = (e, value) => {
+    console.log(e.target.checked, '==============handleCheckChange')
+    const check = e.target.checked ? '1' : '0'
+    debugger
+    // this.props.form.setFieldsValue({
+    //   value: check,
+    // });
+  }
 
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
@@ -427,18 +495,60 @@ class Info extends Component {
   // type 5 check
   // type 6 radio
   // type 7 被顺带出的文字
+  // type 8 inputext
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form }) => {
+    switch (type) {
+      case 2:
+        return (
+          <Select style={{ width: 180 }} placeholder="请选择" onChange={(v) => { this.handleSelectChange(v, value) }}>
+            {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>
+            )}
+          </Select>
+        )
+      case 3:
+        return (
+          <span onClick={() => { this[clickFn](1) }} style={{ cursor: 'pointer' }}>{text}</span>
+        )
+      case 4:
+        return (
+          <span>{value}</span>
+        )
+      case 5:
+        return <Checkbox checked={form.getFieldValue(value)}>{text}</Checkbox>
+      case 6:
+        return <Radio.Group>
+          {
+            arr.map(({ key, value }) => {
+              return <Radio value={value}>{key}</Radio>
+            })
+          }
+               </Radio.Group>
+      case 7:
+        return <span>{form.getFieldValue(value)}</span>
+      case 8:
+        return <TextArea rows={2} placeholder="请输入" />
+      case 9:
+        return <DatePicker />
+      default:
+        return <Input style={{ width: '100' }} placeholder="请输入" />
+    }
+    //  type === 7 ?
+  }
+
+
   getModalContent = () => {
     const {
       rightMenu,
       choosenRowData,
-      form: { getFieldDecorator },
+      form,
     } = this.props;
+    const { getFieldDecorator } = form
     const { modalType } = this.state
     const content = ''
     const isEdit = modalType === 'edit'
     const { quote } = this.props
     const addArr = rightMenu === 1 ? headList : detailList
-    console.log(quote.wordbookdropdown)
+    console.log(this.props.form.getFieldsValue())
     return (
       <Form size="small">
         {
@@ -451,31 +561,9 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? choosenRowData[value] : initValue || '',
-                    })(type === 2 ?
-                      <Select style={{ width: 180 }} placeholder="请选择" onChange={this.handleSelectChange}>
-                        {quote[list] && quote[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>
-                        )}
-                      </Select> :
-                      type === 3 ?
-                        <span onClick={() => { this[clickFn](1) }} style={{ cursor: 'pointer' }}>{text}</span>
-                        :
-                        type === 4 ?
-                          <span>{value}</span>
-                          :
-                          type === 5 ?
-                            <Checkbox checked>{value}</Checkbox>
-                            :
-                            type === 6 ?
-                              <Radio.Group>
-                                {
-                                  arr.map(({ key, value }) => {
-                                    return <Radio value={value}>{key}</Radio>
-                                  })
-                                }
-                              </Radio.Group> : type === 7 ?
-                                <span>{quote[value]}</span> : <Input style={{ width: '100' }} placeholder="请输入" />
-                    )
+                      initialValue: isEdit ? choosenRowData[value] : initValue || undefined,
+                    })(this.returnElement({ key, value, noNeed, type, list, clickFn, text, arr, initValue, data: quote, form }))
+
                   }
                 </FormItem>
               </div>
@@ -532,8 +620,8 @@ class Info extends Component {
 
   // 编辑按钮回调
   handleEdit = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
+    const { rightMenu, form } = this.props
+    const str = rightMenu === 1 ? 'quotelist' : 'quoteDatialList'
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -544,18 +632,17 @@ class Info extends Component {
     form.validateFields((err, values) => {
       if (!err) {
         const { choosenRowData } = this.props
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         const params = {
           ...values,
           id: choosenRowData.id
         }
-        serviceObj[`addBasic${selectKey}`](params).then(res => {
+        serviceObj[`add${str}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head
           if (rtnCode === '000000') {
             notification.success({
               message: rtnMsg,
             });
-            this.getList()
+            this.getList({ sendReq: 'currentQuote' });
             this.btnFn('');
           }
         })
@@ -576,7 +663,7 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.getList()
+        this.getList({ sendReq: 'currentQuote' });
       }
     })
   }
@@ -585,7 +672,9 @@ class Info extends Component {
   handleLock = () => {
     const { selectedRowKeys } = this.props
     const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'cancelApproval'
+    const serviceType = isLock ? 'approval' : 'cancelApproval'
+    console.log(serviceObj, serviceObj[serviceType], selectedRowKeys)
+    debugger
     serviceObj[serviceType](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head
       if (rtnCode === '000000') {
@@ -677,11 +766,51 @@ class Info extends Component {
     this.unLockEdit()
   }
 
+  // 选中某行表头
+  changeChoosenRow = (rowData) => {
+    const { dispatch } = this.props;
+    debugger
+    dispatch({
+      type: `quote/getProductChoosenRowData`,
+      payload: rowData,
+    });
+  };
+
+  // { key: '客户货号', value: 'custoerProductNo', noNeed: true, type: 7},
+  // { key: '类别', value: 'type', noNeed: true, type: 7 },
+  // { key: '成色名称', value: '1', noNeed: true , type: 7}, // ?
+  // { key: '宝石颜色', value: 'gemColorName', noNeed: true, type: 7 },
+  // { key: '电镀颜色', value: 'platingColorName', noNeed: true, type: 7 },
+  handleProductModalOk = () => {
+    this.showProductModalFunc(2);
+    console.log(this.props.productChoosenRowData)
+    const { custoerProductNo, type, gemColorName, platingColorName, productColorName } = this.props.productChoosenRowData
+    debugger
+    this.props.form.setFieldsValue({
+      productColorName,
+      custoerProductNo,
+      productTypeName,
+      gemColorName,
+      platingColorName
+    });
+  }
+
+  handleProductModalCancel = () => {
+    this.showProductModalFunc(2);
+  }
+
+  onSelectChange = (selectedRowKeys) => {
+    this.props.dispatch({
+      type: `quote/changeProductselectedKeys`,
+      payload: selectedRowKeys,
+    })
+  };
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange } = this;
     const { modalType, } = state;
-    const { list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal } = props;
-    console.log(showProductModal, '========showProductModal')
+    const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData } = props;
+    console.log(productList, '========productList')
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -700,6 +829,7 @@ class Info extends Component {
                 returnLockType={returnLockType}
                 returnSisabled={returnSisabled}
                 handleRadio={handleRadio}
+                returnElement={returnElement}
               />
             </div>
           </div>
@@ -725,13 +855,21 @@ class Info extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
+          onOk={handleProductModalOk}
           visible={showProductModal}
-          onCancel={() => {
-            showProductModalFunc(2);
-          }}
+          onCancel={handleProductModalCancel}
         >
-          <SelectProductModal productSearchParams={productSearchParams} />
+          <SelectProductModal
+            list={productList}
+            productSearchParams={productSearchParams}
+            pagination={productPagination}
+            returnElement={returnElement}
+            source={quote}
+            productselectedKeys={productselectedKeys}
+            changeChoosenRow={changeChoosenRow}
+            choosenRowData={productChoosenRowData}
+            onSelectChange={onSelectChange}
+          />
         </Modal>
       </div>
     );
@@ -739,22 +877,16 @@ class Info extends Component {
 }
 
 
-
-
 const radioArr = ['报价主页', '报价明细']
 
-
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu, choosenDetailRowData }) => (
+const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu, choosenDetailRowData, returnElement }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
-
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
-        <CenterInfo type={type} handleRadio={handleRadio} />
+        <CenterInfo type={type} handleRadio={handleRadio} returnElement={returnElement} />
       </Col>
-
-
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
@@ -954,23 +1086,27 @@ class CenterInfo extends Component {
   }
 
   onSearch = (v) => {
-    this.getList(v)
+    const { timeline } = this.props
+    this.getList(v, { sendReq: timeline })
   }
 
+
   // 获取对应key=》页面进行数据请求
-  getList = (args) => {
+  getList = (params, args) => {
     const { dispatch, pagination } = this.props;
     // getDevList
     dispatch({
       type: `quote/getList`,
-      payload: { params: { ...pagination, ...args } },
+      payload: { params: { ...pagination, ...params }, ...args },
     });
   }
 
+
+
   render() {
     const { onSelectChange, props, clearFn, onSearch } = this
-    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination } = props;
-    console.log(quotelist, quoteDatialList, choosenRowData, '================quotelist')
+    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement } = props;
+    console.log(quotelist, quoteDatialList, choosenRowData, returnElement, '================quotelist')
     return (
       <div className={styles.view_left_content}>
         <div style={{ marginBottom: 20 }}>
@@ -985,7 +1121,7 @@ class CenterInfo extends Component {
             </Radio.Button>
           </Radio.Group>
         </div>
-        <SearchForm data={searchParams} onSearch={onSearch} />
+        <SearchForm data={searchParams} source={quote} onSearch={onSearch} returnElement={returnElement} />
         <div className={styles.tableBox}>
           <Table
             columns={clientContentColumns}
