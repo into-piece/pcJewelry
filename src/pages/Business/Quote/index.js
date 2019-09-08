@@ -26,7 +26,7 @@ const { TextArea } = Input;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
-const { deleteProductQuoteHeader } = serviceObj
+const { deleteProductQuoteHeader, deleteProformaInvoiceDetail } = serviceObj
 // manuArr是 =》menu配置提供遍历
 // modalContent => 每个menu不同的增加弹窗填写信息
 const { modalContent } = jsonData
@@ -522,7 +522,7 @@ class Info extends Component {
               return <Radio value={value}>{key}</Radio>
             })
           }
-               </Radio.Group>
+        </Radio.Group>
       case 7:
         return <span>{form.getFieldValue(value)}</span>
       case 8:
@@ -654,7 +654,7 @@ class Info extends Component {
   handleDelect = () => {
     const { rightMenu, selectedRowKeys, selectedDetailRowKeys } = this.props
     console.log(selectedRowKeys, selectedDetailRowKeys)
-    const sendApi = rightMenu === 1 ? deleteProductQuoteHeader : ''
+    const sendApi = rightMenu === 1 ? deleteProductQuoteHeader : deleteProformaInvoiceDetail
     const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head

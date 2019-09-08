@@ -43,6 +43,7 @@ const resultArr = [
   { key: 'deleteProductQuoteHeader', path: '/product-quote-header/deleteProductQuoteHeader' }, // 报价单审批
   { key: 'listBrands', path: '/basic/brand//listBrands', module: 4 }, // 报价单审批
   { key: 'listBasicColourSettingsDropDown', path: '/develop/basic/colour-settings/listBasicColourSettingsDropDown', module: 4 }, // 报价单审批
+  { key: 'deleteProformaInvoiceDetail', path: '/business/order/proforma-invoice-detail/deleteProformaInvoiceDetail', module: 4 }, // 报价单审批
 ]
 // /listMstWordbook
 
