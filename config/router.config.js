@@ -239,20 +239,20 @@ export default [
           //模具设定
           {
             path: '/dev/Mould',
-            name: 'mould',
+            name: 'Mould',
             icon: 'inbox',
             component: './dev/Mould',
           },
           //原料设定
           {
             path: '/dev/Raw',
-            name: 'raw',
+            name: 'Raw',
             icon: 'inbox',
             component: './dev/Raw',
           },
           {
             path: '/dev/FinishedProduct',
-            name: 'finishedproduct',
+            name: 'FinishedProduct',
             icon: 'deployment-unit',
             component: './dev/FinishedProduct',
           },
