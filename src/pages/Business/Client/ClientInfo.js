@@ -20,11 +20,11 @@ import {
   message,
   Spin,
 } from 'antd';
-import styles from './base.less';
 import { connect } from 'dva';
+import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
-import GeographicView from './../../Account/Settings/GeographicView';
+import GeographicView from "../../Account/Settings/GeographicView";
 import City from './components/City';
 import Dict from './components/Dict';
 import QualityRequirements from './components/QualityRequirements';
@@ -135,7 +135,7 @@ class ClientInfo extends PureComponent {
     let content = '';
     // if (location && location.params) {
     if (params) {
-      let data = { ...params };
+      const data = { ...params };
       // console.log(" render data is ",data)
       content = data.content;
       // this.state.showItem = { ...content };
@@ -168,7 +168,7 @@ class ClientInfo extends PureComponent {
       this.state.showItem = false;
     }
 
-    let isCurstomerUpdate =
+    const isCurstomerUpdate =
       customerDeleteloading ||
       customerSaveloading ||
       customerUpdateloading ||
@@ -178,8 +178,7 @@ class ClientInfo extends PureComponent {
     if (isCurstomerUpdate) {
       this.state.update = true;
       if (customerUpdateloading) this.state.customerUpdate = true;
-    } else {
-      if (update) {
+    } else if (update) {
         this.loadCustomeForId();
 
         if (body.rtnCode === '000000') {
@@ -201,7 +200,6 @@ class ClientInfo extends PureComponent {
 
         this.state.update = false;
       }
-    }
 
     const modalFooter = this.state.done
       ? { footer: null, onCancel: this.handleDone }
@@ -219,7 +217,7 @@ class ClientInfo extends PureComponent {
 
           <Form
             layout="inline"
-            size={'small'}
+            size="small"
             className={styles.from_content}
             labelAlign="left"
             onSubmit={this.handleSubmit}
@@ -412,7 +410,7 @@ class ClientInfo extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="primary"
                 icon="plus"
-                size={'small'}
+                size="small"
                 disabled={this.state.isAddEdit}
                 onClick={this.clickNewFrom}
               >
@@ -422,7 +420,7 @@ class ClientInfo extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="danger"
                 icon="delete"
-                size={'small'}
+                size="small"
                 disabled={this.state.isEdit|| (this.state.showItem && this.state.showItem.status === '2')}
                 onClick={this.clickDeleteFrom}
               >
@@ -431,7 +429,7 @@ class ClientInfo extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="edit"
                 disabled={this.state.isEdit|| (this.state.showItem && this.state.showItem.status === '2')}
                 onClick={this.clickEditFrom}
@@ -441,7 +439,7 @@ class ClientInfo extends PureComponent {
               {
                 this.state.showItem.status==='2'?<Button
                   className={clientStyle.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="danger"
                   icon="unlock"
                   disabled={this.state.isEdit}
@@ -449,15 +447,15 @@ class ClientInfo extends PureComponent {
                 >
                   取消审批
                 </Button>:  <Button
-                  className={clientStyle.buttomControl}
-                  size={'small'}
-                  type="primary"
-                  icon="lock"
-                  disabled={this.state.isEdit}
-                  onClick={this.clickFreezeFrom}
-                >
+                                                   className={clientStyle.buttomControl}
+                                                   size="small"
+                                                   type="primary"
+                                                   icon="lock"
+                                                   disabled={this.state.isEdit}
+                                                   onClick={this.clickFreezeFrom}
+                                                 >
                   审批
-                </Button>
+                                                 </Button>
               }
 
             </div>
@@ -473,18 +471,18 @@ class ClientInfo extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
-                disabled={true}
+                disabled
               >
                 复制
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
-                disabled={true}
+                disabled
               >
                 撤销
               </Button>
@@ -574,7 +572,7 @@ class ClientInfo extends PureComponent {
     // console.log('featQuality item ', showItem);
     this.state.isLoading = true;
     const _this = this;
-    let params = { id };
+    const params = { id };
     fetch(HttpFetch.loadCustomerList, {
       method: 'POST',
       credentials: 'include',
@@ -586,7 +584,7 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
@@ -668,27 +666,27 @@ headers: {
           <DescriptionList size="small" col="1">
             <Description term="">{this.state.showItem.remarks}</Description>
           </DescriptionList>
-          {/*<Divider className={styles.divder} />*/}
-          {/*<span*/}
-            {/*style={{*/}
-              {/*marginBottom: 10,*/}
-              {/*paddingLeft: 10,*/}
-              {/*fontSize: 20,*/}
-              {/*fontWeight: 'bold',*/}
-              {/*color: '#35B0F4',*/}
-            {/*}}*/}
-          {/*>*/}
-            {/*联络信息*/}
-          {/*</span>*/}
-          {/*<Divider className={styles.divder} />*/}
-          {/*<List*/}
-            {/*loading={false}*/}
-            {/*dataSource={listdata}*/}
-            {/*renderItem={this.getContantItem}*/}
-            {/*size="small"*/}
-            {/*bordered={false}*/}
-            {/*split={true}*/}
-          {/*/>*/}
+          {/* <Divider className={styles.divder} /> */}
+          {/* <span */}
+          {/* style={{ */}
+          {/* marginBottom: 10, */}
+          {/* paddingLeft: 10, */}
+          {/* fontSize: 20, */}
+          {/* fontWeight: 'bold', */}
+          {/* color: '#35B0F4', */}
+          {/* }} */}
+          {/* > */}
+          {/* 联络信息 */}
+          {/* </span> */}
+          {/* <Divider className={styles.divder} /> */}
+          {/* <List */}
+          {/* loading={false} */}
+          {/* dataSource={listdata} */}
+          {/* renderItem={this.getContantItem} */}
+          {/* size="small" */}
+          {/* bordered={false} */}
+          {/* split={true} */}
+          {/* /> */}
         </Spin>
       </div>
     );
@@ -698,7 +696,7 @@ headers: {
     const { showItem } = this.state;
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.qualityRequirements) {
-      let params = { id: showItem.qualityRequirements };
+      const params = { id: showItem.qualityRequirements };
       fetch(HttpFetch.queryQuality, {
         method: 'POST',
         credentials: 'include',
@@ -710,7 +708,7 @@ headers: {
       })
         .then(response => response.json())
         .then(d => {
-          const body = d.body;
+          const {body} = d;
           let qualityRequirements = '';
           if (body.records.length > 0) {
             qualityRequirements = body.records[0].qualityEnName;
@@ -730,7 +728,7 @@ headers: {
     const { showItem } = this.state;
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.settlementCurrency) {
-      let params = { wordbookCode: showItem.settlementCurrency };
+      const params = { wordbookCode: showItem.settlementCurrency };
       // fetch('/server/sys/mst-wordbook/listMstWordbook', {
       fetch(HttpFetch.queryMstWordList, {
         method: 'POST',
@@ -743,7 +741,7 @@ headers: {
       })
         .then(response => response.json())
         .then(d => {
-          const body = d.body;
+          const {body} = d;
           let settlementCurrency = '';
           if (body.records.length > 0) {
             settlementCurrency = body.records[0].wordbookContentZh;
@@ -763,7 +761,7 @@ headers: {
     const { showItem } = this.state;
     // console.log('featQuality item ', showItem);
     if (showItem && showItem.deliveryMethod) {
-      let params = { id: showItem.deliveryMethod };
+      const params = { id: showItem.deliveryMethod };
       fetch(HttpFetch.queryDelivery, {
         method: 'POST',
         credentials: 'include',
@@ -775,7 +773,7 @@ headers: {
       })
         .then(response => response.json())
         .then(d => {
-          const body = d.body;
+          const {body} = d;
           let deliveryMethod = '';
           if (body.records.length > 0) {
             deliveryMethod = body.records[0].deliveryZhName;
@@ -810,7 +808,7 @@ headers: {
     } = this.props;
 
     return (
-      <Form size={'small'} onSubmit={this.handleSubmit}>
+      <Form size="small" onSubmit={this.handleSubmit}>
         <FormItem label="品质要求英文名称" {...this.formLayout}>
           {getFieldDecorator('qualityEnName', {
             rules: [{ required: true, message: '请输入英文名称' }],
@@ -836,7 +834,7 @@ headers: {
 
     // console.log('customer render ', data);
     // data.ref()
-    //handle
+    // handle
     this.setState({
       visible: false,
       customerDelete,
@@ -876,7 +874,7 @@ headers: {
 
       params.typeId = info.typeId;
       if (!isAdd && info.content && info.content.id) {
-        let tempFields = { ...fieldsValue };
+        const tempFields = { ...fieldsValue };
 
         const updateCustomer = Object.assign(info.content, { ...tempFields });
         console.log('assign params = ', updateCustomer);

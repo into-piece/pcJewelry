@@ -31,7 +31,7 @@ const result = serviceArr.map(({ name, arr, path }) => (
 const resultArr = [
   ...result.flat(),
   { key: 'listGemSetProcessDropDown', path: '/colour-set/listBasicColourSetDropDown' },
-  { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: env + '/business/sys' }
+  { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: `${env  }/business/sys` }
 ]
 
 console.log(resultArr, '============')
@@ -40,7 +40,7 @@ console.log(resultArr, '============')
 const outPutObject = {}
 resultArr.forEach(({ key, path, priefx1 }) => {
   outPutObject[key] = async (params) => {
-    return request((priefx1 ? priefx1 : priefx) + path, {
+    return request((priefx1 || priefx) + path, {
       method: 'POST',
       data: params,
     });

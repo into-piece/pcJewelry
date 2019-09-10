@@ -59,7 +59,7 @@ export default [
       // dashboard
       {
         path: '/',
-        redirect: '/business/client',
+        redirect: '/business/Client',
         // authority: ['admin', 'user','chents']
       },
       // bussiness route
@@ -71,7 +71,7 @@ export default [
         routes: [
           {
             path: '/business/client',
-            name: 'Client',
+            name: 'client',
             icon: 'user',
             component: './Business/Client/ClientView',
             routes: [
@@ -112,7 +112,7 @@ export default [
           },
           {
             path: '/business/basic',
-            name: 'Basic',
+            name: 'basic',
             icon: 'bulb',
             component: './Business/Basic/Info',
             routes: [
@@ -170,7 +170,7 @@ export default [
           },
           {
             path: '/business/product',
-            name: 'Product',
+            name: 'product',
             icon: 'shopping',
             component: './Business/Product/ProductInfo',
             routes: [],
@@ -178,21 +178,21 @@ export default [
 
           {
             path: '/business/specimen',
-            name: 'Specimen',
+            name: 'specimen',
             icon: 'form',
             component: './Business/Specimen/Specimen',
             routes: [],
           },
           {
             path: '/business/quote',
-            name: 'Quote',
+            name: 'quote',
             icon: 'form',
             component: './Business/Quote',
             routes: [],
           },
           {
             path: '/business/proforminvoice',
-            name: 'Proform Invoice',
+            name: 'proforminvoice',
             icon: 'form',
             component: './Business/Proforminvoice/Proforminvoice',
             routes: [],
@@ -200,7 +200,7 @@ export default [
 
           {
             path: '/business/deliver',
-            name: 'Deliver',
+            name: 'deliver',
             icon: 'form',
             component: './Business/Deliver/Deliver',
             routes: [],
@@ -208,7 +208,7 @@ export default [
 
           {
             path: '/business/Receiving',
-            name: 'Receiving',
+            name: 'receiving',
             icon: 'form',
             component: './Business/Receiving/Receiving',
             routes: [],
@@ -216,7 +216,7 @@ export default [
 
           {
             path: '/business/report',
-            name: 'Report',
+            name: 'report',
             icon: 'form',
             component: './Business/Report/Report',
             routes: [],
@@ -232,27 +232,27 @@ export default [
         routes: [
           {
             path: '/dev/basic',
-            name: 'Basic',
+            name: 'basic',
             icon: 'bulb',
             component: './dev/Basic',
           },
           //模具设定
           {
             path: '/dev/Mould',
-            name: 'Mould',
+            name: 'mould',
             icon: 'inbox',
             component: './dev/Mould',
           },
           //原料设定
           {
             path: '/dev/Raw',
-            name: 'Raw',
+            name: 'raw',
             icon: 'inbox',
             component: './dev/Raw',
           },
           {
             path: '/dev/FinishedProduct',
-            name: 'FinishedProduct',
+            name: 'finishedProduct',
             icon: 'deployment-unit',
             component: './dev/FinishedProduct',
           },

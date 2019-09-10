@@ -21,16 +21,16 @@ import {
   Upload,
   message,
 } from 'antd';
+import { connect } from 'dva';
 import business from '../business.less';
-import listStyles from '../Client/TableList.less';
+import listStyles from "./TableList.less";
 
 import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
-import { connect } from 'dva';
+import clientStyle from './Client.less';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-import clientStyle from './Client.less';
 const { Description } = DescriptionList;
 
 const productColumn = [
@@ -103,24 +103,24 @@ class Product extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
-          {/*<DescriptionList size="small" col="2">*/}
-            {/*<Description size="small" term="产品序列编号" />*/}
-            {/*<Description size="small" term="产品系列名称">*/}
-              {/*A系列*/}
-            {/*</Description>*/}
-            {/*<Description size="small" term="产品报价系数">*/}
-              {/*98%*/}
-            {/*</Description>*/}
-          {/*</DescriptionList>*/}
-          {/*<List*/}
-            {/*loading={false}*/}
-            {/*dataSource={listdata}*/}
-            {/*className={styles.product_list}*/}
-            {/*renderItem={this.getListItem}*/}
-            {/*size="small"*/}
-            {/*bordered={false}*/}
-            {/*split={true}*/}
-          {/*/>*/}
+          {/* <DescriptionList size="small" col="2"> */}
+          {/* <Description size="small" term="产品序列编号" /> */}
+          {/* <Description size="small" term="产品系列名称"> */}
+          {/* A系列 */}
+          {/* </Description> */}
+          {/* <Description size="small" term="产品报价系数"> */}
+          {/* 98% */}
+          {/* </Description> */}
+          {/* </DescriptionList> */}
+          {/* <List */}
+          {/* loading={false} */}
+          {/* dataSource={listdata} */}
+          {/* className={styles.product_list} */}
+          {/* renderItem={this.getListItem} */}
+          {/* size="small" */}
+          {/* bordered={false} */}
+          {/* split={true} */}
+          {/* /> */}
         </div>
         <Card
           bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
@@ -139,7 +139,7 @@ class Product extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="primary"
                 icon="plus"
-                size={'small'}
+                size="small"
               >
                 新增
               </Button>
@@ -147,21 +147,21 @@ class Product extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="danger"
                 icon="delete"
-                size={'small'}
+                size="small"
               >
                 删除
               </Button>
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="edit"
               >
                 编辑
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="lock"
               >
@@ -180,14 +180,14 @@ class Product extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
               >
                 复制
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
               >
@@ -252,7 +252,7 @@ class Product extends PureComponent {
           renderItem={this.getListItem}
           size="small"
           bordered={false}
-          split={true}
+          split
         />
       </div>
     );
