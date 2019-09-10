@@ -252,7 +252,7 @@ export default [
           },
           {
             path: '/dev/FinishedProduct',
-            name: 'finishedProduct',
+            name: 'finishedproduct',
             icon: 'deployment-unit',
             component: './dev/FinishedProduct',
           },
