@@ -1504,7 +1504,7 @@ const routes = [
           },
           {
             path: '/dev/Mould',
-            name: 'Mould',
+            name: 'mould',
             icon: 'inbox',
             component: __IS_BROWSER
               ? _dvaDynamic({
@@ -1518,7 +1518,7 @@ const routes = [
           },
           {
             path: '/dev/Raw',
-            name: 'Raw',
+            name: 'raw',
             icon: 'inbox',
             component: __IS_BROWSER
               ? _dvaDynamic({
@@ -1532,7 +1532,7 @@ const routes = [
           },
           {
             path: '/dev/FinishedProduct',
-            name: 'FinishedProduct',
+            name: 'finishedproduct',
             icon: 'deployment-unit',
             component: __IS_BROWSER
               ? _dvaDynamic({
