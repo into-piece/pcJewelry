@@ -22,10 +22,10 @@ import {
 } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { connect } from 'dva';
+import router from 'umi/router';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
 import DescriptionList from '@/components/DescriptionList';
-import router from 'umi/router';
 
 import TerminalClient from './TerminalClient';
 import ClientInfo from './ClientInfo';
@@ -33,16 +33,10 @@ import Mark from './Mark';
 import PackageInfo from './PackageInfo';
 import Product from './Product';
 import History from './History';
-
-const FormItem = Form.Item;
-const { Option } = Select;
-const { TabPane } = Tabs;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 import listStyles from './TableList.less';
 import baseStyles from './base.less';
-import business from './../business.less';
-import clientInfoStyle from './../Client/ClientInfo.less';
+import business from "../business.less";
+import clientInfoStyle from "./ClientInfo.less";
 import maintainer from './models/maintainer';
 import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
@@ -50,6 +44,12 @@ import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
 import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 import TableSortView from '../../components/TableSortView';
+
+const FormItem = Form.Item;
+const { Option } = Select;
+const { TabPane } = Tabs;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 const { Description } = DescriptionList;
 
@@ -59,13 +59,13 @@ const { Description } = DescriptionList;
 //     dataIndex: 'zhName',
 //     key: 'zhName',
 {
-  /*sorter: (a, b) => {*/
+  /* sorter: (a, b) => { */
 }
 //       return pingYincompare(a.zhName, b.zhName);
 //     },
 //   },
 {
-  /*{*/
+  /* { */
 }
 //     title: '英文名称',
 //     dataIndex: 'enName',
@@ -240,7 +240,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column={'中文名称'} field={'zh_name'} sortChange={this.clientSortFilter} />
+          <TableSortView column="中文名称" field="zh_name" sortChange={this.clientSortFilter} />
         );
       },
       dataIndex: 'zhName',
@@ -249,7 +249,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column={'英文名称'} field={'en_name'} sortChange={this.clientSortFilter} />
+          <TableSortView column="英文名称" field="en_name" sortChange={this.clientSortFilter} />
         );
       },
       dataIndex: 'enName',
@@ -259,8 +259,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'创建时间'}
-            field={'create_time'}
+            column="创建时间"
+            field="create_time"
             sortChange={this.clientSortFilter}
           />
         );
@@ -275,8 +275,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'联系人'}
-            field={'contacts'}
+            column="联系人"
+            field="contacts"
             sortChange={this.contactsSortFilter}
           />
         );
@@ -286,7 +286,7 @@ class ClientView extends PureComponent {
     },
     {
       title: () => {
-        return <TableSortView column={'电话'} field={'tel'} sortChange={this.contactsSortFilter} />;
+        return <TableSortView column="电话" field="tel" sortChange={this.contactsSortFilter} />;
       },
       dataIndex: 'tel',
       key: 'tel',
@@ -295,7 +295,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column={'手机'} field={'phone'} sortChange={this.contactsSortFilter} />
+          <TableSortView column="手机" field="phone" sortChange={this.contactsSortFilter} />
         );
       },
       dataIndex: 'phone',
@@ -304,7 +304,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column={'email'} field={'email'} sortChange={this.contactsSortFilter} />
+          <TableSortView column="email" field="email" sortChange={this.contactsSortFilter} />
         );
       },
       dataIndex: 'email',
@@ -312,7 +312,7 @@ class ClientView extends PureComponent {
     },
     {
       title: () => {
-        return <TableSortView column={'qq'} field={'qq'} sortChange={this.contactsSortFilter} />;
+        return <TableSortView column="qq" field="qq" sortChange={this.contactsSortFilter} />;
       },
       dataIndex: 'qq',
       key: 'qq',
@@ -320,7 +320,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column={'wechat'} field={'wechat'} sortChange={this.contactsSortFilter} />
+          <TableSortView column="wechat" field="wechat" sortChange={this.contactsSortFilter} />
         );
       },
       dataIndex: 'wechat',
@@ -330,8 +330,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'主联系人'}
-            field={'is_primary_contact'}
+            column="主联系人"
+            field="is_primary_contact"
             sortChange={this.contactsSortFilter}
           />
         );
@@ -347,8 +347,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'客户编号'}
-            field={'customer_no'}
+            column="客户编号"
+            field="customer_no"
             sortChange={this.customerSortFilter}
           />
         );
@@ -360,7 +360,7 @@ class ClientView extends PureComponent {
       // title: <div className={clientInfoStyle.row_normal2}>简称</div>,
       title: () => {
         return (
-          <TableSortView column={'简称'} field={'shot_name'} sortChange={this.customerSortFilter} />
+          <TableSortView column="简称" field="shot_name" sortChange={this.customerSortFilter} />
         );
       },
       dataIndex: 'shotName',
@@ -371,8 +371,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'英文名称'}
-            field={'en_name'}
+            column="英文名称"
+            field="en_name"
             sortChange={this.customerSortFilter}
           />
         );
@@ -385,8 +385,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'中文名称'}
-            field={'zh_name'}
+            column="中文名称"
+            field="zh_name"
             sortChange={this.customerSortFilter}
           />
         );
@@ -399,8 +399,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'联系人'}
-            field={'contacts'}
+            column="联系人"
+            field="contacts"
             sortChange={this.customerSortFilter}
           />
         );
@@ -411,7 +411,7 @@ class ClientView extends PureComponent {
     {
       // title: <div className={clientInfoStyle.row_normal2}>手机</div>,
       title: () => {
-        return <TableSortView column={'手机'} field={'tel'} sortChange={this.customerSortFilter} />;
+        return <TableSortView column="手机" field="tel" sortChange={this.customerSortFilter} />;
       },
       dataIndex: 'tel',
       key: 'tel',
@@ -421,7 +421,7 @@ class ClientView extends PureComponent {
       // title: <div className={clientInfoStyle.row_normal2}>电话</div>,
       title: () => {
         return (
-          <TableSortView column={'电话'} field={'phone'} sortChange={this.customerSortFilter} />
+          <TableSortView column="电话" field="phone" sortChange={this.customerSortFilter} />
         );
       },
       dataIndex: 'phone',
@@ -433,8 +433,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'中文地址'}
-            field={'zh_address'}
+            column="中文地址"
+            field="zh_address"
             sortChange={this.customerSortFilter}
           />
         );
@@ -448,8 +448,8 @@ class ClientView extends PureComponent {
       title: () => {
         return (
           <TableSortView
-            column={'英文地址'}
-            field={'en_address'}
+            column="英文地址"
+            field="en_address"
             sortChange={this.customerSortFilter}
           />
         );
@@ -461,7 +461,7 @@ class ClientView extends PureComponent {
       // title: <div className={clientInfoStyle.row_normal2}>状态</div>,
       title: () => {
         return (
-          <TableSortView column={'状态'} field={'status'} sortChange={this.customerSortFilter} />
+          <TableSortView column="状态" field="status" sortChange={this.customerSortFilter} />
         );
       },
       dataIndex: 'status',
@@ -525,6 +525,8 @@ class ClientView extends PureComponent {
     // router.replace('/business/client/emptyView');
   }
 
+
+  // 第一部分 搜索框
   renderSimpleForm() {
     const {
       form: { getFieldDecorator },
@@ -663,13 +665,13 @@ class ClientView extends PureComponent {
       onChange: this.pageCustomerChange,
     };
 
-    let isUpdate =
+    const isUpdate =
       clientUpdateloading ||
       clientSaveloading ||
       clientDeleteloading ||
       clientFreezeloading ||
       clientunFreezeloading;
-    let isCurstomerUpdate =
+    const isCurstomerUpdate =
       customerDeleteloading ||
       customerSaveloading ||
       customerUpdateloading ||
@@ -681,13 +683,11 @@ class ClientView extends PureComponent {
 
     if (customerListloading) {
       this.state.customerLoad = true;
-    } else {
-      if (this.state.customerLoad) {
+    } else if (this.state.customerLoad) {
         this.state.customerLoad = false;
         const { rowCustomerData } = this.state;
         // console.log('update list row ', rowCustomerData);
       }
-    }
 
     if (customerBody.data) {
       customerBody.data.map(value => {
@@ -705,12 +705,10 @@ class ClientView extends PureComponent {
 
     if (isCurstomerUpdate) {
       this.state.customerLoading = true;
-    } else {
-      if (this.state.customerLoading) {
+    } else if (this.state.customerLoading) {
         // this.startShowTab();
         this.state.customerLoading = false;
       }
-    }
 
     if (this.state.isDelete) {
       this.setState({});
@@ -723,8 +721,7 @@ class ClientView extends PureComponent {
       if (clientUpdateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
+    } else if (update) {
         // console.log('code '+body.rtnCode)
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
@@ -741,7 +738,6 @@ class ClientView extends PureComponent {
           this.state.showItem = { ...current };
         }
       }
-    }
 
     const { contactsItem } = this.state;
 
@@ -763,6 +759,7 @@ class ClientView extends PureComponent {
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={clientStyle.left_content} loading={false}>
                 <div style={{ marginBottom: 16 }}>
+                  {/* 中间第一部分 */}
                   <div className={listStyles.tableListForm}>{this.renderForm()}</div>
                   <Table
                     style={{ marginBottom: 20 }}
@@ -784,6 +781,8 @@ class ClientView extends PureComponent {
                     onSelectRow={this.handleSelectRows}
                   />
 
+
+                  {/* 中间第二部分 */}
                   <Radio.Group defaultValue="show_clientlist" value={radioType} buttonStyle="solid">
                     <Radio.Button value="show_clientlist" onClick={this.selectClients}>
                       客户列表
@@ -810,9 +809,9 @@ class ClientView extends PureComponent {
                   </div>
                   <Divider className={clientStyle.divder} />
 
-                  {/*<Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({*/}
-                  {/*maintainerAddVisible: true,*/}
-                  {/*})} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button>*/}
+                  {/* <Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({ */}
+                  {/* maintainerAddVisible: true, */}
+                  {/* })} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button> */}
 
                   <Button
                     icon="plus"
@@ -870,6 +869,7 @@ class ClientView extends PureComponent {
                     删除
                   </Button>
 
+                  {/* 第二部分列表  客户列表 */}
                   <Table
                     style={{ display: selectType === 'client' ? '' : 'none' }}
                     loading={isCurstomerUpdate || customerListloading}
@@ -889,7 +889,7 @@ class ClientView extends PureComponent {
                     className={business.small2_table}
                     columns={this.clientContentColumns}
                   />
-
+                  {/* 第二部分列表  维护人 */}
                   <Table
                     style={{ display: selectType === 'maintains' ? '' : 'none' }}
                     loading={maintainsLoading}
@@ -901,6 +901,7 @@ class ClientView extends PureComponent {
                     columns={maintainsColumn}
                   />
 
+                  {/* 第二部分列表  联系人 */}
                   <JewelryTable
                     style={{ display: selectType === 'contacts' ? '' : 'none' }}
                     onSelectItem={(item, rows) => {
@@ -953,15 +954,15 @@ class ClientView extends PureComponent {
           handleCancel={this.handleCancel}
           contactsSubmit={this.handleContactsSubmit}
         />
-        {/*<Modal*/}
-        {/*width={720}*/}
-        {/*className={styles.standardListForm}*/}
-        {/*destroyOnClose*/}
-        {/*visible={contactsAddVisible}*/}
-        {/*{...contactsModalFooter}*/}
-        {/*>*/}
-        {/*{this.getContactsContent()}*/}
-        {/*</Modal>*/}
+        {/* <Modal */}
+        {/* width={720} */}
+        {/* className={styles.standardListForm} */}
+        {/* destroyOnClose */}
+        {/* visible={contactsAddVisible} */}
+        {/* {...contactsModalFooter} */}
+        {/* > */}
+        {/* {this.getContactsContent()} */}
+        {/* </Modal> */}
       </div>
     );
   }
@@ -976,7 +977,7 @@ class ClientView extends PureComponent {
       <div>
         <span className={clientStyle.sun_title_info}>类型</span>
         <Divider className={clientStyle.divder} />
-        <Form size={'small'} onSubmit={this.handleSubmit}>
+        <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('zhName', {
               rules: [{ required: true, message: '请输入中文名称' }],
@@ -1003,7 +1004,7 @@ class ClientView extends PureComponent {
       <div>
         <span className={clientStyle.sun_title_info}>共同维护人</span>
         <Divider className={clientStyle.divder} />
-        <Form size={'small'} onSubmit={this.handleSubmit}>
+        <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="共同维护人" {...this.formLayout}>
             {getFieldDecorator('salesmanId', {
               rules: [{ required: true, message: '请输入共同维护人' }],
@@ -1017,7 +1018,7 @@ class ClientView extends PureComponent {
 
   contactsSortFilter = (field, sort) => {
     const { contactsSorts } = this.state;
-    let newContacts = this.parseOrder(contactsSorts, field, sort);
+    const newContacts = this.parseOrder(contactsSorts, field, sort);
     this.state.contactsSorts = newContacts;
     // console.log('change cantacts ', newContacts);
     this.loadContactsList();
@@ -1025,7 +1026,7 @@ class ClientView extends PureComponent {
 
   customerSortFilter = (field, sort) => {
     const { customerSorts, showItem } = this.state;
-    let newCustomer = this.parseOrder(customerSorts, field, sort);
+    const newCustomer = this.parseOrder(customerSorts, field, sort);
     this.state.customerSorts = newCustomer;
     console.log('change  customer ', newCustomer);
     this.loadCustomerList(showItem.id);
@@ -1046,14 +1047,12 @@ class ClientView extends PureComponent {
       } else {
         newSort.splice(newSort.findIndex(v => v.field === field), 1);
       }
-    } else {
-      if (sort !== 'normal') {
+    } else if (sort !== 'normal') {
         newSort.push({
           field,
           sort,
         });
       }
-    }
 
     return newSort;
   };
@@ -1061,7 +1060,7 @@ class ClientView extends PureComponent {
   clientSortFilter = (field, sort) => {
     const { clientSorts } = this.state;
 
-    let newClients = this.parseOrder(clientSorts, field, sort);
+    const newClients = this.parseOrder(clientSorts, field, sort);
     this.state.clientSorts = newClients;
     // console.log('change cantacts ', clientSorts);
     this.loadClientList();
@@ -1117,7 +1116,7 @@ class ClientView extends PureComponent {
                 type="primary"
                 icon="plus"
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 onClick={this.handleNewClient}
               >
                 新增
@@ -1126,7 +1125,7 @@ class ClientView extends PureComponent {
                 type="danger"
                 icon="delete"
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 onClick={this.handleDeleteClients}
                 disabled={isEdit}
               >
@@ -1134,7 +1133,7 @@ class ClientView extends PureComponent {
               </Button>
               <Button
                 type="primary"
-                size={'small'}
+                size="small"
                 className={clientStyle.buttomControl}
                 icon="edit"
                 disabled={isEdit}
@@ -1146,7 +1145,7 @@ class ClientView extends PureComponent {
               {showItem.status === '审批' ? (
                 <Button
                   className={clientStyle.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="danger"
                   icon="unlock"
                   disabled={isEdit}
@@ -1157,7 +1156,7 @@ class ClientView extends PureComponent {
               ) : (
                 <Button
                   className={clientStyle.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="primary"
                   icon="lock"
                   disabled={isEdit}
@@ -1179,7 +1178,7 @@ class ClientView extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
                 disabled
               >
@@ -1187,7 +1186,7 @@ class ClientView extends PureComponent {
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
                 disabled
@@ -1245,9 +1244,9 @@ class ClientView extends PureComponent {
           </span>
           <Divider className={clientStyle.divder} />
 
-          {/*{*/}
-          {/*selectTitle === '类型' ? this.getAddType() : children*/}
-          {/*}*/}
+          {/* { */}
+          {/* selectTitle === '类型' ? this.getAddType() : children */}
+          {/* } */}
 
           {selectTitle === '类型' ? this.getAddType() : Component}
         </div>
@@ -1257,9 +1256,9 @@ class ClientView extends PureComponent {
 
   clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let rowData = this.state.rowData;
-    const selects = selectedRowKeys ? selectedRowKeys : [];
-    const id = record.id;
+    let {rowData} = this.state;
+    const selects = selectedRowKeys || [];
+    const {id} = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -1312,10 +1311,10 @@ class ClientView extends PureComponent {
 
   clickCustomerRowItem = record => {
     const { customerSelectedRowKeys, rowCustomerSelectedData } = this.state;
-    let rowCustomerData = this.state.rowCustomerData;
+    let {rowCustomerData} = this.state;
     // const selects = selectedRowKeys ? selectedRowKeys : [];
-    const selects = customerSelectedRowKeys ? customerSelectedRowKeys : [];
-    const id = record.id;
+    const selects = customerSelectedRowKeys || [];
+    const {id} = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -1369,7 +1368,7 @@ class ClientView extends PureComponent {
 
       const data = { ...fieldsValue };
 
-      let params = {};
+      const params = {};
       params.zhName = data.selectZhName;
       params.enName = data.selectEnName;
       params.size = defaultPageSize;
@@ -1622,9 +1621,9 @@ class ClientView extends PureComponent {
     const { dispatch } = this.props;
 
     const { selectZhName, selectEnName } = this.state;
-    const zhName = selectZhName ? selectZhName : undefined;
-    const enName = selectEnName ? selectEnName : undefined;
-    let params = {
+    const zhName = selectZhName || undefined;
+    const enName = selectEnName || undefined;
+    const params = {
       size: defaultPageSize,
       current: page,
       zhName,
@@ -1743,7 +1742,7 @@ class ClientView extends PureComponent {
     this.startShowTab();
   };
 
-  //merchange
+  // merchange
   selectCustomerChange = (selectedRowKeys, selectedRows) => {
     console.log('selectCustomerChange');
 
@@ -1784,9 +1783,9 @@ class ClientView extends PureComponent {
     const { dispatch } = this.props;
     const { customerPageCurrent } = this.state;
 
-    const tyid = typeId ? typeId : ' ';
+    const tyid = typeId || ' ';
 
-    let params = this.state.searchCustomerParams;
+    const params = this.state.searchCustomerParams;
 
     params.size = defaultPageSize;
     params.typeId = tyid;
@@ -1824,7 +1823,7 @@ class ClientView extends PureComponent {
       this.startClient();
     }
 
-    //2019-06-22 15:23
+    // 2019-06-22 15:23
     // this.startShowTab();
   };
 
@@ -2030,7 +2029,7 @@ class ClientView extends PureComponent {
       return;
     }
 
-    let params = { customerId: selectCustomerItem.id };
+    const params = { customerId: selectCustomerItem.id };
 
     fetch(HttpFetch.loadMaintainer, {
       method: 'POST',
@@ -2043,7 +2042,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             _this.setState({
@@ -2075,13 +2074,13 @@ class ClientView extends PureComponent {
       sorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += ',' + v.field;
+            orderByAsc += `,${  v.field}`;
           } else {
             orderByAsc = v.field;
           }
           // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
         } else if (v.sort === 'descend') {
-          if (orderByDesc) orderByDesc += ',' + v.field;
+          if (orderByDesc) orderByDesc += `,${  v.field}`;
           else orderByDesc = v.field;
 
           // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
@@ -2105,9 +2104,9 @@ class ClientView extends PureComponent {
     * selectZhName: data.selectZhName,
         selectEnName: data.selectEnName,
     * */
-    let params = { size: defaultPageSize, current: pageCurrent };
-    params.zhName = selectZhName ? selectZhName : undefined;
-    params.enName = selectEnName ? selectEnName : undefined;
+    const params = { size: defaultPageSize, current: pageCurrent };
+    params.zhName = selectZhName || undefined;
+    params.enName = selectEnName || undefined;
     this.getTabOrderBy(params, this.state.clientSorts);
     dispatch({
       type: 'client/fetchListClient',
@@ -2123,13 +2122,13 @@ class ClientView extends PureComponent {
         contactsLoading: false,
       });
       return;
-    } else {
+    }
       _this.setState({
         contactsLoading: true,
       });
-    }
 
-    let params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
+
+    const params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
 
     if (this.state.contactsSorts.length > 0) {
       let orderByAsc;
@@ -2137,13 +2136,13 @@ class ClientView extends PureComponent {
       this.state.contactsSorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += ',' + v.field;
+            orderByAsc += `,${  v.field}`;
           } else {
             orderByAsc = v.field;
           }
           // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
         } else if (v.sort === 'descend') {
-          if (orderByDesc) orderByDesc += ',' + v.field;
+          if (orderByDesc) orderByDesc += `,${  v.field}`;
           else orderByDesc = v.field;
 
           // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
@@ -2165,7 +2164,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
           const contactsRes = body.records.map(value => {
             const s = value.isPrimaryContact;
@@ -2184,12 +2183,12 @@ class ClientView extends PureComponent {
               contactsLoading: false,
             });
             return;
-          } else {
+          }
             _this.setState({
               contactsTableBody: {},
               contactsLoading: false,
             });
-          }
+
         }
         _this.setState({
           contactsLoading: false,
@@ -2217,7 +2216,7 @@ class ClientView extends PureComponent {
       return;
     }
 
-    let params = {
+    const params = {
       customerId: selectCustomerItem.id,
       salesmanId: item.salesmanId,
     };
@@ -2233,13 +2232,11 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const {head} = d;
 
         if (!head) message.error('保存失败！');
-        else {
-          if (head.rtnCode === '000000') message.success(head.rtnMsg);
+        else if (head.rtnCode === '000000') message.success(head.rtnMsg);
           else message.success(head.rtnMsg);
-        }
         _this.setState({
           maintainsLoading: false,
         });
@@ -2263,13 +2260,13 @@ class ClientView extends PureComponent {
         contactsLoading: false,
       });
       return;
-    } else {
+    }
       this.setState({
         contactsLoading: true,
       });
-    }
 
-    let params = item;
+
+    const params = item;
 
     if (item.isPrimaryContact == true) item.isPrimaryContact = '1';
     else item.isPrimaryContact = '0';
@@ -2290,7 +2287,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const {head} = d;
 
         if (!head) message.error('保存失败！');
         else {
@@ -2338,7 +2335,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const {head} = d;
 
         if (!head) message.error('删除失败！');
         else {

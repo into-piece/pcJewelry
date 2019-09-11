@@ -90,6 +90,10 @@ class ClientInfo extends PureComponent {
     labelCol: { span: 12 },
     wrapperCol: {
       span: 24,
+      xs:24,
+      lg:24,
+      md:24,
+      sm:24,
     },
   };
 
@@ -222,7 +226,7 @@ class ClientInfo extends PureComponent {
             labelAlign="left"
             onSubmit={this.handleSubmit}
           >
-            <Row gutter={2} justify="start">
+            <Row gutter={2} style={{width: "100%"}} justify="start">
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="客户编号" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('customerNo', {
@@ -250,7 +254,8 @@ class ClientInfo extends PureComponent {
               </Col>
             </Row>
 
-            <Row gutter={2}>
+            <Row gutter={2} style={{width: "100%"}} justify="start">
+
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('zhName', {
@@ -276,7 +281,8 @@ class ClientInfo extends PureComponent {
                 </FormItem>
               </Col>
             </Row>
-            <Row gutter={2}>
+            <Row gutter={2} style={{width: "100%"}} justify="start">
+
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('enAddress', {
@@ -289,7 +295,7 @@ class ClientInfo extends PureComponent {
                 <FormItem label="国别" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('country', {
                     initialValue: current.country,
-                  })(<City content={current.country} />)}
+                  })(<City content={current.country}  />)}
                 </FormItem>
               </Col>
               <Col lg={8} md={8} sm={8} xs={8}>
@@ -300,7 +306,8 @@ class ClientInfo extends PureComponent {
                 </FormItem>
               </Col>
             </Row>
-            <Row gutter={2}>
+            <Row gutter={2} style={{width: "100%"}} justify="start">
+
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="电话" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('companyPhone', {
@@ -325,7 +332,8 @@ class ClientInfo extends PureComponent {
                 </FormItem>
               </Col>
             </Row>
-            <Row gutter={2}>
+            <Row gutter={2} style={{width: "100%"}} justify="start">
+
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="品质" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('qualityRequirements', {
@@ -359,7 +367,8 @@ class ClientInfo extends PureComponent {
                 </FormItem>
               </Col>
             </Row>
-            <Row gutter={2}>
+            <Row gutter={2} style={{width: "100%"}} justify="start">
+
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('deliveryMethod', {
@@ -368,12 +377,12 @@ class ClientInfo extends PureComponent {
                   })(<DeliveryMethods content={current.deliveryMethod} />)}
                 </FormItem>
               </Col>
-              <Col lg={12} md={12} sm={12} xs={12}>
+              <Col lg={16} md={16} sm={16} xs={16}>
                 <FormItem label="备注" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('remarks', {
-                    rules: [{ message: '请输入备注' }],
-                    initialValue: current.remarks,
-                  })(<TextArea rows={4} placeholder="请输入" />)}
+                  rules: [{ message: '请输入备注' }],
+                  initialValue: current.remarks,
+                })(<TextArea rows={4} placeholder="请输入" />)}
                 </FormItem>
               </Col>
             </Row>

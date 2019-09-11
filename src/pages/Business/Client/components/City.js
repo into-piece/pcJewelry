@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 
-const { Option } = Select;
-
 import { connect } from 'dva';
+
+const { Option } = Select;
 
 // import { connect } from 'dva';
 @connect(({ city, loading }) => {
@@ -37,7 +37,7 @@ class City extends PureComponent {
 
   render() {
     const { value, isFirst } = this.state;
-    const { content } = this.props;
+    const { content,style } = this.props;
 
     let showValue;
     if (isFirst) showValue = content;
@@ -50,7 +50,7 @@ class City extends PureComponent {
         showSearch
         value={showValue}
         placeholder={this.props.placeholder}
-        style={this.props.style}
+        style={style}
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
@@ -88,15 +88,15 @@ class City extends PureComponent {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.code} value={item.name + '/' + item.nameEn}>
-        {item.name + '/' + item.nameEn}
+      <Option key={item.code} value={`${item.name  }/${  item.nameEn}`}>
+        {`${item.name  }/${  item.nameEn}`}
       </Option>
     ));
   };
 
   loadImageUrl = item => {
     console.log('load image url ', item);
-    let params = {};
+    const params = {};
     params.name = item;
     params.size = 10;
     const { dispatch } = this.props;
