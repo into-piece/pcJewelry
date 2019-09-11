@@ -21,18 +21,18 @@ import {
   message,
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
+import { connect } from 'dva';
+import Cropper from 'react-cropper';
 import clientStyle from './Client.less';
 import styles from './base.less';
-import { connect } from 'dva';
 import PackageListItem from './components/PackageListItem';
 
-import Cropper from 'react-cropper';
+
+import TerminalSelected from './components/TerminalSelected';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
-
-import TerminalSelected from './components/TerminalSelected';
 @connect(({ loading, packageinfo }) => {
   return {
     body: packageinfo.body,
@@ -91,8 +91,7 @@ class PackageInfo extends PureComponent {
       if (packageUpdateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
+    } else if (update) {
         this.setState({
           terminalShotName: false,
         });
@@ -112,7 +111,6 @@ class PackageInfo extends PureComponent {
           this.state.showItem = { ...current };
         }
       }
-    }
 
     if (params) {
       const data = { ...params };
@@ -153,7 +151,7 @@ class PackageInfo extends PureComponent {
             renderItem={this.getContantItem2}
             size="small"
             bordered={false}
-            split={true}
+            split
           />
         </div>
 
@@ -175,7 +173,7 @@ class PackageInfo extends PureComponent {
                 type="primary"
                 icon="plus"
                 disabled={this.state.isAddEdit}
-                size={'small'}
+                size="small"
                 onClick={this.clickNewFrom}
               >
                 新增
@@ -184,7 +182,7 @@ class PackageInfo extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="danger"
                 icon="delete"
-                size={'small'}
+                size="small"
                 onClick={this.clickDeleteFrom}
                 disabled={this.state.isEdit || this.state.isAddEdit||isFreeze}
               >
@@ -193,7 +191,7 @@ class PackageInfo extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="edit"
                 onClick={this.clickEditFrom}
                 disabled={this.state.isEdit || this.state.isAddEdit||isFreeze}
@@ -203,7 +201,7 @@ class PackageInfo extends PureComponent {
               {
                 isFreeze? <Button
                   className={clientStyle.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="danger"
                   icon="unlock"
                   onClick={this.clickUnFreezeFrom}
@@ -211,15 +209,15 @@ class PackageInfo extends PureComponent {
                 >
                   取消审批
                 </Button>: <Button
-                  className={clientStyle.buttomControl}
-                  size={'small'}
-                  type="primary"
-                  icon="lock"
-                  onClick={this.clickFreezeFrom}
-                  disabled={this.state.isEdit || this.state.isAddEdit}
-                >
+                            className={clientStyle.buttomControl}
+                            size="small"
+                            type="primary"
+                            icon="lock"
+                            onClick={this.clickFreezeFrom}
+                            disabled={this.state.isEdit || this.state.isAddEdit}
+                          >
                   审批
-                </Button>
+                          </Button>
               }
             </div>
 
@@ -234,7 +232,7 @@ class PackageInfo extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
                 disabled
               >
@@ -242,7 +240,7 @@ class PackageInfo extends PureComponent {
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
                 disabled
@@ -298,10 +296,10 @@ class PackageInfo extends PureComponent {
             preview=".img-preview"
             aspectRatio={800 / 800}
             cropBoxResizable={false}
-            viewMode={1} //定义cropper的视图模式
-            zoomable={true} //是否允许放大图像
-            guides={true}
-            background={true}
+            viewMode={1} // 定义cropper的视图模式
+            zoomable // 是否允许放大图像
+            guides
+            background
             // crop={this.crop}
           />
           <div className={styles.cropper_preview}>
@@ -313,7 +311,7 @@ class PackageInfo extends PureComponent {
     const handleChange = info => {
       let fileList = [...info.fileList];
 
-      const file = info.file;
+      const {file} = info;
 
       if (file.type) {
         const isJPG = file.type.indexOf('image') != -1;
@@ -363,7 +361,7 @@ class PackageInfo extends PureComponent {
         <Form
           accept="image/*"
           layout="inline"
-          size={'small'}
+          size="small"
           className={styles.from_content}
           labelAlign="left"
           onSubmit={this.handleSubmit}
@@ -415,13 +413,13 @@ class PackageInfo extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
-                  initialValue: terminalShotName ? terminalShotName : current.endShotName,
+                  initialValue: terminalShotName || current.endShotName,
                 })(
                   <div>
                     <Input
                       placeholder="请输入"
                       readOnly="true"
-                      value={terminalShotName ? terminalShotName : current.endShotName}
+                      value={terminalShotName || current.endShotName}
                     />
                   </div>
                 )}
@@ -455,7 +453,7 @@ class PackageInfo extends PureComponent {
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
-        fileList[i].name = 'crop' + Date.parse(new Date()) + fileList[i].name;
+        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
@@ -569,7 +567,7 @@ class PackageInfo extends PureComponent {
 
   changeSelectItem = item => {
     const { selectedItem } = this.state;
-    let selectitem = selectedItem === item ? '' : item;
+    const selectitem = selectedItem === item ? '' : item;
 
     this.setState({
       selectedItem: selectitem,
@@ -605,9 +603,9 @@ class PackageInfo extends PureComponent {
   clickDeleteFrom = () => {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       // console.log('delet', keys, id);
       dispatch({
@@ -626,9 +624,9 @@ class PackageInfo extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       dispatch({
         type: 'packageinfo/freezePackage',
@@ -641,9 +639,9 @@ class PackageInfo extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       dispatch({
         type: 'packageinfo/unfreezePackage',
@@ -678,8 +676,8 @@ class PackageInfo extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
-      let params = {};
-      let urls, names;
+      const params = {};
+      let urls; let names;
       const fiedls = { ...fieldsValue };
 
       if (fileList.length > 0) {

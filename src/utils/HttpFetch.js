@@ -34,6 +34,7 @@ export const deleteContacts = `${priefx}/business/business.customer/business-con
  * 加载配送方式
  * @type {string}
  */
+export const queryDelivery2 = `${priefx}/business/basic/delivery-method/listDeliveryMethodsDropDown`
 export const queryDelivery = `${priefx}/business/business/basic/delivery-method/listDeliveryMethods`
 
 /**
@@ -64,6 +65,7 @@ export const saveProductImage = `${priefx}/business/business/product-picture/sav
  * 加载品质要求
  * @type {string}
  */
+export const queryQuality2 = `${priefx}/business/basic/quality-requirements/listQualityRequirementssDropDown`
 export const queryQuality = `${priefx}/business/business/basic/quality-requirements/listQualityRequirementss`
 
 /**
@@ -190,9 +192,11 @@ export default {
   saveMaintainer,
   deleteContacts,
   queryDelivery,
+  queryDelivery2,
   queryMarkImage,
   queryImage,
   queryQuality,
+  queryQuality2,
   queryTerminalList,
   loadCustomerList,
   queryMstWordList,

@@ -416,13 +416,13 @@ class Royalty extends PureComponent {
                   >
                     取消审批
                                                           </Button>) : (<Button
-                      className={styles.buttomControl}
-                      size="small"
-                      type="primary"
-                      icon="lock"
-                      onClick={this.clickFreezeFrom}
-                      disabled={isEdit}
-                    >
+                    className={styles.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    onClick={this.clickFreezeFrom}
+                    disabled={isEdit}
+                  >
                       审批
                                 </Button>)}
                 </div>
