@@ -55,25 +55,26 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
+    authority: ['admin', 'user','chents'],
     routes: [
       // dashboard
       {
         path: '/',
         redirect: '/business/Client',
-        // authority: ['admin', 'user','chents']
+        // authority: ['admin', 'user','chents'],
       },
       // bussiness route
       {
         path: '/business',
         icon: 'code',
         name: 'business',
-
         routes: [
           {
             path: '/business/client',
             name: 'client',
             icon: 'user',
             component: './Business/Client/ClientView',
+
             routes: [
               {
                 path: '/business/client',
