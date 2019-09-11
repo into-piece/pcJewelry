@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 
-const { Option } = Select;
-
 import { connect } from 'dva';
 import HttpFetch, { queryDelivery } from '../../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../../utils/authority';
+
+const { Option } = Select;
 
 class DeliveryMethods extends PureComponent {
   state = {
@@ -80,11 +80,11 @@ class DeliveryMethods extends PureComponent {
   loadDict = () => {
     const { dict } = this.props;
 
-    let params = {};
+    const params = {};
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ', params);
-    fetch(HttpFetch.queryDelivery, {
+    fetch(HttpFetch.queryDelivery2, {
       method: 'POST',
       credentials: 'include',
 headers: {
@@ -95,7 +95,7 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
 
         if (body.records)
           _this.setState({

@@ -55,25 +55,26 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
+    authority: ['admin', 'user','chents'],
     routes: [
       // dashboard
       {
         path: '/',
         redirect: '/business/Client',
-        // authority: ['admin', 'user','chents']
+        // authority: ['admin', 'user','chents'],
       },
       // bussiness route
       {
         path: '/business',
         icon: 'code',
         name: 'business',
-
         routes: [
           {
             path: '/business/client',
             name: 'client',
             icon: 'user',
             component: './Business/Client/ClientView',
+
             routes: [
               {
                 path: '/business/client',
@@ -239,20 +240,20 @@ export default [
           //模具设定
           {
             path: '/dev/Mould',
-            name: 'mould',
+            name: 'Mould',
             icon: 'inbox',
             component: './dev/Mould',
           },
           //原料设定
           {
             path: '/dev/Raw',
-            name: 'raw',
+            name: 'Raw',
             icon: 'inbox',
             component: './dev/Raw',
           },
           {
             path: '/dev/FinishedProduct',
-            name: 'finishedProduct',
+            name: 'FinishedProduct',
             icon: 'deployment-unit',
             component: './dev/FinishedProduct',
           },

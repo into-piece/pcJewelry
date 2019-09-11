@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 
-const { Option } = Select;
-
 import { connect } from 'dva';
 import HttpFetch from '../../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../../utils/authority';
+
+const { Option } = Select;
 
 const empty = {
   wordbookCode: '',
@@ -51,7 +51,7 @@ class Dict extends PureComponent {
   }
 
   render() {
-    const { content, defaultValue } = this.props;
+    const { content, defaultValue ,style} = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
@@ -65,7 +65,7 @@ class Dict extends PureComponent {
     return (
       <Select
         placeholder={this.props.placeholder}
-        style={this.props.style}
+        style={{ width: '100%' }}
         defaultActiveFirstOption={false}
         showArrow={false}
         value={showValue}
@@ -111,7 +111,7 @@ class Dict extends PureComponent {
   };
 
   loadDictsUrl = item => {
-    let params = {};
+    const params = {};
 
     const { dispatch } = this.props;
     dispatch({
@@ -123,7 +123,7 @@ class Dict extends PureComponent {
   loadDict = () => {
     const { dict } = this.props;
 
-    let params = {};
+    const params = {};
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ', params);
@@ -139,7 +139,7 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
 
         if (body.records)
           _this.setState({

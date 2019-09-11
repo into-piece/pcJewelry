@@ -30,7 +30,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2019  广州格尚珠宝有限公司
+    Copyright <Icon type="copyright" /> 2019 广州格尚珠宝有限公司
   </Fragment>
 );
 
@@ -46,6 +46,16 @@ class UserLayout extends Component {
     });
   }
 
+  logout = () =>{
+    const {
+      dispatch,
+    } = this.props;
+    dispatch({
+      type: 'login/logout',
+    });
+  }
+
+
   render() {
     const {
       children,
@@ -55,7 +65,7 @@ class UserLayout extends Component {
     return (
       <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>
         <div className={styles.container}>
-          <Header />
+          <Header logout={this.logout} />
           <div className={styles.content}>
             <div className={styles.top} />
             {children}
@@ -71,10 +81,10 @@ const navData = [
   { key: '基础资料', value: '/business/basic' },
   { key: '操作输入', value: '/introduce' },
   { key: '数据分析', value: '' },
-]
+];
 
-const Header = () => (
-  <header className={styles.headerComponent}>
+const Header = (props) => {
+  return <header className={styles.headerComponent}>
     <div className={styles.header}>
       <Link to="/"><img alt="logo" className={styles.big_logo} src={logo} /></Link>
       <ul className={styles.nav}>
@@ -85,14 +95,15 @@ const Header = () => (
         }
       </ul>
     </div>
-    <Link to="/user/login">
-      <div className={styles.logout}>
-        <Icon type="poweroff" />
-        退出登录
-      </div>
-    </Link>
+    <div
+      className={styles.logout}
+      onClick={props.logout}
+    >
+      <Icon type="poweroff" />
+      退出登录
+    </div>
   </header>
-)
+};
 
 export default connect(({ menu: menuModel }) => ({
   menuData: menuModel.menuData,
