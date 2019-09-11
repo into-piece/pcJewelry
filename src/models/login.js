@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha, queryAllCity } from '@/services/api';
+import { fakeAccountLogin, getFakeCaptcha, queryAllCity,logout } from '@/services/api';
 import { login } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery, testCurrentUser } from '@/utils/utils';
@@ -49,7 +49,8 @@ export default {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout(_, { put }) {
+    *logout(_, { put,call }) {
+      yield call(logout,{});
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -59,6 +60,7 @@ export default {
       });
       reloadAuthorized();
       const { redirect } = getPageQuery();
+
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
         yield put(

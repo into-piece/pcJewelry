@@ -44,9 +44,9 @@ const errorHandler = error => {
     window.g_app._store.dispatch({
       type: 'login/logout',
     });
-    notification.error({
-      message: '未登录或登录已过期，请重新登录。',
-    });
+    // notification.error({
+    //   message: '未登录或登录已过期，请重新登录。',
+    // });
   }
 
   // if (status === 401) {

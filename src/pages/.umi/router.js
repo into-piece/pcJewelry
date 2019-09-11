@@ -204,6 +204,7 @@ const routes = [
         })
       : require('../../layouts/BasicLayout').default,
     Routes: [require('../Authorized').default],
+    authority: ['admin', 'user', 'chents'],
     routes: [
       {
         path: '/index.html',

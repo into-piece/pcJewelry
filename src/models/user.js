@@ -1,6 +1,7 @@
 import { query as queryUsers, queryCurrent } from '@/services/user';
 import { queryAllCity} from '@/services/api';
 import { testCurrentUser } from '../utils/utils';
+
 export default {
   namespace: 'user',
 

@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
+import { connect } from 'dva';
 import styles from '../base.less';
+
 
 const { Option } = Select;
 const { Description } = DescriptionList;
-
-import { connect } from 'dva';
 
 @connect(({ city, loading }) => {
   return {
