@@ -10,6 +10,7 @@ import pathToRegexp from 'path-to-regexp';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
 import Media from 'react-media';
+import { formatMessage } from 'umi/locale';
 import logo from '../assets/logo_img.png';
 // import Footer from './Footer';
 // import Authorized from '@/utils/Authorized';
@@ -54,8 +55,11 @@ class BasicLayout extends React.Component {
   constructor(props) {
     super(props);
     const { routes } = props.route;
-    const routeKey = '/business/client';
-    const tabName = '客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    // const routeKey = props.location.pathname === '/business/basic'? props.location.pathname :'/business/client';
+    const routeKey = props.location.pathname==='/'?'/business/client':props.location.pathname ;
+    const tabNametem = props.location.pathname==='/'?'menu.business.client':`menu${props.location.pathname.replace(/\//g,'.')}` ; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    const tabName = formatMessage({id:tabNametem});
+    // const tabName = props.location.pathname === '/business/basic'?'基础数据':'客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabLists = this.updateTree(routes);
     const tabList = [];
     const tabListArr = [];
@@ -82,6 +86,9 @@ class BasicLayout extends React.Component {
 
     this.getPageTitle = memoizeOne(this.getPageTitle);
     this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
+
+    // console.log(props.location.pathname)
+    // router.push(props.location.pathname);
   }
 
   componentDidMount() {
@@ -136,7 +143,6 @@ class BasicLayout extends React.Component {
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-
     return `${pageName} - Ant Tabs`;
   };
 
@@ -186,6 +192,7 @@ class BasicLayout extends React.Component {
   onHandlePage = e => {
     // 点击左侧菜单
     const { menuData } = this.props;
+    console.log(e)
     let { key } = e;
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;
@@ -348,6 +355,7 @@ class BasicLayout extends React.Component {
       hidenAntTabs,
       fixedHeader,
     } = this.props;
+    console.log(breadcrumbNameMap)
 
     const isTop = PropsLayout === 'topmenu';
     const { activeKey, routeKey, tabList } = this.state;

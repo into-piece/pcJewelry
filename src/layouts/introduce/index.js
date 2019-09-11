@@ -68,7 +68,7 @@ class UserLayout extends Component {
 }
 
 const navData = [
-  { key: '基础资料', value: '' },
+  { key: '基础资料', value: '/business/basic' },
   { key: '操作输入', value: '/introduce' },
   { key: '数据分析', value: '' },
 ]

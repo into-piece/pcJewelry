@@ -565,10 +565,10 @@ class Info extends Component {
                       )}
                     </Select> :
                     type && type === 3 ?
-                        <Radio.Group value={value}>
-                          <Radio value={1}>是</Radio>
-                          <Radio value={2}>否</Radio>
-                        </Radio.Group>
+                      <Radio.Group value={value}>
+                        <Radio value={1}>是</Radio>
+                        <Radio value={2}>否</Radio>
+                      </Radio.Group>
                       :
                       <Input placeholder="请输入" />
                   )

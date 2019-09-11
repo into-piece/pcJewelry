@@ -85,7 +85,7 @@ class Info extends Component {
     const { offsetWidth, height, innerHeight, innerWidth } = this.main;
 
     this.print2(
-      'change width =' + offsetWidth + 'height ' + window.innerHeight + '，wid=' + innerWidth
+      `change width =${  offsetWidth  }height ${  window.innerHeight  }，wid=${  innerWidth}`
     );
     if (offsetWidth > 400 && offsetWidth < 641) {
       mode = 'horizontal';
@@ -124,7 +124,7 @@ class Info extends Component {
             onClick={this.selectKey}
             className={styles.leftmenu}
           >
-            <Icon tyle={'mail'} />
+            <Icon tyle="mail" />
             {this.getmenu()}
           </Menu>
         </div>

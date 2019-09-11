@@ -27,6 +27,7 @@ functions/mock
 .temp/**
 
 # umi
+.umi/**
 .umi
 .umi-production
 

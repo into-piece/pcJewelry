@@ -48,7 +48,9 @@ class ProformInvoice extends Component {
           <Row gutter={24}>
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }} />
+                <div style={{ marginBottom: 16 }}>
+                  proforminvoice
+                </div>
               </Card>
             </Col>
             <Col lg={leftlg} md={24}>

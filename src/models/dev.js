@@ -68,7 +68,9 @@ export default {
     },
     // 计量单位
     * getUnitDropDown({ payload }, { call, put }) {
+      // 请求数据接口  getDevDropDown接口方法   payload请求参数
       const response = yield call(getDevDropDown, payload);
+      // 存储数据
       yield put({
         type: 'getData',
         payload: response,
