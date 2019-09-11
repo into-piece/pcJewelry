@@ -94,9 +94,6 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>报价单号</div>,
     dataIndex: 'quoteNumber',
     key: 'quoteNumber',
-    sorter: (a, b) => {
-      return pingYincompare(a.zhName, b.zhName);
-    },
   },
   {
     title: <div className={styles.row_normal2}>类别</div>, // ?
@@ -115,18 +112,14 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>数量</div>,
     dataIndex: 'quoteTotalCount',
     key: 'quoteTotalCount',
-    sorter: (a, b) => {
-      return pingYincompare(a.zhName, b.zhName);
-    },
+
   },
 
   {
     title: <div className={styles.row_normal2}>重量</div>,
     dataIndex: 'quoteTotalWeight',
     key: 'quoteTotalWeight',
-    sorter: (a, b) => {
-      encompare(a.enAddress, b.enAddress);
-    },
+
   },
   {
     title: <div className={styles.row_normal2}>总额</div>,
@@ -156,8 +149,6 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>产品编号</div>,
     dataIndex: 'productNo',
     key: 'productNo',
-    // defaultSortOrder: 'descend',
-    sorter: (a, b) => a.age - b.age,
   },
   {
     title: <div className={styles.row_normal2}>客户货号</div>,
@@ -178,9 +169,6 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>最高工费/克</div>,
     dataIndex: 'topCount',
     key: 'topCount',
-    sorter: (a, b) => {
-      return pingYincompare(a.zhName, b.zhName);
-    },
   },
   {
     title: <div className={styles.row_normal2}>此次工费/克</div>,
@@ -198,18 +186,12 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>包装价/件</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
-    sorter: (a, b) => {
-      return pingYincompare(a.zhName, b.zhName);
-    },
   },
 
   {
     title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
-    sorter: (a, b) => {
-      encompare(a.enAddress, b.enAddress);
-    },
   },
 ];
 
@@ -248,7 +230,7 @@ const headList = [
 ]
 
 const detailList = [
-  { key: '产品编号', value: 'productNo', clickFn: 'showProductModalFunc', text: '选择产品编号', type: 3 },
+  { key: '产品编号', value: 'id', clickFn: 'showProductModalFunc', text: '选择产品编号', type: 3 },
   { key: '客户货号', value: 'custoerProductNo', noNeed: true, type: 7 },
   { key: '类别', value: 'productTypeName', noNeed: true, type: 7 },
   { key: '成色名称', value: 'productColorName', noNeed: true, type: 7 }, // ?
@@ -262,7 +244,7 @@ const detailList = [
   { key: '最高工费/克', value: 'topCount', noNeed: true },
   { key: '实际工费/克', value: 'actualCount', noNeed: true },
   { key: '此次工费/克', value: 'nowCount' },
-  { key: '是否计石重', value: 'isWeighStonesName', noNeed: true },
+  { key: '是否计石重', value: 'isWeighStones', type: 6, arr: [{ key: '是', value: 'H009001' }, { key: '否', value: 'H009002' }], initValue: 1 },
   { key: '石材重量', value: 'stonesWeight', noNeed: true },
   { key: '主材重量', value: 'mainMaterialWeight', noNeed: true },
   { key: '石材价', value: 'stonePrice', noNeed: true },
@@ -270,15 +252,15 @@ const detailList = [
   { key: '字印英文名', value: 'markingEnName', noNeed: true },
   { key: '字印价/件', value: 'markingPrice', noNeed: true },
   { key: '包装单价/件', value: 'packPrice', noNeed: true },
-  { key: '单价', value: 'price', noNeed: true },
+  { key: '单价', value: 'price' },
   { key: '报价数量', value: 'qty' },
-  { key: '报价金额', value: 'quotedAmount', noNeed: true },
-  { key: '报价重量范围', value: 'quotedWeightRange' },
+  { key: '报价金额', value: 'quotedAmount' },
+  { key: '报价重量范围', value: 'quotedWeightRange', noNeed: true },
   { key: '产品工费/件', value: 'productCost' },
-  { key: '产品长度', value: 'productLength' },
-  { key: '长度描述', value: 'lengthDescription' },
-  { key: '长度单位', value: 'lengthUnit' },
-  { key: '戒围标准', value: 'ringAroundStId' },
+  { key: '产品长度', value: 'productLength', noNeed: true },
+  { key: '长度描述', value: 'lengthDescription', noNeed: true },
+  { key: '长度单位', value: 'lengthUnit', noNeed: true },
+  { key: '戒围标准', value: 'ringAroundStId', noNeed: true },
   { key: '戒围号', value: 'sizeCodeId' },
   { key: '备注', value: 'remark' },
   { key: '客户要求', value: '1' } // ?
@@ -331,7 +313,6 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    this.unLockEdit("14ba2d13-3d78-4756-a0c2-055c917f271d")
 
     // 获取客户编号下拉
     dispatch({
@@ -507,11 +488,11 @@ class Info extends Component {
         )
       case 3:
         return (
-          <span onClick={() => { this[clickFn](1) }} style={{ cursor: 'pointer' }}>{text}</span>
+          <p style={{ maxWidth: 180 }}> {form.getFieldValue(value) || ''} <span style={{ color: '#40a9ff', cursor: 'pointer' }} onClick={() => { this[clickFn](1) }}> {text}</span></p>
         )
       case 4:
         return (
-          <span>{value}</span>
+          <span>{value || ''}</span>
         )
       case 5:
         return <Checkbox checked={form.getFieldValue(value)}>{text}</Checkbox>
@@ -524,7 +505,7 @@ class Info extends Component {
           }
         </Radio.Group>
       case 7:
-        return <span>{form.getFieldValue(value)}</span>
+        return <span>{form.getFieldValue(value) || ''}</span>
       case 8:
         return <TextArea rows={2} placeholder="请输入" />
       case 9:
@@ -784,9 +765,11 @@ class Info extends Component {
   handleProductModalOk = () => {
     this.showProductModalFunc(2);
     console.log(this.props.productChoosenRowData)
-    const { custoerProductNo, type, gemColorName, platingColorName, productColorName } = this.props.productChoosenRowData
+    debugger
+    const { id, custoerProductNo, productTypeName, gemColorName, platingColorName, productColorName } = this.props.productChoosenRowData
     debugger
     this.props.form.setFieldsValue({
+      id,
       productColorName,
       custoerProductNo,
       productTypeName,
@@ -817,7 +800,7 @@ class Info extends Component {
         <div className={styles.center_content}>
           {/* lg={17} md={24} */}
           <div className={styles.main}>
-            <div className={styles.right}>
+            <div className={styles.right} style={{ width: '100%' }}>
               <RightContent
                 choosenDetailRowData={choosenDetailRowData}
                 rightMenu={rightMenu}
