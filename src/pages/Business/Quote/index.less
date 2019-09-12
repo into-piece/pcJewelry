@@ -1,5 +1,5 @@
 @import '~antd/lib/style/themes/default.less';
-
+@import '~@/common';
 .main {
   display: flex;
   width: 100%;
@@ -9,7 +9,7 @@
   .leftmenu {
     padding-top: 20px;
     width: 170px;
-    background-color: #fff;
+    background-color: @globalbgcolor;
     border-right: @border-width-base @border-style-base @border-color-split;
     :global {
       .ant-menu-inline {
@@ -48,7 +48,7 @@
   width: 1000px;
 }
 .view_left_content {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   height: 100%;
   min-height: 85vh;
   max-height: 85vh;
@@ -89,20 +89,20 @@
 }
 .row_table {
   border-width: 0;
-  border-color: #ffffff;
+  border-color: #fff;
   padding: 0;
   border-radius: 0;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 .row_normal {
   background-color: #e5f6fe;
 }
 .menu_content {
-  backgroundcolor: '#fff';
+  backgroundcolor: @globalbgcolor;
   height: 100%;
 }
 .view_left_content {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   height: 100%;
   min-height: 85vh;
   max-height: 85vh;
@@ -110,7 +110,7 @@
   padding-left: 20px;
 }
 .list_info {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   display: flex;
   flex: 1 1;
   flex-direction: column;
@@ -127,7 +127,7 @@
   overflow: auto;
 }
 .view_right_content {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   height: 100%;
   width: 100%;
   min-height: 85vh;
@@ -145,17 +145,17 @@
   margin-right: 3px;
 }
 .view_right_list_content {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   height: 100%;
   width: 100%;
   position: absolute;
 }
 .view_right_list {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   height: 100%;
 }
 .view_edit_list {
-  background-color: #fff;
+  background-color: @globalbgcolor;
   width: 100%;
 }
 .headerList {
