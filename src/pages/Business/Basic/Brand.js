@@ -422,7 +422,7 @@ class BrandCompoenet extends Component {
                                                  disabled={isEdit}
                                                >
                       审批
-                                               </Button>)}
+                                                             </Button>)}
 
                 </div>
               </Card>
@@ -856,15 +856,15 @@ class BrandCompoenet extends Component {
                     </Button>
                   ) : (
                     <Button
-                        className={styles.buttomControl}
-                        size="small"
-                        type="primary"
-                        icon="lock"
-                        onClick={this.clickFreezeFrom}
-                        disabled={isEdit}
-                      >
+                      className={styles.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      onClick={this.clickFreezeFrom}
+                      disabled={isEdit}
+                    >
                         审批
-                      </Button>
+                    </Button>
                     )}
                 </div>
               </Card>

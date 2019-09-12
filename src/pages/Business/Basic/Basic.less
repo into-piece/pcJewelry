@@ -1,11 +1,10 @@
 @import '~antd/lib/style/themes/default.less';
+@import '~@/common.less';
 
 .nav {
-  wdith: 100;
-  //background-color: #fff;
-  background-color: #00000000;
-  //padding-top: 5px;
+  width: 100px;
   padding-left: 34px;
+  background-color: #000;
 }
 
 .main {
@@ -13,13 +12,12 @@
   width: 100%;
   height: 100%;
 
-  background-color: #00000000;
   .leftmenu {
-    padding-top: 0;
     width: 220px;
+    padding-top: 0;
     //margin-right: 13px;
     //margin-bottom: 12px;
-    background-color: #fff;
+    background-color: @globalbgcolor;
     border-right: @border-width-base @border-style-base @border-color-split;
     :global {
       .ant-menu-inline {
@@ -33,10 +31,7 @@
   .right {
     flex: 1;
     height: 100%;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding: 0;
     .title {
       margin-bottom: 12px;
       color: @heading-color;
@@ -58,8 +53,8 @@
 }
 
 .menu-content {
-  background-color: #fff;
   height: 100%;
+  background-color: #fff;
 }
 
 :global {
