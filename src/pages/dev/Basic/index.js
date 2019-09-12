@@ -126,8 +126,8 @@ const columnsArr = {
     },
     {
       title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
+      dataIndex: 'mstWordbook.wordbookContentZh',
+      key: 'mstWordbook.wordbookContentZh',
     },
     {
       title: '状态',
@@ -521,7 +521,7 @@ class Info extends Component {
         if (selectKey === 'colorPercentage') {
           dispatch({
             type: 'dev/getListMstWordbook',
-            payload: {},
+            payload: {wordbookTypeCode:'H014'},
           });
         }
         this.setState({ modalType });
