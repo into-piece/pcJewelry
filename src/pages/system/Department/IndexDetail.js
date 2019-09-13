@@ -3,40 +3,33 @@ import {
   Card,
   Row,
   Col,
-  Table,
   Icon,
   Form,
-  Select,
-  InputNumber,
-  DatePicker,
-  Tabs,
-  Radio,
   Button,
   Input,
-  Divider,
-  Breadcrumb, Carousel, Modal, message, Upload, Spin,
+  Divider, Carousel, Modal, message, Upload, Spin,
 } from 'antd';
 
-import business from '../business.less';
-import baseStyles from '../Client/base.less';
+import business from '@/pages/dev/business.less';
+import baseStyles from '@/pages/Business/Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
-import styles from './product.less';
+import styles from './Index.less';
 import 'cropperjs/dist/cropper.css';
-import clientStyle from '../Client/Client.less';
+import clientStyle from '@/pages/Business/Client/Client.less';
 import BrandListSelect from './components/BrandListSelect';
 import ProductTypeSelect from './components/ProductTypeSelect';
 import UnitColorListSelect from './components/UnitColorListSelect';
 import PlatingColorListSelect from './components/PlatingColorListSelect';
-import Dict from '../Client/components/Dict';
+import Dict from '@/pages/Business/Client/components/Dict';
 import MoldListSelect from './components/MoldListSelect';
 import PercentageSelect from './components/ProcentageSelect';
 import BasicMeasureListSelect from './components/BasicMeasureListSelect';
 import TerminalListSelected from './components/TerminalListSelected';
 import Cropper from 'react-cropper';
-import HttpFetch from '../../../utils/HttpFetch';
+import HttpFetch from '@/utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
-import { getCurrentUser } from '../../../utils/authority';
+import { getCurrentUser } from '@/utils/authority';
 
 const { Description } = DescriptionList;
 
@@ -59,7 +52,7 @@ const FormItem = Form.Item;
   };
 })
 @Form.create()
-class ProductDetail extends Component {
+class IndexDetail extends Component {
 
 
   centerFormLayout = {
@@ -361,39 +354,13 @@ class ProductDetail extends Component {
                       disabled={!showItem || showItem === '' || !isProductUpdate}
                       onClick={this.handleFreezeProduct}
                     >
-                      审批
+                      审批/取消审批
                     </Button>
                 }
 
               </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  paddingTop: 10,
-                }}
-              >
-                <Button
-                  className={business.buttomControl}
-                  type="primary"
-                  size="small"
-                  icon="copy"
-                  disabled
-                >
-                  复制
-                </Button>
-                <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="primary"
-                  icon="rollback"
-                  disabled
-                >
-                  撤销
-                </Button>
-              </div>
+
             </div>
             <Modal
               width={1200}
@@ -1366,4 +1333,4 @@ headers: {
 
 }
 
-export default ProductDetail;
+export default IndexDetail;

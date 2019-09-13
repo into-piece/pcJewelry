@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Form, Icon, Input, InputNumber, Row } from 'antd';
-import business from "../../business.less";
+import business from '../../../dev/business.less';
 import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;

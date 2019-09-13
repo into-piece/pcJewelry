@@ -55,7 +55,7 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user','chents'],
+    authority: ['admin', 'user', 'chents'],
     routes: [
       // dashboard
       {
@@ -224,6 +224,7 @@ export default [
           },
         ],
       },
+
 
       // dev route
       {
@@ -529,6 +530,33 @@ export default [
       {
         component: '404',
       },
+      {
+        path: '/system',
+        icon: 'setting',
+        name: 'system',
+        routes: [
+          {
+            path: '/system/department',
+            name: 'department',
+            icon: 'apartment',
+            component: './system/Department',
+            routes: [],
+          }, {
+            path: '/system/personnel',
+            name: 'personnel',
+            icon: 'user',
+            component: './system/Personnel',
+            routes: [],
+          }, {
+            path: '/system/authority',
+            name: 'authority',
+            icon: 'lock',
+            component: './system/Authority',
+            routes: [],
+          },
+        ],
+      },
     ],
+
   },
 ];

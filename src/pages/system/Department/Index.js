@@ -11,13 +11,13 @@ import {
 import { connect } from 'dva';
 
 
-import business from '../business.less';
-import product from './product.less';
+import business from '../../dev/business.less';
+import product from './Index.less';
 import JewelryTable from '../../components/JewelryTable';
 import ProductSearchFrom from './components/ProductSearchFrom';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '../../../utils/HttpFetch';
-import ProductDetail from './ProductDetail';
+import IndexDetail from './IndexDetail';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
 
@@ -31,135 +31,118 @@ const defaultPageSize = 10;
     body: product.body,
     rtnCode,
     rtnMsg,
-    productListloading: loading.effects['product/fetchListProduct'],
-    productSaveloading: loading.effects['product/addProduct'],
-    productUpdateloading: loading.effects['product/updateProduct'],
-    productDeleteloading: loading.effects['product/deleteProduct'],
-    productFreezeloading: loading.effects['product/freezeProduct'],
-    queryProductLocking: loading.effects['product/queryProductLock'],
-    updateProductUnLocking: loading.effects['product/updateProductUnLock'],
   };
 })
 
 
-class ProductInfo extends Component {
+class Index extends Component {
 
 
   productColumns = [
 
     {
-      // title: <div className={product.row_normal2}>客户编号</div>,
       title: () => {
         return (
           <TableSortView
-            column="客户编号"
-            field="product_no"
+            column="ID"
+            field="id"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'productNo',
-      key: 'productNo',
-      width: 200,
+      dataIndex: 'id',
+      key: 'id',
+      width: 80,
     },
 
     {
-      // title: <div className={product.row_normal2}>颜色</div>,
       title: () => {
         return (
           <TableSortView
-            column="颜色"
-            field="gem_color_name"
+            column="部门编号"
+            field="role"
             className={product.row_normal2}
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'gemColorName',
-      key: 'gemColorName',
+      dataIndex: 'role',
+      key: 'role',
       width: 100,
     },
     {
-      // title: <div className={product.row_normal2}>成色</div>,
       title: () => {
         return (
           <TableSortView
-            column="成色"
-            field="product_color_name"
+            column="部门简称"
+            field="short_name"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'productColorName',
-      key: 'productColorName',
+      dataIndex: 'shortName',
+      key: 'shortName',
       width: 100,
     },
     {
-      // title: <div className={product.row_normal2}>电镀颜色</div>,
       title: () => {
         return (
           <TableSortView
-            column="电镀颜色"
-            field="plating_color_name"
+            column="中文名"
+            field="zh_name"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'platingColorName',
-      key: 'platingColorName',
-      width: 150,
-    },
-
-
-    {
-      // title: <div className={product.row_normal2}>客户编号</div>,
-      title: () => {
-        return (
-          <TableSortView
-            column="客户编号"
-            field="customer_no"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'customerNo',
-      key: 'customerNo',
-      width: 100,
-    },
-
-    {
-      // title: <div className={product.row_normal2}>供应商编号</div>,
-      title: () => {
-        return (
-          <TableSortView
-            column="供应商编号"
-            field="supplier_id"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'supplierId',
-      key: 'supplierId',
-      width: 100,
-    },
-
-    {
-      // title: <div className={product.row_normal2}>供应商名称</div>,
-      title: () => {
-        return (
-          <TableSortView
-            column="供应商名称"
-            field="supplier_product_no"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'supplierProductNo',
-      key: 'supplierProductNo',
+      dataIndex: 'zhName',
+      key: 'zhName',
       width: 100,
     },
 
 
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="英文名"
+            field="en_name"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'en_name',
+      key: 'en_name',
+      width: 100,
+    },
+
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="备注"
+            field="remarks"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'remarks',
+      key: 'remarks',
+      width: 100,
+    },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="状态"
+            field="status"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'status',
+      key: 'status',
+      width: 100,
+    },
   ];
 
 
@@ -314,7 +297,7 @@ class ProductInfo extends Component {
 
     // console.log(" detail product ",showItem)
 
-    return <ProductDetail
+    return <IndexDetail
       item={showItem}
       isProductUpdate={isProductUpdate}
       selectProductData={selectProductData}
@@ -523,4 +506,4 @@ class ProductInfo extends Component {
 
 }
 
-export default ProductInfo;
+export default Index;
