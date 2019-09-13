@@ -14,7 +14,7 @@ import { connect } from 'dva';
 import business from '../../dev/business.less';
 import product from './Index.less';
 import JewelryTable from '../../components/JewelryTable';
-import ProductSearchFrom from './components/ProductSearchFrom';
+import SearchFrom from './components/SearchFrom';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '../../../utils/HttpFetch';
 import IndexDetail from './IndexDetail';
@@ -45,13 +45,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="姓名"
-            field="name"
+            field="userName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'userName',
+      key: 'userName',
       width: 80,
     },
 
@@ -60,14 +60,14 @@ class Index extends Component {
         return (
           <TableSortView
             column="性别"
-            field="sex"
+            field="gender"
             className={product.row_normal2}
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'sex',
-      key: 'sex',
+      dataIndex: 'gender',
+      key: 'gender',
       width: 100,
     },
     {
@@ -75,7 +75,7 @@ class Index extends Component {
         return (
           <TableSortView
             column="部门"
-            field="short_name"
+            field="shortName"
             sortChange={this.sortFilter}
           />
         );
@@ -89,13 +89,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="部门编号"
-            field="zh_name"
+            field="role"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'zhName',
-      key: 'zhName',
+      dataIndex: 'role',
+      key: 'role',
       width: 100,
     },
 
@@ -105,13 +105,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="出生日期"
-            field="en_name"
+            field="birthdate"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'en_name',
-      key: 'en_name',
+      dataIndex: 'birthdate',
+      key: 'birthdate',
       width: 100,
     },
 
@@ -120,13 +120,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="家庭地址"
-            field="remarks"
+            field="address"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'remarks',
-      key: 'remarks',
+      dataIndex: 'address',
+      key: 'address',
       width: 100,
     },
     {
@@ -134,39 +134,39 @@ class Index extends Component {
         return (
           <TableSortView
             column="身份证"
-            field="status"
+            field="idCard"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'idCard',
+      key: 'idCard',
       width: 100,
     },   {
       title: () => {
         return (
           <TableSortView
             column="入职日期"
-            field="status"
+            field="hiredate"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'hiredate',
+      key: 'hiredate',
       width: 100,
     },   {
       title: () => {
         return (
           <TableSortView
             column="过期日期"
-            field="status"
+            field="indate"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'indate',
+      key: 'indate',
       width: 100,
     },
   ];
@@ -262,9 +262,9 @@ class Index extends Component {
         <div className={business.center_content}>
           <Row gutter={24}>
             <Col lg={rightlg} md={24} style={{overflow:'auto'}}>
-              <Card bordered={false} loading={false}>
+              <Card bordered={false} loading={false} className={business.left_content}>
                 <div style={{ marginBottom: 16 }} />
-                <ProductSearchFrom
+                <SearchFrom
                   onSearch={this.handleProductSearch}
                   onCustomerReset={this.handleProductFormReset}
                 />

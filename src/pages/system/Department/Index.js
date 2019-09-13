@@ -14,7 +14,7 @@ import { connect } from 'dva';
 import business from '../../dev/business.less';
 import product from './Index.less';
 import JewelryTable from '../../components/JewelryTable';
-import ProductSearchFrom from './components/ProductSearchFrom';
+import SearchFrom from './components/SearchFrom';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '../../../utils/HttpFetch';
 import IndexDetail from './IndexDetail';
@@ -238,7 +238,7 @@ class Index extends Component {
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
                 <div style={{ marginBottom: 16 }} />
-                <ProductSearchFrom
+                <SearchFrom
                   onSearch={this.handleProductSearch}
                   onCustomerReset={this.handleProductFormReset}
                 />
