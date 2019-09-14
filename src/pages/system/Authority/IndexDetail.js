@@ -243,7 +243,7 @@ class IndexDetail extends Component {
       <div className={business.list_info}>
 
         <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            产品
+            权限信息
         </span>
         <Divider className={business.divder} />
 

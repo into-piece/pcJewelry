@@ -75,7 +75,7 @@ class Index extends Component {
         return (
           <TableSortView
             column="部门简称"
-            field="short_name"
+            field="shortName"
             sortChange={this.sortFilter}
           />
         );
@@ -89,7 +89,7 @@ class Index extends Component {
         return (
           <TableSortView
             column="中文名"
-            field="zh_name"
+            field="zhName"
             sortChange={this.sortFilter}
           />
         );
@@ -105,7 +105,7 @@ class Index extends Component {
         return (
           <TableSortView
             column="英文名"
-            field="en_name"
+            field="enName"
             sortChange={this.sortFilter}
           />
         );
@@ -243,7 +243,7 @@ class Index extends Component {
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-
+                  scroll={{x:1200}}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {

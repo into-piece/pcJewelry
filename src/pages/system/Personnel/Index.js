@@ -271,6 +271,7 @@ class Index extends Component {
                 <JewelryTable
                   scroll={{x:1200}}
                   onSelectItem={(item, rows) => {
+                    console.log(item,rows);
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {
                       // console.log("两个选中的对象 :",item.id,showItem.id)

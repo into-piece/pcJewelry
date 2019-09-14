@@ -49,8 +49,8 @@ class Index extends Component {
           />
         );
       },
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'shortName',
+      key: 'shortName',
       width: 80,
     },
 
@@ -74,13 +74,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="过期日期"
-            field="short_name"
+            field="indate"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'shortName',
-      key: 'shortName',
+      dataIndex: 'indate',
+      key: 'indate',
       width: 100,
     },
     {
@@ -88,13 +88,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="禁用"
-            field="zh_name"
+            field="status"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'zhName',
-      key: 'zhName',
+      dataIndex: 'status',
+      key: 'status',
       width: 100,
     },
 

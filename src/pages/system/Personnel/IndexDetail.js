@@ -16,15 +16,8 @@ import DescriptionList from '@/components/DescriptionList';
 import styles from './Index.less';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '@/pages/Business/Client/Client.less';
-import BrandListSelect from './components/BrandListSelect';
-import ProductTypeSelect from './components/ProductTypeSelect';
-import UnitColorListSelect from './components/UnitColorListSelect';
-import PlatingColorListSelect from './components/PlatingColorListSelect';
 import Dict from '@/pages/Business/Client/components/Dict';
 import MoldListSelect from './components/MoldListSelect';
-import PercentageSelect from './components/ProcentageSelect';
-import BasicMeasureListSelect from './components/BasicMeasureListSelect';
-import TerminalListSelected from './components/TerminalListSelected';
 import Cropper from 'react-cropper';
 import HttpFetch from '@/utils/HttpFetch';
 import Zmage from 'react-zmage';
@@ -243,7 +236,7 @@ class IndexDetail extends Component {
       <div className={business.list_info}>
 
         <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            产品
+            员工信息
         </span>
         <Divider className={business.divder} />
 
@@ -256,37 +249,50 @@ class IndexDetail extends Component {
                     {this.getImages(paths)}
                   </Carousel>
                   <DescriptionList size="small" col="1">
-                    <Description term="名称">{showItem.zhName}</Description>
-                    <Description term="编号">{showItem.productNo}</Description>
-                    <Description term="类别">{showItem.productTypeName}</Description>
-                    <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价" />
-                  </DescriptionList>
-                  <span className={business.title_info}>
-            参数详情
-                  </span>
-                  <Divider className={business.divder} />
-                  <DescriptionList size="small" col="2">
-                    <Description term="颜色">{showItem.gemColorName}</Description>
-                    <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
-                    <Description term="报价重量">{showItem.finishedWeight}</Description>
-                    <Description term="成色重量">{showItem.unitOfWeightName}</Description>
-                    <Description term="电镀">{showItem.platingColorName}</Description>
-                    <Description term="成色">{showItem.productColorName}</Description>
-                    <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                    <Description term="模具">{showItem.mouldNoName}</Description>
-                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
-                    <Description term="客户">{showItem.customerNo}</Description>
-                    <Description term="供应商货号">{showItem.supplierId}</Description>
-                    <Description term="供应商">{showItem.supplierProductNo}</Description>
-                    <Description term="品牌">{showItem.brandNo}</Description>
+                    <Description term="ID">{showItem.id}</Description>
+                    <Description term="姓名">{showItem.userName}</Description>
+                    <Description term="密码">{showItem.password}</Description>
+                    <Description term="英文名称">{showItem.enName}</Description>
+                    <Description term="民族">{showItem.nation}</Description>
+                    <Description term="性别">{showItem.gender}</Description>
+
+                    <Description term="婚姻">{showItem.marriage}</Description>
+                    <Description term="籍贯">{showItem.nativePlace}</Description>
+                    <Description term="邮编">{showItem.postcode}</Description>
+                    <Description term="身份证">{showItem.idCard}</Description>
+                    <Description term="出生日期">{showItem.birthdate}</Description>
+                    <Description term="电话">{showItem.phone}</Description>
+
+                    <Description term="手机">{showItem.tel}</Description>
+                    <Description term="学历">{showItem.education}</Description>
+                    <Description term="专业">{showItem.specialty}</Description>
+                    <Description term="体重">{showItem.weight}</Description>
+                    <Description term="身高">{showItem.stature}</Description>
+                    <Description term="卡号">{showItem.cardNo}</Description>
+
+                    <Description term="部门">{showItem.dept}</Description>
+                    <Description term="职位">{showItem.position}</Description>
+                    <Description term="短号">{showItem.cornet}</Description>
+                    <Description term="邮箱">{showItem.email}</Description>
+                    <Description term="宿舍">{showItem.dorm}</Description>
+                    <Description term="入职日期">{showItem.hiredate}</Description>
+
+                    <Description term="薪资">{showItem.salary}</Description>
+                    <Description term="外宿">{showItem.isSleepOut}</Description>
+                    <Description term="内食">{showItem.isDineIn}</Description>
+                    <Description term="离职日期">{showItem.terminationDate}</Description>
+                    <Description term="离厂原因">{showItem.exFactoryReson}</Description>
+                    <Description term="离职类别">{showItem.teminationType}</Description>
+
+                    <Description term="有效期">{showItem.indate}</Description>
+                    <Description term="头像">{showItem.profilePhoto}</Description>
                   </DescriptionList>
                   <span className={business.title_info}>
             备注
                   </span>
                   <Divider className={business.divder} />
                   <DescriptionList size="small" col="1">
-                    <Description>{showItem.marks}</Description>
+                    <Description>{showItem.remarks}</Description>
                   </DescriptionList>
                 </Spin>
               </div>
@@ -472,14 +478,13 @@ class IndexDetail extends Component {
           <Row gutter={4}>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="流水号"
+                label="ID"
                 className={business.from_content_col}
                 {...this.centerFormLayout}
               >
-                {getFieldDecorator('productNo', {
-                  rules: [{ required: true, message: '请输入姓名' }],
-                  initialValue: current.productNo,
-                  // })(<text>系统自动生成</text>)}
+                {getFieldDecorator('id', {
+                  rules: [{ required: true, message: '请输入ID' }],
+                  initialValue: current.id,
                 })(<Input
                   placeholder="自动生成编号"
                   readOnly
@@ -488,116 +493,30 @@ class IndexDetail extends Component {
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="品牌"
+                label="姓名"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('brand', {
-                  rules: [{ required: true, message: '请输入品牌' }],
-                  initialValue: current.brand,
+                {getFieldDecorator('userName', {
+                  rules: [{ required: true, message: '请输入姓名' }],
+                  initialValue: current.userName,
                 })
-                (<BrandListSelect
-                  placeholder="请输入"
-                  onSelect={(v) => {
-                    if (v && v.brandNo) {
-                      this.state.cNoBrandNo = v.brandNo;
-                      this.parseProductNo();
-                    }
-                  }
-                  }
-                  content={current.brand}
-                />)
+                (<Input />)
                 }
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="类别"
+                label="密码"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('productType', {
-                  initialValue: current.productType,
-                  rules: [{ required: true, message: '请输入类别' }],
-                })(<ProductTypeSelect
-                  content={current.productType}
-                  onSelect={(v) => {
-                    // console.log(" select  ",v)
-                    if (v.zhName) {
-                      this.state.cNofCodezhName = v.zhName;
-                      this.state.cNofCode = v.fCode;
-                      this.parseProductNo();
-                    }
-                  }
-                  }
-                />)}
+                {getFieldDecorator('password', {
+                  initialValue: current.password,
+                  rules: [{ required: true, message: '请输入密码' }],
+                })(<Input />)}
               </FormItem>
             </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label='宝石颜色'
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('gemColor', {
-                  rules: [{ required: true, message: '请输入宝石颜色' }],
-                  initialValue: current.gemColor,
-                })(<UnitColorListSelect
-                  placeholder="请输入"
-                  content={current.gemColor}
-                  onSelect={(v) => {
-                    if (v.unitCode) {
-                      this.state.cNoUnitCode = v.unitCode;
-                      this.state.cNozhNameUniCode = v.zhName;
-                      this.state.cNoenNameUniCode = v.enName;
-                      // console.log(' cNozhNameUniCode ', v.zhName,v.enName);
-                      this.parseProductNo();
-
-                    }
-                  }
-                  }
-                />)}
-              </FormItem>
-            </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="电镀颜色"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('platingColor', {
-                  rules: [{ required: true, message: '请输入电镀颜色' }],
-                  initialValue: current.platingColor,
-                })(<PlatingColorListSelect
-                  placeholder="请输入"
-                  onSelect={(v) => {
-                    if (v.colorCode) {
-                      this.state.cNoColorCode = v.colorCode;
-                      this.parseProductNo();
-                    }
-                  }}
-                  content={current.platingColor}
-                />)}
-              </FormItem>
-            </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="中文名称"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('zhName', {
-                  rules: [{ required: true, message: '请输入中文名称' }],
-                  initialValue: current.zhName,
-                })(<Input placeholder="自动生成" readOnly />,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-
-
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='英文名称'
@@ -607,164 +526,281 @@ class IndexDetail extends Component {
                 {getFieldDecorator('enName', {
                   rules: [{ required: true, message: '请输入英文名称' }],
                   initialValue: current.enName,
-                })(<Input
-                  placeholder="自动生成"
-                  readOnly
-                />)}
+                })(<Input />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label='产品来源'
+                label="民族"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('sourceOfProduct', {
-                  rules: [{ required: true, message: '请输入产品来源' }],
-                })(<Dict
-                  dict="H005"
-                  content={current.sourceOfProduct ? current.sourceOfProduct : 'H005001'}
-                  placeholder="请输入"
-                />)}
+                {getFieldDecorator('nation', {
+                  rules: [{ required: true, message: '请输入民族' }],
+                  initialValue: current.nation,
+                })(<Input />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label='模具号'
+                label="性别"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('mouldNo', {
-                  rules: [{ required: true, message: '请输入' }],
-                  initialValue: current.mouldNo,
-                })(<MoldListSelect
-                  content={current.mouldNo}
-                  placeholder="请输入"
-                  onSelect={(v) => {
-
-                                     // console.log(" select mold ",v)
-                                     if (v && v.mainMold)
-                                       this.state.cNomainMold = v.mainMold;
-                                     this.parseProductNo();
-                                   }}
-                />)}
-              </FormItem>
-            </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="成色"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('productColor', {
-                  rules: [{ required: true, message: '请输入成色' }],
-                  initialValue: current.productColor,
-                })(<PercentageSelect
-                  placeholder="请输入"
-                  content={current.productColor}
-                  onSelect={(v) => {
-                    if (v.zhName)
-                      this.state.cNoPercentageZhName = v.zhName;
-
-                    if (v.enName)
-                      this.state.cNoPercentageEnName = v.enName;
-
-
-                    this.parseProductNo();
-
-
-                  }}
-                />)}
-              </FormItem>
-            </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label='规格'
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('specification', {
-                  rules: [{
-                    required: (this.state.cNofCodezhName === '耳环' || this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链'),
-                    message: '请输入规格',
-                  }],
-                  initialValue: current.specification,
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-            </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="计量单位"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('unitOfMeasurement', {
-                  rules: [{ message: '请输入计量单位' }],
-                  initialValue: current.unitOfMeasurement,
-                })(<BasicMeasureListSelect
-                  content={current.unitOfMeasurement ? current.unitOfMeasurement : 'ae32e48c2df27123682943b6effa72d3'}
-                  placeholder="请输入"
-                />)}
+                {getFieldDecorator('gender', {
+                  rules: [{ required: true, message: '请输入性别' }],
+                  initialValue: current.gender,
+                })(<Input   />,
+                )}
               </FormItem>
             </Col>
           </Row>
 
           <Row>
-            <Col lg={5} md={5} sm={5} xs={5}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="重量单位"
+                label='婚姻'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('unitOfWeight', {
-                  rules: [{ message: '请输入' }],
-                  initialValue: current.unitOfWeight,
-                })(<BasicMeasureListSelect
-                  content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
-                  placeholder="请输入"
-                />)}
+                {getFieldDecorator('marriage', {
+                  rules: [{ required: true, message: '请选择婚姻状况' }],
+                  initialValue: current.marriage,
+                })(<Input   />)}
               </FormItem>
             </Col>
-            <Col lg={5} md={5} sm={5} xs={5}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="成品重量"
+                label='籍贯'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('finishedWeight', {
-                  initialValue: current.finishedWeight,
+                {getFieldDecorator('nativePlace', {
+                  rules: [{ required: true, message: '请输入籍贯' }],
+                  initialValue: current.nativePlace,
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label='出生日期'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('birthdate', {
+                  rules: [{ required: true, message: '请输入出生日期' }],
+                  initialValue: current.birthdate,
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="邮编"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('postcode', {
+                  rules: [{ required: true, message: '请输入邮编' }],
+                  initialValue: current.postcode,
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label='身份证'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('idCard', {
+                  rules: [{ required: true, message: '请输入邮编' }],
+                  initialValue: current.idCard,
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
-            <Col lg={5} md={5} sm={5} xs={5}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="产品描述"
+                label="电话"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
-                {getFieldDecorator('productDesc', {
-                  rules: [{ message: '请输入产品描述' }],
-                  initialValue: current.productDesc,
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-            </Col>
-            <Col lg={5} md={5} sm={5} xs={5}>
-              <FormItem
-                label="备注"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('marks', {
-                  initialValue: current.marks,
-                })(<Input placeholder="请输入" />)}
+                {getFieldDecorator('phone', {
+                  rules: [{ message: '请输入联系电话' }],
+                  initialValue: current.phone,
+                })(<Input />)}
               </FormItem>
             </Col>
           </Row>
+
+          <Row>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="部门"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('dept', {
+                  rules: [{ message: '请输入部门' }],
+                  initialValue: current.dept,
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="职位"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('position', {
+                  initialValue: current.position,
+                })(<Input placeholder="请输入职位" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="短号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('cornet', {
+                  rules: [{ message: '请输入短号' }],
+                  initialValue: current.cornet,
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="邮箱"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('email', {
+                  initialValue: current.email,
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="宿舍"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('dorm', {
+                  initialValue: current.dorm,
+                })(<Input placeholder="请输入宿舍" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="入职日期"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('hiredate', {
+                  initialValue: current.hiredate,
+                })(<Input placeholder="请输入入职日期" />)}
+              </FormItem>
+            </Col>
+          </Row>
+
+
+
+          <Row>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="薪资"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('salary', {
+                  rules: [{ message: '请输入薪资' }],
+                  initialValue: current.salary,
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="外宿"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('isSleepOut', {
+                  initialValue: current.isSleepOut,
+                })(<Input placeholder="请输入外宿" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="内食"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('isDineIn', {
+                  rules: [{ message: '请输入内食' }],
+                  initialValue: current.isDineIn,
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="离职日期"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('terminationDate', {
+                  initialValue: current.terminationDate,
+                })(<Input placeholder="请输入离职日期" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="离厂原因"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('exFactoryReson', {
+                  initialValue: current.exFactoryReson,
+                })(<Input placeholder="请输入离厂原因" />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="离职类别"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('teminationType', {
+                  initialValue: current.teminationType,
+                })(<Input placeholder="请输入离职类别" />)}
+              </FormItem>
+            </Col>
+          </Row>
+
+
+          <Row>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="有效期"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('indate', {
+                  rules: [{ message: '请输入有效期' }],
+                  initialValue: current.indate,
+                })(<Input />)}
+              </FormItem>
+            </Col>
+          </Row>
+
+
+
+
+
+
 
           <Row>
             <Col lg={24} md={24} sm={24} xs={24}>
               <FormItem
-                label=''
+                label='头像'
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
@@ -788,129 +824,6 @@ class IndexDetail extends Component {
           </Row>
 
         </Form>
-
-        <Form
-          size='small'
-          labelAlign='left'
-          layout='inline'
-          className={business.from_content}
-        >
-          <span className={business.sun_title_info}>客户信息</span>
-          <Divider className={business.divder} />
-          <Row>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label='客户编号'
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('customerId', {
-                  rules: [{ required: true, message: '请输入客户编号' }],
-                  initialValue: current.customerId,
-                })(<TerminalListSelected
-                  content={current.customerId}
-                  onSelectEndName={(file, customerCombine) => {
-
-                    if (file && customerCombine) {
-                      // console.log('end name ', file);
-                      this.setState({
-                        customerShotName: customerCombine,
-
-                      });
-
-                      // setFieldsValue({
-                      //   customerShotName: customerCombine,
-                      // });
-
-                      this.state.cNoCustomerCombine = customerCombine,
-                        this.parseProductNo();
-                    }
-                  }}
-                />)}
-              </FormItem>
-            </Col>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label="客户简称"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('customerShotName', {
-                  rules: [{ message: '请输入客户简称' }],
-                  initialValue: current.customerShotName,
-                })(<div>
-                  <Input
-                    placeholder="请输入"
-                    readOnly
-                    value={customerShotName || current.endShotName}
-                  />
-                </div>)}
-              </FormItem>
-            </Col>
-
-            <Col lg={8} md={8} sm={8} xs={8}>
-              <FormItem
-                label='客户货号'
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('custoerProductNo', {
-                  rules: [{ message: '请输入货号' }],
-                  initialValue: current.custoerProductNo,
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Modal {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
-            {this.openCutImageModal()}
-          </Modal>
-        </Form>
-
-        {
-          sourceOfProduct === 'H005005' ? <Form
-            size="small"
-            labelAlign="left"
-            layout="inline"
-            style={{ width: '100%' }}
-            className={business.from_content}
-          >
-            <span className={business.sun_title_info}>供应商信息</span>
-            <Divider className={business.divder} />
-            <Row style={{ width: '100%' }}>
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="供应商编号"
-                  {...this.centerFormLayout}
-                  className={business.from_content_col}
-                >
-                  {getFieldDecorator('supplierId', {
-                    rules: [{ required: true, message: '请输入供应商编号' }],
-                    initialValue: current.supplierId,
-                  })(<Input placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-
-              <Col lg={8} md={8} sm={8} xs={8}>
-                <FormItem
-                  label="供应商货号"
-                  {...this.centerFormLayout}
-
-                  className={business.from_content_col}
-                >
-                  {getFieldDecorator('supplierProductNo', {
-                    rules: [{ message: '请输入供应商货号' }],
-                    initialValue: current.supplierProductNo,
-                  })(<Input placeholder="请输入" />)}
-                </FormItem>
-              </Col>
-            </Row>
-          </Form> : ''
-
-
-        }
-
       </div>
     );
   };

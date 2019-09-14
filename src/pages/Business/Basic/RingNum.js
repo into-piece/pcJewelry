@@ -809,7 +809,7 @@ class RingNum extends PureComponent {
                                                       disabled={isEdit}
                                                     >
                 审批
-                                                    </Button>)}
+                                                                  </Button>)}
           </div>
         </Card>
       </div>
@@ -892,7 +892,7 @@ class RingNum extends PureComponent {
                                                             disabled={isEditNumber}
                                                           >
                 审批
-                                                                        </Button>)}
+                                                          </Button>)}
           </div>
         </Card>
       </div>
