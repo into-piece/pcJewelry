@@ -145,6 +145,12 @@ export const queryProductLock = `${priefx}/business/business/product/checkIsEdit
  */
 export const queryProductList = `${priefx}/business/business/product/listProduct`
 
+/**
+ * 加载部门
+ * @type {string}
+ */
+export const queryDeptList = `${priefx}/sys.user/sys-role/listDept`
+
 
 
 /**
@@ -212,6 +218,7 @@ export default {
   queryProductImage,
   saveProductImage,
   queryProductList,
+  queryDeptList,
   querSpecimentLock,
   querSpecimentUnLock,
   querySpecimenList,

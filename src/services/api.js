@@ -14,6 +14,64 @@ export async function queryActivities() {
 export async function logout() {
   return request('/logout');
 }
+//
+export async function approvalDept(params) {
+  return request(`${priefx  }/sys.user/sys-role/approval`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function cancelDept(params) {
+  return request(`${priefx  }/sys.user/sys-role/cancel`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function saveOrUpdatedept(params) {
+  return request(`${priefx  }/sys.user/sys-role/saveOrUpdate`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function deleteTheDept(params) {
+  return request(`${priefx  }/sys.user/sys-role/delete`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function querylistDept(params) {
+  return request(`${priefx  }/sys.user/sys-role/listDept`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
 
 export async function querylistBrands() {
   return request(`${priefx  }/business/basic/brand/listBrands`, {
@@ -109,7 +167,7 @@ export async function querylistRoyalty() {
           token: getCurrentUser() ? getCurrentUser().token : '',
         },
       },
-    }
+    },
   );
 }
 
@@ -125,7 +183,7 @@ export async function saveTheRoyalty(params) {
       data: {
         ...params,
       },
-    }
+    },
   );
 }
 
@@ -139,7 +197,7 @@ export async function deleteTheRoyalty(params) {
         token: getCurrentUser() ? getCurrentUser().token : '',
       },
       data: params.list,
-    }
+    },
   );
 }
 
@@ -155,7 +213,7 @@ export async function updateTheRoyalty(params) {
       data: {
         ...params,
       },
-    }
+    },
   );
 }
 
@@ -412,7 +470,7 @@ export async function querylistRingNum() {
           token: getCurrentUser() ? getCurrentUser().token : '',
         },
       },
-    }
+    },
   );
   console.log(data);
   return data;
@@ -430,7 +488,7 @@ export async function saveTheRingNum(params) {
       data: {
         ...params,
       },
-    }
+    },
   );
 }
 
@@ -457,7 +515,7 @@ export async function updateTheRingNum(params) {
       data: {
         ...params,
       },
-    }
+    },
   );
 }
 
@@ -778,7 +836,6 @@ export async function unfreezeTheTerminal(params) {
     data: params.list,
   });
 }
-
 
 
 export async function querylistMark(parmas) {

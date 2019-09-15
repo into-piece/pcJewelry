@@ -6,6 +6,7 @@ const onCancel = function onCancel(){
 const ModalConfirm =(params)=> {
 
   const { title, content, okText, cancelText,onOk } = params;
+  console.log(onOk)
   Modal.confirm({
     title: title||'温馨提示',
     content:content||'请确认您的操作',

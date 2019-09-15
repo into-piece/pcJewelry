@@ -6,7 +6,7 @@ import {
   Form,
   Button,
   Input,
-  Divider, Carousel, Modal, message, Upload, Spin,
+  Divider, Carousel, Modal, message, Spin,
 } from 'antd';
 import  ModalConfirm from '@/utils/modal';
 
@@ -16,7 +16,6 @@ import DescriptionList from '@/components/DescriptionList';
 import styles from './Index.less';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '@/pages/Business/Client/Client.less';
-import Cropper from 'react-cropper';
 import HttpFetch from '@/utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
@@ -26,20 +25,18 @@ const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ dept, loading }) => {
+  const { rtnCode, rtnMsg } = dept;
   return {
-    body: product.body,
+    body: dept.body,
     rtnCode,
     rtnMsg,
-    productListloading: loading.effects['product/fetchListProduct'],
-    productSaveloading: loading.effects['product/addProduct'],
-    productUpdateloading: loading.effects['product/updateProduct'],
-    productDeleteloading: loading.effects['product/deleteProduct'],
-    productFreezeloading: loading.effects['product/freezeProduct'],
-    productUnFreezeloading: loading.effects['product/unfreezeProduct'],
-    queryProductLocking: loading.effects['product/queryProductLock'],
-    updateProductUnLocking: loading.effects['product/updateProductUnLock'],
+    addDeptloading: loading.effects['dept/addDept'],
+    fetchListDeptloading: loading.effects['dept/fetchListDept'],
+    deptUpdateloading: loading.effects['dept/updateDept'],
+    deptDeleteloading: loading.effects['dept/deleteDept'],
+    approvalDeptloading: loading.effects['dept/approvalDept'],
+    cancelDeptloading: loading.effects['dept/cancelDept'],
   };
 })
 @Form.create()
@@ -96,13 +93,12 @@ class IndexDetail extends Component {
   render() {
 
     const {
-      productListloading,
-      productUpdateloading,
-      productSaveloading,
-      productFreezeloading,
-      productUnFreezeloading,
-      productDeleteloading,
-      queryProductLocking,
+      addDeptloading,
+      fetchListDeptloading,
+      deptUpdateloading,
+      deptDeleteloading,
+      approvalDeptloading,
+      cancelDeptloading,
       body = {},
       isloading,
       refarshList,
@@ -110,17 +106,17 @@ class IndexDetail extends Component {
       item,
     } = this.props;
 
-    const { update, isLoadImage, productParams } = this.state;
+    const { update,  productParams } = this.state;
 
     // (item)
 
 
     const isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
+      addDeptloading  || deptUpdateloading || deptDeleteloading  || approvalDeptloading || cancelDeptloading
 
     if (isUpdate) {
       this.state.update = true;
-      if (productUpdateloading || productSaveloading) {
+      if (deptUpdateloading || addDeptloading) {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
@@ -132,8 +128,6 @@ class IndexDetail extends Component {
           this.state.requestState = 'error';
         }
 
-        this.productRefresh();
-        // this.handleUpdateImage(productParams)
         this.state.update = false;
         if (this.state.isUpdateFrom) {
           this.state.isUpdateFrom = false;
@@ -146,7 +140,7 @@ class IndexDetail extends Component {
       }
 
 
-    const updat = isUpdate || productListloading;
+    const updat = isUpdate || fetchListDeptloading;
     if (updat !== this.state.isLoad) {
       if (isloading)
         isloading(updat);
@@ -252,7 +246,7 @@ class IndexDetail extends Component {
                     <Description term="部门简称">{showItem.shortName}</Description>
                     <Description term="中文名">{showItem.zhName}</Description>
                     <Description term="英文名">{showItem.enName}</Description>
-                    <Description term="状态">{showItem.status}</Description>
+                    <Description term="状态">{showItem.statusVar}</Description>
                   </DescriptionList>
 
                   <span className={business.title_info}>
@@ -392,22 +386,6 @@ class IndexDetail extends Component {
           <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
-                label="ID"
-                className={business.from_content_col}
-                {...this.centerFormLayout}
-              >
-                {getFieldDecorator('ID', {
-                  rules: [{ required: true, message: '请输入姓名' }],
-                  initialValue: current.id,
-                  // })(<text>系统自动生成</text>)}
-                })(<Input
-                  placeholder="自动生成ID"
-                  readOnly
-                />)}
-              </FormItem>
-            </Col>
-            <Col lg={12} md={12} sm={12} xs={12}>
-              <FormItem
                 label="部门编号"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
@@ -420,9 +398,7 @@ class IndexDetail extends Component {
                 }
               </FormItem>
             </Col>
-          </Row>
 
-          <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
                 label="部门简称"
@@ -435,6 +411,9 @@ class IndexDetail extends Component {
                 })(<Input  />)}
               </FormItem>
             </Col>
+          </Row>
+
+          <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
                 label='中文名称'
@@ -447,9 +426,7 @@ class IndexDetail extends Component {
                 })(<Input  />)}
               </FormItem>
             </Col>
-          </Row>
 
-          <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
                 label="英文名称"
@@ -462,6 +439,9 @@ class IndexDetail extends Component {
                 })(<Input  />)}
               </FormItem>
             </Col>
+          </Row>
+
+          <Row gutter={2}>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem
                 label='备注'
@@ -499,7 +479,7 @@ class IndexDetail extends Component {
     params.id = item.id;
 
 
-    fetch(HttpFetch.queryProductList, {
+    fetch(HttpFetch.queryDeptList, {
       method: 'POST',
       credentials: 'include',
 headers: {
@@ -527,8 +507,6 @@ headers: {
           });
           // console.log(" update data ",showItem)
         }
-        this.fetchImages(showItem);
-
         _this.setState({
           isLoading: false,
         });
@@ -578,33 +556,6 @@ headers: {
   };
 
 
-  parseImages = item => {
-    let fileList = [];
-    if (item) {
-      fileList = item.map(v => ({
-        uid: v.id,
-        name: v.fileName,
-        status: 'done',
-        url: v.path,
-      }));
-      this.state.imageUrl = item.map(v => {
-        return v.path;
-      });
-      this.state.fileName = item.map(v => {
-        return v.fileName;
-      });
-    } else {
-      this.state.imageUrl = [];
-      this.state.fileName = [];
-    }
-    // console.log("parse file list ",this.state.fileList,this.state.fileName,item)
-    // console.log('upload edit list ',fileList)
-    this.state.fileList = fileList;
-    // this.setState({
-    //   fileList,
-    // });
-  };
-
   handleDeleteProduct = () => {
     const { selectProductData } = this.props;
 
@@ -617,7 +568,7 @@ headers: {
 
 
     dispatch({
-      type: 'product/deleteProduct',
+      type: 'dept/deleteDept',
       payload: { list: ids },
     });
 
@@ -633,15 +584,10 @@ headers: {
     const ids = selectProductData.map(v => {
       return v.id;
     });
-
-    // console.log(" freeze ",ids)
-
     const { dispatch } = this.props;
-    const data = [];
-    // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/unfreezeProduct',
+      type: 'dept/cancelDept',
       payload: { list: ids },
     });
   };
@@ -652,14 +598,10 @@ headers: {
     const ids = selectProductData.map(v => {
       return v.id;
     });
-
-    // console.log(" freeze ",ids)
-
     const { dispatch } = this.props;
-    // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/freezeProduct',
+      type: 'dept/approvalDept',
       payload: { list: ids },
     });
   };
@@ -673,19 +615,13 @@ headers: {
         return;
       }
 
-      const params = {};
-      params.product = { ...fieldsValue };
+      const params   = { ...fieldsValue };
 
       const urls = fileList.map(v => v.url);
       const names = fileList.map(v => v.name);
-      params.imgStr = urls;
-      // params.imgStr = this.state.urls;
-      params.fileName = names;
-      // params.productId = item.productNo;
-      // params.product = item;
       if (isAdd) {
         dispatch({
-          type: 'product/addProduct',
+          type: 'dept/addDept',
           payload: {
             ...params,
           },
@@ -697,10 +633,10 @@ headers: {
           update: true,
         });
       } else {
-        params.product.id = showItem.id;
-        params.product.version = showItem.version;
+        params.id = showItem.id;
+        params.version = showItem.version;
         dispatch({
-          type: 'product/updateProduct',
+          type: 'dept/updateDept',
           payload: {
             ...params,
           },
