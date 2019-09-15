@@ -9,14 +9,13 @@ import {
   Input,
   Divider, Carousel, Modal, message, Upload, Spin,
 } from 'antd';
-
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
 import styles from './Index.less';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '@/pages/Business/Client/Client.less';
-import Dict from '@/pages/Business/Client/components/Dict';
+import ModalConfirm from '@/utils/modal';
 import MoldListSelect from './components/MoldListSelect';
 import Cropper from 'react-cropper';
 import HttpFetch from '@/utils/HttpFetch';
@@ -326,7 +325,6 @@ class IndexDetail extends Component {
                   icon="delete"
                   className={business.buttomControl}
                   size="small"
-                  onClick={this.handleDeleteProduct}
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
                   删除
@@ -347,7 +345,7 @@ class IndexDetail extends Component {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={this.handleUnFreezeProduct}
+                    onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.handleUnFreezeProduct();}});}}
                     disabled={!showItem || showItem === '' || !isProductUpdate}
                   >
                       取消审批
@@ -358,9 +356,9 @@ class IndexDetail extends Component {
                       type="primary"
                       icon="lock"
                       disabled={!showItem || showItem === '' || !isProductUpdate}
-                      onClick={this.handleFreezeProduct}
+                      onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleFreezeProduct();}});}}
                     >
-                      审批/取消审批
+                      审批
                     </Button>
                 }
 

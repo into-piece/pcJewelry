@@ -8,18 +8,15 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Checkbox, DatePicker } from 'antd';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
-import SvgUtil from '@/utils/SvgUtil';
+import ModalConfirm from '@/utils/modal';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/quote';
-import LockTag from '@/components/LockTag'
 import jsonData from './index.json'
 import SearchForm from '@/components/SearchForm'
 import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
-// import Bread from '@/components/BreadCrumb'
 import SelectProductModal from './SelectProductModal'
 
 const { TextArea } = Input;
@@ -27,30 +24,7 @@ const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
 const { deleteProductQuoteHeader, deleteProformaInvoiceDetail } = serviceObj
-// manuArr是 =》menu配置提供遍历
-// modalContent => 每个menu不同的增加弹窗填写信息
-const { modalContent } = jsonData
 
-// 弹窗form表单样式
-// const formLayout = {
-//   labelCol: { span: 2 },
-//   wrapperCol: {
-//     span: 6,
-//   },
-// };
-
-// 面包屑数据
-// const breadData = [
-//   {
-//     name: '主页', link: '/'
-//   },
-//   {
-//     name: '开发', link: '/quote/basic'
-//   },
-//   {
-//     name: '基础数据', link: ''
-//   }
-// ]
 
 // 右手边按钮集合
 const btnGroup = [
@@ -422,10 +396,10 @@ class Info extends Component {
         this.setState({ modalType });
         break;
       case 'delete':
-        this.handleDelect()
+        ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDelect();}});
         break;
       case 'lock':
-        this.handleLock()
+        ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleLock();}});
         break;
       case 'copy':
         this.handleCopy()

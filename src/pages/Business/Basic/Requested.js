@@ -22,6 +22,7 @@ import { requested as Requested } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
+import ModalConfirm from '@/utils/modal';
 
 const FormItem = Form.Item;
 const clientContentColumns = [
@@ -255,13 +256,13 @@ class RequestedComponent extends PureComponent {
             {getFieldDecorator('qualityEnName', {
               rules: [{ required: true, message: '请输入英文名称' }],
               initialValue: current.qualityEnName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
           <FormItem label="品质要求中文名" {...this.formLayout}>
             {getFieldDecorator('qualityZhName', {
               rules: [{ message: '请输入中文名称' }],
               initialValue: current.qualityZhName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
         </Form>
       );
@@ -287,7 +288,7 @@ class RequestedComponent extends PureComponent {
                   }}
                   component={Requested}
                 />
-                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
+                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求"/>
               </div>
               <Card bordered={false} loading={false}>
                 <Table
@@ -338,7 +339,7 @@ class RequestedComponent extends PureComponent {
                   >
                     品质要求信息
                   </span>
-                  <Divider />
+                  <Divider/>
                   {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
@@ -359,7 +360,13 @@ class RequestedComponent extends PureComponent {
                     type="danger"
                     icon="delete"
                     size="small"
-                    onClick={this.clickDeleteFrom}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？', onOk: () => {
+                          this.clickDeleteFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                   >
                     删除
@@ -379,20 +386,32 @@ class RequestedComponent extends PureComponent {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickUnFreezeFrom}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定取消审批吗？', onOk: () => {
+                          this.clickUnFreezeFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit}
                   >
                     取消审批
-                                                          </Button>) : (<Button
+                  </Button>) : (<Button
                     className={styles.buttomControl}
                     size="small"
                     type="primary"
                     icon="lock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定审批吗？', onOk: () => {
+                          this.clickFreezeFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit}
                   >
-                      审批
-                                </Button>)}
+                    审批
+                  </Button>)}
                 </div>
               </Card>
             </div>
@@ -449,7 +468,7 @@ class RequestedComponent extends PureComponent {
         });
       }
     }
-  }
+  };
 
   clickNewFrom = () => {
     this.state.isAdd = true;
@@ -468,7 +487,7 @@ class RequestedComponent extends PureComponent {
     dispatch({
       type: 'requested/deleteRequested',
       payload:
-        // ...requestedNo,
+      // ...requestedNo,
         { list: selectedRowKeys },
     });
 

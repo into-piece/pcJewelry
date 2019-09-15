@@ -16,29 +16,30 @@ import {
   Divider,
   Breadcrumb, Carousel, Modal, message, Upload, Spin,
 } from 'antd';
+import ModalConfirm from '@/utils/modal';
 
 import business from '../business.less';
 import baseStyles from '../Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
-import styles from './specimen.less'
+import styles from './specimen.less';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '../Client/Client.less';
-import BrandListSelect from './../Product/components/BrandListSelect';
-import ProductTypeSelect from './../Product/components/ProductTypeSelect';
-import UnitColorListSelect from './../Product/components/UnitColorListSelect';
-import PlatingColorListSelect from './../Product/components/PlatingColorListSelect';
+import BrandListSelect from "../Product/components/BrandListSelect";
+import ProductTypeSelect from "../Product/components/ProductTypeSelect";
+import UnitColorListSelect from "../Product/components/UnitColorListSelect";
+import PlatingColorListSelect from "../Product/components/PlatingColorListSelect";
 import Dict from '../Client/components/Dict';
-import MoldListSelect from './../Product/components/MoldListSelect';
-import PercentageSelect from './../Product/components/ProcentageSelect';
-import BasicMeasureListSelect from './../Product/components/BasicMeasureListSelect';
-import TerminalListSelected from './../Product/components/TerminalListSelected';
+import MoldListSelect from "../Product/components/MoldListSelect";
+import PercentageSelect from "../Product/components/ProcentageSelect";
+import BasicMeasureListSelect from "../Product/components/BasicMeasureListSelect";
+import TerminalListSelected from "../Product/components/TerminalListSelected";
 import Cropper from 'react-cropper';
 import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
-
-const { Description } = DescriptionList;
 import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
+
+const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 
@@ -73,7 +74,7 @@ class SpecimenDetaill extends Component {
   carouselsettings = {
     speed: 150,
     initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -96,9 +97,9 @@ class SpecimenDetaill extends Component {
       cNoPercentageEnName: '',
       cNoPercentageZhName: '',
       isLoad: false,
-      isLoadImage:true,
-      productParams:{},
-      isEditItem:false,
+      isLoadImage: true,
+      productParams: {},
+      isEditItem: false,
     };
   }
 
@@ -126,23 +127,20 @@ class SpecimenDetaill extends Component {
       item,
     } = this.props;
 
-    const { update , isLoadImage,productParams } = this.state;
+    const { update, isLoadImage, productParams } = this.state;
 
     // (item)
 
 
-
-
-    let isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading ||productUnFreezeloading;
+    const isUpdate =
+      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
 
     if (isUpdate) {
       this.state.update = true;
-      if (productUpdateloading||productSaveloading) {
+      if (productUpdateloading || productSaveloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
+    } else if (update) {
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
           message.success(body.rtnMsg);
@@ -151,7 +149,7 @@ class SpecimenDetaill extends Component {
           this.state.requestState = 'error';
         }
 
-        this.productRefresh()
+        this.productRefresh();
         // this.handleUpdateImage(productParams)
         this.state.update = false;
         if (this.state.isUpdateFrom) {
@@ -163,10 +161,9 @@ class SpecimenDetaill extends Component {
 
 
       }
-    }
 
 
-    let updat = isUpdate || productListloading;
+    const updat = isUpdate || productListloading;
     if (updat !== this.state.isLoad) {
       if (isloading)
         isloading(updat);
@@ -204,22 +201,22 @@ class SpecimenDetaill extends Component {
     // const {visible} = this.state;
 
     const { item } = nextProps;
-    const {showItem} = this.state;
+    const { showItem } = this.state;
 
 
     // console.log("componentWillReceiveProps :",item)
 
 
-    if(item&&(!showItem||item.id!==showItem.id)){
+    if (item && (!showItem || item.id !== showItem.id)) {
       this.state.showItem = item;
-      this.productRefresh()
+      this.productRefresh();
     }
 
-    if(!item){
+    if (!item) {
       this.state.showItem = false;
       this.setState({
-        showItem:false
-      })
+        showItem: false,
+      });
     }
 
     // console.log(" component Props ",item)
@@ -232,10 +229,9 @@ class SpecimenDetaill extends Component {
 
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible,showItem,isLoading } = this.state;
-    const {  isProductUpdate } = this.props;
+    const { imageObject, drawVisible, visible, showItem, isLoading } = this.state;
+    const { isProductUpdate } = this.props;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
 
 
     let paths = [];
@@ -254,10 +250,10 @@ class SpecimenDetaill extends Component {
     return (<div className={business.right_info}>
       <div className={business.list_info}>
 
-      <span className={business.title_info} onClick={this.clickToggleDrawer}>
+        <span className={business.title_info} onClick={this.clickToggleDrawer}>
             新款输入
-          </span>
-        <Divider className={business.divder}/>
+        </span>
+        <Divider className={business.divder} />
 
         <div className={baseStyles.content}>
           <div className={baseStyles.right_info}>
@@ -272,12 +268,12 @@ class SpecimenDetaill extends Component {
                     <Description term="编号">{showItem.productNo}</Description>
                     <Description term="类别">{showItem.productTypeName}</Description>
                     <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价"></Description>
+                    <Description term="工价" />
                   </DescriptionList>
                   <span className={business.title_info}>
             参数详情
-          </span>
-                  <Divider className={business.divder}/>
+                  </span>
+                  <Divider className={business.divder} />
                   <DescriptionList size="small" col="2">
                     <Description term="颜色">{showItem.gemColorName}</Description>
                     <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
@@ -295,15 +291,15 @@ class SpecimenDetaill extends Component {
                   </DescriptionList>
                   <span className={business.title_info}>
             备注
-          </span>
-                  <Divider className={business.divder}/>
+                  </span>
+                  <Divider className={business.divder} />
                   <DescriptionList size="small" col="1">
                     <Description>{showItem.marks}</Description>
                   </DescriptionList>
                 </Spin>
               </div>
             ) : (
-              <div/>
+              <div />
             )}
           </div>
 
@@ -321,7 +317,7 @@ class SpecimenDetaill extends Component {
                   type="primary"
                   icon="plus"
                   className={business.buttomControl}
-                  size={'small'}
+                  size="small"
                   onClick={this.handleNewProduct}
 
                 >
@@ -331,40 +327,58 @@ class SpecimenDetaill extends Component {
                   type="danger"
                   icon="delete"
                   className={business.buttomControl}
-                  size={'small'}
-                  onClick={this.handleDeleteProduct}
-                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status==='2'}
+                  size="small"
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定删除吗？', onOk: () => {
+                        this.handleDeleteProduct();
+                      },
+                    });
+                  }}
+                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
                   删除
                 </Button>
                 <Button
                   type="primary"
-                  size={'small'}
+                  size="small"
                   className={business.buttomControl}
                   icon="edit"
-                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status==='2'}
+                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                   onClick={this.handleEditProduct}
                 >
                   编辑
                 </Button>
                 {
-                  showItem&&showItem.status==='2'?<Button
-                      className={business.buttomControl}
-                      size={'small'}
-                      type="danger"
-                      icon="unlock"
-                      onClick={this.handleUnFreezeProduct}
-                      disabled={!showItem || showItem === '' || !isProductUpdate }
-                    >
+                  showItem && showItem.status === '2' ? <Button
+                    className={business.buttomControl}
+                    size="small"
+                    type="danger"
+                    icon="unlock"
+                    onClick={() => {
+                        ModalConfirm({
+                          content: '确定取消审批吗？', onOk: () => {
+                            this.handleUnFreezeProduct();
+                          },
+                        });
+                      }}
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                  >
                       取消审批
-                    </Button>
+                                                        </Button>
                     : <Button
                       className={business.buttomControl}
-                      size={'small'}
+                      size="small"
                       type="primary"
                       icon="lock"
                       disabled={!showItem || showItem === '' || !isProductUpdate}
-                      onClick={this.handleFreezeProduct}
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？', onOk: () => {
+                            this.handleFreezeProduct();
+                          },
+                        });
+                      }}
                     >
                       审批
                     </Button>
@@ -383,7 +397,7 @@ class SpecimenDetaill extends Component {
                 <Button
                   className={business.buttomControl}
                   type="primary"
-                  size={'small'}
+                  size="small"
                   icon="copy"
                   disabled
                 >
@@ -391,7 +405,7 @@ class SpecimenDetaill extends Component {
                 </Button>
                 <Button
                   className={business.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="primary"
                   icon="rollback"
                   disabled
@@ -441,7 +455,7 @@ class SpecimenDetaill extends Component {
 
       let fileList = [...info.fileList];
 
-      const file = info.file;
+      const {file} = info;
 
 
       if (file.type) {
@@ -499,9 +513,9 @@ class SpecimenDetaill extends Component {
     return (
       <div className={clientStyle.list_info}>
         <span className={business.sun_title_info}>新款输入</span>
-        <Divider className={business.divder}/>
+        <Divider className={business.divder} />
         <Form
-          size={'small'}
+          size="small"
           labelAlign="left"
           layout="inline"
           className={clientStyle.from_content}
@@ -518,8 +532,9 @@ class SpecimenDetaill extends Component {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.productNo,
                   // })(<text>系统自动生成</text>)}
-                })(<Input placeholder="自动生成流水号"
-                          readOnly={true}
+                })(<Input
+                  placeholder="自动生成流水号"
+                  readOnly
                 />)}
               </FormItem>
             </Col>
@@ -566,7 +581,8 @@ class SpecimenDetaill extends Component {
                       this.parseProductNo();
                     }
                   }
-                  }/>)}
+                  }
+                />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -625,7 +641,7 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入中文名称' }],
                   initialValue: current.zhName,
-                })(<Input placeholder="自动生成" readOnly={true}/>,
+                })(<Input placeholder="自动生成" readOnly />,
                 )}
               </FormItem>
             </Col>
@@ -643,17 +659,25 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('enName', {
                   rules: [{ required: true, message: '请输入英文名称' }],
                   initialValue: current.enName,
-                })(<Input placeholder="自动生成" readOnly={true}
+                })(<Input
+                  placeholder="自动生成"
+                  readOnly
                 />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label='产品来源'{...this.centerFormLayout} className={business.from_content_col}>
+                label='产品来源'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
                 {getFieldDecorator('sourceOfProduct', {
                   rules: [{ required: true, message: '请输入产品来源' }],
-                })(<Dict dict="H005" content={current.sourceOfProduct ? current.sourceOfProduct : 'H005001'}
-                         placeholder="请输入"/>)}
+                })(<Dict
+                  dict="H005"
+                  content={current.sourceOfProduct ? current.sourceOfProduct : 'H005001'}
+                  placeholder="请输入"
+                />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -665,8 +689,10 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('mouldNo', {
                   rules: [{ required: true, message: '请输入' }],
                   initialValue: current.mouldNo,
-                })(<MoldListSelect content={current.mouldNo} placeholder="请输入"
-                                   onSelect={(v) => {
+                })(<MoldListSelect
+                  content={current.mouldNo}
+                  placeholder="请输入"
+                  onSelect={(v) => {
 
                                      // console.log(" select mold ",v)
                                      if (v && v.mainMold)
@@ -715,7 +741,7 @@ class SpecimenDetaill extends Component {
                     message: '请输入规格',
                   }],
                   initialValue: current.specification,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -729,7 +755,8 @@ class SpecimenDetaill extends Component {
                   initialValue: current.unitOfMeasurement,
                 })(<BasicMeasureListSelect
                   content={current.unitOfMeasurement ? current.unitOfMeasurement : 'ae32e48c2df27123682943b6effa72d3'}
-                  placeholder="请输入"/>)}
+                  placeholder="请输入"
+                />)}
               </FormItem>
             </Col>
           </Row>
@@ -746,7 +773,8 @@ class SpecimenDetaill extends Component {
                   initialValue: current.unitOfWeight,
                 })(<BasicMeasureListSelect
                   content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
-                  placeholder="请输入"/>)}
+                  placeholder="请输入"
+                />)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -757,7 +785,7 @@ class SpecimenDetaill extends Component {
               >
                 {getFieldDecorator('finishedWeight', {
                   initialValue: current.finishedWeight,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -769,7 +797,7 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('productDesc', {
                   rules: [{ message: '请输入产品描述' }],
                   initialValue: current.productDesc,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -780,7 +808,7 @@ class SpecimenDetaill extends Component {
               >
                 {getFieldDecorator('marks', {
                   initialValue: current.marks,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -803,7 +831,7 @@ class SpecimenDetaill extends Component {
                   onChange={handleChange}
                 >
                   <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
                     <div className="ant-upload-text">上传图片</div>
                   </div>
                 </Upload>
@@ -820,7 +848,7 @@ class SpecimenDetaill extends Component {
           className={business.from_content}
         >
           <span className={business.sun_title_info}>客户信息</span>
-          <Divider className={business.divder}/>
+          <Divider className={business.divder} />
           <Row>
 
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -867,8 +895,8 @@ class SpecimenDetaill extends Component {
                 })(<div>
                   <Input
                     placeholder="请输入"
-                    readOnly={true}
-                    value={customerShotName ? customerShotName : current.endShotName}
+                    readOnly
+                    value={customerShotName || current.endShotName}
                   />
                 </div>)}
               </FormItem>
@@ -883,7 +911,7 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('custoerProductNo', {
                   rules: [{ message: '请输入货号' }],
                   initialValue: current.custoerProductNo,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -894,14 +922,14 @@ class SpecimenDetaill extends Component {
 
         {
           sourceOfProduct === 'H005005' ? <Form
-            size={'small'}
+            size="small"
             labelAlign="left"
             layout="inline"
             style={{ width: '100%' }}
             className={business.from_content}
           >
             <span className={business.sun_title_info}>供应商信息</span>
-            <Divider className={business.divder}/>
+            <Divider className={business.divder} />
             <Row style={{ width: '100%' }}>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem
@@ -912,7 +940,7 @@ class SpecimenDetaill extends Component {
                   {getFieldDecorator('supplierId', {
                     rules: [{ required: true, message: '请输入供应商编号' }],
                     initialValue: current.supplierId,
-                  })(<Input placeholder="请输入"/>)}
+                  })(<Input placeholder="请输入" />)}
                 </FormItem>
               </Col>
 
@@ -926,7 +954,7 @@ class SpecimenDetaill extends Component {
                   {getFieldDecorator('supplierProductNo', {
                     rules: [{ message: '请输入供应商货号' }],
                     initialValue: current.supplierProductNo,
-                  })(<Input placeholder="请输入"/>)}
+                  })(<Input placeholder="请输入" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -948,14 +976,14 @@ class SpecimenDetaill extends Component {
   handleSubmit = () => {
 
     const { dispatch, form } = this.props;
-    const { isAdd ,fileList,showItem} = this.state;
+    const { isAdd, fileList, showItem } = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
 
-      let params = {};
-      params.sample={ ...fieldsValue }
+      const params = {};
+      params.sample = { ...fieldsValue };
 
       const urls = fileList.map(v => v.url);
       const names = fileList.map(v => v.name);
@@ -971,7 +999,7 @@ class SpecimenDetaill extends Component {
             ...params,
           },
         });
-        //todo
+        // todo
 
         this.setState({
           isEdit: true,
@@ -990,7 +1018,7 @@ class SpecimenDetaill extends Component {
 
       this.setState({
         visible: false,
-        productParams:params
+        productParams: params,
       });
     });
 
@@ -998,13 +1026,13 @@ class SpecimenDetaill extends Component {
   };
 
 
-  handleUpdateImage=(item)=>{
-    if(!item.id) return;
-    console.log("  save image")
+  handleUpdateImage = (item) => {
+    if (!item.id) return;
+    console.log('  save image');
     const { fileList = [] } = this.state;
 
     const _this = this;
-    let params = {};
+    const params = {};
     const urls = fileList.map(v => v.url);
     const names = fileList.map(v => v.name);
     params.imgStr = urls;
@@ -1014,22 +1042,20 @@ class SpecimenDetaill extends Component {
     params.sample = item;
 
 
-
     fetch(HttpFetch.saveProductImage, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const {head} = d;
 
-        if(head.rtnCode!=='000000')
-        {
+        if (head.rtnCode !== '000000') {
           message.error(head.rtnMsg);
         }
 
@@ -1039,16 +1065,16 @@ headers: {
           loading: false,
         });
       });
-  }
+  };
 
 
-  productRefresh=()=>{
+  productRefresh = () => {
 
     const item = this.state.showItem;
 
-    const isEditItem = this.state.isEditItem;
+    const {isEditItem} = this.state;
 
-    if(!item.id) return;
+    if (!item.id) return;
 
     const _this = this;
     _this.setState({
@@ -1056,7 +1082,7 @@ headers: {
     });
 
 
-    let params = {};
+    const params = {};
     params.id = item.id;
 
 
@@ -1065,20 +1091,20 @@ headers: {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
-        const body = d.body;
+        const {head} = d;
+        const {body} = d;
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
 
 
-          const current=isEditItem?{...showItem}:this.state.current;
+          const current = isEditItem ? { ...showItem } : this.state.current;
 
           // console.log(" cur is ",current,isEditItem)
 
@@ -1088,7 +1114,7 @@ headers: {
           });
           // console.log(" update data ",showItem)
         }
-        this.fetchImages(showItem)
+        this.fetchImages(showItem);
 
         _this.setState({
           isLoading: false,
@@ -1101,7 +1127,7 @@ headers: {
           isLoading: false,
         });
       });
-  }
+  };
 
   handleCancel = () => {
     this.setState({
@@ -1116,7 +1142,7 @@ headers: {
       isAdd: true,
       current: {},
       fileList: [],
-      isEditItem:false,
+      isEditItem: false,
     });
   };
 
@@ -1124,20 +1150,19 @@ headers: {
     const { item } = this.props;
     this.resetParse();
     const { imageObject } = this.state;
-    this.parseImages(imageObject)
+    this.parseImages(imageObject);
 
     this.setState({
       current: item,
       visible: true,
       isAdd: false,
-      fileList: this.state.fileList,//测试真实数据重接口获取
-      isEditItem:true
+      fileList: this.state.fileList,// 测试真实数据重接口获取
+      isEditItem: true,
     });
 
     this.state.isEditItem = true;
     this.productRefresh();
   };
-
 
 
   parseImages = item => {
@@ -1185,13 +1210,13 @@ headers: {
 
     this.setState({
       isEdit: true,
-      showItem:false,
+      showItem: false,
     });
   };
 
   handleUnFreezeProduct = () => {
 
-    const { selectProductData=[] } = this.props;
+    const { selectProductData = [] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
@@ -1210,7 +1235,7 @@ headers: {
 
   handleFreezeProduct = () => {
 
-    const { selectProductData=[] } = this.props;
+    const { selectProductData = [] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
@@ -1240,15 +1265,15 @@ headers: {
           style={{ height: 400 }}
           preview=".img-preview"
           cropBoxResizable={false}
-          viewMode={1} //定义cropper的视图模式
-          zoomable={true} //是否允许放大图像
-          guides={true}
-          background={true}
+          viewMode={1} // 定义cropper的视图模式
+          zoomable // 是否允许放大图像
+          guides
+          background
           aspectRatio={800 / 800}
           // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
-          <div className="img-preview" style={{ width: '100%', height: '100%' }}/>
+          <div className="img-preview" style={{ width: '100%', height: '100%' }} />
         </div>
       </div>
     );
@@ -1256,20 +1281,20 @@ headers: {
 
   fetchImages = item => {
     const _this = this;
-    let params = {};
+    const params = {};
     params.productId = item.id;
     fetch(HttpFetch.queryProductImage, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             const imageObject = body.records;
@@ -1283,7 +1308,7 @@ headers: {
         }
         _this.setState({
           loading: false,
-          imageObject:[],
+          imageObject: [],
         });
       })
       .catch(function(ex) {
@@ -1302,7 +1327,7 @@ headers: {
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
-        fileList[i].name = 'crop' + Date.parse(new Date()) + fileList[i].name;
+        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
@@ -1338,10 +1363,10 @@ headers: {
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = cNoBrandNo + cNofCode + '-' + showMold + cNoUnitCode + cNoColorCode + cNoCustomerCombine;
+    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
     const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
-    //成色+宝石颜色+类别
+    // 成色+宝石颜色+类别
     this.setState({
       productNo,
       zhName,

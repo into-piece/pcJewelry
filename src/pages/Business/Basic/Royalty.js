@@ -17,10 +17,9 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { royalty } from '@/utils/SvgUtil';
-import formstyles from './BasicForm.less';
-import Result from '@/components/Result';
 import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
+import ModalConfirm from '@/utils/modal';
 
 const FormItem = Form.Item;
 
@@ -391,7 +390,7 @@ class Royalty extends PureComponent {
                     type="danger"
                     icon="delete"
                     size="small"
-                    onClick={this.clickDeleteFrom}
+                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}}
                     disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                   >
                     删除
@@ -411,7 +410,7 @@ class Royalty extends PureComponent {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickUnFreezeFrom}
+                    onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.clickUnFreezeFrom();}});}}
                     disabled={isEdit}
                   >
                     取消审批
@@ -420,7 +419,7 @@ class Royalty extends PureComponent {
                     size="small"
                     type="primary"
                     icon="lock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}}
                     disabled={isEdit}
                   >
                       审批

@@ -8,6 +8,7 @@ import {
   Input,
   Divider, Carousel, Modal, message, Upload, Spin,
 } from 'antd';
+import  ModalConfirm from '@/utils/modal';
 
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
@@ -293,7 +294,7 @@ class IndexDetail extends Component {
                   icon="delete"
                   className={business.buttomControl}
                   size="small"
-                  onClick={this.handleDeleteProduct}
+                  onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDeleteProduct();}});}}
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
                   删除
@@ -314,7 +315,7 @@ class IndexDetail extends Component {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={this.handleUnFreezeProduct}
+                    onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.handleUnFreezeProduct();}});}}
                     disabled={!showItem || showItem === '' || !isProductUpdate}
                   >
                       取消审批
@@ -325,9 +326,9 @@ class IndexDetail extends Component {
                       type="primary"
                       icon="lock"
                       disabled={!showItem || showItem === '' || !isProductUpdate}
-                      onClick={this.handleFreezeProduct}
+                      onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleFreezeProduct();}});}}
                     >
-                      审批/取消审批
+                      审批
                     </Button>
                 }
 
@@ -663,7 +664,57 @@ headers: {
     });
   };
 
+  handleSubmit = () => {
 
+    const { dispatch, form } = this.props;
+    const { isAdd, fileList, showItem } = this.state;
+    form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+
+      const params = {};
+      params.product = { ...fieldsValue };
+
+      const urls = fileList.map(v => v.url);
+      const names = fileList.map(v => v.name);
+      params.imgStr = urls;
+      // params.imgStr = this.state.urls;
+      params.fileName = names;
+      // params.productId = item.productNo;
+      // params.product = item;
+      if (isAdd) {
+        dispatch({
+          type: 'product/addProduct',
+          payload: {
+            ...params,
+          },
+        });
+        // todo
+
+        this.setState({
+          isEdit: true,
+          update: true,
+        });
+      } else {
+        params.product.id = showItem.id;
+        params.product.version = showItem.version;
+        dispatch({
+          type: 'product/updateProduct',
+          payload: {
+            ...params,
+          },
+        });
+      }
+
+      this.setState({
+        visible: false,
+        productParams: params,
+      });
+    });
+
+
+  };
 
 
 }

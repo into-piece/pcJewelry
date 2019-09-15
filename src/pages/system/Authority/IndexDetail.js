@@ -3,7 +3,7 @@ import {
   Card,
   Form,
   Button,
-  Divider,  Tree, Modal, message, Spin,
+  Divider,  Tree, message, Spin,
 } from 'antd';
 
 import business from '@/pages/dev/business.less';
@@ -14,6 +14,7 @@ import HttpFetch from '@/utils/HttpFetch';
 import { connect } from 'dva';
 import { getCurrentUser } from '@/utils/authority';
 
+import ModalConfirm from '@/utils/modal';
 
 const { TreeNode } = Tree;
 
@@ -340,7 +341,7 @@ class IndexDetail extends Component {
                   icon="delete"
                   className={business.buttomControl}
                   size="small"
-                  onClick={this.handleDeleteProduct}
+                  onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDeleteProduct();}});}}
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
                   禁用/启用
