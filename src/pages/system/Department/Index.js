@@ -39,22 +39,6 @@ class Index extends Component {
 
 
   deptColumns = [
-
-    {
-      title: () => {
-        return (
-          <TableSortView
-            column="ID"
-            field="id"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'id',
-      key: 'id',
-      width: 80,
-    },
-
     {
       title: () => {
         return (

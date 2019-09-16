@@ -836,6 +836,7 @@ class ClientView extends PureComponent {
                     loading={isCurstomerUpdate || customerListloading}
                     dataSource={fristLoad ? [] : customerBody.data}
                     size="middle"
+                    scroll={{x:1200}}
                     rowKey={record => record.id}
                     rowSelection={rowCustomerSelection}
                     onRow={record => {
@@ -871,6 +872,7 @@ class ClientView extends PureComponent {
                         contactsData: rows,
                       });
                     }}
+                    scroll={{x:1200}}
                     loading={contactsLoading}
                     body={contactsTableBody}
                     columns={this.contactsColumn}

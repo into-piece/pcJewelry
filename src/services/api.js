@@ -14,7 +14,83 @@ export async function queryActivities() {
 export async function logout() {
   return request('/logout');
 }
-//
+/*
+* 员工接口
+* */
+export async function querylistPerson(params) {
+  return request(`${priefx  }/listUsers`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function saveThePerson(params) {
+  return request(`${priefx  }/saveOrUpdate`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function deleteThePerson(params) {
+  return request(`${priefx  }/delete`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function updateThePerson(params) {
+  return request(`${priefx }/saveOrUpdate`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function approvalThePerson(params) {
+  return request(`${priefx  }/approval`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function unApprovalThePerson(params) {
+  return request(`${priefx  }/cancel`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
+
+
+/*
+*
+* 部门接口
+*
+* */
 export async function approvalDept(params) {
   return request(`${priefx  }/sys.user/sys-role/approval`, {
     method: 'POST',

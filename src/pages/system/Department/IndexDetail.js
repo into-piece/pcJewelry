@@ -434,7 +434,7 @@ class IndexDetail extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('enName', {
-                  rules: [{ required: true, message: '请输入部门英文名称' }],
+                  rules: [{   message: '请输入部门英文名称' }],
                   initialValue: current.enName,
                 })(<Input  />)}
               </FormItem>

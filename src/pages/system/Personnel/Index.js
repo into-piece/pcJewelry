@@ -25,10 +25,10 @@ import { getCurrentUser } from '../../../utils/authority';
 const defaultPageSize = 10;
 
 @Form.create()
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ person, loading }) => {
+  const { rtnCode, rtnMsg } = person;
   return {
-    body: product.body,
+    body: person.body,
     rtnCode,
     rtnMsg,
   };
@@ -203,38 +203,36 @@ class Index extends Component {
 
   componentDidMount() {
     this.loadProduct();
-    window.onbeforeunload = () => {
-      console.log('onbeforeunload ');
-      const { showItem } = this.state;
-      if (showItem) {
-        // console.log('执行解锁3');
 
-        this.updateProductLock(showItem);
-      }
-    };
   }
   ;
 
   // router.replace('/business/client/emptyView');
 
   componentWillUnmount() {
-    const { showItem } = this.state;
-    if (showItem) {
-      this.updateProductLock(showItem);
-      // console.log('执行解锁2');
-    }
+
   }
 
   render() {
     const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const {
-      queryProductLocking,
       body = {},
     } = this.props;
 
-
+    if(body.records){
+       body.records.map(v => {
+        const s = v.status;
+        if (s == 0) {
+          v.statusVar = '输入';
+        } else if (s == 1) {
+          v.statusVar = '使用中';
+        } else if (s == 2) {
+          v.statusVar = '审批';
+        }
+        return v;
+      });
+    }
     if (isLoad) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
@@ -255,7 +253,7 @@ class Index extends Component {
               <a href="">业务</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="#/business/product">产品信息</a>
+              <a href="#/business/product">员工信息</a>
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>
@@ -273,17 +271,7 @@ class Index extends Component {
                   onSelectItem={(item, rows) => {
                     console.log(item,rows);
                     const { showItem } = this.state;
-                    if (showItem && showItem.id !== item.id) {
-                      // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
-                      // console.log('执行解锁 ： ',showItem.id);
-                    }
 
-                    if (item) {
-                      if (!showItem || showItem.id !== item.id)
-                      // this.fetchImages(item);
-                        this.loadProductLock(item);
-                    }
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
                       showItem: this.state.showItem,
@@ -418,7 +406,7 @@ class Index extends Component {
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'product/fetchListProduct',
+      type: 'person/fetchListPerson',
       payload: { ...params },
     });
   };
@@ -443,63 +431,6 @@ class Index extends Component {
 
   };
 
-
-  /**
-   * 获取锁定状态
-   * @param item
-   */
-  loadProductLock = (item) => {
-    // console.log(' 查询锁定对象为 :', item.id);
-    const _this = this;
-    const params = {};
-    params.id = item.id;
-    params.dataNo = item.markingNo;
-    fetch(HttpFetch.queryProductLock, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser() ? getCurrentUser().token : '',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {head} = d;
-
-        const isProductUpdate = head.rtnCode === '000000';
-
-        if (!isProductUpdate) {
-          message.error(head.rtnMsg);
-        }
-
-        _this.setState({
-          isProductUpdate,
-        });
-      })
-      .catch(function(ex) {
-        // message.error('加载图片失败！');
-        _this.setState({
-          loading: false,
-        });
-      });
-
-  };
-
-
-  /** *
-   * 解锁
-   * @param item
-   */
-  updateProductLock = (item) => {
-    const { dispatch } = this.props;
-    const { isProductUpdate } = this.state;
-    if (isProductUpdate)
-      dispatch({
-        type: 'product/updateProductUnLock',
-        payload: { id: item.id },
-      });
-  };
 
 
   pageProductChange = (page, pageSize) => {

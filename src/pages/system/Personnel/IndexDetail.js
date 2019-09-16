@@ -27,20 +27,18 @@ const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ person, loading }) => {
+  const { rtnCode, rtnMsg } = person;
   return {
-    body: product.body,
+    body: person.body,
     rtnCode,
     rtnMsg,
-    productListloading: loading.effects['product/fetchListProduct'],
-    productSaveloading: loading.effects['product/addProduct'],
-    productUpdateloading: loading.effects['product/updateProduct'],
-    productDeleteloading: loading.effects['product/deleteProduct'],
-    productFreezeloading: loading.effects['product/freezeProduct'],
-    productUnFreezeloading: loading.effects['product/unfreezeProduct'],
-    queryProductLocking: loading.effects['product/queryProductLock'],
-    updateProductUnLocking: loading.effects['product/updateProductUnLock'],
+    personListloading: loading.effects['person/fetchListPerson'],
+    personSaveloading: loading.effects['person/addPerson'],
+    personUpdateloading: loading.effects['person/updatePerson'],
+    personDeleteloading: loading.effects['person/deletePerson'],
+    approvalPersonloading: loading.effects['person/approvalPerson'],
+    unApprovaloading: loading.effects['person/unApprovalPerson'],
   };
 })
 @Form.create()
@@ -100,10 +98,9 @@ class IndexDetail extends Component {
       productListloading,
       productUpdateloading,
       productSaveloading,
-      productFreezeloading,
-      productUnFreezeloading,
       productDeleteloading,
-      queryProductLocking,
+      approvalPersonloading,
+      unApprovaloading,
       body = {},
       isloading,
       refarshList,
@@ -111,13 +108,13 @@ class IndexDetail extends Component {
       item,
     } = this.props;
 
-    const { update, isLoadImage, productParams } = this.state;
+    const { update } = this.state;
 
     // (item)
 
 
     const isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
+      productUpdateloading || productSaveloading || unApprovaloading || productDeleteloading || approvalPersonloading;
 
     if (isUpdate) {
       this.state.update = true;
@@ -474,21 +471,7 @@ class IndexDetail extends Component {
           onSubmit={this.handleContactsSubmit}
         >
           <Row gutter={4}>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="ID"
-                className={business.from_content_col}
-                {...this.centerFormLayout}
-              >
-                {getFieldDecorator('id', {
-                  rules: [{ required: true, message: '请输入ID' }],
-                  initialValue: current.id,
-                })(<Input
-                  placeholder="自动生成编号"
-                  readOnly
-                />)}
-              </FormItem>
-            </Col>
+
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="姓名"
@@ -552,9 +535,6 @@ class IndexDetail extends Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
-
-          <Row>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='婚姻'
@@ -567,6 +547,10 @@ class IndexDetail extends Component {
                 })(<Input   />)}
               </FormItem>
             </Col>
+          </Row>
+
+          <Row>
+
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='籍贯'
@@ -610,7 +594,7 @@ class IndexDetail extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('idCard', {
-                  rules: [{ required: true, message: '请输入邮编' }],
+                  rules: [{ required: true, message: '请输入身份证' }],
                   initialValue: current.idCard,
                 })(<Input placeholder="请输入" />)}
               </FormItem>
@@ -625,6 +609,18 @@ class IndexDetail extends Component {
                   rules: [{ message: '请输入联系电话' }],
                   initialValue: current.phone,
                 })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="短号"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('cornet', {
+                  rules: [{ message: '请输入短号' }],
+                  initialValue: current.cornet,
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -653,18 +649,7 @@ class IndexDetail extends Component {
                 })(<Input placeholder="请输入职位" />)}
               </FormItem>
             </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="短号"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('cornet', {
-                  rules: [{ message: '请输入短号' }],
-                  initialValue: current.cornet,
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-            </Col>
+
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="邮箱"
@@ -698,11 +683,6 @@ class IndexDetail extends Component {
                 })(<Input placeholder="请输入入职日期" />)}
               </FormItem>
             </Col>
-          </Row>
-
-
-
-          <Row>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="薪资"
@@ -715,6 +695,12 @@ class IndexDetail extends Component {
                 })(<Input />)}
               </FormItem>
             </Col>
+          </Row>
+
+
+
+          <Row>
+
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="外宿"
@@ -771,10 +757,6 @@ class IndexDetail extends Component {
                 })(<Input placeholder="请输入离职类别" />)}
               </FormItem>
             </Col>
-          </Row>
-
-
-          <Row>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="有效期"
@@ -788,6 +770,7 @@ class IndexDetail extends Component {
               </FormItem>
             </Col>
           </Row>
+
 
 
 
@@ -853,7 +836,7 @@ class IndexDetail extends Component {
       // params.product = item;
       if (isAdd) {
         dispatch({
-          type: 'product/addProduct',
+          type: 'person/addPerson',
           payload: {
             ...params,
           },
@@ -945,7 +928,7 @@ headers: {
     params.id = item.id;
 
 
-    fetch(HttpFetch.queryProductList, {
+    fetch(HttpFetch.queryPersonList, {
       method: 'POST',
       credentials: 'include',
 headers: {
@@ -1063,7 +1046,7 @@ headers: {
 
 
     dispatch({
-      type: 'product/deleteProduct',
+      type: 'person/deletePerson',
       payload: { list: ids },
     });
 
@@ -1087,7 +1070,7 @@ headers: {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/unfreezeProduct',
+      type: 'person/unApprovalPerson',
       payload: { list: ids },
     });
   };
@@ -1105,7 +1088,7 @@ headers: {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/freezeProduct',
+      type: 'person/approvalPerson',
       payload: { list: ids },
     });
   };
