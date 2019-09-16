@@ -126,8 +126,8 @@ const columnsArr = {
     },
     {
       title: '返主材类别',
-      dataIndex: 'mstWordbook.wordbookContentZh',
-      key: 'mstWordbook.wordbookContentZh',
+      dataIndex: 'rtnMainMaterial',
+      key: 'rtnMainMaterial',
     },
     {
       title: '状态',
