@@ -218,7 +218,14 @@ class IndexDetail extends Component {
         return v.path;
       });
     }
-
+    const v = showItem||{};
+    if (v.status == 0) {
+      v.statusVar = '输入';
+    } else if (v.status == 1) {
+      v.statusVar = '使用中';
+    } else if (v.status == 2) {
+      v.statusVar = '审批';
+    }
     // console.log(" fetch isload ",showItem)
     // console.log(" data status ",showItem?showItem.status:'nudefine')
 
@@ -241,7 +248,6 @@ class IndexDetail extends Component {
                     {this.getImages(paths)}
                   </Carousel>
                   <DescriptionList size="small" col="1">
-                    <Description term="ID">{showItem.id}</Description>
                     <Description term="部门编号">{showItem.role}</Description>
                     <Description term="部门简称">{showItem.shortName}</Description>
                     <Description term="中文名">{showItem.zhName}</Description>

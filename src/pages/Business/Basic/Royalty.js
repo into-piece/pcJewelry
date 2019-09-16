@@ -423,7 +423,7 @@ class Royalty extends PureComponent {
                     disabled={isEdit}
                   >
                       审批
-                                </Button>)}
+                  </Button>)}
                 </div>
               </Card>
             </div>

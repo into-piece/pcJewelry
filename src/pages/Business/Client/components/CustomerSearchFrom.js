@@ -33,17 +33,17 @@ class CustomerSearchFrom extends Component {
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="客户编号" className={clientStyle.from_content_col}>
-              {getFieldDecorator('customerNo')(<Input placeholder="请输入"  size="small"/>)}
+              {getFieldDecorator('customerNo')(<Input placeholder="请输入" size="small" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="简称" className={clientStyle.from_content_col}>
-              {getFieldDecorator('shotName')(<Input placeholder="请输入" size="small"/>)}
+              {getFieldDecorator('shotName')(<Input placeholder="请输入" size="small" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="客户渠道" className={clientStyle.from_content_col}>
-              {getFieldDecorator('customerChannels')(<InputNumber style={{ width: '100%' }} size="small"/>)}
+              {getFieldDecorator('customerChannels')(<InputNumber style={{ width: '100%' }} size="small" />)}
             </FormItem>
           </Col>
         </Row>
@@ -52,14 +52,14 @@ class CustomerSearchFrom extends Component {
             <FormItem label="中文名" className={clientStyle.from_content_col}>
               {getFieldDecorator('zhName', {
                 initialValue: '',
-              })(<Input placeholder="请输入" size="small"/>)}
+              })(<Input placeholder="请输入" size="small" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="英文名" className={clientStyle.from_content_col}>
               {getFieldDecorator('enName', {
                 initialValue: '',
-              })(<Input placeholder="请输入"  size="small"/>)}
+              })(<Input placeholder="请输入" size="small" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
@@ -91,7 +91,7 @@ class CustomerSearchFrom extends Component {
             <FormItem label="电话" className={clientStyle.from_content_col}>
               {getFieldDecorator('companyPhone', {
                 initialValue: '',
-              })(<Input placeholder="请输入"  size="small"/>)}
+              })(<Input placeholder="请输入" size="small" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
@@ -162,7 +162,7 @@ class CustomerSearchFrom extends Component {
 
   handleCustomerSearch = e => {
     const { form, onCustomerSearch } = this.props;
-    //禁止表单提交，采用Ajax提交
+    // 禁止表单提交，采用Ajax提交
     e.preventDefault();
     form.validateFields((err, fieldsValue) => {
       if (onCustomerSearch) onCustomerSearch({ ...fieldsValue });
@@ -196,7 +196,7 @@ class CustomerSearchFrom extends Component {
               <Button size="small" type="primary" htmlType="submit">
                 查询
               </Button>
-              <Button  size="small" style={{ marginLeft: 5 }} onClick={this.handleCustomerFormReset}>
+              <Button size="small" style={{ marginLeft: 5 }} onClick={this.handleCustomerFormReset}>
                 重置
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>

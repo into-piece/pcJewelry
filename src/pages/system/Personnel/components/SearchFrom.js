@@ -32,26 +32,26 @@ class SearchFrom extends Component {
       >
         <Row gutter={2}>
           <Col lg={8}>
-            <FormItem label="姓名">
+            <FormItem label="用户编号">
               {getFieldDecorator('userName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8}>
             <FormItem label="姓名">
-              {getFieldDecorator('enName')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('zhName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8}>
-            <FormItem label="民族">
-              {getFieldDecorator('nation')(<Input placeholder="请输入" />)}
+            <FormItem label="英文名">
+              {getFieldDecorator('enName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={2}>
 
           <Col lg={8}>
-            <FormItem label="身份证号">
-              {getFieldDecorator('idCard')(<Input placeholder="请输入" />)}
+            <FormItem label="民族">
+              {getFieldDecorator('nation')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8}>
@@ -62,6 +62,14 @@ class SearchFrom extends Component {
           <Col lg={8}>
             <FormItem label="手机">
               {getFieldDecorator('tel')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={2}>
+
+          <Col lg={8}>
+            <FormItem label="身份证号">
+              {getFieldDecorator('idCard')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
@@ -117,7 +125,7 @@ class SearchFrom extends Component {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row>
           <Col lg={8}>
-            <FormItem label="姓名">
+            <FormItem label="用户编号">
               {getFieldDecorator('userName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>

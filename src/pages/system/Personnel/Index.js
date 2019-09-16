@@ -16,7 +16,6 @@ import product from './Index.less';
 import JewelryTable from '../../components/JewelryTable';
 import SearchFrom from './components/SearchFrom';
 import 'cropperjs/dist/cropper.css';
-import HttpFetch from '../../../utils/HttpFetch';
 import IndexDetail from './IndexDetail';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
@@ -38,20 +37,20 @@ const defaultPageSize = 10;
 class Index extends Component {
 
 
-  productColumns = [
+  personColumns = [
 
     {
       title: () => {
         return (
           <TableSortView
             column="姓名"
-            field="userName"
+            field="zhName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'userName',
-      key: 'userName',
+      dataIndex: 'zhName',
+      key: 'zhName',
       width: 80,
     },
 
@@ -66,8 +65,8 @@ class Index extends Component {
           />
         );
       },
-      dataIndex: 'gender',
-      key: 'gender',
+      dataIndex: 'genderVar',
+      key: 'genderVar',
       width: 100,
     },
     {
@@ -75,27 +74,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="部门"
-            field="shortName"
+            field="deptName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'shortName',
-      key: 'shortName',
-      width: 100,
-    },
-    {
-      title: () => {
-        return (
-          <TableSortView
-            column="部门编号"
-            field="role"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'role',
-      key: 'role',
+      dataIndex: 'deptName',
+      key: 'deptName',
       width: 100,
     },
 
@@ -168,6 +153,19 @@ class Index extends Component {
       dataIndex: 'indate',
       key: 'indate',
       width: 100,
+    },   {
+      title: () => {
+        return (
+          <TableSortView
+            column="状态"
+            field="status"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'statusVar',
+      key: 'statusVar',
+      width: 100,
     },
   ];
 
@@ -230,6 +228,29 @@ class Index extends Component {
         } else if (s == 2) {
           v.statusVar = '审批';
         }
+        if(v.gender==1){
+          v.genderVar ='男';
+        }else if(v.gender==0){
+          v.genderVar ='女';
+        }
+         if(v.marriage==1){
+           v.marriageVar ='已婚';
+         }else if(v.marriage==0){
+           v.marriageVar ='未婚';
+         }
+         if(v.isSleepOut==1){
+           v.isSleepOutVar ='是';
+         }else if(v.isSleepOut==0){
+           v.isSleepOutVar ='否';
+         }
+         if(v.isDineIn==1){
+           v.isDineInVar ='是';
+         }else if(v.isDineIn==0){
+           v.isDineInVar ='否';
+         }
+
+
+
         return v;
       });
     }
@@ -237,7 +258,7 @@ class Index extends Component {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
 
-        this.refs.productTable.updateSelectDatas(body);
+        this.refs.personTable.updateSelectDatas(body);
         this.state.isLoadList = false;
       }
 
@@ -271,19 +292,17 @@ class Index extends Component {
                   onSelectItem={(item, rows) => {
                     console.log(item,rows);
                     const { showItem } = this.state;
-
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
                       showItem: this.state.showItem,
                       selectProductData: [...rows],
                     });
                   }}
-                  ref="productTable"
+                  ref="personTable"
                   loading={isLoad}// productListloading || isUpdate
-                  columns={this.productColumns}
+                  columns={this.personColumns}
                   className={business.small_table}
                   rowClassName={this.onSelectRowClass}
-                  // scroll={{ y: 300 }}
                   body={body}
                   pageChange={this.pageProductChange}
                 />

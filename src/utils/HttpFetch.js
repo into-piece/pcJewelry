@@ -194,11 +194,18 @@ export const querySpecimenList = `${priefx}/business/business/product/sample/lis
  */
 export const queryPersonList = `${priefx}/listUsers`
 
+/**
+ * 员工  部门下拉
+ * @type {string}
+ */
+export const listDeptDropDown = `${priefx}//sys.user/sys-role/listDeptDropDown`
+
 
 
 
 export default {
   priefx,
+  listDeptDropDown,
   queryPersonList,
   loadMaintainer,
   loadContacts,

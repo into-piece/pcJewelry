@@ -125,7 +125,7 @@ class TerminalSelected extends PureComponent {
   };
 
   fetchList = item => {
-    let params = {};
+    const params = {};
     params.endNo = item;
     params.size = 10;
     const mythis = this;
@@ -141,12 +141,12 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
           // if (body.records.length > 0) {
-          let records = body.records;
+          let {records} = body;
           // console.log("terminal records ",records)
-          let value = '';
+          const value = '';
           if (!records) records = [];
 
 
@@ -180,7 +180,7 @@ headers: {
 
   fetchListParams = item => {
 
-    let params = {};
+    const params = {};
     if (item)
       params.id = item;
     const mythis = this;
@@ -196,13 +196,13 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
-          let records = body.records;
+          let {records} = body;
           if (!records) records = [];
           else {
             const { onSelectEndName } = this.props;
-            const id = records[0].id;
+            const {id} = records[0];
             if (onSelectEndName) {
               if (item) {
                 let endName = '';
