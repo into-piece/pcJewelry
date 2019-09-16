@@ -46,7 +46,7 @@ class MyTable extends Component {
 
   render() {
     const { props, pageChange, onSelectRowClass, onRow } = this;
-    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading, noSelect } = props;
+    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading, noSelect ,scroll} = props;
     const { current, size } = pagination;
     const paginationProps = {
       showQuickJumper: true,
@@ -67,6 +67,7 @@ class MyTable extends Component {
 
     return (
       <Table
+        scroll={scroll}
         columns={columns}
         dataSource={body.records}
         rowSelection={rowSelection}

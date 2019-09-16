@@ -14,15 +14,16 @@ import {
   Radio,
   message,
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
+import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { ring } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import Result from '@/components/Result';
-import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from '../Client/Client.less';
+import ModalConfirm from '@/utils/modal';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -203,7 +204,7 @@ class RingNum extends PureComponent {
       if (err) return;
 
       if (isAdd) {
-        let params = {};
+        const params = {};
         params.sizeCode = fieldsValue.sizeCode;
         (params.ringAroundStId = showItem.id),
           // console.log('params data = ' + Object.keys(params));
@@ -314,7 +315,7 @@ class RingNum extends PureComponent {
       sonfreezing,
       sonunfreezing,
       form: { getFieldDecorator },
-      dispatch
+      dispatch,
     } = this.props;
 
     this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
@@ -324,24 +325,22 @@ class RingNum extends PureComponent {
       if (upateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg)
-        } else {
-          this.state.requestState = 'error';
-          message.error(body.rtnMsg)
-        }
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        this.state.requestState = 'error';
+        message.error(body.rtnMsg);
+      }
 
-        // this.state.requestMes = body.rtnMsg;
-        this.state.update = false;
-        this.state.done = true;
-        this.state.refreshList = 'standard';
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          // this.state.showItem = { ...current };
-        }
+      // this.state.requestMes = body.rtnMsg;
+      this.state.update = false;
+      this.state.done = true;
+      this.state.refreshList = 'standard';
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        // this.state.showItem = { ...current };
       }
     }
 
@@ -353,61 +352,57 @@ class RingNum extends PureComponent {
       if (upatesonloading) {
         this.state.isUpdateNumberFrom = true;
       }
-    } else {
-      if (updateNumber) {
+    } else if (updateNumber) {
 
-        // console.log(" save body ",body2)
+      // console.log(" save body ",body2)
 
-        if (body2.rtnCode2 === '000000') {
-          // this.state.requestState = 'success';
-          message.success(body2.rtnMsg2)
-        } else {
-          this.state.requestState = 'error';
-          message.error(body2.rtnMsg2)
-        }
-        const params = {
-          ring_around_st_id: showItem.id,
-        };
-        dispatch({
-          type: 'ringnum2/fetchListSonRingNum',
-          payload: {
-            ...params,
-          },
-        });
-        // this.state.requestMes = body2.rtnMsg;
-        this.state.updateNumber = false;
-        this.state.done = true;
-        this.state.refreshList = 'number';
-        if (this.state.isUpdateNumberFrom) {
-          this.state.isUpdateNumberFrom = false;
-          // this.state.showNumberItem = { ...currentNumber };
-          // console.log('number update ' + this.state.showNumberItem);
-        }
+      if (body2.rtnCode2 === '000000') {
+        // this.state.requestState = 'success';
+        message.success(body2.rtnMsg2);
+      } else {
+        this.state.requestState = 'error';
+        message.error(body2.rtnMsg2);
+      }
+      const params = {
+        ring_around_st_id: showItem.id,
+      };
+      dispatch({
+        type: 'ringnum2/fetchListSonRingNum',
+        payload: {
+          ...params,
+        },
+      });
+      // this.state.requestMes = body2.rtnMsg;
+      this.state.updateNumber = false;
+      this.state.done = true;
+      this.state.refreshList = 'number';
+      if (this.state.isUpdateNumberFrom) {
+        this.state.isUpdateNumberFrom = false;
+        // this.state.showNumberItem = { ...currentNumber };
+        // console.log('number update ' + this.state.showNumberItem);
       }
     }
 
     if (listLoading) {
       this.state.isLoadList = true;
-    } else {
-      if (this.state.isLoadList) {
-        if (body && body.data && body.data.length > 0) {
-          const newdata = body.data.map(value => {
-            const s = value.status;
-            if (s == 0) {
-              value.status = '输入';
-            } else if (s == 1) {
-              value.status = '使用中';
-            } else if (s == 2) {
-              value.status = '审批';
-            }
-            return value;
-          });
+    } else if (this.state.isLoadList) {
+      if (body && body.data && body.data.length > 0) {
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          if (s == 0) {
+            value.status = '输入';
+          } else if (s == 1) {
+            value.status = '使用中';
+          } else if (s == 2) {
+            value.status = '审批';
+          }
+          return value;
+        });
 
-          this.state.data = newdata;
-        }
-        this.updateSelectStandardDatas();
-        this.state.isLoadList = false;
+        this.state.data = newdata;
       }
+      this.updateSelectStandardDatas();
+      this.state.isLoadList = false;
     }
 
     this.state.data2 = [];
@@ -431,26 +426,24 @@ class RingNum extends PureComponent {
 
     if (istLoading2) {
       this.state.isRingNumLoadList = true;
-    } else {
-      if (this.state.isRingNumLoadList) {
-        const newdata = body2.sonData.map(value => {
-          const s = value.status;
-          if (s == 0) {
-            value.status = '输入';
-          } else if (s == 1) {
-            value.status = '使用中';
-          } else if (s == 2) {
-            value.status = '审批';
-          }
-          return value;
-        });
+    } else if (this.state.isRingNumLoadList) {
+      const newdata = body2.sonData.map(value => {
+        const s = value.status;
+        if (s == 0) {
+          value.status = '输入';
+        } else if (s == 1) {
+          value.status = '使用中';
+        } else if (s == 2) {
+          value.status = '审批';
+        }
+        return value;
+      });
 
-        this.state.data2 = newdata;
-        this.updateSelectRingNumDatas();
-        this.state.isRingNumLoadList = false;
-        // console.log(" new data  updateSelectRingNumDatas",this.state.data2)
+      this.state.data2 = newdata;
+      this.updateSelectRingNumDatas();
+      this.state.isRingNumLoadList = false;
+      // console.log(" new data  updateSelectRingNumDatas",this.state.data2)
 
-      }
     }
 
     // if (this.state.done) {
@@ -482,7 +475,7 @@ class RingNum extends PureComponent {
 
       if (modalType === 'number') {
         return (
-          <Form size={'small'} onSubmit={this.handleNumberSubmit}>
+          <Form size="small" onSubmit={this.handleNumberSubmit}>
             <FormItem
               label="戒围号"
               help="手寸输入用逗号'.'分割，如7.8.9录后请按回车健"
@@ -496,9 +489,10 @@ class RingNum extends PureComponent {
             </FormItem>
           </Form>
         );
-      } else if (modalType === 'standard') {
+      }
+      if (modalType === 'standard') {
         return (
-          <Form size={'small'} onSubmit={this.handleSubmit}>
+          <Form size="small" onSubmit={this.handleSubmit}>
             <FormItem label="中文名称" {...this.formLayout}>
               {getFieldDecorator('zhName', {
                 rules: [{ required: true, message: '请输入中文名称' }],
@@ -639,9 +633,9 @@ class RingNum extends PureComponent {
 
   clickStandardRowItem = record => {
     const { standardSelectedRowKeys, standardRowData } = this.state;
-    let rowData = this.state.rowData;
-    const selects = standardSelectedRowKeys ? standardSelectedRowKeys : [];
-    const id = record.id;
+    let { rowData } = this.state;
+    const selects = standardSelectedRowKeys || [];
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -686,9 +680,9 @@ class RingNum extends PureComponent {
 
   clickRowNumberItem = record => {
     const { numberSelectedRowKeys, numberRowData } = this.state;
-    let rowNumberData = this.state.rowNumberData;
-    const selects = numberSelectedRowKeys ? numberSelectedRowKeys : [];
-    const id = record.id;
+    let { rowNumberData } = this.state;
+    const selects = numberSelectedRowKeys || [];
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -743,11 +737,11 @@ class RingNum extends PureComponent {
   };
 
   getRingStandrad = () => {
-    const { isEdit, showItem, } = this.state;
+    const { isEdit, showItem } = this.state;
     return (
       <div className={styles.view_dwon}>
         <div className={clientStyle.list_info}>
-          {/*{this.getRingStandrad()}*/}
+          {/* {this.getRingStandrad()} */}
           <Card bordered={false} className={styles.rignum_right_card_view}>
             <div>
               <span
@@ -774,7 +768,7 @@ class RingNum extends PureComponent {
               className={styles.buttomControl}
               type="primary"
               icon="plus"
-              size={'small'}
+              size="small"
               onClick={this.clickNewFrom}
             >
               新增
@@ -783,8 +777,14 @@ class RingNum extends PureComponent {
               className={styles.buttomControl}
               type="danger"
               icon="delete"
-              size={'small'}
-              onClick={this.clickDeleteFrom}
+              size="small"
+              onClick={() => {
+                ModalConfirm({
+                  content: '确定删除吗？', onOk: () => {
+                    this.clickDeleteFrom();
+                  },
+                });
+              }}
               disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
             >
               删除
@@ -792,7 +792,7 @@ class RingNum extends PureComponent {
             <Button
               className={styles.buttomControl}
               type="primary"
-              size={'small'}
+              size="small"
               onClick={this.clickEditFrom}
               disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
               icon="edit"
@@ -801,23 +801,35 @@ class RingNum extends PureComponent {
             </Button>
             {this.state.showItem.status === '审批' ? (<Button
               className={styles.buttomControl}
-              size={'small'}
+              size="small"
               type="danger"
               icon="unlock"
-              onClick={this.clickUnFreezeFrom}
+              onClick={() => {
+                ModalConfirm({
+                  content: '确定取消审批吗？', onOk: () => {
+                    this.clickUnFreezeFrom();
+                  },
+                });
+              }}
               disabled={isEdit}
             >
               取消审批
             </Button>) : (<Button
-                className={styles.buttomControl}
-                size={'small'}
-                type="primary"
-                icon="lock"
-                onClick={this.clickFreezeFrom}
-                disabled={isEdit}
-              >
-                审批
-            </Button>)}
+                                                      className={styles.buttomControl}
+                                                      size="small"
+                                                      type="primary"
+                                                      icon="lock"
+                                                      onClick={() => {
+                ModalConfirm({
+                  content: '确定审批吗？', onOk: () => {
+                    this.clickFreezeFrom();
+                  },
+                });
+              }}
+                                                      disabled={isEdit}
+                                                    >
+              审批
+                                                                  </Button>)}
           </div>
         </Card>
       </div>
@@ -825,11 +837,11 @@ class RingNum extends PureComponent {
   };
 
   getRingNumber = () => {
-    const { isEditNumber, isEdit, } = this.state;
+    const { isEditNumber, isEdit } = this.state;
     return (
       <div className={styles.view_dwon}>
         <div className={clientStyle.list_info}>
-          {/*{this.getRingStandrad()}*/}
+          {/* {this.getRingStandrad()} */}
           <Card className={styles.rignum_right_card_view} bordered={false}>
             <div>
               <span
@@ -856,7 +868,7 @@ class RingNum extends PureComponent {
               className={styles.buttomControl}
               type="primary"
               icon="plus"
-              size={'small'}
+              size="small"
               onClick={this.clickNewSonFrom}
               disabled={isEdit}
             >
@@ -866,8 +878,8 @@ class RingNum extends PureComponent {
               className={styles.buttomControl}
               type="danger"
               icon="delete"
-              size={'small'}
-              onClick={this.clickNumberDeleteFrom}
+              size="small"
+              onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickNumberDeleteFrom();}});}}
               disabled={isEditNumber || (this.state.showNumberItem && this.state.showNumberItem.status === '审批')}
             >
               删除
@@ -875,7 +887,7 @@ class RingNum extends PureComponent {
             <Button
               className={styles.buttomControl}
               type="primary"
-              size={'small'}
+              size="small"
               onClick={this.clickNumberEditFrom}
               disabled={isEditNumber || (this.state.showNumberItem && this.state.showNumberItem.status === '审批')}
               icon="edit"
@@ -884,23 +896,23 @@ class RingNum extends PureComponent {
             </Button>
             {this.state.showNumberItem.status === '审批' ? (<Button
               className={styles.buttomControl}
-              size={'small'}
+              size="small"
               type="danger"
               icon="unlock"
-              onClick={this.clickUnNumberFreezeFrom}
+              onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.clickUnNumberFreezeFrom();}});}}
               disabled={isEditNumber}
             >
               取消审批
             </Button>) : (<Button
-                className={styles.buttomControl}
-                size={'small'}
-                type="primary"
-                icon="lock"
-                onClick={this.clickNumberFreezeFrom}
-                disabled={isEditNumber}
-              >
-                审批
-            </Button>)}
+                                                            className={styles.buttomControl}
+                                                            size="small"
+                                                            type="primary"
+                                                            icon="lock"
+                                                            onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickNumberFreezeFrom();}});}}
+                                                            disabled={isEditNumber}
+                                                          >
+              审批
+                                                          </Button>)}
           </div>
         </Card>
       </div>
@@ -924,7 +936,7 @@ class RingNum extends PureComponent {
   };
 
 
-  /***
+  /** *
    * 通过最新列表更新选择的值
    * */
   updateSelectStandardDatas = () => {
@@ -961,9 +973,9 @@ class RingNum extends PureComponent {
         });
       }
     }
-  }
+  };
 
-  /***
+  /** *
    * 通过最新列表更新选择的值
    * */
   updateSelectRingNumDatas = () => {
@@ -999,7 +1011,7 @@ class RingNum extends PureComponent {
         });
       }
     }
-  }
+  };
 
   clickNewFrom = () => {
     // this.state.modalType = 'standard';
@@ -1087,9 +1099,8 @@ class RingNum extends PureComponent {
     dispatch({
       type: 'ringnum/unfreezeRingNum',
       payload: { list: standardSelectedRowKeys },
-    })
-  }
-
+    });
+  };
 
 
   clickNumberFreezeFrom = () => {
@@ -1113,7 +1124,8 @@ class RingNum extends PureComponent {
   };
 
 
-  selectChange = (record, index) => { };
+  selectChange = (record, index) => {
+  };
 
   loadNumList = record => {
     const params = {
@@ -1187,7 +1199,7 @@ class RingNum extends PureComponent {
       this.setState({
         showNumberItem,
         rowNumberData: selectRows,
-        numberSelectedRowKeys: numberSelectedRowKeys,
+        numberSelectedRowKeys,
       });
       this.state.showNumberItem = showNumberItem;
       this.showSelectNumberItem(record[0]);
@@ -1252,7 +1264,7 @@ class RingNum extends PureComponent {
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="戒围号">{item.sizeCode}</Description>
         </DescriptionList>
-        {/* <Divider/>*/}
+        {/* <Divider/> */}
       </span>
     );
   };
@@ -1266,7 +1278,7 @@ class RingNum extends PureComponent {
           <Description term="备注">{item.marks}</Description>
           <Description term="状态">{item.status}</Description>
         </DescriptionList>
-        {/* <Divider/>*/}
+        {/* <Divider/> */}
       </span>
     );
   };

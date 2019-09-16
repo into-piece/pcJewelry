@@ -8,6 +8,7 @@ import { currency } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
+import ModalConfirm from '@/utils/modal';
 
 const FormItem = Form.Item;
 
@@ -378,7 +379,7 @@ class Currency extends PureComponent {
                     type="danger"
                     icon="delete"
                     size="small"
-                    onClick={this.clickDeleteFrom}
+                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}}
                     disabled
                   >
                     删除
@@ -398,7 +399,7 @@ class Currency extends PureComponent {
                     size="small"
                     type="primary"
                     icon="lock"
-                    onClick={this.clickFreezeFrom}
+                    onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}}
                     disabled
                   >
                     审批

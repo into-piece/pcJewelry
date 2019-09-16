@@ -34,6 +34,7 @@ export const deleteContacts = `${priefx}/business/business.customer/business-con
  * 加载配送方式
  * @type {string}
  */
+export const queryDelivery2 = `${priefx}/business/basic/delivery-method/listDeliveryMethodsDropDown`
 export const queryDelivery = `${priefx}/business/business/basic/delivery-method/listDeliveryMethods`
 
 /**
@@ -64,6 +65,7 @@ export const saveProductImage = `${priefx}/business/business/product-picture/sav
  * 加载品质要求
  * @type {string}
  */
+export const queryQuality2 = `${priefx}/business/basic/quality-requirements/listQualityRequirementssDropDown`
 export const queryQuality = `${priefx}/business/business/basic/quality-requirements/listQualityRequirementss`
 
 /**
@@ -143,6 +145,12 @@ export const queryProductLock = `${priefx}/business/business/product/checkIsEdit
  */
 export const queryProductList = `${priefx}/business/business/product/listProduct`
 
+/**
+ * 加载部门
+ * @type {string}
+ */
+export const queryDeptList = `${priefx}/sys.user/sys-role/listDept`
+
 
 
 /**
@@ -180,19 +188,36 @@ export const querSpecimentUnLock = `${priefx}/business/business/product/sample/u
  */
 export const querySpecimenList = `${priefx}/business/business/product/sample/listSample`
 
+/**
+ * 员工列表
+ * @type {string}
+ */
+export const queryPersonList = `${priefx}/listUsers`
+
+/**
+ * 员工  部门下拉
+ * @type {string}
+ */
+export const listDeptDropDown = `${priefx}//sys.user/sys-role/listDeptDropDown`
+
+
 
 
 export default {
   priefx,
+  listDeptDropDown,
+  queryPersonList,
   loadMaintainer,
   loadContacts,
   saveContacts,
   saveMaintainer,
   deleteContacts,
   queryDelivery,
+  queryDelivery2,
   queryMarkImage,
   queryImage,
   queryQuality,
+  queryQuality2,
   queryTerminalList,
   loadCustomerList,
   queryMstWordList,
@@ -208,6 +233,7 @@ export default {
   queryProductImage,
   saveProductImage,
   queryProductList,
+  queryDeptList,
   querSpecimentLock,
   querSpecimentUnLock,
   querySpecimenList,

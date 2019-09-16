@@ -15,7 +15,7 @@ class JewelryTable extends Component {
   }
 
   render() {
-    const { body = {}, isLoading } = this.props;
+    const { body = {}, isLoading,scroll={} } = this.props;
 
     const { pageCurrent, selectedRowKeys } = this.state;
 
@@ -45,6 +45,7 @@ class JewelryTable extends Component {
         dataSource={body.records}
         rowSelection={rowSelection}
         pagination={paginationProps}
+        scroll={scroll}
         rowClassName={this.props.rowClassName?this.props.rowClassName:this.onSelectRowClass}
         rowKey={record => record.id}
         onRow={record => {
@@ -61,9 +62,9 @@ class JewelryTable extends Component {
   clickRowItem = record => {
     const { onSelectItem } = this.props;
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let rowData = this.state.rowData;
-    const selects = selectedRowKeys ? selectedRowKeys : [];
-    const id = record.id;
+    let {rowData} = this.state;
+    const selects = selectedRowKeys || [];
+    const {id} = record;
 
     let selectItem = {...record};
     if (selects.includes(id)) {
@@ -127,7 +128,7 @@ class JewelryTable extends Component {
   selectChange = (record, index) => {};
 
 
-  /***
+  /** *
    *
    * 通过最新列表更新选择的值
    * */

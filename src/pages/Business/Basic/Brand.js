@@ -14,6 +14,7 @@ import {
   List,
   message,
 } from 'antd';
+import ModalConfirm from '@/utils/modal';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
@@ -196,12 +197,10 @@ class BrandCompoenet extends Component {
       deleteloading,
       upateloading,
       freezing,
-      unfreeze
+      unfreeze,
     } = this.props;
 
     this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreeze;
-
-
 
 
     if (listLoading) {
@@ -251,9 +250,6 @@ class BrandCompoenet extends Component {
         // this.state.showItem = { ...current };
       }
     }
-
-
-
 
 
     const modalFooter = this.state.done
@@ -389,7 +385,13 @@ class BrandCompoenet extends Component {
                     type="danger"
                     icon="delete"
                     size="small"
-                    onClick={this.clickDeleteFrom}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？', onOk: () => {
+                          this.clickDeleteFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit || (showItem && showItem.status === '审批')}
                   >
                     删除
@@ -409,7 +411,13 @@ class BrandCompoenet extends Component {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={this.clickUnFreezeFrom}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定取消审批吗？', onOk: () => {
+                          this.clickUnFreezeFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit}
                   >
                     取消审批
@@ -418,11 +426,17 @@ class BrandCompoenet extends Component {
                                                  size="small"
                                                  type="primary"
                                                  icon="lock"
-                                                 onClick={this.clickFreezeFrom}
+                                                 onClick={() => {
+                      ModalConfirm({
+                        content: '确定审批吗？', onOk: () => {
+                          this.clickFreezeFrom();
+                        },
+                      });
+                    }}
                                                  disabled={isEdit}
                                                >
-                      审批
-                                               </Button>)}
+                    审批
+                                                             </Button>)}
 
                 </div>
               </Card>
@@ -828,7 +842,7 @@ class BrandCompoenet extends Component {
                     type="danger"
                     icon="delete"
                     size="small"
-                    onClick={this.clickDeleteFrom}
+                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}}
                     disabled={isEdit || (showItem && showItem.status === '审批')}
                   >
                     删除
@@ -849,23 +863,23 @@ class BrandCompoenet extends Component {
                       size="small"
                       type="danger"
                       icon="unlock"
-                      onClick={this.clickUnFreezeFrom}
+                      onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.clickUnFreezeFrom();}});}}
                       disabled={isEdit}
                     >
                       取消审批
                     </Button>
                   ) : (
                     <Button
-                        className={styles.buttomControl}
-                        size="small"
-                        type="primary"
-                        icon="lock"
-                        onClick={this.clickFreezeFrom}
-                        disabled={isEdit}
-                      >
-                        审批
-                      </Button>
-                    )}
+                      className={styles.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}}
+                      disabled={isEdit}
+                    >
+                      审批
+                    </Button>
+                  )}
                 </div>
               </Card>
             </div>

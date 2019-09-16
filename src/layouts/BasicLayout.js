@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Layout, Menu, Tabs, Dropdown, Icon } from 'antd';
+import { Layout, Menu, Tabs, Dropdown, Icon  } from 'antd';
 import router from 'umi/router';
 import DocumentTitle from 'react-document-title';
 import { Route } from 'react-router-dom';
@@ -54,6 +54,7 @@ const query = {
 class BasicLayout extends React.Component {
   constructor(props) {
     super(props);
+    console.log('props',props)
     const { routes } = props.route;
     // const routeKey = props.location.pathname === '/business/basic'? props.location.pathname :'/business/client';
     const routeKey = props.location.pathname==='/'?'/business/client':props.location.pathname ;
@@ -355,7 +356,7 @@ class BasicLayout extends React.Component {
       hidenAntTabs,
       fixedHeader,
     } = this.props;
-    console.log(breadcrumbNameMap)
+    // console.log(breadcrumbNameMap)
 
     const isTop = PropsLayout === 'topmenu';
     const { activeKey, routeKey, tabList } = this.state;

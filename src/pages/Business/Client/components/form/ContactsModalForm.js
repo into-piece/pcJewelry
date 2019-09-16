@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Col, Divider, Form, Icon, Input, InputNumber, Modal, Row, Switch } from 'antd';
-import clientStyle from './../../Client.less';
-import styles from './../../../../Account/Center/Center.less';
+import clientStyle from "../../Client.less";
+import styles from "../../../../Account/Center/Center.less";
 
 const FormItem = Form.Item;
 
@@ -40,7 +40,7 @@ class ContactsModalForm extends Component {
         <span className={clientStyle.sun_title_info}>联系人</span>
         <Divider className={clientStyle.divder} />
         <Form
-          size={'small'}
+          size="small"
           labelAlign="left"
           layout="inline"
           className={clientStyle.from_content}

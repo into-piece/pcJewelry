@@ -3,19 +3,14 @@ import {
   Card,
   Row,
   Col,
-  Table,
   Icon,
   Form,
-  Select,
-  InputNumber,
-  DatePicker,
-  Tabs,
-  Radio,
   Button,
   Input,
   Divider,
-  Breadcrumb, Carousel, Modal, message, Upload, Spin,
+  Carousel, Modal, message, Upload, Spin,
 } from 'antd';
+import ModalConfirm from '@/utils/modal';
 
 import business from '../business.less';
 import baseStyles from '../Client/base.less';
@@ -35,10 +30,10 @@ import TerminalListSelected from './components/TerminalListSelected';
 import Cropper from 'react-cropper';
 import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
-
-const { Description } = DescriptionList;
 import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
+
+const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 
@@ -131,7 +126,7 @@ class ProductDetail extends Component {
     // (item)
 
 
-    let isUpdate =
+    const isUpdate =
       productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
 
     if (isUpdate) {
@@ -139,32 +134,30 @@ class ProductDetail extends Component {
       if (productUpdateloading || productSaveloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-
-        this.productRefresh();
-        // this.handleUpdateImage(productParams)
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-        }
-
-        if (refarshList)
-          refarshList();
-
-
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
       }
+
+      this.productRefresh();
+      // this.handleUpdateImage(productParams)
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+      }
+
+      if (refarshList)
+        refarshList();
+
+
     }
 
 
-    let updat = isUpdate || productListloading;
+    const updat = isUpdate || productListloading;
     if (updat !== this.state.isLoad) {
       if (isloading)
         isloading(updat);
@@ -251,10 +244,10 @@ class ProductDetail extends Component {
     return (<div className={business.right_info}>
       <div className={business.list_info}>
 
-      <span className={business.title_info} onClick={this.clickToggleDrawer}>
+        <span className={business.title_info} onClick={this.clickToggleDrawer}>
             产品
-          </span>
-        <Divider className={business.divder}/>
+        </span>
+        <Divider className={business.divder} />
 
         <div className={baseStyles.content}>
           <div className={baseStyles.right_info}>
@@ -269,12 +262,12 @@ class ProductDetail extends Component {
                     <Description term="编号">{showItem.productNo}</Description>
                     <Description term="类别">{showItem.productTypeName}</Description>
                     <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价"></Description>
+                    <Description term="工价" />
                   </DescriptionList>
                   <span className={business.title_info}>
             参数详情
-          </span>
-                  <Divider className={business.divder}/>
+                  </span>
+                  <Divider className={business.divder} />
                   <DescriptionList size="small" col="2">
                     <Description term="颜色">{showItem.gemColorName}</Description>
                     <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
@@ -292,15 +285,15 @@ class ProductDetail extends Component {
                   </DescriptionList>
                   <span className={business.title_info}>
             备注
-          </span>
-                  <Divider className={business.divder}/>
+                  </span>
+                  <Divider className={business.divder} />
                   <DescriptionList size="small" col="1">
                     <Description>{showItem.marks}</Description>
                   </DescriptionList>
                 </Spin>
               </div>
             ) : (
-              <div/>
+              <div />
             )}
           </div>
 
@@ -318,7 +311,7 @@ class ProductDetail extends Component {
                   type="primary"
                   icon="plus"
                   className={business.buttomControl}
-                  size={'small'}
+                  size="small"
                   onClick={this.handleNewProduct}
 
                 >
@@ -328,15 +321,22 @@ class ProductDetail extends Component {
                   type="danger"
                   icon="delete"
                   className={business.buttomControl}
-                  size={'small'}
-                  onClick={this.handleDeleteProduct}
+                  size="small"
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定删除吗？', onOk: () => {
+                        this.handleDeleteProduct();
+                      },
+                    });
+                  }}
+
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
                   删除
                 </Button>
                 <Button
                   type="primary"
-                  size={'small'}
+                  size="small"
                   className={business.buttomControl}
                   icon="edit"
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
@@ -346,22 +346,34 @@ class ProductDetail extends Component {
                 </Button>
                 {
                   showItem && showItem.status === '2' ? <Button
-                      className={business.buttomControl}
-                      size={'small'}
-                      type="danger"
-                      icon="unlock"
-                      onClick={this.handleUnFreezeProduct}
-                      disabled={!showItem || showItem === '' || !isProductUpdate}
-                    >
+                    className={business.buttomControl}
+                    size="small"
+                    type="danger"
+                    icon="unlock"
+                    onClick={() => {
+                        ModalConfirm({
+                          content: '确定取消审批吗？', onOk: () => {
+                            this.handleUnFreezeProduct();
+                          },
+                        });
+                      }}
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                  >
                       取消审批
-                    </Button>
+                                                        </Button>
                     : <Button
                       className={business.buttomControl}
-                      size={'small'}
+                      size="small"
                       type="primary"
                       icon="lock"
                       disabled={!showItem || showItem === '' || !isProductUpdate}
-                      onClick={this.handleFreezeProduct}
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？', onOk: () => {
+                            this.handleFreezeProduct();
+                          },
+                        });
+                      }}
                     >
                       审批
                     </Button>
@@ -380,7 +392,7 @@ class ProductDetail extends Component {
                 <Button
                   className={business.buttomControl}
                   type="primary"
-                  size={'small'}
+                  size="small"
                   icon="copy"
                   disabled
                 >
@@ -388,7 +400,7 @@ class ProductDetail extends Component {
                 </Button>
                 <Button
                   className={business.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="primary"
                   icon="rollback"
                   disabled
@@ -438,7 +450,7 @@ class ProductDetail extends Component {
 
       let fileList = [...info.fileList];
 
-      const file = info.file;
+      const { file } = info;
 
 
       if (file.type) {
@@ -496,9 +508,9 @@ class ProductDetail extends Component {
     return (
       <div className={clientStyle.list_info}>
         <span className={business.sun_title_info}>产品</span>
-        <Divider className={business.divder}/>
+        <Divider className={business.divder} />
         <Form
-          size={'small'}
+          size="small"
           labelAlign="left"
           layout="inline"
           className={clientStyle.from_content}
@@ -515,8 +527,9 @@ class ProductDetail extends Component {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.productNo,
                   // })(<text>系统自动生成</text>)}
-                })(<Input placeholder="自动生成编号"
-                          readOnly={true}
+                })(<Input
+                  placeholder="自动生成编号"
+                  readOnly
                 />)}
               </FormItem>
             </Col>
@@ -563,7 +576,8 @@ class ProductDetail extends Component {
                       this.parseProductNo();
                     }
                   }
-                  }/>)}
+                  }
+                />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -622,7 +636,7 @@ class ProductDetail extends Component {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入中文名称' }],
                   initialValue: current.zhName,
-                })(<Input placeholder="自动生成" readOnly={true}/>,
+                })(<Input placeholder="自动生成" readOnly />,
                 )}
               </FormItem>
             </Col>
@@ -640,17 +654,25 @@ class ProductDetail extends Component {
                 {getFieldDecorator('enName', {
                   rules: [{ required: true, message: '请输入英文名称' }],
                   initialValue: current.enName,
-                })(<Input placeholder="自动生成" readOnly={true}
+                })(<Input
+                  placeholder="自动生成"
+                  readOnly
                 />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label='产品来源'{...this.centerFormLayout} className={business.from_content_col}>
+                label='产品来源'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
                 {getFieldDecorator('sourceOfProduct', {
                   rules: [{ required: true, message: '请输入产品来源' }],
-                })(<Dict dict="H005" content={current.sourceOfProduct ? current.sourceOfProduct : 'H005001'}
-                         placeholder="请输入"/>)}
+                })(<Dict
+                  dict="H005"
+                  content={current.sourceOfProduct ? current.sourceOfProduct : 'H005001'}
+                  placeholder="请输入"
+                />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -662,14 +684,16 @@ class ProductDetail extends Component {
                 {getFieldDecorator('mouldNo', {
                   rules: [{ required: true, message: '请输入' }],
                   initialValue: current.mouldNo,
-                })(<MoldListSelect content={current.mouldNo} placeholder="请输入"
-                                   onSelect={(v) => {
+                })(<MoldListSelect
+                  content={current.mouldNo}
+                  placeholder="请输入"
+                  onSelect={(v) => {
 
-                                     // console.log(" select mold ",v)
-                                     if (v && v.mainMold)
-                                       this.state.cNomainMold = v.mainMold;
-                                     this.parseProductNo();
-                                   }}
+                    // console.log(" select mold ",v)
+                    if (v && v.mainMold)
+                      this.state.cNomainMold = v.mainMold;
+                    this.parseProductNo();
+                  }}
                 />)}
               </FormItem>
             </Col>
@@ -712,7 +736,7 @@ class ProductDetail extends Component {
                     message: '请输入规格',
                   }],
                   initialValue: current.specification,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -726,7 +750,8 @@ class ProductDetail extends Component {
                   initialValue: current.unitOfMeasurement,
                 })(<BasicMeasureListSelect
                   content={current.unitOfMeasurement ? current.unitOfMeasurement : 'ae32e48c2df27123682943b6effa72d3'}
-                  placeholder="请输入"/>)}
+                  placeholder="请输入"
+                />)}
               </FormItem>
             </Col>
           </Row>
@@ -743,7 +768,8 @@ class ProductDetail extends Component {
                   initialValue: current.unitOfWeight,
                 })(<BasicMeasureListSelect
                   content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
-                  placeholder="请输入"/>)}
+                  placeholder="请输入"
+                />)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -754,7 +780,7 @@ class ProductDetail extends Component {
               >
                 {getFieldDecorator('finishedWeight', {
                   initialValue: current.finishedWeight,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -766,7 +792,7 @@ class ProductDetail extends Component {
                 {getFieldDecorator('productDesc', {
                   rules: [{ message: '请输入产品描述' }],
                   initialValue: current.productDesc,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -777,7 +803,7 @@ class ProductDetail extends Component {
               >
                 {getFieldDecorator('marks', {
                   initialValue: current.marks,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -800,7 +826,7 @@ class ProductDetail extends Component {
                   onChange={handleChange}
                 >
                   <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
                     <div className="ant-upload-text">上传图片</div>
                   </div>
                 </Upload>
@@ -817,7 +843,7 @@ class ProductDetail extends Component {
           className={business.from_content}
         >
           <span className={business.sun_title_info}>客户信息</span>
-          <Divider className={business.divder}/>
+          <Divider className={business.divder} />
           <Row>
 
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -864,8 +890,8 @@ class ProductDetail extends Component {
                 })(<div>
                   <Input
                     placeholder="请输入"
-                    readOnly={true}
-                    value={customerShotName ? customerShotName : current.endShotName}
+                    readOnly
+                    value={customerShotName || current.endShotName}
                   />
                 </div>)}
               </FormItem>
@@ -880,7 +906,7 @@ class ProductDetail extends Component {
                 {getFieldDecorator('custoerProductNo', {
                   rules: [{ message: '请输入货号' }],
                   initialValue: current.custoerProductNo,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -891,14 +917,14 @@ class ProductDetail extends Component {
 
         {
           sourceOfProduct === 'H005005' ? <Form
-            size={'small'}
+            size="small"
             labelAlign="left"
             layout="inline"
             style={{ width: '100%' }}
             className={business.from_content}
           >
             <span className={business.sun_title_info}>供应商信息</span>
-            <Divider className={business.divder}/>
+            <Divider className={business.divder} />
             <Row style={{ width: '100%' }}>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem
@@ -909,7 +935,7 @@ class ProductDetail extends Component {
                   {getFieldDecorator('supplierId', {
                     rules: [{ required: true, message: '请输入供应商编号' }],
                     initialValue: current.supplierId,
-                  })(<Input placeholder="请输入"/>)}
+                  })(<Input placeholder="请输入" />)}
                 </FormItem>
               </Col>
 
@@ -923,7 +949,7 @@ class ProductDetail extends Component {
                   {getFieldDecorator('supplierProductNo', {
                     rules: [{ message: '请输入供应商货号' }],
                     initialValue: current.supplierProductNo,
-                  })(<Input placeholder="请输入"/>)}
+                  })(<Input placeholder="请输入" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -951,7 +977,7 @@ class ProductDetail extends Component {
         return;
       }
 
-      let params = {};
+      const params = {};
       params.product = { ...fieldsValue };
 
       const urls = fileList.map(v => v.url);
@@ -968,7 +994,7 @@ class ProductDetail extends Component {
             ...params,
           },
         });
-        //todo
+        // todo
 
         this.setState({
           isEdit: true,
@@ -1001,7 +1027,7 @@ class ProductDetail extends Component {
     const { fileList = [] } = this.state;
 
     const _this = this;
-    let params = {};
+    const params = {};
     const urls = fileList.map(v => v.url);
     const names = fileList.map(v => v.name);
     params.imgStr = urls;
@@ -1014,15 +1040,15 @@ class ProductDetail extends Component {
     fetch(HttpFetch.saveProductImage, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const { head } = d;
 
         if (head.rtnCode !== '000000') {
           message.error(head.rtnMsg);
@@ -1041,7 +1067,7 @@ headers: {
 
     const item = this.state.showItem;
 
-    const isEditItem = this.state.isEditItem;
+    const { isEditItem } = this.state;
 
     if (!item.id) return;
 
@@ -1051,23 +1077,23 @@ headers: {
     });
 
 
-    let params = {};
+    const params = {};
     params.id = item.id;
 
 
     fetch(HttpFetch.queryProductList, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
-        const body = d.body;
+        const { head } = d;
+        const { body } = d;
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
@@ -1125,7 +1151,7 @@ headers: {
       current: item,
       visible: true,
       isAdd: false,
-      fileList: this.state.fileList,//测试真实数据重接口获取
+      fileList: this.state.fileList,// 测试真实数据重接口获取
       isEditItem: true,
     });
 
@@ -1234,15 +1260,15 @@ headers: {
           style={{ height: 400 }}
           preview=".img-preview"
           cropBoxResizable={false}
-          viewMode={1} //定义cropper的视图模式
-          zoomable={true} //是否允许放大图像
-          guides={true}
-          background={true}
+          viewMode={1} // 定义cropper的视图模式
+          zoomable // 是否允许放大图像
+          guides
+          background
           aspectRatio={800 / 800}
           // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
-          <div className="img-preview" style={{ width: '100%', height: '100%' }}/>
+          <div className="img-preview" style={{ width: '100%', height: '100%' }} />
         </div>
       </div>
     );
@@ -1250,20 +1276,20 @@ headers: {
 
   fetchImages = item => {
     const _this = this;
-    let params = {};
+    const params = {};
     params.productId = item.id;
     fetch(HttpFetch.queryProductImage, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             const imageObject = body.records;
@@ -1296,7 +1322,7 @@ headers: {
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
-        fileList[i].name = 'crop' + Date.parse(new Date()) + fileList[i].name;
+        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
@@ -1332,10 +1358,10 @@ headers: {
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = cNoBrandNo + cNofCode + '-' + showMold + cNoUnitCode + cNoColorCode + cNoCustomerCombine;
+    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
     const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
-    //成色+宝石颜色+类别
+    // 成色+宝石颜色+类别
     this.setState({
       productNo,
       zhName,

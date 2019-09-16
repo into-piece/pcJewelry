@@ -204,6 +204,7 @@ const routes = [
         })
       : require('../../layouts/BasicLayout').default,
     Routes: [require('../Authorized').default],
+    authority: ['admin', 'user', 'chents'],
     routes: [
       {
         path: '/index.html',
@@ -1504,7 +1505,7 @@ const routes = [
           },
           {
             path: '/dev/Mould',
-            name: 'mould',
+            name: 'Mould',
             icon: 'inbox',
             component: __IS_BROWSER
               ? _dvaDynamic({
@@ -1518,7 +1519,7 @@ const routes = [
           },
           {
             path: '/dev/Raw',
-            name: 'raw',
+            name: 'Raw',
             icon: 'inbox',
             component: __IS_BROWSER
               ? _dvaDynamic({
@@ -1532,7 +1533,7 @@ const routes = [
           },
           {
             path: '/dev/FinishedProduct',
-            name: 'finishedproduct',
+            name: 'FinishedProduct',
             icon: 'deployment-unit',
             component: __IS_BROWSER
               ? _dvaDynamic({
@@ -1564,6 +1565,114 @@ const routes = [
             })
           : require('../404').default,
         exact: true,
+      },
+      {
+        path: '/system',
+        icon: 'setting',
+        name: 'system',
+        routes: [
+          {
+            path: '/system/department',
+            name: 'department',
+            icon: 'apartment',
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  app: require('@tmp/dva').getApp(),
+                  models: () => [
+                    import(/* webpackChunkName: 'p__system__Department__models__index.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/system/Department/models/index.js').then(
+                      m => {
+                        return { namespace: 'index', ...m.default };
+                      },
+                    ),
+                  ],
+                  component: () =>
+                    import(/* webpackChunkName: "p__system__Department" */ '../system/Department'),
+                  LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../system/Department').default,
+            routes: [
+              {
+                component: () =>
+                  React.createElement(
+                    require('/Users/frank-zeng/WebstormProjects/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                      .default,
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
+                  ),
+              },
+            ],
+          },
+          {
+            path: '/system/personnel',
+            name: 'personnel',
+            icon: 'user',
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  app: require('@tmp/dva').getApp(),
+                  models: () => [
+                    import(/* webpackChunkName: 'p__system__Personnel__models__index.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/system/Personnel/models/index.js').then(
+                      m => {
+                        return { namespace: 'index', ...m.default };
+                      },
+                    ),
+                  ],
+                  component: () =>
+                    import(/* webpackChunkName: "p__system__Personnel" */ '../system/Personnel'),
+                  LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../system/Personnel').default,
+            routes: [
+              {
+                component: () =>
+                  React.createElement(
+                    require('/Users/frank-zeng/WebstormProjects/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                      .default,
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
+                  ),
+              },
+            ],
+          },
+          {
+            path: '/system/authority',
+            name: 'authority',
+            icon: 'lock',
+            component: __IS_BROWSER
+              ? _dvaDynamic({
+                  app: require('@tmp/dva').getApp(),
+                  models: () => [
+                    import(/* webpackChunkName: 'p__system__Authority__models__index.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/system/Authority/models/index.js').then(
+                      m => {
+                        return { namespace: 'index', ...m.default };
+                      },
+                    ),
+                  ],
+                  component: () =>
+                    import(/* webpackChunkName: "p__system__Authority" */ '../system/Authority'),
+                  LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                    .default,
+                })
+              : require('../system/Authority').default,
+            routes: [
+              {
+                component: () =>
+                  React.createElement(
+                    require('/Users/frank-zeng/WebstormProjects/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                      .default,
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
+                  ),
+              },
+            ],
+          },
+          {
+            component: () =>
+              React.createElement(
+                require('/Users/frank-zeng/WebstormProjects/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                  .default,
+                { pagesPath: 'src/pages', hasRoutesInConfig: true },
+              ),
+          },
+        ],
       },
       {
         component: () =>

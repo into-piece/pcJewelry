@@ -1,18 +1,56 @@
 @import '~antd/lib/style/themes/default.less';
+@import 'common.less';
 
+//@globalbgcolor: #fbfbfb;
+.ant-modal-title{
+  background-color: @globalbgcolor !important;
+}
+.ant-modal-header{
+  background-color: @globalbgcolor !important;
+}
+.ant-modal-body {
+  background-color: @globalbgcolor !important;
+}
+.ant-modal-footer{
+  background-color: @globalbgcolor !important;
+}
+.ant-menu{
+  background-color: @globalbgcolor !important;
+}
+.ant-table-placeholder{
+  background-color: @globalbgcolor !important;
+}
+
+.ant-layout-sider-children{
+  background-color: @globalbgcolor;
+}
+.ant-card-body{
+  background-color: @globalbgcolor;
+}
+
+.ant-table-row-selected {
+  > td {
+    background-color: @tableactivecolor !important;
+  }
+}
+.ant-row{
+  width: 100%;
+}
 html,
 body,
 #root {
   height: 100%;
 }
 ul {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 .colorWeak {
   filter: invert(80%);
 }
-
+.ant-form-item {
+  width: 100% !important;
+}
 .ant-form-item-label > label {
   font-size: 1em !important;
 }
@@ -36,14 +74,14 @@ ul {
   background-color: #2eabff !important;
 
   > tr {
-    background-color: #ffffff !important;
+    background-color: @globalbgcolor !important;
   }
 }
 
 .ant-table-tbody {
   > tr > td {
     border-width: 0 !important;
-    border-color: #ffffff !important;
+    border-color: @globalbgcolor !important;
   }
 }
 
@@ -55,15 +93,10 @@ ul {
   background-color: #006ee1 !important;
 }
 
-.ant-table-row-selected {
-  > td {
-    background-color: #006ee1 !important;
-  }
-}
 
 .antd-pro-components-sider-menu-index-logo {
   > a > h1 {
-    color: #fff !important;
+    color: @globalbgcolor !important;
   }
 
   background-color: #006ee1 !important;
@@ -71,17 +104,17 @@ ul {
 
 /* For demo */
 .ant-carousel .slick-slide {
-  text-align: center;
   height: 60px;
-  line-height: 60px;
-  background: #fff;
   overflow: hidden;
+  line-height: 60px;
+  text-align: center;
+  background: @globalbgcolor;
 }
 
 //slick-slide slick-active slick-current
 
 .slick-slide {
-  background: #fff;
+  background: @globalbgcolor;
 }
 
 .slick-dots-bottom > li > button {
@@ -96,7 +129,13 @@ ul {
   display: flex !important;
   justify-content: center !important;
 }
-
+.ant-table-thead > tr > th {
+  padding: 16px 16px;
+  background: @globalbgcolor !important;
+}
+.ant-tabs .ant-tabs-bar {
+  margin: 0 !important;
+}
 //.ant-carousel .slick-active
 //{
 //  background-color: #364d79;

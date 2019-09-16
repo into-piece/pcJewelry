@@ -36,17 +36,24 @@ const errorHandler = error => {
     notification.error({
       message: '该操作未授权。',
     });
+    return;
   }
 
+  if (status === 500) {
+    notification.error({
+      message: '请求失败。',
+    });
+    return false;
+  }
 
   if (status === 402) {
     // router.push('/exception/403');
     window.g_app._store.dispatch({
       type: 'login/logout',
     });
-    notification.error({
-      message: '未登录或登录已过期，请重新登录。',
-    });
+    // notification.error({
+    //   message: '未登录或登录已过期，请重新登录。',
+    // });
   }
 
   // if (status === 401) {

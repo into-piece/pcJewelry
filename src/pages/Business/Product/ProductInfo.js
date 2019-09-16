@@ -3,52 +3,23 @@ import {
   Card,
   Row,
   Col,
-  Icon,
   Form,
-  Select,
-  Tabs,
-  Radio,
-  Button,
-  Input,
-  Divider,
-  Modal,
   Breadcrumb,
   message,
-  Drawer, Upload, Carousel,
+  Drawer,
 } from 'antd';
 import { connect } from 'dva';
 
-const FormItem = Form.Item;
-// const { Option } = Select;
-// const { TabPane } = Tabs;
-// const RadioButton = Radio.Button;
-// const RadioGroup = Radio.Group;
 
 import business from '../business.less';
-import DescriptionList from '@/components/DescriptionList';
 import product from './product.less';
 import JewelryTable from '../../components/JewelryTable';
 import ProductSearchFrom from './components/ProductSearchFrom';
-import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-import BrandListSelect from './components/BrandListSelect';
-import Dict from '../Client/components/Dict';
-import UnitColorListSelect from './components/UnitColorListSelect';
-import PlatingColorListSelect from './components/PlatingColorListSelect';
-import TerminalListSelected from './components/TerminalListSelected';
-import BasicMeasureListSelect from './components/BasicMeasureListSelect';
-import PercentageSelect from './components/ProcentageSelect';
-import ProductMaterialSelect from './components/ProductMaterialSelect';
-import MoldListSelect from './components/MoldListSelect';
-import Zmage from 'react-zmage';
 import HttpFetch from '../../../utils/HttpFetch';
-import ProductTypeSelect from './components/ProductTypeSelect';
 import ProductDetail from './ProductDetail';
-import clientStyle from '../Client/Client.less';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
-
-const { Description } = DescriptionList;
 
 
 const defaultPageSize = 10;
@@ -81,8 +52,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'客户编号'}
-            field={'product_no'}
+            column="客户编号"
+            field="product_no"
             sortChange={this.sortFilter}
           />
         );
@@ -97,8 +68,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'颜色'}
-            field={'gem_color_name'}
+            column="颜色"
+            field="gem_color_name"
             className={product.row_normal2}
             sortChange={this.sortFilter}
           />
@@ -113,8 +84,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'成色'}
-            field={'product_color_name'}
+            column="成色"
+            field="product_color_name"
             sortChange={this.sortFilter}
           />
         );
@@ -128,8 +99,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'电镀颜色'}
-            field={'plating_color_name'}
+            column="电镀颜色"
+            field="plating_color_name"
             sortChange={this.sortFilter}
           />
         );
@@ -145,8 +116,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'客户编号'}
-            field={'customer_no'}
+            column="客户编号"
+            field="customer_no"
             sortChange={this.sortFilter}
           />
         );
@@ -161,8 +132,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'供应商编号'}
-            field={'supplier_id'}
+            column="供应商编号"
+            field="supplier_id"
             sortChange={this.sortFilter}
           />
         );
@@ -177,8 +148,8 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'供应商名称'}
-            field={'supplier_product_no'}
+            column="供应商名称"
+            field="supplier_product_no"
             sortChange={this.sortFilter}
           />
         );
@@ -257,13 +228,11 @@ class ProductInfo extends Component {
 
     if (isLoad) {
       this.state.isLoadList = true;
-    } else {
-      if (this.state.isLoadList) {
+    } else if (this.state.isLoadList) {
 
         this.refs.productTable.updateSelectDatas(body);
         this.state.isLoadList = false;
       }
-    }
 
 
     // console.log("bod ",body.data)
@@ -285,13 +254,13 @@ class ProductInfo extends Component {
           <Row gutter={24}>
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }}/>
+                <div style={{ marginBottom: 16 }} />
                 <ProductSearchFrom
                   onSearch={this.handleProductSearch}
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-
+                  scroll={{x:1200}}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {
@@ -312,7 +281,7 @@ class ProductInfo extends Component {
                     });
                   }}
                   ref="productTable"
-                  loading={isLoad}//productListloading || isUpdate
+                  loading={isLoad}// productListloading || isUpdate
                   columns={this.productColumns}
                   className={business.small_table}
                   rowClassName={this.onSelectRowClass}
@@ -345,18 +314,20 @@ class ProductInfo extends Component {
 
     // console.log(" detail product ",showItem)
 
-    return <ProductDetail item={showItem}
-                          isProductUpdate={isProductUpdate}
-                          selectProductData={selectProductData}
-                          key={'556'}
-                          isloading={(isLoad) => {
+    return <ProductDetail
+      item={showItem}
+      isProductUpdate={isProductUpdate}
+      selectProductData={selectProductData}
+      key="556"
+      isloading={(isLoad) => {
                             this.setState({
                               isLoad,
                             });
                           }}
-                          refarshList={() => {
+      refarshList={() => {
                             this.loadProduct();
-                          }}/>;
+                          }}
+    />;
 
   };
 
@@ -391,14 +362,12 @@ class ProductInfo extends Component {
         newContacts.splice(newContacts.findIndex(v => v.field === field), 1);
       }
 
-    } else {
-      if (sort !== 'normal') {
+    } else if (sort !== 'normal') {
         newContacts.push({
           field,
           sort,
         });
       }
-    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
@@ -408,7 +377,7 @@ class ProductInfo extends Component {
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
 
-    let params = { ...searchProductParams };
+    const params = { ...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
 
@@ -418,13 +387,13 @@ class ProductInfo extends Component {
       this.state.productSorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += ',' + v.field;
+            orderByAsc += `,${  v.field}`;
           } else {
             orderByAsc = v.field;
           }
         } else if (v.sort === 'descend') {
           if (orderByDesc)
-            orderByDesc += ',' + v.field;
+            orderByDesc += `,${  v.field}`;
           else
             orderByDesc = v.field;
         }
@@ -472,7 +441,7 @@ class ProductInfo extends Component {
   loadProductLock = (item) => {
     // console.log(' 查询锁定对象为 :', item.id);
     const _this = this;
-    let params = {};
+    const params = {};
     params.id = item.id;
     params.dataNo = item.markingNo;
     fetch(HttpFetch.queryProductLock, {
@@ -486,7 +455,7 @@ class ProductInfo extends Component {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const {head} = d;
 
         const isProductUpdate = head.rtnCode === '000000';
 
@@ -508,7 +477,7 @@ class ProductInfo extends Component {
   };
 
 
-  /***
+  /** *
    * 解锁
    * @param item
    */

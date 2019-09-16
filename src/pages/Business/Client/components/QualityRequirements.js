@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 
-const { Option } = Select;
-
 import { connect } from 'dva';
-import HttpFetch from '../../../../utils/HttpFetch';
+import HttpFetch, { queryQuality2 } from '../../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../../utils/authority';
+
+const { Option } = Select;
 
 // import { connect } from 'dva';
 @connect(({ dict, loading }) => {
@@ -88,11 +88,11 @@ class QualityRequirements extends PureComponent {
   loadDict = () => {
     const { dict } = this.props;
 
-    let params = {};
+    const params = {};
     const _this = this;
     params.wordbookTypeCode = dict;
     // console.log('dict params is ',params)
-    fetch(HttpFetch.queryQuality, {
+    fetch(HttpFetch.queryQuality2, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -103,7 +103,7 @@ class QualityRequirements extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
 
         if (body.records)
           _this.setState({

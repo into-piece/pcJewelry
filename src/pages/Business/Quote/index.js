@@ -8,18 +8,15 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Checkbox, DatePicker } from 'antd';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
-import SvgUtil from '@/utils/SvgUtil';
+import ModalConfirm from '@/utils/modal';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/quote';
-import LockTag from '@/components/LockTag'
 import jsonData from './index.json'
 import SearchForm from '@/components/SearchForm'
 import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
-// import Bread from '@/components/BreadCrumb'
 import SelectProductModal from './SelectProductModal'
 
 const { TextArea } = Input;
@@ -27,30 +24,7 @@ const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
 const { deleteProductQuoteHeader, deleteProformaInvoiceDetail } = serviceObj
-// manuArr是 =》menu配置提供遍历
-// modalContent => 每个menu不同的增加弹窗填写信息
-const { modalContent } = jsonData
 
-// 弹窗form表单样式
-// const formLayout = {
-//   labelCol: { span: 2 },
-//   wrapperCol: {
-//     span: 6,
-//   },
-// };
-
-// 面包屑数据
-// const breadData = [
-//   {
-//     name: '主页', link: '/'
-//   },
-//   {
-//     name: '开发', link: '/quote/basic'
-//   },
-//   {
-//     name: '基础数据', link: ''
-//   }
-// ]
 
 // 右手边按钮集合
 const btnGroup = [
@@ -81,6 +55,7 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>客户编号</div>,
     dataIndex: 'customerNo',
     key: 'customerNo',
+    width:100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     )
@@ -89,22 +64,30 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>简称</div>,
     dataIndex: 'customerShotName',
     key: 'customerShotName',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>报价单号</div>,
     dataIndex: 'quoteNumber',
     key: 'quoteNumber',
+    width:100,
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
   },
   {
     title: <div className={styles.row_normal2}>类别</div>, // ?
     dataIndex: 'typeName',
     key: 'typeName',
+    width:100,
+
   },
 
   {
     title: <div className={styles.row_normal2}>报价日期</div>,
     dataIndex: 'quoteDate',
     key: 'quoteDate',
+    width:100,
     render: (data) => (data)
   },
 
@@ -112,34 +95,44 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>数量</div>,
     dataIndex: 'quoteTotalCount',
     key: 'quoteTotalCount',
-
+    width:100,
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
   },
 
   {
     title: <div className={styles.row_normal2}>重量</div>,
     dataIndex: 'quoteTotalWeight',
     key: 'quoteTotalWeight',
-
+    width:100,
+    sorter: (a, b) => {
+      encompare(a.enAddress, b.enAddress);
+    },
   },
   {
     title: <div className={styles.row_normal2}>总额</div>,
     dataIndex: 'quoteTotalAmount',
     key: 'quoteTotalAmount',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>终客号</div>,
     dataIndex: 'endNo',
     key: 'endNo',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>终客简称</div>,
     dataIndex: 'endShotName',
     key: 'endShotName',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>产品说明</div>,// ?
     dataIndex: 'explains',
     key: 'explains',
+    width:100,
   },
 ];
 
@@ -154,25 +147,33 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>客户货号</div>,
     dataIndex: 'custoerProductNo',
     key: 'custoerProductNo',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>前次工费/克</div>,
     dataIndex: 'lastCount',
     key: 'enName',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>实际工费/克</div>,
     dataIndex: 'actualCount',
     key: 'actualCount',
+    width:100,
   },
   {
     title: <div className={styles.row_normal2}>最高工费/克</div>,
     dataIndex: 'topCount',
     key: 'topCount',
+    width:100,
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
   },
   {
     title: <div className={styles.row_normal2}>此次工费/克</div>,
     dataIndex: 'nowCount',
+    width:100,
     key: 'nowCount',
   },
 
@@ -180,18 +181,27 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>字印价/件</div>,
     dataIndex: 'markingPrice',
     key: 'markingPrice',
+    width:100,
   },
 
   {
     title: <div className={styles.row_normal2}>包装价/件</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
+    width:100,
+    sorter: (a, b) => {
+      return pingYincompare(a.zhName, b.zhName);
+    },
   },
 
   {
     title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
+    width:100,
+    sorter: (a, b) => {
+      encompare(a.enAddress, b.enAddress);
+    },
   },
 ];
 
@@ -403,10 +413,10 @@ class Info extends Component {
         this.setState({ modalType });
         break;
       case 'delete':
-        this.handleDelect()
+        ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDelect();}});
         break;
       case 'lock':
-        this.handleLock()
+        ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleLock();}});
         break;
       case 'copy':
         this.handleCopy()
@@ -1107,6 +1117,7 @@ class CenterInfo extends Component {
         <SearchForm data={searchParams} source={quote} onSearch={onSearch} returnElement={returnElement} />
         <div className={styles.tableBox}>
           <Table
+            scroll={{x:1400}}
             columns={clientContentColumns}
             body={quotelist}
             changeChoosenRow={record => { this.changeChoosenRow(record, 1) }}
@@ -1135,6 +1146,7 @@ class CenterInfo extends Component {
         </Radio.Group>
         <div className={styles.tableBox}>
           <Table
+            scroll={{x:1600}}
             columns={customerColumns}
             body={quoteDatialList}
             type={2}

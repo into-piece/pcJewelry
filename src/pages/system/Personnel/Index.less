@@ -1,0 +1,139 @@
+@import '../../../../node_modules/antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+@import "~@/common";
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.left_content{
+  background-color: @globalbgcolor;
+  min-height: 83vh;
+  max-height: 83vh;
+  margin-bottom: 24px;
+  overflow: auto;
+  width:1000px;
+}
+.from_content_col {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.product_list {
+  width: 100%;
+}
+
+.row_normal {
+  background-color: #e5f6fe;
+  font-size: 0.9em!important;
+}
+
+.cropper {
+  width: 300px;
+  height: 300px;
+}
+
+.cropper_view {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.carousel_image {
+
+  max-width: 100%;
+  max-height: 100%;
+
+}
+
+.carousel_image_ground {
+  display: flex !important;
+  max-width: 300px;
+  max-height: 300px;
+  //width: 390px;
+  //height: 390px;
+  justify-content: center !important;
+  align-items: center;
+}
+
+.cropper_preview {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+
+.row_normal2 {
+  font-size: 0.9em!important;
+}
+
+.row_select {
+  background-color: #2eabff !important;
+}
+
+.row_noselect {
+  background-color: #fff;
+}
+
+.divder {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.title_info {
+  margin-bottom: 10px;
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #35b0f4;
+}
+
+.tableListForm {
+  :global {
+    .ant-form-item {
+      display: flex;
+      margin-right: 0;
+      margin-bottom: 24px;
+
+      > .ant-form-item-label {
+        width: auto;
+        padding-right: 8px;
+        line-height: 32px;
+      }
+
+      .ant-form-item-control {
+        line-height: 32px;
+      }
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
+
+  .submitButtons {
+    display: block;
+    margin-bottom: 24px;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 24px;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 8px;
+  }
+}
