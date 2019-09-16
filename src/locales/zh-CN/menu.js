@@ -28,6 +28,14 @@ export default {
   'menu.dev.Raw':'原料设定',
   'menu.dev.FinishedProduct':'成品设定',
 
+
+  'menu.system':'系统',
+  'menu.system.department':'部门设置',
+  'menu.system.personnel':'员工设置',
+  'menu.system.authority':'权限设置',
+
+
+
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',

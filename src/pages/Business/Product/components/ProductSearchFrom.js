@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Form, Icon, Input, InputNumber, Row } from 'antd';
-import business from './../../business.less';
+import business from "../../business.less";
 import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
@@ -46,16 +46,16 @@ class ProductSearchFrom extends Component {
               {getFieldDecorator('color')(<Input laceholder="请输入" />)}
             </FormItem>
           </Col>
-          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-            {/*<FormItem label="模具号" className={business.from_content_col}>*/}
-              {/*{getFieldDecorator('mouldNo')(<Input placeholder="请输入" />)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
-          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-            {/*<FormItem label="产品描述" className={business.from_content_col}>*/}
-              {/*{getFieldDecorator('productDesc')(<Input laceholder="请输入" />)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
+          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+          {/* <FormItem label="模具号" className={business.from_content_col}> */}
+          {/* {getFieldDecorator('mouldNo')(<Input placeholder="请输入" />)} */}
+          {/* </FormItem> */}
+          {/* </Col> */}
+          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+          {/* <FormItem label="产品描述" className={business.from_content_col}> */}
+          {/* {getFieldDecorator('productDesc')(<Input laceholder="请输入" />)} */}
+          {/* </FormItem> */}
+          {/* </Col> */}
         </Row>
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
@@ -77,51 +77,51 @@ class ProductSearchFrom extends Component {
               {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-            {/*<FormItem label="产品编号" className={business.from_content_col}>*/}
-              {/*{getFieldDecorator('productNo', {*/}
-                {/*initialValue: '',*/}
-              {/*})(<Input placeholder="请输入" />)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
-          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-            {/*<FormItem label="类型" className={business.from_content_col}>*/}
-              {/*{getFieldDecorator('productType', {*/}
-                {/*initialValue: '',*/}
-              {/*})(<Input placeholder="请输入" />)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
-          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-            {/*<FormItem label="产品来源" className={business.from_content_col}>*/}
-              {/*{getFieldDecorator('sourceOfProduct')(<Input placeholder="请输入" />)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
+          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+          {/* <FormItem label="产品编号" className={business.from_content_col}> */}
+          {/* {getFieldDecorator('productNo', { */}
+          {/* initialValue: '', */}
+          {/* })(<Input placeholder="请输入" />)} */}
+          {/* </FormItem> */}
+          {/* </Col> */}
+          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+          {/* <FormItem label="类型" className={business.from_content_col}> */}
+          {/* {getFieldDecorator('productType', { */}
+          {/* initialValue: '', */}
+          {/* })(<Input placeholder="请输入" />)} */}
+          {/* </FormItem> */}
+          {/* </Col> */}
+          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+          {/* <FormItem label="产品来源" className={business.from_content_col}> */}
+          {/* {getFieldDecorator('sourceOfProduct')(<Input placeholder="请输入" />)} */}
+          {/* </FormItem> */}
+          {/* </Col> */}
         </Row>
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
-          <FormItem label="客户货号" className={business.from_content_col}>
-          {getFieldDecorator('goodsNo', {
+            <FormItem label="客户货号" className={business.from_content_col}>
+              {getFieldDecorator('goodsNo', {
           initialValue: '',
           })(<Input placeholder="请输入" />)}
-          </FormItem>
+            </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-          <FormItem label="供应商编号" className={business.from_content_col}>
-          {getFieldDecorator('supplierNo', {
+            <FormItem label="供应商编号" className={business.from_content_col}>
+              {getFieldDecorator('supplierNo', {
           initialValue: '',
           })(<Input placeholder="请输入" />)}
-          </FormItem>
+            </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
-          <FormItem label="供应商名称" className={business.from_content_col}>
-          {getFieldDecorator('supplierName')(<Input placeholder="请输入" />)}
-          </FormItem>
+            <FormItem label="供应商名称" className={business.from_content_col}>
+              {getFieldDecorator('supplierName')(<Input placeholder="请输入" />)}
+            </FormItem>
           </Col>
-          {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-            {/*<FormItem label="规格" className={business.from_content_col}>*/}
-              {/*{getFieldDecorator('specification')(<Input placeholder="请输入" />)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
+          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+          {/* <FormItem label="规格" className={business.from_content_col}> */}
+          {/* {getFieldDecorator('specification')(<Input placeholder="请输入" />)} */}
+          {/* </FormItem> */}
+          {/* </Col> */}
 
         </Row>
 
@@ -151,7 +151,7 @@ class ProductSearchFrom extends Component {
 
   handleSearch = e => {
     const { form, onSearch } = this.props;
-    //禁止表单提交，采用Ajax提交
+    // 禁止表单提交，采用Ajax提交
     e.preventDefault();
     form.validateFields((err, fieldsValue) => {
       if (onSearch) onSearch({ ...fieldsValue });

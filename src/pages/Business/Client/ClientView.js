@@ -4,25 +4,20 @@ import {
   Row,
   Col,
   Table,
-  Icon,
   Form,
   Select,
-  InputNumber,
-  DatePicker,
   Tabs,
   Radio,
   Button,
   Input,
-  Switch,
   Divider,
   Modal,
   Breadcrumb,
   message,
   Drawer,
 } from 'antd';
-import GridContent from '@/components/PageHeaderWrapper/GridContent';
+import ModalConfirm from '@/utils/modal';
 import { connect } from 'dva';
-import router from 'umi/router';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
 import DescriptionList from '@/components/DescriptionList';
@@ -37,7 +32,6 @@ import listStyles from './TableList.less';
 import baseStyles from './base.less';
 import business from "../business.less";
 import clientInfoStyle from "./ClientInfo.less";
-import maintainer from './models/maintainer';
 import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
@@ -52,39 +46,6 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 const { Description } = DescriptionList;
-
-// const clientColumns = [
-//   {
-//     title: '中文名称',
-//     dataIndex: 'zhName',
-//     key: 'zhName',
-{
-  /* sorter: (a, b) => { */
-}
-//       return pingYincompare(a.zhName, b.zhName);
-//     },
-//   },
-{
-  /* { */
-}
-//     title: '英文名称',
-//     dataIndex: 'enName',
-//     key: 'enName',
-//     onFilter: (value, record) => record.enName.includes(value),
-//     sorter: (a, b) => {
-//       if (/^\d/.test(a.enName) ^ /^\D/.test(b.enName)) return a.enName > b.enName ? 1 : (a.enName == b.enName ? 0 : -1);
-//       return a.enName > b.enName ? -1 : (a.enName == b.enName ? 0 : 1);
-//     },
-//   },
-//   {
-//     title: '创建时间',
-//     dataIndex: 'createTime',
-//     key: 'createTime',
-//     sorter: (a, b) => {
-//       return formDatecompare(a.createTime, b.createTime);
-//     },
-//   },
-// ];
 
 const clientContentColumns = [
   {
@@ -863,7 +824,7 @@ class ClientView extends PureComponent {
                     icon="delete"
                     type="danger"
                     style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
-                    onClick={this.deleteContactsList}
+                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.deleteContactsList();}});}}
                     disabled={!contactsItem || contactsItem === ''}
                   >
                     删除
@@ -1126,7 +1087,7 @@ class ClientView extends PureComponent {
                 icon="delete"
                 className={clientStyle.buttomControl}
                 size="small"
-                onClick={this.handleDeleteClients}
+                onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDeleteClients();}});}}
                 disabled={isEdit}
               >
                 删除
@@ -1149,7 +1110,7 @@ class ClientView extends PureComponent {
                   type="danger"
                   icon="unlock"
                   disabled={isEdit}
-                  onClick={this.handleUnFreezeClients}
+                  onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.handleUnFreezeClients();}});}}
                 >
                   取消审批
                 </Button>
@@ -1160,7 +1121,7 @@ class ClientView extends PureComponent {
                   type="primary"
                   icon="lock"
                   disabled={isEdit}
-                  onClick={this.handleFreezeClients}
+                  onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleFreezeClients();}});}}
                 >
                   审批
                 </Button>

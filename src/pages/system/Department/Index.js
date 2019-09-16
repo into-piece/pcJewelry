@@ -11,13 +11,13 @@ import {
 import { connect } from 'dva';
 
 
-import business from '../business.less';
-import product from './product.less';
+import business from '../../dev/business.less';
+import product from './Index.less';
 import JewelryTable from '../../components/JewelryTable';
-import ProductSearchFrom from './components/ProductSearchFrom';
+import SearchFrom from './components/SearchFrom';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '../../../utils/HttpFetch';
-import ProductDetail from './ProductDetail';
+import IndexDetail from './IndexDetail';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
 
@@ -25,141 +25,124 @@ import { getCurrentUser } from '../../../utils/authority';
 const defaultPageSize = 10;
 
 @Form.create()
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ dept, loading }) => {
+  const { rtnCode, rtnMsg } = dept;
   return {
-    body: product.body,
+    body: dept.body,
     rtnCode,
     rtnMsg,
-    productListloading: loading.effects['product/fetchListProduct'],
-    productSaveloading: loading.effects['product/addProduct'],
-    productUpdateloading: loading.effects['product/updateProduct'],
-    productDeleteloading: loading.effects['product/deleteProduct'],
-    productFreezeloading: loading.effects['product/freezeProduct'],
-    queryProductLocking: loading.effects['product/queryProductLock'],
-    updateProductUnLocking: loading.effects['product/updateProductUnLock'],
   };
 })
 
 
-class ProductInfo extends Component {
+class Index extends Component {
 
 
-  productColumns = [
+  deptColumns = [
 
     {
-      // title: <div className={product.row_normal2}>客户编号</div>,
       title: () => {
         return (
           <TableSortView
-            column="客户编号"
-            field="product_no"
+            column="ID"
+            field="id"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'productNo',
-      key: 'productNo',
-      width: 200,
+      dataIndex: 'id',
+      key: 'id',
+      width: 80,
     },
 
     {
-      // title: <div className={product.row_normal2}>颜色</div>,
       title: () => {
         return (
           <TableSortView
-            column="颜色"
-            field="gem_color_name"
+            column="部门编号"
+            field="role"
             className={product.row_normal2}
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'gemColorName',
-      key: 'gemColorName',
+      dataIndex: 'role',
+      key: 'role',
       width: 100,
     },
     {
-      // title: <div className={product.row_normal2}>成色</div>,
       title: () => {
         return (
           <TableSortView
-            column="成色"
-            field="product_color_name"
+            column="部门简称"
+            field="shortName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'productColorName',
-      key: 'productColorName',
+      dataIndex: 'shortName',
+      key: 'shortName',
       width: 100,
     },
     {
-      // title: <div className={product.row_normal2}>电镀颜色</div>,
       title: () => {
         return (
           <TableSortView
-            column="电镀颜色"
-            field="plating_color_name"
+            column="中文名"
+            field="zhName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'platingColorName',
-      key: 'platingColorName',
-      width: 150,
-    },
-
-
-    {
-      // title: <div className={product.row_normal2}>客户编号</div>,
-      title: () => {
-        return (
-          <TableSortView
-            column="客户编号"
-            field="customer_no"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'customerNo',
-      key: 'customerNo',
-      width: 100,
-    },
-
-    {
-      // title: <div className={product.row_normal2}>供应商编号</div>,
-      title: () => {
-        return (
-          <TableSortView
-            column="供应商编号"
-            field="supplier_id"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'supplierId',
-      key: 'supplierId',
-      width: 100,
-    },
-
-    {
-      // title: <div className={product.row_normal2}>供应商名称</div>,
-      title: () => {
-        return (
-          <TableSortView
-            column="供应商名称"
-            field="supplier_product_no"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'supplierProductNo',
-      key: 'supplierProductNo',
+      dataIndex: 'zhName',
+      key: 'zhName',
       width: 100,
     },
 
 
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="英文名"
+            field="enName"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'enName',
+      key: 'enName',
+      width: 100,
+    },
+
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="备注"
+            field="remarks"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'remarks',
+      key: 'remarks',
+      width: 100,
+    },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="状态"
+            field="status"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'statusVar',
+      key: 'statusVar',
+      width: 100,
+    },
   ];
 
 
@@ -194,34 +177,20 @@ class ProductInfo extends Component {
 
   componentDidMount() {
     this.loadProduct();
-    window.onbeforeunload = () => {
-      console.log('onbeforeunload ');
-      const { showItem } = this.state;
-      if (showItem) {
-        // console.log('执行解锁3');
 
-        this.updateProductLock(showItem);
-      }
-    };
   }
   ;
 
   // router.replace('/business/client/emptyView');
 
   componentWillUnmount() {
-    const { showItem } = this.state;
-    if (showItem) {
-      this.updateProductLock(showItem);
-      // console.log('执行解锁2');
-    }
+
   }
 
   render() {
-    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const { leftlg, rightlg, drawVisible,   isLoad } = this.state;
 
     const {
-      queryProductLocking,
       body = {},
     } = this.props;
 
@@ -230,12 +199,22 @@ class ProductInfo extends Component {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
 
-        this.refs.productTable.updateSelectDatas(body);
+        this.refs.deptTable.updateSelectDatas(body);
         this.state.isLoadList = false;
       }
-
-
-    // console.log("bod ",body.data)
+   if(body.records){
+     const newdata =body.records.map(v => {
+       const s = v.status;
+       if (s == 0) {
+         v.statusVar = '输入';
+       } else if (s == 1) {
+         v.statusVar = '使用中';
+       } else if (s == 2) {
+         v.statusVar = '审批';
+       }
+       return v;
+     });
+   }
 
     return (
       <div className={business.page}>
@@ -243,10 +222,10 @@ class ProductInfo extends Component {
           <Breadcrumb style={{ display: 'none' }}>
             <Breadcrumb.Item>主页</Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">业务</a>
+              <a href="">系统</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="#/business/product">产品信息</a>
+              <a href="#/business/product">部门信息</a>
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>
@@ -255,34 +234,23 @@ class ProductInfo extends Component {
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
                 <div style={{ marginBottom: 16 }} />
-                <ProductSearchFrom
+                <SearchFrom
                   onSearch={this.handleProductSearch}
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-
+                  scroll={{x:1200}}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
-                    if (showItem && showItem.id !== item.id) {
-                      // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
-                      // console.log('执行解锁 ： ',showItem.id);
-                    }
-
-                    if (item) {
-                      if (!showItem || showItem.id !== item.id)
-                      // this.fetchImages(item);
-                        this.loadProductLock(item);
-                    }
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
                       showItem: this.state.showItem,
                       selectProductData: [...rows],
                     });
                   }}
-                  ref="productTable"
+                  ref="deptTable"
                   loading={isLoad}// productListloading || isUpdate
-                  columns={this.productColumns}
+                  columns={this.deptColumns}
                   className={business.small_table}
                   rowClassName={this.onSelectRowClass}
                   // scroll={{ y: 300 }}
@@ -314,7 +282,7 @@ class ProductInfo extends Component {
 
     // console.log(" detail product ",showItem)
 
-    return <ProductDetail
+    return <IndexDetail
       item={showItem}
       isProductUpdate={isProductUpdate}
       selectProductData={selectProductData}
@@ -408,7 +376,7 @@ class ProductInfo extends Component {
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'product/fetchListProduct',
+      type: 'dept/fetchListDept',
       payload: { ...params },
     });
   };
@@ -434,62 +402,8 @@ class ProductInfo extends Component {
   };
 
 
-  /**
-   * 获取锁定状态
-   * @param item
-   */
-  loadProductLock = (item) => {
-    // console.log(' 查询锁定对象为 :', item.id);
-    const _this = this;
-    const params = {};
-    params.id = item.id;
-    params.dataNo = item.markingNo;
-    fetch(HttpFetch.queryProductLock, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser() ? getCurrentUser().token : '',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {head} = d;
-
-        const isProductUpdate = head.rtnCode === '000000';
-
-        if (!isProductUpdate) {
-          message.error(head.rtnMsg);
-        }
-
-        _this.setState({
-          isProductUpdate,
-        });
-      })
-      .catch(function(ex) {
-        // message.error('加载图片失败！');
-        _this.setState({
-          loading: false,
-        });
-      });
-
-  };
 
 
-  /** *
-   * 解锁
-   * @param item
-   */
-  updateProductLock = (item) => {
-    const { dispatch } = this.props;
-    const { isProductUpdate } = this.state;
-    if (isProductUpdate)
-      dispatch({
-        type: 'product/updateProductUnLock',
-        payload: { id: item.id },
-      });
-  };
 
 
   pageProductChange = (page, pageSize) => {
@@ -523,4 +437,4 @@ class ProductInfo extends Component {
 
 }
 
-export default ProductInfo;
+export default Index;

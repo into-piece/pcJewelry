@@ -20,6 +20,8 @@ import {
   message,
   Spin,
 } from 'antd';
+import ModalConfirm from '@/utils/modal';
+
 import { connect } from 'dva';
 import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
@@ -431,7 +433,8 @@ class ClientInfo extends PureComponent {
                 icon="delete"
                 size="small"
                 disabled={this.state.isEdit|| (this.state.showItem && this.state.showItem.status === '2')}
-                onClick={this.clickDeleteFrom}
+                onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}}
+
               >
                 删除
               </Button>
@@ -452,7 +455,7 @@ class ClientInfo extends PureComponent {
                   type="danger"
                   icon="unlock"
                   disabled={this.state.isEdit}
-                  onClick={this.clickUnFreezeFrom}
+                  onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.clickUnFreezeFrom();}});}}
                 >
                   取消审批
                 </Button>:  <Button
@@ -461,7 +464,7 @@ class ClientInfo extends PureComponent {
                                                    type="primary"
                                                    icon="lock"
                                                    disabled={this.state.isEdit}
-                                                   onClick={this.clickFreezeFrom}
+                                                   onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}}
                                                  >
                   审批
                                                  </Button>
