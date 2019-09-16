@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 
+import { statusConvert, YoNConvert, genderConvert } from '@/utils/convert';
 
 import business from '../../dev/business.less';
 import product from './Index.less';
@@ -127,7 +128,7 @@ class Index extends Component {
       dataIndex: 'idCard',
       key: 'idCard',
       width: 100,
-    },   {
+    }, {
       title: () => {
         return (
           <TableSortView
@@ -140,7 +141,7 @@ class Index extends Component {
       dataIndex: 'hiredate',
       key: 'hiredate',
       width: 100,
-    },   {
+    }, {
       title: () => {
         return (
           <TableSortView
@@ -153,7 +154,7 @@ class Index extends Component {
       dataIndex: 'indate',
       key: 'indate',
       width: 100,
-    },   {
+    }, {
       title: () => {
         return (
           <TableSortView
@@ -218,37 +219,14 @@ class Index extends Component {
       body = {},
     } = this.props;
 
-    if(body.records){
-       body.records.map(v => {
+    if (body.records) {
+      body.records.map(v => {
         const s = v.status;
-        if (s == 0) {
-          v.statusVar = '输入';
-        } else if (s == 1) {
-          v.statusVar = '使用中';
-        } else if (s == 2) {
-          v.statusVar = '审批';
-        }
-        if(v.gender==1){
-          v.genderVar ='男';
-        }else if(v.gender==0){
-          v.genderVar ='女';
-        }
-         if(v.marriage==1){
-           v.marriageVar ='已婚';
-         }else if(v.marriage==0){
-           v.marriageVar ='未婚';
-         }
-         if(v.isSleepOut==1){
-           v.isSleepOutVar ='是';
-         }else if(v.isSleepOut==0){
-           v.isSleepOutVar ='否';
-         }
-         if(v.isDineIn==1){
-           v.isDineInVar ='是';
-         }else if(v.isDineIn==0){
-           v.isDineInVar ='否';
-         }
-
+        v.statusVar = statusConvert[s];
+        v.genderVar = genderConvert[v.gender];
+        v.marriageVar = YoNConvert[v.marriage];
+        v.isSleepOutVar = YoNConvert[v.isSleepOut];
+        v.isDineInVar = YoNConvert[v.isDineIn];
 
 
         return v;
@@ -258,9 +236,9 @@ class Index extends Component {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
 
-        this.refs.personTable.updateSelectDatas(body);
-        this.state.isLoadList = false;
-      }
+      this.refs.personTable.updateSelectDatas(body);
+      this.state.isLoadList = false;
+    }
 
 
     // console.log("bod ",body.data)
@@ -280,7 +258,7 @@ class Index extends Component {
         </div>
         <div className={business.center_content}>
           <Row gutter={24}>
-            <Col lg={rightlg} md={24} style={{overflow:'auto'}}>
+            <Col lg={rightlg} md={24} style={{ overflow: 'auto' }}>
               <Card bordered={false} loading={false} className={business.left_content}>
                 <div style={{ marginBottom: 16 }} />
                 <SearchFrom
@@ -288,9 +266,9 @@ class Index extends Component {
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-                  scroll={{x:1200}}
+                  scroll={{ x: 1200 }}
                   onSelectItem={(item, rows) => {
-                    console.log(item,rows);
+                    console.log(item, rows);
                     const { showItem } = this.state;
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
@@ -337,13 +315,13 @@ class Index extends Component {
       selectProductData={selectProductData}
       key="556"
       isloading={(isLoad) => {
-                            this.setState({
-                              isLoad,
-                            });
-                          }}
+        this.setState({
+          isLoad,
+        });
+      }}
       refarshList={() => {
-                            this.loadProduct();
-                          }}
+        this.loadProduct();
+      }}
     />;
 
   };
@@ -380,11 +358,11 @@ class Index extends Component {
       }
 
     } else if (sort !== 'normal') {
-        newContacts.push({
-          field,
-          sort,
-        });
-      }
+      newContacts.push({
+        field,
+        sort,
+      });
+    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
@@ -433,12 +411,12 @@ class Index extends Component {
 
   handleProductSearch = (productParams) => {
 
-      // data.typeId = showItem.id;
-      this.state.searchProductParams = { ...productParams };
+    // data.typeId = showItem.id;
+    this.state.searchProductParams = { ...productParams };
 
-      this.state.current = 1;
+    this.state.current = 1;
 
-      this.loadProduct();
+    this.loadProduct();
 
   };
 
@@ -449,7 +427,6 @@ class Index extends Component {
     });
 
   };
-
 
 
   pageProductChange = (page, pageSize) => {
