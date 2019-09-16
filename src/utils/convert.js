@@ -1,3 +1,5 @@
+import { formatMessage } from 'umi/locale';
+
 export const statusConvert = {
   0:'输入',
   1:'使用中',
