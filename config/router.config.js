@@ -55,7 +55,7 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user', 'chents'],
+    // authority: ['admin', 'user', 'chents'],
     routes: [
       // dashboard
       {
