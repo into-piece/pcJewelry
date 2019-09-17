@@ -1,13 +1,13 @@
-import React, { PureComponent } from 'react';
+import React ,{PureComponent} from 'react';
 import { Select } from 'antd';
 
-import HttpFetch  from '../../../../utils/HttpFetch';
+import {listDeptDropDown}  from '../../../../utils/HttpFetch';
 import JewelrySelect from '../../../components/JewelrySelect';
 
 const { Option } = Select;
 
 
-class MoldListSelect extends JewelrySelect {
+class DeptListSelect extends JewelrySelect {
 
 
   getOptionList = list => {
@@ -18,18 +18,17 @@ class MoldListSelect extends JewelrySelect {
         </Option>
       );
     }
-
     return list.map(item => (
       <Option key={item.id} value={item.id}>
-        {item.mainMold}
+        {item.zhName}
       </Option>
     ));
   };
 
   getUrl =()=>{
-    return HttpFetch.listDeptDropDown
+    return  listDeptDropDown
   }
 
 }
 
-export default MoldListSelect;
+export default DeptListSelect;

@@ -260,7 +260,7 @@ class ProductInfo extends Component {
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-
+                  scroll={{x:1200}}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {

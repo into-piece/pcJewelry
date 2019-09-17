@@ -51,12 +51,16 @@ class JewelrySelect extends PureComponent {
     }
     return (
       <Select
+        showSearch={this.props.showSearch}
+        optionFilterProp="children"
         placeholder={this.props.placeholder}
+        filterOption={(input, option) =>
+          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
         defaultActiveFirstOption={false}
         style={{ width: '100%', height: '100%' }}
         showArrow={false}
         value={showValue}
-        filterOption={false}
         onChange={this.handleChange}
         notFoundContent={null}
       >
@@ -71,6 +75,7 @@ class JewelrySelect extends PureComponent {
   }
 
   getOption = list => {
+    console.log(list)
     return this.getOptionList(list);
 
   };
@@ -78,7 +83,7 @@ class JewelrySelect extends PureComponent {
   loadSelect = () => {
     const { content ,onSelect } = this.props;
     const { firstSelected } = this.state;
-    let params = {};
+    const params = {};
     const _this = this;
     const url = this.getUrl();
     if(url){
@@ -93,7 +98,7 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body.records) {
           _this.setState({
             loading: false,

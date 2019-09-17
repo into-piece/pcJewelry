@@ -17,17 +17,15 @@ import {
   Drawer, Upload, Carousel,
 } from 'antd';
 import { connect } from 'dva';
-
-const FormItem = Form.Item;
 // const { Option } = Select;
 // const { TabPane } = Tabs;
 // const RadioButton = Radio.Button;
 // const RadioGroup = Radio.Group;
 
+import Cropper from 'react-cropper';
 import business from '../business.less';
 import DescriptionList from '@/components/DescriptionList';
 import specimen from './specimen.less';
-import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import Zmage from 'react-zmage';
 import HttpFetch from '../../../utils/HttpFetch';
@@ -36,6 +34,8 @@ import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
 import ProductSearchFrom from '../Product/components/ProductSearchFrom';
 import JewelryTable from '../../components/JewelryTable';
+
+const FormItem = Form.Item;
 
 
 const defaultPageSize = 10;
@@ -65,8 +65,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'客户编号'}
-            field={'product_no'}
+            column="客户编号"
+            field="product_no"
             sortChange={this.sortFilter}
           />
         );
@@ -81,8 +81,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'颜色'}
-            field={'gem_color_name'}
+            column="颜色"
+            field="gem_color_name"
             className={specimen.row_normal2}
             sortChange={this.sortFilter}
           />
@@ -97,8 +97,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'成色'}
-            field={'product_color_name'}
+            column="成色"
+            field="product_color_name"
             sortChange={this.sortFilter}
           />
         );
@@ -112,8 +112,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'电镀颜色'}
-            field={'plating_color_name'}
+            column="电镀颜色"
+            field="plating_color_name"
             sortChange={this.sortFilter}
           />
         );
@@ -129,8 +129,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'客户编号'}
-            field={'customer_no'}
+            column="客户编号"
+            field="customer_no"
             sortChange={this.sortFilter}
           />
         );
@@ -145,8 +145,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'供应商编号'}
-            field={'supplier_id'}
+            column="供应商编号"
+            field="supplier_id"
             sortChange={this.sortFilter}
           />
         );
@@ -161,8 +161,8 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column={'供应商名称'}
-            field={'supplier_product_no'}
+            column="供应商名称"
+            field="supplier_product_no"
             sortChange={this.sortFilter}
           />
         );
@@ -243,13 +243,11 @@ class Specimen extends Component {
 
     if (isLoad) {
       this.state.isLoadList = true;
-    } else {
-      if (this.state.isLoadList) {
+    } else if (this.state.isLoadList) {
 
         this.refs.productTable.updateSelectDatas(body);
         this.state.isLoadList = false;
       }
-    }
 
 
     // console.log("bod ",body.data)
@@ -271,13 +269,13 @@ class Specimen extends Component {
           <Row gutter={24}>
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }}/>
+                <div style={{ marginBottom: 16 }} />
                 <ProductSearchFrom
                   onSearch={this.handleSpecimenSearch}
                   onCustomerReset={this.handleSpecimenFormReset}
                 />
                 <JewelryTable
-
+                  scroll={{x:1200}}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {
@@ -298,7 +296,7 @@ class Specimen extends Component {
                     });
                   }}
                   ref="productTable"
-                  loading={isLoad}//productListloading || isUpdate
+                  loading={isLoad}// productListloading || isUpdate
                   columns={this.productColumns}
                   className={business.small_table}
                   rowClassName={this.onSelectRowClass}
@@ -331,18 +329,20 @@ class Specimen extends Component {
 
     // console.log(" detail product ",showItem)
 
-    return <SpecimenDetaill item={showItem}
-                          isProductUpdate={isProductUpdate}
-                          selectProductData={selectProductData}
-                          key={'556'}
-                          isloading={(isLoad) => {
+    return <SpecimenDetaill
+      item={showItem}
+      isProductUpdate={isProductUpdate}
+      selectProductData={selectProductData}
+      key="556"
+      isloading={(isLoad) => {
                             this.setState({
                               isLoad,
                             });
                           }}
-                          refarshList={() => {
+      refarshList={() => {
                             this.loadProduct();
-                          }}/>
+                          }}
+    />
       ;
   };
 
@@ -377,14 +377,12 @@ class Specimen extends Component {
         newContacts.splice(newContacts.findIndex(v => v.field === field), 1);
       }
 
-    } else {
-      if (sort !== 'normal') {
+    } else if (sort !== 'normal') {
         newContacts.push({
           field,
           sort,
         });
       }
-    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
@@ -394,7 +392,7 @@ class Specimen extends Component {
     const { productPage , searchProductParams} = this.state;
     // let params = { current: productPage, size: defaultPageSize };
 
-    let params = {...searchProductParams};
+    const params = {...searchProductParams};
     params.current = productPage;
     params.size = defaultPageSize;
 
@@ -405,7 +403,7 @@ class Specimen extends Component {
         if(v.sort==='ascend'){
           if(orderByAsc)
           {
-            orderByAsc+=","+v.field;
+            orderByAsc+=`,${v.field}`;
           }else
           {
             orderByAsc = v.field;
@@ -413,7 +411,7 @@ class Specimen extends Component {
         }else if(v.sort==='descend')
         {
           if(orderByDesc)
-            orderByDesc+=","+v.field;
+            orderByDesc+=`,${v.field}`;
           else
             orderByDesc = v.field;
         }
@@ -463,7 +461,7 @@ class Specimen extends Component {
   loadProductLock = (item) => {
     // console.log(' 查询锁定对象为 :', item.id);
     const _this = this;
-    let params = {};
+    const params = {};
     params.id = item.id;
     params.dataNo = item.markingNo;
     fetch(HttpFetch.querySpecimenList, {
@@ -477,7 +475,7 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const head = d.head;
+        const {head} = d;
 
         const isProductUpdate = head.rtnCode === '000000';
 
@@ -499,7 +497,7 @@ headers: {
   };
 
 
-  /***
+  /** *
    * 解锁
    * @param item
    */

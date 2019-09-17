@@ -188,10 +188,25 @@ export const querSpecimentUnLock = `${priefx}/business/business/product/sample/u
  */
 export const querySpecimenList = `${priefx}/business/business/product/sample/listSample`
 
+/**
+ * 员工列表
+ * @type {string}
+ */
+export const queryPersonList = `${priefx}/listUsers`
+
+/**
+ * 员工  部门下拉
+ * @type {string}
+ */
+export const listDeptDropDown = `${priefx}//sys.user/sys-role/listDeptDropDown`
+
+
 
 
 export default {
   priefx,
+  listDeptDropDown,
+  queryPersonList,
   loadMaintainer,
   loadContacts,
   saveContacts,

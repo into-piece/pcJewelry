@@ -10,13 +10,13 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 
+import { statusConvert, YoNConvert, genderConvert } from '@/utils/convert';
 
 import business from '../../dev/business.less';
 import product from './Index.less';
 import JewelryTable from '../../components/JewelryTable';
 import SearchFrom from './components/SearchFrom';
 import 'cropperjs/dist/cropper.css';
-import HttpFetch from '../../../utils/HttpFetch';
 import IndexDetail from './IndexDetail';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
@@ -25,10 +25,10 @@ import { getCurrentUser } from '../../../utils/authority';
 const defaultPageSize = 10;
 
 @Form.create()
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ person, loading }) => {
+  const { rtnCode, rtnMsg } = person;
   return {
-    body: product.body,
+    body: person.body,
     rtnCode,
     rtnMsg,
   };
@@ -38,20 +38,20 @@ const defaultPageSize = 10;
 class Index extends Component {
 
 
-  productColumns = [
+  personColumns = [
 
     {
       title: () => {
         return (
           <TableSortView
             column="姓名"
-            field="userName"
+            field="zhName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'userName',
-      key: 'userName',
+      dataIndex: 'zhName',
+      key: 'zhName',
       width: 80,
     },
 
@@ -66,8 +66,8 @@ class Index extends Component {
           />
         );
       },
-      dataIndex: 'gender',
-      key: 'gender',
+      dataIndex: 'genderVar',
+      key: 'genderVar',
       width: 100,
     },
     {
@@ -75,27 +75,13 @@ class Index extends Component {
         return (
           <TableSortView
             column="部门"
-            field="shortName"
+            field="deptName"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'shortName',
-      key: 'shortName',
-      width: 100,
-    },
-    {
-      title: () => {
-        return (
-          <TableSortView
-            column="部门编号"
-            field="role"
-            sortChange={this.sortFilter}
-          />
-        );
-      },
-      dataIndex: 'role',
-      key: 'role',
+      dataIndex: 'deptName',
+      key: 'deptName',
       width: 100,
     },
 
@@ -142,7 +128,7 @@ class Index extends Component {
       dataIndex: 'idCard',
       key: 'idCard',
       width: 100,
-    },   {
+    }, {
       title: () => {
         return (
           <TableSortView
@@ -155,7 +141,7 @@ class Index extends Component {
       dataIndex: 'hiredate',
       key: 'hiredate',
       width: 100,
-    },   {
+    }, {
       title: () => {
         return (
           <TableSortView
@@ -167,6 +153,19 @@ class Index extends Component {
       },
       dataIndex: 'indate',
       key: 'indate',
+      width: 100,
+    }, {
+      title: () => {
+        return (
+          <TableSortView
+            column="状态"
+            field="status"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'statusVar',
+      key: 'statusVar',
       width: 100,
     },
   ];
@@ -203,45 +202,43 @@ class Index extends Component {
 
   componentDidMount() {
     this.loadProduct();
-    window.onbeforeunload = () => {
-      console.log('onbeforeunload ');
-      const { showItem } = this.state;
-      if (showItem) {
-        // console.log('执行解锁3');
 
-        this.updateProductLock(showItem);
-      }
-    };
   }
   ;
 
   // router.replace('/business/client/emptyView');
 
   componentWillUnmount() {
-    const { showItem } = this.state;
-    if (showItem) {
-      this.updateProductLock(showItem);
-      // console.log('执行解锁2');
-    }
+
   }
 
   render() {
     const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const {
-      queryProductLocking,
       body = {},
     } = this.props;
 
+    if (body.records) {
+      body.records.map(v => {
+        const s = v.status;
+        v.statusVar = statusConvert[s];
+        v.genderVar = genderConvert[v.gender];
+        v.marriageVar = YoNConvert[v.marriage];
+        v.isSleepOutVar = YoNConvert[v.isSleepOut];
+        v.isDineInVar = YoNConvert[v.isDineIn];
 
+
+        return v;
+      });
+    }
     if (isLoad) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
 
-        this.refs.productTable.updateSelectDatas(body);
-        this.state.isLoadList = false;
-      }
+      this.refs.personTable.updateSelectDatas(body);
+      this.state.isLoadList = false;
+    }
 
 
     // console.log("bod ",body.data)
@@ -255,13 +252,13 @@ class Index extends Component {
               <a href="">业务</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="#/business/product">产品信息</a>
+              <a href="#/business/product">员工信息</a>
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>
         <div className={business.center_content}>
           <Row gutter={24}>
-            <Col lg={rightlg} md={24} style={{overflow:'auto'}}>
+            <Col lg={rightlg} md={24} style={{ overflow: 'auto' }}>
               <Card bordered={false} loading={false} className={business.left_content}>
                 <div style={{ marginBottom: 16 }} />
                 <SearchFrom
@@ -269,33 +266,21 @@ class Index extends Component {
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-                  scroll={{x:1200}}
+                  scroll={{ x: 1200 }}
                   onSelectItem={(item, rows) => {
-                    console.log(item,rows);
+                    console.log(item, rows);
                     const { showItem } = this.state;
-                    if (showItem && showItem.id !== item.id) {
-                      // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
-                      // console.log('执行解锁 ： ',showItem.id);
-                    }
-
-                    if (item) {
-                      if (!showItem || showItem.id !== item.id)
-                      // this.fetchImages(item);
-                        this.loadProductLock(item);
-                    }
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
                       showItem: this.state.showItem,
                       selectProductData: [...rows],
                     });
                   }}
-                  ref="productTable"
+                  ref="personTable"
                   loading={isLoad}// productListloading || isUpdate
-                  columns={this.productColumns}
+                  columns={this.personColumns}
                   className={business.small_table}
                   rowClassName={this.onSelectRowClass}
-                  // scroll={{ y: 300 }}
                   body={body}
                   pageChange={this.pageProductChange}
                 />
@@ -330,13 +315,13 @@ class Index extends Component {
       selectProductData={selectProductData}
       key="556"
       isloading={(isLoad) => {
-                            this.setState({
-                              isLoad,
-                            });
-                          }}
+        this.setState({
+          isLoad,
+        });
+      }}
       refarshList={() => {
-                            this.loadProduct();
-                          }}
+        this.loadProduct();
+      }}
     />;
 
   };
@@ -373,11 +358,11 @@ class Index extends Component {
       }
 
     } else if (sort !== 'normal') {
-        newContacts.push({
-          field,
-          sort,
-        });
-      }
+      newContacts.push({
+        field,
+        sort,
+      });
+    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
@@ -418,7 +403,7 @@ class Index extends Component {
 
     const { dispatch } = this.props;
     dispatch({
-      type: 'product/fetchListProduct',
+      type: 'person/fetchListPerson',
       payload: { ...params },
     });
   };
@@ -426,12 +411,12 @@ class Index extends Component {
 
   handleProductSearch = (productParams) => {
 
-      // data.typeId = showItem.id;
-      this.state.searchProductParams = { ...productParams };
+    // data.typeId = showItem.id;
+    this.state.searchProductParams = { ...productParams };
 
-      this.state.current = 1;
+    this.state.current = 1;
 
-      this.loadProduct();
+    this.loadProduct();
 
   };
 
@@ -441,64 +426,6 @@ class Index extends Component {
       searchProductParams: {},
     });
 
-  };
-
-
-  /**
-   * 获取锁定状态
-   * @param item
-   */
-  loadProductLock = (item) => {
-    // console.log(' 查询锁定对象为 :', item.id);
-    const _this = this;
-    const params = {};
-    params.id = item.id;
-    params.dataNo = item.markingNo;
-    fetch(HttpFetch.queryProductLock, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser() ? getCurrentUser().token : '',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {head} = d;
-
-        const isProductUpdate = head.rtnCode === '000000';
-
-        if (!isProductUpdate) {
-          message.error(head.rtnMsg);
-        }
-
-        _this.setState({
-          isProductUpdate,
-        });
-      })
-      .catch(function(ex) {
-        // message.error('加载图片失败！');
-        _this.setState({
-          loading: false,
-        });
-      });
-
-  };
-
-
-  /** *
-   * 解锁
-   * @param item
-   */
-  updateProductLock = (item) => {
-    const { dispatch } = this.props;
-    const { isProductUpdate } = this.state;
-    if (isProductUpdate)
-      dispatch({
-        type: 'product/updateProductUnLock',
-        payload: { id: item.id },
-      });
   };
 
 

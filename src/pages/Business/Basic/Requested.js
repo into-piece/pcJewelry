@@ -256,13 +256,13 @@ class RequestedComponent extends PureComponent {
             {getFieldDecorator('qualityEnName', {
               rules: [{ required: true, message: '请输入英文名称' }],
               initialValue: current.qualityEnName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="品质要求中文名" {...this.formLayout}>
             {getFieldDecorator('qualityZhName', {
               rules: [{ message: '请输入中文名称' }],
               initialValue: current.qualityZhName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
         </Form>
       );
@@ -288,7 +288,7 @@ class RequestedComponent extends PureComponent {
                   }}
                   component={Requested}
                 />
-                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求"/>
+                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
               </div>
               <Card bordered={false} loading={false}>
                 <Table
@@ -339,7 +339,7 @@ class RequestedComponent extends PureComponent {
                   >
                     品质要求信息
                   </span>
-                  <Divider/>
+                  <Divider />
                   {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
@@ -397,21 +397,21 @@ class RequestedComponent extends PureComponent {
                   >
                     取消审批
                   </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={() => {
+                                                            className={styles.buttomControl}
+                                                            size="small"
+                                                            type="primary"
+                                                            icon="lock"
+                                                            onClick={() => {
                       ModalConfirm({
                         content: '确定审批吗？', onOk: () => {
                           this.clickFreezeFrom();
                         },
                       });
                     }}
-                    disabled={isEdit}
-                  >
+                                                            disabled={isEdit}
+                                                          >
                     审批
-                  </Button>)}
+                                                                        </Button>)}
                 </div>
               </Card>
             </div>

@@ -36,8 +36,15 @@ const errorHandler = error => {
     notification.error({
       message: '该操作未授权。',
     });
+    return;
   }
 
+  if (status === 500) {
+    notification.error({
+      message: '请求失败。',
+    });
+    return false;
+  }
 
   if (status === 402) {
     // router.push('/exception/403');
