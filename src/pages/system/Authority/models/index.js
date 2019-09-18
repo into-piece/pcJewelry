@@ -1,41 +1,44 @@
 import {
-  querylistProduct,
-  saveTheProduct,
-  deleteTheProduct,
-  updateTheProduct,
-  freezeTheProduct,
-  unFreezeTheProduct,
-  querylistProductSeries,
-  saveTheProductSeries,
-  deleteTheProductSeries,
-  updateTheProductSeries,
-  freezeTheProductSeries,
-  queryTheProductLock,
-  updateTheProductUnLock,
+  querylistPermissionUser,
+  queryUserPermission,
+  queryPermissionTree,
+  updateThePermission,
+  disableThePermission,
+  enableThePermission,
 } from '@/services/api';
 
 export default {
-  namespace: 'product',
+  namespace: 'permission',
 
   state: {
     province: [],
     city: [],
     head: [],
     isLoading: false,
+    treeData:[],
+    permissionData:[]
   },
 
   effects: {
-    *fetchListProduct({ payload, callback }, { call, put }) {
-      const response = yield call(querylistProduct, payload);
+    *fetchListPermissionUser({ payload, callback }, { call, put }) {
+      const response = yield call(querylistPermissionUser, payload);
       yield put({
         type: 'list',
         payload: response,
       });
       if (callback) callback();
     },
+    *fetchUserPermission({ payload, callback }, { call, put }) {
+      const response = yield call(queryUserPermission, payload);
+      yield put({
+        type: 'userpermission',
+        payload: response,
+      });
+      if (callback) callback();
+    },
 
-    *addProduct({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheProduct, payload);
+    *updatePermission({ payload, callback }, { call, put }) {
+      const response = yield call(updateThePermission, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -43,8 +46,17 @@ export default {
       if (callback) callback();
     },
 
-    *updateProduct({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheProduct, payload);
+    *fetchPermissionTree({ payload, callback }, { call, put }) {
+      const response = yield call(queryPermissionTree, payload);
+      yield put({
+        type: 'treedata',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *disableThePermission({ payload, callback }, { call, put }) {
+      const response = yield call(disableThePermission, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -52,100 +64,14 @@ export default {
       if (callback) callback();
     },
 
-    *deleteProduct({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheProduct, payload);
+    *enableThePermission({ payload, callback }, { call, put }) {
+      const response = yield call(enableThePermission, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback();
     },
-
-    *freezeProduct({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheProduct, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *unfreezeProduct({ payload, callback }, { call, put }) {
-      const response = yield call(unFreezeTheProduct, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-
-
-    *queryProductLock({ payload, callback }, { call, put }) {
-      const response = yield call(queryTheProductLock, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *updateProductUnLock({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheProductUnLock, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *fetchListProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(querylistProductSeries, payload);
-      yield put({
-        type: 'list',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *addProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(saveTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *updateProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(updateTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *deleteProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(deleteTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-    *freezeProductSeries({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheProductSeries, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      if (callback) callback();
-    },
-
-
-
   },
 
   reducers: {
@@ -165,6 +91,23 @@ export default {
       };
     },
 
+
+    userpermission(state, action){
+      return {
+        ...state,
+        head: action.payload,
+        permissionData:action.payload.permissionData
+      };
+
+    },
+    treedata(state, action){
+      return {
+        ...state,
+        head: action.payload,
+        treeData:action.payload.body.records
+      };
+
+    },
     save(state, action) {
       return {
         ...state,

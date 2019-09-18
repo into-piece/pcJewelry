@@ -15,6 +15,79 @@ export async function logout() {
   return request('/logout');
 }
 /*
+* 权限接口
+* */
+
+export async function disableThePermission(params) {
+  return request(`${priefx  }/sys.user/sys-resource/disableUser`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function enableThePermission(params) {
+  return request(`${priefx  }/sys.user/sys-resource/enableUser`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function querylistPermissionUser(params) {
+  return request(`${priefx  }/sys.user/sys-resource/getPermissionUsers`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function queryUserPermission(params) {
+  return request(`${priefx  }/sys.user/sys-resource/getPermissionByUser`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function queryPermissionTree(params) {
+  return request(`${priefx  }/sys.user/sys-resource/getTreeData`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+export async function updateThePermission(params) {
+  return request(`${priefx  }/sys.user/sys-resource/savePermission`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
+
+
+
+/*
 * 员工接口
 * */
 export async function querylistPerson(params) {

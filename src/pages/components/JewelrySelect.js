@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
-import querystring from 'querystring';
+import {  Select } from 'antd';
 import { getCurrentUser } from '../../utils/authority';
 
 const { Option } = Select;

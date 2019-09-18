@@ -14,3 +14,9 @@ export const genderConvert = {
   0:'女',
   1:'男',
 };
+
+
+export const ableConvert = {
+  0:'禁用',
+  2:'启用',
+};

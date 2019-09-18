@@ -208,7 +208,7 @@ export default [
           },
 
           {
-            path: '/business/Receiving',
+            path: '/business/receiving',
             name: 'receiving',
             icon: 'form',
             component: './Business/Receiving/Receiving',

@@ -204,7 +204,6 @@ const routes = [
         })
       : require('../../layouts/BasicLayout').default,
     Routes: [require('../Authorized').default],
-    authority: ['admin', 'user', 'chents'],
     routes: [
       {
         path: '/index.html',
@@ -1429,7 +1428,7 @@ const routes = [
             ],
           },
           {
-            path: '/business/Receiving',
+            path: '/business/receiving',
             name: 'receiving',
             icon: 'form',
             component: __IS_BROWSER
