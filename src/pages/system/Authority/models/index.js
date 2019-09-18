@@ -31,7 +31,7 @@ export default {
     *fetchUserPermission({ payload, callback }, { call, put }) {
       const response = yield call(queryUserPermission, payload);
       yield put({
-        type: 'userpermission',
+        type: 'userpermission2',
         payload: response,
       });
       if (callback) callback();
@@ -91,14 +91,19 @@ export default {
       };
     },
 
-
+    userpermission2(state, action){
+      return {
+        ...state,
+        head: action.payload,
+        permissionData: action.payload.body.records
+      };
+    },
     userpermission(state, action){
       return {
         ...state,
         head: action.payload,
-        permissionData:action.payload.permissionData
+        permissionData:[...action.payload.permissionData]
       };
-
     },
     treedata(state, action){
       return {
