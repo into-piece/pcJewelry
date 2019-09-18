@@ -136,7 +136,6 @@ class BasicLayout extends React.Component {
 
   getPageTitle = (pathname, breadcrumbNameMap) => {
     const currRouterData = this.matchParamsPath(pathname, breadcrumbNameMap);
-
     if (!currRouterData) {
       return 'Ant Tabs';
     }
@@ -193,7 +192,7 @@ class BasicLayout extends React.Component {
   onHandlePage = e => {
     // 点击左侧菜单
     const { menuData } = this.props;
-    console.log(e)
+    // console.log(e)
     let { key } = e;
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;

@@ -910,7 +910,7 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
+          <Modal {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
             {this.openCutImageModal()}
           </Modal>
         </Form>
@@ -1257,14 +1257,14 @@ class ProductDetail extends Component {
           ref="cropper"
           src={uploadFile}
           className={baseStyles.cropper}
-          style={{ height: 400 }}
+          style={{ height: '400px',width:'400px' }}
           preview=".img-preview"
           cropBoxResizable={false}
           viewMode={1} // 定义cropper的视图模式
-          zoomable // 是否允许放大图像
+          dragMode="move"
           guides
           background
-          aspectRatio={800 / 800}
+          aspectRatio={1 / 1}
           // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
