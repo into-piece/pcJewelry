@@ -209,6 +209,13 @@ class Index extends Component {
                   scroll={{ x: 1000 }}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
+                    // const { dispatch } = this.props;
+                    // if(showItem){
+                    //   dispatch({
+                    //     type: 'permission/fetchUserPermission',
+                    //     payload: { id:showItem.id},
+                    //   });
+                    // }
 
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
