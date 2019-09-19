@@ -15,7 +15,7 @@ class JewelryTable extends Component {
   }
 
   render() {
-    const { body = {}, isLoading,scroll={} } = this.props;
+    const { body = {}, isLoading, scroll = {} } = this.props;
 
     const { pageCurrent, selectedRowKeys } = this.state;
 
@@ -46,7 +46,7 @@ class JewelryTable extends Component {
         rowSelection={rowSelection}
         pagination={paginationProps}
         scroll={scroll}
-        rowClassName={this.props.rowClassName?this.props.rowClassName:this.onSelectRowClass}
+        rowClassName={this.props.rowClassName ? this.props.rowClassName : this.onSelectRowClass}
         rowKey={record => record.id}
         onRow={record => {
           return {
@@ -62,16 +62,17 @@ class JewelryTable extends Component {
   clickRowItem = record => {
     const { onSelectItem } = this.props;
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let {rowData} = this.state;
+    let { rowData } = this.state;
     const selects = selectedRowKeys || [];
-    const {id} = record;
+    const { id } = record;
 
-    let selectItem = {...record};
+    let selectItem = { ...record };
+
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
-      if (rowData.includes(record)) rowData = [];
-      if (rowSelectedData.includes(record)) {
-        // console.log('includes ' + record.id);
+      if (rowData.flatMap(e=>e.id).includes(record.id)) rowData = [];
+      if (rowSelectedData.flatMap(e => e.id).includes(record.id)) {
+        // console.log(`includes ${  record.id}`);
         rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
       }
     } else {
@@ -80,26 +81,22 @@ class JewelryTable extends Component {
       }
       rowData = [];
       rowData.push({ ...record });
+      selects.splice(0,selects.length);
       selects.push(id);
+      rowSelectedData.splice(0,rowSelectedData.length);
       rowSelectedData.push(record);
     }
-
     if (selects.length === 0) {
       // const recordK = selects[selects.length - 1];
       // const r = rowSelectedData.filter(value => value.id == recordK);
       // selectItem = r[0];
       // this.showSelectItem(r[0]);
 
-    // } else {
+      // } else {
       this.setState({
         showItem: false,
         selectItem: false,
-        // isEdit: true,
-        // current: false,
-        // fristLoad: true,
       });
-      // this.state.showItem = false;
-      // this.state.selectItem = false;
       selectItem = false;
     }
 
@@ -109,34 +106,28 @@ class JewelryTable extends Component {
     this.setState({
       selectedRowKeys: [].concat(selects),
       rowData,
-      selectItem
-      // customerSelectedRowKeys: [],
-      // selectCustomerItem: '',
-      // rowCustomerData: [],
-      // customerPageCurrent: 1,
-      // rowCustomerSelectedData: [],
+      selectItem,
     });
+    console.log('2', [...this.state.rowSelectedData]);
+    console.log('2', [...rowData]);
+    console.log('2', selectItem);
+    if (onSelectItem) onSelectItem(selectItem, rowData);
 
-    // console.log(" select the data  ",selectItem)
-
-    if (onSelectItem) onSelectItem(selectItem,rowData);
-
-    // this.clearClient();
-    // this.startShowTab();
   };
 
-  selectChange = (record, index) => {};
+  selectChange = (record, index) => {
+  };
 
 
   /** *
    *
    * 通过最新列表更新选择的值
    * */
-  updateSelectDatas =(body)=>{
+  updateSelectDatas = (body) => {
     const { onSelectItem } = this.props;
-    // console.log(" updateSelectDatas  :",body)
 
     const { rowSelectedData, selectItem } = this.state;
+
     if (rowSelectedData && rowSelectedData.length > 0) {
       const newRowSelected = body.records.filter(v => {
         const rs = rowSelectedData.filter(v1 => {
@@ -147,7 +138,7 @@ class JewelryTable extends Component {
       });
       // console.log(" updateSelectDatas  rowSelecteData ",newRowSelected,selectItem)
       if (newRowSelected && newRowSelected.length > 0) {
-        this.state.rowSelectedData = newRowSelected;
+        // this.state.rowSelectedData = newRowSelected;
         // this.setState({
         //   rowSelectedData: newRowSelected,
         // });
@@ -166,32 +157,32 @@ class JewelryTable extends Component {
         this.setState({
           selectItem: newShowItem[0],
         });
-      }else{
-        this.state.selectItem=false
+      } else {
+        this.state.selectItem = false;
       }
-
-      if (onSelectItem) onSelectItem(this.state.selectItem,this.state.rowSelectedData);
+      if (onSelectItem) onSelectItem(this.state.selectItem, this.state.rowSelectedData);
     }
 
-  }
+  };
 
   pageChange = (page, pageSize) => {
     const { pageChange } = this.props;
     if (pageChange) pageChange(page, pageSize);
-    if (this.props.onSelectItem) this.props.onSelectItem(false,[]);
+    if (this.props.onSelectItem) this.props.onSelectItem(false, []);
 
 
     this.setState({
-      pageCurrent:page,
-      selectItem:false,
-      selectedRowKeys:[],
-      rowSelectedData:[],
+      pageCurrent: page,
+      selectItem: false,
+      selectedRowKeys: [],
+      rowSelectedData: [],
 
-    })
+    });
 
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
+
     const { onSelectItem } = this.props;
     let selectItem = false;
     if (selectedRowKeys.length > 0) {
@@ -219,9 +210,9 @@ class JewelryTable extends Component {
       rowSelectedData: selectedRows,
       selectCustomerItem: '',
     });
+    console.log('ss',selectedRows)
     this.state.selectCustomerItem = '';
-
-    if (onSelectItem) onSelectItem(selectItem,selectedRows);
+    if (onSelectItem) onSelectItem(selectItem, selectedRows);
   };
 
   onSelectRowClass = (record, index) => {
