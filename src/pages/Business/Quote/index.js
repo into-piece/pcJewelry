@@ -23,8 +23,12 @@ const { TextArea } = Input;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
-const { deleteProductQuoteHeader, deleteProformaInvoiceDetail } = serviceObj
-
+const {
+  deleteProductQuoteHeader, deleteProformaInvoiceDetail, getLastQuoteDetailByProductId, getTopQuoteDetailByProductId, getlistProductLine,
+  getLastPackPriceByProductId,
+  getActualCountByProductId
+} = serviceObj
+const { headList, detailList } = jsonData
 
 // 右手边按钮集合
 const btnGroup = [
@@ -41,21 +45,13 @@ function returnStatus(v) {
   return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : ''
 }
 
-// createTime: "2019-06-07 10:49:57"
-// createUser: "zengwl"
-// enName: "Strategic Customer"
-// id: "79066b803097ff4e6d28b0afbf20fed1"
-// modifier: "zengwl"
-// mtime: "2019-07-27 00:56:51"
-// status: "0"
-// zhName: "战略客户"
-
+// 报价主页表头
 const clientContentColumns = [
   {
     title: <div className={styles.row_normal2}>客户编号</div>,
     dataIndex: 'customerNo',
     key: 'customerNo',
-    width:100,
+    width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     )
@@ -64,13 +60,13 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>简称</div>,
     dataIndex: 'customerShotName',
     key: 'customerShotName',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>报价单号</div>,
     dataIndex: 'quoteNumber',
     key: 'quoteNumber',
-    width:100,
+    width: 100,
     sorter: (a, b) => {
       return pingYincompare(a.zhName, b.zhName);
     },
@@ -79,7 +75,7 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>类别</div>, // ?
     dataIndex: 'typeName',
     key: 'typeName',
-    width:100,
+    width: 100,
 
   },
 
@@ -87,7 +83,7 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>报价日期</div>,
     dataIndex: 'quoteDate',
     key: 'quoteDate',
-    width:100,
+    width: 100,
     render: (data) => (data)
   },
 
@@ -95,7 +91,7 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>数量</div>,
     dataIndex: 'quoteTotalCount',
     key: 'quoteTotalCount',
-    width:100,
+    width: 100,
     sorter: (a, b) => {
       return pingYincompare(a.zhName, b.zhName);
     },
@@ -105,7 +101,7 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>重量</div>,
     dataIndex: 'quoteTotalWeight',
     key: 'quoteTotalWeight',
-    width:100,
+    width: 100,
     sorter: (a, b) => {
       encompare(a.enAddress, b.enAddress);
     },
@@ -114,29 +110,29 @@ const clientContentColumns = [
     title: <div className={styles.row_normal2}>总额</div>,
     dataIndex: 'quoteTotalAmount',
     key: 'quoteTotalAmount',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>终客号</div>,
     dataIndex: 'endNo',
     key: 'endNo',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>终客简称</div>,
     dataIndex: 'endShotName',
     key: 'endShotName',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>产品说明</div>,// ?
     dataIndex: 'explains',
     key: 'explains',
-    width:100,
+    width: 100,
   },
 ];
 
-
+// 报价详情表头
 const customerColumns = [
   {
     title: <div className={styles.row_normal2}>产品编号</div>,
@@ -147,25 +143,25 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>客户货号</div>,
     dataIndex: 'custoerProductNo',
     key: 'custoerProductNo',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>前次工费/克</div>,
     dataIndex: 'lastCount',
     key: 'enName',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>实际工费/克</div>,
     dataIndex: 'actualCount',
     key: 'actualCount',
-    width:100,
+    width: 100,
   },
   {
     title: <div className={styles.row_normal2}>最高工费/克</div>,
     dataIndex: 'topCount',
     key: 'topCount',
-    width:100,
+    width: 100,
     sorter: (a, b) => {
       return pingYincompare(a.zhName, b.zhName);
     },
@@ -173,7 +169,7 @@ const customerColumns = [
   {
     title: <div className={styles.row_normal2}>此次工费/克</div>,
     dataIndex: 'nowCount',
-    width:100,
+    width: 100,
     key: 'nowCount',
   },
 
@@ -181,14 +177,14 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>字印价/件</div>,
     dataIndex: 'markingPrice',
     key: 'markingPrice',
-    width:100,
+    width: 100,
   },
 
   {
     title: <div className={styles.row_normal2}>包装价/件</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
-    width:100,
+    width: 100,
     sorter: (a, b) => {
       return pingYincompare(a.zhName, b.zhName);
     },
@@ -198,7 +194,7 @@ const customerColumns = [
     title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
-    width:100,
+    width: 100,
     sorter: (a, b) => {
       encompare(a.enAddress, b.enAddress);
     },
@@ -215,66 +211,7 @@ const searchParams = [
   { key: '产品说明', value: 'explains' },
 ]
 
-// 新增 编辑 遍历配置
-const headList = [
-  { key: '报价单号', value: '系统自动生成', type: 4, noNeed: true },
-  { key: '报价日期', value: '系统自动生成', type: 4, noNeed: true },
-  { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
-  { key: '紧急程度', value: 'emergency', text: '紧急', type: 5, initValue: '1', noNeed: true },
-  { key: '客户编号', value: 'customerId', "type": 2, "list": "customerDropDownList" },
-  { key: '客户简称', value: 'customerShotName', type: 7, noNeed: true },
-  { key: '终客编号', value: 'endId', "type": 2, "list": "endCustomerList" },
-  { key: '终客简称', value: 'endShotName' },
-  { key: '报价方式', value: 'quoteMethod', type: 6, arr: [{ key: '计重', value: 'H008002' }, { key: '计件', value: 'H008001' }], initValue: 1 },
-  { key: '是否计石重', value: 'isWeighStones', type: 6, arr: [{ key: '是', value: 'H009001' }, { key: '否', value: 'H009002' }], initValue: 1 },
-  { key: '结算币种', value: 'currency', "type": 2, "list": "currencydropdown", noNeed: true }, // ?
-  { key: '主材价', value: 'quotePrice', noNeed: true },
-  { key: '税率 (%)', value: 'taxRate', noNeed: true },
-  { key: '字印编码', value: 'markingId', "type": 2, "list": "markinglist", noNeed: true },
-  { key: '字印英文名', value: 'markingEnName', type: 7, noNeed: true },
-  { key: '包装单价', value: 'packPriceType', type: 6, arr: [{ key: '计收', value: 'H011001' }, { key: '不计收', value: 'H011002' }], initValue: 1 },
-  { key: '客户备料', value: 'customerPreparation', text: '客户备料', type: 5, noNeed: true, initValue: '1' },
-  { key: '向客户采购用料', value: 'purchasingMaterialsFromCustomers', text: '向客户备料', type: 5, noNeed: true, initValue: '1' }, // ?
-  { key: '说明', value: 'explains', type: 8, noNeed: true },
-  { key: '备注', value: 'remark', type: 8, noNeed: true },
-]
 
-const detailList = [
-  { key: '产品编号', value: 'id', clickFn: 'showProductModalFunc', text: '选择产品编号', type: 3 },
-  { key: '客户货号', value: 'custoerProductNo', noNeed: true, type: 7 },
-  { key: '类别', value: 'productTypeName', noNeed: true, type: 7 },
-  { key: '成色名称', value: 'productColorName', noNeed: true, type: 7 }, // ?
-  { key: '宝石颜色', value: 'gemColorName', noNeed: true, type: 7 },
-  { key: '电镀颜色', value: 'platingColorName', noNeed: true, type: 7 },
-  { key: '产品系列', value: 'productLineName', noNeed: true },
-  { key: '产品报价系数', value: 'productLineCoefficientQuotation', noNeed: true },
-  { key: '计量单位', value: 'unitOfMeasurementName', noNeed: true },
-  { key: '重量单位', value: 'unitOfWeightName', noNeed: true },
-  { key: '前次工费/克', value: 'lastCount', noNeed: true },
-  { key: '最高工费/克', value: 'topCount', noNeed: true },
-  { key: '实际工费/克', value: 'actualCount', noNeed: true },
-  { key: '此次工费/克', value: 'nowCount' },
-  { key: '是否计石重', value: 'isWeighStones', type: 6, arr: [{ key: '是', value: 'H009001' }, { key: '否', value: 'H009002' }], initValue: 1 },
-  { key: '石材重量', value: 'stonesWeight', noNeed: true },
-  { key: '主材重量', value: 'mainMaterialWeight', noNeed: true },
-  { key: '石材价', value: 'stonePrice', noNeed: true },
-  { key: '字印编码', value: 'markingId', noNeed: true },
-  { key: '字印英文名', value: 'markingEnName', noNeed: true },
-  { key: '字印价/件', value: 'markingPrice', noNeed: true },
-  { key: '包装单价/件', value: 'packPrice', noNeed: true },
-  { key: '单价', value: 'price' },
-  { key: '报价数量', value: 'qty' },
-  { key: '报价金额', value: 'quotedAmount' },
-  { key: '报价重量范围', value: 'quotedWeightRange', noNeed: true },
-  { key: '产品工费/件', value: 'productCost' },
-  { key: '产品长度', value: 'productLength', noNeed: true },
-  { key: '长度描述', value: 'lengthDescription', noNeed: true },
-  { key: '长度单位', value: 'lengthUnit', noNeed: true },
-  { key: '戒围标准', value: 'ringAroundStId', noNeed: true },
-  { key: '戒围号', value: 'sizeCodeId' },
-  { key: '备注', value: 'remark' },
-  { key: '客户要求', value: '1' } // ?
-]
 
 // 新增 产品 遍历配置
 const productSearchParams = [
@@ -367,8 +304,9 @@ class Info extends Component {
   }
 
   openAddModal = () => {
-    const { dispatch, rightMenu } = this.props
-    const isHead = rightMenu === 1
+    const { dispatch, choosenRowData } = this.props
+    const isHead = !choosenRowData.id
+    debugger
     if (isHead) {
       dispatch({
         type: 'quote/getcurrencydropdown'
@@ -413,10 +351,10 @@ class Info extends Component {
         this.setState({ modalType });
         break;
       case 'delete':
-        ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDelect();}});
+        ModalConfirm({ content: "确定删除吗？", onOk: () => { this.handleDelect(); } });
         break;
       case 'lock':
-        ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleLock();}});
+        ModalConfirm({ content: "确定审批吗？", onOk: () => { this.handleLock(); } });
         break;
       case 'copy':
         this.handleCopy()
@@ -468,16 +406,29 @@ class Info extends Component {
         customerShotName: shotName,
       });
     }
+
+    if (type === 'markingId') {
+      const obj = this.props.quote.customerDropDownList.find(item => {
+        return item.value === value
+      })
+      const { markingEnName, markingPrice } = obj
+      this.props.form.setFieldsValue({
+        markingEnName,
+        markingPrice
+      });
+    }
   };
 
   handleCheckChange = (e, value) => {
     console.log(e.target.checked, '==============handleCheckChange')
-    const check = e.target.checked ? '1' : '0'
-    debugger
-    // this.props.form.setFieldsValue({
-    //   value: check,
-    // });
+    if (value === 'isWeighStones') {
+      const isWeighStones = e.target.checked === 1
+      devbugger
+      isWeighStones && this.props.form.validateFields(['stonePrice'], { disabled: true });
+    }
   }
+
+
 
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
@@ -505,7 +456,7 @@ class Info extends Component {
           <span>{value || ''}</span>
         )
       case 5:
-        return <Checkbox checked={form.getFieldValue(value)}>{text}</Checkbox>
+        return <Checkbox checked={form.getFieldValue(value)} onChange={e => { this.handleCheckChange(e, value) }}>{text}</Checkbox>
       case 6:
         return <Radio.Group>
           {
@@ -521,12 +472,12 @@ class Info extends Component {
       case 9:
         return <DatePicker />
       default:
-        return <Input style={{ width: '100' }} placeholder="请输入" />
+        return <Input disabled={value === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001'} style={{ width: '100' }} placeholder="请输入" />
     }
     //  type === 7 ?
   }
 
-
+  // 获取新增/编辑弹窗内容
   getModalContent = () => {
     const {
       rightMenu,
@@ -538,12 +489,11 @@ class Info extends Component {
     const content = ''
     const isEdit = modalType === 'edit'
     const { quote } = this.props
-    const addArr = rightMenu === 1 ? headList : detailList
-    console.log(this.props.form.getFieldsValue())
+    const addArr = choosenRowData.id ? detailList : headList;
     return (
       <Form size="small">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -552,9 +502,8 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? choosenRowData[value] : initValue || undefined,
+                      initialValue: isEdit ? choosenRowData[value] : initValue || (number ? 0 : undefined),
                     })(this.returnElement({ key, value, noNeed, type, list, clickFn, text, arr, initValue, data: quote, form }))
-
                   }
                 </FormItem>
               </div>
@@ -587,21 +536,27 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = () => {
-    const { rightMenu, form } = this.props
-    const str = rightMenu === 1 ? 'quotelist' : 'quoteDatialList'
+    const { form, choosenRowData } = this.props
+    const { productLineId } = this.state
+    const isHead = !choosenRowData.id
+    const str = isHead ? 'quotelist' : 'quoteDatialList'
+    let params = {}
+    if (!isHead) {
+      params = { quoteHeadId: choosenRowData.id, productLineId }
+    }
     form.validateFields((err, values) => {
       if (!err) {
         // this.setState({
         //   [selectKey]
         // })
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        serviceObj[`add${str}`](values).then(res => {
+        serviceObj[`add${str}`]({ ...params, ...values }).then(res => {
           const { rtnCode, rtnMsg } = res.head
           if (rtnCode === '000000') {
             notification.success({
               message: rtnMsg,
             });
-            this.getList()
+            this.getList({ sendReq: 'currentQuote' });
             this.btnFn('');
           }
         })
@@ -772,20 +727,79 @@ class Info extends Component {
   // { key: '成色名称', value: '1', noNeed: true , type: 7}, // ?
   // { key: '宝石颜色', value: 'gemColorName', noNeed: true, type: 7 },
   // { key: '电镀颜色', value: 'platingColorName', noNeed: true, type: 7 },
-  handleProductModalOk = () => {
+  handleProductModalOk = async () => {
+    const { choosenRowData } = this.props
     this.showProductModalFunc(2);
     console.log(this.props.productChoosenRowData)
     debugger
-    const { id, custoerProductNo, productTypeName, gemColorName, platingColorName, productColorName } = this.props.productChoosenRowData
-    debugger
-    this.props.form.setFieldsValue({
+    const {
       id,
-      productColorName,
       custoerProductNo,
       productTypeName,
       gemColorName,
-      platingColorName
+      platingColorName,
+      productColorName,
+      productType,
+      productLineId,
+      productLineName,
+      finishedWeight,
+      unitOfMeasurementName,
+      unitOfWeightName
+    } = this.props.productChoosenRowData
+    let lastCount = 0
+    await getLastQuoteDetailByProductId({ productId: id }).then(res => {
+      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+        lastCount = res.body.records[0].count
+      }
+    })
+    let topCount = 0
+    await getTopQuoteDetailByProductId({ productId: id }).then(res => {
+      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+        topCount = res.body.records[0].count
+      }
+    })
+    let listProductLine = ''
+    await getlistProductLine({ productId: id }).then(res => {
+      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+        listProductLine = res.body.records[0].productLineCoefficientQuotation
+      }
+    })
+
+    let packPrice = ''
+    await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.id }).then(res => {
+      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+        packPrice = res.body.records[0].productLineCoefficientQuotation
+      }
+    })
+
+    let actualCount = ''
+    await getActualCountByProductId({ productId: id }).then(res => {
+      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+        actualCount = res.body.records[0].count
+      }
+    })
+
+    this.props.form.setFieldsValue({
+      productId: id,
+      productColorName,
+      custoerProductNo,
+      productTypeName,
+      productType,
+      gemColorName,
+      platingColorName,
+      productLineId,
+      finishedWeight,
+      topCount,
+      lastCount,
+      unitOfMeasurementName,
+      unitOfWeightName,
+      productLineName,
+      packPrice,
+      actualCount
     });
+    this.setState({
+      productLineId
+    })
   }
 
   handleProductModalCancel = () => {
@@ -1068,14 +1082,18 @@ class CenterInfo extends Component {
 
   // 当表头重复点击选中 清空选中 清空表体
   clearFn = (type) => {
-    const { dispatch, rightMenu } = this.props;
+    const { dispatch } = this.props;
     debugger
     if (type === 1) {
       debugger
       dispatch({
         type: `quote/clearDetailList`,
       });
-    } else { }
+      dispatch({
+        type: `quote/getChoosenRowData`,
+        payload: {}
+      });
+    }
   }
 
   onSearch = (v) => {
@@ -1117,7 +1135,7 @@ class CenterInfo extends Component {
         <SearchForm data={searchParams} source={quote} onSearch={onSearch} returnElement={returnElement} />
         <div className={styles.tableBox}>
           <Table
-            scroll={{x:1400}}
+            scroll={{ x: 1400 }}
             columns={clientContentColumns}
             body={quotelist}
             changeChoosenRow={record => { this.changeChoosenRow(record, 1) }}
@@ -1146,7 +1164,7 @@ class CenterInfo extends Component {
         </Radio.Group>
         <div className={styles.tableBox}>
           <Table
-            scroll={{x:1600}}
+            scroll={{ x: 1600 }}
             columns={customerColumns}
             body={quoteDatialList}
             type={2}
