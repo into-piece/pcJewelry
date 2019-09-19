@@ -65,7 +65,6 @@ class JewelryTable extends Component {
     let { rowData } = this.state;
     const selects = selectedRowKeys || [];
     const { id } = record;
-
     let selectItem = { ...record };
 
     if (selects.includes(id)) {
@@ -99,6 +98,13 @@ class JewelryTable extends Component {
       });
       selectItem = false;
     }
+    if(selects.length>0&&!record){
+      this.setState({
+        showItem: rowSelectedData[0],
+        selectItem: rowSelectedData[0],
+      });
+      selectItem = rowSelectedData[0];
+    }
 
     this.state.selectItem = selectItem;
 
@@ -108,9 +114,6 @@ class JewelryTable extends Component {
       rowData,
       selectItem,
     });
-    console.log('2', [...this.state.rowSelectedData]);
-    console.log('2', [...rowData]);
-    console.log('2', selectItem);
     if (onSelectItem) onSelectItem(selectItem, rowData);
 
   };
