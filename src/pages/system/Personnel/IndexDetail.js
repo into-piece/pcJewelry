@@ -9,6 +9,8 @@ import {
   DatePicker,
   Divider, Carousel, Modal, message, Spin,Empty
 } from 'antd';
+import { statusConvert, YoNConvert, genderConvert } from '@/utils/convert';
+
 import moment from 'moment';
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
@@ -140,7 +142,6 @@ class IndexDetail extends Component {
       if (this.state.isUpdateFrom) {
         this.state.isUpdateFrom = false;
       }
-
       if (refarshList)
         refarshList();
 
@@ -231,35 +232,11 @@ class IndexDetail extends Component {
     // console.log(" data status ",showItem?showItem.status:'nudefine')
 
     const v = showItem||{};
-    if (v.status == 0) {
-      v.statusVar = '输入';
-    } else if (v.status == 1) {
-      v.statusVar = '使用中';
-    } else if (v.status == 2) {
-      v.statusVar = '审批';
-    }
-    if(v.gender==1){
-      v.genderVar ='男';
-    }else if(v.gender==0){
-      v.genderVar ='女';
-    }
-    if(v.marriage==1){
-      v.marriageVar ='已婚';
-    }else if(v.marriage==0){
-      v.marriageVar ='未婚';
-    }
-    if(v.isSleepOut==1){
-      v.isSleepOutVar ='是';
-    }else if(v.isSleepOut==0){
-      v.isSleepOutVar ='否';
-    }
-    if(v.isDineIn==1){
-      v.isDineInVar ='是';
-    }else if(v.isDineIn==0){
-      v.isDineInVar ='否';
-    }
-
-
+    v.statusVar = statusConvert[v.status];
+    v.genderVar = genderConvert[v.gender];
+    v.marriageVar = YoNConvert[v.marriage];
+    v.isSleepOutVar = YoNConvert[v.isSleepOut];
+    v.isDineInVar = YoNConvert[v.isDineIn];
 
     if (!paths) paths = [];
 

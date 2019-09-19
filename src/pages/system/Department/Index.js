@@ -9,7 +9,7 @@ import {
   Drawer,
 } from 'antd';
 import { connect } from 'dva';
-
+import {statusConvert} from '@/utils/convert';
 
 import business from '../../dev/business.less';
 import product from './Index.less';
@@ -186,16 +186,12 @@ class Index extends Component {
         this.refs.deptTable.updateSelectDatas(body);
         this.state.isLoadList = false;
       }
+
+
    if(body.records){
      const newdata =body.records.map(v => {
        const s = v.status;
-       if (s == 0) {
-         v.statusVar = '输入';
-       } else if (s == 1) {
-         v.statusVar = '使用中';
-       } else if (s == 2) {
-         v.statusVar = '审批';
-       }
+         v.statusVar = statusConvert[s];
        return v;
      });
    }

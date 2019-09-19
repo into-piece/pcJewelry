@@ -198,13 +198,20 @@ export const queryPersonList = `${priefx}/listUsers`
  * 员工  部门下拉
  * @type {string}
  */
-export const listDeptDropDown = `${priefx}//sys.user/sys-role/listDeptDropDown`
+export const listDeptDropDown = `${priefx}/sys.user/sys-role/listDeptDropDown`
 
 
+
+/**
+ * 权限  获取员工列表
+ * @type {string}
+ */
+export const queryPermissionUserList = `${priefx}/sys.user/sys-resource/getPermissionUsers`
 
 
 export default {
   priefx,
+  queryPermissionUserList,
   listDeptDropDown,
   queryPersonList,
   loadMaintainer,

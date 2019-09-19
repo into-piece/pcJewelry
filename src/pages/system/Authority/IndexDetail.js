@@ -3,12 +3,11 @@ import {
   Card,
   Form,
   Button,
-  Divider,  Tree, message, Spin,
+  Divider, Tree, message, Spin,
 } from 'antd';
 
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
-import styles from './Index.less';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '@/utils/HttpFetch';
 import { connect } from 'dva';
@@ -18,66 +17,25 @@ import ModalConfirm from '@/utils/modal';
 
 const { TreeNode } = Tree;
 
-const treeData = [
-  {
-    title: '0-0',
-    key: '0-0',
-    selectable:false,
-    disableCheckbox: true,
-    children: [
-      {
-        title: '0-0-0',
-        key: '0-0-0',
-        children: [
-          { title: '0-0-0-0', key: '0-0-0-0' },
-          { title: '0-0-0-1', key: '0-0-0-1' },
-          { title: '0-0-0-2', key: '0-0-0-2' },
-        ],
-      },
-      {
-        title: '0-0-1',
-        key: '0-0-1',
-        children: [
-          { title: '0-0-1-0', key: '0-0-1-0' },
-          { title: '0-0-1-1', key: '0-0-1-1' },
-          { title: '0-0-1-2', key: '0-0-1-2' },
-        ],
-      },
-      {
-        title: '0-0-2',
-        key: '0-0-2',
-      },
-    ],
-  },
-  {
-    title: '0-1',
-    key: '0-1',
-    children: [
-      { title: '0-1-0-0', key: '0-1-0-0' },
-      { title: '0-1-0-1', key: '0-1-0-1' },
-      { title: '0-1-0-2', key: '0-1-0-2' },
-    ],
-  },
-  {
-    title: '0-2',
-    key: '0-2',
-  },
-];
 
-
-
-@connect(({ product, loading }) => {
-  const { rtnCode, rtnMsg } = product;
+@connect(({ permission, loading }) => {
+  const { rtnCode, rtnMsg } = permission;
   return {
-    body: product.body,
+    body: permission.body,
+    treeData: permission.treeData,
+    permissionData: permission.permissionData,
+    fetchListPermissionUserLoading: loading.effects['permission/fetchListPermissionUser'],
+    fetchUserPermissionLoading: loading.effects['permission/fetchUserPermission'],
+    updatePermissionLoading: loading.effects['permission/updatePermission'],
+    fetchPermissionTreeLoading: loading.effects['permission/fetchPermissionTree'],
+    disableThePermissionLoading: loading.effects['permission/disableThePermission'],
+    enableThePermissionLoading: loading.effects['permission/enableThePermission'],
     rtnCode,
     rtnMsg,
   };
 })
 @Form.create()
 class IndexDetail extends Component {
-
-
   centerFormLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
@@ -85,40 +43,11 @@ class IndexDetail extends Component {
     },
   };
 
-
-  carouselsettings = {
-    speed: 150,
-    initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
-  };
-
   constructor(props) {
     super(props);
     this.state = {
-      expandedKeys: ['0-0-0', '0-0-1'],
-      autoExpandParent: true,
-      checkedKeys: ['0-0-0'],
-
-
-      drawVisible: false,
-      visible: false,
-      isEdit: true,
       imageObject: [],
-      cNoBrandNo: '',
-      cNofCode: '',
-      cNofCodezhName: '',
-      cNoUnitCode: '',
-      cNoColorCode: '',
-      productNo: '',
-      cNoCustomerCombine: '',
-      customerShotName: '',
-      cNoenNameUniCode: '',
-      cNozhNameUniCode: '',
-      cNomainMold: '',
-      cNoPercentageEnName: '',
-      cNoPercentageZhName: '',
       isLoad: false,
-      isLoadImage: true,
-      productParams: {},
       isEditItem: false,
     };
   }
@@ -130,91 +59,6 @@ class IndexDetail extends Component {
     //   this.fetchImages(item);
   }
 
-  render() {
-
-    const {
-      productListloading,
-      productUpdateloading,
-      productSaveloading,
-      productFreezeloading,
-      productUnFreezeloading,
-      productDeleteloading,
-      queryProductLocking,
-      body = {},
-      isloading,
-      refarshList,
-      isLoad,
-      item,
-    } = this.props;
-
-    const { update, productParams } = this.state;
-
-    // (item)
-
-
-    const isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
-
-    if (isUpdate) {
-      this.state.update = true;
-      if (productUpdateloading || productSaveloading) {
-        this.state.isUpdateFrom = true;
-      }
-    } else if (update) {
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-
-        this.productRefresh();
-        // this.handleUpdateImage(productParams)
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-        }
-
-        if (refarshList)
-          refarshList();
-
-
-      }
-
-
-    const updat = isUpdate || productListloading;
-    if (updat !== this.state.isLoad) {
-      if (isloading)
-        isloading(updat);
-      this.state.isLoad = updat;
-    }
-
-    // if(this.state.isLoadImage&&item) {
-    //   this.fetchImages(item);
-    //   this.state.isLoadImage = false;
-    // }
-
-    return this.getDetailInfo();
-  }
-
-  resetParse = () => {
-    this.setState({
-      cNoBrandNo: '',
-      cNofCode: '',
-      cNofCodezhName: '',
-      cNoUnitCode: '',
-      cNoColorCode: '',
-      productNo: '',
-      cNoCustomerCombine: '',
-      customerShotName: '',
-      cNoenNameUniCode: '',
-      cNozhNameUniCode: '',
-      cNomainMold: '',
-      cNoPercentageEnName: '',
-      cNoPercentageZhName: '',
-    });
-  };
 
   componentWillReceiveProps(nextProps, nextContext) {
     // const { item } =this.props;
@@ -224,12 +68,10 @@ class IndexDetail extends Component {
     const { showItem } = this.state;
 
 
-    // console.log("componentWillReceiveProps :",item)
-
-
     if (item && (!showItem || item.id !== showItem.id)) {
       this.state.showItem = item;
       this.productRefresh();
+
     }
 
     if (!item) {
@@ -238,8 +80,6 @@ class IndexDetail extends Component {
         showItem: false,
       });
     }
-
-    // console.log(" component Props ",item)
   }
 
 
@@ -252,7 +92,11 @@ class IndexDetail extends Component {
 
   onCheck = checkedKeys => {
     console.log('onCheck', checkedKeys);
-    this.setState({ checkedKeys });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'permission/userpermission',
+      payload: { permissionData: checkedKeys },
+    });
   };
 
   // 渲染树节点
@@ -278,9 +122,8 @@ class IndexDetail extends Component {
     });
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading } = this.state;
-    const { isProductUpdate } = this.props;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const { imageObject, showItem, isLoad } = this.state;
+    const { isProductUpdate, treeData, permissionData, selectProductData } = this.props;
 
 
     let paths = [];
@@ -291,8 +134,6 @@ class IndexDetail extends Component {
       });
     }
 
-    // console.log(" fetch isload ",showItem)
-    // console.log(" data status ",showItem?showItem.status:'nudefine')
 
     if (!paths) paths = [];
 
@@ -308,13 +149,13 @@ class IndexDetail extends Component {
           <div className={baseStyles.right_info}>
             {(showItem && showItem !== '') ? (
               <div>
-                <Spin spinning={isLoading}>
+                <Spin spinning={isLoad}>
                   {/* 权限树操作 */}
                   <Tree
                     checkable
                     defaultExpandAll
                     onCheck={this.onCheck}
-                    checkedKeys={this.state.checkedKeys}
+                    checkedKeys={permissionData}
                   >
                     {this.renderTreeNodes(treeData)}
                   </Tree>
@@ -335,27 +176,50 @@ class IndexDetail extends Component {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-
-                <Button
-                  type="danger"
-                  icon="delete"
-                  className={business.buttomControl}
-                  size="small"
-                  onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDeleteProduct();}});}}
-                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
-                >
-                  禁用/启用
-                </Button>
                 <Button
                   type="primary"
                   size="small"
                   className={business.buttomControl}
                   icon="edit"
-                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
-                  onClick={this.handleEditProduct}
+                  disabled={!showItem || showItem === '' || !isProductUpdate || !selectProductData || selectProductData.length === 0}
+                  onClick={this.handleSubmit}
                 >
                   保存
                 </Button>
+                {(showItem && showItem.status == 0) ?
+                  <Button
+                    type="primary"
+                    icon="check-circle"
+                    className={business.buttomControl}
+                    size="small"
+                    disabled={!showItem || showItem === '' || !isProductUpdate || !selectProductData || selectProductData.length === 0}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定启用吗？', onOk: () => {
+                          this.handleUnFreezeProduct();
+                        },
+                      });
+                    }}
+                  >
+                    启用
+                  </Button> :
+                  <Button
+                    type="danger"
+                    icon="stop"
+                    className={business.buttomControl}
+                    size="small"
+                    disabled={!showItem || showItem === '' || !isProductUpdate || !selectProductData || selectProductData.length === 0}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定禁用吗？', onOk: () => {
+                          this.handleFreezeProduct();
+                        },
+                      });
+                    }}
+                  >
+                    禁用
+                  </Button>}
+
 
               </div>
 
@@ -365,59 +229,34 @@ class IndexDetail extends Component {
         </div>
 
       </div>
-
     </div>);
 
 
   };
 
+  // 保存
   handleSubmit = () => {
 
-    const { dispatch, form } = this.props;
-    const { isAdd, fileList, showItem } = this.state;
-    form.validateFields((err, fieldsValue) => {
-      if (err) {
-        return;
-      }
+    const { dispatch, selectProductData = [], permissionData } = this.props;
+    const ids = selectProductData.map(v => {
+      return v.id;
+    });
+    const params = {};
+    params.permissions = permissionData;
+    params.userIds = ids;
 
-      const params = {};
-      params.product = { ...fieldsValue };
 
-      const urls = fileList.map(v => v.url);
-      const names = fileList.map(v => v.name);
-      params.imgStr = urls;
-      // params.imgStr = this.state.urls;
-      params.fileName = names;
-      // params.productId = item.productNo;
-      // params.product = item;
-      if (isAdd) {
-        dispatch({
-          type: 'product/addProduct',
-          payload: {
-            ...params,
-          },
-        });
-        // todo
+    dispatch({
+      type: 'permission/updatePermission',
+      payload: {
+        ...params,
+      },
+    });
 
-        this.setState({
-          isEdit: true,
-          update: true,
-        });
-      } else {
-        params.product.id = showItem.id;
-        params.product.version = showItem.version;
-        dispatch({
-          type: 'product/updateProduct',
-          payload: {
-            ...params,
-          },
-        });
-      }
-
-      this.setState({
-        visible: false,
-        productParams: params,
-      });
+    this.setState({
+      isEdit: true,
+      update: true,
+      visible: false,
     });
 
 
@@ -427,62 +266,17 @@ class IndexDetail extends Component {
   productRefresh = () => {
 
     const item = this.state.showItem;
-
-    const {isEditItem} = this.state;
-
     if (!item.id) return;
-
-    const _this = this;
-    _this.setState({
-      isLoading: true,
-    });
-
 
     const params = {};
     params.id = item.id;
 
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'permission/fetchUserPermission',
+      payload: { ...params },
+    });
 
-    fetch(HttpFetch.queryProductList, {
-      method: 'POST',
-      credentials: 'include',
-headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {head} = d;
-        const {body} = d;
-        let showItem = false;
-        if (body.records.length > 0) {
-          showItem = body.records[0];
-
-
-          const current = isEditItem ? { ...showItem } : this.state.current;
-
-          // console.log(" cur is ",current,isEditItem)
-
-          this.setState({
-            showItem,
-            current,
-          });
-          // console.log(" update data ",showItem)
-        }
-        this.fetchImages(showItem);
-
-        _this.setState({
-          isLoading: false,
-        });
-
-
-      })
-      .catch(function(ex) {
-        _this.setState({
-          isLoading: false,
-        });
-      });
   };
 
   handleCancel = () => {
@@ -492,8 +286,7 @@ headers: {
   };
 
 
-
-
+// 启用
   handleUnFreezeProduct = () => {
 
     const { selectProductData = [] } = this.props;
@@ -508,11 +301,16 @@ headers: {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/unfreezeProduct',
+      type: 'permission/enableThePermission',
       payload: { list: ids },
+      callback: () => {
+        this.productStatusRefresh();
+      },
+
     });
   };
 
+// 禁用
   handleFreezeProduct = () => {
 
     const { selectProductData = [] } = this.props;
@@ -526,52 +324,115 @@ headers: {
     // data.push(selectedRowKeys);
 
     dispatch({
-      type: 'product/freezeProduct',
+      type: 'permission/disableThePermission',
       payload: { list: ids },
+      callback: () => {
+        this.productStatusRefresh();
+      },
     });
+
   };
 
-  fetchImages = item => {
+  productStatusRefresh = () => {
+    const item = this.state.showItem;
+    console.log("123213",item.id)
+
+    if (!item.id) return;
     const _this = this;
+    _this.setState({
+      isLoading: true,
+    });
+
+
     const params = {};
-    params.productId = item.id;
-    fetch(HttpFetch.queryProductImage, {
+    params.id = item.id;
+    params.current = 1;
+    params.size = 10;
+    fetch(HttpFetch.queryPermissionUserList, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const {body} = d;
-        if (body && body.records) {
-          if (body.records.length > 0) {
-            const imageObject = body.records;
-            this.state.imageObject = imageObject;
-            _this.setState({
-              imageObject,
-              loading: false,
-            });
-            return;
-          }
+        const { body } = d;
+        let showItem = false;
+        if (body.records.length > 0) {
+          showItem = body.records[0];
+          this.setState({
+            showItem,
+          });
         }
         _this.setState({
-          loading: false,
-          imageObject: [],
+          isLoading: false,
         });
       })
       .catch(function(ex) {
-        console.log('parsing failed', ex);
         _this.setState({
-          loading: false,
+          isLoading: false,
         });
       });
-    // }
   };
 
+  render() {
+
+    const {
+      fetchListPermissionUserLoading,
+      fetchUserPermissionLoading,
+      updatePermissionLoading,
+      fetchPermissionTreeLoading,
+      disableThePermissionLoading,
+      enableThePermissionLoading,
+      body = {},
+      isloading,
+      refarshList,
+    } = this.props;
+
+    const { update } = this.state;
+
+    // (item)
+
+
+    const isUpdate = updatePermissionLoading || disableThePermissionLoading || enableThePermissionLoading || fetchPermissionTreeLoading || fetchUserPermissionLoading;
+    const isUpdate2 = updatePermissionLoading || disableThePermissionLoading || enableThePermissionLoading || fetchPermissionTreeLoading;
+
+    if (isUpdate) {
+      this.state.update = true;
+      if (updatePermissionLoading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
+      }
+
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+      }
+      if (refarshList)
+        refarshList();
+    }
+
+
+    const updat = isUpdate || fetchListPermissionUserLoading;
+    const updat2 = isUpdate2 || fetchListPermissionUserLoading;
+    if (updat !== this.state.isLoad) {
+      if (isloading)
+        isloading(updat2);// 表格loading
+      this.state.isLoad = updat;
+    }
+
+    return this.getDetailInfo();
+  }
 
 
 }

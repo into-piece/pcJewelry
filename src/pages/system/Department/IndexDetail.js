@@ -8,7 +8,8 @@ import {
   Input,
   Divider, Carousel, Modal, message, Spin,
 } from 'antd';
-import  ModalConfirm from '@/utils/modal';
+import ModalConfirm from '@/utils/modal';
+import {statusConvert} from '@/utils/convert';
 
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
@@ -25,6 +26,7 @@ const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+
 @connect(({ dept, loading }) => {
   const { rtnCode, rtnMsg } = dept;
   return {
@@ -106,13 +108,13 @@ class IndexDetail extends Component {
       item,
     } = this.props;
 
-    const { update,  productParams } = this.state;
+    const { update, productParams } = this.state;
 
     // (item)
 
 
     const isUpdate =
-      addDeptloading  || deptUpdateloading || deptDeleteloading  || approvalDeptloading || cancelDeptloading
+      addDeptloading || deptUpdateloading || deptDeleteloading || approvalDeptloading || cancelDeptloading;
 
     if (isUpdate) {
       this.state.update = true;
@@ -120,24 +122,24 @@ class IndexDetail extends Component {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-        }
-
-        if (refarshList)
-          refarshList();
-
-
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
       }
+
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+      }
+
+      if (refarshList)
+        refarshList();
+
+
+    }
 
 
     const updat = isUpdate || fetchListDeptloading;
@@ -195,7 +197,6 @@ class IndexDetail extends Component {
         showItem: false,
       });
     }
-
     // console.log(" component Props ",item)
   }
 
@@ -218,16 +219,8 @@ class IndexDetail extends Component {
         return v.path;
       });
     }
-    const v = showItem||{};
-    if (v.status == 0) {
-      v.statusVar = '输入';
-    } else if (v.status == 1) {
-      v.statusVar = '使用中';
-    } else if (v.status == 2) {
-      v.statusVar = '审批';
-    }
-    // console.log(" fetch isload ",showItem)
-    // console.log(" data status ",showItem?showItem.status:'nudefine')
+    const v = showItem || {};
+    v.statusVar = statusConvert[v.status];
 
     if (!paths) paths = [];
 
@@ -294,7 +287,13 @@ class IndexDetail extends Component {
                   icon="delete"
                   className={business.buttomControl}
                   size="small"
-                  onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDeleteProduct();}});}}
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定删除吗？', onOk: () => {
+                        this.handleDeleteProduct();
+                      },
+                    });
+                  }}
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
                   删除
@@ -315,18 +314,30 @@ class IndexDetail extends Component {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.handleUnFreezeProduct();}});}}
+                    onClick={() => {
+                        ModalConfirm({
+                          content: '确定取消审批吗？', onOk: () => {
+                            this.handleUnFreezeProduct();
+                          },
+                        });
+                      }}
                     disabled={!showItem || showItem === '' || !isProductUpdate}
                   >
                       取消审批
-                                                        </Button>
+                  </Button>
                     : <Button
                       className={business.buttomControl}
                       size="small"
                       type="primary"
                       icon="lock"
                       disabled={!showItem || showItem === '' || !isProductUpdate}
-                      onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleFreezeProduct();}});}}
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？', onOk: () => {
+                            this.handleFreezeProduct();
+                          },
+                        });
+                      }}
                     >
                       审批
                     </Button>
@@ -374,8 +385,7 @@ class IndexDetail extends Component {
   getProductModalContent = () => {
 
     const { form: { getFieldDecorator, getFieldValue } } = this.props;
-    const { current = {}} = this.state;
-
+    const { current = {} } = this.state;
 
 
     return (
@@ -400,7 +410,7 @@ class IndexDetail extends Component {
                   rules: [{ required: true, message: '请输入部门编号' }],
                   initialValue: current.role,
                 })
-                (<Input  />)
+                (<Input />)
                 }
               </FormItem>
             </Col>
@@ -414,7 +424,7 @@ class IndexDetail extends Component {
                 {getFieldDecorator('shortName', {
                   initialValue: current.shortName,
                   rules: [{ required: true, message: '请输入部门简称' }],
-                })(<Input  />)}
+                })(<Input />)}
               </FormItem>
             </Col>
           </Row>
@@ -429,7 +439,7 @@ class IndexDetail extends Component {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入部门中文名称' }],
                   initialValue: current.zhName,
-                })(<Input  />)}
+                })(<Input />)}
               </FormItem>
             </Col>
 
@@ -440,9 +450,9 @@ class IndexDetail extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('enName', {
-                  rules: [{   message: '请输入部门英文名称' }],
+                  rules: [{ message: '请输入部门英文名称' }],
                   initialValue: current.enName,
-                })(<Input  />)}
+                })(<Input />)}
               </FormItem>
             </Col>
           </Row>
@@ -471,7 +481,7 @@ class IndexDetail extends Component {
 
     const item = this.state.showItem;
 
-    const {isEditItem} = this.state;
+    const { isEditItem } = this.state;
 
     if (!item.id) return;
 
@@ -488,16 +498,16 @@ class IndexDetail extends Component {
     fetch(HttpFetch.queryDeptList, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
-        const {body} = d;
+        const { head } = d;
+        const { body } = d;
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
@@ -621,7 +631,7 @@ headers: {
         return;
       }
 
-      const params   = { ...fieldsValue };
+      const params = { ...fieldsValue };
 
       const urls = fileList.map(v => v.url);
       const names = fileList.map(v => v.name);
