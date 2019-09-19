@@ -54,6 +54,20 @@ class Index extends Component {
       key: 'userName',
       width: 80,
     },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="部门"
+            field="deptName"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'deptName',
+      key: 'deptName',
+      width: 80,
+    },
 
     {
       title: () => {
@@ -209,13 +223,6 @@ class Index extends Component {
                   scroll={{ x: 1000 }}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
-                    // const { dispatch } = this.props;
-                    // if(showItem){
-                    //   dispatch({
-                    //     type: 'permission/fetchUserPermission',
-                    //     payload: { id:showItem.id},
-                    //   });
-                    // }
 
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({

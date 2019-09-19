@@ -129,7 +129,7 @@ class IndexDetail extends Component {
 
   getDetailInfo = () => {
     const { imageObject, showItem, isLoad } = this.state;
-    const { isProductUpdate, treeData, permissionData } = this.props;
+    const { isProductUpdate, treeData, permissionData ,selectProductData} = this.props;
 
 
     let paths = [];
@@ -187,7 +187,7 @@ class IndexDetail extends Component {
                   size="small"
                   className={business.buttomControl}
                   icon="edit"
-                  disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
+                  disabled={!showItem || showItem === '' || !isProductUpdate||!selectProductData||selectProductData.length===0}
                   onClick={this.handleSubmit}
                 >
                   保存
@@ -198,7 +198,7 @@ class IndexDetail extends Component {
                     icon="check-circle"
                     className={business.buttomControl}
                     size="small"
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    disabled={!showItem || showItem === '' || !isProductUpdate||!selectProductData||selectProductData.length===0}
                     onClick={() => {
                       ModalConfirm({
                         content: '确定启用吗？', onOk: () => {
@@ -214,7 +214,7 @@ class IndexDetail extends Component {
                     icon="stop"
                     className={business.buttomControl}
                     size="small"
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    disabled={!showItem || showItem === '' || !isProductUpdate||!selectProductData||selectProductData.length===0}
                     onClick={() => {
                       ModalConfirm({
                         content: '确定禁用吗？', onOk: () => {
