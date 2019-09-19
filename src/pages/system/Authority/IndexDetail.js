@@ -8,7 +8,6 @@ import {
 
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
-import styles from './Index.less';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '@/utils/HttpFetch';
 import { connect } from 'dva';
@@ -69,12 +68,10 @@ class IndexDetail extends Component {
     const { showItem } = this.state;
 
 
-    // console.log("componentWillReceiveProps :",item)
-
-
     if (item && (!showItem || item.id !== showItem.id)) {
       this.state.showItem = item;
       this.productRefresh();
+
     }
 
     if (!item) {
@@ -83,15 +80,12 @@ class IndexDetail extends Component {
         showItem: false,
       });
     }
-
-    // console.log(" component Props ",item)
   }
 
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     return true;
   }
-
 
 
 // 树节点选择出发
@@ -129,7 +123,7 @@ class IndexDetail extends Component {
 
   getDetailInfo = () => {
     const { imageObject, showItem, isLoad } = this.state;
-    const { isProductUpdate, treeData, permissionData ,selectProductData} = this.props;
+    const { isProductUpdate, treeData, permissionData, selectProductData } = this.props;
 
 
     let paths = [];
@@ -187,7 +181,7 @@ class IndexDetail extends Component {
                   size="small"
                   className={business.buttomControl}
                   icon="edit"
-                  disabled={!showItem || showItem === '' || !isProductUpdate||!selectProductData||selectProductData.length===0}
+                  disabled={!showItem || showItem === '' || !isProductUpdate || !selectProductData || selectProductData.length === 0}
                   onClick={this.handleSubmit}
                 >
                   保存
@@ -198,7 +192,7 @@ class IndexDetail extends Component {
                     icon="check-circle"
                     className={business.buttomControl}
                     size="small"
-                    disabled={!showItem || showItem === '' || !isProductUpdate||!selectProductData||selectProductData.length===0}
+                    disabled={!showItem || showItem === '' || !isProductUpdate || !selectProductData || selectProductData.length === 0}
                     onClick={() => {
                       ModalConfirm({
                         content: '确定启用吗？', onOk: () => {
@@ -214,7 +208,7 @@ class IndexDetail extends Component {
                     icon="stop"
                     className={business.buttomControl}
                     size="small"
-                    disabled={!showItem || showItem === '' || !isProductUpdate||!selectProductData||selectProductData.length===0}
+                    disabled={!showItem || showItem === '' || !isProductUpdate || !selectProductData || selectProductData.length === 0}
                     onClick={() => {
                       ModalConfirm({
                         content: '确定禁用吗？', onOk: () => {
@@ -283,7 +277,6 @@ class IndexDetail extends Component {
       payload: { ...params },
     });
 
-
   };
 
   handleCancel = () => {
@@ -310,6 +303,10 @@ class IndexDetail extends Component {
     dispatch({
       type: 'permission/enableThePermission',
       payload: { list: ids },
+      callback: () => {
+        this.productStatusRefresh();
+      },
+
     });
   };
 
@@ -329,7 +326,56 @@ class IndexDetail extends Component {
     dispatch({
       type: 'permission/disableThePermission',
       payload: { list: ids },
+      callback: () => {
+        this.productStatusRefresh();
+      },
     });
+
+  };
+
+  productStatusRefresh = () => {
+    const item = this.state.showItem;
+    console.log("123213",item.id)
+
+    if (!item.id) return;
+    const _this = this;
+    _this.setState({
+      isLoading: true,
+    });
+
+
+    const params = {};
+    params.id = item.id;
+    params.current = 1;
+    params.size = 10;
+    fetch(HttpFetch.queryPermissionUserList, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { body } = d;
+        let showItem = false;
+        if (body.records.length > 0) {
+          showItem = body.records[0];
+          this.setState({
+            showItem,
+          });
+        }
+        _this.setState({
+          isLoading: false,
+        });
+      })
+      .catch(function(ex) {
+        _this.setState({
+          isLoading: false,
+        });
+      });
   };
 
   render() {
@@ -351,8 +397,8 @@ class IndexDetail extends Component {
     // (item)
 
 
-    const isUpdate =
-      updatePermissionLoading || disableThePermissionLoading || enableThePermissionLoading || fetchPermissionTreeLoading || fetchUserPermissionLoading;
+    const isUpdate = updatePermissionLoading || disableThePermissionLoading || enableThePermissionLoading || fetchPermissionTreeLoading || fetchUserPermissionLoading;
+    const isUpdate2 = updatePermissionLoading || disableThePermissionLoading || enableThePermissionLoading || fetchPermissionTreeLoading;
 
     if (isUpdate) {
       this.state.update = true;
@@ -372,17 +418,16 @@ class IndexDetail extends Component {
       if (this.state.isUpdateFrom) {
         this.state.isUpdateFrom = false;
       }
-      // this.productRefresh();
-
       if (refarshList)
         refarshList();
     }
 
 
     const updat = isUpdate || fetchListPermissionUserLoading;
+    const updat2 = isUpdate2 || fetchListPermissionUserLoading;
     if (updat !== this.state.isLoad) {
       if (isloading)
-        isloading(updat);// 表格loading
+        isloading(updat2);// 表格loading
       this.state.isLoad = updat;
     }
 

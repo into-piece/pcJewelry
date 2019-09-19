@@ -203,15 +203,15 @@ export const listDeptDropDown = `${priefx}/sys.user/sys-role/listDeptDropDown`
 
 
 /**
- * 权限  获取员工权限
+ * 权限  获取员工列表
  * @type {string}
  */
-export const queryUserPermission = `${priefx}/sys.user/sys-resource/getPermissionByUser`
+export const queryPermissionUserList = `${priefx}/sys.user/sys-resource/getPermissionUsers`
 
 
 export default {
   priefx,
-  queryUserPermission,
+  queryPermissionUserList,
   listDeptDropDown,
   queryPersonList,
   loadMaintainer,

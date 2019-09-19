@@ -197,7 +197,6 @@ class IndexDetail extends Component {
         showItem: false,
       });
     }
-
     // console.log(" component Props ",item)
   }
 

@@ -223,7 +223,6 @@ class Index extends Component {
                   scroll={{ x: 1000 }}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
-
                     this.state.showItem = item ? { ...item } : false;
                     this.setState({
                       showItem: this.state.showItem,

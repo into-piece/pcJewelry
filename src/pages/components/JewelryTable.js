@@ -163,6 +163,8 @@ console.log('clickRowItem',record)
       } else {
         this.state.selectItem = false;
       }
+
+      console.log('selectItem',this.state.selectItem)
       if (onSelectItem) onSelectItem(this.state.selectItem, this.state.rowSelectedData);
     }
 
