@@ -66,7 +66,7 @@ class JewelryTable extends Component {
     const selects = selectedRowKeys || [];
     const { id } = record;
     let selectItem = { ...record };
-
+console.log('clickRowItem',record)
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
       if (rowData.flatMap(e=>e.id).includes(record.id)) rowData = [];
@@ -98,7 +98,7 @@ class JewelryTable extends Component {
       });
       selectItem = false;
     }
-    if(selects.length>0&&!record){
+    if(selects.length>0){
       this.setState({
         showItem: rowSelectedData[0],
         selectItem: rowSelectedData[0],
@@ -114,7 +114,7 @@ class JewelryTable extends Component {
       rowData,
       selectItem,
     });
-    if (onSelectItem) onSelectItem(selectItem, rowData);
+    if (onSelectItem) onSelectItem(selectItem, rowSelectedData);
 
   };
 
@@ -213,7 +213,6 @@ class JewelryTable extends Component {
       rowSelectedData: selectedRows,
       selectCustomerItem: '',
     });
-    console.log('ss',selectedRows)
     this.state.selectCustomerItem = '';
     if (onSelectItem) onSelectItem(selectItem, selectedRows);
   };
