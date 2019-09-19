@@ -142,7 +142,6 @@ class IndexDetail extends Component {
       if (this.state.isUpdateFrom) {
         this.state.isUpdateFrom = false;
       }
-
       if (refarshList)
         refarshList();
 
