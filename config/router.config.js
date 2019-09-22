@@ -60,7 +60,7 @@ export default [
       // dashboard
       {
         path: '/',
-        redirect: '/business/Client',
+        redirect: '/business/client',
         // authority: ['admin', 'user','chents'],
       },
       // bussiness route
