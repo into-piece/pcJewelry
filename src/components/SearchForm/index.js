@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Button, Form, Icon, Input } from 'antd';
-// import business from "../../business.less";
-// import styles from '../../../Account/Center/Center.less';
 import styles from './index.less';
 
 const FormItem = Form.Item;
 @Form.create()
-class ProductSearchFrom extends Component {
+class SearchFrom extends Component {
   state = {
-    expandForm: false,
+    expandForm: false, // 是否展开
   }
 
+  // 返回遍历的筛选条件组件
   renderCustomerForm = (type) => {
     const {
       form,
@@ -39,7 +38,9 @@ class ProductSearchFrom extends Component {
               }) :
               <div className="addModal">
                 <FormItem label={data[0].key}>
-                  {getFieldDecorator(data[0].value)(<Input placeholder="请输入" />)}
+                  {getFieldDecorator(data[0].value, {
+                    initialValue: undefined,
+                  })(returnElement({ ...data[0], data: source, }))}
                 </FormItem>
               </div>
           }
@@ -55,7 +56,6 @@ class ProductSearchFrom extends Component {
                 {
                   type ? <>收起 <Icon type="up" /></> : <>展开<Icon type="down" /></>
                 }
-
               </a>
             </span>
           </p>
@@ -64,6 +64,7 @@ class ProductSearchFrom extends Component {
     )
   }
 
+  // 确认筛选按钮回调
   handleSearch = e => {
     const { form, onSearch } = this.props;
     // 禁止表单提交，采用Ajax提交
@@ -73,42 +74,14 @@ class ProductSearchFrom extends Component {
     });
   };
 
+  // 重置回调
   handleReset = () => {
     const { onCustomerReset, form } = this.props;
     form.resetFields();
-    this.setState({
-      searchCustomerParams: {},
-    });
     if (onCustomerReset) onCustomerReset();
   };
 
-  renderCustomerSimpleForm = () => {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <div className="addModal">
-          <FormItem label="客户编号">
-            {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
-          </FormItem>
-          <p className={styles.submitButtons}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{ marginLeft: 5 }} onClick={this.handleReset}>
-              重置
-            </Button>
-            <a style={{ marginLeft: 8, whiteSpace: 'nowrap' }} onClick={this.toggleForm}>
-              展开 <Icon type="down" />
-            </a>
-          </p>
-        </div>
-      </Form>
-    );
-  }
-
+  // 切换展开
   toggleForm = () => {
     this.setState((state) => ({
       expandForm: !state.expandForm,
@@ -121,4 +94,4 @@ class ProductSearchFrom extends Component {
   }
 }
 
-export default ProductSearchFrom;
+export default SearchFrom;

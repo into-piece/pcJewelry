@@ -558,9 +558,9 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? choosenRowData[value] : '',
+                      initialValue: isEdit ? choosenRowData[value] : undefined,
                     })(type && type === 2 ?
-                      <Select placeholder="请选择">
+                      <Select placeholder="请选择" style={{ width: 180 }}>
                         {dev[list] && dev[list].map(({ value, key }) =>
                           <Option value={value}>{key}</Option>
                         )}
