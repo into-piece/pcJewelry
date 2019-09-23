@@ -251,6 +251,7 @@ const productSearchParams = [
     productList: quote.productList,
     productselectedKeys: quote.productselectedKeys,
     productChoosenRowData: quote.productChoosenRowData,
+    productListLoading: loading.effects['quote/getProductList'],
   };
 })
 class Info extends Component {
@@ -291,6 +292,9 @@ class Info extends Component {
     dispatch({
       type: `quote/getList`,
       payload: { params: pagination, ...args },
+    });
+    dispatch({
+      type: `quote/clearDetailList`,
     });
   }
 
@@ -382,17 +386,25 @@ class Info extends Component {
     })
   }
 
+  // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    console.log(value);
-
+    const { quote, form } = this.props
     // 自动带出字印英文名
     if (type === 'markingId') {
-      const obj = this.props.quote.markinglist.find(item => {
+      const obj = quote.markinglist.find(item => {
         return item.value === value
       })
       const { enName } = obj
-      this.props.form.setFieldsValue({
+      form.setFieldsValue({
         markingEnName: enName,
+      });
+      const obj2 = quote.customerDropDownList.find(item => {
+        return item.value === value
+      })
+      const { markingEnName, markingPrice } = obj2
+      form.setFieldsValue({
+        markingEnName,
+        markingPrice
       });
     }
 
@@ -406,29 +418,25 @@ class Info extends Component {
         customerShotName: shotName,
       });
     }
-
-    if (type === 'markingId') {
-      const obj = this.props.quote.customerDropDownList.find(item => {
-        return item.value === value
-      })
-      const { markingEnName, markingPrice } = obj
-      this.props.form.setFieldsValue({
-        markingEnName,
-        markingPrice
-      });
-    }
   };
 
+  //  弹窗表单 check回调
   handleCheckChange = (e, value) => {
     console.log(e.target.checked, '==============handleCheckChange')
     if (value === 'isWeighStones') {
       const isWeighStones = e.target.checked === 1
-      devbugger
-      isWeighStones && this.props.form.validateFields(['stonePrice'], { disabled: true });
+      if (isWeighStones) {
+        this.props.form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
+      }
     }
   }
 
 
+  disabledCondition = (v, form) => {
+    const isstonePrice = v === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001'
+    const ismainMaterialWeight = v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001'
+    return isstonePrice || ismainMaterialWeight
+  }
 
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
@@ -472,7 +480,7 @@ class Info extends Component {
       case 9:
         return <DatePicker />
       default:
-        return <Input disabled={value === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001'} style={{ width: '100' }} placeholder="请输入" />
+        return <Input disabled={this.disabledCondition(value, form)} style={{ width: '100' }} placeholder="请输入" />
     }
     //  type === 7 ?
   }
@@ -543,7 +551,13 @@ class Info extends Component {
     let params = {}
     if (!isHead) {
       params = { quoteHeadId: choosenRowData.id, productLineId }
+      const { markingId, markingEnName } = choosenRowData
+      this.props.form.setFieldsValue({
+        markingId,
+        markingEnName
+      });
     }
+
     form.validateFields((err, values) => {
       if (!err) {
         // this.setState({
@@ -616,7 +630,7 @@ class Info extends Component {
 
   // 审批/撤销 按钮回调
   handleLock = () => {
-    const { selectedRowKeys } = this.props
+    const { selectedRowKeys, dispatch } = this.props
     const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approval' : 'cancelApproval'
     console.log(serviceObj, serviceObj[serviceType], selectedRowKeys)
@@ -627,7 +641,13 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.getList()
+        const payload = isLock ? 'historyQuote' : 'currentQuote'
+        dispatch({
+          type: 'quote/getTimeline',
+          payload
+        })
+
+        this.getList({ sendReq: payload })
       }
     })
   }
@@ -722,11 +742,7 @@ class Info extends Component {
     });
   };
 
-  // { key: '客户货号', value: 'custoerProductNo', noNeed: true, type: 7},
-  // { key: '类别', value: 'type', noNeed: true, type: 7 },
-  // { key: '成色名称', value: '1', noNeed: true , type: 7}, // ?
-  // { key: '宝石颜色', value: 'gemColorName', noNeed: true, type: 7 },
-  // { key: '电镀颜色', value: 'platingColorName', noNeed: true, type: 7 },
+  // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
     const { choosenRowData } = this.props
     this.showProductModalFunc(2);
@@ -766,9 +782,9 @@ class Info extends Component {
     })
 
     let packPrice = ''
-    await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.id }).then(res => {
+    await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {
       if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
-        packPrice = res.body.records[0].productLineCoefficientQuotation
+        packPrice = res.body.records[0].count
       }
     })
 
@@ -802,6 +818,7 @@ class Info extends Component {
     })
   }
 
+  // 产品选择弹窗取消回调
   handleProductModalCancel = () => {
     this.showProductModalFunc(2);
   }
@@ -814,9 +831,9 @@ class Info extends Component {
   };
 
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct } = this;
     const { modalType, } = state;
-    const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData } = props;
+    const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData, productListLoading } = props;
     console.log(productList, '========productList')
     return (
       <div className={styles.page}>
@@ -876,6 +893,8 @@ class Info extends Component {
             changeChoosenRow={changeChoosenRow}
             choosenRowData={productChoosenRowData}
             onSelectChange={onSelectChange}
+            listLoading={productListLoading}
+            onSearch={getProduct}
           />
         </Modal>
       </div>
@@ -1019,6 +1038,7 @@ const menuRadio2 = ['产品清单']
   return {
     quote,
     listLoading: loading.effects['quote/getList'],
+    listDetailLoading: loading.effects['quote/getDetailList'],
     quotelist: quote.quotelist,
     pagination: quote.pagination,
     choosenRowData: quote.choosenRowData,
@@ -1110,13 +1130,16 @@ class CenterInfo extends Component {
       type: `quote/getList`,
       payload: { params: { ...pagination, ...params }, ...args },
     });
+    dispatch({
+      type: `quote/clearDetailList`,
+    });
   }
 
 
 
   render() {
     const { onSelectChange, props, clearFn, onSearch } = this
-    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement } = props;
+    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement, listDetailLoading } = props;
     console.log(quotelist, quoteDatialList, choosenRowData, returnElement, '================quotelist')
     return (
       <div className={styles.view_left_content}>
@@ -1174,8 +1197,9 @@ class CenterInfo extends Component {
             changePagination={this.changePagination}
             selectedRowKeys={selectedDetailRowKeys}
             onSelectChange={(data) => { onSelectChange(data, 2) }}
-            listLoading={listLoading}
+            listLoading={listDetailLoading}
             clearFn={clearFn}
+
           />
         </div>
       </div>
