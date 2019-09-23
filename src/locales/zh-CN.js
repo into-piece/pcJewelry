@@ -12,6 +12,7 @@ import pwa from './zh-CN/pwa';
 import component from './zh-CN/component';
 import editor from './zh-CN/editor';
 import basic from './zh-CN/basice';
+import raw from './zh-CN/raw';
 
 export default {
   'navBar.lang': '语言',
@@ -23,6 +24,7 @@ export default {
   'app.forms.basic.description':
     '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
   ...analysis,
+  ...raw,
   ...exception,
   ...form,
   ...globalHeader,

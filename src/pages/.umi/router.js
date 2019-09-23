@@ -1522,6 +1522,14 @@ const routes = [
             icon: 'inbox',
             component: __IS_BROWSER
               ? _dvaDynamic({
+                  app: require('@tmp/dva').getApp(),
+                  models: () => [
+                    import(/* webpackChunkName: 'p__dev__Raw__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/Raw/models/model.js').then(
+                      m => {
+                        return { namespace: 'model', ...m.default };
+                      },
+                    ),
+                  ],
                   component: () =>
                     import(/* webpackChunkName: "p__dev__Raw" */ '../dev/Raw'),
                   LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
