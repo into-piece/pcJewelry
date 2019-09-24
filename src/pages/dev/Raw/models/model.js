@@ -9,7 +9,7 @@ import servicesConfig from '@/services/dev';
 
 const initData = { records: [] }
 
-const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown, listMstWordbook } = servicesConfig
+const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown, listMstWordbook,listBasicMeasureUnitDropDown } = servicesConfig
 export default {
   namespace: 'devRaw',
 
@@ -17,17 +17,18 @@ export default {
   state: {
     dropDownList: [],
     gemSetProcessDropDown: [],
+    getBUMropDown:[],
     listMstWordbookDrop: [],
     pagination: {
       current: 1,
       size: 10,
     },
-    selectKey: 'mainMaterial',
+    selectKey: 'material',
     colorSettingList: initData,
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 
-    mainMaterialList:initData,
+    materialList:initData,
 
 
   },
@@ -69,15 +70,16 @@ export default {
         payload: response,
       });
     },
-    * getList({ payload }, { call, put }) {
+    * getList({ payload ,callback}, { call, put }) {
       const { type, params } = payload
-      console.log(servicesConfig)
-      console.log(type, params, servicesConfig[`listBasic${type}`])
+      // console.log(servicesConfig)
+      // console.log(type, params, servicesConfig[`listBasic${type}`])
       const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
         type: 'getDevList2',
         payload: { response, type },
       });
+      if(callback)callback();
     },
     *addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
@@ -90,6 +92,13 @@ export default {
       const response = yield call(listGemSetProcessDropDown, payload);
       yield put({
         type: 'getGemDropDown2',
+        payload: response,
+      });
+    },
+    *getBUMDropDown({ payload }, { call, put }) {
+      const response = yield call(listBasicMeasureUnitDropDown, payload);
+      yield put({
+        type: 'getBUMropDownre',
         payload: response,
       });
     },
@@ -114,14 +123,14 @@ export default {
       };
     },
     getDevList2(state, action) {
-      console.log(action.payload)
+      // console.log(action.payload)
       const { type, response } = action.payload
       const listName = `${type}List`
       const listData =
         response && response.head && response.head.rtnCode === '000000'
           ? response.body
           : initData;
-      console.log(listData);
+      // console.log(listData);
       return {
         ...state,
         [listName]: listData,
@@ -167,7 +176,7 @@ export default {
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
           : initData;
-      console.log(colorPercentageList)
+      // console.log(colorPercentageList)
       return {
         ...state,
         colorPercentageList,
@@ -180,7 +189,7 @@ export default {
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
           : initData;
-      console.log(categorySetList)
+      // console.log(categorySetList)
       return {
         ...state,
         categorySetList,
@@ -306,6 +315,21 @@ export default {
       return {
         ...state,
         gemSetProcessDropDown,
+      };
+    },
+    getBUMropDownre(state, action) {
+      let getBUMropDown =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (getBUMropDown.length > 0) {
+        getBUMropDown = getBUMropDown.map(({ zhName, id }) => {
+          return { key: zhName, value: id }
+        })
+      }
+      return {
+        ...state,
+        getBUMropDown,
       };
     },
     getListMstWordbook2(state, action) {

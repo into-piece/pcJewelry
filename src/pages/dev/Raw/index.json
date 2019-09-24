@@ -1,12 +1,17 @@
 {
   "manuArr": [
-    "mainMaterial"
+    "material"
   ],
   "modalContent": {
-    "mainMaterial": [
-      { "key": "单位代码", "value": "unitCode" },
-      { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" }
+    "material": [
+      { "key": "成色", "value": "assaying" ,"name":true,"list":"gemSetProcessDropDown","type":2},
+      { "key": "中文名", "value": "zhName" ,"noNeed":true},
+      { "key": "英文名", "value": "enName","noNeed":true },
+      { "key": "重量单位", "value": "weightUnit" ,"noNeed":true ,"name":true,"list":"getBUMropDown","type":2},
+      { "key": "计价类别", "value": "valuationClass" ,"noNeed":true ,"name":true,"type":3},
+      { "key": "最低采购量", "value": "minimumPurchaseQuantity" ,"noNeed":true},
+      { "key": "备注", "value": "remarks","noNeed":true }
+
     ],
     "mainMaterial2": [
       { "key": "单位代码", "value": "unitCode" },

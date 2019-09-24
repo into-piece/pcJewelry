@@ -17,7 +17,7 @@ import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag';
 import jsonData from './index.json';
-// import Bread from '@/components/BreadCrumb'
+import { statusConvert } from '@/utils/convert';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -64,18 +64,14 @@ const btnGroup = [
 
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-function returnStatus(v) {
-  return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : '';
-}
-
 // table 当前页对应的表头配置
 const columnsArr = {
   // 计量单位表头
-  mainMaterial: [
+  material: [
     {
-      title: '单位代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assaying',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -84,20 +80,30 @@ const columnsArr = {
         : (data),
     },
     {
-      title: '中文名称',
+      title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
     },
     {
-      title: '英文名称',
+      title: '英文名',
       dataIndex: 'enName',
       key: 'enName',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'weightUnitName',
+      key: 'weightUnit',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 };
@@ -106,7 +112,7 @@ const columnsArr = {
 @Form.create()
 @connect(({ devRaw }) => {
   return {
-    dev:devRaw,
+    dev: devRaw,
     list: devRaw.list,
     pagination: devRaw.pagination,
     selectKey: devRaw.selectKey,
@@ -150,7 +156,7 @@ class Info extends Component {
 
   // 根据当前页面的key 返回对应的icon
   getMenuIcon = key => {
-    console.log(SvgUtil);
+    // console.log(SvgUtil);
     return SvgUtil[key];
   };
 
@@ -158,19 +164,19 @@ class Info extends Component {
   handleSelectKey = ({ key }) => {
     const { dispatch, pagination } = this.props;
     dispatch({
-      type: 'dev/getSelectKey',
+      type: 'devRaw/getSelectKey',
       payload: key,
     });
     this.getList(key);
 
     // 还要清空所选中项
     dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'devRaw/changeSelectedRowKeys',
       payload: [],
     });
 
     dispatch({
-      type: 'dev/getChoosenRowData',
+      type: 'devRaw/getChoosenRowData',
       payload: { id: '', zhName: '', enName: '', unitCode: '' },
     });
 
@@ -185,9 +191,22 @@ class Info extends Component {
     });
     // getDevList
     dispatch({
-      type: `dev/getList`,
+      type: `devRaw/getList`,
       payload: { params: pagination, type: key },
+      callback: () => {
+        const { dev } = this.props;
+        dev[`${dev.selectKey}List`].records.map((item) => {
+          if (item.id === dev.choosenRowData.id) {
+            dispatch({
+              type: 'devRaw/getChoosenRowData',
+              payload: item,
+            });
+          }
+        });
+      },
     });
+
+
   };
 
   // 列表对应操作button回调
@@ -197,18 +216,24 @@ class Info extends Component {
       case 'plus':
       case 'edit':
       default:
-        console.log(selectKey, '==============selectKey');
-        // 镶石工艺
-        if (selectKey === 'insertStoneTechnology') {
+        // console.log(selectKey, '==============selectKey');
+        // 主材
+        if (selectKey === 'material') {
+          // 成色列表
           dispatch({
-            type: 'dev/getGemDropDown',
+            type: 'devRaw/getGemDropDown',
+            payload: {},
+          });
+          // 重量单位列表
+          dispatch({
+            type: 'devRaw/getBUMDropDown',
             payload: {},
           });
         }
         // 成色设定
         if (selectKey === 'colorPercentage') {
           dispatch({
-            type: 'dev/getListMstWordbook',
+            type: 'devRaw/getListMstWordbook',
             payload: {},
           });
         }
@@ -239,7 +264,7 @@ class Info extends Component {
       <Form size="small">
         {
           dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
-            console.log(list);
+            // console.log(list);
             return (
               <FormItem label={key} {...formLayout} key={key}>
                 {
@@ -256,9 +281,9 @@ class Info extends Component {
                       )}
                     </Select> :
                     type && type === 3 ?
-                      <Radio.Group value={value}>
-                        <Radio value={1}>是</Radio>
-                        <Radio value={2}>否</Radio>
+                      <Radio.Group>
+                        <Radio value="0">计重</Radio>
+                        <Radio value="1">计件</Radio>
                       </Radio.Group>
                       :
                       <Input placeholder="请输入" />,
@@ -322,7 +347,7 @@ class Info extends Component {
 
     // 还要清空所选中项
     this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'devRaw/changeSelectedRowKeys',
       payload: [],
     });
 
@@ -540,8 +565,8 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 // Table 中间列表内容
 @connect(({ loading, devRaw }) => {
   return {
-    dev:devRaw,
-    listLoading: loading.effects['dev/getList'],
+    dev: devRaw,
+    listLoading: loading.effects['devRaw/getList'],
     pagination: devRaw.pagination,
     choosenRowData: devRaw.choosenRowData,
     selectedRowKeys: devRaw.selectedRowKeys,
@@ -551,11 +576,11 @@ class CenterInfo extends Component {
   changePagination = obj => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'dev/getDevList',
+      type: 'devRaw/getDevList',
       payload: obj,
     });
     dispatch({
-      type: 'dev/getPagination',
+      type: 'devRaw/getPagination',
       payload: obj,
     });
   };
@@ -563,7 +588,7 @@ class CenterInfo extends Component {
   changeChoosenRow = rowData => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'dev/getChoosenRowData',
+      type: 'devRaw/getChoosenRowData',
       payload: rowData,
     });
   };
@@ -572,7 +597,7 @@ class CenterInfo extends Component {
   // 更改table select数组
   onSelectChange = (selectedRowKeys) => {
     this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'devRaw/changeSelectedRowKeys',
       payload: selectedRowKeys,
     });
   };
@@ -631,9 +656,9 @@ const GetRenderitem = ({ data, type }) => {
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value }) => {
-            return (
-              <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
+          arr.map(({ key, value, name }) => {
+            return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
+                : <Description key={key} term={key}>{value === 'status' ? statusConvert[data[value]] : data[value]}</Description>
             );
           })
         }

@@ -6,7 +6,8 @@
  * @LastEditors: Please set LastEditors
  */
 import request from '@/utils/request';
-import serviceArr from './dev.json'
+import {serviceArr} from './devUrl'
+import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server'
 const priefx = `${env}/business/develop/basic`;
@@ -31,10 +32,11 @@ const result = serviceArr.map(({ name, arr, path }) => (
 const resultArr = [
   ...result.flat(),
   { key: 'listGemSetProcessDropDown', path: '/colour-set/listBasicColourSetDropDown' },
+  { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: `${env  }/business/sys` }
 ]
 
-console.log(resultArr, '============')
+// console.log(resultArr, '============')
 
 // 请求url配置
 const outPutObject = {}
@@ -42,10 +44,13 @@ resultArr.forEach(({ key, path, priefx1 }) => {
   outPutObject[key] = async (params) => {
     return request((priefx1 || priefx) + path, {
       method: 'POST',
+      headers: {
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
       data: params,
     });
   }
 })
-console.log(outPutObject)
+// console.log(outPutObject)
 
 export default outPutObject
