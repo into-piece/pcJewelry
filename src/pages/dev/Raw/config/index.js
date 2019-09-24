@@ -1,8 +1,10 @@
-{
-  "manuArr": [
+// manuArr是 =》menu配置提供遍历
+export const manuArr = [
     "material"
-  ],
-  "modalContent": {
+  ];
+
+// modalContent => 每个menu不同的增加弹窗填写信息
+export const modalContent ={
     "material": [
       { "key": "成色", "value": "assaying" ,"name":true,"list":"gemSetProcessDropDown","type":2},
       { "key": "中文名", "value": "zhName" ,"noNeed":true},
@@ -20,4 +22,3 @@
     ]
 
   }
-}

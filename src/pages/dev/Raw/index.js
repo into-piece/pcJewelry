@@ -16,7 +16,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag';
-import jsonData from './index.json';
+import { manuArr, modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 
@@ -25,9 +25,6 @@ const { Item } = Menu;
 const FormItem = Form.Item;
 const { Option } = Select;
 
-// manuArr是 =》menu配置提供遍历
-// modalContent => 每个menu不同的增加弹窗填写信息
-const { manuArr, modalContent } = jsonData;
 // 左边menu遍历配置
 const menuMap = manuArr.map(item => ({
   value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Main material" />,
