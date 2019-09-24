@@ -7,8 +7,24 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
+import {
+  Menu,
+  Icon,
+  Upload,
+  Row,
+  Col,
+  Card,
+  Button,
+  Modal,
+  Form,
+  Input,
+  notification,
+  Select,
+  Radio,
+  message,
+} from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import Cropper from 'react-cropper';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
 import Table from '@/components/Table';
@@ -19,6 +35,8 @@ import LockTag from '@/components/LockTag';
 import { manuArr, modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
+import 'cropperjs/dist/cropper.css';
+
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -38,7 +56,6 @@ const formLayout = {
     span: 13,
   },
 };
-
 // 面包屑数据
 // const breadData = [
 //   {
@@ -64,7 +81,7 @@ const isLockList = false; // table是否锁定=》显示锁定标签做判断 �
 
 // table 当前页对应的表头配置
 const columnsArr = {
-  // 计量单位表头
+  // 主材表头
   material: [
     {
       title: '成色',
@@ -104,6 +121,71 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
+  // 配件表头
+  accessories: [
+    {
+      title: '原料编号',
+      dataIndex: 'accessorieCode',
+      key: 'accessorieCode',
+      render: data => isLockList ? (
+        <LockTag>
+          {data}
+        </LockTag>
+        )
+        : (data),
+    },
+    {
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assaying',
+    },
+    {
+      title: '形状',
+      dataIndex: 'shapeName',
+      key: 'shape',
+    },
+    {
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specification',
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '计量单位',
+      dataIndex: 'measureUnitName',
+      key: 'measureUnit',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'weightUnitName',
+      key: 'weightUnit',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
+    },
+    {
+      title: '单重',
+      dataIndex: 'inventoryWeight',
+      key: 'inventoryWeight',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
+    },
+  ],
 };
 
 
@@ -133,6 +215,11 @@ class Info extends Component {
       },
       colorPercentage: {},
     },
+
+    loading: false,
+    fileList: [],
+    cropperVisible: false,
+
   };
 
   componentDidMount() {
@@ -216,7 +303,7 @@ class Info extends Component {
       default:
         // console.log(selectKey, '==============selectKey');
         // 主材
-        if (selectKey === 'material') {
+        if (selectKey === 'material' || selectKey === 'accessories') {
           // 成色列表
           dispatch({
             type: 'devRaw/getGemDropDown',
@@ -228,13 +315,21 @@ class Info extends Component {
             payload: {},
           });
         }
-        // 成色设定
-        if (selectKey === 'colorPercentage') {
+        // todo
+        if (selectKey === 'accessories') {
+          // 形状下拉
           dispatch({
-            type: 'devRaw/getListMstWordbook',
+            type: 'devRaw/getShapeDropDown',
+            payload: {},
+          });
+          // 规格下拉
+          dispatch({
+            type: 'devRaw/getSpecificationDropDown',
             payload: {},
           });
         }
+
+
         this.setState({ modalType });
         break;
       case 'delete':
@@ -245,7 +340,7 @@ class Info extends Component {
         });
         break;
       case 'lock':
-        const  isLock = this.returnLockType().type === 1;
+        const isLock = this.returnLockType().type === 1;
         const setvicetypename = isLock ? '审核' : '撤销';
         ModalConfirm({
           content: `确定${setvicetypename}吗？`, onOk: () => {
@@ -256,52 +351,204 @@ class Info extends Component {
     }
   };
 
+
+  returnElement = ({ type, dev, list, disable }) => {
+    switch (type) {
+      case 2:
+        return (<Select placeholder="请选择" disabled={disable || false}>
+          {dev[list] && dev[list].map(({ value, key }) =>
+            <Option value={value}>{key}</Option>,
+          )}
+        </Select>);
+      case 3 :
+        return (<Radio.Group disabled={disable || false}>
+          <Radio value="0">计重</Radio>
+          <Radio value="1">计件</Radio>
+        </Radio.Group>);
+      default:
+        return <Input placeholder="请输入" disabled={disable || false} />;
+    }
+  };
+
+
+  handleCropSubmit = () => {
+    const { uploadFileUid, fileList } = this.state;
+
+    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
+
+    fileList.forEach((v, i) => {
+      if (v.uid === uploadFileUid) {
+        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
+        fileList[i].url = cropImage;
+        fileList[i].thumbUrl = cropImage;
+        // console.log("set file url ",cropImage)
+      }
+    });
+
+    this.setState({
+      cropperVisible: false,
+      fileList,
+      cropImage,
+    });
+  };
+
+  handleCropCancle = () => {
+    this.setState({
+      cropperVisible: false,
+      cropImage: '',
+      uploadFileUid: '',
+    });
+  };
+
+  openCutImageModal = () => {
+
+    const { uploadFile } = this.state;
+
+    return (
+      <div className={styles.cropper_view}>
+        <Cropper
+          ref="cropper"
+          src={uploadFile}
+          className={styles.cropper}
+          style={{ height: '400px', width: '400px' }}
+          preview=".img-preview"
+          cropBoxResizable={false}
+          viewMode={1} // 定义cropper的视图模式
+          dragMode="move"
+          guides
+          background
+          aspectRatio={1 / 1}
+          // crop={this.crop}
+        />
+        <div className={styles.cropper_preview}>
+          <div className="img-preview" style={{ width: '100%', height: '100%' }} />
+        </div>
+      </div>
+    );
+  };
+
+  getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
   // 根据btn点击 返回对应弹窗内容
   getModalContent = () => {
     const {
       selectKey,
       choosenRowData,
-      form: { getFieldDecorator },
+      form: { getFieldDecorator, getFieldsValue },
     } = this.props;
-    const { modalType } = this.state;
+    const { modalType, cropperVisible } = this.state;
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
     const { dev } = this.props;
+    const handleChange = info => {
+
+      let fileList = [...info.fileList];
+
+      const { file } = info;
+
+
+      if (file.type) {
+        const isJPG = file.type.indexOf('image') != -1;
+        if (!isJPG) {
+          message.error('只能上传图片格式的文件');
+          return;
+        }
+      }
+
+      // fileList = fileList.slice(-10);
+      fileList = fileList.map(file => {
+        // console.log('image is the ', file);
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        if (!file.url) {
+          this.getBase64(file.originFileObj, imageUrl => {
+            fileList.forEach((v, i) => {
+              if (v.uid === info.file.uid) {
+                fileList[i].url = imageUrl;
+                // console.log("change file name =  ", v.name, info.file)
+                this.setState({
+                  fileList,
+                  cropperVisible: true,
+                  uploadFile: imageUrl,
+                  uploadFileUid: v.uid,
+                });
+              }
+            });
+          });
+        }
+
+        return file;
+      });
+
+      this.setState({ fileList });
+    };
+
+    const modalCropperFooter = {
+      okText: '保存',
+      onOk: this.handleCropSubmit,
+      onCancel: this.handleCropCancle,
+    };
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list,dfv }) => {
-            // console.log(list);
+          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable }) => {
+
             return (
-              <FormItem label={key} {...formLayout} key={key}>
-                {
-                  getFieldDecorator(value, {
-                    rules: [{
-                      required: !noNeed,
-                      message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
-                    }],
-                    initialValue: isEdit ? choosenRowData[value] : (dfv||''),
-                  })(type && type === 2 ?
-                    <Select placeholder="请选择">
-                      {dev[list] && dev[list].map(({ value, key }) =>
-                        <Option value={value}>{key}</Option>,
-                      )}
-                    </Select> :
-                    type && type === 3 ?
-                      <Radio.Group>
-                        <Radio value="0">计重</Radio>
-                        <Radio value="1">计件</Radio>
-                      </Radio.Group>
-                      :
-                      <Input placeholder="请输入" />,
-                  )
-                }
-              </FormItem>
+              <Col span={span || 12}>
+                <FormItem label={key} {...formLayout} key={key}>
+                  {
+                    getFieldDecorator(value, {
+                      rules: [{
+                        required: !noNeed,
+                        message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
+                      }],
+                      initialValue: isEdit ? choosenRowData[value] : (dfv || ''),
+                    })(this.returnElement({ type, dev, list, disable }))
+                  }
+                </FormItem>
+              </Col>
             );
           })
         }
+
+        {(selectKey === 'accessories') && <Col span={18}>
+          <FormItem
+            label="上传图片"
+            key="uploadPic"
+            labelCol={{ span: 3 }}
+            wrapperCol={{
+              span: 20,
+            }
+            }
+          >
+            <Upload
+              disabled={this.state.fileList.length >= 10}
+              accept='image/*'
+              name='avatar'
+              beforeUpload={() => {
+                return false;
+              }}
+              listType='picture-card'
+              fileList={this.state.fileList ? this.state.fileList : []}
+              onChange={handleChange}
+            >
+              <div>
+                <Icon type={this.state.loading ? 'loading' : 'plus'} />
+                <div className="ant-upload-text">上传图片</div>
+              </div>
+            </Upload>
+          </FormItem>
+        </Col>}
         {content}
+        <Modal {...modalCropperFooter} width={668} destroyOnClose visible={cropperVisible}>
+          {this.openCutImageModal()}
+        </Modal>
       </Form>
     );
   };
@@ -384,7 +631,7 @@ class Info extends Component {
   // 删除按钮回调
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props;
-    serviceObj[`deleteBasic${selectKey}`]({list:selectedRowKeys}).then(res => {
+    serviceObj[`deleteBasic${selectKey}`]({ list: selectedRowKeys }).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -400,7 +647,7 @@ class Info extends Component {
     const { selectKey, selectedRowKeys } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
-    serviceObj[serviceType + selectKey]({list:selectedRowKeys}).then(res => {
+    serviceObj[serviceType + selectKey]({ list: selectedRowKeys }).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -498,7 +745,7 @@ class Info extends Component {
         </div>
         <Modal
           title={returnTitle()}
-          width={640}
+          width={selectKey === 'accessories' ? 960 : 640}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
@@ -507,7 +754,6 @@ class Info extends Component {
           onCancel={() => {
             btnFn('');
           }}
-
         >
           {getModalContent()}
         </Modal>
@@ -666,7 +912,11 @@ const GetRenderitem = ({ data, type }) => {
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
-                : <Description key={key} term={key}>{value === 'status' ? statusConvert[data[value]] : data[value]}</Description>
+                : <Description
+                  key={key}
+                  term={key}
+                >{value === 'status' ? statusConvert[data[value]] : data[value]}
+                </Description>
             );
           })
         }
