@@ -15,9 +15,10 @@ import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
-import LockTag from '@/components/LockTag'
-import jsonData from './index.json'
-// import Bread from '@/components/BreadCrumb'
+import LockTag from '@/components/LockTag';
+import jsonData from './index.json';
+import { statusConvert } from '@/utils/convert';
+import ModalConfirm from '@/utils/modal';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -26,8 +27,7 @@ const { Option } = Select;
 
 // manuArr是 =》menu配置提供遍历
 // modalContent => 每个menu不同的增加弹窗填写信息
-const { manuArr, modalContent } = jsonData
-
+const { manuArr, modalContent } = jsonData;
 // 左边menu遍历配置
 const menuMap = manuArr.map(item => ({
   value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Main material" />,
@@ -63,86 +63,22 @@ const btnGroup = [
   { name: '审批', tag: 'lock' },
 ];
 
-const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
-
-function returnStatus(v) {
-  return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : ''
-}
+const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
 // table 当前页对应的表头配置
 const columnsArr = {
   // 计量单位表头
-  measureUnit: [
+  material: [
     {
-      title: '单位代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assaying',
       render: data => isLockList ? (
         <LockTag>
           {data}
         </LockTag>
-      )
-        : (data)
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名称',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data)
-    },
-  ],
-
-  // 成色设定表头
-  colorPercentage: [
-    {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 颜色设定表头
-  colorSetting: [
-    {
-      title: '颜色代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
+        )
+        : (data),
     },
     {
       title: '中文名',
@@ -155,278 +91,37 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 电镀表头
-  electroplateSetting: [
-    {
-      title: '电镀颜色代码',
-      dataIndex: 'colorCode',
-      key: 'colorCode',
+      title: '重量单位',
+      dataIndex: 'weightUnitName',
+      key: 'weightUnit',
     },
     {
-      title: '简称',
-      dataIndex: 'shotName',
-      key: 'shotName',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '含镍',
-      dataIndex: 'isNickel',
-      key: 'isNickel',
-      render: (data) => (Number(data) === 1 ? '是' : '否')
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
-
-  // 形状设定表头
-  shapeSetting: [
-    {
-      title: '形状代码',
-      dataIndex: 'shapeCode',
-      key: 'shapeCode',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 规格设定表头
-  specificationSetting: [
-    {
-      title: '规格代码',
-      dataIndex: 'specificationCode',
-      key: 'specificationCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 原料等级设定表头
-  materialsGrade: [
-    {
-      title: '等级代码',
-      dataIndex: 'gradeCode',
-      key: 'gradeCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 石头切工设定列表
-  stoneCutter: [
-    {
-      title: '切工代码',
-      dataIndex: 'cuttingCode',
-      key: 'cuttingCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 镶石工艺
-  insertStoneTechnology: [
-    {
-      title: '成色',
-      dataIndex: 'basicColourSet',
-      key: 'basicColourSet',
-      render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
-      )
-    },
-    {
-      title: '类别',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '公费',
-      dataIndex: 'costs',
-      key: 'costs',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remarks',
-      key: 'remarks',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 胶膜设定
-  rubberMouldSetting: [
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '胶膜尺寸',
-      dataIndex: 'filmSize',
-      key: 'filmSize',
-    },
-    {
-      title: '胶膜片数',
-      dataIndex: 'filmNumber',
-      key: 'filmNumber',
-    },
-    {
-      title: '工费',
-      dataIndex: 'costs',
-      key: 'costs',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 模具仓位设定
-  mouldPosition: [
-    {
-      title: '仓位编号',
-      dataIndex: 'positionCode',
-      key: 'positionCode',
-    },
-    {
-      title: '房间号',
-      dataIndex: 'roomNum',
-      key: 'roomNum',
-    },
-    {
-      title: '橱柜号',
-      dataIndex: 'cabinetNum',
-      key: 'cabinetNum',
-    },
-    {
-      title: '抽屉号',
-      dataIndex: 'drawerNum',
-      key: 'drawerNum',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remarks',
-      key: 'remarks',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-}
-
+};
 
 
 @Form.create()
-@connect(({ dev }) => {
+@connect(({ devRaw }) => {
   return {
-    dev,
-    list: dev.list,
-    pagination: dev.pagination,
-    selectKey: dev.selectKey,
-    choosenRowData: dev.choosenRowData,
-    colorSetList: dev.colorSetList,
-    selectedRowKeys: dev.selectedRowKeys,
-    gemSetProcessDropDown: dev.gemSetProcessDropDown,
-    listMstWordbookDrop: dev.listMstWordbookDrop
+    dev: devRaw,
+    list: devRaw.list,
+    pagination: devRaw.pagination,
+    selectKey: devRaw.selectKey,
+    choosenRowData: devRaw.choosenRowData,
+    colorSetList: devRaw.colorSetList,
+    selectedRowKeys: devRaw.selectedRowKeys,
+    gemSetProcessDropDown: devRaw.gemSetProcessDropDown,
+    listMstWordbookDrop: devRaw.listMstWordbookDrop,
   };
 })
 class Info extends Component {
@@ -437,10 +132,10 @@ class Info extends Component {
       measureUnit: {
         unitCode: '',
         zhName: '',
-        enName: ''
+        enName: '',
       },
-      colorPercentage: {}
-    }
+      colorPercentage: {},
+    },
   };
 
   componentDidMount() {
@@ -462,7 +157,7 @@ class Info extends Component {
 
   // 根据当前页面的key 返回对应的icon
   getMenuIcon = key => {
-    console.log(SvgUtil)
+    // console.log(SvgUtil);
     return SvgUtil[key];
   };
 
@@ -470,19 +165,19 @@ class Info extends Component {
   handleSelectKey = ({ key }) => {
     const { dispatch, pagination } = this.props;
     dispatch({
-      type: 'dev/getSelectKey',
+      type: 'devRaw/getSelectKey',
       payload: key,
     });
-    this.getList(key)
+    this.getList(key);
 
     // 还要清空所选中项
     dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'devRaw/changeSelectedRowKeys',
       payload: [],
     });
 
     dispatch({
-      type: 'dev/getChoosenRowData',
+      type: 'devRaw/getChoosenRowData',
       payload: { id: '', zhName: '', enName: '', unitCode: '' },
     });
 
@@ -491,46 +186,75 @@ class Info extends Component {
   // 获取对应key=》页面进行数据请求
   getList = (key = this.props.selectKey) => {
     const { dispatch, pagination } = this.props;
-    const obj = {}
+    const obj = {};
     manuArr.forEach(item => {
-      obj[item] = `get${item}List`
-    })
+      obj[item] = `get${item}List`;
+    });
     // getDevList
     dispatch({
-      type: `dev/getList`,
+      type: `devRaw/getList`,
       payload: { params: pagination, type: key },
+      callback: () => {
+        const { dev } = this.props;
+        dev[`${dev.selectKey}List`].records.map((item) => {
+          if (item.id === dev.choosenRowData.id) {
+            dispatch({
+              type: 'devRaw/getChoosenRowData',
+              payload: item,
+            });
+          }
+        });
+      },
     });
-  }
+
+
+  };
 
   // 列表对应操作button回调
   btnFn = modalType => {
-    const { selectKey, dispatch } = this.props
+    const { selectKey, dispatch } = this.props;
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
-        console.log(selectKey, '==============selectKey')
-        // 镶石工艺
-        if (selectKey === 'insertStoneTechnology') {
+        // console.log(selectKey, '==============selectKey');
+        // 主材
+        if (selectKey === 'material') {
+          // 成色列表
           dispatch({
-            type: 'dev/getGemDropDown',
+            type: 'devRaw/getGemDropDown',
+            payload: {},
+          });
+          // 重量单位列表
+          dispatch({
+            type: 'devRaw/getBUMDropDown',
             payload: {},
           });
         }
         // 成色设定
         if (selectKey === 'colorPercentage') {
           dispatch({
-            type: 'dev/getListMstWordbook',
+            type: 'devRaw/getListMstWordbook',
             payload: {},
           });
         }
         this.setState({ modalType });
         break;
       case 'delete':
-        this.handleDelect()
+        ModalConfirm({
+          content: '确定删除吗？', onOk: () => {
+            this.handleDelect();
+          },
+        });
         break;
       case 'lock':
-        this.handleLock()
+        const  isLock = this.returnLockType().type === 1;
+        const setvicetypename = isLock ? '审核' : '撤销';
+        ModalConfirm({
+          content: `确定${setvicetypename}吗？`, onOk: () => {
+            this.handleLock();
+          },
+        });
         break;
     }
   };
@@ -542,39 +266,42 @@ class Info extends Component {
       choosenRowData,
       form: { getFieldDecorator },
     } = this.props;
-    const { modalType } = this.state
-    const content = ''
-    const dataArr = modalContent[selectKey]
-    const isEdit = modalType === 'edit'
-    const { dev } = this.props
+    const { modalType } = this.state;
+    const content = '';
+    const dataArr = modalContent[selectKey];
+    const isEdit = modalType === 'edit';
+    const { dev } = this.props;
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
-            console.log(list)
+          dataArr && dataArr.map(({ key, value, noNeed, type, list,dfv }) => {
+            // console.log(list);
             return (
               <FormItem label={key} {...formLayout} key={key}>
                 {
                   getFieldDecorator(value, {
-                    rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
-                    initialValue: isEdit ? choosenRowData[value] : '',
+                    rules: [{
+                      required: !noNeed,
+                      message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
+                    }],
+                    initialValue: isEdit ? choosenRowData[value] : (dfv||''),
                   })(type && type === 2 ?
                     <Select placeholder="请选择">
                       {dev[list] && dev[list].map(({ value, key }) =>
-                        <Option value={value}>{key}</Option>
+                        <Option value={value}>{key}</Option>,
                       )}
                     </Select> :
                     type && type === 3 ?
-                        <Radio.Group value={value}>
-                          <Radio value={1}>是</Radio>
-                          <Radio value={2}>否</Radio>
-                        </Radio.Group>
+                      <Radio.Group>
+                        <Radio value="0">计重</Radio>
+                        <Radio value="1">计件</Radio>
+                      </Radio.Group>
                       :
-                      <Input placeholder="请输入" />
+                      <Input placeholder="请输入" />,
                   )
                 }
               </FormItem>
-            )
+            );
           })
         }
         {content}
@@ -601,8 +328,8 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
+    const { selectKey, form } = this.props;
+    const { addData } = this.state;
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -611,81 +338,81 @@ class Info extends Component {
         // })
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         serviceObj[`addBasic${selectKey}`](values).then(res => {
-          const { rtnCode, rtnMsg } = res.head
+          const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
               message: rtnMsg,
             });
-            this.getList()
+            this.getList();
             this.btnFn('');
           }
-        })
+        });
       }
     });
-  }
+  };
 
   // 编辑按钮回调
   handleEdit = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
+    const { selectKey, form } = this.props;
+    const { addData } = this.state;
 
     // 还要清空所选中项
     this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'devRaw/changeSelectedRowKeys',
       payload: [],
     });
 
     form.validateFields((err, values) => {
       if (!err) {
-        const { choosenRowData } = this.props
+        const { choosenRowData } = this.props;
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         const params = {
           ...values,
-          id: choosenRowData.id
-        }
+          id: choosenRowData.id,
+        };
         serviceObj[`addBasic${selectKey}`](params).then(res => {
-          const { rtnCode, rtnMsg } = res.head
+          const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
               message: rtnMsg,
             });
-            this.getList()
+            this.getList();
             this.btnFn('');
           }
-        })
+        });
       }
     });
-  }
+  };
 
   // 删除按钮回调
   handleDelect = () => {
-    const { selectKey, selectedRowKeys } = this.props
-    serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+    const { selectKey, selectedRowKeys } = this.props;
+    serviceObj[`deleteBasic${selectKey}`]({list:selectedRowKeys}).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        this.getList()
+        this.getList();
       }
-    })
-  }
+    });
+  };
 
   // 审批/撤销 按钮回调
   handleLock = () => {
-    const { selectKey, selectedRowKeys } = this.props
-    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke'
-    serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+    const { selectKey, selectedRowKeys } = this.props;
+    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const serviceType = isLock ? 'approve' : 'revoke';
+    serviceObj[serviceType + selectKey]({list:selectedRowKeys}).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        this.getList()
+        this.getList();
       }
-    })
-  }
+    });
+  };
 
   /**
    * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
@@ -695,46 +422,50 @@ class Info extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const { selectedRowKeys, dev, selectKey } = this.props
-    console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============')
-    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
+    const { selectedRowKeys, dev, selectKey } = this.props;
+    // console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============');
+    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return {
+      name: '审批',
+      disabled: true,
+      type: 1,
+    };
     const isLock1 = selectedRowKeys.reduce((res, cur) => {
-      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur)
-      if (singleObjcect) res.push(singleObjcect.status)
-      return res
-    }, [])
-    const isShenPi = isLock1.every((item) => Number(item) === 0) // 是否全是0
-    const isChexiao = isLock1.every((item) => Number(item) === 2) // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 }
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 }
-    return { name: '审批', disabled: true, type: 1 } // 当两种状态都有 禁止点击
-  }
+      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur);
+      if (singleObjcect) res.push(singleObjcect.status);
+      return res;
+    }, []);
+    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
+    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
+    if (isShenPi) return { name: '审批', disabled: false, type: 1 };
+    if (isChexiao) return { name: '撤销', disabled: false, type: 2 };
+    return { name: '审批', disabled: true, type: 1 }; // 当两种状态都有 禁止点击
+  };
 
   // 弹窗确定提交回调
   handleModalOk = () => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-        this.handleAdd()
+        this.handleAdd();
         break;
       case 'edit':
-        this.handleEdit()
+        this.handleEdit();
         break;
       default:
         break;
     }
 
-  }
+  };
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props
-    if (tag === 'plus') return false
+    const { selectedRowKeys } = this.props;
+    if (tag === 'plus') return false;
     if (tag === 'lock') {
-      return selectedRowKeys.length === 0 || this.returnLockType().disabled
+      return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
-    return selectedRowKeys.length === 0
-  }
+    return selectedRowKeys.length === 0;
+  };
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
@@ -827,7 +558,9 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
-                  onClick={() => { btnFn(tag) }}
+                  onClick={() => {
+                    btnFn(tag);
+                  }}
                 >
                   {tag === 'lock' ? returnLockType().name : name}
                 </Button>
@@ -841,24 +574,24 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 );
 
 // Table 中间列表内容
-@connect(({ loading, dev }) => {
+@connect(({ loading, devRaw }) => {
   return {
-    dev,
-    listLoading: loading.effects['dev/getList'],
-    pagination: dev.pagination,
-    choosenRowData: dev.choosenRowData,
-    selectedRowKeys: dev.selectedRowKeys,
+    dev: devRaw,
+    listLoading: loading.effects['devRaw/getList'],
+    pagination: devRaw.pagination,
+    choosenRowData: devRaw.choosenRowData,
+    selectedRowKeys: devRaw.selectedRowKeys,
   };
 })
 class CenterInfo extends Component {
   changePagination = obj => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'dev/getDevList',
+      type: 'devRaw/getDevList',
       payload: obj,
     });
     dispatch({
-      type: 'dev/getPagination',
+      type: 'devRaw/getPagination',
       payload: obj,
     });
   };
@@ -866,7 +599,7 @@ class CenterInfo extends Component {
   changeChoosenRow = rowData => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'dev/getChoosenRowData',
+      type: 'devRaw/getChoosenRowData',
       payload: rowData,
     });
   };
@@ -875,16 +608,16 @@ class CenterInfo extends Component {
   // 更改table select数组
   onSelectChange = (selectedRowKeys) => {
     this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
+      type: 'devRaw/changeSelectedRowKeys',
       payload: selectedRowKeys,
-    })
+    });
   };
 
   render() {
-    const { onSelectChange, props } = this
+    const { onSelectChange, props } = this;
     const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
-    const columns = columnsArr[type]
-    const list = dev[`${type}List`]
+    const columns = columnsArr[type];
+    const list = dev[`${type}List`];
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
@@ -919,19 +652,25 @@ const GetRenderitem = ({ data, type }) => {
   const selectRowItem = () => {
     // console.log('select the item');
   };
-  const arr = [
-    ...modalContent[type],
-    { "key": "状态", "value": "status" },
-  ]
+
+  let arr = [];
+
+  if (modalContent[type]) {
+    arr = [
+      ...modalContent[type],
+      { 'key': '状态', 'value': 'status' },
+    ];
+  }
+
 
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value }) => {
-            return (
-              <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
-            )
+          arr.map(({ key, value, name }) => {
+            return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
+                : <Description key={key} term={key}>{value === 'status' ? statusConvert[data[value]] : data[value]}</Description>
+            );
           })
         }
       </DescriptionList>
