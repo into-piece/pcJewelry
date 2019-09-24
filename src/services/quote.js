@@ -41,9 +41,15 @@ const resultArr = [
   { key: 'approval', path: '/product-quote-header/approval' }, // 报价单审批
   { key: 'cancelApproval', path: '/product-quote-header/cancelApproval' }, // 报价单审批
   { key: 'deleteProductQuoteHeader', path: '/product-quote-header/deleteProductQuoteHeader' }, // 报价单审批
-  { key: 'listBrands', path: '/basic/brand//listBrands', module: 4 }, // 报价单审批
+  { key: 'listBrands', path: '/basic/brand/listBrands', module: 4 }, // 报价单审批
   { key: 'listBasicColourSettingsDropDown', path: '/develop/basic/colour-settings/listBasicColourSettingsDropDown', module: 4 }, // 报价单审批
   { key: 'deleteProformaInvoiceDetail', path: '/business/order/proforma-invoice-detail/deleteProformaInvoiceDetail', module: 4 }, // 报价单审批
+  { key: 'addquoteDatialList', path: '/product-quote-detail/saveOrupdateProductQuoteDetail' }, // 7）添加或更新报价单产品明细信息：
+  { key: 'getLastQuoteDetailByProductId', path: '/product-quote-detail/getLastQuoteDetailByProductId' }, // 前次工费
+  { key: 'getTopQuoteDetailByProductId', path: '/product-quote-detail/getTopQuoteDetailByProductId' }, // 最高工费
+  { key: 'getlistProductLine', path: '/business/product-line/listProductLine', module: 4 }, // 产品报价系数
+  { key: 'getLastPackPriceByProductId', path: '/product-quote-detail/getLastPackPriceByProductId' }, // 抓出同一客户同款产品的最近一次包装单价
+  { key: 'getActualCountByProductId', path: '/product-quote-detail/getActualCountByProductId' }, // 抓出该款产品的最近一次PI工费
 ]
 // /listMstWordbook
 

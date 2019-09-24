@@ -86,9 +86,14 @@ const columns = [
   //   )
   // },
 ]
-export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange }) => (
+export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch }) => (
   <div className={styles.productModal}>
-    <SearchForm data={productSearchParams} returnElement={returnElement} source={source} />
+    <SearchForm
+      onSearch={onSearch}
+      data={productSearchParams}
+      returnElement={returnElement}
+      source={source}
+    />
     <Table
       columns={columns}
       body={list}
@@ -97,8 +102,8 @@ export default (({ productSearchParams, pagination, returnElement, source, list,
       selectedRowKeys={productselectedKeys}
       changeChoosenRow={changeChoosenRow}
       selectKey={choosenRowData.id}
-      // changePagination={changePagination}
       onSelectChange={onSelectChange}
+    // changePagination={changePagination}
     // listLoading={listLoading}
     />
   </div>

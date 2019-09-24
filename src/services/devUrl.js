@@ -1,4 +1,5 @@
-[
+export  const   serviceArr = [
+  // 基础数据
   {
     "name": "measureUnit",
     "path": "measure-unit",
@@ -102,5 +103,18 @@
       "approval",
       "revoke"
     ]
-  }
+  },
+  // 原料设置
+  {
+    "name": "material",
+    "path": "principal-material",
+    "arr": [
+      "listPrincipalMaterial",
+      "savePrincipalMaterial",
+      "deletePrincipalMaterial",
+      "approval",
+      "revoke"
+    ]
+  },
+
 ]

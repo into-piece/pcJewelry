@@ -76,6 +76,7 @@ class MyTable extends Component {
         rowClassName={onSelectRowClass}
         loading={listLoading}
         onRow={onRow}
+        scroll={{ x: 900 }}
       />
     );
   }
