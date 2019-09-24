@@ -18,6 +18,7 @@ import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag';
 import jsonData from './index.json';
 import { statusConvert } from '@/utils/convert';
+import ModalConfirm from '@/utils/modal';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -240,10 +241,20 @@ class Info extends Component {
         this.setState({ modalType });
         break;
       case 'delete':
-        this.handleDelect();
+        ModalConfirm({
+          content: '确定删除吗？', onOk: () => {
+            this.handleDelect();
+          },
+        });
         break;
       case 'lock':
-        this.handleLock();
+        const  isLock = this.returnLockType().type === 1;
+        const setvicetypename = isLock ? '审核' : '撤销';
+        ModalConfirm({
+          content: `确定${setvicetypename}吗？`, onOk: () => {
+            this.handleLock();
+          },
+        });
         break;
     }
   };
@@ -263,7 +274,7 @@ class Info extends Component {
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list,dfv }) => {
             // console.log(list);
             return (
               <FormItem label={key} {...formLayout} key={key}>
@@ -273,7 +284,7 @@ class Info extends Component {
                       required: !noNeed,
                       message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
                     }],
-                    initialValue: isEdit ? choosenRowData[value] : '',
+                    initialValue: isEdit ? choosenRowData[value] : (dfv||''),
                   })(type && type === 2 ?
                     <Select placeholder="请选择">
                       {dev[list] && dev[list].map(({ value, key }) =>
