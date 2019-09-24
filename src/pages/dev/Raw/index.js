@@ -376,7 +376,7 @@ class Info extends Component {
   // 删除按钮回调
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props;
-    serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
+    serviceObj[`deleteBasic${selectKey}`]({list:selectedRowKeys}).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -392,7 +392,7 @@ class Info extends Component {
     const { selectKey, selectedRowKeys } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
-    serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
+    serviceObj[serviceType + selectKey]({list:selectedRowKeys}).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
