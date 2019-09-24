@@ -261,6 +261,7 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
+    this.unLockEdit("c1edf2f0-47e5-468a-a0a3-0cb26b1b2ba6")
 
     // 获取客户编号下拉
     dispatch({
@@ -310,7 +311,6 @@ class Info extends Component {
   openAddModal = () => {
     const { dispatch, choosenRowData } = this.props
     const isHead = !choosenRowData.id
-    debugger
     if (isHead) {
       dispatch({
         type: 'quote/getcurrencydropdown'
@@ -338,11 +338,16 @@ class Info extends Component {
 
   // 列表对应操作button回调
   btnFn = async (modalType) => {
-    const { selectKey, dispatch, choosenRowData } = this.props
+    const { selectKey, dispatch, choosenRowData, form } = this.props
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
+        const { markingId, markingEnName } = choosenRowData
+        form.setFieldsValue({
+          markingId,
+          markingEnName
+        });
         if (modalType === 'edit') {
           const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
             if (res.head.rtnCode !== '000000') return false
@@ -469,7 +474,7 @@ class Info extends Component {
         return <Radio.Group>
           {
             arr.map(({ key, value }) => {
-              return <Radio value={value}>{key}</Radio>
+              return <Radio value={value} key={value}>{key}</Radio>
             })
           }
         </Radio.Group>
@@ -491,6 +496,7 @@ class Info extends Component {
       rightMenu,
       choosenRowData,
       form,
+      choosenDetailRowData
     } = this.props;
     const { getFieldDecorator } = form
     const { modalType } = this.state
@@ -510,7 +516,7 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? choosenRowData[value] : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (choosenRowData.id ? choosenDetailRowData[value] : choosenRowData[value]) : initValue || (number ? 0 : undefined),
                     })(this.returnElement({ key, value, noNeed, type, list, clickFn, text, arr, initValue, data: quote, form }))
                   }
                 </FormItem>
@@ -551,11 +557,6 @@ class Info extends Component {
     let params = {}
     if (!isHead) {
       params = { quoteHeadId: choosenRowData.id, productLineId }
-      const { markingId, markingEnName } = choosenRowData
-      this.props.form.setFieldsValue({
-        markingId,
-        markingEnName
-      });
     }
 
     form.validateFields((err, values) => {
@@ -580,21 +581,30 @@ class Info extends Component {
 
   // 编辑按钮回调
   handleEdit = () => {
-    const { rightMenu, form } = this.props
-    const str = rightMenu === 1 ? 'quotelist' : 'quoteDatialList'
+    const { form, choosenRowData, dispatch, choosenDetailRowData } = this.props
+    const { productLineId } = choosenDetailRowData
+    const isHead = !choosenRowData.id
+    const str = isHead ? 'quotelist' : 'quoteDatialList'
+
+    let params = {
+      id: choosenRowData.id
+    }
+
+    if (!isHead) {
+      params = { quoteHeadId: choosenRowData.id, productLineId }
+    }
 
     // 还要清空所选中项
-    this.props.dispatch({
+    dispatch({
       type: 'quote/changeSelectedRowKeys',
       payload: [],
     });
 
     form.validateFields((err, values) => {
       if (!err) {
-        const { choosenRowData } = this.props
-        const params = {
+        params = {
+          ...params,
           ...values,
-          id: choosenRowData.id
         }
         serviceObj[`add${str}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head
@@ -928,6 +938,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               {
                 radioArr.map((item, index) =>
                   <Radio.Button
+                    key={item}
                     style={{
                       height: 40,
                       width: 130,
