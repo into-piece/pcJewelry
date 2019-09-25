@@ -105,6 +105,7 @@ export  const   serviceArr = [
     ]
   },
   // 原料设置
+  // 主材
   {
     "name": "material",
     "path": "principal-material",
@@ -112,6 +113,18 @@ export  const   serviceArr = [
       "listPrincipalMaterial",
       "savePrincipalMaterial",
       "deletePrincipalMaterial",
+      "approval",
+      "revoke"
+    ]
+  },
+  // 配件
+  {
+    "name": "accessories",
+    "path": "accessories",
+    "arr": [
+      "listAccessories",
+      "saveOrUpdate",
+      "deleteAccessories",
       "approval",
       "revoke"
     ]

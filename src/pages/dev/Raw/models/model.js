@@ -7,9 +7,15 @@
  */
 import servicesConfig from '@/services/dev';
 
-const initData = { records: [] }
+const initData = { records: [] };
 
-const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown, listMstWordbook,listBasicMeasureUnitDropDown } = servicesConfig
+const {
+  addBasicMeasureUnit,
+  listGemSetProcessDropDown,
+  listBasicShapeSettingsDropDown,
+  listBasicSpecificationSettingsDropDown,
+  listBasicMeasureUnitDropDown,
+  listMstWordbook } = servicesConfig;
 export default {
   namespace: 'devRaw',
 
@@ -17,8 +23,10 @@ export default {
   state: {
     dropDownList: [],
     gemSetProcessDropDown: [],
-    getBUMropDown:[],
+    getBUMropDown: [],
     listMstWordbookDrop: [],
+    shapeSettingList:[],
+    specificationSettingList:[],
     pagination: {
       current: 1,
       size: 10,
@@ -28,7 +36,7 @@ export default {
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 
-    materialList:initData,
+    materialList: initData,
 
 
   },
@@ -63,15 +71,15 @@ export default {
     // 计量单位
     * getUnitDropDown({ payload }, { call, put }) {
       // 请求数据接口  getDevDropDown接口方法   payload请求参数
-      const response = yield call(getDevDropDown, payload);
+      const response = yield call(listBasicMeasureUnitDropDown, payload);
       // 存储数据
       yield put({
         type: 'getData',
         payload: response,
       });
     },
-    * getList({ payload ,callback}, { call, put }) {
-      const { type, params } = payload
+    * getList({ payload, callback }, { call, put }) {
+      const { type, params } = payload;
       // console.log(servicesConfig)
       // console.log(type, params, servicesConfig[`listBasic${type}`])
       const response = yield call(servicesConfig[`listBasic${type}`], params);
@@ -79,30 +87,47 @@ export default {
         type: 'getDevList2',
         payload: { response, type },
       });
-      if(callback)callback();
+      if (callback) callback();
     },
-    *addMeasureUnit({ payload }, { call, put }) {
+    * addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
       yield put({
         type: 'addMeasureUnit2',
         payload: response,
       });
     },
-    *getGemDropDown({ payload }, { call, put }) {
+    * getGemDropDown({ payload }, { call, put }) {
       const response = yield call(listGemSetProcessDropDown, payload);
       yield put({
         type: 'getGemDropDown2',
         payload: response,
       });
     },
-    *getBUMDropDown({ payload }, { call, put }) {
+    // 重量单位 计量单位下拉
+    * getBUMDropDown({ payload }, { call, put }) {
       const response = yield call(listBasicMeasureUnitDropDown, payload);
       yield put({
         type: 'getBUMropDownre',
         payload: response,
       });
     },
-    *getListMstWordbook({ payload }, { call, put }) {
+    // 形状下拉
+    * getShapeDropDown({ payload }, { call, put }) {
+      const response = yield call(listBasicShapeSettingsDropDown, payload);
+      yield put({
+        type: 'getshapeSettingList2',
+        payload: response,
+      });
+    },
+    // 规格下拉
+    * getSpecificationDropDown({ payload }, { call, put }) {
+      const response = yield call(listBasicSpecificationSettingsDropDown, payload);
+      yield put({
+        type: 'getspecificationSettingList2',
+        payload: response,
+      });
+    },
+    * getListMstWordbook({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload);
       yield put({
         type: 'getListMstWordbook2',
@@ -119,13 +144,13 @@ export default {
           : initData;
       return {
         ...state,
-        list,
+        listBasicMeasureUnitDropDown:list,
       };
     },
     getDevList2(state, action) {
       // console.log(action.payload)
-      const { type, response } = action.payload
-      const listName = `${type}List`
+      const { type, response } = action.payload;
+      const listName = `${type}List`;
       const listData =
         response && response.head && response.head.rtnCode === '000000'
           ? response.body
@@ -169,139 +194,7 @@ export default {
         choosenRowData: action.payload,
       };
     },
-
     // 成色
-    getColorPercentage2(state, action) {
-      const colorPercentageList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      // console.log(colorPercentageList)
-      return {
-        ...state,
-        colorPercentageList,
-      };
-    },
-
-    // 分类
-    getCategorySetList2(state, action) {
-      const categorySetList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      // console.log(categorySetList)
-      return {
-        ...state,
-        categorySetList,
-      };
-    },
-
-    // 颜色
-    getcolorSettingList2(state, action) {
-      const colorSettingList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        colorSettingList,
-      };
-    },
-
-    // 电镀
-    getelectroplateSettingList2(state, action) {
-      const electroplateSettingList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        electroplateSettingList,
-      };
-    },
-
-    // 形状
-    getshapeSettingList2(state, action) {
-      const shapeSettingList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        shapeSettingList,
-      };
-    },
-
-    // 规格
-    getspecificationSettingList2(state, action) {
-      const specificationSettingList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        specificationSettingList,
-      };
-    },
-    // 规格
-    getmaterialsGradeList2(state, action) {
-      const materialsGradeList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        materialsGradeList,
-      };
-    },
-
-    // 规格
-    getstoneCutterList2(state, action) {
-      const stoneCutterList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        stoneCutterList,
-      };
-    },
-
-    // 规格
-    getinsertStoneTechnologyList2(state, action) {
-      const insertStoneTechnologyList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        insertStoneTechnologyList,
-      };
-    },
-
-    // 规格
-    getrubberMouldSettingList2(state, action) {
-      const rubberMouldSettingList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        rubberMouldSettingList,
-      };
-    },
-
-    // 规格
-    getmouldPositionList2(state, action) {
-      const mouldPositionList =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body
-          : initData;
-      return {
-        ...state,
-        mouldPositionList,
-      };
-    },
     getGemDropDown2(state, action) {
       let gemSetProcessDropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -317,6 +210,41 @@ export default {
         gemSetProcessDropDown,
       };
     },
+
+     // 形状
+    getshapeSettingList2(state, action) {
+      let shapeSettingList =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (shapeSettingList.length > 0) {
+        shapeSettingList = shapeSettingList.map(({ zhName, id }) => {
+          return { key: zhName, value: id };
+        });
+      }
+      return {
+        ...state,
+        shapeSettingList,
+      };
+    },
+
+    // 规格
+    getspecificationSettingList2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map(({ zhName, id }) => {
+          return { key: zhName, value: id };
+        });
+      }
+      return {
+        ...state,
+        specificationSettingList:list,
+      };
+    },
+    // 重量 计量单位
     getBUMropDownre(state, action) {
       let getBUMropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -324,8 +252,8 @@ export default {
           : initData;
       if (getBUMropDown.length > 0) {
         getBUMropDown = getBUMropDown.map(({ zhName, id }) => {
-          return { key: zhName, value: id }
-        })
+          return { key: zhName, value: id };
+        });
       }
       return {
         ...state,
@@ -339,8 +267,8 @@ export default {
           : initData;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode }
-        })
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
       }
 
       return {
