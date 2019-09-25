@@ -33,6 +33,9 @@ const resultArr = [
   ...result.flat(),
   { key: 'listGemSetProcessDropDown', path: '/colour-set/listBasicColourSetDropDown' },
   { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
+  { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },
+  { key: 'listBasicSpecificationSettingsDropDown', path: '/specification-settings/listBasicSpecificationSettingsDropDown' },
+
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: `${env  }/business/sys` }
 ]
 
