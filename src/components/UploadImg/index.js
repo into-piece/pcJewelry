@@ -23,7 +23,6 @@ class UploadImg extends Component {
   handleChange = info => {
 
     let fileList = [...info.fileList];
-
     const { file } = info;
     const { maxcount,fileListFun } = this.props;
 
@@ -36,13 +35,13 @@ class UploadImg extends Component {
     }
 
     fileList = fileList.slice(-maxcount);
-    fileList = fileList.map(file => {
+    fileList = fileList.map(f => {
       // console.log('image is the ', file);
-      if (file.response) {
-        file.url = file.response.url;
+      if (f.response) {
+        f.url = f.response.url;
       }
-      if (!file.url) {
-        this.getBase64(file.originFileObj, imageUrl => {
+      if (!f.url) {
+        this.getBase64(f.originFileObj, imageUrl => {
           fileList.forEach((v, i) => {
             if (v.uid === info.file.uid) {
               fileList[i].url = imageUrl;
@@ -58,7 +57,7 @@ class UploadImg extends Component {
         });
       }
 
-      return file;
+      return f;
     });
     if(fileListFun)fileListFun(fileList);
     this.setState({ fileList });

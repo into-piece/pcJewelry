@@ -70,7 +70,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete' ,type:'danger'},
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -213,7 +213,7 @@ class Info extends Component {
       },
       colorPercentage: {},
     },
-    filelist:[],
+    filelist: [],
   };
 
   componentDidMount() {
@@ -400,18 +400,23 @@ class Info extends Component {
             );
           })
         }
-
         {(selectKey === 'accessories') && <Col span={18}>
           <FormItem
             label="上传图片"
-            key={`uploadPic${Math.random()}`}
+            key="uploadPic"
             labelCol={{ span: 3 }}
             wrapperCol={{
               span: 20,
             }
             }
           >
-            <UploadImg maxcount={10} fileListFun={(list)=>{this.setState({filelist:list})}} />
+            <UploadImg
+              key="uimg"
+              maxcount={10}
+              fileListFun={(list) => {
+              this.setState({ filelist: list });
+            }}
+            />
           </FormItem>
         </Col>}
         {content}
@@ -498,7 +503,7 @@ class Info extends Component {
   // 删除按钮回调
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props;
-    serviceObj[`deleteBasic${selectKey}`]({ list: selectedRowKeys }).then(res => {
+    serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -514,7 +519,7 @@ class Info extends Component {
     const { selectKey, selectedRowKeys } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
-    serviceObj[serviceType + selectKey]({ list: selectedRowKeys }).then(res => {
+    serviceObj[serviceType + selectKey]( selectedRowKeys ).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -660,11 +665,11 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag }) => (
+              {btnGroup.map(({ name, tag ,type}) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type="primary"
+                  type={type||"primary"}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
