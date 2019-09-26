@@ -19,11 +19,11 @@ import {
   List,
   message,
 } from 'antd';
+import { connect } from 'dva';
 import styles from './base.less';
 
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
-import { connect } from 'dva';
 import AllCity from './components/AllCity';
 import City from './components/City';
 import GeographicView from './GeographicView';
@@ -117,8 +117,7 @@ class TerminalClient extends PureComponent {
       if (terminalUpdateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
+    } else if (update) {
         // console.log('code '+body.rtnCode)
         if (body.rtnCode === '000000') {
           this.state.requestState = 'success';
@@ -135,7 +134,6 @@ class TerminalClient extends PureComponent {
           this.state.showItem = { ...current };
         }
       }
-    }
 
     if (params) {
       const data = params;
@@ -172,22 +170,22 @@ class TerminalClient extends PureComponent {
           <Divider className={clientStyle.divder} />
           <Form
             layout="inline"
-            size={'small'}
+            size="small"
             className={styles.from_content}
             labelAlign="left"
             onSubmit={this.handleSubmit}
           >
             <Row gutter={2} justify="start">
-              {/*<Col lg={8} md={8} sm={8} xs={8}>*/}
-              {/*<FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}>*/}
-              {/*{getFieldDecorator('endNo', {*/}
-              {/*rules: [{ required: true, message: '请输入终客编号' }],*/}
-              {/*initialValue: current.endNo,*/}
-              {/*})(*/}
-              {/*<Input placeholder="请输入"/>,*/}
-              {/*)}*/}
-              {/*</FormItem>*/}
-              {/*</Col>*/}
+              {/* <Col lg={8} md={8} sm={8} xs={8}> */}
+              {/* <FormItem label="终客编号" {...this.formLayout} className={styles.from_content_col}> */}
+              {/* {getFieldDecorator('endNo', { */}
+              {/* rules: [{ required: true, message: '请输入终客编号' }], */}
+              {/* initialValue: current.endNo, */}
+              {/* })( */}
+              {/* <Input placeholder="请输入"/>, */}
+              {/* )} */}
+              {/* </FormItem> */}
+              {/* </Col> */}
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('endShotName', {
@@ -332,7 +330,7 @@ class TerminalClient extends PureComponent {
             renderItem={this.getContantItem}
             size="small"
             bordered={false}
-            split={true}
+            split
           />
         </div>
 
@@ -353,7 +351,7 @@ class TerminalClient extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="primary"
                 icon="plus"
-                size={'small'}
+                size="small"
                 disabled={this.state.isAddEdit}
                 onClick={this.clickNewFrom}
               >
@@ -363,7 +361,7 @@ class TerminalClient extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="danger"
                 icon="delete"
-                size={'small'}
+                size="small"
                 disabled={this.state.isEdit||isFreeze}
                 onClick={this.clickDeleteFrom}
               >
@@ -372,7 +370,7 @@ class TerminalClient extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="edit"
                 disabled={this.state.isEdit||isFreeze}
                 onClick={this.clickEditFrom}
@@ -382,7 +380,7 @@ class TerminalClient extends PureComponent {
               {
                 isFreeze?<Button
                   className={clientStyle.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="danger"
                   icon="unlock"
                   disabled={this.state.isEdit}
@@ -390,15 +388,15 @@ class TerminalClient extends PureComponent {
                 >
                   取消审批
                 </Button>:<Button
-                  className={clientStyle.buttomControl}
-                  size={'small'}
-                  type="primary"
-                  icon="lock"
-                  disabled={this.state.isEdit}
-                  onClick={this.clickFreezeFrom}
-                >
+                           className={clientStyle.buttomControl}
+                           size="small"
+                           type="primary"
+                           icon="lock"
+                           disabled={this.state.isEdit}
+                           onClick={this.clickFreezeFrom}
+                         >
                   审批
-                </Button>
+                                   </Button>
               }
 
             </div>
@@ -414,7 +412,7 @@ class TerminalClient extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
                 disabled
               >
@@ -422,7 +420,7 @@ class TerminalClient extends PureComponent {
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
                 disabled
@@ -486,7 +484,7 @@ class TerminalClient extends PureComponent {
 
   changeSelectItem = item => {
     const { selectedItem } = this.state;
-    let selectitem = selectedItem === item ? '' : item;
+    const selectitem = selectedItem === item ? '' : item;
 
     this.setState({
       selectedItem: selectitem,
@@ -521,9 +519,9 @@ class TerminalClient extends PureComponent {
   clickDeleteFrom = () => {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       console.log('delet', keys, id);
       dispatch({
@@ -542,9 +540,9 @@ class TerminalClient extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       dispatch({
         type: 'terminal/freezeTerminal',
@@ -557,9 +555,9 @@ class TerminalClient extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       dispatch({
         type: 'terminal/unfreezeTerminal',
@@ -593,7 +591,7 @@ class TerminalClient extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let params = { ...fieldsValue };
+      const params = { ...fieldsValue };
       // if (fieldsValue.city.name)
       //   params.city = fieldsValue.city.name;
       // if (fieldsValue.country.name)
