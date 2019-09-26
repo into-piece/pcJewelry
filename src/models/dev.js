@@ -35,8 +35,11 @@ export default {
     insertStoneTechnologyList: initData,
     rubberMouldSettingList: initData,
     mouldPositionList: initData,
+
     gemSetProcessDropDown: [],
-    listMstWordbookDrop: []
+    listMstWordbookDrop: [],
+    gemSetProcessDropDownh015:[],
+    gemSetProcessDropDownh016:[]
   },
 
   effects: {
@@ -76,7 +79,7 @@ export default {
         payload: response,
       });
     },
-    * getList({ payload }, { call, put }) {
+    * getList({ payload ,callback}, { call, put }) {
       const { type, params } = payload
       console.log(servicesConfig)
       console.log(type, params, servicesConfig[`listBasic${type}`])
@@ -85,6 +88,7 @@ export default {
         type: 'getDevList2',
         payload: { response, type },
       });
+      if(callback)callback();
     },
     *addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
@@ -106,6 +110,20 @@ export default {
         type: 'getListMstWordbook2',
         payload: response,
       });
+    },
+    *getListMstWordbookParams({ payload }, { call, put }) {
+      const response = yield call(listMstWordbook, payload);
+      if(payload.wordbookTypeCode==='H015'){
+        yield put({
+          type: 'getListMstWordbook3',
+          payload: response,
+        });
+      }else if(payload.wordbookTypeCode==='H016'){
+        yield put({
+          type: 'getListMstWordbook4',
+          payload: response,
+        });
+      }
     },
   },
 
@@ -325,10 +343,39 @@ export default {
           return { key: wordbookContentZh, value: wordbookCode }
         })
       }
-
       return {
         ...state,
         listMstWordbookDrop,
+      };
+    },
+    getListMstWordbook3(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookCode }
+        })
+      }
+      return {
+        ...state,
+        listMstWordbookDroph015:listMstWordbookDrop,
+      };
+    },
+    getListMstWordbook4(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookCode }
+        })
+      }
+      return {
+        ...state,
+        listMstWordbookDroph016:listMstWordbookDrop,
       };
     },
   },

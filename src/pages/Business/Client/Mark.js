@@ -20,13 +20,13 @@ import {
   Upload,
   message,
 } from 'antd';
+import { connect } from 'dva';
+import Cropper from 'react-cropper';
 import styles from './base.less';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from './Client.less';
-import { connect } from 'dva';
 import Deliver from '../Deliver/Deliver';
 import MarkListItem from './components/MarkListItem';
-import Cropper from 'react-cropper';
 // import   '../../../../node_modules/cropperjs/dist/cropper.css'; //需要找到相对的 node_modules 路径，必须引入该css文件！
 import 'cropperjs/dist/cropper.css';
 
@@ -116,8 +116,7 @@ class Mark extends PureComponent {
       if (markUpdateloading) {
         this.state.isUpdateFrom = true;
       }
-    } else {
-      if (update) {
+    } else if (update) {
         this.setState({
           terminalShotName: false,
         });
@@ -137,7 +136,6 @@ class Mark extends PureComponent {
           this.state.showItem = { ...current };
         }
       }
-    }
 
     if (params) {
       const data = { ...params };
@@ -178,7 +176,7 @@ class Mark extends PureComponent {
             }}
             style={{ paddingLeft: 10, paddingRight: 10 }}
             bordered={false}
-            split={true}
+            split
           />
         </div>
         <Card
@@ -198,7 +196,7 @@ class Mark extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="primary"
                 icon="plus"
-                size={'small'}
+                size="small"
                 onClick={this.clickNewFrom}
                 disabled={this.state.isAddEdit}
               >
@@ -208,7 +206,7 @@ class Mark extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="danger"
                 icon="delete"
-                size={'small'}
+                size="small"
                 onClick={this.clickDeleteFrom}
                 disabled={this.state.isEdit || this.state.isAddEdit || isFreeze}
               >
@@ -217,7 +215,7 @@ class Mark extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="edit"
                 onClick={this.clickEditFrom}
                 disabled={this.state.isEdit || this.state.isAddEdit || isFreeze}
@@ -227,7 +225,7 @@ class Mark extends PureComponent {
               {
                 isFreeze ? <Button
                   className={clientStyle.buttomControl}
-                  size={'small'}
+                  size="small"
                   type="danger"
                   icon="unlock"
                   onClick={this.clickUnFreezeFrom}
@@ -235,15 +233,15 @@ class Mark extends PureComponent {
                 >
                   取消审批
                 </Button> : <Button
-                  className={clientStyle.buttomControl}
-                  size={'small'}
-                  type="primary"
-                  icon="lock"
-                  onClick={this.clickFreezeFrom}
-                  disabled={this.state.isEdit || this.state.isAddEdit}
-                >
+                             className={clientStyle.buttomControl}
+                             size="small"
+                             type="primary"
+                             icon="lock"
+                             onClick={this.clickFreezeFrom}
+                             disabled={this.state.isEdit || this.state.isAddEdit}
+                           >
                   审批
-                </Button>
+                           </Button>
               }
 
             </div>
@@ -259,7 +257,7 @@ class Mark extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
                 disabled
               >
@@ -267,7 +265,7 @@ class Mark extends PureComponent {
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
                 disabled
@@ -297,7 +295,7 @@ class Mark extends PureComponent {
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
-        fileList[i].name = 'crop' + Date.parse(new Date()) + fileList[i].name;
+        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
@@ -351,7 +349,7 @@ class Mark extends PureComponent {
     // console.log('changeSelectItem');
 
     const { selectedItem } = this.state;
-    let selectitem = selectedItem === item ? '' : item;
+    const selectitem = selectedItem === item ? '' : item;
 
     this.setState({
       selectedItem: selectitem,
@@ -415,9 +413,9 @@ class Mark extends PureComponent {
   clickDeleteFrom = () => {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       // console.log('delet', keys, id);
       dispatch({
@@ -437,9 +435,9 @@ class Mark extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       dispatch({
         type: 'mark/freezeMark',
@@ -452,9 +450,9 @@ class Mark extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const id = selectedItem.id;
+    const {id} = selectedItem;
     if (id) {
-      let keys = [];
+      const keys = [];
       keys.push(id);
       dispatch({
         type: 'mark/unfreezeMark',
@@ -488,7 +486,7 @@ class Mark extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let params = {};
+      const params = {};
       const fiedls = { ...fieldsValue };
 
       const urls = fileList.map(v => v.url);
@@ -538,7 +536,7 @@ class Mark extends PureComponent {
 
       // const imageUrl = this.state.imageUrl;
 
-      const file = info.file;
+      const {file} = info;
 
 
       if (file.type) {
@@ -590,15 +588,15 @@ class Mark extends PureComponent {
             style={{ height: 400 }}
             preview=".img-preview"
             cropBoxResizable={false}
-            viewMode={1} //定义cropper的视图模式
-            zoomable={true} //是否允许放大图像
-            guides={true}
-            background={true}
+            viewMode={1} // 定义cropper的视图模式
+            zoomable // 是否允许放大图像
+            guides
+            background
             aspectRatio={800 / 800}
             // crop={this.crop}
           />
           <div className={styles.cropper_preview}>
-            <div className="img-preview" style={{ width: '100%', height: '100%' }}/>
+            <div className="img-preview" style={{ width: '100%', height: '100%' }} />
           </div>
         </div>
       );
@@ -612,10 +610,10 @@ class Mark extends PureComponent {
     return (
       <div className={clientStyle.list_info}>
         <span className={clientStyle.sun_title_info}>字印</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form
           layout="inline"
-          size={'small'}
+          size="small"
           className={styles.from_content}
           labelAlign="left"
           onSubmit={this.handleSubmit}
@@ -634,9 +632,9 @@ class Mark extends PureComponent {
                   fileList={this.state.fileList ? this.state.fileList : []}
                   onChange={handleChange}
                 >
-                  {/*{imageUrl?'':uploadButton}*/}
+                  {/* {imageUrl?'':uploadButton} */}
                   <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
                     <div className="ant-upload-text">上传图片</div>
                   </div>
                 </Upload>
@@ -665,13 +663,13 @@ class Mark extends PureComponent {
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
-                  initialValue: terminalShotName ? terminalShotName : current.endShotName,
+                  initialValue: terminalShotName || current.endShotName,
                 })(
                   <div>
                     <Input
                       placeholder="请输入"
                       readOnly="true"
-                      value={terminalShotName ? terminalShotName : current.endShotName}
+                      value={terminalShotName || current.endShotName}
                     />
                   </div>,
                 )}
@@ -685,7 +683,7 @@ class Mark extends PureComponent {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入中文名' }],
                   initialValue: current.zhName,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
@@ -693,7 +691,7 @@ class Mark extends PureComponent {
                 {getFieldDecorator('enName', {
                   rules: [{ required: true, message: '请输入英文名' }],
                   initialValue: current.enName,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>
@@ -703,7 +701,7 @@ class Mark extends PureComponent {
                 {getFieldDecorator('markingPrice', {
                   rules: [{ message: '字印价' }],
                   initialValue: current.markingPrice,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
@@ -711,7 +709,7 @@ class Mark extends PureComponent {
                 {getFieldDecorator('markingExplain', {
                   rules: [{ message: '请输入字印说明' }],
                   initialValue: current.markingExplain,
-                })(<Input placeholder="请输入"/>)}
+                })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
           </Row>

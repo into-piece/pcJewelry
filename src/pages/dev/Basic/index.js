@@ -16,17 +16,15 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag'
-import jsonData from './index.json'
-// import Bread from '@/components/BreadCrumb'
+import { manuArr, modalContent } from './config/index'
+import { statusConvert } from '@/utils/convert';
+import ModalConfirm from '@/utils/modal';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
 const FormItem = Form.Item;
 const { Option } = Select;
 
-// manuArr是 =》menu配置提供遍历
-// modalContent => 每个menu不同的增加弹窗填写信息
-const { manuArr, modalContent } = jsonData
 
 // 左边menu遍历配置
 const menuMap = manuArr.map(item => ({
@@ -58,16 +56,13 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete',type:"danger" },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
 
 const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
 
-function returnStatus(v) {
-  return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : ''
-}
 
 // table 当前页对应的表头配置
 const columnsArr = {
@@ -98,7 +93,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data)
+      render: data => statusConvert[data]
     },
   ],
 
@@ -133,7 +128,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -158,7 +153,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -194,7 +189,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -219,7 +214,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -244,7 +239,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -269,7 +264,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -294,7 +289,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -337,7 +332,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -372,7 +367,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
 
@@ -407,9 +402,45 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data),
+      render: data => statusConvert[data],
     },
   ],
+
+  // 类别设定
+  categorySet: [
+    {
+      title: '类别代码',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '类别',
+      dataIndex: 'bTypeName',
+      key: 'bTypeName',
+    },
+    {
+      title: '小类',
+      dataIndex: 'sTypeName',
+      key: 'bTypeName',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
+    },
+  ],
+
 
 }
 
@@ -499,6 +530,17 @@ class Info extends Component {
     dispatch({
       type: `dev/getList`,
       payload: { params: pagination, type: key },
+      callback: () => {
+        const { dev } = this.props;
+        dev[`${dev.selectKey}List`].records.map((item) => {
+          if (item.id === dev.choosenRowData.id) {
+            dispatch({
+              type: 'dev/getChoosenRowData',
+              payload: item,
+            });
+          }
+        });
+      },
     });
   }
 
@@ -524,13 +566,33 @@ class Info extends Component {
             payload: {wordbookTypeCode:'H014'},
           });
         }
+        if (selectKey === 'categorySet') {
+          dispatch({
+            type: 'dev/getListMstWordbookParams',
+            payload: {wordbookTypeCode:"H015"},
+          });
+          dispatch({
+            type: 'dev/getListMstWordbookParams',
+            payload: {wordbookTypeCode:"H016"},
+          });
+        }
         this.setState({ modalType });
         break;
       case 'delete':
-        this.handleDelect()
+        ModalConfirm({
+          content: '确定删除吗？', onOk: () => {
+            this.handleDelect();
+          },
+        });
         break;
       case 'lock':
-        this.handleLock()
+        const isLock = this.returnLockType().type === 1;
+        const setvicetypename = isLock ? '审核' : '撤销';
+        ModalConfirm({
+          content: `确定${setvicetypename}吗？`, onOk: () => {
+            this.handleLock();
+          },
+        });
         break;
     }
   };
@@ -551,7 +613,7 @@ class Info extends Component {
       <Form size="small">
         {
           dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
-            console.log(list)
+            // console.log(list)
             return (
               <div className="adddevModal" key={key}>
                 <FormItem label={key} key={key}>
@@ -821,11 +883,11 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag }) => (
+              {btnGroup.map(({ name, tag,type }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type="primary"
+                  type={type||"primary"}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
@@ -930,10 +992,14 @@ const GetRenderitem = ({ data, type }) => {
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value }) => {
-            return (
-              <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
-            )
+          arr.map(({ key, value,name }) => {
+            return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
+                : <Description
+                  key={key}
+                  term={key}
+                >{value === 'status' ? statusConvert[data[value]] : data[value]}
+                </Description>
+            );
           })
         }
       </DescriptionList>

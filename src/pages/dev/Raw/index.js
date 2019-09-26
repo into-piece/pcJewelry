@@ -21,13 +21,12 @@ import {
   notification,
   Select,
   Radio,
-  message,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
-import Cropper from 'react-cropper';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
 import Table from '@/components/Table';
+import UploadImg from '@/components/UploadImg';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
@@ -35,7 +34,6 @@ import LockTag from '@/components/LockTag';
 import { manuArr, modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
-import 'cropperjs/dist/cropper.css';
 
 
 const { Description } = DescriptionList;
@@ -72,7 +70,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete' ,type:'danger'},
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -215,11 +213,7 @@ class Info extends Component {
       },
       colorPercentage: {},
     },
-
-    loading: false,
-    fileList: [],
-    cropperVisible: false,
-
+    filelist: [],
   };
 
   componentDidMount() {
@@ -357,7 +351,7 @@ class Info extends Component {
       case 2:
         return (<Select placeholder="请选择" disabled={disable || false}>
           {dev[list] && dev[list].map(({ value, key }) =>
-            <Option value={value}>{key}</Option>,
+            <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
       case 3 :
@@ -371,68 +365,6 @@ class Info extends Component {
   };
 
 
-  handleCropSubmit = () => {
-    const { uploadFileUid, fileList } = this.state;
-
-    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
-
-    fileList.forEach((v, i) => {
-      if (v.uid === uploadFileUid) {
-        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
-        fileList[i].url = cropImage;
-        fileList[i].thumbUrl = cropImage;
-        // console.log("set file url ",cropImage)
-      }
-    });
-
-    this.setState({
-      cropperVisible: false,
-      fileList,
-      cropImage,
-    });
-  };
-
-  handleCropCancle = () => {
-    this.setState({
-      cropperVisible: false,
-      cropImage: '',
-      uploadFileUid: '',
-    });
-  };
-
-  openCutImageModal = () => {
-
-    const { uploadFile } = this.state;
-
-    return (
-      <div className={styles.cropper_view}>
-        <Cropper
-          ref="cropper"
-          src={uploadFile}
-          className={styles.cropper}
-          style={{ height: '400px', width: '400px' }}
-          preview=".img-preview"
-          cropBoxResizable={false}
-          viewMode={1} // 定义cropper的视图模式
-          dragMode="move"
-          guides
-          background
-          aspectRatio={1 / 1}
-          // crop={this.crop}
-        />
-        <div className={styles.cropper_preview}>
-          <div className="img-preview" style={{ width: '100%', height: '100%' }} />
-        </div>
-      </div>
-    );
-  };
-
-  getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
   // 根据btn点击 返回对应弹窗内容
   getModalContent = () => {
     const {
@@ -440,67 +372,19 @@ class Info extends Component {
       choosenRowData,
       form: { getFieldDecorator, getFieldsValue },
     } = this.props;
-    const { modalType, cropperVisible } = this.state;
+    const { modalType } = this.state;
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
     const { dev } = this.props;
-    const handleChange = info => {
 
-      let fileList = [...info.fileList];
-
-      const { file } = info;
-
-
-      if (file.type) {
-        const isJPG = file.type.indexOf('image') != -1;
-        if (!isJPG) {
-          message.error('只能上传图片格式的文件');
-          return;
-        }
-      }
-
-      // fileList = fileList.slice(-10);
-      fileList = fileList.map(file => {
-        // console.log('image is the ', file);
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        if (!file.url) {
-          this.getBase64(file.originFileObj, imageUrl => {
-            fileList.forEach((v, i) => {
-              if (v.uid === info.file.uid) {
-                fileList[i].url = imageUrl;
-                // console.log("change file name =  ", v.name, info.file)
-                this.setState({
-                  fileList,
-                  cropperVisible: true,
-                  uploadFile: imageUrl,
-                  uploadFileUid: v.uid,
-                });
-              }
-            });
-          });
-        }
-
-        return file;
-      });
-
-      this.setState({ fileList });
-    };
-
-    const modalCropperFooter = {
-      okText: '保存',
-      onOk: this.handleCropSubmit,
-      onCancel: this.handleCropCancle,
-    };
     return (
       <Form size="small">
         {
           dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable }) => {
 
             return (
-              <Col span={span || 12}>
+              <Col span={span || 12} key={value}>
                 <FormItem label={key} {...formLayout} key={key}>
                   {
                     getFieldDecorator(value, {
@@ -516,7 +400,6 @@ class Info extends Component {
             );
           })
         }
-
         {(selectKey === 'accessories') && <Col span={18}>
           <FormItem
             label="上传图片"
@@ -527,28 +410,17 @@ class Info extends Component {
             }
             }
           >
-            <Upload
-              disabled={this.state.fileList.length >= 10}
-              accept='image/*'
-              name='avatar'
-              beforeUpload={() => {
-                return false;
-              }}
-              listType='picture-card'
-              fileList={this.state.fileList ? this.state.fileList : []}
-              onChange={handleChange}
-            >
-              <div>
-                <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">上传图片</div>
-              </div>
-            </Upload>
+            <UploadImg
+              key="uimg"
+              maxcount={10}
+              fileListFun={(list) => {
+              this.setState({ filelist: list });
+            }}
+            />
           </FormItem>
         </Col>}
         {content}
-        <Modal {...modalCropperFooter} width={668} destroyOnClose visible={cropperVisible}>
-          {this.openCutImageModal()}
-        </Modal>
+
       </Form>
     );
   };
@@ -631,7 +503,7 @@ class Info extends Component {
   // 删除按钮回调
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props;
-    serviceObj[`deleteBasic${selectKey}`]({ list: selectedRowKeys }).then(res => {
+    serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -647,7 +519,7 @@ class Info extends Component {
     const { selectKey, selectedRowKeys } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
-    serviceObj[serviceType + selectKey]({ list: selectedRowKeys }).then(res => {
+    serviceObj[serviceType + selectKey]( selectedRowKeys ).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -793,11 +665,11 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag }) => (
+              {btnGroup.map(({ name, tag ,type}) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type="primary"
+                  type={type||"primary"}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}

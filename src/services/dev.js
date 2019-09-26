@@ -36,6 +36,14 @@ const resultArr = [
   { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },
   { key: 'listBasicSpecificationSettingsDropDown', path: '/specification-settings/listBasicSpecificationSettingsDropDown' },
 
+
+  { key: 'approvecategorySet', path: '/develop.category/develop-basic-category-set/approval', priefx1: `${env}/business` },
+  { key: 'deleteBasiccategorySet', path: '/develop.category/develop-basic-category-set/delete', priefx1: `${env}/business` },
+  { key: 'revokecategorySet', path: '/develop.category/develop-basic-category-set/revoke', priefx1: `${env}/business` },
+  { key: 'listBasiccategorySet', path: '/develop.category/develop-basic-category-set/list', priefx1: `${env}/business` },
+  { key: 'addBasiccategorySet', path: '/develop.category/develop-basic-category-set/saveOrUpdate', priefx1: `${env}/business` },
+
+
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: `${env  }/business/sys` }
 ]
 
