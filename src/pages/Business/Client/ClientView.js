@@ -21,6 +21,7 @@ import { connect } from 'dva';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
 import DescriptionList from '@/components/DescriptionList';
+import { statusConvert } from '@/utils/convert';
 
 import TerminalClient from './TerminalClient';
 import ClientInfo from './ClientInfo';
@@ -228,6 +229,20 @@ class ClientView extends PureComponent {
       },
       dataIndex: 'createTime',
       key: 'createTime',
+    },
+    {
+      title: () => {
+        return (
+          <TableSortView
+            column="状态"
+            field="status"
+            sortChange={this.clientSortFilter}
+          />
+        );
+      },
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
     },
   ];
 
@@ -1059,6 +1074,7 @@ class ClientView extends PureComponent {
               <Description term="英文名">{showItem.enName}</Description>
               <Description term="中文名">{showItem.zhName}</Description>
               <Description term="创建日期">{showItem.createTime}</Description>
+              <Description term="状态">{statusConvert[showItem.status]}</Description>
             </DescriptionList>
           ) : (
             <div />

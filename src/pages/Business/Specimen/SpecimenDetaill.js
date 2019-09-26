@@ -1265,7 +1265,7 @@ class SpecimenDetaill extends Component {
           style={{ height: 400 }}
           preview=".img-preview"
           cropBoxResizable={false}
-          viewMode={1} // 定义cropper的视图模式
+          viewMode={0} // 定义cropper的视图模式
           zoomable // 是否允许放大图像
           guides
           background
