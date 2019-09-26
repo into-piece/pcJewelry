@@ -12,9 +12,20 @@ export default {
 
   state: {
     status: undefined,
+    loginstatus:false,
   },
 
   effects: {
+    *loginOk(_,{call,put}){
+      const response = true;
+      // const response = yield call(login,{});
+      yield put({
+        type: 'changeLoginOkStatus',
+        payload: response,
+      });
+    },
+
+
     *login({ payload }, { call, put }) {
       const response = yield call(login, payload);
       yield put({
@@ -76,6 +87,12 @@ export default {
   },
 
   reducers: {
+    changeLoginOkStatus(state,{payload}){
+      return {
+        ...state,
+        loginstatus: payload,
+      };
+    },
     changeLoginStatus(state, { payload }) {
       // setAuthority(payload.currentAuthority);
       if (payload.head && payload.head.rtnCode === '000000')

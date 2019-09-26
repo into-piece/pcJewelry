@@ -59,7 +59,7 @@ class UserLayout extends Component {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.big_logo} src={logo} />
-                {/*<span className={styles.title}>GOOSA格尚</span>*/}
+                {/* <span className={styles.title}>GOOSA格尚</span> */}
               </Link>
             </div>
             <div className={styles.lang}>
@@ -68,8 +68,7 @@ class UserLayout extends Component {
           </div>
 
           <div className={styles.content}>
-            <div className={styles.top}>
-            </div>
+            <div className={styles.top} />
             {children}
           </div>
           <GlobalFooter links={links} copyright={copyright} />

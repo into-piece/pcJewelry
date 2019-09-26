@@ -58,16 +58,14 @@ export default [
     // authority: ['admin', 'user', 'chents'],
     routes: [
       // dashboard
-      {
-        path: '/',
-        redirect: '/business/client',
-        // authority: ['admin', 'user','chents'],
-      },
+      { path: '/', redirect: '/business/client' },
+
       // bussiness route
       {
         path: '/business',
         icon: 'code',
         name: 'business',
+
         routes: [
           {
             path: '/business/client',
