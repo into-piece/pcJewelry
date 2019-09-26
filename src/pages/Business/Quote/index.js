@@ -18,7 +18,9 @@ import jsonData from './index.json'
 import SearchForm from '@/components/SearchForm'
 import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 import SelectProductModal from './SelectProductModal'
+import moment from 'moment';
 
+const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -211,19 +213,10 @@ const searchParams = [
   { key: '产品说明', value: 'explains' },
 ]
 
-
-
 // 新增 产品 遍历配置
 const productSearchParams = [
-  { key: '品牌', value: 'brand', "type": 2, "list": "brandsList" },
-  { key: '客户编号', value: 'customerId', "type": 2, "list": "customerDropDownList" },
-  // { key: '产品编码', value: 'productNo' },
-  // { key: '客户货号', value: 'supplierProductNo' },
-  { key: '宝石颜色', value: 'gemColor', "type": 2, "list": "basicColourSettingsList" },
-  // { key: '成色', value: 'productColor' },
-  // { key: '电镀颜色', value: 'platingColor' },
-  // { key: '中文名', value: 'zhName' },
-  // { key: '英文名', value: 'enName' },
+  { key: '产品编号', value: 'productNo' },
+  { key: '客户编号', value: 'customerNo' },
 ]
 
 
@@ -257,6 +250,8 @@ const productSearchParams = [
 class Info extends Component {
   state = {
     modalType: '',
+    quoteDateFrom: null,
+    quoteDateTo: null
   };
 
   componentDidMount() {
@@ -287,12 +282,12 @@ class Info extends Component {
   }
 
   // 获取对应key=》页面进行数据请求
-  getList = (args) => {
+  getList = (args, param) => {
     const { dispatch, pagination } = this.props;
     // getDevList
     dispatch({
       type: `quote/getList`,
-      payload: { params: pagination, ...args },
+      payload: { params: { ...pagination, ...param }, ...args },
     });
     dispatch({
       type: `quote/clearDetailList`,
@@ -301,10 +296,9 @@ class Info extends Component {
 
   getProduct = (args) => {
     const { dispatch, productPagination } = this.props
-    debugger
     dispatch({
       type: 'quote/getProductList',
-      payload: { params: productPagination, ...args },
+      payload: { params: { ...productPagination, ...args } },
     })
   }
 
@@ -443,6 +437,17 @@ class Info extends Component {
     return isstonePrice || ismainMaterialWeight
   }
 
+  handleDatePicker = (date, dateString) => {
+    console.log(date, dateString)
+    const quoteDateFrom = moment(date[1]).valueOf()
+    const quoteDateTo = moment(date[2]).valueOf()
+    debugger
+    this.setState({
+      quoteDateFrom: quoteDateFrom,
+      quoteDateTo: quoteDateTo
+    })
+  }
+
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
   // type 3 点击事件
@@ -483,7 +488,10 @@ class Info extends Component {
       case 8:
         return <TextArea rows={2} placeholder="请输入" />
       case 9:
-        return <DatePicker />
+        return <RangePicker
+          style={{ marginRight: 10 }}
+          onChange={(date, dateString) => { this.handleDatePicker(date, dateString, value) }}
+        />
       default:
         return <Input disabled={this.disabledCondition(value, form)} style={{ width: '100' }} placeholder="请输入" />
     }
@@ -503,7 +511,7 @@ class Info extends Component {
     const content = ''
     const isEdit = modalType === 'edit'
     const { quote } = this.props
-    const addArr = choosenRowData.id ? detailList : headList;
+    const addArr = rightMenu === 1 ? headList : detailList;
     return (
       <Form size="small">
         {
@@ -516,7 +524,7 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (choosenRowData.id ? choosenDetailRowData[value] : choosenRowData[value]) : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (rightMenu === 1 ? choosenRowData[value] : choosenDetailRowData[value]) : initValue || (number ? 0 : undefined),
                     })(this.returnElement({ key, value, noNeed, type, list, clickFn, text, arr, initValue, data: quote, form }))
                   }
                 </FormItem>
@@ -544,15 +552,15 @@ class Info extends Component {
       default:
         break;
     }
-    const str = rightMenu === 1 ? '' : '明细'
+    const str = rightMenu === 1 ? '主页' : '明细'
     return `${text}报价${str}`;
   };
 
   // 新增按钮事件回调
   handleAdd = () => {
-    const { form, choosenRowData } = this.props
+    const { rightMenu, form, choosenRowData } = this.props
     const { productLineId } = this.state
-    const isHead = !choosenRowData.id
+    const isHead = rightMenu === 1
     const str = isHead ? 'quotelist' : 'quoteDatialList'
     let params = {}
     if (!isHead) {
@@ -581,9 +589,9 @@ class Info extends Component {
 
   // 编辑按钮回调
   handleEdit = () => {
-    const { form, choosenRowData, dispatch, choosenDetailRowData } = this.props
+    const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData } = this.props
     const { productLineId } = choosenDetailRowData
-    const isHead = !choosenRowData.id
+    const isHead = rightMenu === 1
     const str = isHead ? 'quotelist' : 'quoteDatialList'
 
     let params = {
@@ -755,9 +763,6 @@ class Info extends Component {
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
     const { choosenRowData } = this.props
-    this.showProductModalFunc(2);
-    console.log(this.props.productChoosenRowData)
-    debugger
     const {
       id,
       custoerProductNo,
@@ -804,7 +809,7 @@ class Info extends Component {
         actualCount = res.body.records[0].count
       }
     })
-
+    this.showProductModalFunc(2);
     this.props.form.setFieldsValue({
       productId: id,
       productColorName,
@@ -840,11 +845,24 @@ class Info extends Component {
     })
   };
 
+  onSearch = (v) => {
+    const { timeline } = this.props
+    console.log(this.state, '==========this.state')
+    const { quoteDateFrom, quoteDateTo } = this.state
+    console.log(v)
+    if (v.quoteDate) {
+      v.quoteDateFrom = quoteDateFrom
+      v.quoteDateTo = quoteDateTo
+      v.quoteDate = null
+    }
+    this.getList({ sendReq: timeline }, v)
+  }
+
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct, onSearch } = this;
     const { modalType, } = state;
     const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData, productListLoading } = props;
-    console.log(productList, '========productList')
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -864,6 +882,7 @@ class Info extends Component {
                 returnSisabled={returnSisabled}
                 handleRadio={handleRadio}
                 returnElement={returnElement}
+                onSearch={onSearch}
               />
             </div>
           </div>
@@ -916,12 +935,12 @@ class Info extends Component {
 const radioArr = ['报价主页', '报价明细']
 
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu, choosenDetailRowData, returnElement }) => (
+const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu, choosenDetailRowData, returnElement, onSearch }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
-        <CenterInfo type={type} handleRadio={handleRadio} returnElement={returnElement} />
+        <CenterInfo type={type} handleRadio={handleRadio} returnElement={returnElement} onSearch={onSearch} />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
@@ -1114,9 +1133,7 @@ class CenterInfo extends Component {
   // 当表头重复点击选中 清空选中 清空表体
   clearFn = (type) => {
     const { dispatch } = this.props;
-    debugger
     if (type === 1) {
-      debugger
       dispatch({
         type: `quote/clearDetailList`,
       });
@@ -1127,10 +1144,6 @@ class CenterInfo extends Component {
     }
   }
 
-  onSearch = (v) => {
-    const { timeline } = this.props
-    this.getList(v, { sendReq: timeline })
-  }
 
 
   // 获取对应key=》页面进行数据请求
@@ -1149,8 +1162,8 @@ class CenterInfo extends Component {
 
 
   render() {
-    const { onSelectChange, props, clearFn, onSearch } = this
-    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement, listDetailLoading } = props;
+    const { onSelectChange, props, clearFn, } = this
+    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement, listDetailLoading, onSearch } = props;
     console.log(quotelist, quoteDatialList, choosenRowData, returnElement, '================quotelist')
     return (
       <div className={styles.view_left_content}>
@@ -1196,6 +1209,7 @@ class CenterInfo extends Component {
             })
           }
         </Radio.Group>
+        <SearchForm data={searchParams} source={quote} onSearch={onSearch} returnElement={returnElement} />
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 1600 }}
