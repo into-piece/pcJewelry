@@ -106,7 +106,7 @@ class UploadImg extends Component {
           style={{ height: '400px', width: '400px' }}
           preview=".img-preview"
           cropBoxResizable={false}
-          viewMode={1} // 定义cropper的视图模式
+          viewMode={0} // 定义cropper的视图模式
           dragMode="move"
           guides
           background
@@ -151,7 +151,7 @@ class UploadImg extends Component {
           <div className="ant-upload-text">上传图片</div>
         </div>
       </Upload>,
-      <Modal {...modalCropperFooter} width={668} destroyOnClose visible={cropperVisible}>
+      <Modal maskClosable={false} {...modalCropperFooter} width={668} destroyOnClose visible={cropperVisible}>
         {openCutImageModal()}
       </Modal>,
     ];

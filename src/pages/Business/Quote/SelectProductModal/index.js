@@ -61,30 +61,6 @@ const columns = [
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     )
   },
-  // {
-  //   title: <div className={styles.row_normal2}>报价重量</div>,
-  //   dataIndex: 'customerId',
-  //   key: 'customerId',
-  //   render: (data) => (
-  //     <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-  //   )
-  // },
-  // {
-  //   title: <div className={styles.row_normal2}>类别中文名</div>,
-  //   dataIndex: 'customerId',
-  //   key: 'customerId',
-  //   render: (data) => (
-  //     <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-  //   )
-  // },
-  // {
-  //   title: <div className={styles.row_normal2}>颜色名称</div>,
-  //   dataIndex: 'customerId',
-  //   key: 'customerId',
-  //   render: (data) => (
-  //     <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-  //   )
-  // },
 ]
 export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch }) => (
   <div className={styles.productModal}>
@@ -103,8 +79,6 @@ export default (({ productSearchParams, pagination, returnElement, source, list,
       changeChoosenRow={changeChoosenRow}
       selectKey={choosenRowData.id}
       onSelectChange={onSelectChange}
-    // changePagination={changePagination}
-    // listLoading={listLoading}
     />
   </div>
 ))

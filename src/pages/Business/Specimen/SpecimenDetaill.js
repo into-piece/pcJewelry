@@ -414,7 +414,7 @@ class SpecimenDetaill extends Component {
                 </Button>
               </div>
             </div>
-            <Modal
+            <Modal maskClosable={false}
               width={1200}
               className={styles.standardListForm}
               destroyOnClose
@@ -915,7 +915,7 @@ class SpecimenDetaill extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
+          <Modal maskClosable={false} {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
             {this.openCutImageModal()}
           </Modal>
         </Form>
@@ -1265,7 +1265,7 @@ class SpecimenDetaill extends Component {
           style={{ height: 400 }}
           preview=".img-preview"
           cropBoxResizable={false}
-          viewMode={1} // 定义cropper的视图模式
+          viewMode={0} // 定义cropper的视图模式
           zoomable // 是否允许放大图像
           guides
           background

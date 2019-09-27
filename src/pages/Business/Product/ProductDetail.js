@@ -409,7 +409,7 @@ class ProductDetail extends Component {
                 </Button>
               </div>
             </div>
-            <Modal
+            <Modal maskClosable={false}
               width={1200}
               className={styles.standardListForm}
               destroyOnClose
@@ -910,7 +910,7 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
+          <Modal maskClosable={false} {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
             {this.openCutImageModal()}
           </Modal>
         </Form>
@@ -1260,7 +1260,7 @@ class ProductDetail extends Component {
           style={{ height: '400px',width:'400px' }}
           preview=".img-preview"
           cropBoxResizable={false}
-          viewMode={1} // 定义cropper的视图模式
+          viewMode={0} // 定义cropper的视图模式
           dragMode="move"
           guides
           background

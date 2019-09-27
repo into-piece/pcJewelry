@@ -33,6 +33,7 @@ lambda/mock/Index.js
 # umi
 /src/pages/.umi/**
 /src/pages/.umi
+.umi
 .umi-production
 
 # screenshot

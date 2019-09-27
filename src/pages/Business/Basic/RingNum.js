@@ -580,7 +580,7 @@ class RingNum extends PureComponent {
                   columns={subringNumContentColumns}
                 />
 
-                <Modal
+                <Modal maskClosable={false}
                   // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
                   width={640}
                   className={styles.standardListForm}

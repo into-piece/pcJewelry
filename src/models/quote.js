@@ -200,8 +200,8 @@ export default {
       });
     },
 
-    * getProductList(data, { call, put }) {
-      const response = yield call(listProductNotCreateQoute, {});
+    * getProductList({ payload }, { call, put }) {
+      const response = yield call(listProductNotCreateQoute, payload.params);
       console.log(response)
       const productList = response.body
       yield put({

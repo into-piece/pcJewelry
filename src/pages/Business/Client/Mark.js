@@ -275,7 +275,7 @@ class Mark extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal
+        <Modal maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -588,7 +588,7 @@ class Mark extends PureComponent {
             style={{ height: 400 }}
             preview=".img-preview"
             cropBoxResizable={false}
-            viewMode={1} // 定义cropper的视图模式
+            viewMode={0} // 定义cropper的视图模式
             zoomable // 是否允许放大图像
             guides
             background
@@ -714,7 +714,7 @@ class Mark extends PureComponent {
             </Col>
           </Row>
         </Form>
-        <Modal {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
+        <Modal maskClosable={false} {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
           {openCutImageModal()}
         </Modal>
       </div>
