@@ -409,7 +409,7 @@ class ProductDetail extends Component {
                 </Button>
               </div>
             </div>
-            <Modal
+            <Modal maskClosable={false}
               width={1200}
               className={styles.standardListForm}
               destroyOnClose
@@ -910,7 +910,7 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
+          <Modal maskClosable={false} {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
             {this.openCutImageModal()}
           </Modal>
         </Form>

@@ -335,6 +335,7 @@ class BrandCompoenet extends Component {
                 />
 
                 <Modal
+                  maskClosable={false}
                   title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}
                   className={styles.standardListForm}
                   width={640}
@@ -792,6 +793,7 @@ class BrandCompoenet extends Component {
                 />
 
                 <Modal
+                  maskClosable={false}
                   title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}
                   className={styles.standardListForm}
                   width={640}

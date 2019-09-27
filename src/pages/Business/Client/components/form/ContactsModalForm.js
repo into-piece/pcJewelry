@@ -17,7 +17,7 @@ class ContactsModalForm extends Component {
     };
 
     return (
-      <Modal
+      <Modal maskClosable={false}
         {...this.props}
         width={720}
         className={styles.standardListForm}

@@ -250,7 +250,7 @@ class PackageInfo extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal
+        <Modal maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -438,7 +438,7 @@ class PackageInfo extends PureComponent {
             </Col>
           </Row>
         </Form>
-        <Modal {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
+        <Modal maskClosable={false} {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
           {openCutImageModal()}
         </Modal>
       </div>

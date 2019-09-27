@@ -501,7 +501,7 @@ class ClientInfo extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal
+        <Modal maskClosable={false}
           // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
           width={740}
           className={styles.standardListForm}
