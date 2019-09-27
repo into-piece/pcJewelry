@@ -474,7 +474,7 @@ class LoadBefore extends React.Component {
     const {
       dispatch,
     } = this.props;
-    // 判断是否登录
+    // 判断是否登录操作
     dispatch({
       type: 'login/loginOk',
     });
@@ -486,7 +486,7 @@ class LoadBefore extends React.Component {
     const loginOk = props.login.loginstatus;
     return (loginOk?<Media query="(max-width: 599px)">
       {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
-                    </Media>:<Spin />);
+                    </Media>:<div className={styles.loadingpage}><Spin size="large" /></div>);
   }
 }
 export default connect(({ global, setting, menu: menuModel,login }) => ({

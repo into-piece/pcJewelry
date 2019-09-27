@@ -1,4 +1,5 @@
 @import '~antd/lib/style/themes/default.less';
+@import '~@/common.less';
 
 .content {
   margin: 24px;
@@ -26,4 +27,17 @@
   .addModal input {
     width: 180px;
   }
+}
+
+.loadingpage {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: @loadingpagebg;
+
 }
