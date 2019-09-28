@@ -2,12 +2,15 @@ import React from 'react';
 import { formatMessage } from 'umi/locale';
 import Link from 'umi/link';
 import Exception from '@/components/Exception';
+import {getPageQuery} from '@/utils/utils';
 
 const Exception403 = () => (
+
   <Exception
     type="403"
     desc={formatMessage({ id: 'app.exception.description.403' })}
     linkElement={Link}
+    redirect={'/opration'}
     backText={formatMessage({ id: 'app.exception.back' })}
   />
 );
