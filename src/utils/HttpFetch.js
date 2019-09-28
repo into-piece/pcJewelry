@@ -35,7 +35,7 @@ export const deleteContacts = `${priefx}/business/business.customer/business-con
  * @type {string}
  */
 export const queryDelivery2 = `${priefx}/business/basic/delivery-method/listDeliveryMethodsDropDown`
-export const queryDelivery = `${priefx}/business/business/basic/delivery-method/listDeliveryMethods`
+export const queryDelivery = `${priefx}/business/basic/delivery-method/listDeliveryMethods`
 
 /**
  * 加载图片
