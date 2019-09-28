@@ -28,10 +28,6 @@ class MyTable extends Component {
     changeChoosenRow(record);
   };
 
-  pageChange = (page, pageSize) => {
-    const { changePagination } = this.props
-    changePagination({ current: page, size: pageSize });
-  };
 
   onSelectRowClass = (record, index) => {
     const color = index % 2 === 0 ? styles.row_normal : ''
@@ -44,16 +40,26 @@ class MyTable extends Component {
     }, // 点击行
   })
 
+  onChange = (pagination, filters, sorter) => {
+    console.log(sorter)
+    const { current, pageSize } = pagination
+    const { handleTableChange } = this.props
+    const { order, field } = sorter
+    const orderKey = order === "ascend" ? 'Asc' : order === 'descend' ? 'Desc' : ''
+    handleTableChange({ current, size: pageSize, [`orderBy${orderKey}`]: field });
+    debugger
+  }
+
   render() {
-    const { props, pageChange, onSelectRowClass, onRow } = this;
-    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading, noSelect ,scroll} = props;
+    const { props, pageChange, onSelectRowClass, onRow, onChange } = this;
+    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading, noSelect, scroll } = props;
     const { current, size } = pagination;
     const paginationProps = {
       showQuickJumper: true,
       pageSize: size,
       current,
       total: body ? body.total : 0,
-      onChange: pageChange,
+      // onChange: pageChange,
     };
 
     const rowSelection =
@@ -67,16 +73,16 @@ class MyTable extends Component {
 
     return (
       <Table
-        scroll={scroll}
+        scroll={scroll || { x: 900 }}
         columns={columns}
         dataSource={body.records}
         rowSelection={rowSelection}
         pagination={paginationProps}
+        onChange={onChange}
         rowKey={record => record.id}
         rowClassName={onSelectRowClass}
         loading={listLoading}
         onRow={onRow}
-        scroll={{ x: 900 }}
       />
     );
   }

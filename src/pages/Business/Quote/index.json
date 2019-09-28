@@ -44,7 +44,7 @@
       "value": "packPriceType",
       "type": 6,
       "arr": [{ "key": "计收", "value": "H011001" }, { "key": "不计收", "value": "H011002" }],
-      "initValue": "H011001"
+      "initValue": "H011002"
     },
     {
       "key": "客户备料",
