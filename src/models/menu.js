@@ -177,6 +177,8 @@ export default {
 
 
         newMenu.basicMenu = convertMenuComponents(allMenuData, newMenu.basicMenu);
+        newMenu.dataAnalysis = convertMenuComponents(allMenuData, newMenu.dataAnalysis);
+        newMenu.operationMenu = convertMenuComponents(allMenuData, newMenu.operationMenu);
 
 
         const t1 = isInMenu(newMenu.basicMenu, pathname);
