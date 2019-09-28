@@ -133,8 +133,8 @@ export default {
       const { pathname, routes, authority, path } = payload;
       const originalMenuData = memoizeOneFormatter(routes, authority, path);
       // todo 暂时注释
-      // let menuData = [];
-      const  menuData = filterMenuData(originalMenuData);
+      let menuData = [];
+      // const  menuData = filterMenuData(originalMenuData);
 
 
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
@@ -150,30 +150,30 @@ export default {
         const t3 = isInMenu(newMenu.operationMenu, pathname);
 
         // todo 暂时注释
-        // if (!t1 && !t2 && !t3) {
-        //   yield put(
-        //     routerRedux.replace({
-        //       pathname: '/403',
-        //       search: stringify({
-        //         redirect: pathname,
-        //       }),
-        //     }),
-        //   );
-        // }
-        //
-        //
-        // if (t1) {
-        //   menuData = newMenu.basicMenu;
-        // } else if (t2) {
-        //   menuData = newMenu.dataAnalysis;
-        // } else if (t3) {
-        //   menuData = newMenu.operationMenu;
-        // }
+        if (!t1 && !t2 && !t3) {
+          yield put(
+            routerRedux.replace({
+              pathname: '/403',
+              search: stringify({
+                redirect: pathname,
+              }),
+            }),
+          );
+        }
+
+
+        if (t1) {
+          menuData = newMenu.basicMenu;
+        } else if (t2) {
+          menuData = newMenu.dataAnalysis;
+        } else if (t3) {
+          menuData = newMenu.operationMenu;
+        }
 
 
       }
 
-      console.log('菜单json', menuData);
+      console.log('菜单json', JSON.stringify(menuData));
 
       yield put({
         type: 'save',
