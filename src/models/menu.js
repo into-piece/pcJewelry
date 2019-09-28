@@ -150,7 +150,7 @@ export default {
         const t3 = isInMenu(newMenu.operationMenu, pathname);
 
         // todo 暂时注释
-        if (!t1 && !t2 && !t3) {
+        if (!t1 && !t2 && !t3 && pathname != 'opration') {
           yield put(
             routerRedux.replace({
               pathname: '/403',
