@@ -145,8 +145,6 @@ class Index extends Component {
     },
   ]
 
-
-
   centerFormLayout = {
     labelCol: { span: 12 },
     wrapperCol: {

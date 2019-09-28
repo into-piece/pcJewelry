@@ -11,6 +11,11 @@ import styles from './index.less';
 
 class MyTable extends Component {
 
+  /**
+   * 点击单行回调
+   * 传入 onSelectChange 进行选中
+   * 传入clearFn
+   */
   clickRowItem = record => {
     const { changeChoosenRow, onSelectChange, clearFn } = this.props;
     let selectedRow = [];
@@ -28,7 +33,7 @@ class MyTable extends Component {
     changeChoosenRow(record);
   };
 
-
+  // 行样式
   onSelectRowClass = (record, index) => {
     const color = index % 2 === 0 ? styles.row_normal : ''
     return color;
@@ -40,6 +45,11 @@ class MyTable extends Component {
     }, // 点击行
   })
 
+  /**
+   * 翻页 或 排序触发回调
+   * handleTableChange 为列表请求函数
+   * 直接传参数触发更新
+   */
   onChange = (pagination, filters, sorter) => {
     console.log(sorter)
     const { current, pageSize } = pagination
