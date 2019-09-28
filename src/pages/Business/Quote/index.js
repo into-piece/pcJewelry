@@ -272,7 +272,7 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
+    // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown'

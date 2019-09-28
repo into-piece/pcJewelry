@@ -169,8 +169,8 @@ export default {
       const response = yield call(listCustomerDropDown, {});
       console.log(response)
       let customerDropDownList = response.body.records
-      customerDropDownList = customerDropDownList.map(({ customerNo, id, shotName, currencyCode,markingPrice, markingEnName }) => {
-        return { value: id, key: customerNo, shotName, currencyCode,markingPrice, markingEnName }
+      customerDropDownList = customerDropDownList.map(({ customerNo, id, shotName, currencyCode }) => {
+        return { value: id, key: customerNo, shotName, currencyCode }
       })
       yield put({
         type: 'changeState',
