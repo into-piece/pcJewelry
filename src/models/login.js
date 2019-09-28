@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha, queryAllCity,logout } from '@/services/api';
-import { login } from '@/services/user';
+import { fakeAccountLogin, getFakeCaptcha, queryAllCity, logout } from '@/services/api';
+import { login, checkLogin } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery, testCurrentUser } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
@@ -12,10 +12,36 @@ export default {
 
   state: {
     status: undefined,
+    loginstatus: false,
+    loginUser: {},
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+
+    * loginOk(_, { call, put }) {
+      const response = yield call(checkLogin, {});
+      yield put({
+        type: 'changeLoginOkStatus',
+        payload: response,
+      });
+
+      // 没登录跳转登录页
+      if (response && response.head && response.head.rtnCode === '000000' && response.body.records.length === 0) {
+        yield put(
+          routerRedux.replace({
+            pathname: '/user/login',
+            search: stringify({
+              redirect: window.location.href,
+            }),
+          }),
+        );
+      }
+
+
+    },
+
+
+    * login({ payload }, { call, put }) {
       const response = yield call(login, payload);
       yield put({
         type: 'changeLoginStatus',
@@ -45,12 +71,12 @@ export default {
       }
     },
 
-    *getCaptcha({ payload }, { call }) {
+    * getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout(_, { put,call }) {
-      yield call(logout,{});
+    * logout(_, { put, call }) {
+      yield call(logout, {});
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -69,19 +95,32 @@ export default {
             search: stringify({
               redirect: window.location.href,
             }),
-          })
+          }),
         );
       }
     },
   },
 
   reducers: {
+    changeLoginOkStatus(state, { payload }) {
+      let loginstatus = false;
+      let loginUser = {};
+      if (payload.head && payload.head.rtnCode === '000000' && payload.body.records.length > 0) {
+        loginstatus = true;
+        loginUser = payload.body.records[0];
+      }
+      return {
+        ...state,
+        loginstatus,
+        loginUser,
+      };
+    },
     changeLoginStatus(state, { payload }) {
       // setAuthority(payload.currentAuthority);
       if (payload.head && payload.head.rtnCode === '000000')
         setAuthority(payload.body[0].userName);
       // console.log(" save user ",payload.body[0])
-      setCurrentUser(payload.body[0])
+      setCurrentUser(payload.body[0]);
       return {
         ...state,
         rtnCode: payload.head.rtnCode,

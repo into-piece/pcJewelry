@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Layout, Menu, Tabs, Dropdown, Icon  } from 'antd';
+import { Layout, Menu, Tabs, Dropdown, Icon,Spin } from 'antd';
 import router from 'umi/router';
 import DocumentTitle from 'react-document-title';
 import { Route } from 'react-router-dom';
@@ -54,12 +54,12 @@ const query = {
 class BasicLayout extends React.Component {
   constructor(props) {
     super(props);
-    console.log('props',props)
+    // console.log('props', props);
     const { routes } = props.route;
     // const routeKey = props.location.pathname === '/business/basic'? props.location.pathname :'/business/client';
-    const routeKey = props.location.pathname==='/'?'/business/client':props.location.pathname ;
-    const tabNametem = props.location.pathname==='/'?'menu.business.client':`menu${props.location.pathname.replace(/\//g,'.')}` ; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
-    const tabName = formatMessage({id:tabNametem});
+    const routeKey = props.location.pathname === '/' ? '/business/client' : props.location.pathname;
+    const tabNametem = props.location.pathname === '/' ? 'menu.business.client' : `menu${props.location.pathname.replace(/\//g, '.')}`; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    const tabName = formatMessage({ id: tabNametem });
     // const tabName = props.location.pathname === '/business/basic'?'基础数据':'客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabLists = this.updateTree(routes);
     const tabList = [];
@@ -92,10 +92,16 @@ class BasicLayout extends React.Component {
     // router.push(props.location.pathname);
   }
 
+  componentWillMount() {
+    // pathname
+    // if (location.pathname === '/') {
+    //   router.push('/user/login');
+    // }
+  }
+
   componentDidMount() {
     const {
       dispatch,
-      route: { routes, path, authority },
     } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
@@ -103,10 +109,12 @@ class BasicLayout extends React.Component {
     dispatch({
       type: 'setting/getSetting',
     });
-    dispatch({
-      type: 'menu/getMenuData',
-      payload: { routes, path, authority },
-    });
+
+    // // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
+    // dispatch({
+    //   type: 'menu/getMenuData',
+    //   payload: { routes, path, authority,pathname :(location.pathname==='/'?"/bussiness/client":location.pathname)  },
+    // });
   }
 
   componentDidUpdate(preProps) {
@@ -253,7 +261,7 @@ class BasicLayout extends React.Component {
         tabListKey.push(pane.key);
       }
     });
-    const newActiveKey = lastIndex >= 0 && activeKey === targetKey ? tabList[lastIndex].key : activeKey
+    const newActiveKey = lastIndex >= 0 && activeKey === targetKey ? tabList[lastIndex].key : activeKey;
     router.push(newActiveKey);
     this.setState({ tabList, activeKey: newActiveKey, tabListKey });
   };
@@ -359,7 +367,7 @@ class BasicLayout extends React.Component {
 
     const isTop = PropsLayout === 'topmenu';
     const { activeKey, routeKey, tabList } = this.state;
-    const newActiveKey = pathname === '/' ? routeKey : activeKey
+    const newActiveKey = pathname === '/' ? routeKey : activeKey;
     const menu = (
       <Menu onClick={this.onClickHover}>
         <Menu.Item key="1">关闭当前标签页</Menu.Item>
@@ -461,14 +469,48 @@ class BasicLayout extends React.Component {
   }
 }
 
-export default connect(({ global, setting, menu: menuModel }) => ({
+class LoadBefore extends React.Component {
+
+  componentDidMount(){
+    const {
+      location,
+      dispatch,
+      route: { routes, path, authority },
+    } = this.props;
+    // 判断是否登录操作
+    dispatch({
+      type: 'login/loginOk',
+    });
+
+    console.log("location.pathname",location.pathname)
+    // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
+    dispatch({
+      type: 'menu/getMenuData',
+      payload: { routes, path, authority,pathname :(location.pathname==='/'?"/bussiness/client":location.pathname)  },
+    });
+  }
+
+
+  render (){
+    const  {props} = this;
+    const  {menuData} = props;
+    const loginOk = props.login.loginstatus;
+    return ((loginOk&&menuData.length>0)?<Media query="(max-width: 599px)">
+      {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
+                                         </Media>:<div className={styles.loadingpage}><Spin size="large" /></div>);
+  }
+}
+export default connect(({ global, setting, menu: menuModel,login }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   menuData: menuModel.menuData,
+  basicMenu:menuModel.basicMenu,
+  dataAnalysis:menuModel.dataAnalysis,
+  operationMenu:menuModel.operationMenu,
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
   ...setting,
-}))(props => (
-  <Media query="(max-width: 599px)">
-    {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
-  </Media>
-));
+  login
+}))(props => {
+    return <LoadBefore {...props} />;
+  },
+);

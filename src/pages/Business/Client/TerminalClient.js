@@ -430,7 +430,7 @@ class TerminalClient extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal
+        <Modal maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose

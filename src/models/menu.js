@@ -2,9 +2,26 @@ import memoizeOne from 'memoize-one';
 import isEqual from 'lodash/isEqual';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Authorized from '@/utils/Authorized';
+import { getMenuData } from '@/services/user';
+import { routerRedux } from 'dva/router';
+import { stringify } from 'qs';
 import { menu } from '../defaultSettings';
 
 const { check } = Authorized;
+
+function isInMenu(arr, pathname) {
+  return arr.some((e) => {
+    if (e.path === pathname) {
+      return true;
+    }
+    if (e.path !== pathname && e.children && e.children.length > 0) {
+      return isInMenu(e.children, pathname);
+    }
+    return false;
+
+  });
+
+}
 
 // Conversion router to menu.
 function formatter(data, parentAuthority, parentName) {
@@ -106,23 +123,70 @@ export default {
     menuData: [],
     routerData: [],
     breadcrumbNameMap: {},
+    basicMenu: [],
+    dataAnalysis: [],
+    operationMenu: [],
   },
 
   effects: {
-    *getMenuData({ payload }, { put }) {
-      const { routes, authority, path } = payload;
+    * getMenuData({ payload, callback }, { call, put }) {
+      const { pathname, routes, authority, path } = payload;
       const originalMenuData = memoizeOneFormatter(routes, authority, path);
-      const menuData = filterMenuData(originalMenuData);
+      // todo 暂时注释
+      let menuData = [];
+      // const  menuData = filterMenuData(originalMenuData);
+
+
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
+
+      const networkMenu = yield call(getMenuData, {});
+      let newMenu = {};
+
+      if (networkMenu.head && networkMenu.head.rtnCode === '000000' && networkMenu.body.records.length > 0) {
+        newMenu = networkMenu.body.records[0];
+
+        const t1 = isInMenu(newMenu.basicMenu, pathname);
+        const t2 = isInMenu(newMenu.dataAnalysis, pathname);
+        const t3 = isInMenu(newMenu.operationMenu, pathname);
+
+        // todo 暂时注释
+        if (!t1 && !t2 && !t3 && pathname !== '/opration' && pathname !== '/introduce') {
+          yield put(
+            routerRedux.replace({
+              pathname: '/403',
+              search: stringify({
+                redirect: pathname,
+              }),
+            }),
+          );
+        }
+
+
+        if (t1) {
+          menuData = newMenu.basicMenu;
+        } else if (t2) {
+          menuData = newMenu.dataAnalysis;
+        } else if (t3) {
+          menuData = newMenu.operationMenu;
+        }
+
+
+      }
+
+      console.log('菜单json', JSON.stringify(menuData));
+
       yield put({
         type: 'save',
-        payload: { menuData, breadcrumbNameMap, routerData: routes },
+        payload: { menuData, breadcrumbNameMap, routerData: routes, ...newMenu },
       });
+
+      if (callback) callback();
     },
   },
 
   reducers: {
     save(state, action) {
+      // console.log(action.payload)
       return {
         ...state,
         ...action.payload,

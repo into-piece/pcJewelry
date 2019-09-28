@@ -939,7 +939,7 @@ class Info extends Component {
           </div>
         </div>
         {handleModalOk &&
-          <Modal
+          <Modal maskClosable={false}
             title={returnTitle()}
             width={1000}
             className={styles.standardListForm}
@@ -953,7 +953,7 @@ class Info extends Component {
           </Modal>
         }
 
-        <Modal
+        <Modal maskClosable={false}
           title='选择产品'
           width={1000}
           className={styles.standardListForm}

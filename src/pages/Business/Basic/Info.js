@@ -88,7 +88,7 @@ class Info extends Component {
       royalty,
       currency
     }
-    console.log(key, menuObj[key], '================')
+    // console.log(key, menuObj[key], '================')
     return menuObj[key]
   };
 

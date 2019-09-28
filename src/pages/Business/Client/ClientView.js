@@ -906,7 +906,7 @@ class ClientView extends PureComponent {
           {this.getDetailInfo()}
         </Drawer>
 
-        <Modal
+        <Modal maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -916,7 +916,7 @@ class ClientView extends PureComponent {
           {this.getModalContent()}
         </Modal>
 
-        <Modal
+        <Modal maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -932,7 +932,7 @@ class ClientView extends PureComponent {
           handleCancel={this.handleCancel}
           contactsSubmit={this.handleContactsSubmit}
         />
-        {/* <Modal */}
+        {/* <Modal maskClosable={false} */}
         {/* width={720} */}
         {/* className={styles.standardListForm} */}
         {/* destroyOnClose */}

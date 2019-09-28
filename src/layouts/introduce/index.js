@@ -5,10 +5,10 @@ import Link from 'umi/link';
 import { Icon } from 'antd';
 import DocumentTitle from 'react-document-title';
 import GlobalFooter from '@/components/GlobalFooter';
-import SelectLang from '@/components/SelectLang';
-import styles from './index.less';
 import logo from '../../assets/rowLogo.png';
 import getPageTitle from '@/utils/getPageTitle';
+import {getMenuPath} from '@/utils/utils';
+import styles from './index.less';
 
 const links = [
   {
@@ -37,23 +37,27 @@ const copyright = (
 class UserLayout extends Component {
   componentDidMount() {
     const {
+      menu,
+      location,
       dispatch,
       route: { routes, authority },
     } = this.props;
+    console.log('location.pathname', location.pathname);
+
     dispatch({
       type: 'menu/getMenuData',
-      payload: { routes, authority },
+      payload: { routes, authority, pathname: (location.pathname === '/' ? '/opration' : location.pathname) },
     });
   }
 
-  logout = () =>{
+  logout = () => {
     const {
       dispatch,
     } = this.props;
     dispatch({
       type: 'login/logout',
     });
-  }
+  };
 
 
   render() {
@@ -61,11 +65,22 @@ class UserLayout extends Component {
       children,
       location: { pathname },
       breadcrumbNameMap,
+      basicMenu,
+      dataAnalysis,
     } = this.props;
+
+
+    const navData = [
+      { key: '基础资料', value: getMenuPath(basicMenu) },
+      { key: '操作输入', value: '/introduce' },
+      { key: '数据分析', value: getMenuPath(dataAnalysis) },
+    ];
+
+
     return (
       <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>
         <div className={styles.container}>
-          <Header logout={this.logout} />
+          <Header logout={this.logout} navData={navData} />
           <div className={styles.content}>
             <div className={styles.top} />
             {children}
@@ -77,16 +92,12 @@ class UserLayout extends Component {
   }
 }
 
-const navData = [
-  { key: '基础资料', value: '/business/basic' },
-  { key: '操作输入', value: '/introduce' },
-  { key: '数据分析', value: '' },
-];
 
 const Header = (props) => {
+  const { navData } = props;
   return <header className={styles.headerComponent}>
     <div className={styles.header}>
-      <Link to="/"><img alt="logo" className={styles.big_logo} src={logo} /></Link>
+      <Link to="/opration"><img alt="logo" className={styles.big_logo} src={logo} /></Link>
       <ul className={styles.nav}>
         {
           navData.map(({ key, value }) => (
@@ -102,10 +113,14 @@ const Header = (props) => {
       <Icon type="poweroff" />
       退出登录
     </div>
-  </header>
+  </header>;
 };
 
 export default connect(({ menu: menuModel }) => ({
+  menu: menuModel,
+  basicMenu: menuModel.basicMenu,
+  dataAnalysis: menuModel.dataAnalysis,
+  operationMenu: menuModel.operationMenu,
   menuData: menuModel.menuData,
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
 }))(UserLayout);
