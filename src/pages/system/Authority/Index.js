@@ -37,9 +37,25 @@ const defaultPageSize = 10;
 
 class Index extends Component {
 
+  state = {
+    rightlg: 16,
+    leftlg: 8,
+    drawVisible: false,
+    isEdit: true,
+    visible: false,
+    cropperVisible: false,
+    pageCurrent: 1,
+    selectProductItem: {},
+    selectProductData: [],
+    isProductUpdate: true,
+    productPage: 1,
+    isLoad: false,
+    productSorts: [],
+    searchProductParams: {},
+  }
+
 
   productColumns = [
-
     {
       title: () => {
         return (
@@ -127,31 +143,9 @@ class Index extends Component {
       key: 'statusVar',
       width: 100,
     },
+  ]
 
 
-  ];
-
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      rightlg: 16,
-      leftlg: 8,
-      drawVisible: false,
-      isEdit: true,
-      visible: false,
-      cropperVisible: false,
-      pageCurrent: 1,
-      selectProductItem: {},
-      selectProductData: [],
-      isProductUpdate: true,
-      productPage: 1,
-      isLoad: false,
-      productSorts: [],
-      searchProductParams: {},
-
-    };
-  }
 
   centerFormLayout = {
     labelCol: { span: 12 },
@@ -160,101 +154,9 @@ class Index extends Component {
     },
   };
 
-
   componentDidMount() {
     this.loadProduct();
     this.loadTreeData();
-  }
-
-
-  // router.replace('/business/client/emptyView');
-
-  componentWillUnmount() {
-
-  }
-
-  render() {
-    const { leftlg, rightlg, drawVisible, isLoad } = this.state;
-
-    const {
-      body = {},
-    } = this.props;
-
-    if (body.records) {
-      const newdata = body.records.map(v => {
-        const s = v.status;
-        v.statusVar = ableConvert[s];
-        return v;
-      });
-    }
-
-    if (isLoad) {
-      this.state.isLoadList = true;
-    } else if (this.state.isLoadList) {
-
-      this.refs.productTable.updateSelectDatas(body);
-      this.state.isLoadList = false;
-    }
-
-    return (
-      <div className={business.page}>
-        <div className={business.nav}>
-          <Breadcrumb style={{ display: 'none' }}>
-            <Breadcrumb.Item>主页</Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">业务</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="#/business/product">产品信息</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-        </div>
-        <div className={business.center_content}>
-          <Row gutter={24}>
-            <Col lg={rightlg} md={24}>
-              <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }} />
-                <SearchFrom
-                  onSearch={this.handleProductSearch}
-                  onCustomerReset={this.handleProductFormReset}
-                />
-
-                <JewelryTable
-                  scroll={{ x: 1000 }}
-                  onSelectItem={(item, rows) => {
-                    const { showItem } = this.state;
-                    this.state.showItem = item ? { ...item } : false;
-                    this.setState({
-                      showItem: this.state.showItem,
-                      selectProductData: [...rows],
-                    });
-                  }}
-                  ref="productTable"
-                  loading={isLoad}// productListloading || isUpdate
-                  columns={this.productColumns}
-                  className={business.small_table}
-                  rowClassName={this.onSelectRowClass}
-                  // scroll={{ y: 300 }}
-                  body={body}
-                  pageChange={this.pageProductChange}
-                />
-
-
-              </Card>
-            </Col>
-            <Col lg={leftlg} md={24}>
-              {this.getDetailInfow()}
-            </Col>
-          </Row>
-        </div>
-        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
-          {this.getDetailInfow()}
-        </Drawer>
-
-
-      </div>
-
-    );
   }
 
   handleProductFormReset = () => {
@@ -362,13 +264,13 @@ class Index extends Component {
       this.state.productSorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += `,${  v.field}`;
+            orderByAsc += `,${v.field}`;
           } else {
             orderByAsc = v.field;
           }
         } else if (v.sort === 'descend') {
           if (orderByDesc)
-            orderByDesc += `,${  v.field}`;
+            orderByDesc += `,${v.field}`;
           else
             orderByDesc = v.field;
         }
@@ -417,6 +319,83 @@ class Index extends Component {
     });
   };
 
+
+  render() {
+    const { leftlg, rightlg, drawVisible, isLoad } = this.state;
+
+    const {
+      body = {},
+    } = this.props;
+
+    if (body.records) {
+      const newdata = body.records.map(v => {
+        const s = v.status;
+        v.statusVar = ableConvert[s];
+        return v;
+      });
+    }
+
+    if (isLoad) {
+      this.state.isLoadList = true;
+    } else if (this.state.isLoadList) {
+      this.refs.productTable.updateSelectDatas(body);
+      this.state.isLoadList = false;
+    }
+
+    return (
+      <div className={business.page}>
+        <div className={business.nav}>
+          <Breadcrumb style={{ display: 'none' }}>
+            <Breadcrumb.Item>主页</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">业务</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="#/business/product">产品信息</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </div>
+        <div className={business.center_content}>
+          <Row gutter={24}>
+            <Col lg={rightlg} md={24}>
+              <Card bordered={false} className={business.left_content} loading={false}>
+                <div style={{ marginBottom: 16 }} />
+                <SearchFrom
+                  onSearch={this.handleProductSearch}
+                  onCustomerReset={this.handleProductFormReset}
+                />
+                <JewelryTable
+                  scroll={{ x: 1000 }}
+                  onSelectItem={(item, rows) => {
+                    const { showItem } = this.state;
+                    this.state.showItem = item ? { ...item } : false;
+                    this.setState({
+                      showItem: this.state.showItem,
+                      selectProductData: [...rows],
+                    });
+                  }}
+                  ref="productTable"
+                  loading={isLoad}// productListloading || isUpdate
+                  columns={this.productColumns}
+                  className={business.small_table}
+                  rowClassName={this.onSelectRowClass}
+                  // scroll={{ y: 300 }}
+                  body={body}
+                  pageChange={this.pageProductChange}
+                />
+              </Card>
+            </Col>
+            <Col lg={leftlg} md={24}>
+              {this.getDetailInfow()}
+            </Col>
+          </Row>
+        </div>
+        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
+          {this.getDetailInfow()}
+        </Drawer>
+      </div>
+    );
+  }
 
 }
 

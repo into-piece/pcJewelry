@@ -50,6 +50,8 @@ const resultArr = [
   { key: 'getlistProductLine', path: '/business/product-line/listProductLine', module: 4 }, // 产品报价系数
   { key: 'getLastPackPriceByProductId', path: '/product-quote-detail/getLastPackPriceByProductId' }, // 抓出同一客户同款产品的最近一次包装单价
   { key: 'getActualCountByProductId', path: '/product-quote-detail/getActualCountByProductId' }, // 抓出该款产品的最近一次PI工费
+  { key: 'geInitializeCountByProductId', path: '/product-quote-detail/geInitializeCountByProductId' }, // 抓出该款产品的多个参数
+  { key: 'getMainMaterialPrice', path: '/product-quote-header/getMainMaterialPrice' }, // 获取当天银价（主材价）
 ]
 // /listMstWordbook
 

@@ -47,6 +47,7 @@ export default {
     markinglist: [],
     markingEnName: '',
     brandsList: [],
+    materialPriceList: [],
   },
 
   effects: {
@@ -155,8 +156,8 @@ export default {
     * getcurrencydropdown(data, { call, put }) {
       const response = yield call(listMstWordbook, { "wordbookTypeCode": "H006" });
       let currencydropdown = response.body.records
-      currencydropdown = currencydropdown.map(({ wordbookContentEn }) => {
-        return { value: wordbookContentEn, key: wordbookContentEn }
+      currencydropdown = currencydropdown.map(({ wordbookContentCode }) => {
+        return { value: wordbookContentCode, key: wordbookContentCode }
       })
       yield put({
         type: 'changeState',
@@ -168,8 +169,8 @@ export default {
       const response = yield call(listCustomerDropDown, {});
       console.log(response)
       let customerDropDownList = response.body.records
-      customerDropDownList = customerDropDownList.map(({ customerNo, id, shotName }) => {
-        return { value: id, key: customerNo, shotName }
+      customerDropDownList = customerDropDownList.map(({ customerNo, id, shotName, settlementCurrency }) => {
+        return { value: id, key: customerNo, shotName, settlementCurrency }
       })
       yield put({
         type: 'changeState',
@@ -191,8 +192,8 @@ export default {
     * getEndCustomerListDropDown(data, { call, put }) {
       const response = yield call(listEndCustomerDropDown, {});
       let endCustomerList = response.body.records
-      endCustomerList = endCustomerList.map(({ id, endNo, }) => {
-        return { value: id, key: endNo }
+      endCustomerList = endCustomerList.map(({ id, endNo, endShotName }) => {
+        return { value: id, key: endNo, endShotName }
       })
       yield put({
         type: 'changeState',

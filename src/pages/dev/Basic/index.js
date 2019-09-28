@@ -16,7 +16,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag'
-import { manuArr, modalContent } from './config/index'
+import { manuArr, modalContent } from './config.json'
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 
@@ -56,7 +56,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete',type:"danger" },
+  { name: '删除', tag: 'delete', type: "danger" },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -444,8 +444,6 @@ const columnsArr = {
 
 }
 
-
-
 @Form.create()
 @connect(({ dev }) => {
   return {
@@ -569,11 +567,11 @@ class Info extends Component {
         if (selectKey === 'categorySet') {
           dispatch({
             type: 'dev/getListMstWordbookParams',
-            payload: {wordbookTypeCode:"H015"},
+            payload: { wordbookTypeCode: "H015" },
           });
           dispatch({
             type: 'dev/getListMstWordbookParams',
-            payload: {wordbookTypeCode:"H016"},
+            payload: { wordbookTypeCode: "H016" },
           });
         }
         this.setState({ modalType });
@@ -883,11 +881,11 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag,type }) => (
+              {btnGroup.map(({ name, tag, type }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type={type||"primary"}
+                  type={type || "primary"}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
@@ -992,13 +990,13 @@ const GetRenderitem = ({ data, type }) => {
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value,name }) => {
+          arr.map(({ key, value, name }) => {
             return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
-                : <Description
-                  key={key}
-                  term={key}
-                >{value === 'status' ? statusConvert[data[value]] : data[value]}
-                </Description>
+              : <Description
+                key={key}
+                term={key}
+              >{value === 'status' ? statusConvert[data[value]] : data[value]}
+              </Description>
             );
           })
         }
