@@ -6,6 +6,18 @@
  * @LastEditors: Please set LastEditors
  */
 export default [
+  {
+    path: '/403',
+    component: './Exception/403',
+  },
+  {
+    path: '/404',
+    component: './Exception/404',
+  },
+  {
+    path: '/500',
+    component: './Exception/500',
+  },
   // user
   {
     path: '/user',
@@ -42,6 +54,7 @@ export default [
       // },
     ],
   },
+
   {
     path: '/opration',
     component: '../layouts/introduce',
@@ -525,9 +538,7 @@ export default [
       //     },
       //   ],
       // },
-      {
-        component: '404',
-      },
+
       {
         path: '/system',
         icon: 'setting',
@@ -557,4 +568,5 @@ export default [
     ],
 
   },
+
 ];

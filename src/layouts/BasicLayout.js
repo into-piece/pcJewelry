@@ -93,7 +93,7 @@ class BasicLayout extends React.Component {
   }
 
   componentWillMount() {
-    const { location } = this.props;
+    // pathname
     // if (location.pathname === '/') {
     //   router.push('/user/login');
     // }
@@ -102,7 +102,6 @@ class BasicLayout extends React.Component {
   componentDidMount() {
     const {
       dispatch,
-      route: { routes, path, authority },
     } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
@@ -110,10 +109,12 @@ class BasicLayout extends React.Component {
     dispatch({
       type: 'setting/getSetting',
     });
-    dispatch({
-      type: 'menu/getMenuData',
-      payload: { routes, path, authority },
-    });
+
+    // // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
+    // dispatch({
+    //   type: 'menu/getMenuData',
+    //   payload: { routes, path, authority,pathname :(location.pathname==='/'?"/bussiness/client":location.pathname)  },
+    // });
   }
 
   componentDidUpdate(preProps) {
@@ -472,32 +473,43 @@ class LoadBefore extends React.Component {
 
   componentDidMount(){
     const {
+      location,
       dispatch,
+      route: { routes, path, authority },
     } = this.props;
     // 判断是否登录操作
     dispatch({
       type: 'login/loginOk',
+    });
+
+    // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
+    dispatch({
+      type: 'menu/getMenuData',
+      payload: { routes, path, authority,pathname :(location.pathname==='/'?"/bussiness/client":location.pathname)  },
     });
   }
 
 
   render (){
     const  {props} = this;
+    const  {menuData} = props;
     const loginOk = props.login.loginstatus;
-    return (loginOk?<Media query="(max-width: 599px)">
+    return ((loginOk&&menuData.length>0)?<Media query="(max-width: 599px)">
       {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
-                    </Media>:<div className={styles.loadingpage}><Spin size="large" /></div>);
+                                         </Media>:<div className={styles.loadingpage}><Spin size="large" /></div>);
   }
 }
 export default connect(({ global, setting, menu: menuModel,login }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   menuData: menuModel.menuData,
+  basicMenu:menuModel.basicMenu,
+  dataAnalysis:menuModel.dataAnalysis,
+  operationMenu:menuModel.operationMenu,
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
   ...setting,
   login
 }))(props => {
-  console.log('login',props)
     return <LoadBefore {...props} />;
   },
 );

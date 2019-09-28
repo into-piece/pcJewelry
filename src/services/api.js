@@ -1417,9 +1417,6 @@ export async function updateTheSpecimenUnLock(params) {
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
-    headers: {
-      token: '',
-    },
     data: {
       ...params,
     },

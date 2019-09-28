@@ -27,7 +27,7 @@ export default class GlobalHeader extends PureComponent {
     return (
       <div className={styles.header}>
         {isMobile && (
-          <Link to="/" className={styles.logo} key="logo">
+          <Link to="/opration" className={styles.logo} key="logo">
             <img src={logo} alt="logo" width="32" />
           </Link>
         )}
