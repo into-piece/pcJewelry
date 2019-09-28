@@ -219,7 +219,6 @@ const searchParams = [
   { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
   { key: '终客编号', value: 'endId' },
-  { key: '产品说明', value: 'explains' },
 ]
 
 // 报价主页的筛选参数
@@ -433,7 +432,6 @@ class Info extends Component {
       const { quote, form } = this.props
       const obj = quote.customerDropDownList.find(item => item.value === value)
       const { shotName, currencyCode } = obj
-      debugger
       form.setFieldsValue({
         customerShotName: shotName,
         currency: currencyCode
@@ -451,11 +449,14 @@ class Info extends Component {
 
   //  弹窗表单 check回调
   handleCheckChange = (e, value) => {
-    console.log(e.target.checked, '==============handleCheckChange')
+    const { form } = this.props
+    form.setFieldsValue({
+      value: e.target.checked ? 1 : 0,
+    });
     if (value === 'isWeighStones') {
       const isWeighStones = e.target.checked === 1
       if (isWeighStones) {
-        this.props.form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
+        form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
       }
     }
   }
@@ -471,7 +472,6 @@ class Info extends Component {
     console.log(date, dateString)
     const quoteDateFrom = moment(date[1]).valueOf()
     const quoteDateTo = moment(date[2]).valueOf()
-    debugger
     this.setState({
       quoteDateFrom,
       quoteDateTo
@@ -599,11 +599,19 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
+
+        params = {
+          ...params,
+          ...values,
+          emergency: values.emergency ? 1 : 0,
+          customerPreparation: values.customerPreparation ? 1 : 0,
+          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0
+        }
         // this.setState({
         //   [selectKey]
         // })
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        serviceObj[`add${str}`]({ ...params, ...values }).then(res => {
+        serviceObj[`add${str}`]({ ...params }).then(res => {
           const { rtnCode, rtnMsg } = res.head
           if (rtnCode === '000000') {
             notification.success({
@@ -643,6 +651,9 @@ class Info extends Component {
         params = {
           ...params,
           ...values,
+          emergency: values.emergency ? 1 : 0,
+          customerPreparation: values.customerPreparation ? 1 : 0,
+          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0
         }
         serviceObj[`add${str}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head
@@ -666,7 +677,6 @@ class Info extends Component {
     const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head
-      debugger
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -682,7 +692,6 @@ class Info extends Component {
     const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approval' : 'cancelApproval'
     console.log(serviceObj, serviceObj[serviceType], selectedRowKeys)
-    debugger
     serviceObj[serviceType](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head
       if (rtnCode === '000000') {
@@ -784,7 +793,6 @@ class Info extends Component {
   // 选中某行表头
   changeChoosenRow = (rowData) => {
     const { dispatch } = this.props;
-    debugger
     dispatch({
       type: `quote/getProductChoosenRowData`,
       payload: rowData,
@@ -892,7 +900,6 @@ class Info extends Component {
   onSearch = (v) => {
     const { timeline } = this.props
     const { quoteDateFrom, quoteDateTo } = this.state
-    debugger
     if (v.quoteDate) {
       v.quoteDateFrom = quoteDateFrom
       v.quoteDateTo = quoteDateTo
@@ -933,7 +940,8 @@ class Info extends Component {
           </div>
         </div>
         {handleModalOk &&
-          <Modal maskClosable={false}
+          <Modal
+            maskClosable={false}
             title={returnTitle()}
             width={1000}
             className={styles.standardListForm}
