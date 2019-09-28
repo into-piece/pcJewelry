@@ -319,7 +319,7 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '公费',
+      title: '工费',
       dataIndex: 'costs',
       key: 'costs',
     },
