@@ -37,13 +37,12 @@ const copyright = (
 class UserLayout extends Component {
   componentDidMount() {
     const {
+      location,
       dispatch,
       route: { routes, authority },
     } = this.props;
-    dispatch({
-      type: 'menu/getMenuData',
-      payload: { routes, authority },
-    });
+
+
   }
 
   render() {
