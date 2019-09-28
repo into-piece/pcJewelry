@@ -204,6 +204,7 @@ class BasicLayout extends React.Component {
     let { key } = e;
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;
+    console.log(this.state)
     if (tabListArr.includes(key)) {
       router.push(key);
     } else {
