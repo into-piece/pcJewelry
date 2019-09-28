@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
-import Link from 'umi/link';
-import { Checkbox, Alert, Modal, Icon } from 'antd';
-import Login from '@/components/Login';
+import router from 'umi/router';
+import {getMenuPath} from '@/utils/utils';
 import styles from './index.less';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
-
-
 const menuArr = [
-  { key: '产品编号', value: 1, text: '123123sdfsdf' },
-  { key: '报价单', value: 2, text: '123123sdfsdf' },
-  { key: '订单', value: 3, text: '123123sdfsdf' },
-  { key: '发票确认', value: 4, text: '123123sdfsdf' },
-  { key: '发票审批', value: 5, text: '123123sdfsdf' },
-]
+  { key: 'menu.business.product', value: '/business/product', text: '123123sdfsdf' },
+  { key: 'menu.business.quote', value: '/business/quote', text: '123' },
+  { key: 'menu.business.proforminvoice', value: '/business/proforminvoice', text: '123123sdfsdf' },
+  { key: 'menu.business.deliver', value: '/business/deliver', text: '123123sdfsdf' },
+  { key: 'menu.business.receiving', value: '/business/receiving', text: '123123sdfsdf' },
+];
+
 @connect(({ login, loading }) => ({
   login,
   submitting: loading.effects['login/login'],
@@ -29,20 +26,19 @@ class Introduct extends Component {
   onMouseEnter = (contentText) => {
     this.setState({
       // showText: true,
-      contentText
-    })
-  }
+      contentText,
+    });
+  };
 
   onMouseLeave = () => {
     // this.setState({
     //   showText: false
     // })
-  }
-
+  };
 
 
   render() {
-    const { onMouseEnter, onMouseLeave } = this
+    const { onMouseEnter, onMouseLeave } = this;
     const { login, submitting } = this.props;
     const { showText, contentText } = this.state;
 
@@ -54,12 +50,25 @@ class Introduct extends Component {
         <div className={styles.cotent}>
           <ul className={styles.menu}>
             {menuArr.map(({ key, value, text }) =>
-              <li key={value} onMouseEnter={() => { onMouseEnter(text) }} onMouseLeave={() => { onMouseLeave() }}>{key}</li>
+              <li
+                key={value}
+                onClick={()=>{
+                  console.log(value)
+                  router.push(value);
+                }}
+                onMouseEnter={() => {
+                  onMouseEnter(text);
+                }}
+                onMouseLeave={() => {
+                  onMouseLeave();
+                }}
+              >
+                <FormattedMessage id={key} />
+              </li>,
             )}
           </ul>
           {showText && <section className={styles.contentText}>
             {contentText}
-            asdfasdfasdfasdf
           </section>}
         </div>
       </div>
