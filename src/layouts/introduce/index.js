@@ -38,12 +38,15 @@ class UserLayout extends Component {
   componentDidMount() {
     const {
       menu,
+      location,
       dispatch,
       route: { routes, authority },
     } = this.props;
+    console.log("location.pathname",location.pathname)
+
     dispatch({
       type: 'menu/getMenuData',
-      payload: { routes, authority },
+      payload: { routes, authority,pathname :(location.pathname==='/'?"/opration":location.pathname) },
     });
   }
 
@@ -87,7 +90,7 @@ const navData = [
 const Header = (props) => {
   return <header className={styles.headerComponent}>
     <div className={styles.header}>
-      <Link to="/"><img alt="logo" className={styles.big_logo} src={logo} /></Link>
+      <Link to="/opration"><img alt="logo" className={styles.big_logo} src={logo} /></Link>
       <ul className={styles.nav}>
         {
           navData.map(({ key, value }) => (

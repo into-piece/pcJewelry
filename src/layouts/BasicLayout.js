@@ -482,6 +482,7 @@ class LoadBefore extends React.Component {
       type: 'login/loginOk',
     });
 
+    console.log("location.pathname",location.pathname)
     // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
     dispatch({
       type: 'menu/getMenuData',

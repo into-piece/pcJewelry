@@ -41,10 +41,8 @@ class UserLayout extends Component {
       dispatch,
       route: { routes, authority },
     } = this.props;
-    dispatch({
-      type: 'menu/getMenuData',
-      payload: { routes, authority,pathname :(location.pathname==='/'?"/opration":location.pathname) },
-    });
+
+
   }
 
   render() {
