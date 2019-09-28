@@ -214,7 +214,7 @@ customerColumns = customerColumns.map(item => ({ ...item, sorter: true }))
 
 // 报价主页的筛选参数
 const searchParams = [
-  { key: '客户编号', value: 'customerId' },
+  { key: '客户编号', value: 'customerNo' },
   { key: '报价单号', value: 'quoteNumber' },
   { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
@@ -273,8 +273,6 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    this.unLockEdit("c1edf2f0-47e5-468a-a0a3-0cb26b1b2ba6")
-
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown'
@@ -292,10 +290,6 @@ class Info extends Component {
 
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
-  }
-
-  componentWillUnmount() {
-    this.unLockEdit()
   }
 
   // 获取对应key=》页面进行数据请求
@@ -1053,7 +1047,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 const rowArr = [
   { key: '报价单号', value: 'quoteNumber' },
   { key: '报价日期', value: 'quoteDate' },
-  { key: '客户', value: 'customerId' },
+  { key: '客户', value: 'customerNo' },
   { key: '类别', value: 'type', belong: 3, "list": "wordbookdropdown" },
   { key: '终客', value: 'endNo' },
   { key: '中文名', value: 'zhName' },
