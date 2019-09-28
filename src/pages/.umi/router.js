@@ -10,6 +10,66 @@ const Router = require('dva/router').routerRedux.ConnectedRouter;
 
 const routes = [
   {
+    path: '/403',
+    component: __IS_BROWSER
+      ? _dvaDynamic({
+          app: require('@tmp/dva').getApp(),
+          models: () => [
+            import(/* webpackChunkName: 'p__Exception__models__error.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/Exception/models/error.js').then(
+              m => {
+                return { namespace: 'error', ...m.default };
+              },
+            ),
+          ],
+          component: () =>
+            import(/* webpackChunkName: "p__Exception__403" */ '../Exception/403'),
+          LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+            .default,
+        })
+      : require('../Exception/403').default,
+    exact: true,
+  },
+  {
+    path: '/404',
+    component: __IS_BROWSER
+      ? _dvaDynamic({
+          app: require('@tmp/dva').getApp(),
+          models: () => [
+            import(/* webpackChunkName: 'p__Exception__models__error.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/Exception/models/error.js').then(
+              m => {
+                return { namespace: 'error', ...m.default };
+              },
+            ),
+          ],
+          component: () =>
+            import(/* webpackChunkName: "p__Exception__404" */ '../Exception/404'),
+          LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+            .default,
+        })
+      : require('../Exception/404').default,
+    exact: true,
+  },
+  {
+    path: '/500',
+    component: __IS_BROWSER
+      ? _dvaDynamic({
+          app: require('@tmp/dva').getApp(),
+          models: () => [
+            import(/* webpackChunkName: 'p__Exception__models__error.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/Exception/models/error.js').then(
+              m => {
+                return { namespace: 'error', ...m.default };
+              },
+            ),
+          ],
+          component: () =>
+            import(/* webpackChunkName: "p__Exception__500" */ '../Exception/500'),
+          LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+            .default,
+        })
+      : require('../Exception/500').default,
+    exact: true,
+  },
+  {
     path: '/user',
     component: __IS_BROWSER
       ? _dvaDynamic({
@@ -1561,17 +1621,6 @@ const routes = [
               ),
           },
         ],
-      },
-      {
-        component: __IS_BROWSER
-          ? _dvaDynamic({
-              component: () =>
-                import(/* webpackChunkName: "p__404" */ '../404'),
-              LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
-                .default,
-            })
-          : require('../404').default,
-        exact: true,
       },
       {
         path: '/system',

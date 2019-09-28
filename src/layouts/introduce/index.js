@@ -37,6 +37,7 @@ const copyright = (
 class UserLayout extends Component {
   componentDidMount() {
     const {
+      menu,
       dispatch,
       route: { routes, authority },
     } = this.props;
@@ -106,6 +107,7 @@ const Header = (props) => {
 };
 
 export default connect(({ menu: menuModel }) => ({
+  menu:menuModel,
   menuData: menuModel.menuData,
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
 }))(UserLayout);

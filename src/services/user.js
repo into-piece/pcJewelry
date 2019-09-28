@@ -1,6 +1,20 @@
 import request from '@/utils/request';
 import HttpFetch, { priefx } from '../utils/HttpFetch';
+import { getCurrentUser } from '../utils/authority';
 
+
+export async function getMenuData(params) {
+  // return request('/basic/ring-around/freeze', {
+  return request(`${priefx  }/sys.user/sys-resource/getMenuTree`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...params,
+    },
+  });
+}
 
 export async function checkLogin(params) {
 

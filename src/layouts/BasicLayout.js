@@ -93,7 +93,7 @@ class BasicLayout extends React.Component {
   }
 
   componentWillMount() {
-    const { location } = this.props;
+    // pathname
     // if (location.pathname === '/') {
     //   router.push('/user/login');
     // }
@@ -101,6 +101,7 @@ class BasicLayout extends React.Component {
 
   componentDidMount() {
     const {
+      location,
       dispatch,
       route: { routes, path, authority },
     } = this.props;
@@ -110,9 +111,11 @@ class BasicLayout extends React.Component {
     dispatch({
       type: 'setting/getSetting',
     });
+
+    //获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
     dispatch({
       type: 'menu/getMenuData',
-      payload: { routes, path, authority },
+      payload: { routes, path, authority,pathname :(location.pathname==='/'?"/bussiness/client":location.pathname)  },
     });
   }
 
@@ -493,11 +496,13 @@ export default connect(({ global, setting, menu: menuModel,login }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   menuData: menuModel.menuData,
+  basicMenu:menuModel.basicMenu,
+  dataAnalysis:menuModel.dataAnalysis,
+  operationMenu:menuModel.operationMenu,
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
   ...setting,
   login
 }))(props => {
-  console.log('login',props)
     return <LoadBefore {...props} />;
   },
 );
