@@ -66,7 +66,7 @@ export const saveProductImage = `${priefx}/business/business/product-picture/sav
  * @type {string}
  */
 export const queryQuality2 = `${priefx}/business/basic/quality-requirements/listQualityRequirementssDropDown`
-export const queryQuality = `${priefx}/business/business/basic/quality-requirements/listQualityRequirementss`
+export const queryQuality = `${priefx}/business/basic/quality-requirements/listQualityRequirementss`
 
 /**
  * 加载终客列表
