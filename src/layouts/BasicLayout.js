@@ -54,7 +54,7 @@ const query = {
 class BasicLayout extends React.Component {
   constructor(props) {
     super(props);
-    // console.log('props', props);
+    console.log('props', props);
     const { routes } = props.route;
     // const routeKey = props.location.pathname === '/business/basic'? props.location.pathname :'/business/client';
     const routeKey = props.location.pathname === '/' ? '/business/client' : props.location.pathname;
@@ -204,12 +204,12 @@ class BasicLayout extends React.Component {
     let { key } = e;
     const tabLists = this.updateTreeList(menuData);
     const { tabListKey, tabList, tabListArr } = this.state;
-    console.log(this.state)
+
     if (tabListArr.includes(key)) {
       router.push(key);
     } else {
-      key = '/exception/404';
-      router.push('/exception/404');
+      key = '/404';
+      router.push('/404');
     }
 
     this.setState({
@@ -230,6 +230,9 @@ class BasicLayout extends React.Component {
         }
       }
     });
+
+    console.log("key",this.state)
+
     // this.setState({
     //   tabListKey:this.state.tabList.map((va)=>va.key)
     // })
@@ -487,7 +490,7 @@ class LoadBefore extends React.Component {
     // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
     dispatch({
       type: 'menu/getMenuData',
-      payload: { routes, path, authority,pathname :(location.pathname==='/'?"/bussiness/client":location.pathname)  },
+      payload: { routes, path, authority,pathname :(location.pathname==='/'?"/business/client":location.pathname)  },
     });
   }
 

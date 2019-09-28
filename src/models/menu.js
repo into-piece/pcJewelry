@@ -116,6 +116,37 @@ const getBreadcrumbNameMap = menuData => {
 
 const memoizeOneGetBreadcrumbNameMap = memoizeOne(getBreadcrumbNameMap, isEqual);
 
+
+const findComponent = (ad, path) => {
+
+  const c = ad.map(e => {
+    if (e.path === path) {
+      return e.component;
+    }
+    if (e.children && e.children.length > 0) {
+      const temp = findComponent(e.children, path);
+      return temp;
+    }
+
+  });
+  const rc = c.filter(cc => (cc));
+
+  return (rc && rc.length > 0) ? rc[0] : null;
+};
+
+const convertMenuComponents = (a, b) => {
+  b.forEach(e => {
+    if (e.children) {
+      convertMenuComponents(a, e.children);
+    } else {
+      e.component = findComponent(a, e.path);
+    }
+  });
+
+  return b;
+};
+
+
 export default {
   namespace: 'menu',
 
@@ -132,9 +163,8 @@ export default {
     * getMenuData({ payload, callback }, { call, put }) {
       const { pathname, routes, authority, path } = payload;
       const originalMenuData = memoizeOneFormatter(routes, authority, path);
-      // todo 暂时注释
       let menuData = [];
-      // const  menuData = filterMenuData(originalMenuData);
+      const allMenuData = filterMenuData(originalMenuData);
 
 
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
@@ -145,11 +175,13 @@ export default {
       if (networkMenu.head && networkMenu.head.rtnCode === '000000' && networkMenu.body.records.length > 0) {
         newMenu = networkMenu.body.records[0];
 
+
+        newMenu.basicMenu = convertMenuComponents(allMenuData, newMenu.basicMenu);
+
+
         const t1 = isInMenu(newMenu.basicMenu, pathname);
         const t2 = isInMenu(newMenu.dataAnalysis, pathname);
         const t3 = isInMenu(newMenu.operationMenu, pathname);
-
-        // todo 暂时注释
         if (!t1 && !t2 && !t3 && pathname !== '/opration' && pathname !== '/introduce') {
           yield put(
             routerRedux.replace({
@@ -173,7 +205,6 @@ export default {
 
       }
 
-      console.log('菜单json', JSON.stringify(menuData));
 
       yield put({
         type: 'save',
