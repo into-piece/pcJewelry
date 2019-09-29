@@ -9,8 +9,17 @@ import React, { Component } from 'react';
 import { Table } from 'antd';
 import styles from './index.less';
 
-class MyTable extends Component {
+/**
+ * body 直接将接口返回的body存进model中，包含records数据数组和total数据总数
+ * columns为表头
+ * selectedRowKeys为勾选中的列表数组 存储的是数据的id
+ * onSelectChange 触发勾选回调  返回选中数据对应id的数组=》进行本地model存储
+ * listLoading 列表的loading
+ * scroll 可以固定前后的列，横向滚动
+ * handleTableChange 为翻页或排序触发回调 传入列表请求函数 返回筛选参数对象 
+ */
 
+class MyTable extends Component {
   /**
    * 点击单行回调
    * 传入 onSelectChange 进行选中
@@ -23,6 +32,7 @@ class MyTable extends Component {
     if (selectedRowKeys.includes(record.id)) {
       selectedRow = selectedRowKeys.filter(item => item !== record.id);
       clearFn && clearFn(this.props.type)
+      debugger
       onSelectChange && onSelectChange(selectedRow)
       // selectedRowKeys = []
       return
@@ -57,28 +67,24 @@ class MyTable extends Component {
     const { order, field } = sorter
     const orderKey = order === "ascend" ? 'Asc' : order === 'descend' ? 'Desc' : ''
     handleTableChange({ current, size: pageSize, [`orderBy${orderKey}`]: field });
-    debugger
   }
 
   render() {
-    const { props, pageChange, onSelectRowClass, onRow, onChange } = this;
-    const { body = {}, columns, pagination, selectedRowKeys, onSelectChange, listLoading, noSelect, scroll } = props;
-    const { current, size } = pagination;
+    const { props, onSelectRowClass, onRow, onChange } = this;
+    const { body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
+    const { size } = pagination;
     const paginationProps = {
       showQuickJumper: true,
       pageSize: size,
-      current,
       total: body ? body.total : 0,
-      // onChange: pageChange,
+      // total: 100, //做测试
     };
 
     const rowSelection =
-    // noSelect ? null :
     {
       selectedRowKeys,
       type: 'checkbox',
       onChange: onSelectChange,
-      // onSelect: this.selectChange,
     };
 
     return (
