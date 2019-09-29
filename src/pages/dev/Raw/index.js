@@ -33,7 +33,7 @@ import { manuArr, modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import SearchFrom from './components/SearchFrom';
-import SearchFromSecond from './components/SearchFromSecond';
+import SearchFromTab0 from './components/SearchFromTab0';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -183,9 +183,276 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
+  // 其他材料
+  otherMaterial:[
+    {
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assaying',
+      render: data => isLockList ? (
+        <LockTag>
+          {data}
+        </LockTag>
+        )
+        : (data),
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'assayingName',
+      key: 'weightUnit',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
+    },
+    {
+      title: '最低采购量',
+      dataIndex: 'minimumPurchaseQuantity',
+      key: 'minimumPurchaseQuantity',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
+    },
+  ],
+  wrapper:[
+    {
+      title: '原料编号',
+      dataIndex: 'fCode',
+      key: 'fCode',
+      render: data => isLockList ? (
+        <LockTag>
+          {data}
+        </LockTag>
+        )
+        : (data),
+    },
+    {
+      title: '颜色',
+      dataIndex: 'colourName',
+      key: 'colour',
+    },
+    {
+      title: '形状',
+      dataIndex: 'shapeName',
+      key: 'shape',
+    },
+    {
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specification',
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '计量单位',
+      dataIndex: 'measureUnitName',
+      key: 'measureUnit',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'assayingName',
+      key: 'weightUnit',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
+    },
+    {
+      title: '单重',
+      dataIndex: 'inventoryWeight',
+      key: 'inventoryWeight',
+    },
+    {
+      title: '基本材料"',
+      dataIndex: 'basicMaterials',
+      key: 'basicMaterials',
+    },
+    {
+      title: '条码',
+      dataIndex: 'barCode',
+      key: 'barCode',
+    },
+    {
+      title: '售价',
+      dataIndex: 'price',
+      key: 'price',
+    },
+    {
+      title: '成本价',
+      dataIndex: 'costPirce',
+      key: 'costPirce',
+    },
+    {
+      title: '币种',
+      dataIndex: 'currency',
+      key: 'currency',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
+    },
+  ],
+  auxiliaryMaterial:[
+    {
+      title: '原料编号',
+      dataIndex: 'fCode',
+      key: 'fCode',
+      render: data => isLockList ? (
+        <LockTag>
+          {data}
+        </LockTag>
+        )
+        : (data),
+    },
+    {
+      title: '颜色',
+      dataIndex: 'colourName',
+      key: 'colour',
+    },
+    {
+      title: '形状',
+      dataIndex: 'shapeName',
+      key: 'shape',
+    },
+    {
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specification',
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '计量单位',
+      dataIndex: 'measureUnitName',
+      key: 'measureUnit',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'assayingName',
+      key: 'weightUnit',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
+    },
+    {
+      title: '单重',
+      dataIndex: 'inventoryWeight',
+      key: 'inventoryWeight',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
+    },
+  ],
+  stone:[
+    {
+      title: '原料编号',
+      dataIndex: 'fCode',
+      key: 'fCode',
+      render: data => isLockList ? (
+        <LockTag>
+          {data}
+        </LockTag>
+        )
+        : (data),
+    },
+    {
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assaying',
+    },
+    {
+      title: '形状',
+      dataIndex: 'shapeName',
+      key: 'shape',
+    },
+    {
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specification',
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+    },
+    {
+      title: '计量单位',
+      dataIndex: 'measureUnitName',
+      key: 'measureUnit',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'assayingName',
+      key: 'weightUnit',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClass',
+    },
+    {
+      title: '单重',
+      dataIndex: 'inventoryWeight',
+      key: 'inventoryWeight',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: data => statusConvert[data],
+    },
+  ]
+
 };
 columnsArr.material = columnsArr.material.map(item => ({ ...item, sorter: true }));
 columnsArr.accessories = columnsArr.accessories.map(item => ({ ...item, sorter: true }));
+columnsArr.otherMaterial = columnsArr.otherMaterial.map(item => ({ ...item, sorter: true }));
+columnsArr.wrapper = columnsArr.wrapper.map(item => ({ ...item, sorter: true }));
+columnsArr.auxiliaryMaterial = columnsArr.auxiliaryMaterial.map(item => ({ ...item, sorter: true }));
+columnsArr.stone = columnsArr.stone.map(item => ({ ...item, sorter: true }));
 
 
 @Form.create()
@@ -220,17 +487,17 @@ class Info extends Component {
 
   componentDidMount() {
     // 获取初始表单数据
-    this.getList();
+    this.getList({});
   }
 
 
   // 获取对应key=》页面进行数据请求
-  getList = (params) => {
+  getList = ({key,params}) => {
     const { dispatch, pagination, selectKey, searchParams } = this.props;
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params, ...searchParams }, type: selectKey },
+      payload: { params: { ...pagination,  ...searchParams ,...params}, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -255,32 +522,6 @@ class Info extends Component {
       case 'edit':
       default:
         // console.log(selectKey, '==============selectKey');
-        // 主材
-        if (selectKey === 'material' || selectKey === 'accessories') {
-          // 成色列表
-          dispatch({
-            type: 'devRaw/getGemDropDown',
-            payload: {},
-          });
-          // 重量单位列表
-          dispatch({
-            type: 'devRaw/getBUMDropDown',
-            payload: {},
-          });
-        }
-        // todo
-        if (selectKey === 'accessories') {
-          // 形状下拉
-          dispatch({
-            type: 'devRaw/getShapeDropDown',
-            payload: {},
-          });
-          // 规格下拉
-          dispatch({
-            type: 'devRaw/getSpecificationDropDown',
-            payload: {},
-          });
-        }
 
 
         this.setState({ modalType });
@@ -418,7 +659,7 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList();
+            this.getList({});
             this.btnFn('');
           }
         });
@@ -451,7 +692,7 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList();
+            this.getList({});
             this.btnFn('');
           }
         });
@@ -468,7 +709,7 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.getList();
+        this.getList({});
       }
     });
   };
@@ -484,7 +725,7 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.getList();
+        this.getList({});
       }
     });
   };
@@ -551,7 +792,7 @@ class Info extends Component {
       type: 'devRaw/getPagination',
       payload: v,
       callback: () => {
-        this.getList(v);
+        this.getList({});
       },
     });
   };
@@ -569,9 +810,10 @@ class Info extends Component {
 
             <div className={styles.right}>
               <RightContent
+                returnElement={this.returnElement}
                 onSearch={onSearch}
-                getList={(params) => {
-                  this.getList(params);
+                getList={(p) => {
+                      this.getList(p);
                 }}
 
                 type={selectKey}
@@ -605,15 +847,15 @@ class Info extends Component {
 }
 
 // 右手边正文内容
-const RightContent = ({ getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch }) => (
+const RightContent = ({ getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch, returnElement }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
-      <Col lg={16} md={24}>
-        <CenterInfo getList={getList} type={type} onSearch={onSearch} />
+      <Col lg={16} md={16}>
+        <CenterInfo returnElement={returnElement} getList={getList} type={type} onSearch={onSearch} />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
-      <Col lg={8} md={24}>
+      <Col lg={8} md={16}>
         <div className={styles.view_right_content}>
           <Card bordered={false}>
             <div>
@@ -671,6 +913,41 @@ const RightContent = ({ getList, type, choosenRowData, btnFn, returnLockType, re
 })
 class CenterInfo extends Component {
 
+  componentDidMount() {
+    const { type } = this.props;
+    this.initDropList(type);
+  }
+
+
+  initDropList(type) {
+    const { dispatch } = this.props;
+    // 主材
+    if (type === 'material' || type === 'accessories') {
+      // 成色列表
+      dispatch({
+        type: 'devRaw/getGemDropDown',
+        payload: {},
+      });
+      // 重量单位列表
+      dispatch({
+        type: 'devRaw/getBUMDropDown',
+        payload: {},
+      });
+    }
+    // 配件
+    if (type === 'accessories') {
+      // 形状下拉
+      dispatch({
+        type: 'devRaw/getShapeDropDown',
+        payload: {},
+      });
+      // 规格下拉
+      dispatch({
+        type: 'devRaw/getSpecificationDropDown',
+        payload: {},
+      });
+    }
+  }
 
   changeChoosenRow = rowData => {
     const { dispatch } = this.props;
@@ -692,11 +969,21 @@ class CenterInfo extends Component {
   turnTab(e) {
     const key = e.target.value;
     const { dispatch, pagination, getList } = this.props;
+    this.initDropList(key);
+
     dispatch({
       type: 'devRaw/getSelectKey',
       payload: key,
+      callback:()=>{
+        dispatch({
+          type: 'devRaw/getPagination',
+          payload: { current: 1 },
+          callback: () => {
+            getList({key});
+          },
+        });
+      }
     });
-    getList({ key });
 
     // 还要清空所选中项
     dispatch({
@@ -708,22 +995,34 @@ class CenterInfo extends Component {
       type: 'devRaw/getChoosenRowData',
       payload: { id: '', zhName: '', enName: '', unitCode: '' },
     });
+    dispatch({
+      type: 'devRaw/setSearchParams',
+      payload: {},
+    });
 
+    this.SearchFromTab0.handleReset();
   }
 
   search(params) {
-    const { dispatch,getList } = this.props;
-    dispatch({
-      type: 'devRaw/getPagination',
-      payload: { current: 1},
-      callback: () => {
-        getList(params);
-      },
-    });
+    const { dispatch, getList } = this.props;
+    console.log(params)
     dispatch({
       type: 'devRaw/setSearchParams',
-      payload: params
+      payload: params,
+      callback:()=>{
+        // 搜索变第一页
+        dispatch({
+          type: 'devRaw/getPagination',
+          payload: { current: 1 },
+          callback: () => {
+            getList({params:{...params,current: 1}});
+          },
+        });
+      }
     });
+
+
+
   }
 
   reset() {
@@ -731,13 +1030,13 @@ class CenterInfo extends Component {
 
     dispatch({
       type: 'devRaw/setSearchParams',
-      payload: {}
+      payload: {},
     });
   }
 
   render() {
     const { onSelectChange, props } = this;
-    const { getList,type, choosenRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch } = props;
+    const { type, choosenRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
     return (
@@ -759,7 +1058,7 @@ class CenterInfo extends Component {
               主材
             </Radio.Button>
             <Radio.Button
-              value="show_persion"
+              value="stone"
               onChange={(e) => {
                 this.turnTab(e);
               }}
@@ -775,7 +1074,7 @@ class CenterInfo extends Component {
               配件
             </Radio.Button>
             <Radio.Button
-              value="show_clientlist"
+              value="wrapper"
               onChange={(e) => {
                 this.turnTab(e);
               }}
@@ -783,7 +1082,7 @@ class CenterInfo extends Component {
               包装
             </Radio.Button>
             <Radio.Button
-              value="show_persion"
+              value="auxiliaryMaterial"
               onChange={(e) => {
                 this.turnTab(e);
               }}
@@ -791,7 +1090,7 @@ class CenterInfo extends Component {
               辅材
             </Radio.Button>
             <Radio.Button
-              value="show_contacts"
+              value="otherMaterial"
               onChange={(e) => {
                 this.turnTab(e);
               }}
@@ -802,10 +1101,20 @@ class CenterInfo extends Component {
         </div>
 
         <div className={styles.tableBox}>
-          <SearchFromSecond
-            onSearch={()=>{this.search()}}
-            onReset={()=>{this.reset()}}
+          <SearchFromTab0
+            dev={dev}
+            modalContent={modalContent}
+            returnElement={returnElement}
+            selectType={type}
+            onSearch={(p) => {
+              this.search(p);
+            }}
+            onReset={() => {
+              this.reset();
+            }}
+            wrappedComponentRef={(e) => this.SearchFromTab0 = e}
           />
+
           <Table
             columns={columns}
             body={list}

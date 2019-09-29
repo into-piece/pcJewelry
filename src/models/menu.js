@@ -29,7 +29,6 @@ function formatter(data, parentAuthority, parentName) {
   if (!data) {
     return undefined;
   }
-  console.log(data)
   return data
     .map(item => {
       if (!item.name || !item.path) {
@@ -37,7 +36,6 @@ function formatter(data, parentAuthority, parentName) {
       }
 
       let locale = 'menu';
-      console.log("parentName",parentName)
       if (parentName && parentName !== '/erp') {
         // parentName = parentName.replace(/\//g,"")
         locale = `${parentName}.${item.name}`;

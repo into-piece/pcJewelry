@@ -482,26 +482,24 @@ class LoadBefore extends React.Component {
       route: { routes, path, authority },
     } = this.props;
     // 判断是否登录操作
-    dispatch({
-      type: 'login/loginOk',
-    });
+    // dispatch({
+    //   type: 'login/loginOk',
+    // });
 
-    console.log("location.pathname",location.pathname)
     // 获取菜单列表 判断是否菜单树有这个pathname 没有跳转403页面   判断菜单树显示逻辑
     dispatch({
       type: 'menu/getMenuData',
-      payload: { routes, path, authority,pathname :(location.pathname==='/'?"/business/client":location.pathname)  },
+      payload: { routes, path, authority,pathname :(location.pathname==='/erp'?"/erp/business/client":location.pathname)  },
     });
   }
 
 
   render (){
     const  {props} = this;
-    const  {menuData} = props;
-    const loginOk = props.login.loginstatus;
-    return ((loginOk&&menuData.length>0)?<Media query="(max-width: 599px)">
+    return (true?<Media query="(max-width: 599px)">
+      {/* return (menuData.length>0?<Media query="(max-width: 599px)"> */}
       {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
-                                         </Media>:<div className={styles.loadingpage}><Spin size="large" /></div>);
+                 </Media>:<div className={styles.loadingpage}><Spin size="large" /></div>);
   }
 }
 export default connect(({ global, setting, menu: menuModel,login }) => ({
