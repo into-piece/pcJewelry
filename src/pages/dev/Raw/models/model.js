@@ -31,33 +31,29 @@ export default {
       current: 1,
       size: 10,
     },
-    searchParams:{},
 
     selectKey: 'material',
     colorSettingList: initData,
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 
-    materialList: initData,
-    accessoriesList:initData,
-
-
+    choosenTypesRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
     paginationTypes: {
       current: 1,
       size: 10,
     },
 
+
+    typesList:initData,
+
+    materialList: initData,
+    accessoriesList:initData,
+
+
   },
 
   effects: {
 
-    * setSearchParams({ payload,callback }, { put }){
-      yield put.resolve({
-        type: 'setSearchParams2',
-        payload,
-      });
-       if(callback)  callback();
-    },
     // table
     * getPagination({ payload,callback }, { put }) {
       yield put({
@@ -73,6 +69,13 @@ export default {
       });
       if(callback)callback();
 
+    },
+    * getChoosenTypeRowData({ payload,callback }, { put }) {
+      yield put({
+        type: 'getChoosenTypeRowData2',
+        payload,
+      });
+      if(callback)callback();
     },
     * getChoosenRowData({ payload,callback }, { put }) {
       yield put({
@@ -156,12 +159,6 @@ export default {
   },
 
   reducers: {
-    setSearchParams2(state,action){
-      return {
-        ...state,
-        searchParams:action.payload
-      }
-    },
     getData(state, action) {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -217,6 +214,12 @@ export default {
       return {
         ...state,
         choosenRowData: action.payload,
+      };
+    },
+    getChoosenTypeRowData2(state, action) {
+      return {
+        ...state,
+        choosenTypesRowData: action.payload,
       };
     },
     // 成色
