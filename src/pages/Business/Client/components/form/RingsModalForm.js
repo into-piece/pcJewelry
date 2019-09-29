@@ -24,16 +24,22 @@ class RingsModalForm extends Component {
       data: [],
       selectedRowKeys: [],
       selectedRows: [],
-
+      current: 1,
+      pageSize: 5,
     };
   }
 
   componentDidMount() {
     const params = {
-        current: 1,
-        size: 5,
-      };
+      current: 1,
+      size: 5,
+    };
+   this.getList(params);
+  }
+
+  getList=(params)=>{
     const _this = this;
+    _this.setState({listLoading:true})
     fetch(HttpFetch.listRingAround, {
       method: 'POST',
       headers: {
@@ -47,9 +53,9 @@ class RingsModalForm extends Component {
           if (body.records.length > 0) {
             _this.setState({
               dataBody: body,
-              data:body.records
+              data: body.records,
+              listLoading:false
             });
-
           }
         }
       }).catch(() => {
@@ -57,12 +63,13 @@ class RingsModalForm extends Component {
     });
   }
 
-  onSelectChange = (selectedRowKeys,selectedRows) => {
-    this.setState({ selectedRowKeys ,selectedRows});
+
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows });
   };
 
   getContactsContent = () => {
-    const { dataBody, selectedRowKeys,data } = this.state;
+    const { dataBody, selectedRowKeys,listLoading, data } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -80,9 +87,11 @@ class RingsModalForm extends Component {
 
         <Row>
           <Table
+            onChange={this.onChange.bind(this)}
             columns={ringsColumn}
             dataSource={data}
             rowSelection={rowSelection}
+            loading={listLoading}
             pagination={paginationProps}
           />
         </Row>
@@ -101,12 +110,30 @@ class RingsModalForm extends Component {
   handleCancel = () => {
     const { handleCancel } = this.props;
 
-    if(handleCancel)handleCancel();
+    if (handleCancel) handleCancel();
     return Promise.resolve();
   };
 
-  render() {
 
+  /**
+   * 翻页 或 排序触发回调
+   * handleTableChange 为列表请求函数
+   * 直接传参数触发更新
+   */
+  onChange = (pagination, filters, sorter) => {
+    console.log("pagination",pagination);
+    const { current, pageSize } = pagination
+    const { order, field } = sorter
+    const orderKey = order === "ascend" ? 'Asc' : order === 'descend' ? 'Desc' : ''
+
+    this.setState({
+      current, pageSize
+    },()=>{
+      this.getList({current,size:pageSize});
+    })
+  }
+
+  render() {
     const contactsModalFooter = {
       okText: '保存',
       onOk: this.handleContactsSubmit,
