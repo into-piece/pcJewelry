@@ -14,13 +14,6 @@ const empty = {
   wordbookContentZh: '---请选择---',
 };
 
-// import { connect } from 'dva';
-@connect(({ dict, loading }) => {
-  return {
-    body: dict.body,
-    loading: loading.effects['dict/fetchWorkBook'],
-  };
-})
 class Dict extends PureComponent {
   state = {
     dicts: [],
@@ -44,39 +37,11 @@ class Dict extends PureComponent {
 
   componentDidMount() {
     this.loadDict();
-    const { content , onChange} = this.props;
+    const { content, onChange } = this.props;
+    console.log(this.props)
     onChange(content);
     // const { dict } = this.props;
     // console.log('dict ', dict);
-  }
-
-  render() {
-    const { content, defaultValue ,style} = this.props;
-    const { value, isFirst } = this.state;
-
-    let showValue;
-    if (isFirst) showValue = content;
-    else {
-      showValue = value;
-    }
-
-    if (!showValue) showValue = defaultValue;
-
-    return (
-      <Select
-        placeholder={this.props.placeholder}
-        style={{ width: '100%' }}
-        defaultActiveFirstOption={false}
-        showArrow={false}
-        value={showValue}
-        filterOption={false}
-        onSearch={this.handleSearch}
-        onChange={this.handleChange}
-        notFoundContent={null}
-      >
-        {this.getDict()}
-      </Select>
-    );
   }
 
   getDict() {
@@ -131,15 +96,15 @@ class Dict extends PureComponent {
     fetch(HttpFetch.queryMstWordList, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const {body} = d;
+        const { body } = d;
 
         if (body.records)
           _this.setState({
@@ -148,10 +113,39 @@ headers: {
           });
         // console.log('result ', d);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         // message.error('加载图片失败！');
       });
   };
+
+  render() {
+    const { content, defaultValue, style } = this.props;
+    const { value, isFirst } = this.state;
+
+    let showValue;
+    if (isFirst) showValue = content;
+    else {
+      showValue = value;
+    }
+
+    if (!showValue) showValue = defaultValue;
+
+    return (
+      <Select
+        placeholder={this.props.placeholder}
+        style={{ width: '100%' }}
+        defaultActiveFirstOption={false}
+        showArrow={false}
+        value={showValue}
+        filterOption={false}
+        onSearch={this.handleSearch}
+        onChange={this.handleChange}
+        notFoundContent={null}
+      >
+        {this.getDict()}
+      </Select>
+    );
+  }
 }
 
 export default Dict;

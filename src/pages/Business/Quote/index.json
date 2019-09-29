@@ -8,7 +8,7 @@
       "value": "emergency",
       "text": "紧急",
       "type": 5,
-      "initValue": "1",
+      "initValue": 1,
       "noNeed": true
     },
     { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
@@ -52,7 +52,7 @@
       "text": "客户备料",
       "type": 5,
       "noNeed": true,
-      "initValue": "1"
+      "initValue": 1
     },
     {
       "key": "向客户采购用料",
@@ -60,7 +60,7 @@
       "text": "向客户备料",
       "type": 5,
       "noNeed": true,
-      "initValue": "1"
+      "initValue": 1
     },
     { "key": "说明", "value": "explains", "type": 8, "noNeed": true },
     { "key": "备注", "value": "remark", "type": 8, "noNeed": true }
@@ -98,7 +98,7 @@
     { "key": "石材重量", "value": "stonesWeight", "noNeed": true, "number": true },
     { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
     { "key": "石材价", "value": "stonePrice", "noNeed": true, "number": true },
-    { "key": "字印编码", "value": "markingId", "noNeed": true },
+    { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
     { "key": "字印价/件", "value": "markingPrice", "number": true },
     { "key": "包装单价/件", "value": "packPrice", "number": true, "noNeed": true },

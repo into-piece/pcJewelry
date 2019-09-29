@@ -9,7 +9,7 @@ import {
   Drawer,
 } from 'antd';
 import { connect } from 'dva';
-import {statusConvert} from '@/utils/convert';
+import { statusConvert } from '@/utils/convert';
 
 import business from '../../dev/business.less';
 import product from './Index.less';
@@ -36,8 +36,6 @@ const defaultPageSize = 10;
 
 
 class Index extends Component {
-
-
   deptColumns = [
     {
       title: () => {
@@ -82,8 +80,6 @@ class Index extends Component {
       key: 'zhName',
       width: 100,
     },
-
-
     {
       title: () => {
         return (
@@ -185,13 +181,13 @@ class Index extends Component {
       selectProductData={selectProductData}
       key="556"
       isloading={(isLoad) => {
-                            this.setState({
-                              isLoad,
-                            });
-                          }}
+        this.setState({
+          isLoad,
+        });
+      }}
       refarshList={() => {
-                            this.loadProduct();
-                          }}
+        this.loadProduct();
+      }}
     />;
 
   };
@@ -228,11 +224,11 @@ class Index extends Component {
       }
 
     } else if (sort !== 'normal') {
-        newContacts.push({
-          field,
-          sort,
-        });
-      }
+      newContacts.push({
+        field,
+        sort,
+      });
+    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
@@ -252,13 +248,13 @@ class Index extends Component {
       this.state.productSorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += `,${  v.field}`;
+            orderByAsc += `,${v.field}`;
           } else {
             orderByAsc = v.field;
           }
         } else if (v.sort === 'descend') {
           if (orderByDesc)
-            orderByDesc += `,${  v.field}`;
+            orderByDesc += `,${v.field}`;
           else
             orderByDesc = v.field;
         }
@@ -281,12 +277,12 @@ class Index extends Component {
 
   handleProductSearch = (productParams) => {
 
-      // data.typeId = showItem.id;
-      this.state.searchProductParams = { ...productParams };
+    // data.typeId = showItem.id;
+    this.state.searchProductParams = { ...productParams };
 
-      this.state.current = 1;
+    this.state.current = 1;
 
-      this.loadProduct();
+    this.loadProduct();
 
   };
 
@@ -328,7 +324,7 @@ class Index extends Component {
 
 
   render() {
-    const { leftlg, rightlg, drawVisible,   isLoad } = this.state;
+    const { leftlg, rightlg, drawVisible, isLoad } = this.state;
 
     const {
       body = {},
@@ -339,18 +335,18 @@ class Index extends Component {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
 
-        this.refs.deptTable.updateSelectDatas(body);
-        this.state.isLoadList = false;
-      }
+      this.refs.deptTable.updateSelectDatas(body);
+      this.state.isLoadList = false;
+    }
 
 
-   if(body.records){
-     const newdata =body.records.map(v => {
-       const s = v.status;
-         v.statusVar = statusConvert[s];
-       return v;
-     });
-   }
+    if (body.records) {
+      const newdata = body.records.map(v => {
+        const s = v.status;
+        v.statusVar = statusConvert[s];
+        return v;
+      });
+    }
 
     return (
       <div className={business.page}>
@@ -375,7 +371,7 @@ class Index extends Component {
                   onCustomerReset={this.handleProductFormReset}
                 />
                 <JewelryTable
-                  scroll={{x:1200}}
+                  scroll={{ x: 1200 }}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
                     this.state.showItem = item ? { ...item } : false;
@@ -393,8 +389,6 @@ class Index extends Component {
                   body={body}
                   pageChange={this.pageProductChange}
                 />
-
-
               </Card>
             </Col>
             <Col lg={leftlg} md={24}>
@@ -405,8 +399,6 @@ class Index extends Component {
         <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
           {this.getDetailInfow()}
         </Drawer>
-
-
       </div>
 
     );

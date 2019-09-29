@@ -214,12 +214,11 @@ customerColumns = customerColumns.map(item => ({ ...item, sorter: true }))
 
 // 报价主页的筛选参数
 const searchParams = [
-  { key: '客户编号', value: 'customerId' },
+  { key: '客户编号', value: 'customerNo' },
   { key: '报价单号', value: 'quoteNumber' },
   { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
   { key: '终客编号', value: 'endId' },
-  { key: '产品说明', value: 'explains' },
 ]
 
 // 报价主页的筛选参数
@@ -273,8 +272,7 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    this.unLockEdit("c1edf2f0-47e5-468a-a0a3-0cb26b1b2ba6")
-
+    // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown'
@@ -290,12 +288,13 @@ class Info extends Component {
       type: 'quote/getEndCustomerListDropDown'
     })
 
+    // 字印编码
+    dispatch({
+      type: 'quote/getMarkinglistDropDown'
+    })
+
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
-  }
-
-  componentWillUnmount() {
-    this.unLockEdit()
   }
 
   // 获取对应key=》页面进行数据请求
@@ -322,18 +321,16 @@ class Info extends Component {
   openAddModal = () => {
     const { rightMenu, dispatch, form } = this.props
     const isHead = rightMenu === 1
+
     if (isHead) {
       dispatch({
         type: 'quote/getcurrencydropdown'
-      })
-      dispatch({
-        type: 'quote/getMarkinglistDropDown'
       })
     }
 
     getMainMaterialPrice().then(res => {
       const { head, body } = res
-      if (head.rtnCode === '000000') {
+      if (head.rtnCode === '000000' && body.records.length > 0) {
         const { silver } = body.records[0]
         form.setFieldsValue({
           quotePrice: silver
@@ -359,16 +356,18 @@ class Info extends Component {
 
   // 列表对应操作button回调
   btnFn = async (modalType) => {
-    const { selectKey, dispatch, choosenRowData, form } = this.props
+    const { selectKey, dispatch, choosenRowData, form, rightMenu } = this.props
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
-        const { markingId, markingEnName } = choosenRowData
-        form.setFieldsValue({
-          markingId,
-          markingEnName
-        });
+        if (rightMenu === 2) {
+          const { markingId, markingEnName } = choosenRowData
+          form.setFieldsValue({
+            markingId,
+            markingEnName
+          });
+        }
         if (modalType === 'edit') {
           const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
             if (res.head.rtnCode !== '000000') return false
@@ -414,7 +413,7 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form } = this.props
+    const { quote, form, rightMenu } = this.props
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -424,14 +423,6 @@ class Info extends Component {
       form.setFieldsValue({
         markingEnName: enName,
       });
-      const obj2 = quote.customerDropDownList.find(item => {
-        return item.value === value
-      })
-      const { markingEnName, markingPrice } = obj2
-      form.setFieldsValue({
-        markingEnName,
-        markingPrice
-      });
     }
 
     // 自动带出
@@ -439,7 +430,6 @@ class Info extends Component {
       const { quote, form } = this.props
       const obj = quote.customerDropDownList.find(item => item.value === value)
       const { shotName, currencyCode } = obj
-      debugger
       form.setFieldsValue({
         customerShotName: shotName,
         currency: currencyCode
@@ -457,11 +447,14 @@ class Info extends Component {
 
   //  弹窗表单 check回调
   handleCheckChange = (e, value) => {
-    console.log(e.target.checked, '==============handleCheckChange')
+    const { form } = this.props
+    form.setFieldsValue({
+      value: e.target.checked ? 1 : 0,
+    });
     if (value === 'isWeighStones') {
       const isWeighStones = e.target.checked === 1
       if (isWeighStones) {
-        this.props.form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
+        form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
       }
     }
   }
@@ -477,7 +470,6 @@ class Info extends Component {
     console.log(date, dateString)
     const quoteDateFrom = moment(date[1]).valueOf()
     const quoteDateTo = moment(date[2]).valueOf()
-    debugger
     this.setState({
       quoteDateFrom,
       quoteDateTo
@@ -605,11 +597,19 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
+
+        params = {
+          ...params,
+          ...values,
+          emergency: values.emergency ? 1 : 0,
+          customerPreparation: values.customerPreparation ? 1 : 0,
+          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0
+        }
         // this.setState({
         //   [selectKey]
         // })
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        serviceObj[`add${str}`]({ ...params, ...values }).then(res => {
+        serviceObj[`add${str}`]({ ...params }).then(res => {
           const { rtnCode, rtnMsg } = res.head
           if (rtnCode === '000000') {
             notification.success({
@@ -649,6 +649,9 @@ class Info extends Component {
         params = {
           ...params,
           ...values,
+          emergency: values.emergency ? 1 : 0,
+          customerPreparation: values.customerPreparation ? 1 : 0,
+          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0
         }
         serviceObj[`add${str}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head
@@ -672,7 +675,6 @@ class Info extends Component {
     const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head
-      debugger
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -688,7 +690,6 @@ class Info extends Component {
     const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approval' : 'cancelApproval'
     console.log(serviceObj, serviceObj[serviceType], selectedRowKeys)
-    debugger
     serviceObj[serviceType](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head
       if (rtnCode === '000000') {
@@ -749,10 +750,10 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props
+    const { selectedRowKeys, rightMenu, selectedDetailRowKeys } = this.props
     if (tag === 'plus') return false
-    if (tag === 'lock') return selectedRowKeys.length === 0 || this.returnLockType().disabled
-    return selectedRowKeys.length === 0
+    if (tag === 'lock') return rightMenu === 1 && selectedRowKeys.length === 0 || rightMenu === 2 && selectedDetailRowKeys.length === 0 || this.returnLockType().disabled
+    return rightMenu === 1 && selectedRowKeys.length === 0 || rightMenu === 2 && selectedDetailRowKeys.length === 0
   }
 
   // 弹窗单选框 回调
@@ -790,7 +791,6 @@ class Info extends Component {
   // 选中某行表头
   changeChoosenRow = (rowData) => {
     const { dispatch } = this.props;
-    debugger
     dispatch({
       type: `quote/getProductChoosenRowData`,
       payload: rowData,
@@ -898,7 +898,6 @@ class Info extends Component {
   onSearch = (v) => {
     const { timeline } = this.props
     const { quoteDateFrom, quoteDateTo } = this.state
-    debugger
     if (v.quoteDate) {
       v.quoteDateFrom = quoteDateFrom
       v.quoteDateTo = quoteDateTo
@@ -1055,7 +1054,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 const rowArr = [
   { key: '报价单号', value: 'quoteNumber' },
   { key: '报价日期', value: 'quoteDate' },
-  { key: '客户', value: 'customerId' },
+  { key: '客户', value: 'customerNo' },
   { key: '类别', value: 'type', belong: 3, "list": "wordbookdropdown" },
   { key: '终客', value: 'endNo' },
   { key: '中文名', value: 'zhName' },
