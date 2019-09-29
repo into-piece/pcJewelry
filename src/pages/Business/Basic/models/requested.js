@@ -32,7 +32,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *updateRequested({ payload, callback }, { call, put }) {
@@ -41,7 +41,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *deleteRequested({ payload, callback }, { call, put }) {

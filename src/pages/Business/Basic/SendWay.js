@@ -114,6 +114,11 @@ class SendWay extends PureComponent {
           payload: {
             ...fieldsValue,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
 
         this.setState({
@@ -139,6 +144,11 @@ class SendWay extends PureComponent {
           payload: {
             ...data,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
       }
       this.setState({
@@ -154,7 +164,6 @@ class SendWay extends PureComponent {
     });
 
     this.setState({
-      visible: false,
       done: false,
     });
   };
@@ -306,7 +315,8 @@ class SendWay extends PureComponent {
                   size="middle"
                   columns={clientContentColumns}
                 />
-                <Modal maskClosable={false}
+                <Modal
+                  maskClosable={false}
                   title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
                   width={640}
                   className={styles.standardListForm}

@@ -28,7 +28,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback &&response.head.rtnCode==='000000') callback();
     },
 
     *updateCurrency({ payload, callback }, { call, put }) {
@@ -37,7 +37,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *deleteCurrency({ payload, callback }, { call, put }) {

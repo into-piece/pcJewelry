@@ -430,7 +430,8 @@ class TerminalClient extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -579,7 +580,6 @@ class TerminalClient extends PureComponent {
       payload: { customerId: this.state.customerId },
     });
     this.setState({
-      visible: false,
       selectedItem: '',
       // fristLoad: true,
     });
@@ -598,13 +598,17 @@ class TerminalClient extends PureComponent {
       //   params.country = fieldsValue.country.name;
       params.customerId = this.state.customerId;
       if (isAdd) {
-        console.log(params);
         // if (isAdd) {
         dispatch({
           type: 'terminal/addTerminal',
           payload: {
             ...params,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
       } else {
         params.id = selectedItem.id;
@@ -615,6 +619,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
       }
     });

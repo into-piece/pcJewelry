@@ -22,6 +22,8 @@ import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
 import DescriptionList from '@/components/DescriptionList';
 import { statusConvert } from '@/utils/convert';
+import { getCurrentUser } from '@/utils/authority';
+import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 
 import TerminalClient from './TerminalClient';
 import ClientInfo from './ClientInfo';
@@ -31,19 +33,15 @@ import Product from './Product';
 import History from './History';
 import listStyles from './TableList.less';
 import baseStyles from './base.less';
-import business from "../business.less";
-import clientInfoStyle from "./ClientInfo.less";
+import business from '../business.less';
+import clientInfoStyle from './ClientInfo.less';
 import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
-import { pingYincompare, encompare, formDatecompare } from '@/utils/utils';
 import TableSortView from '../../components/TableSortView';
 
 const FormItem = Form.Item;
-const { Option } = Select;
-const { TabPane } = Tabs;
-const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 const { Description } = DescriptionList;
@@ -660,10 +658,10 @@ class ClientView extends PureComponent {
     if (customerListloading) {
       this.state.customerLoad = true;
     } else if (this.state.customerLoad) {
-        this.state.customerLoad = false;
-        const { rowCustomerData } = this.state;
-        // console.log('update list row ', rowCustomerData);
-      }
+      this.state.customerLoad = false;
+      const { rowCustomerData } = this.state;
+      // console.log('update list row ', rowCustomerData);
+    }
 
     if (customerBody.data) {
       customerBody.data.map(value => {
@@ -682,9 +680,9 @@ class ClientView extends PureComponent {
     if (isCurstomerUpdate) {
       this.state.customerLoading = true;
     } else if (this.state.customerLoading) {
-        // this.startShowTab();
-        this.state.customerLoading = false;
-      }
+      // this.startShowTab();
+      this.state.customerLoading = false;
+    }
 
     if (this.state.isDelete) {
       this.setState({});
@@ -698,22 +696,23 @@ class ClientView extends PureComponent {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
-        // console.log('code '+body.rtnCode)
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-        this.handleDone();
-
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
-        }
+      // console.log('code '+body.rtnCode)
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
       }
+
+      this.handleDone();
+
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        this.state.showItem = { ...current };
+      }
+    }
 
     const { contactsItem } = this.state;
 
@@ -839,7 +838,13 @@ class ClientView extends PureComponent {
                     icon="delete"
                     type="danger"
                     style={{ marginBottom: 10, display: selectType === 'contacts' ? '' : 'none' }}
-                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.deleteContactsList();}});}}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？', onOk: () => {
+                          this.deleteContactsList();
+                        },
+                      });
+                    }}
                     disabled={!contactsItem || contactsItem === ''}
                   >
                     删除
@@ -851,7 +856,7 @@ class ClientView extends PureComponent {
                     loading={isCurstomerUpdate || customerListloading}
                     dataSource={fristLoad ? [] : customerBody.data}
                     size="middle"
-                    scroll={{x:1200}}
+                    scroll={{ x: 1200 }}
                     rowKey={record => record.id}
                     rowSelection={rowCustomerSelection}
                     onRow={record => {
@@ -887,7 +892,7 @@ class ClientView extends PureComponent {
                         contactsData: rows,
                       });
                     }}
-                    scroll={{x:1200}}
+                    scroll={{ x: 1200 }}
                     loading={contactsLoading}
                     body={contactsTableBody}
                     columns={this.contactsColumn}
@@ -906,7 +911,8 @@ class ClientView extends PureComponent {
           {this.getDetailInfo()}
         </Drawer>
 
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -916,7 +922,8 @@ class ClientView extends PureComponent {
           {this.getModalContent()}
         </Modal>
 
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -1026,11 +1033,11 @@ class ClientView extends PureComponent {
         newSort.splice(newSort.findIndex(v => v.field === field), 1);
       }
     } else if (sort !== 'normal') {
-        newSort.push({
-          field,
-          sort,
-        });
-      }
+      newSort.push({
+        field,
+        sort,
+      });
+    }
 
     return newSort;
   };
@@ -1105,7 +1112,13 @@ class ClientView extends PureComponent {
                 icon="delete"
                 className={clientStyle.buttomControl}
                 size="small"
-                onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.handleDeleteClients();}});}}
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定删除吗？', onOk: () => {
+                      this.handleDeleteClients();
+                    },
+                  });
+                }}
                 disabled={isEdit}
               >
                 删除
@@ -1128,7 +1141,13 @@ class ClientView extends PureComponent {
                   type="danger"
                   icon="unlock"
                   disabled={isEdit}
-                  onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.handleUnFreezeClients();}});}}
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定取消审批吗？', onOk: () => {
+                        this.handleUnFreezeClients();
+                      },
+                    });
+                  }}
                 >
                   取消审批
                 </Button>
@@ -1139,7 +1158,13 @@ class ClientView extends PureComponent {
                   type="primary"
                   icon="lock"
                   disabled={isEdit}
-                  onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.handleFreezeClients();}});}}
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定审批吗？', onOk: () => {
+                        this.handleFreezeClients();
+                      },
+                    });
+                  }}
                 >
                   审批
                 </Button>
@@ -1235,9 +1260,9 @@ class ClientView extends PureComponent {
 
   clickRowItem = record => {
     const { selectedRowKeys, rowSelectedData } = this.state;
-    let {rowData} = this.state;
+    let { rowData } = this.state;
     const selects = selectedRowKeys || [];
-    const {id} = record;
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -1290,10 +1315,10 @@ class ClientView extends PureComponent {
 
   clickCustomerRowItem = record => {
     const { customerSelectedRowKeys, rowCustomerSelectedData } = this.state;
-    let {rowCustomerData} = this.state;
+    let { rowCustomerData } = this.state;
     // const selects = selectedRowKeys ? selectedRowKeys : [];
     const selects = customerSelectedRowKeys || [];
-    const {id} = record;
+    const { id } = record;
 
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
@@ -1301,7 +1326,7 @@ class ClientView extends PureComponent {
       if (rowCustomerSelectedData.includes(record)) {
         rowCustomerSelectedData.splice(
           rowCustomerSelectedData.findIndex(item => item.id === id),
-          1
+          1,
         );
       }
     } else {
@@ -1419,6 +1444,9 @@ class ClientView extends PureComponent {
     });
   };
 
+
+
+  // 联系人添加
   handleContactsSubmit = contacts => {
     // if (err) console.log(err);
 
@@ -1447,6 +1475,11 @@ class ClientView extends PureComponent {
           payload: {
             ...fieldsValue,
           },
+          callback: () => {
+            this.setState({
+              visible: false,
+            });
+          },
         });
 
         this.setState({
@@ -1473,12 +1506,15 @@ class ClientView extends PureComponent {
           payload: {
             ...data,
           },
+          callback: () => {
+            this.setState({
+              visible: false,
+            });
+          },
         });
       }
     });
-    this.setState({
-      visible: false,
-    });
+
   };
 
   handleDone = () => {
@@ -1492,7 +1528,6 @@ class ClientView extends PureComponent {
       },
     });
     this.setState({
-      visible: false,
       fristLoad: true,
     });
   };
@@ -2021,7 +2056,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const {body} = d;
+        const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             _this.setState({
@@ -2102,9 +2137,9 @@ class ClientView extends PureComponent {
       });
       return;
     }
-      _this.setState({
-        contactsLoading: true,
-      });
+    _this.setState({
+      contactsLoading: true,
+    });
 
 
     const params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
@@ -2143,7 +2178,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const {body} = d;
+        const { body } = d;
         if (body && body.records) {
           const contactsRes = body.records.map(value => {
             const s = value.isPrimaryContact;
@@ -2163,10 +2198,10 @@ class ClientView extends PureComponent {
             });
             return;
           }
-            _this.setState({
-              contactsTableBody: {},
-              contactsLoading: false,
-            });
+          _this.setState({
+            contactsTableBody: {},
+            contactsLoading: false,
+          });
 
         }
         _this.setState({
@@ -2211,11 +2246,11 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
+        const { head } = d;
 
         if (!head) message.error('保存失败！');
         else if (head.rtnCode === '000000') message.success(head.rtnMsg);
-          else message.success(head.rtnMsg);
+        else message.success(head.rtnMsg);
         _this.setState({
           maintainsLoading: false,
         });
@@ -2240,9 +2275,9 @@ class ClientView extends PureComponent {
       });
       return;
     }
-      this.setState({
-        contactsLoading: true,
-      });
+    this.setState({
+      contactsLoading: true,
+    });
 
 
     const params = item;
@@ -2266,7 +2301,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
+        const { head } = d;
 
         if (!head) message.error('保存失败！');
         else {
@@ -2314,7 +2349,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
+        const { head } = d;
 
         if (!head) message.error('删除失败！');
         else {

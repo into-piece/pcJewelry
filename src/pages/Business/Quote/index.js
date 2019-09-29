@@ -272,6 +272,7 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
+    // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown'
@@ -285,6 +286,11 @@ class Info extends Component {
     // 终客编号下拉
     dispatch({
       type: 'quote/getEndCustomerListDropDown'
+    })
+
+    // 字印编码
+    dispatch({
+      type: 'quote/getMarkinglistDropDown'
     })
 
     // 获取初始表单数据
@@ -315,18 +321,16 @@ class Info extends Component {
   openAddModal = () => {
     const { rightMenu, dispatch, form } = this.props
     const isHead = rightMenu === 1
+
     if (isHead) {
       dispatch({
         type: 'quote/getcurrencydropdown'
-      })
-      dispatch({
-        type: 'quote/getMarkinglistDropDown'
       })
     }
 
     getMainMaterialPrice().then(res => {
       const { head, body } = res
-      if (head.rtnCode === '000000') {
+      if (head.rtnCode === '000000' && body.records.length > 0) {
         const { silver } = body.records[0]
         form.setFieldsValue({
           quotePrice: silver
@@ -352,16 +356,18 @@ class Info extends Component {
 
   // 列表对应操作button回调
   btnFn = async (modalType) => {
-    const { selectKey, dispatch, choosenRowData, form } = this.props
+    const { selectKey, dispatch, choosenRowData, form, rightMenu } = this.props
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
-        const { markingId, markingEnName } = choosenRowData
-        form.setFieldsValue({
-          markingId,
-          markingEnName
-        });
+        if (rightMenu === 2) {
+          const { markingId, markingEnName } = choosenRowData
+          form.setFieldsValue({
+            markingId,
+            markingEnName
+          });
+        }
         if (modalType === 'edit') {
           const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
             if (res.head.rtnCode !== '000000') return false
@@ -407,7 +413,7 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form } = this.props
+    const { quote, form, rightMenu } = this.props
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -416,14 +422,6 @@ class Info extends Component {
       const { enName } = obj
       form.setFieldsValue({
         markingEnName: enName,
-      });
-      const obj2 = quote.customerDropDownList.find(item => {
-        return item.value === value
-      })
-      const { markingEnName, markingPrice } = obj2
-      form.setFieldsValue({
-        markingEnName,
-        markingPrice
       });
     }
 
@@ -752,10 +750,10 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props
+    const { selectedRowKeys, rightMenu, selectedDetailRowKeys } = this.props
     if (tag === 'plus') return false
-    if (tag === 'lock') return selectedRowKeys.length === 0 || this.returnLockType().disabled
-    return selectedRowKeys.length === 0
+    if (tag === 'lock') return rightMenu === 1 && selectedRowKeys.length === 0 || rightMenu === 2 && selectedDetailRowKeys.length === 0 || this.returnLockType().disabled
+    return rightMenu === 1 && selectedRowKeys.length === 0 || rightMenu === 2 && selectedDetailRowKeys.length === 0
   }
 
   // 弹窗单选框 回调
@@ -955,7 +953,8 @@ class Info extends Component {
           </Modal>
         }
 
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           title='选择产品'
           width={1000}
           className={styles.standardListForm}

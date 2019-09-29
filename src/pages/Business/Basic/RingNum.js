@@ -160,6 +160,11 @@ class RingNum extends PureComponent {
           payload: {
             ...fieldsValue,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
 
         this.setState({
@@ -184,6 +189,11 @@ class RingNum extends PureComponent {
           type: 'ringnum/updateRingNum',
           payload: {
             ...data,
+            callback:()=>{
+              this.setState({
+                visible: false,
+              });
+            }
           },
         });
       }
@@ -254,7 +264,6 @@ class RingNum extends PureComponent {
       });
 
       this.setState({
-        visible: false,
         done: false,
         sonSelectIndexAt: -1,
         showNumberItem: false,
@@ -271,7 +280,6 @@ class RingNum extends PureComponent {
         },
       });
       this.setState({
-        visible: false,
         done: false,
         fristLoad: false,
       });
@@ -580,7 +588,8 @@ class RingNum extends PureComponent {
                   columns={subringNumContentColumns}
                 />
 
-                <Modal maskClosable={false}
+                <Modal
+                  maskClosable={false}
                   // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
                   width={640}
                   className={styles.standardListForm}

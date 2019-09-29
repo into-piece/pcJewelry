@@ -414,7 +414,8 @@ class SpecimenDetaill extends Component {
                 </Button>
               </div>
             </div>
-            <Modal maskClosable={false}
+            <Modal
+              maskClosable={false}
               width={1200}
               className={styles.standardListForm}
               destroyOnClose
@@ -998,6 +999,11 @@ class SpecimenDetaill extends Component {
           payload: {
             ...params,
           },
+          callback:()=>{
+            this.setState({
+              visible:false
+            })
+          }
         });
         // todo
 
@@ -1013,11 +1019,15 @@ class SpecimenDetaill extends Component {
           payload: {
             ...params,
           },
+          callback:()=>{
+            this.setState({
+              visible:false
+            })
+          }
         });
       }
 
       this.setState({
-        visible: false,
         productParams: params,
       });
     });

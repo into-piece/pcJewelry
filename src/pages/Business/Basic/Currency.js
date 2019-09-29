@@ -116,6 +116,11 @@ class Currency extends PureComponent {
           payload: {
             ...fieldsValue,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
 
         this.setState({
@@ -144,6 +149,11 @@ class Currency extends PureComponent {
           payload: {
             ...data,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
       }
       this.setState({
@@ -159,7 +169,6 @@ class Currency extends PureComponent {
     });
 
     this.setState({
-      visible: false,
       done: false,
     });
   };
