@@ -478,7 +478,7 @@ class ClientInfo extends PureComponent {
                   }}
                                                      >
                   审批
-                                                                 </Button>
+                                                     </Button>
               }
 
             </div>
@@ -551,6 +551,8 @@ class ClientInfo extends PureComponent {
 
     if (info.ckeys) {
       const keys = info.ckeys;
+
+      console.log("keysdelete",keys)
       dispatch({
         type: 'customer/deleteCustomer',
         payload: { list: info.ckeys },

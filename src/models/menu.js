@@ -29,6 +29,7 @@ function formatter(data, parentAuthority, parentName) {
   if (!data) {
     return undefined;
   }
+  console.log(data)
   return data
     .map(item => {
       if (!item.name || !item.path) {
@@ -36,7 +37,9 @@ function formatter(data, parentAuthority, parentName) {
       }
 
       let locale = 'menu';
-      if (parentName && parentName !== '/') {
+      console.log("parentName",parentName)
+      if (parentName && parentName !== '/erp') {
+        // parentName = parentName.replace(/\//g,"")
         locale = `${parentName}.${item.name}`;
       } else {
         locale = `menu.${item.name}`;
@@ -165,7 +168,6 @@ export default {
       const originalMenuData = memoizeOneFormatter(routes, authority, path);
       let menuData = [];
       const allMenuData = filterMenuData(originalMenuData);
-
 
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
 

@@ -1724,6 +1724,7 @@ class ClientView extends PureComponent {
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log(111111,selectedRowKeys,selectedRows)
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
@@ -1758,13 +1759,15 @@ class ClientView extends PureComponent {
 
   // merchange
   selectCustomerChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectCustomerChange');
+    console.log('selectCustomerChange',selectedRowKeys, selectedRows);
 
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
       const d = record[0];
       const selectCustomerItem = { ...d };
+      console.log("selectedRows",selectedRows)
+      console.log("selectedRowKeys",selectedRowKeys)
       this.setState({
         selectCustomerItem,
         rowCustomerData: selectedRows,
@@ -1772,10 +1775,13 @@ class ClientView extends PureComponent {
         contactsTableBody: [],
         contactsItem: '',
         contactsPage: 1,
+      },()=>{
+        // this.startClient();
+        // 更新右视图
+        this.startShowTab();
       });
-      this.state.selectCustomerItem = selectCustomerItem;
 
-      this.startClient();
+
     } else {
       this.state.selectCustomerItem = '';
       this.setState({
@@ -1790,7 +1796,6 @@ class ClientView extends PureComponent {
       });
       // this.clearClient();
     }
-    this.startShowTab();
   };
 
   loadCustomerList = typeId => {
@@ -1904,7 +1909,8 @@ class ClientView extends PureComponent {
     params.ref = this.refreshCustomerList;
     params.content = selectCustomerItem !== '' ? { ...selectCustomerItem } : '';
     params.ckeys = [].concat(customerSelectedRowKeys);
-    // console.log('keys ', customerSelectedRowKeys, selectCustomerItem);
+    console.log('keyscustomerSelectedRowKeys', customerSelectedRowKeys);
+    console.log('keysselectCustomerItem',  selectCustomerItem);
     // router.replace({ pathname: '/business/client/client', params: params });
     this.setState({
       Component: <ClientInfo params={params} />,
