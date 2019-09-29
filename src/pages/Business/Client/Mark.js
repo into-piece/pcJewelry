@@ -275,7 +275,8 @@ class Mark extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -474,7 +475,6 @@ class Mark extends PureComponent {
       payload: { customerId: this.state.customerId },
     });
     this.setState({
-      visible: false,
       selectedItem: '',
       // fristLoad: true,
     });
@@ -510,6 +510,11 @@ class Mark extends PureComponent {
         payload: {
           ...params,
         },
+        callback:()=>{
+          this.setState({
+            visible: false,
+          });
+        }
       });
     });
   };

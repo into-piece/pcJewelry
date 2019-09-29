@@ -394,7 +394,8 @@ class IndexDetail extends Component {
 
 
             </div>
-            <Modal maskClosable={false}
+            <Modal
+              maskClosable={false}
               width={1200}
               className={styles.standardListForm}
               destroyOnClose

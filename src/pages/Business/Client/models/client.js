@@ -33,7 +33,9 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback && response.head.rtnCode ==='000000'){
+        callback();
+      }
     },
 
     *updateClient({ payload, callback }, { call, put }) {
@@ -42,7 +44,9 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback && response.head.rtnCode ==='000000'){
+        callback();
+      }
     },
 
     *deleteClient({ payload, callback }, { call, put }) {

@@ -18,7 +18,7 @@ export default {
   },
 
   effects: {
-    *fetchListMark({ payload, callback }, { call, put }) {
+    * fetchListMark({ payload, callback }, { call, put }) {
       const response = yield call(querylistMark, payload);
       yield put({
         type: 'list',
@@ -27,25 +27,25 @@ export default {
       if (callback) callback();
     },
 
-    *addMark({ payload, callback }, { call, put }) {
+    * addMark({ payload, callback }, { call, put }) {
       const response = yield call(saveTheMark, payload);
       yield put({
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode=="000000") callback();
     },
 
-    *updateMark({ payload, callback }, { call, put }) {
+    * updateMark({ payload, callback }, { call, put }) {
       const response = yield call(updateTheMark, payload);
       yield put({
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
-    *deleteMark({ payload, callback }, { call, put }) {
+    * deleteMark({ payload, callback }, { call, put }) {
       const response = yield call(deleteTheMark, payload);
       yield put({
         type: 'save',
@@ -54,7 +54,7 @@ export default {
       if (callback) callback();
     },
 
-    *freezeMark({ payload, callback }, { call, put }) {
+    * freezeMark({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheMark, payload);
       yield put({
         type: 'save',
@@ -63,7 +63,7 @@ export default {
       if (callback) callback();
     },
 
-    *unfreezeMark({ payload, callback }, { call, put }) {
+    * unfreezeMark({ payload, callback }, { call, put }) {
       const response = yield call(unfreezeTheMark, payload);
       yield put({
         type: 'save',

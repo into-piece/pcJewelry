@@ -250,7 +250,8 @@ class PackageInfo extends PureComponent {
             </div>
           </div>
         </Card>
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           width={640}
           className={styles.standardListForm}
           destroyOnClose
@@ -663,7 +664,6 @@ class PackageInfo extends PureComponent {
       payload: { customerId: this.state.customerId },
     });
     this.setState({
-      visible: false,
       selectedItem: '',
       // fristLoad: true,
     });
@@ -691,7 +691,6 @@ class PackageInfo extends PureComponent {
       params.imgStr = urls;
       params.fileName = names;
       params.pack = pack;
-      console.log('package', params);
       if (!isAdd) {
         params.pack.id = selectedItem.id;
         params.pack.packNo = selectedItem.packNo;
@@ -702,11 +701,14 @@ class PackageInfo extends PureComponent {
         payload: {
           ...params,
         },
+        callback:()=>{
+          this.setState({
+            visible:false
+          })
+        }
       });
 
-      // this.setState({
-      //   visible: false,
-      // });
+
     });
   };
 }

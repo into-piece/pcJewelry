@@ -33,7 +33,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode=="000000") callback();
     },
 
     *updateTerminal({ payload, callback }, { call, put }) {
@@ -42,7 +42,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode=="000000") callback();
     },
 
     *deleteTerminal({ payload, callback }, { call, put }) {

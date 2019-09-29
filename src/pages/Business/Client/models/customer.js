@@ -33,7 +33,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode ==='000000') callback();
     },
 
     *updateCustomer({ payload, callback }, { call, put }) {
@@ -42,7 +42,9 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback && response.head.rtnCode ==='000000'){
+        callback();
+      }
     },
 
     *deleteCustomer({ payload, callback }, { call, put }) {
@@ -52,6 +54,7 @@ export default {
         payload: response,
       });
       if (callback) callback();
+
     },
 
     *freezeCustomer({ payload, callback }, { call, put }) {
