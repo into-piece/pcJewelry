@@ -9,8 +9,6 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import {
   Menu,
-  Icon,
-  Upload,
   Row,
   Col,
   Card,
@@ -34,7 +32,8 @@ import LockTag from '@/components/LockTag';
 import { manuArr, modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
-
+import SearchFrom from './components/SearchFrom';
+import SearchFromSecond from './components/SearchFromSecond';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -70,7 +69,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' ,type:'danger'},
+  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -185,6 +184,8 @@ const columnsArr = {
     },
   ],
 };
+columnsArr.material = columnsArr.material.map(item => ({ ...item, sorter: true }));
+columnsArr.accessories = columnsArr.accessories.map(item => ({ ...item, sorter: true }));
 
 
 @Form.create()
@@ -193,6 +194,7 @@ const columnsArr = {
     dev: devRaw,
     list: devRaw.list,
     pagination: devRaw.pagination,
+    searchParams: devRaw.searchParams,
     selectKey: devRaw.selectKey,
     choosenRowData: devRaw.choosenRowData,
     colorSetList: devRaw.colorSetList,
@@ -221,57 +223,14 @@ class Info extends Component {
     this.getList();
   }
 
-  // 获取对应menu
-  getmenu = () => {
-    return menuMap.map(({ key, value }) => (
-      <Item key={key} style={{ textAlign: 'vertical-center' }}>
-        <span style={{ display: 'flex', alignItems: 'center' }}>
-          <Icon style={{ width: 25, height: 25 }} component={this.getMenuIcon(key)} />
-          {value}
-        </span>
-      </Item>
-    ));
-  };
-
-  // 根据当前页面的key 返回对应的icon
-  getMenuIcon = key => {
-    // console.log(SvgUtil);
-    return SvgUtil[key];
-  };
-
-  // 点击menu 更换子页面回调 请求list数据
-  handleSelectKey = ({ key }) => {
-    const { dispatch, pagination } = this.props;
-    dispatch({
-      type: 'devRaw/getSelectKey',
-      payload: key,
-    });
-    this.getList(key);
-
-    // 还要清空所选中项
-    dispatch({
-      type: 'devRaw/changeSelectedRowKeys',
-      payload: [],
-    });
-
-    dispatch({
-      type: 'devRaw/getChoosenRowData',
-      payload: { id: '', zhName: '', enName: '', unitCode: '' },
-    });
-
-  };
 
   // 获取对应key=》页面进行数据请求
-  getList = (key = this.props.selectKey) => {
-    const { dispatch, pagination } = this.props;
-    const obj = {};
-    manuArr.forEach(item => {
-      obj[item] = `get${item}List`;
-    });
+  getList = (params) => {
+    const { dispatch, pagination, selectKey, searchParams } = this.props;
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: pagination, type: key },
+      payload: { params: { ...pagination, ...params, ...searchParams }, type: selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -414,8 +373,8 @@ class Info extends Component {
               key="uimg"
               maxcount={10}
               fileListFun={(list) => {
-              this.setState({ filelist: list });
-            }}
+                this.setState({ filelist: list });
+              }}
             />
           </FormItem>
         </Col>}
@@ -519,7 +478,7 @@ class Info extends Component {
     const { selectKey, selectedRowKeys } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
-    serviceObj[serviceType + selectKey]( selectedRowKeys ).then(res => {
+    serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -583,8 +542,22 @@ class Info extends Component {
     return selectedRowKeys.length === 0;
   };
 
+
+  // 第二部分table  排序 页面切换 触发
+  onSearch = (v) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'devRaw/getPagination',
+      payload: v,
+      callback: () => {
+        this.getList(v);
+      },
+    });
+  };
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch } = this;
     const { mode, modalType } = state;
     const { list, selectKey, choosenRowData } = props;
     return (
@@ -593,18 +566,14 @@ class Info extends Component {
         <div className={styles.center_content}>
           {/* lg={17} md={24} */}
           <div className={styles.main}>
-            <div
-              className={styles.leftmenu}
-              ref={ref => {
-                this.main = ref;
-              }}
-            >
-              <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.handleSelectKey}>
-                {this.getmenu()}
-              </Menu>
-            </div>
+
             <div className={styles.right}>
               <RightContent
+                onSearch={onSearch}
+                getList={(params) => {
+                  this.getList(params);
+                }}
+
                 type={selectKey}
                 sourceList={list}
                 choosenRowData={choosenRowData}
@@ -636,12 +605,12 @@ class Info extends Component {
 }
 
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled }) => (
+const RightContent = ({ getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
-        <CenterInfo type={type} />
+        <CenterInfo getList={getList} type={type} onSearch={onSearch} />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
@@ -666,11 +635,11 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag ,type}) => (
+              {btnGroup.map(({ name, tag, type }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type={type||"primary"}
+                  type={type || 'primary'}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
@@ -695,22 +664,13 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
     dev: devRaw,
     listLoading: loading.effects['devRaw/getList'],
     pagination: devRaw.pagination,
+    paginationSec: devRaw.paginationSec,
     choosenRowData: devRaw.choosenRowData,
     selectedRowKeys: devRaw.selectedRowKeys,
   };
 })
 class CenterInfo extends Component {
-  changePagination = obj => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'devRaw/getDevList',
-      payload: obj,
-    });
-    dispatch({
-      type: 'devRaw/getPagination',
-      payload: obj,
-    });
-  };
+
 
   changeChoosenRow = rowData => {
     const { dispatch } = this.props;
@@ -729,32 +689,134 @@ class CenterInfo extends Component {
     });
   };
 
+  turnTab(e) {
+    const key = e.target.value;
+    const { dispatch, pagination, getList } = this.props;
+    dispatch({
+      type: 'devRaw/getSelectKey',
+      payload: key,
+    });
+    getList({ key });
+
+    // 还要清空所选中项
+    dispatch({
+      type: 'devRaw/changeSelectedRowKeys',
+      payload: [],
+    });
+
+    dispatch({
+      type: 'devRaw/getChoosenRowData',
+      payload: { id: '', zhName: '', enName: '', unitCode: '' },
+    });
+
+  }
+
+  search(params) {
+    const { dispatch,getList } = this.props;
+    dispatch({
+      type: 'devRaw/getPagination',
+      payload: { current: 1},
+      callback: () => {
+        getList(params);
+      },
+    });
+    dispatch({
+      type: 'devRaw/setSearchParams',
+      payload: params
+    });
+  }
+
+  reset() {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'devRaw/setSearchParams',
+      payload: {}
+    });
+  }
+
   render() {
     const { onSelectChange, props } = this;
-    const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
+    const { getList,type, choosenRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
-          <Icon
-            className={styles.titleIcon}
-            component={SvgUtil[type]}
-          />
-          <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
+          {/* <Icon */}
+          {/* className={styles.titleIcon} */}
+          {/* component={SvgUtil[type]} */}
+          {/* /> */}
+          {/* <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" /> */}
+          {/* 中间第二部分 */}
+          <Radio.Group defaultValue="material" value={type} buttonStyle="solid">
+            <Radio.Button
+              value="material"
+              onChange={(e) => {
+                this.turnTab(e);
+              }}
+            >
+              主材
+            </Radio.Button>
+            <Radio.Button
+              value="show_persion"
+              onChange={(e) => {
+                this.turnTab(e);
+              }}
+            >
+              石材
+            </Radio.Button>
+            <Radio.Button
+              value="accessories"
+              onChange={(e) => {
+                this.turnTab(e);
+              }}
+            >
+              配件
+            </Radio.Button>
+            <Radio.Button
+              value="show_clientlist"
+              onChange={(e) => {
+                this.turnTab(e);
+              }}
+            >
+              包装
+            </Radio.Button>
+            <Radio.Button
+              value="show_persion"
+              onChange={(e) => {
+                this.turnTab(e);
+              }}
+            >
+              辅材
+            </Radio.Button>
+            <Radio.Button
+              value="show_contacts"
+              onChange={(e) => {
+                this.turnTab(e);
+              }}
+            >
+              其他
+            </Radio.Button>
+          </Radio.Group>
         </div>
 
         <div className={styles.tableBox}>
+          <SearchFromSecond
+            onSearch={()=>{this.search()}}
+            onReset={()=>{this.reset()}}
+          />
           <Table
             columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}
             selectKey={choosenRowData.id}
             pagination={pagination}
-            changePagination={this.changePagination}
+            // changePagination={this.changePagination}
             selectedRowKeys={selectedRowKeys}
             onSelectChange={onSelectChange}
             listLoading={listLoading}
+            handleTableChange={onSearch}
           />
         </div>
       </div>

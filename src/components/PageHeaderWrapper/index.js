@@ -72,7 +72,7 @@ const PageHeaderWrapper = ({
                 conversionBreadcrumbList({
                   ...value,
                   ...restProps,
-                  home: <FormattedMessage id="menu.home" defaultMessage="Home" />,
+                  home: <FormattedMessage id="menu.erp.home" defaultMessage="Home" />,
                 })
               }
               className={styles.pageHeader}

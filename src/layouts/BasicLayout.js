@@ -57,8 +57,8 @@ class BasicLayout extends React.Component {
     console.log('props', props);
     const { routes } = props.route;
     // const routeKey = props.location.pathname === '/business/basic'? props.location.pathname :'/business/client';
-    const routeKey = props.location.pathname === '/' ? '/business/client' : props.location.pathname;
-    const tabNametem = props.location.pathname === '/' ? 'menu.business.client' : `menu${props.location.pathname.replace(/\//g, '.')}`; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
+    const routeKey = props.location.pathname === '/erp' ? '/business/client' : props.location.pathname;
+    const tabNametem = props.location.pathname === '/erp' ? 'menu.erp.business.client' : `menu${props.location.pathname.replace(/\//g, '.')}`; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabName = formatMessage({ id: tabNametem });
     // const tabName = props.location.pathname === '/business/basic'?'基础数据':'客户资料'; // routeKey 为设置首页设置 试试 '/dashboard/analysis' 或其他key值
     const tabLists = this.updateTree(routes);

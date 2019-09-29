@@ -31,18 +31,25 @@ export default {
       current: 1,
       size: 10,
     },
+    searchParams:{},
+
     selectKey: 'material',
     colorSettingList: initData,
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 
     materialList: initData,
+    accessoriesList:initData,
 
+
+    paginationTypes: {
+      current: 1,
+      size: 10,
+    },
 
   },
 
   effects: {
-
     // table
     * getPagination({ payload }, { put }) {
       yield put({
@@ -137,6 +144,12 @@ export default {
   },
 
   reducers: {
+    setSearchParams(state,action){
+      return {
+        ...state,
+        searchParams:action.payload
+      }
+    },
     getData(state, action) {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'

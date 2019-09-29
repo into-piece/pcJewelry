@@ -6,11 +6,11 @@ import {getMenuPath} from '@/utils/utils';
 import styles from './index.less';
 
 const menuArr = [
-  { key: 'menu.business.product', value: '/business/product', text: '123123sdfsdf' },
-  { key: 'menu.business.quote', value: '/business/quote', text: '123' },
-  { key: 'menu.business.proforminvoice', value: '/business/proforminvoice', text: '123123sdfsdf' },
-  { key: 'menu.business.deliver', value: '/business/deliver', text: '123123sdfsdf' },
-  { key: 'menu.business.receiving', value: '/business/receiving', text: '123123sdfsdf' },
+  { key: 'menu.erp.business.product', value: '/erp/business/product', text: '123123sdfsdf' },
+  { key: 'menu.erp.business.quote', value: '/erp/business/quote', text: '123' },
+  { key: 'menu.erp.business.proforminvoice', value: '/erp/business/proforminvoice', text: '123123sdfsdf' },
+  { key: 'menu.erp.business.deliver', value: '/erp/business/deliver', text: '123123sdfsdf' },
+  { key: 'menu.erp.business.receiving', value: '/erp/business/receiving', text: '123123sdfsdf' },
 ];
 
 @connect(({ login, loading }) => ({
