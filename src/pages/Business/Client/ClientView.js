@@ -39,6 +39,7 @@ import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
 import HttpFetch from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
+import RingsModalForm from './components/form/RingsModalForm';
 import TableSortView from '../../components/TableSortView';
 
 const FormItem = Form.Item;
@@ -243,6 +244,17 @@ class ClientView extends PureComponent {
       render: data => statusConvert[data],
     },
   ];
+
+ ringsColumn =[
+   {
+     title:  '圈戒编号',
+     field: 'ringAroundName',
+     dataIndex: 'ringAroundName',
+     key: 'ringAroundName',
+   },
+ ]
+
+
 
   contactsColumn = [
     {
@@ -474,16 +486,22 @@ class ClientView extends PureComponent {
       drawVisible: false,
       maintainerAddVisible: false,
       contactsAddVisible: false,
+      ringsAddVisible: false,
       contactsTableContent: [],
+      ringsTableContent:[],
       contactsTableBody: {},
+      ringsTableBody: {},
       Component: '',
       searchCustomerParams: {},
       radioType: 'show_clientlist',
       contactsPage: 1,
+      ringsPage: 1,
       contactsItem: '',
       contactsData: [],
       contactsLoading: false,
+      ringsLoading: false,
       contactsSorts: [],
+      ringsSorts: [],
       clientSorts: [],
       customerSorts: [],
     };
@@ -565,6 +583,7 @@ class ClientView extends PureComponent {
       current = {},
       update,
       contactsTableBody,
+      ringsTableBody,
       radioType,
       pageCurrent,
       customerPageCurrent,
@@ -574,7 +593,9 @@ class ClientView extends PureComponent {
       selectType,
       selectCustomerItem,
       contactsAddVisible,
+      ringsAddVisible,
       contactsLoading,
+      ringsLoading,
       selectedRowKeys,
       customerSelectedRowKeys,
       maintainsLoading,
@@ -582,6 +603,7 @@ class ClientView extends PureComponent {
       maintainerAddVisible,
       drawVisible,
       contactsTableContent,
+      ringsTableContent,
       contactsSelectedRowKeys,
     } = this.state;
 
@@ -768,7 +790,7 @@ class ClientView extends PureComponent {
                     <Radio.Button value="show_contacts" onClick={this.selectContacts}>
                       联系人
                     </Radio.Button>
-                    <Radio.Button value="">圈戒资料</Radio.Button>
+                    <Radio.Button value="show_ring" onClick={this.selectRings}>圈戒资料</Radio.Button>
                   </Radio.Group>
                   <div
                     style={{
@@ -788,6 +810,43 @@ class ClientView extends PureComponent {
                   {/* maintainerAddVisible: true, */}
                   {/* })} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button> */}
 
+
+                  {/* 圈戒按钮 */}
+                  <Button
+                    icon="plus"
+                    type="primary"
+                    style={{
+                      marginBottom: 10,
+                      marginRight: 20,
+                      display: selectType === 'rings' ? '' : 'none',
+                    }}
+                    onClick={() =>
+                      this.setState({
+                        contactsCurrent: {},
+                        ringsAddVisible: true,
+                      })
+                    }
+                    disabled={!selectCustomerItem || selectCustomerItem === ''}
+                  >
+                    新建
+                  </Button>
+                  <Button
+                    icon="delete"
+                    type="danger"
+                    style={{ marginBottom: 10, display: selectType === 'rings' ? '' : 'none' }}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？', onOk: () => {
+                          this.deleteContactsList();
+                        },
+                      });
+                    }}
+                    disabled={!contactsItem || contactsItem === ''}
+                  >
+                    删除
+                  </Button>
+
+                  {/* 联系人按钮 */}
                   <Button
                     icon="plus"
                     type="primary"
@@ -899,6 +958,23 @@ class ClientView extends PureComponent {
                     onChange={this.handleContactsTableChange}
                     pageChange={this.pageContactsChange}
                   />
+
+                  {/* 第二部分列表  圈戒资料 */}
+                  <JewelryTable
+                    style={{ display: selectType === 'rings' ? '' : 'none' }}
+                    onSelectItem={(item, rows) => {
+                      this.setState({
+                        ringsItem: item,
+                        ringsData: rows,
+                      });
+                    }}
+                    scroll={{ x: 1200 }}
+                    loading={ringsLoading}
+                    body={ringsTableBody}
+                    columns={this.ringsColumn}
+                    onChange={this.handleContactsTableChange}
+                    pageChange={this.pageContactsChange}
+                  />
                 </div>
               </Card>
             </Col>
@@ -938,6 +1014,11 @@ class ClientView extends PureComponent {
           visible={contactsAddVisible}
           handleCancel={this.handleCancel}
           contactsSubmit={this.handleContactsSubmit}
+        />
+        <RingsModalForm
+          visible={ringsAddVisible}
+          handleCancel={this.handleCancel}
+          Submit={this.handleRingsSubmit}
         />
         {/* <Modal maskClosable={false} */}
         {/* width={720} */}
@@ -1444,7 +1525,51 @@ class ClientView extends PureComponent {
     });
   };
 
+  handleRingsSubmit= ids=>{
+    const {selectCustomerItem} =this.state;
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      this.setState({
+        ringsLoading: false,
+      });
+      return;
+    }
+    const _this =this;
+    ids = ids.flatMap((e)=>e.id);
+    const params={
+      ringSizeIds:ids,
+      customerId:selectCustomerItem.id
+    };
+    fetch(HttpFetch.saveRings, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { head } = d;
 
+        if (!head) message.error('保存失败！');
+        else {
+          message.success(head.rtnMsg);
+        }
+        _this.setState({
+          ringsLoading: false,
+          ringsAddVisible: false,
+        });
+
+        this.loadRingsList();
+      })
+      .catch(function(ex) {
+        message.error('保存数据失败！ 请重试');
+        _this.setState({
+          contactsLoading: false,
+        });
+      });
+  }
 
   // 联系人添加
   handleContactsSubmit = contacts => {
@@ -1537,6 +1662,7 @@ class ClientView extends PureComponent {
       visible: false,
       maintainerAddVisible: false,
       contactsAddVisible: false,
+      ringsAddVisible: false,
     });
   };
 
@@ -1724,7 +1850,7 @@ class ClientView extends PureComponent {
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(111111,selectedRowKeys,selectedRows)
+    console.log(111111, selectedRowKeys, selectedRows);
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
@@ -1759,15 +1885,15 @@ class ClientView extends PureComponent {
 
   // merchange
   selectCustomerChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectCustomerChange',selectedRowKeys, selectedRows);
+    console.log('selectCustomerChange', selectedRowKeys, selectedRows);
 
     if (selectedRowKeys.length > 0) {
       const recordK = selectedRowKeys[selectedRowKeys.length - 1];
       const record = selectedRows.filter(value => value.id == recordK);
       const d = record[0];
       const selectCustomerItem = { ...d };
-      console.log("selectedRows",selectedRows)
-      console.log("selectedRowKeys",selectedRowKeys)
+      console.log('selectedRows', selectedRows);
+      console.log('selectedRowKeys', selectedRowKeys);
       this.setState({
         selectCustomerItem,
         rowCustomerData: selectedRows,
@@ -1775,7 +1901,7 @@ class ClientView extends PureComponent {
         contactsTableBody: [],
         contactsItem: '',
         contactsPage: 1,
-      },()=>{
+      }, () => {
         // this.startClient();
         // 更新右视图
         this.startShowTab();
@@ -1910,7 +2036,7 @@ class ClientView extends PureComponent {
     params.content = selectCustomerItem !== '' ? { ...selectCustomerItem } : '';
     params.ckeys = [].concat(customerSelectedRowKeys);
     console.log('keyscustomerSelectedRowKeys', customerSelectedRowKeys);
-    console.log('keysselectCustomerItem',  selectCustomerItem);
+    console.log('keysselectCustomerItem', selectCustomerItem);
     // router.replace({ pathname: '/business/client/client', params: params });
     this.setState({
       Component: <ClientInfo params={params} />,
@@ -1954,6 +2080,16 @@ class ClientView extends PureComponent {
       radioType: 'show_persion',
     });
     this.loadmaintainerList();
+  };
+
+  selectRings = () => {
+    this.setState({
+      ringsTableContent: [],
+      selectType: 'rings',
+      ringsLoading: true,
+      radioType: 'show_ring',
+    });
+    this.loadRingsList();
   };
 
   selectContacts = () => {
@@ -2062,6 +2198,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
+        console.log(11111,d)
         const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
@@ -2132,6 +2269,62 @@ class ClientView extends PureComponent {
       type: 'client/fetchListClient',
       payload: { ...params },
     });
+  };
+
+  loadRingsList =()=>{
+    const { selectCustomerItem, ringsPage } = this.state;
+    const _this = this;
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      _this.setState({
+        ringsLoading: false,
+      });
+      return;
+    }
+    _this.setState({
+      ringsLoading: true,
+    });
+
+    const params = { customerId: selectCustomerItem.id, current: ringsPage, size: 5 };
+
+    fetch(HttpFetch.loadRings, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { body } = d;
+        if (body && body.records) {
+          if (body.records.length > 0) {
+            _this.setState({
+              ringsTableContent: body.records,
+              ringsTableBody: body,
+              ringsLoading: false,
+            });
+            return;
+          }
+          _this.setState({
+            ringsTableBody: {},
+            ringsLoading: false,
+          });
+
+        }
+        _this.setState({
+          ringsLoading: false,
+        });
+      })
+      .catch(function(ex) {
+        message.error('加载失败！');
+        _this.setState({
+          ringsLoading: false,
+        });
+      });
+    //
+
   };
 
   loadContactsList = () => {
