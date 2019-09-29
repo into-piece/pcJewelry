@@ -35,7 +35,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *updateSpecimen({ payload, callback }, { call, put }) {
@@ -44,7 +44,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *deleteSpecimen({ payload, callback }, { call, put }) {

@@ -347,7 +347,8 @@ class IndexDetail extends Component {
 
 
             </div>
-            <Modal maskClosable={false}
+            <Modal
+              maskClosable={false}
               width={600}
               className={styles.standardListForm}
               destroyOnClose
@@ -641,6 +642,11 @@ class IndexDetail extends Component {
           payload: {
             ...params,
           },
+          callback:()=>{
+            this.setState({
+              visible:false
+            })
+          }
         });
         // todo
 
@@ -656,11 +662,15 @@ class IndexDetail extends Component {
           payload: {
             ...params,
           },
+          callback:()=>{
+            this.setState({
+              visible:false
+            })
+          }
         });
       }
 
       this.setState({
-        visible: false,
         productParams: params,
       });
     });

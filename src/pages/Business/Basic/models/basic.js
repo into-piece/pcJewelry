@@ -37,7 +37,7 @@ export default {
         type: 'saveBrand',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *updateBrand({ payload, callback }, { call, put }) {
@@ -47,7 +47,7 @@ export default {
         type: 'saveBrand',
         payload: response,
       });
-      if (callback) callback();
+      if (callback&&response.head.rtnCode==='000000') callback();
     },
 
     *deleteBrand({ payload, callback }, { call, put }) {

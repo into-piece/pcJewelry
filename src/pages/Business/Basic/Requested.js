@@ -118,6 +118,11 @@ class RequestedComponent extends PureComponent {
           payload: {
             ...fieldsValue,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
 
         this.setState({
@@ -143,6 +148,11 @@ class RequestedComponent extends PureComponent {
           payload: {
             ...data,
           },
+          callback:()=>{
+            this.setState({
+              visible: false,
+            });
+          }
         });
       }
       this.setState({
@@ -158,7 +168,6 @@ class RequestedComponent extends PureComponent {
     });
 
     this.setState({
-      visible: false,
       done: false,
     });
   };

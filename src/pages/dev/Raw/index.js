@@ -615,7 +615,8 @@ class Info extends Component {
             </div>
           </div>
         </div>
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           title={returnTitle()}
           width={selectKey === 'accessories' ? 960 : 640}
           className={styles.standardListForm}

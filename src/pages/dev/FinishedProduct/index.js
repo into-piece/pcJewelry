@@ -768,7 +768,8 @@ class Info extends Component {
             </div>
           </div>
         </div>
-        <Modal maskClosable={false}
+        <Modal
+          maskClosable={false}
           title={returnTitle()}
           width={640}
           className={styles.standardListForm}
