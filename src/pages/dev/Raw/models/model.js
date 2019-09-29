@@ -50,24 +50,36 @@ export default {
   },
 
   effects: {
+
+    * setSearchParams({ payload,callback }, { put }){
+      yield put.resolve({
+        type: 'setSearchParams2',
+        payload,
+      });
+       if(callback)  callback();
+    },
     // table
-    * getPagination({ payload }, { put }) {
+    * getPagination({ payload,callback }, { put }) {
       yield put({
         type: 'getPagination2',
         payload,
       });
+      if(callback)callback();
     },
-    * getSelectKey({ payload }, { put }) {
+    * getSelectKey({ payload,callback }, { put }) {
       yield put({
         type: 'getSelectKey2',
         payload,
       });
+      if(callback)callback();
+
     },
-    * getChoosenRowData({ payload }, { put }) {
+    * getChoosenRowData({ payload,callback }, { put }) {
       yield put({
         type: 'getChoosenRowData2',
         payload,
       });
+      if(callback)callback();
     },
     * changeSelectedRowKeys({ payload }, { put }) {
       yield put({
@@ -144,7 +156,7 @@ export default {
   },
 
   reducers: {
-    setSearchParams(state,action){
+    setSearchParams2(state,action){
       return {
         ...state,
         searchParams:action.payload
