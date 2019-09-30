@@ -510,14 +510,14 @@ class Info extends Component {
   };
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
-      payload: { wordbookTypeCode: "H015" },
+      payload: { wordbookTypeCode: 'H015' },
     });
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
-      payload: { wordbookTypeCode: "H016" },
+      payload: { wordbookTypeCode: 'H016' },
     });
     this.getTypeList();
 
@@ -1069,7 +1069,7 @@ class CenterInfo extends Component {
 
   render() {
     const { onSelectChange, props } = this;
-    const { type, choosenRowData,choosenTypesRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
+    const { type, choosenRowData, choosenTypesRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
     const typeslist = dev.typesList;
