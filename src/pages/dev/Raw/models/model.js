@@ -25,6 +25,8 @@ export default {
     gemSetProcessDropDown: [],
     getBUMropDown: [],
     listMstWordbookDrop: [],
+    listMstWordbookDroph015: [],
+    listMstWordbookDroph016: [],
     shapeSettingList:[],
     specificationSettingList:[],
     pagination: {
@@ -48,12 +50,29 @@ export default {
 
     materialList: initData,
     accessoriesList:initData,
+    stoneList:initData,
+    wrapperList:initData,
+    auxiliaryMaterialList:initData,
+    otherMaterialList:initData,
 
 
   },
 
   effects: {
-
+    *getListMstWordbookParams({ payload }, { call, put }) {
+      const response = yield call(listMstWordbook, payload);
+      if(payload.wordbookTypeCode==='H015'){
+        yield put({
+          type: 'getListMstWordbook3',
+          payload: response,
+        });
+      }else if(payload.wordbookTypeCode==='H016'){
+        yield put({
+          type: 'getListMstWordbook4',
+          payload: response,
+        });
+      }
+    },
     // table
     * getPagination({ payload,callback }, { put }) {
       yield put({
@@ -159,6 +178,40 @@ export default {
   },
 
   reducers: {
+
+
+    getListMstWordbook3(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookCode }
+        })
+      }
+      return {
+        ...state,
+        listMstWordbookDroph015:listMstWordbookDrop,
+      };
+    },
+    getListMstWordbook4(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookCode }
+        })
+      }
+      return {
+        ...state,
+        listMstWordbookDroph016:listMstWordbookDrop,
+      };
+    },
+
+
     getData(state, action) {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
