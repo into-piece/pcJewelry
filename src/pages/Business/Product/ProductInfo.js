@@ -52,7 +52,7 @@ class ProductInfo extends Component {
       title: () => {
         return (
           <TableSortView
-            column="客户编号"
+            column="产品编号"
             field="product_no"
             sortChange={this.sortFilter}
           />

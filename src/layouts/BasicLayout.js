@@ -231,7 +231,7 @@ class BasicLayout extends React.Component {
       }
     });
 
-    console.log("key",this.state)
+    // console.log("key",this.state)
 
     // this.setState({
     //   tabListKey:this.state.tabList.map((va)=>va.key)
@@ -456,6 +456,9 @@ class BasicLayout extends React.Component {
         </Layout>
       </Layout>
     );
+
+    console.log('breadcrumbNameMap',pathname)
+    console.log(breadcrumbNameMap)
     return (
       <React.Fragment>
         <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>

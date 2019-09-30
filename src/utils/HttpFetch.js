@@ -209,13 +209,48 @@ export const listDeptDropDown = `${priefx}/sys.user/sys-role/listDeptDropDown`
 export const queryPermissionUserList = `${priefx}/sys.user/sys-resource/getPermissionUsers`
 
 
+
+/**
+ *   根据客户id获取戒围号
+ * @type {string}
+ */
+export const loadRings = `${priefx}/business/business.customer/ring/getRingAroundByCustomerId`
+
+
+
+/**
+ *   戒围下拉
+ * @type {string}
+ */
+export const listRingAround = `${priefx}/business/basic/ring-around/listRingAround`
+
+
+
+/**
+ *   客户圈戒资料保存
+ * @type {string}
+ */
+export const saveRings = `${priefx}/business/business.customer/ring/save`
+
+
+/**
+ *   客户圈戒资料删除
+ * @type {string}
+ */
+export const deleteRings = `${priefx}/business/business.customer/ring/delete`
+
+
 export default {
   priefx,
+  listRingAround,
+  deleteRings,
+  saveRings,
   queryPermissionUserList,
   listDeptDropDown,
   queryPersonList,
   loadMaintainer,
   loadContacts,
+  loadRings,
   saveContacts,
   saveMaintainer,
   deleteContacts,

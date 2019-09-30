@@ -44,6 +44,8 @@ const resultArr = [
   { key: 'addBasiccategorySet', path: '/develop.category/develop-basic-category-set/saveOrUpdate', priefx1: `${env}/business` },
 
 
+  { key: 'listBasictypes', path: '/develop.category/develop-basic-category-set/list', priefx1: `${env  }/business` },
+
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: `${env  }/business/sys` }
 ]
 

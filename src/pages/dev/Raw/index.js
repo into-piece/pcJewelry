@@ -34,17 +34,11 @@ import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import SearchFrom from './components/SearchFrom';
 import SearchFromTab0 from './components/SearchFromTab0';
+import Deliver from '../../Business/Deliver/Deliver';
 
 const { Description } = DescriptionList;
-const { Item } = Menu;
 const FormItem = Form.Item;
 const { Option } = Select;
-
-// 左边menu遍历配置
-const menuMap = manuArr.map(item => ({
-  value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Main material" />,
-  key: item,
-}));
 
 // 弹窗form表单样式
 const formLayout = {
@@ -53,18 +47,7 @@ const formLayout = {
     span: 13,
   },
 };
-// 面包屑数据
-// const breadData = [
-//   {
-//     name: '主页', link: '/'
-//   },
-//   {
-//     name: '开发', link: '/dev/basic'
-//   },
-//   {
-//     name: '基础数据', link: ''
-//   }
-// ]
+
 
 // 右手边按钮集合
 const btnGroup = [
@@ -75,6 +58,46 @@ const btnGroup = [
 ];
 
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
+let typeTable = [
+  {
+    title: '类别编码',
+    dataIndex: 'unitCode',
+    key: 'unitCode',
+    render: data => isLockList ? (
+      <LockTag>
+        {data}
+      </LockTag>
+      )
+      : (data),
+  },
+  {
+    title: '中文名',
+    dataIndex: 'zhName',
+    key: 'zhName',
+  },
+  {
+    title: '英文名',
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: '大类',
+    dataIndex: 'bTypeName',
+    key: 'bType',
+  },
+  {
+    title: '小类',
+    dataIndex: 'sTypeName',
+    key: 'sType',
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: data => statusConvert[data],
+  },
+];
+typeTable = typeTable.map(item => ({ ...item, sorter: true }));
 
 // table 当前页对应的表头配置
 const columnsArr = {
@@ -184,7 +207,7 @@ const columnsArr = {
     },
   ],
   // 其他材料
-  otherMaterial:[
+  otherMaterial: [
     {
       title: '成色',
       dataIndex: 'assayingName',
@@ -228,7 +251,7 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-  wrapper:[
+  wrapper: [
     {
       title: '原料编号',
       dataIndex: 'fCode',
@@ -317,7 +340,7 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-  auxiliaryMaterial:[
+  auxiliaryMaterial: [
     {
       title: '原料编号',
       dataIndex: 'fCode',
@@ -381,7 +404,7 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-  stone:[
+  stone: [
     {
       title: '原料编号',
       dataIndex: 'fCode',
@@ -444,7 +467,7 @@ const columnsArr = {
       key: 'status',
       render: data => statusConvert[data],
     },
-  ]
+  ],
 
 };
 columnsArr.material = columnsArr.material.map(item => ({ ...item, sorter: true }));
@@ -464,6 +487,7 @@ columnsArr.stone = columnsArr.stone.map(item => ({ ...item, sorter: true }));
     searchParams: devRaw.searchParams,
     selectKey: devRaw.selectKey,
     choosenRowData: devRaw.choosenRowData,
+    choosenTypesRowData: devRaw.choosenTypesRowData,
     colorSetList: devRaw.colorSetList,
     selectedRowKeys: devRaw.selectedRowKeys,
     gemSetProcessDropDown: devRaw.gemSetProcessDropDown,
@@ -486,18 +510,28 @@ class Info extends Component {
   };
 
   componentDidMount() {
+    this.getTypeList();
+
     // 获取初始表单数据
     this.getList({});
   }
 
-
-  // 获取对应key=》页面进行数据请求
-  getList = ({key,params}) => {
-    const { dispatch, pagination, selectKey, searchParams } = this.props;
+  getTypeList = (params) => {
+    const { dispatch, pagination } = this.props;
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination,  ...searchParams ,...params}, type: key || selectKey },
+      payload: { params: { ...pagination, ...params }, type: 'types' },
+    });
+  };
+
+  // 获取对应key=》页面进行数据请求
+  getList = ({ key, params }) => {
+    const { dispatch, pagination, selectKey } = this.props;
+    // getDevList
+    dispatch({
+      type: `devRaw/getList`,
+      payload: { params: { ...pagination, ...params }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -659,7 +693,7 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList({});
+            this.getList({ key: selectKey });
             this.btnFn('');
           }
         });
@@ -692,7 +726,7 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList({});
+            this.getList({ key: selectKey });
             this.btnFn('');
           }
         });
@@ -709,7 +743,7 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.getList({});
+        this.getList({ key: selectKey });
       }
     });
   };
@@ -725,7 +759,7 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.getList({});
+        this.getList({ key: selectKey });
       }
     });
   };
@@ -786,15 +820,12 @@ class Info extends Component {
 
   // 第二部分table  排序 页面切换 触发
   onSearch = (v) => {
-    const { dispatch } = this.props;
-
+    const { dispatch, selectKey } = this.props;
     dispatch({
       type: 'devRaw/getPagination',
       payload: v,
-      callback: () => {
-        this.getList({});
-      },
     });
+    this.getList({ key: selectKey, params: v });
   };
 
   render() {
@@ -813,7 +844,7 @@ class Info extends Component {
                 returnElement={this.returnElement}
                 onSearch={onSearch}
                 getList={(p) => {
-                      this.getList(p);
+                  this.getList(p);
                 }}
 
                 type={selectKey}
@@ -906,8 +937,9 @@ const RightContent = ({ getList, type, choosenRowData, btnFn, returnLockType, re
     dev: devRaw,
     listLoading: loading.effects['devRaw/getList'],
     pagination: devRaw.pagination,
-    paginationSec: devRaw.paginationSec,
+    paginationTypes: devRaw.paginationTypes,
     choosenRowData: devRaw.choosenRowData,
+    choosenTypesRowData: devRaw.choosenTypesRowData,
     selectedRowKeys: devRaw.selectedRowKeys,
   };
 })
@@ -949,6 +981,14 @@ class CenterInfo extends Component {
     }
   }
 
+  changeChoosenTypeRow = rowData => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'devRaw/getChoosenTypeRowData',
+      payload: rowData,
+    });
+  };
+
   changeChoosenRow = rowData => {
     const { dispatch } = this.props;
     dispatch({
@@ -974,15 +1014,15 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/getSelectKey',
       payload: key,
-      callback:()=>{
+      callback: () => {
         dispatch({
           type: 'devRaw/getPagination',
           payload: { current: 1 },
           callback: () => {
-            getList({key});
+            getList({ key });
           },
         });
-      }
+      },
     });
 
     // 还要清空所选中项
@@ -1003,51 +1043,50 @@ class CenterInfo extends Component {
     this.SearchFromTab0.handleReset();
   }
 
+
+  // 点击搜索
   search(params) {
-    const { dispatch, getList } = this.props;
-    console.log(params)
-    dispatch({
-      type: 'devRaw/setSearchParams',
-      payload: params,
-      callback:()=>{
-        // 搜索变第一页
-        dispatch({
-          type: 'devRaw/getPagination',
-          payload: { current: 1 },
-          callback: () => {
-            getList({params:{...params,current: 1}});
-          },
-        });
-      }
-    });
+    const { dispatch, getList, pagination } = this.props;
+    getList({ params: { ...pagination, ...params, current: 1 } });
 
+    dispatch({
+      type: 'devRaw/getPagination',
+      payload: { current: 1 },
+    });
 
 
   }
 
-  reset() {
-    const { dispatch } = this.props;
-
-    dispatch({
-      type: 'devRaw/setSearchParams',
-      payload: {},
-    });
-  }
 
   render() {
     const { onSelectChange, props } = this;
-    const { type, choosenRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
+    const { type, choosenRowData,choosenTypesRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
+    const typeslist = dev.typesList;
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
-          {/* <Icon */}
-          {/* className={styles.titleIcon} */}
-          {/* component={SvgUtil[type]} */}
-          {/* /> */}
-          {/* <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" /> */}
-          {/* 中间第二部分 */}
+          <SearchFrom
+            onSearch={(p) => {
+              this.search(p);
+            }}
+          />
+        </div>
+        <div className={styles.tableBox}>
+          <Table
+            columns={typeTable}
+            body={typeslist}
+            changeChoosenRow={this.changeChoosenTypeRow}
+            selectKey={choosenTypesRowData.id}
+            pagination={paginationTypes}
+            selectedRowKeys={[]}
+
+            listLoading={listLoading}
+            // handleTableChange={onSearch}
+          />
+        </div>
+        <div className={styles.contentTitle}>
           <Radio.Group defaultValue="material" value={type} buttonStyle="solid">
             <Radio.Button
               value="material"
@@ -1110,7 +1149,6 @@ class CenterInfo extends Component {
               this.search(p);
             }}
             onReset={() => {
-              this.reset();
             }}
             wrappedComponentRef={(e) => this.SearchFromTab0 = e}
           />

@@ -130,5 +130,54 @@ export  const   serviceArr = [
       "revoke"
     ]
   },
+  // 石材
+  {
+    "name": "stone",
+    "path": "stone",
+    "arr": [
+      "listStone",
+      "saveOrUpdate",
+      "deleteStone",
+      "approval",
+      "revoke"
+    ]
+  },
+  // 包装
+  {
+    "name": "wrapper",
+    "path": "wrapper",
+    "arr": [
+      "listWrapper",
+      "saveWrapper",
+      "deleteWrapper",
+      "approval",
+      "revoke"
+    ]
+  },
+  // 辅材
+  {
+    "name": "auxiliaryMaterial",
+    "path": "auxiliary-material",
+    "arr": [
+      "listAuxiliaryMaterial",
+      "saveAuxiliaryMaterial",
+      "deleteAuxiliaryMaterial",
+      "approval",
+      "revoke"
+    ]
+  },
+  // 其他
+  {
+    "name": "otherMaterial",
+    "path": "other-material",
+    "arr": [
+      "listOtherMaterial",
+      "saveOtherMaterial",
+      "deleteOtherMaterial",
+      "approval",
+      "revoke"
+    ]
+  },
+
 
 ]

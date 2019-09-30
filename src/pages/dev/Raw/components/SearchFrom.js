@@ -31,24 +31,29 @@ class SearchFrom extends Component {
       >
         <Row gutter={2} style={{ width: '100%' }}>
           <Col lg={8}>
-            <FormItem label="部门编号">
-              {getFieldDecorator('role')(<Input placeholder="请输入" />)}
+            <FormItem label="类别编码">
+              {getFieldDecorator('unitCode')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8}>
-            <FormItem label="部门简称">
-              {getFieldDecorator('shortName')(<Input placeholder="请输入" />)}
+            <FormItem label="大类">
+              {getFieldDecorator('bType')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col lg={8}>
+            <FormItem label="小类">
+              {getFieldDecorator('sType')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={2}>
           <Col lg={8}>
-            <FormItem label="中文名:">
-              {getFieldDecorator('zhName')(<Input placeholder="请输入" />)}
+            <FormItem label="英文名">
+              {getFieldDecorator('enName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8}>
-            <FormItem label="英文名:">
+            <FormItem label="中文名">
               {getFieldDecorator('enName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
@@ -105,13 +110,8 @@ class SearchFrom extends Component {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row>
           <Col lg={8}>
-            <FormItem label="部门编号">
-              {getFieldDecorator('role')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col lg={8}>
-            <FormItem label="部门简称">
-              {getFieldDecorator('shortName')(<Input placeholder="请输入" />)}
+            <FormItem label="类别编码">
+              {getFieldDecorator('unitCode')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8} push={1}>
