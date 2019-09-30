@@ -40,7 +40,7 @@ function formatter(data, parentAuthority, parentName) {
         // parentName = parentName.replace(/\//g,"")
         locale = `${parentName}.${item.name}`;
       } else {
-        locale = `menu.${item.name}`;
+        locale = `menu.erp.${item.name}`;
       }
       // if enableMenuLocale use item.name,
       // close menu international
@@ -107,6 +107,7 @@ const getBreadcrumbNameMap = menuData => {
       if (menuItem.children) {
         flattenMenuData(menuItem.children);
       }
+      // console.log(123,menuItem)
       // Reduce memory usage
       routerMap[menuItem.path] = menuItem;
     });
@@ -166,7 +167,7 @@ export default {
       const originalMenuData = memoizeOneFormatter(routes, authority, path);
       let menuData = [];
       const allMenuData = filterMenuData(originalMenuData);
-
+// console.log("originalMenuData",originalMenuData)
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
 
       const networkMenu = yield call(getMenuData, {});
