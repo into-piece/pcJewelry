@@ -248,7 +248,7 @@ class IndexDetail extends Component {
       return v.id;
     });
     const params = {};
-    params.permissions = [permissionData,...halfCheckedKeys];
+    params.permissions = [...permissionData,...halfCheckedKeys];
     params.userIds = ids;
 
 
