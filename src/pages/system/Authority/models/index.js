@@ -16,7 +16,8 @@ export default {
     head: [],
     isLoading: false,
     treeData:[],
-    permissionData:[]
+    permissionData:[],
+    halfpermissionData:[]
   },
 
   effects: {
@@ -102,7 +103,8 @@ export default {
       return {
         ...state,
         head: action.payload,
-        permissionData:[...action.payload.permissionData]
+        permissionData:[...action.payload.permissionData],
+        halfpermissionData:[...action.payload.halfpermissionData]
       };
     },
     treedata(state, action){

@@ -510,6 +510,15 @@ class Info extends Component {
   };
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'devRaw/getListMstWordbookParams',
+      payload: { wordbookTypeCode: 'H015' },
+    });
+    dispatch({
+      type: 'devRaw/getListMstWordbookParams',
+      payload: { wordbookTypeCode: 'H016' },
+    });
     this.getTypeList();
 
     // 获取初始表单数据
@@ -1060,7 +1069,7 @@ class CenterInfo extends Component {
 
   render() {
     const { onSelectChange, props } = this;
-    const { type, choosenRowData,choosenTypesRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
+    const { type, choosenRowData, choosenTypesRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
     const typeslist = dev.typesList;
@@ -1068,6 +1077,7 @@ class CenterInfo extends Component {
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
           <SearchFrom
+            devRaw={dev}
             onSearch={(p) => {
               this.search(p);
             }}

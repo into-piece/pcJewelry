@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Col, Form, Icon, Input, InputNumber, Row } from 'antd';
+import { Button, Col, Select,Form, Icon, Input, InputNumber, Row } from 'antd';
 import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 @Form.create()
 class SearchFrom extends Component {
@@ -20,6 +21,7 @@ class SearchFrom extends Component {
   renderCustomerAdvancedForm() {
     const {
       form: { getFieldDecorator },
+      devRaw
     } = this.props;
     return (
       <Form
@@ -28,6 +30,8 @@ class SearchFrom extends Component {
         size="small"
         labelAlign="right"
         labelCol={{ span: 7 }}
+        wrapperCol={{ span: 13 }}
+
       >
         <Row gutter={2} style={{ width: '100%' }}>
           <Col lg={8}>
@@ -37,12 +41,20 @@ class SearchFrom extends Component {
           </Col>
           <Col lg={8}>
             <FormItem label="大类">
-              {getFieldDecorator('bType')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('bType')(<Select placeholder="请选择">
+                {devRaw.listMstWordbookDroph015 && devRaw.listMstWordbookDroph015.map(({ value, key }) =>
+                  <Option value={value} key={value}>{key}</Option>,
+                )}
+              </Select>)}
             </FormItem>
           </Col>
           <Col lg={8}>
             <FormItem label="小类">
-              {getFieldDecorator('sType')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('sType')(<Select placeholder="请选择">
+                {devRaw.listMstWordbookDroph016 && devRaw.listMstWordbookDroph016.map(({ value, key }) =>
+                  <Option value={value} key={value}>{key}</Option>,
+                )}
+              </Select>)}
             </FormItem>
           </Col>
         </Row>

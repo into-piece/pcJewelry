@@ -661,7 +661,7 @@ class BrandCompoenet extends Component {
                                                  disabled={isEdit}
                                                >
                     审批
-                                                             </Button>)}
+                                               </Button>)}
 
                 </div>
               </Card>
