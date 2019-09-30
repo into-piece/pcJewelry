@@ -491,6 +491,8 @@ class ClientView extends PureComponent {
       ringsTableContent:[],
       contactsTableBody: {},
       ringsTableBody: {},
+      ringsItem: '',
+      ringsData: {},
       Component: '',
       searchCustomerParams: {},
       radioType: 'show_clientlist',
@@ -602,6 +604,8 @@ class ClientView extends PureComponent {
       maintainTableContent,
       maintainerAddVisible,
       drawVisible,
+      ringsItem,
+      ringsData,
       contactsTableContent,
       ringsTableContent,
       contactsSelectedRowKeys,
@@ -837,11 +841,11 @@ class ClientView extends PureComponent {
                     onClick={() => {
                       ModalConfirm({
                         content: '确定删除吗？', onOk: () => {
-                          this.deleteContactsList();
+                          this.deleteRingsList();
                         },
                       });
                     }}
-                    disabled={!contactsItem || contactsItem === ''}
+                    disabled={!ringsItem || ringsItem === ''}
                   >
                     删除
                   </Button>
@@ -972,8 +976,8 @@ class ClientView extends PureComponent {
                     loading={ringsLoading}
                     body={ringsTableBody}
                     columns={this.ringsColumn}
-                    onChange={this.handleContactsTableChange}
-                    pageChange={this.pageContactsChange}
+                    onChange={this.handleRingsTableChange}
+                    pageChange={this.pageRingsChange}
                   />
                 </div>
               </Card>
@@ -1019,6 +1023,7 @@ class ClientView extends PureComponent {
           visible={ringsAddVisible}
           handleCancel={this.handleCancel}
           Submit={this.handleRingsSubmit}
+          key={`table${ringsItem.id}`}
         />
         {/* <Modal maskClosable={false} */}
         {/* width={720} */}
@@ -1534,7 +1539,6 @@ class ClientView extends PureComponent {
       return;
     }
     const _this =this;
-    ids = ids.flatMap((e)=>e.id);
     const params={
       ringSizeIds:ids,
       customerId:selectCustomerItem.id
@@ -1789,6 +1793,16 @@ class ClientView extends PureComponent {
     });
   };
 
+  handleRingsTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      RingsPage: pagination.current,
+      RingsSorter: sorter,
+    });
+    this.state.RingsPage = pagination.current;
+    this.state.RingsSorter = sorter;
+    this.loadContactsList();
+  };
+
   handleContactsTableChange = (pagination, filters, sorter) => {
     this.setState({
       contactsPage: pagination.current,
@@ -1796,7 +1810,7 @@ class ClientView extends PureComponent {
     });
     this.state.contactsPage = pagination.current;
     this.state.contactsSorter = sorter;
-    this.loadContactsList();
+    this.loadRingsList();
   };
 
   pageCustomerChange = (page, pageSize) => {
@@ -1839,6 +1853,14 @@ class ClientView extends PureComponent {
     });
     this.state.selectCustomerItem = '';
     this.startShowTab();
+  };
+
+  pageRingsChange = (page, pageSize) => {
+    this.setState({
+      ringsPage: page,
+    });
+    this.state.ringsPage = page;
+    this.loadRingsList();
   };
 
   pageContactsChange = (page, pageSize) => {
@@ -2518,6 +2540,54 @@ class ClientView extends PureComponent {
         message.error('保存数据失败！ 请重试');
         _this.setState({
           contactsLoading: false,
+        });
+      });
+    // }
+  };
+
+  deleteRingsList = () => {
+    const { selectCustomerItem, ringsData } = this.state;
+    const _this = this;
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      this.setState({
+        contactsLoading: false,
+      });
+      return;
+    }
+
+    const ids = ringsData.map(v => {
+      return v.id;
+    });
+
+    fetch(HttpFetch.deleteRings, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(ids),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { head } = d;
+
+        if (!head) message.error('删除失败！');
+        else {
+          message.success(head.rtnMsg);
+        }
+        _this.setState({
+          ringsLoading: false,
+          ringsItem: '',
+        });
+
+        this.loadRingsList();
+        // console.log('result ', d);
+      })
+      .catch(function(ex) {
+        message.error('保存数据失败！ 请重试');
+        _this.setState({
+          ringsLoading: false,
         });
       });
     // }

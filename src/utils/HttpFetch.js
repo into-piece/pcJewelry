@@ -227,15 +227,23 @@ export const listRingAround = `${priefx}/business/basic/ring-around/listRingArou
 
 
 /**
- *   戒围下拉
+ *   客户圈戒资料保存
  * @type {string}
  */
 export const saveRings = `${priefx}/business/business.customer/ring/save`
 
 
+/**
+ *   客户圈戒资料删除
+ * @type {string}
+ */
+export const deleteRings = `${priefx}/business/business.customer/ring/delete`
+
+
 export default {
   priefx,
   listRingAround,
+  deleteRings,
   saveRings,
   queryPermissionUserList,
   listDeptDropDown,

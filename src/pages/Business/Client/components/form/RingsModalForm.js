@@ -24,8 +24,6 @@ class RingsModalForm extends Component {
       data: [],
       selectedRowKeys: [],
       selectedRows: [],
-      current: 1,
-      pageSize: 5,
     };
   }
 
@@ -34,12 +32,12 @@ class RingsModalForm extends Component {
       current: 1,
       size: 5,
     };
-   this.getList(params);
+    this.getList(params);
   }
 
-  getList=(params)=>{
+  getList = (params) => {
     const _this = this;
-    _this.setState({listLoading:true})
+    _this.setState({ listLoading: true });
     fetch(HttpFetch.listRingAround, {
       method: 'POST',
       headers: {
@@ -54,14 +52,35 @@ class RingsModalForm extends Component {
             _this.setState({
               dataBody: body,
               data: body.records,
-              listLoading:false
+              listLoading: false,
             });
           }
         }
       }).catch(() => {
       message.error('加载失败！');
     });
-  }
+  };
+
+  onRow = record => ({
+    onClick: () => {
+      this.clickRowItem(record);
+    }, // 点击行
+  });
+
+  /**
+   * 点击单行
+   */
+  clickRowItem = record => {
+    let { selectedRowKeys, selectedRows } = this.state;
+    console.log(selectedRowKeys, selectedRows);
+    if (selectedRowKeys.some(e => e === record.id)) {
+      selectedRowKeys = selectedRowKeys.filter(item => item !== record.id);
+    } else {
+      selectedRowKeys.push(record.id);
+    }
+
+    this.onSelectChange(selectedRowKeys, selectedRows);
+  };
 
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -69,7 +88,7 @@ class RingsModalForm extends Component {
   };
 
   getContactsContent = () => {
-    const { dataBody, selectedRowKeys,listLoading, data } = this.state;
+    const { dataBody, selectedRowKeys, listLoading, data } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -93,6 +112,8 @@ class RingsModalForm extends Component {
             rowSelection={rowSelection}
             loading={listLoading}
             pagination={paginationProps}
+            onRow={this.onRow}
+            rowKey="id"
           />
         </Row>
       </div>
@@ -102,9 +123,9 @@ class RingsModalForm extends Component {
 
   handleContactsSubmit = () => {
     const { Submit } = this.props;
-    const { selectedRows } = this.state;
+    const { selectedRowKeys } = this.state;
     if (Submit)
-      Submit(selectedRows);
+      Submit(selectedRowKeys);
   };
 
   handleCancel = () => {
@@ -121,17 +142,16 @@ class RingsModalForm extends Component {
    * 直接传参数触发更新
    */
   onChange = (pagination, filters, sorter) => {
-    console.log("pagination",pagination);
-    const { current, pageSize } = pagination
-    const { order, field } = sorter
-    const orderKey = order === "ascend" ? 'Asc' : order === 'descend' ? 'Desc' : ''
+    const { current, pageSize } = pagination;
+    const { order, field } = sorter;
+    const orderKey = order === 'ascend' ? 'Asc' : order === 'descend' ? 'Desc' : '';
 
     this.setState({
-      current, pageSize
-    },()=>{
-      this.getList({current,size:pageSize});
-    })
-  }
+      current, pageSize,
+    }, () => {
+      this.getList({ current, size: pageSize });
+    });
+  };
 
   render() {
     const contactsModalFooter = {
@@ -147,6 +167,7 @@ class RingsModalForm extends Component {
         width={720}
         className={styles.standardListForm}
         destroyOnClose
+
         {...contactsModalFooter}
       >
         {this.getContactsContent()}
