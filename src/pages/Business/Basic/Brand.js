@@ -31,6 +31,10 @@ const { Description } = DescriptionList;
 
 const clientContentColumns = [
   {
+    title: '品牌编码',
+    dataIndex: 'brandNo',
+    key: 'brandNo',
+  }, {
     title: '中文名称',
     dataIndex: 'brandZhName',
     key: 'brandZhName',
@@ -392,6 +396,7 @@ class BrandCompoenet extends Component {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
+          <Description term="品牌英文">{item.brandNo}</Description>
           <Description term="品牌英文">{item.brandEnName}</Description>
           <Description term="品牌中文">{item.brandZhName}</Description>
         </DescriptionList>
@@ -482,7 +487,12 @@ class BrandCompoenet extends Component {
     const getModalContent = () => {
       return (
         <Form size="small" onSubmit={this.handleSubmit}>
-          <FormItem label="英文名称" {...this.formLayout}>
+          <FormItem label="品牌编码" {...this.formLayout}>
+            {getFieldDecorator('brandNo', {
+              rules: [{ required: true, message: '请输入品牌编码' }],
+              initialValue: current.brandEnName,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>  <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('brandEnName', {
               rules: [{ required: true, message: '请输入品牌编号' }],
               initialValue: current.brandEnName,
