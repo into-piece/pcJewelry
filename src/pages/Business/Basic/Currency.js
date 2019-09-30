@@ -39,9 +39,9 @@ const currencyContentColumns = [
     key: 'spotSellingPrice',
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
+    title: '创建时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
   },
 ];
 
@@ -356,7 +356,7 @@ class Currency extends PureComponent {
               <Card bordered={false}>
                 <div>
                   <span
-                    title="币种信息"
+                    title="币种&银价信息"
                     style={{
                       marginBottom: 32,
                       paddingLeft: 10,
@@ -365,57 +365,57 @@ class Currency extends PureComponent {
                       color: '#35B0F4',
                     }}
                   >
-                    币种信息
+                    币种&银价信息
                   </span>
                   <Divider />
                   {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
 
-              <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Button
-                    className={styles.buttomControl}
-                    type="primary"
-                    icon="plus"
-                    size="small"
-                    onClick={this.clickNewFrom}
-                    disabled
-                  >
-                    新增
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    type="danger"
-                    icon="delete"
-                    size="small"
-                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}}
-                    disabled
-                  >
-                    删除
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    type="primary"
-                    size="small"
-                    onClick={this.clickEditFrom}
-                    disabled
-                    icon="edit"
-                  >
-                    编辑
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}}
-                    disabled
-                  >
-                    审批
-                  </Button>
-                </div>
-              </Card>
+              {/* <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}> */}
+              {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> */}
+              {/* <Button */}
+              {/* className={styles.buttomControl} */}
+              {/* type="primary" */}
+              {/* icon="plus" */}
+              {/* size="small" */}
+              {/* onClick={this.clickNewFrom} */}
+              {/* disabled */}
+              {/* > */}
+              {/* 新增 */}
+              {/* </Button> */}
+              {/* <Button */}
+              {/* className={styles.buttomControl} */}
+              {/* type="danger" */}
+              {/* icon="delete" */}
+              {/* size="small" */}
+              {/* onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}} */}
+              {/* disabled */}
+              {/* > */}
+              {/* 删除 */}
+              {/* </Button> */}
+              {/* <Button */}
+              {/* className={styles.buttomControl} */}
+              {/* type="primary" */}
+              {/* size="small" */}
+              {/* onClick={this.clickEditFrom} */}
+              {/* disabled */}
+              {/* icon="edit" */}
+              {/* > */}
+              {/* 编辑 */}
+              {/* </Button> */}
+              {/* <Button */}
+              {/* className={styles.buttomControl} */}
+              {/* size="small" */}
+              {/* type="primary" */}
+              {/* icon="lock" */}
+              {/* onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}} */}
+              {/* disabled */}
+              {/* > */}
+              {/* 审批 */}
+              {/* </Button> */}
+              {/* </div> */}
+              {/* </Card> */}
             </div>
           </Col>
         </Row>

@@ -16,6 +16,7 @@ class JewelrySelect extends PureComponent {
   handleChange = value => {
     const { onChange, onSelect } = this.props;
     const { dicts } = this.state;
+    console.log('dicts',dicts)
     this.setState({
       value,
       isFirst: false,
