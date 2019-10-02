@@ -15,7 +15,8 @@ const {
   listBasicShapeSettingsDropDown,
   listBasicSpecificationSettingsDropDown,
   listBasicMeasureUnitDropDown,
-  listMstWordbook } = servicesConfig;
+  listMstWordbook,
+} = servicesConfig;
 export default {
   namespace: 'devRaw',
 
@@ -27,8 +28,8 @@ export default {
     listMstWordbookDrop: [],
     listMstWordbookDroph015: [],
     listMstWordbookDroph016: [],
-    shapeSettingList:[],
-    specificationSettingList:[],
+    shapeSettingList: [],
+    specificationSettingList: [],
     pagination: {
       current: 1,
       size: 10,
@@ -39,34 +40,34 @@ export default {
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 
-    choosenTypesRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
+    choosenTypesRowData: { id: '', zhName: '', enName: '' }, // select to show
     paginationTypes: {
       current: 1,
       size: 10,
     },
 
 
-    typesList:initData,
+    typesList: initData,
 
     materialList: initData,
-    accessoriesList:initData,
-    stoneList:initData,
-    wrapperList:initData,
-    auxiliaryMaterialList:initData,
-    otherMaterialList:initData,
+    accessoriesList: initData,
+    stoneList: initData,
+    wrapperList: initData,
+    auxiliaryMaterialList: initData,
+    otherMaterialList: initData,
 
 
   },
 
   effects: {
-    *getListMstWordbookParams({ payload }, { call, put }) {
+    * getListMstWordbookParams({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload);
-      if(payload.wordbookTypeCode==='H015'){
+      if (payload.wordbookTypeCode === 'H015') {
         yield put({
           type: 'getListMstWordbook3',
           payload: response,
         });
-      }else if(payload.wordbookTypeCode==='H016'){
+      } else if (payload.wordbookTypeCode === 'H016') {
         yield put({
           type: 'getListMstWordbook4',
           payload: response,
@@ -74,41 +75,41 @@ export default {
       }
     },
     // table
-    * getPagination({ payload,callback }, { put }) {
+    * getPagination({ payload, callback }, { put }) {
       yield put({
         type: 'getPagination2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
     },
-    * getTypesPagination({ payload,callback }, { put }) {
+    * getTypesPagination({ payload, callback }, { put }) {
       yield put({
         type: 'getTypesPagination2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
     },
-    * getSelectKey({ payload,callback }, { put }) {
+    * getSelectKey({ payload, callback }, { put }) {
       yield put({
         type: 'getSelectKey2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
 
     },
-    * getChoosenTypeRowData({ payload,callback }, { put }) {
+    * getChoosenTypeRowData({ payload, callback }, { put }) {
       yield put({
         type: 'getChoosenTypeRowData2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
     },
-    * getChoosenRowData({ payload,callback }, { put }) {
+    * getChoosenRowData({ payload, callback }, { put }) {
       yield put({
         type: 'getChoosenRowData2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
     },
     * changeSelectedRowKeys({ payload }, { put }) {
       yield put({
@@ -136,6 +137,12 @@ export default {
         payload: { response, type },
       });
       if (callback) callback();
+    },
+    * clearSixList(_, { put }) {
+      yield put({
+        type: 'clearSixListData',
+        payload: {},
+      });
     },
     * addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
@@ -194,12 +201,12 @@ export default {
           : initData;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode }
-        })
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
       }
       return {
         ...state,
-        listMstWordbookDroph015:listMstWordbookDrop,
+        listMstWordbookDroph015: listMstWordbookDrop,
       };
     },
     getListMstWordbook4(state, action) {
@@ -209,12 +216,12 @@ export default {
           : initData;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode }
-        })
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
       }
       return {
         ...state,
-        listMstWordbookDroph016:listMstWordbookDrop,
+        listMstWordbookDroph016: listMstWordbookDrop,
       };
     },
 
@@ -226,7 +233,7 @@ export default {
           : initData;
       return {
         ...state,
-        listBasicMeasureUnitDropDown:list,
+        listBasicMeasureUnitDropDown: list,
       };
     },
     getDevList2(state, action) {
@@ -300,8 +307,8 @@ export default {
           : initData;
       if (gemSetProcessDropDown.length > 0) {
         gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
-          return { key: zhName, value: id }
-        })
+          return { key: zhName, value: id };
+        });
       }
       return {
         ...state,
@@ -309,7 +316,7 @@ export default {
       };
     },
 
-     // 形状
+    // 形状
     getshapeSettingList2(state, action) {
       let shapeSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -339,7 +346,7 @@ export default {
       }
       return {
         ...state,
-        specificationSettingList:list,
+        specificationSettingList: list,
       };
     },
     // 重量 计量单位
@@ -356,6 +363,24 @@ export default {
       return {
         ...state,
         getBUMropDown,
+      };
+    },
+    clearSixListData(state) {
+      return {
+        ...state,
+        materialList: initData,
+        accessoriesList: initData,
+        stoneList: initData,
+        wrapperList: initData,
+        auxiliaryMaterialList: initData,
+        otherMaterialList: initData,
+        choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
+        pagination: {
+          current: 1,
+          size: 10,
+        },
+        selectedRowKeys: [], // table select
+
       };
     },
     getListMstWordbook2(state, action) {

@@ -1020,6 +1020,11 @@ class CenterInfo extends Component {
       type: 'devRaw/getChoosenTypeRowData',
       payload: rowData,
     });
+    // 清空右边 下边
+    dispatch({
+      type: 'devRaw/clearSixList',
+      payload:  {},
+    });
   };
 
   changeChoosenRow = rowData => {
@@ -1226,6 +1231,7 @@ const GetRenderitem = ({ data, type }) => {
 
   if (modalContent[type]) {
     arr = [
+      { 'key': '类型', 'value': 'fCode' },
       ...modalContent[type],
       { 'key': '状态', 'value': 'status' },
     ];
@@ -1233,7 +1239,7 @@ const GetRenderitem = ({ data, type }) => {
 
 
   return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
+    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem} key={type}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
