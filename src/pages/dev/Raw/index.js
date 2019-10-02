@@ -483,6 +483,7 @@ columnsArr.stone = columnsArr.stone.map(item => ({ ...item, sorter: true }));
   return {
     dev: devRaw,
     list: devRaw.list,
+    paginationTypes: devRaw.paginationTypes,
     pagination: devRaw.pagination,
     searchParams: devRaw.searchParams,
     selectKey: devRaw.selectKey,
@@ -521,26 +522,29 @@ class Info extends Component {
     });
     this.getTypeList();
 
-    // 获取初始表单数据
-    this.getList({});
   }
 
   getTypeList = (params) => {
-    const { dispatch, pagination } = this.props;
+    const { dispatch, paginationTypes } = this.props;
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params }, type: 'types' },
+      payload: { params: { ...paginationTypes, ...params }, type: 'types' },
     });
   };
 
   // 获取对应key=》页面进行数据请求
   getList = ({ key, params }) => {
-    const { dispatch, pagination, selectKey } = this.props;
+    const { dispatch, pagination, selectKey, choosenTypesRowData } = this.props;
+
+    // 没有选择类型就没有查询下面
+    if (!choosenTypesRowData || choosenTypesRowData.id === '') {
+      return;
+    }
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params }, type: key || selectKey },
+      payload: { params: { ...pagination, ...params, cid: choosenTypesRowData.id }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -827,6 +831,16 @@ class Info extends Component {
   };
 
 
+  // 第一部分table  排序 页面切换 触发
+  onSearchType = (v) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'devRaw/getTypesPagination',
+      payload: v,
+    });
+    this.getTypeList(v);
+  };
+
   // 第二部分table  排序 页面切换 触发
   onSearch = (v) => {
     const { dispatch, selectKey } = this.props;
@@ -838,7 +852,7 @@ class Info extends Component {
   };
 
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch, onSearchType } = this;
     const { mode, modalType } = state;
     const { list, selectKey, choosenRowData } = props;
     return (
@@ -852,12 +866,15 @@ class Info extends Component {
               <RightContent
                 returnElement={this.returnElement}
                 onSearch={onSearch}
+                onSearchType={onSearchType}
                 getList={(p) => {
                   this.getList(p);
                 }}
+                getTypeList={(p) => {
+                  this.getTypeList(p);
+                }}
 
                 type={selectKey}
-                sourceList={list}
                 choosenRowData={choosenRowData}
                 btnFn={btnFn}
                 returnLockType={returnLockType}
@@ -887,12 +904,19 @@ class Info extends Component {
 }
 
 // 右手边正文内容
-const RightContent = ({ getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch, returnElement }) => (
+const RightContent = ({ onSearchType, getTypeList, getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch, returnElement }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
       <Col lg={16} md={16}>
-        <CenterInfo returnElement={returnElement} getList={getList} type={type} onSearch={onSearch} />
+        <CenterInfo
+          returnElement={returnElement}
+          getList={getList}
+          getTypeList={getTypeList}
+          type={type}
+          onSearch={onSearch}
+          onSearchType={onSearchType}
+        />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={16}>
@@ -1017,7 +1041,7 @@ class CenterInfo extends Component {
 
   turnTab(e) {
     const key = e.target.value;
-    const { dispatch, pagination, getList } = this.props;
+    const { dispatch, getList } = this.props;
     this.initDropList(key);
 
     dispatch({
@@ -1053,7 +1077,7 @@ class CenterInfo extends Component {
   }
 
 
-  // 点击搜索
+  // 第二个表格搜索
   search(params) {
     const { dispatch, getList, pagination } = this.props;
     getList({ params: { ...pagination, ...params, current: 1 } });
@@ -1066,10 +1090,21 @@ class CenterInfo extends Component {
 
   }
 
+  // 类型搜索
+  searchType(params) {
+    const { dispatch, getTypeList, paginationTypes } = this.props;
+    getTypeList(  { ...paginationTypes, ...params, current: 1 } );
+
+    dispatch({
+      type: 'devRaw/getTypesPagination',
+      payload: { current: 1 },
+    });
+
+  }
 
   render() {
     const { onSelectChange, props } = this;
-    const { type, choosenRowData, choosenTypesRowData, pagination, paginationTypes, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
+    const { type, onSearchType, choosenRowData, paginationTypes,choosenTypesRowData, pagination, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
     const typeslist = dev.typesList;
@@ -1079,7 +1114,7 @@ class CenterInfo extends Component {
           <SearchFrom
             devRaw={dev}
             onSearch={(p) => {
-              this.search(p);
+              this.searchType(p);
             }}
           />
         </div>
@@ -1090,10 +1125,9 @@ class CenterInfo extends Component {
             changeChoosenRow={this.changeChoosenTypeRow}
             selectKey={choosenTypesRowData.id}
             pagination={paginationTypes}
-            selectedRowKeys={[]}
-
+            selectedRowKeys={[choosenTypesRowData.id]}
             listLoading={listLoading}
-            // handleTableChange={onSearch}
+            handleTableChange={onSearchType}
           />
         </div>
         <div className={styles.contentTitle}>

@@ -81,6 +81,13 @@ export default {
       });
       if(callback)callback();
     },
+    * getTypesPagination({ payload,callback }, { put }) {
+      yield put({
+        type: 'getTypesPagination2',
+        payload,
+      });
+      if(callback)callback();
+    },
     * getSelectKey({ payload,callback }, { put }) {
       yield put({
         type: 'getSelectKey2',
@@ -243,6 +250,16 @@ export default {
         ...state,
         pagination: {
           ...state.pagination,
+          ...action.payload,
+        },
+      };
+    },
+    // table
+    getTypesPagination2(state, action) {
+      return {
+        ...state,
+        paginationTypes: {
+          ...state.paginationTypes,
           ...action.payload,
         },
       };
