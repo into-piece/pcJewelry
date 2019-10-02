@@ -4,7 +4,13 @@ import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
 
-@Form.create()
+@Form.create({
+  onValuesChange(props, changeFields) {
+    props.onChange && props.onChange(changeFields);
+
+  },
+})
+
 class SearchFromTab0 extends Component {
   constructor(props) {
     super(props);
