@@ -544,7 +544,7 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params, cid: choosenTypesRowData.id }, type: key || selectKey },
+      payload: { params: { ...pagination, ...params, cId: choosenTypesRowData.id }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -822,8 +822,8 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props;
-    if (tag === 'plus') return false;
+    const { selectedRowKeys,choosenTypesRowData } = this.props;
+    if (tag === 'plus') return (!choosenTypesRowData||choosenTypesRowData.id==='');
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
