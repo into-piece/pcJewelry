@@ -510,15 +510,38 @@ class Info extends Component {
     filelist: [],
   };
 
+
   componentDidMount() {
     const { dispatch } = this.props;
+    // 大类下拉
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
       payload: { wordbookTypeCode: 'H015' },
     });
+    // 小类下拉
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
       payload: { wordbookTypeCode: 'H016' },
+    });
+    // 成色列表
+    dispatch({
+      type: 'devRaw/getGemDropDown',
+      payload: {},
+    });
+    // 形状下拉
+    dispatch({
+      type: 'devRaw/getShapeDropDown',
+      payload: {},
+    });
+    // 规格下拉
+    dispatch({
+      type: 'devRaw/getSpecificationDropDown',
+      payload: {},
+    });
+    // 重量单位列表
+    dispatch({
+      type: 'devRaw/getBUMDropDown',
+      payload: {},
     });
     this.getTypeList();
 
@@ -886,7 +909,7 @@ class Info extends Component {
         <Modal
           maskClosable={false}
           title={returnTitle()}
-          width={selectKey === 'accessories' ? 960 : 640}
+          width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
@@ -978,41 +1001,8 @@ const RightContent = ({ onSearchType, getTypeList, getList, type, choosenRowData
 })
 class CenterInfo extends Component {
 
-  componentDidMount() {
-    const { type } = this.props;
-    this.initDropList(type);
-  }
 
 
-  initDropList(type) {
-    const { dispatch } = this.props;
-    // 主材
-    if (type === 'material' || type === 'accessories') {
-      // 成色列表
-      dispatch({
-        type: 'devRaw/getGemDropDown',
-        payload: {},
-      });
-      // 重量单位列表
-      dispatch({
-        type: 'devRaw/getBUMDropDown',
-        payload: {},
-      });
-    }
-    // 配件
-    if (type === 'accessories') {
-      // 形状下拉
-      dispatch({
-        type: 'devRaw/getShapeDropDown',
-        payload: {},
-      });
-      // 规格下拉
-      dispatch({
-        type: 'devRaw/getSpecificationDropDown',
-        payload: {},
-      });
-    }
-  }
 
   changeChoosenTypeRow = rowData => {
     const { dispatch } = this.props;
@@ -1047,7 +1037,6 @@ class CenterInfo extends Component {
   turnTab(e) {
     const key = e.target.value;
     const { dispatch, getList } = this.props;
-    this.initDropList(key);
 
     dispatch({
       type: 'devRaw/getSelectKey',
@@ -1231,7 +1220,7 @@ const GetRenderitem = ({ data, type }) => {
 
   if (modalContent[type]) {
     arr = [
-      { 'key': '类型', 'value': 'fCode' },
+      { 'key': '类别', 'value': 'fCode' },
       ...modalContent[type],
       { 'key': '状态', 'value': 'status' },
     ];

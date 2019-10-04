@@ -18,8 +18,8 @@ export default {
   },
 
   effects: {
-    *fetchListSendWay(_, { call, put }) {
-      const response = yield call(querylistsendWay);
+    *fetchListSendWay({ payload}, { call, put }) {
+      const response = yield call(querylistsendWay,payload);
       yield put({
         type: 'list',
         payload: response,
@@ -85,6 +85,9 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body: {
           ...state.body,
+          total: action.payload.body.total,
+          current: action.payload.body.current,
+          size: action.payload.body.pageSize,
           data: action.payload.body.records,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,

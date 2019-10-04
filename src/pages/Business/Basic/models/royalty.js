@@ -18,8 +18,8 @@ export default {
   },
 
   effects: {
-    *fetchListRoyalty(_, { call, put }) {
-      const response = yield call(querylistRoyalty);
+    *fetchListRoyalty({payload}, { call, put }) {
+      const response = yield call(querylistRoyalty,payload);
       yield put({
         type: 'list',
         payload: response,
@@ -111,6 +111,9 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body: {
           ...state.body,
+          total: action.payload.body.total,
+          current: action.payload.body.current,
+          size: action.payload.body.pageSize,
           data: action.payload.body.records,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,

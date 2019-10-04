@@ -20,11 +20,12 @@ export default {
     city: [],
     head: [],
     isLoading: false,
+    body:{}
   },
 
   effects: {
-    *fetchListBrands(_, { call, put }) {
-      const response = yield call(querylistBrands);
+    *fetchListBrands({payload}, { call, put }) {
+      const response = yield call(querylistBrands,payload);
       yield put({
         type: 'listBrand',
         payload: response,
@@ -140,6 +141,9 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body: {
           ...state.body,
+          total: action.payload.body.total,
+          current: action.payload.body.current,
+          size: action.payload.body.pageSize,
           data: action.payload.body.records,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,
@@ -166,6 +170,7 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body: {
           ...state.body,
+          data: action.payload.body.records,
           data: action.payload.body.records,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,
