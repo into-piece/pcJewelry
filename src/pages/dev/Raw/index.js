@@ -671,7 +671,7 @@ class Info extends Component {
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable,noedit }) => {
 
             const selectData = { ...choosenRowData };
             if (value === 'materialNo' && selectKey === 'accessories') {
@@ -693,7 +693,7 @@ class Info extends Component {
               selectData[value] = va || choosenRowData[value];
             }
 
-            return (
+            return (!noedit&&
               <Col span={span || 12} key={`k${value}`}>
                 <FormItem label={key} {...formLayout} key={key}>
                   {

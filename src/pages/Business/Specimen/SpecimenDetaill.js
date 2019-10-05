@@ -57,6 +57,7 @@ const FormItem = Form.Item;
     productUnFreezeloading: loading.effects['specimen/unfreezeSpecimen'],
     queryProductLocking: loading.effects['specimen/querySpecimenLock'],
     updateProductUnLocking: loading.effects['specimen/updateSpecimenUnLock'],
+    transferProductLoading: loading.effects['specimen/transferProduct'],
   };
 })
 @Form.create()
@@ -120,6 +121,7 @@ class SpecimenDetaill extends Component {
       productUnFreezeloading,
       productDeleteloading,
       queryProductLocking,
+      transferProductLoading,
       body = {},
       isloading,
       refarshList,
@@ -133,7 +135,7 @@ class SpecimenDetaill extends Component {
 
 
     const isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
+      productUpdateloading || productSaveloading || productFreezeloading ||transferProductLoading|| productDeleteloading || productUnFreezeloading;
 
     if (isUpdate) {
       this.state.update = true;
@@ -411,6 +413,22 @@ class SpecimenDetaill extends Component {
                   disabled
                 >
                   撤销
+                </Button>
+                <Button
+                  className={business.buttomControl}
+                  size="small"
+                  type="primary"
+                  icon="retweet"
+                  disabled={!showItem || showItem === '' || !isProductUpdate}
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定转产品吗？', onOk: () => {
+                        this.handleTransferProduct();
+                      },
+                    });
+                  }}
+                >
+                  转产品
                 </Button>
               </div>
             </div>
@@ -1261,6 +1279,17 @@ class SpecimenDetaill extends Component {
     });
   };
 
+  handleTransferProduct =()=>{
+    const { selectProductData = [] } = this.props;
+    const ids = selectProductData.map(v => {
+      return v.id;
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'specimen/transferProduct',
+      payload: ids,
+    });
+  }
 
   openCutImageModal = () => {
 

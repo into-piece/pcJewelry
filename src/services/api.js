@@ -16,6 +16,20 @@ export async function logout() {
 }
 
 /*
+* 新款档案  转产品接口
+* */
+
+export async function specimenTransferProduct(params) {
+  return request(`${priefx  }/business/business/product/sample/createProduct`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data:params,
+  });
+}
+
+/*
 * 权限接口
 * */
 

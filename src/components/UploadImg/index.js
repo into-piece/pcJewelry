@@ -66,6 +66,7 @@ class UploadImg extends Component {
       return f;
     });
 
+    if (fileListFun) fileListFun(fileList);
 
     this.setState({ fileList });
   };
