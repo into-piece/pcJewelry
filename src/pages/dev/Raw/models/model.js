@@ -17,6 +17,9 @@ const {
   listBasicMeasureUnitDropDown,
   listMstWordbook,
   getTypeByWordbookCode,
+  getCutDrop,
+  getColorDrop,
+  getQualityDrop,
 } = servicesConfig;
 export default {
   namespace: 'devRaw',
@@ -30,6 +33,12 @@ export default {
     listMstWordbookDroph015: [],
     listMstWordbookDroph016: [],
     listMstWordbookDropH016001: [],
+
+    listCutDrop:[],
+    listColorDrop:[],
+    listQualityDrop:[],
+
+
     statusList: [{key:"输入",value:0},{key:"已审核",value:2}],
     shapeSettingList: [],
     specificationSettingList: [],
@@ -63,6 +72,27 @@ export default {
   },
 
   effects: {
+    * getCutDrop({ payload }, { call, put }) {
+      const response = yield call(getCutDrop, payload);
+      yield put({
+        type: 'getCutDrop2',
+        payload: response,
+      });
+      },
+    * getColorDrop({ payload }, { call, put }) {
+      const response = yield call(getColorDrop, payload);
+      yield put({
+        type: 'getColorDrop2',
+        payload: response,
+      });
+      },
+    * getQualityDrop({ payload }, { call, put }) {
+      const response = yield call(getQualityDrop, payload);
+      yield put({
+        type: 'getQualityDrop2',
+        payload: response,
+      });
+      },
     * getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload);
       yield put({
@@ -248,6 +278,51 @@ export default {
       return {
         ...state,
         listMstWordbookDropH016001: list,
+      };
+    },
+    getCutDrop2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listCutDrop: list,
+      };
+    },
+    getColorDrop2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listColorDrop: list,
+      };
+    },
+    getQualityDrop2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listQualityDrop: list,
       };
     },
 

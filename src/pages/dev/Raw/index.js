@@ -116,11 +116,7 @@ const columnsArr = {
     }, {
       title: '成色',
       dataIndex: 'assayingName',
-      key: 'assaying',
-    }, {
-      title: '类型',
-      dataIndex: 'sIdName',
-      key: 'sIdName',
+      key: 'assayingName',
     },
     {
       title: '中文名',
@@ -135,12 +131,12 @@ const columnsArr = {
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnit',
+      key: 'weightUnitName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuationClassName',
     },
     {
       title: '库存重量',
@@ -175,17 +171,17 @@ const columnsArr = {
     {
       title: '成色',
       dataIndex: 'assayingName',
-      key: 'assaying',
+      key: 'assayingName',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shape',
+      key: 'shapeName',
     },
     {
       title: '规格',
       dataIndex: 'specificationName',
-      key: 'specification',
+      key: 'specificationName',
     },
     {
       title: '中文名',
@@ -200,17 +196,17 @@ const columnsArr = {
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnit',
+      key: 'measureUnitName',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnit',
+      key: 'weightUnitName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuationClassName',
     },
     {
       title: '单重',
@@ -425,8 +421,8 @@ const columnsArr = {
   stone: [
     {
       title: '原料编号',
-      dataIndex: 'fCode',
-      key: 'fCode',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -435,19 +431,29 @@ const columnsArr = {
         : (data),
     },
     {
-      title: '成色',
-      dataIndex: 'assayingName',
-      key: 'assaying',
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specificationName',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shape',
+      key: 'shapeName',
     },
     {
-      title: '规格',
-      dataIndex: 'specificationName',
-      key: 'specification',
+      title: '切工',
+      dataIndex: 'cutName',
+      key: 'cutName',
+    },
+    {
+      title: '颜色',
+      dataIndex: 'colorName',
+      key: 'colorName',
+    },
+    {
+      title: '等级',
+      dataIndex: 'qualityName',
+      key: 'qualityName',
     },
     {
       title: '中文名',
@@ -457,22 +463,27 @@ const columnsArr = {
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'zhName',
+    },
+    {
+      title: '是否配料模块',
+      dataIndex: 'isIngredientName',
+      key: 'isIngredientName',
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnit',
+      key: 'measureUnitName',
     },
     {
       title: '重量单位',
-      dataIndex: 'assayingName',
-      key: 'weightUnit',
+      dataIndex: 'weightUnitName',
+      key: 'weightUnitName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuationClassName',
     },
     {
       title: '单重',
@@ -531,6 +542,21 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    // 切工下拉
+    dispatch({
+      type: 'devRaw/getCutDrop',
+      payload: { },
+    });
+    // 等级下拉
+    dispatch({
+      type: 'devRaw/getQualityDrop',
+      payload: { },
+    });
+    // 颜色下拉
+    dispatch({
+      type: 'devRaw/getColorDrop',
+      payload: { },
+    });
     // 类别下拉
     dispatch({
       type: 'devRaw/getTypeByWordbookCode',
@@ -649,6 +675,11 @@ class Info extends Component {
           <Radio value="0">计重</Radio>
           <Radio value="1">计件</Radio>
         </Radio.Group>);
+      case 4 :
+        return (<Radio.Group disabled={disable || false}>
+          <Radio value="0">否</Radio>
+          <Radio value="1">是</Radio>
+        </Radio.Group>);
       default:
         return <Input placeholder="请输入" disabled={disable || false} />;
     }
@@ -700,7 +731,7 @@ class Info extends Component {
                     getFieldDecorator(value, {
                       rules: [{
                         required: !noNeed,
-                        message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
+                        message: `请${type && (type === 2 || type === 3|| type === 4) ? '选择' : '输入'}${key}`,
                       }],
                       initialValue: isEdit ? selectData[value] : (dfv || ''),
                     })(this.returnElement({ type, dev, list, disable }))
@@ -710,7 +741,7 @@ class Info extends Component {
             );
           })
         }
-        {(selectKey !== 'material' || selectKey !== 'stone') && <Col span={18}>
+        {(selectKey !== 'material' || selectKey !== 'otherMaterial') && <Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -763,7 +794,7 @@ class Info extends Component {
       if (!err) {
         values = { ...values, sId: choosenTypesRowData.id };
 
-        if (selectKey !== 'material'||selectKey !== 'stone') {
+        if (selectKey !== 'material'||selectKey !== 'otherMaterial') {
           values = {
             ...values, picPath: filelist,
           };
@@ -808,7 +839,7 @@ class Info extends Component {
           sId: choosenTypesRowData.id,
         };
 
-        if (selectKey !== 'material'||selectKey !== 'stone') {
+        if (selectKey !== 'material'||selectKey !== 'otherMaterial') {
           params = {
             ...params, picPath: filelist,
           };
@@ -832,12 +863,16 @@ class Info extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const { selectKey, selectedRowKeys } = this.props;
+    const { selectKey, selectedRowKeys ,dispatch} = this.props;
     serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
+        });
+        dispatch({
+          type: 'devRaw/getChoosenRowData',
+          payload: { id: '', zhName: '', enName: '', unitCode: '' },
         });
         this.getList({ key: selectKey });
       }
@@ -1175,6 +1210,7 @@ class CenterInfo extends Component {
         </div>
         <div className={styles.tableBox}>
           <Table
+            key={`ta${Math.random(1)}`}
             columns={typeTable}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}
@@ -1253,6 +1289,8 @@ class CenterInfo extends Component {
           />
 
           <Table
+            key={`tb${Math.random(1)}`}
+
             columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}
@@ -1305,7 +1343,7 @@ const GetRenderitem = ({ data, type }) => {
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem} key={type}>
 
-      {(type !== 'material' && type !== 'stone') &&
+      {(type !== 'material' && type !== 'otherMaterial') &&
       <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
         {getImages(images)}
       </Carousel>}
