@@ -8,6 +8,7 @@ import { currency } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
+import {statusConvert} from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 
 const FormItem = Form.Item;
@@ -45,13 +46,10 @@ const currencyContentColumns = [
   },
 ];
 
-const paginationProps = {
-  // showSizeChanger: true,
-  showQuickJumper: true,
-  pageSize: 10,
-};
+
 
 const { Description } = DescriptionList;
+
 @connect(({ loading, currency }) => {
   const { rtnCode, rtnMsg } = currency;
   return {
@@ -61,6 +59,7 @@ const { Description } = DescriptionList;
     upateloading: loading.effects['currency/updateCurrency'],
     freezing: loading.effects['currency/freezeCurrency'],
     body: currency.body,
+    data: currency.body.data,
     rtnCode,
     rtnMsg,
   };
@@ -89,13 +88,19 @@ class Currency extends PureComponent {
       requestMes: '保存成功！',
       isLoading: false,
       selectIndexAt: -1,
+      pagination:{
+        current:1,
+        size:10
+      }
     };
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
+    const { pagination } = this.state;
     dispatch({
       type: 'currency/fetchListCurrency',
+      payload:pagination
     });
   }
 
@@ -116,11 +121,11 @@ class Currency extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
 
         this.setState({
@@ -149,11 +154,11 @@ class Currency extends PureComponent {
           payload: {
             ...data,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
       }
       this.setState({
@@ -166,6 +171,7 @@ class Currency extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'currency/fetchListCurrency',
+      payload:{}
     });
 
     this.setState({
@@ -221,14 +227,8 @@ class Currency extends PureComponent {
     if (listLoading && body && body.data && body.data.length > 0) {
       const newdata = body.data.map(value => {
         const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
-        return value;
+        value.status = statusConvert[s];
+        return  value;
       });
 
       this.state.data = newdata;
@@ -242,6 +242,7 @@ class Currency extends PureComponent {
       onChange: this.onSelectChange,
       onSelect: this.selectChange,
     };
+
 
     const getModalContent = () => {
       if (this.state.done) {
@@ -259,6 +260,8 @@ class Currency extends PureComponent {
           />
         );
       }
+
+
       return (
         <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="币种" {...this.formLayout}>
@@ -299,6 +302,19 @@ class Currency extends PureComponent {
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
+    const onChange = (pagination, filters, sorter) => {
+      const { current:currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'currency/fetchListCurrency',
+        payload:{ current:currentIndex, size: pageSize }
+      });
+
+    };
+    const  paginationProps = {
+      showQuickJumper: true,
+      pageSize: 10,
+      total:body.total
+    };
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
@@ -335,6 +351,8 @@ class Currency extends PureComponent {
                   }}
                   size="middle"
                   columns={currencyContentColumns}
+                  onChange={onChange}
+
                 />
                 <Modal
                   maskClosable={false}

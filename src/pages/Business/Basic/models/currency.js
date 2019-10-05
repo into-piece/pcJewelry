@@ -11,36 +11,37 @@ export default {
 
   state: {
     isLoading: false,
+    body: {},
   },
 
   effects: {
-    *fetchListCurrency(_, { call, put }) {
-      const response = yield call(querylistCurrency);
+    * fetchListCurrency({ payload }, { call, put }) {
+      const response = yield call(querylistCurrency, payload);
       yield put({
         type: 'list',
         payload: response,
       });
     },
 
-    *addCurrency({ payload, callback }, { call, put }) {
+    * addCurrency({ payload, callback }, { call, put }) {
       const response = yield call(saveTheCurrency, payload);
       yield put({
         type: 'save',
         payload: response,
       });
-      if (callback &&response.head.rtnCode==='000000') callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
-    *updateCurrency({ payload, callback }, { call, put }) {
+    * updateCurrency({ payload, callback }, { call, put }) {
       const response = yield call(updateTheCurrency, payload);
       yield put({
         type: 'save',
         payload: response,
       });
-      if (callback&&response.head.rtnCode==='000000') callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
-    *deleteCurrency({ payload, callback }, { call, put }) {
+    * deleteCurrency({ payload, callback }, { call, put }) {
       const response = yield call(deleteTheCurrency, payload);
       yield put({
         type: 'save',
@@ -49,7 +50,7 @@ export default {
       if (callback) callback();
     },
 
-    *freezeCurrency({ payload, callback }, { call, put }) {
+    * freezeCurrency({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheCurrency, payload);
       yield put({
         type: 'save',
@@ -67,6 +68,7 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body: {
           ...state.body,
+          total: action.payload.body.total,
           data: action.payload.body.records,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,

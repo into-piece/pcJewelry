@@ -23,6 +23,7 @@ import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import ModalConfirm from '@/utils/modal';
+import { statusConvert } from '@/utils/convert';
 
 const FormItem = Form.Item;
 const clientContentColumns = [
@@ -43,11 +44,6 @@ const clientContentColumns = [
   },
 ];
 
-const paginationProps = {
-  // showSizeChanger: true,
-  showQuickJumper: true,
-  pageSize: 5,
-};
 const { Description } = DescriptionList;
 
 @connect(({ loading, requested }) => {
@@ -98,6 +94,7 @@ class RequestedComponent extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'requested/fetchListRequested',
+      payload: { size: 5, current: 1 },
     });
   }
 
@@ -118,11 +115,11 @@ class RequestedComponent extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
 
         this.setState({
@@ -148,11 +145,11 @@ class RequestedComponent extends PureComponent {
           payload: {
             ...data,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
       }
       this.setState({
@@ -162,9 +159,10 @@ class RequestedComponent extends PureComponent {
   };
 
   handleDone = () => {
-    const { dispatch } = this.props;
+    const { dispatch, body } = this.props;
     dispatch({
       type: 'requested/fetchListRequested',
+      payload: { current: body.current, size: body.size },
     });
 
     this.setState({
@@ -223,13 +221,7 @@ class RequestedComponent extends PureComponent {
       if (body && body.data && body.data.length > 0) {
         const newdata = body.data.map(value => {
           const s = value.status;
-          if (s == 0) {
-            value.status = '输入';
-          } else if (s == 1) {
-            value.status = '使用中';
-          } else if (s == 2) {
-            value.status = '审批';
-          }
+          value.status = statusConvert[s];
           return value;
         });
 
@@ -265,13 +257,13 @@ class RequestedComponent extends PureComponent {
             {getFieldDecorator('qualityEnName', {
               rules: [{ required: true, message: '请输入英文名称' }],
               initialValue: current.qualityEnName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
           <FormItem label="品质要求中文名" {...this.formLayout}>
             {getFieldDecorator('qualityZhName', {
               rules: [{ message: '请输入中文名称' }],
               initialValue: current.qualityZhName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
         </Form>
       );
@@ -281,6 +273,19 @@ class RequestedComponent extends PureComponent {
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
+    const onChange = (pagination, filters, sorter) => {
+      const { current: currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'requested/fetchListRequested',
+        payload: { current: currentIndex, size: pageSize },
+      });
+
+    };
+    const paginationProps = {
+      // showSizeChanger: true,
+      showQuickJumper: true,
+      pageSize: 5,
+    };
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
@@ -297,7 +302,7 @@ class RequestedComponent extends PureComponent {
                   }}
                   component={Requested}
                 />
-                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
+                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求"/>
               </div>
               <Card bordered={false} loading={false}>
                 <Table
@@ -317,6 +322,7 @@ class RequestedComponent extends PureComponent {
                   rowClassName={this.onSelectRowClass}
                   size="middle"
                   columns={clientContentColumns}
+                  onChange={onChange}
                 />
                 <Modal
                   maskClosable={false}
@@ -349,7 +355,7 @@ class RequestedComponent extends PureComponent {
                   >
                     品质要求信息
                   </span>
-                  <Divider />
+                  <Divider/>
                   {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
@@ -407,21 +413,21 @@ class RequestedComponent extends PureComponent {
                   >
                     取消审批
                   </Button>) : (<Button
-                                                            className={styles.buttomControl}
-                                                            size="small"
-                                                            type="primary"
-                                                            icon="lock"
-                                                            onClick={() => {
+                    className={styles.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    onClick={() => {
                       ModalConfirm({
                         content: '确定审批吗？', onOk: () => {
                           this.clickFreezeFrom();
                         },
                       });
                     }}
-                                                            disabled={isEdit}
-                                                          >
+                    disabled={isEdit}
+                  >
                     审批
-                                                                        </Button>)}
+                  </Button>)}
                 </div>
               </Card>
             </div>

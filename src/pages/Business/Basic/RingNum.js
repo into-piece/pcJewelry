@@ -24,6 +24,7 @@ import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from '../Client/Client.less';
 import ModalConfirm from '@/utils/modal';
+import { statusConvert } from '@/utils/convert';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -69,10 +70,6 @@ const subringNumContentColumns = [
   },
 ];
 
-const paginationProps = {
-  showQuickJumper: true,
-  pageSize: 5,
-};
 
 const { Description } = DescriptionList;
 
@@ -141,6 +138,7 @@ class RingNum extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'ringnum/fetchListRingNum',
+      payload: { current: 1, size: 5 },
     });
     this.state.data2 = [];
   }
@@ -160,11 +158,11 @@ class RingNum extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
 
         this.setState({
@@ -189,11 +187,11 @@ class RingNum extends PureComponent {
           type: 'ringnum/updateRingNum',
           payload: {
             ...data,
-            callback:()=>{
+            callback: () => {
               this.setState({
                 visible: false,
               });
-            }
+            },
           },
         });
       }
@@ -255,12 +253,13 @@ class RingNum extends PureComponent {
   };
 
   handleDone = () => {
-    const { dispatch } = this.props;
+    const { dispatch, body, body2 } = this.props;
     const { refreshList, showItem } = this.state;
 
     if (refreshList === 'standard') {
       dispatch({
         type: 'ringnum/fetchListRingNum',
+        payload: { current: body.current, size: body.size },
       });
 
       this.setState({
@@ -277,6 +276,8 @@ class RingNum extends PureComponent {
         type: 'ringnum2/fetchListSonRingNum',
         payload: {
           ...params,
+          current: body2.current,
+          size: body2.size,
         },
       });
       this.setState({
@@ -378,6 +379,8 @@ class RingNum extends PureComponent {
         type: 'ringnum2/fetchListSonRingNum',
         payload: {
           ...params,
+          current: 1,
+          size: 5,
         },
       });
       // this.state.requestMes = body2.rtnMsg;
@@ -397,13 +400,8 @@ class RingNum extends PureComponent {
       if (body && body.data && body.data.length > 0) {
         const newdata = body.data.map(value => {
           const s = value.status;
-          if (s == 0) {
-            value.status = '输入';
-          } else if (s == 1) {
-            value.status = '使用中';
-          } else if (s == 2) {
-            value.status = '审批';
-          }
+
+          value.status = statusConvert[s];
           return value;
         });
 
@@ -418,13 +416,7 @@ class RingNum extends PureComponent {
     if (!fristLoad && body2 && body2.sonData && body2.sonData.length > 0) {
       const newdata2 = body2.sonData.map(value => {
         const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
+        value.status = statusConvert[s];
         return value;
       });
 
@@ -437,13 +429,7 @@ class RingNum extends PureComponent {
     } else if (this.state.isRingNumLoadList) {
       const newdata = body2.sonData.map(value => {
         const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
+        value.status = statusConvert[s];
         return value;
       });
 
@@ -532,6 +518,34 @@ class RingNum extends PureComponent {
 
     // console.log('modalType ' + modalType);
 
+    const onChange = (pagination, filters, sorter) => {
+      const { current: currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'ringnum/fetchListRingNum',
+        payload: { current: currentIndex, size: pageSize },
+      });
+
+    };
+    const onChange2 = (pagination, filters, sorter) => {
+      const { current: currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'ringnum2/fetchListSonRingNum',
+        payload: {ring_around_st_id: showItem.id, current: currentIndex, size: pageSize },
+      });
+
+    };
+
+    const paginationProps = {
+      showQuickJumper: true,
+      pageSize: 5,
+      total: body.total,
+    };
+
+    const paginationProps2 = {
+      showQuickJumper: true,
+      pageSize: 5,
+      total: body2.total,
+    };
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
@@ -556,6 +570,7 @@ class RingNum extends PureComponent {
                   pagination={paginationProps}
                   dataSource={this.state.data}
                   rowSelection={rowSelection}
+                  onChange={onChange}
                   rowKey={record => record.id}
                   bordered={false}
                   onRow={record => {
@@ -571,12 +586,14 @@ class RingNum extends PureComponent {
                 />
                 <Table
                   loading={this.state.isSonLoading}
-                  pagination={paginationProps}
+                  pagination={paginationProps2}
                   dataSource={this.state.data2}
                   bordered={false}
                   rowClassName={this.onSelectRowNumberClass}
                   rowSelection={rowNumberSelection}
                   rowKey={record => record.id}
+                  onChange={onChange2}
+
                   onRow={record => {
                     return {
                       onClick: event => {
@@ -888,7 +905,13 @@ class RingNum extends PureComponent {
               type="danger"
               icon="delete"
               size="small"
-              onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickNumberDeleteFrom();}});}}
+              onClick={() => {
+                ModalConfirm({
+                  content: '确定删除吗？', onOk: () => {
+                    this.clickNumberDeleteFrom();
+                  },
+                });
+              }}
               disabled={isEditNumber || (this.state.showNumberItem && this.state.showNumberItem.status === '审批')}
             >
               删除
@@ -908,7 +931,13 @@ class RingNum extends PureComponent {
               size="small"
               type="danger"
               icon="unlock"
-              onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.clickUnNumberFreezeFrom();}});}}
+              onClick={() => {
+                ModalConfirm({
+                  content: '确定取消审批吗？', onOk: () => {
+                    this.clickUnNumberFreezeFrom();
+                  },
+                });
+              }}
               disabled={isEditNumber}
             >
               取消审批
@@ -917,7 +946,13 @@ class RingNum extends PureComponent {
                                                             size="small"
                                                             type="primary"
                                                             icon="lock"
-                                                            onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickNumberFreezeFrom();}});}}
+                                                            onClick={() => {
+                ModalConfirm({
+                  content: '确定审批吗？', onOk: () => {
+                    this.clickNumberFreezeFrom();
+                  },
+                });
+              }}
                                                             disabled={isEditNumber}
                                                           >
               审批
@@ -1146,6 +1181,9 @@ class RingNum extends PureComponent {
       type: 'ringnum2/fetchListSonRingNum',
       payload: {
         ...params,
+        current: 1,
+        size: 5,
+
       },
     });
   };

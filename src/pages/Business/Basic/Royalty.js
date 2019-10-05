@@ -20,6 +20,7 @@ import { royalty } from '@/utils/SvgUtil';
 import { connect } from 'dva';
 import DescriptionList from '@/components/DescriptionList';
 import ModalConfirm from '@/utils/modal';
+import { statusConvert } from '@/utils/convert';
 
 const FormItem = Form.Item;
 
@@ -56,11 +57,6 @@ const clientContentColumns = [
   },
 ];
 
-const paginationProps = {
-  // showSizeChanger: true,
-  showQuickJumper: true,
-  pageSize: 10,
-};
 const { Description } = DescriptionList;
 
 @connect(({ loading, royalty }) => {
@@ -110,6 +106,8 @@ class Royalty extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'royalty/fetchListRoyalty',
+      payload: { current: 1, size: 10 },
+
     });
   }
 
@@ -130,11 +128,11 @@ class Royalty extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
 
         this.setState({
@@ -163,11 +161,11 @@ class Royalty extends PureComponent {
           payload: {
             ...data,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: false,
             });
-          }
+          },
         });
       }
       this.setState({
@@ -177,9 +175,11 @@ class Royalty extends PureComponent {
   };
 
   handleDone = () => {
-    const { dispatch } = this.props;
+    const { dispatch, body } = this.props;
     dispatch({
       type: 'royalty/fetchListRoyalty',
+      payload: { current: body.current, size: body.size },
+
     });
 
     this.setState({
@@ -238,13 +238,7 @@ class Royalty extends PureComponent {
       if (body && body.data && body.data.length > 0) {
         const newdata = body.data.map(value => {
           const s = value.status;
-          if (s == 0) {
-            value.status = '输入';
-          } else if (s == 1) {
-            value.status = '使用中';
-          } else if (s == 2) {
-            value.status = '审批';
-          }
+          value.status = statusConvert[s];
           return value;
         });
 
@@ -311,6 +305,21 @@ class Royalty extends PureComponent {
       ? { footer: null, onCancel: this.handleDone }
       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
+
+    const onChange = (pagination, filters, sorter) => {
+      const { current: currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'royalty/fetchListRoyalty',
+        payload: { current: currentIndex, size: pageSize },
+      });
+
+    };
+
+    const paginationProps = {
+      showQuickJumper: true,
+      pageSize: 10,
+      total: body.total,
+    };
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
@@ -337,6 +346,7 @@ class Royalty extends PureComponent {
                   rowSelection={rowSelection}
                   rowKey={record => record.id}
                   bordered={false}
+                  onChange={onChange}
                   onRow={record => {
                     return {
                       onClick: event => {
@@ -400,7 +410,13 @@ class Royalty extends PureComponent {
                     type="danger"
                     icon="delete"
                     size="small"
-                    onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？', onOk: () => {
+                          this.clickDeleteFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
                   >
                     删除
@@ -420,20 +436,32 @@ class Royalty extends PureComponent {
                     size="small"
                     type="danger"
                     icon="unlock"
-                    onClick={()=>{ModalConfirm({content:"确定取消审批吗？",onOk:()=>{this.clickUnFreezeFrom();}});}}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定取消审批吗？', onOk: () => {
+                          this.clickUnFreezeFrom();
+                        },
+                      });
+                    }}
                     disabled={isEdit}
                   >
                     取消审批
-                                                          </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}}
-                    disabled={isEdit}
-                  >
-                      审批
-                  </Button>)}
+                  </Button>) : (<Button
+                                                            className={styles.buttomControl}
+                                                            size="small"
+                                                            type="primary"
+                                                            icon="lock"
+                                                            onClick={() => {
+                      ModalConfirm({
+                        content: '确定审批吗？', onOk: () => {
+                          this.clickFreezeFrom();
+                        },
+                      });
+                    }}
+                                                            disabled={isEdit}
+                                                          >
+                    审批
+                                                                        </Button>)}
                 </div>
               </Card>
             </div>
@@ -489,7 +517,7 @@ class Royalty extends PureComponent {
         });
       }
     }
-  }
+  };
 
   clickNewFrom = () => {
     this.state.isAdd = true;
@@ -538,7 +566,8 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record, index) => { };
+  selectChange = (record, index) => {
+  };
 
   clickDeleteFrom = () => {
     const { selectedRowKeys } = this.state;
@@ -587,7 +616,8 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record, index) => { };
+  selectChange = (record, index) => {
+  };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {

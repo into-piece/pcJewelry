@@ -27,7 +27,9 @@ const result = serviceArr.map(({ name, arr, path }) => (
       path: `/${path}/${item}`
     }
   ))
+
 ))
+console.log(JSON.stringify(result))
 
 const resultArr = [
   ...result.flat(),
@@ -46,6 +48,7 @@ const resultArr = [
 
   { key: 'listBasictypes', path: '/develop/category/develop-basic-category-set/list', priefx1: `${env  }/business` },
 
+  { key: 'getTypeByWordbookCode', path: '/develop/category/develop-basic-category-set/getTypeByWordbookCode', priefx1: `${env  }/business` },
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', priefx1: `${env  }/business/sys` }
 ]
 

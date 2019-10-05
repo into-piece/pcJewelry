@@ -9,22 +9,34 @@ import React, { Component } from 'react';
 import { Upload, Icon, Modal, message } from 'antd';
 import Cropper from 'react-cropper';
 import styles from './index.less';
+import HttpFetch from '@/utils/HttpFetch';
 import 'cropperjs/dist/cropper.css';
+import { getCurrentUser } from '../../utils/authority';
+
 
 class UploadImg extends Component {
-  state = {
-    loading: false,
-    fileList: [],
-    cropperVisible: false,
-  };
 
+  constructor(props) {
+    super(props);
+
+    const defaultFileList = props.defaultFileList || [];
+    const dflist = defaultFileList.map((e) => {
+      return { url: e.picPath, thumbUrl: e.picPath, uid: e.id, status: 'done' };
+    });
+    if (props.fileListFun) props.fileListFun(dflist);
+
+    this.state = {
+      loading: false,
+      fileList: dflist,
+      cropperVisible: false,
+    };
+  }
 
   // Upload变动
   handleChange = info => {
-
     let fileList = [...info.fileList];
     const { file } = info;
-    const { maxcount,fileListFun } = this.props;
+    const { maxcount, fileListFun } = this.props;
 
     if (file.type) {
       const isJPG = file.type.indexOf('image') != -1;
@@ -34,49 +46,68 @@ class UploadImg extends Component {
       }
     }
 
-    fileList = fileList.slice(-maxcount);
-    fileList = fileList.map(f => {
-      // console.log('image is the ', file);
-      if (f.response) {
-        f.url = f.response.url;
-      }
-      if (!f.url) {
+    if (maxcount && fileList.length > maxcount) {
+      message.error(`只能上传${maxcount}张图片`);
+      return;
+    }
+
+    fileList.map(f => {
+      if (f.uid === info.file.uid && !f.url) {
         this.getBase64(f.originFileObj, imageUrl => {
-          fileList.forEach((v, i) => {
-            if (v.uid === info.file.uid) {
-              fileList[i].url = imageUrl;
-              // console.log("change file name =  ", v.name, info.file)
-              this.setState({
-                fileList,
-                cropperVisible: true,
-                uploadFile: imageUrl,
-                uploadFileUid: v.uid,
-              });
-            }
+          // fileList[i].url = imageUrl;
+          this.setState({
+            cropperVisible: true,
+            uploadFile: imageUrl,
+            uploadFileUid: f.uid,
           });
         });
+        fileList = fileList.slice(0, fileList.length - 1);
       }
-
       return f;
     });
-    if(fileListFun)fileListFun(fileList);
+
+    if (fileListFun) fileListFun(fileList);
+
     this.setState({ fileList });
   };
 
   handleCropSubmit = () => {
     const { uploadFileUid, fileList } = this.state;
-    const {  fileListFun } = this.props;
-
+    const { fileListFun } = this.props;
+    this.setState({ loading: true });
+    const _this = this;
     const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
+    this.refs.cropper.getCroppedCanvas().toBlob((b) => {
 
-    fileList.forEach((v, i) => {
-      if (v.uid === uploadFileUid) {
-        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
-        fileList[i].url = cropImage;
-        fileList[i].thumbUrl = cropImage;
-      }
+      const formData = new FormData();
+      formData.append('file', b, `img${  Math.random(1)  }.png`);
+      fetch(HttpFetch.uploadImg, {
+        method: 'POST',
+        headers: {
+          'token': getCurrentUser() ? getCurrentUser().token : '',
+        },
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(d => {
+          if (d.head && d.head.rtnCode === '000000') {
+            fileList.push({url:d.body.records[0].savePath, thumbUrl: d.body.records[0].savePath, uid:`imgid${Math.random(1)}`, status: 'done'});
+            _this.setState({ loading: false, fileList });
+            if (fileListFun) fileListFun(fileList);
+
+          } else {
+            message.error('上传图片失败');
+          }
+        }).catch(function(ex) {
+        message.error('上传图片失败');
+        _this.setState({ loading: false });
+
+      });
+
     });
-    if(fileListFun)fileListFun(fileList);
+
+
+    if (fileListFun) fileListFun(fileList);
 
     this.setState({
       cropperVisible: false,
@@ -142,8 +173,12 @@ class UploadImg extends Component {
         beforeUpload={() => {
           return false;
         }}
+        onPreview={(e) => {
+          window.open(e.url);
+        }}
+        key="antdUpload"
         listType='picture-card'
-        fileList={fileList || []}
+        fileList={fileList}
         onChange={handleChange}
       >
         <div>

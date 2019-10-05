@@ -240,9 +240,17 @@ export const saveRings = `${priefx}/business/business.customer/ring/save`
 export const deleteRings = `${priefx}/business/business.customer/ring/delete`
 
 
+/**
+ *   公共上传图片
+ * @type {string}
+ */
+export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
+
+
 export default {
   priefx,
   listRingAround,
+  uploadImg,
   deleteRings,
   saveRings,
   queryPermissionUserList,
