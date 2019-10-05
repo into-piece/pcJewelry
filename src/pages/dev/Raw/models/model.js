@@ -16,6 +16,7 @@ const {
   listBasicSpecificationSettingsDropDown,
   listBasicMeasureUnitDropDown,
   listMstWordbook,
+  getTypeByWordbookCode,
 } = servicesConfig;
 export default {
   namespace: 'devRaw',
@@ -28,6 +29,8 @@ export default {
     listMstWordbookDrop: [],
     listMstWordbookDroph015: [],
     listMstWordbookDroph016: [],
+    listMstWordbookDropH016001: [],
+    statusList: [{key:"输入",value:0},{key:"已审核",value:2}],
     shapeSettingList: [],
     specificationSettingList: [],
     pagination: {
@@ -60,6 +63,13 @@ export default {
   },
 
   effects: {
+    * getTypeByWordbookCode({ payload }, { call, put }) {
+      const response = yield call(getTypeByWordbookCode, payload);
+      yield put({
+        type: 'getTypeByWordbookCode2',
+        payload: response,
+      });
+      },
     * getListMstWordbookParams({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload);
       if (payload.wordbookTypeCode === 'H015') {
@@ -73,6 +83,7 @@ export default {
           payload: response,
         });
       }
+
     },
     // table
     * getPagination({ payload, callback }, { put }) {
@@ -200,8 +211,8 @@ export default {
           ? action.payload.body.records
           : initData;
       if (listMstWordbookDrop.length > 0) {
-        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode };
+        listMstWordbookDrop = listMstWordbookDrop.map((item) => {
+          return {...item, key: item.wordbookContentZh, value: item.wordbookCode };
         });
       }
       return {
@@ -215,13 +226,28 @@ export default {
           ? action.payload.body.records
           : initData;
       if (listMstWordbookDrop.length > 0) {
-        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode };
+        listMstWordbookDrop = listMstWordbookDrop.map((item) => {
+          return { ...item,key: item.wordbookContentZh, value: item.wordbookCode };
         });
       }
       return {
         ...state,
         listMstWordbookDroph016: listMstWordbookDrop,
+      };
+    },
+    getTypeByWordbookCode2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listMstWordbookDropH016001: list,
       };
     },
 
@@ -306,8 +332,8 @@ export default {
           ? action.payload.body.records
           : initData;
       if (gemSetProcessDropDown.length > 0) {
-        gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
-          return { key: zhName, value: id };
+        gemSetProcessDropDown = gemSetProcessDropDown.map((item) => {
+          return {...item , key: item.zhName, value: item.id };
         });
       }
       return {
@@ -323,8 +349,8 @@ export default {
           ? action.payload.body.records
           : initData;
       if (shapeSettingList.length > 0) {
-        shapeSettingList = shapeSettingList.map(({ zhName, id }) => {
-          return { key: zhName, value: id };
+        shapeSettingList = shapeSettingList.map((item) => {
+          return { ...item ,key: item.zhName, value: item.id };
         });
       }
       return {
@@ -340,8 +366,8 @@ export default {
           ? action.payload.body.records
           : initData;
       if (list.length > 0) {
-        list = list.map(({ zhName, id }) => {
-          return { key: zhName, value: id };
+        list = list.map((item) => {
+          return { ...item,key: item.zhName, value: item.id };
         });
       }
       return {
@@ -389,8 +415,8 @@ export default {
           ? action.payload.body.records
           : initData;
       if (listMstWordbookDrop.length > 0) {
-        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode };
+        listMstWordbookDrop = listMstWordbookDrop.map((item) => {
+          return { ...item ,key:item.wordbookContentZh, value: item.wordbookCode};
         });
       }
 
