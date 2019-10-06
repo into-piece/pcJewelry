@@ -24,6 +24,7 @@ const { TreeNode } = Tree;
     body: permission.body,
     treeData: permission.treeData,
     permissionData: permission.permissionData,
+    halfpermissionData: permission.halfpermissionData,
     fetchListPermissionUserLoading: loading.effects['permission/fetchListPermissionUser'],
     fetchUserPermissionLoading: loading.effects['permission/fetchUserPermission'],
     updatePermissionLoading: loading.effects['permission/updatePermission'],
@@ -95,7 +96,7 @@ class IndexDetail extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'permission/userpermission',
-      payload: { permissionData: checkedKeys },
+      payload: { permissionData: checkedKeys.checked||checkedKeys,halfpermissionData:checkedKeys.halfChecked||[] },
     });
   };
 
@@ -123,7 +124,7 @@ class IndexDetail extends Component {
 
   getDetailInfo = () => {
     const { imageObject, showItem, isLoad } = this.state;
-    const { isProductUpdate, treeData, permissionData, selectProductData } = this.props;
+    const { isProductUpdate, treeData, permissionData, halfpermissionData,selectProductData } = this.props;
 
 
     let paths = [];
@@ -153,8 +154,11 @@ class IndexDetail extends Component {
                   {/* 权限树操作 */}
                   <Tree
                     checkable
+                    // checkStrictly
+                    ref={tree => this.treecompnent = tree}
                     defaultExpandAll
                     onCheck={this.onCheck}
+                    // checkedKeys={{checked: permissionData, halfChecked: halfpermissionData}}
                     checkedKeys={permissionData}
                   >
                     {this.renderTreeNodes(treeData)}
@@ -236,13 +240,15 @@ class IndexDetail extends Component {
 
   // 保存
   handleSubmit = () => {
+    const {halfCheckedKeys} = this.treecompnent.tree.state;
+    console.log(halfCheckedKeys)
 
     const { dispatch, selectProductData = [], permissionData } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
     const params = {};
-    params.permissions = permissionData;
+    params.permissions = [...permissionData,...halfCheckedKeys];
     params.userIds = ids;
 
 

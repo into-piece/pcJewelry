@@ -14,6 +14,21 @@ export async function queryActivities() {
 export async function logout() {
   return request('/logout');
 }
+
+/*
+* 新款档案  转产品接口
+* */
+
+export async function specimenTransferProduct(params) {
+  return request(`${priefx  }/business/business/product/sample/createProduct`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data:params,
+  });
+}
+
 /*
 * 权限接口
 * */
@@ -29,6 +44,7 @@ export async function disableThePermission(params) {
     },
   });
 }
+
 export async function enableThePermission(params) {
   return request(`${priefx  }/sys.user/sys-resource/enableUser`, {
     method: 'POST',
@@ -40,6 +56,7 @@ export async function enableThePermission(params) {
     },
   });
 }
+
 export async function querylistPermissionUser(params) {
   return request(`${priefx  }/sys.user/sys-resource/getPermissionUsers`, {
     method: 'POST',
@@ -51,6 +68,7 @@ export async function querylistPermissionUser(params) {
     },
   });
 }
+
 export async function queryUserPermission(params) {
   return request(`${priefx  }/sys.user/sys-resource/getPermissionByUser`, {
     method: 'POST',
@@ -62,6 +80,7 @@ export async function queryUserPermission(params) {
     },
   });
 }
+
 export async function queryPermissionTree(params) {
   return request(`${priefx  }/sys.user/sys-resource/getTreeData`, {
     method: 'POST',
@@ -73,6 +92,7 @@ export async function queryPermissionTree(params) {
     },
   });
 }
+
 export async function updateThePermission(params) {
   return request(`${priefx  }/sys.user/sys-resource/savePermission`, {
     method: 'POST',
@@ -84,7 +104,6 @@ export async function updateThePermission(params) {
     },
   });
 }
-
 
 
 /*
@@ -101,6 +120,7 @@ export async function querylistPerson(params) {
     },
   });
 }
+
 export async function saveThePerson(params) {
   return request(`${priefx  }/saveOrUpdate`, {
     method: 'POST',
@@ -112,6 +132,7 @@ export async function saveThePerson(params) {
     },
   });
 }
+
 export async function deleteThePerson(params) {
   return request(`${priefx  }/delete`, {
     method: 'POST',
@@ -123,6 +144,7 @@ export async function deleteThePerson(params) {
     },
   });
 }
+
 export async function updateThePerson(params) {
   return request(`${priefx }/saveOrUpdate`, {
     method: 'POST',
@@ -134,6 +156,7 @@ export async function updateThePerson(params) {
     },
   });
 }
+
 export async function approvalThePerson(params) {
   return request(`${priefx  }/approval`, {
     method: 'POST',
@@ -145,6 +168,7 @@ export async function approvalThePerson(params) {
     },
   });
 }
+
 export async function unApprovalThePerson(params) {
   return request(`${priefx  }/cancel`, {
     method: 'POST',
@@ -156,7 +180,6 @@ export async function unApprovalThePerson(params) {
     },
   });
 }
-
 
 
 /*
@@ -175,6 +198,7 @@ export async function approvalDept(params) {
     },
   });
 }
+
 export async function cancelDept(params) {
   return request(`${priefx  }/sys.user/sys-role/cancel`, {
     method: 'POST',
@@ -198,6 +222,7 @@ export async function saveOrUpdatedept(params) {
     },
   });
 }
+
 export async function deleteTheDept(params) {
   return request(`${priefx  }/sys.user/sys-role/delete`, {
     method: 'POST',
@@ -209,6 +234,7 @@ export async function deleteTheDept(params) {
     },
   });
 }
+
 export async function querylistDept(params) {
   return request(`${priefx  }/sys.user/sys-role/listDept`, {
     method: 'POST',
@@ -222,7 +248,7 @@ export async function querylistDept(params) {
 }
 
 
-export async function querylistBrands() {
+export async function querylistBrands(params) {
   return request(`${priefx  }/business/basic/brand/listBrands`, {
     // return request(priefx+'/business/basic/brand/listBrands', {
 
@@ -231,10 +257,7 @@ export async function querylistBrands() {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
     data: {
-      method: 'POST',
-      headers: {
-        token: getCurrentUser() ? getCurrentUser().token : '',
-      },
+      ...params,
     },
   });
 }
@@ -301,7 +324,7 @@ export async function unfreezeTheBrand(params) {
   });
 }
 
-export async function querylistRoyalty() {
+export async function querylistRoyalty(params) {
   return request(
     `${priefx  }/business/basic/business-commission-setting/listBusinessCommissionSettings`,
     {
@@ -311,10 +334,7 @@ export async function querylistRoyalty() {
         token: getCurrentUser() ? getCurrentUser().token : '',
       },
       data: {
-        method: 'POST',
-        headers: {
-          token: getCurrentUser() ? getCurrentUser().token : '',
-        },
+        ...params,
       },
     },
   );
@@ -388,7 +408,7 @@ export async function unfreezeTheRoyalty(params) {
   });
 }
 
-export async function querylistsendWay() {
+export async function querylistsendWay(params) {
   return request(`${priefx  }/business/basic/delivery-method/listDeliveryMethods`, {
     // return request(priefx+'/business/basic/delivery-method/listDeliveryMethods', {
     method: 'POST',
@@ -396,10 +416,7 @@ export async function querylistsendWay() {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
     data: {
-      method: 'POST',
-      headers: {
-        token: getCurrentUser() ? getCurrentUser().token : '',
-      },
+      ...params,
     },
   });
 }
@@ -463,7 +480,7 @@ export async function unfreezeTheSendWay(params) {
   });
 }
 
-export async function querylistRequested() {
+export async function querylistRequested(params) {
   return request(`${priefx  }/business/basic/quality-requirements/listQualityRequirementss`, {
     // return request(priefx+'/business/basic/quality-requirements/listQualityRequirementss', {
     method: 'POST',
@@ -471,10 +488,7 @@ export async function querylistRequested() {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
     data: {
-      method: 'POST',
-      headers: {
-        token: getCurrentUser() ? getCurrentUser().token : '',
-      },
+      ...params,
     },
   });
 }
@@ -538,19 +552,14 @@ export async function unfreezeTheRequested(params) {
   });
 }
 
-export async function querylistCurrency() {
+export async function querylistCurrency(params) {
   return request(`${priefx  }/business/basic/currency/listCurrency`, {
     // return request(priefx+'/business/basic/currency/listCurrency', {
     method: 'POST',
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
-    data: {
-      method: 'POST',
-      headers: {
-        token: getCurrentUser() ? getCurrentUser().token : '',
-      },
-    },
+    data: params,
   });
 }
 
@@ -604,7 +613,7 @@ export async function freezeTheCurrency(params) {
   });
 }
 
-export async function querylistRingNum() {
+export async function querylistRingNum(params) {
   const data = await request(
     `${priefx  }/business/basic/ring-around-the-standard/listRingAroundTheStandards`,
     {
@@ -614,10 +623,7 @@ export async function querylistRingNum() {
         token: getCurrentUser() ? getCurrentUser().token : '',
       },
       data: {
-        method: 'POST',
-        headers: {
-          token: getCurrentUser() ? getCurrentUser().token : '',
-        },
+        ...params,
       },
     },
   );

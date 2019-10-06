@@ -89,12 +89,16 @@ export default {
         // rtnCode:action.payload.head.rtnCode,
         body2: {
           ...state.body,
+          total: action.payload.body.total,
+          current: action.payload.body.current,
+          size: action.payload.body.pageSize,
           sonData: action.payload.body.records,
           rtnCode2: action.payload.head.rtnCode,
           rtnMsg2: action.payload.head.rtnMsg,
         },
       };
     },
+
 
     saveitem(state, action2) {
       return {

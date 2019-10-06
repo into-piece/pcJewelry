@@ -185,6 +185,7 @@ class ProductDetail extends Component {
       cNoenNameUniCode: '',
       cNozhNameUniCode: '',
       cNomainMold: '',
+      cNoProductMaterial: '',
       cNoPercentageEnName: '',
       cNoPercentageZhName: '',
     });
@@ -254,7 +255,7 @@ class ProductDetail extends Component {
             {(showItem && showItem !== '') ? (
               <div>
                 <Spin spinning={isLoading}>
-                  <Carousel {...this.carouselsettings} className={business.carousel_content} initialSlide={0} autoplay>
+                  <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
                     {this.getImages(paths)}
                   </Carousel>
                   <DescriptionList size="small" col="1">
@@ -520,7 +521,7 @@ class ProductDetail extends Component {
           <Row gutter={4}>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="流水号"
+                label="产品编号"
                 className={business.from_content_col}
                 {...this.centerFormLayout}
               >
@@ -718,6 +719,10 @@ class ProductDetail extends Component {
                       this.state.cNoPercentageEnName = v.enName;
 
 
+                    if (v.productMaterial)
+                      this.state.cNoProductMaterial = v.productMaterial;
+
+
                     this.parseProductNo();
 
 
@@ -736,18 +741,18 @@ class ProductDetail extends Component {
                     required: (this.state.cNofCodezhName === '耳环' || this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链'),
                     message: '请输入规格',
                   }],
-                  initialValue: current.specification,
+                  initialValue: current.specification||'0.00',
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
-                label="计量单位"
+                label="数量单位"
                 {...this.centerFormLayout}
                 className={business.from_content_col}
               >
                 {getFieldDecorator('unitOfMeasurement', {
-                  rules: [{ message: '请输入计量单位' }],
+                  rules: [{ message: '请输入数量单位' }],
                   initialValue: current.unitOfMeasurement,
                 })(<BasicMeasureListSelect
                   content={current.unitOfMeasurement ? current.unitOfMeasurement : 'ae32e48c2df27123682943b6effa72d3'}
@@ -1364,11 +1369,11 @@ class ProductDetail extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '',cNoProductMaterial='', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
+    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoProductMaterial}${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
     const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
     // 成色+宝石颜色+类别

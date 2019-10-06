@@ -4,7 +4,13 @@ import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
 
-@Form.create()
+@Form.create({
+  onValuesChange(props, changeFields) {
+    props.onChange && props.onChange(changeFields);
+
+  },
+})
+
 class SearchFromTab0 extends Component {
   constructor(props) {
     super(props);
@@ -33,12 +39,14 @@ class SearchFromTab0 extends Component {
       >
         <Row gutter={2} style={{ width: '100%' }}>
           {
-            modalContent && modalContent[selectType] && modalContent[selectType].map(({ key, value, type, list, span }) => {
-              return <Col lg={8} key={value}>
-                <FormItem label={key}>
-                  {getFieldDecorator(value)(returnElement({ type, dev, list }))}
-                </FormItem>
-              </Col>;
+            modalContent && modalContent[selectType] && modalContent[selectType].map(({ key, value, type, list, search }) => {
+              if(search){
+                return <Col lg={8} key={value}>
+                  <FormItem label={key}>
+                    {getFieldDecorator(value)(returnElement({ type, dev, list }))}
+                  </FormItem>
+                </Col>;
+              }
             })
           }
         </Row>
@@ -104,9 +112,9 @@ class SearchFromTab0 extends Component {
         <Row>
           <Col lg={8}>
             {
-              modalContent && modalContent[selectType] && modalContent[selectType].map(({ key, value, type, list, span }, index) => {
-                if (index === 0) {
-                  return <FormItem label={key} labelCol={{ span: 7 }} wrapperCol={{ span: 13 }}>
+              modalContent && modalContent[selectType] && modalContent[selectType].map(({ key, value, type, list, span ,search}, index) => {
+                if (index === 0&&search) {
+                  return <FormItem label={key} key={value} labelCol={{ span: 7 }} wrapperCol={{ span: 13 }}>
                     {getFieldDecorator(value)(returnElement({ type, dev, list }))}
                   </FormItem>;
                 }

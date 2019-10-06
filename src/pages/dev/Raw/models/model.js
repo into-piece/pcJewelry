@@ -15,7 +15,12 @@ const {
   listBasicShapeSettingsDropDown,
   listBasicSpecificationSettingsDropDown,
   listBasicMeasureUnitDropDown,
-  listMstWordbook } = servicesConfig;
+  listMstWordbook,
+  getTypeByWordbookCode,
+  getCutDrop,
+  getColorDrop,
+  getQualityDrop,
+} = servicesConfig;
 export default {
   namespace: 'devRaw',
 
@@ -25,61 +30,127 @@ export default {
     gemSetProcessDropDown: [],
     getBUMropDown: [],
     listMstWordbookDrop: [],
-    shapeSettingList:[],
-    specificationSettingList:[],
+    listMstWordbookDroph015: [],
+    listMstWordbookDroph016: [],
+    listMstWordbookDropH016001: [],
+
+    listCutDrop:[],
+    listColorDrop:[],
+    listQualityDrop:[],
+
+
+    statusList: [{key:"输入",value:0},{key:"已审核",value:2}],
+    shapeSettingList: [],
+    specificationSettingList: [],
     pagination: {
       current: 1,
       size: 10,
     },
-    searchParams:{},
 
     selectKey: 'material',
     colorSettingList: initData,
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 
-    materialList: initData,
-    accessoriesList:initData,
-
-
+    choosenTypesRowData: { id: '', zhName: '', enName: '' }, // select to show
     paginationTypes: {
       current: 1,
       size: 10,
     },
 
+
+    typesList: initData,
+
+    materialList: initData,
+    accessoriesList: initData,
+    stoneList: initData,
+    wrapperList: initData,
+    auxiliaryMaterialList: initData,
+    otherMaterialList: initData,
+
+
   },
 
   effects: {
-
-    * setSearchParams({ payload,callback }, { put }){
-      yield put.resolve({
-        type: 'setSearchParams2',
-        payload,
+    * getCutDrop({ payload }, { call, put }) {
+      const response = yield call(getCutDrop, payload);
+      yield put({
+        type: 'getCutDrop2',
+        payload: response,
       });
-       if(callback)  callback();
+      },
+    * getColorDrop({ payload }, { call, put }) {
+      const response = yield call(getColorDrop, payload);
+      yield put({
+        type: 'getColorDrop2',
+        payload: response,
+      });
+      },
+    * getQualityDrop({ payload }, { call, put }) {
+      const response = yield call(getQualityDrop, payload);
+      yield put({
+        type: 'getQualityDrop2',
+        payload: response,
+      });
+      },
+    * getTypeByWordbookCode({ payload }, { call, put }) {
+      const response = yield call(getTypeByWordbookCode, payload);
+      yield put({
+        type: 'getTypeByWordbookCode2',
+        payload: response,
+      });
+      },
+    * getListMstWordbookParams({ payload }, { call, put }) {
+      const response = yield call(listMstWordbook, payload);
+      if (payload.wordbookTypeCode === 'H015') {
+        yield put({
+          type: 'getListMstWordbook3',
+          payload: response,
+        });
+      } else if (payload.wordbookTypeCode === 'H016') {
+        yield put({
+          type: 'getListMstWordbook4',
+          payload: response,
+        });
+      }
+
     },
     // table
-    * getPagination({ payload,callback }, { put }) {
+    * getPagination({ payload, callback }, { put }) {
       yield put({
         type: 'getPagination2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
     },
-    * getSelectKey({ payload,callback }, { put }) {
+    * getTypesPagination({ payload, callback }, { put }) {
+      yield put({
+        type: 'getTypesPagination2',
+        payload,
+      });
+      if (callback) callback();
+    },
+    * getSelectKey({ payload, callback }, { put }) {
       yield put({
         type: 'getSelectKey2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
 
     },
-    * getChoosenRowData({ payload,callback }, { put }) {
+    * getChoosenTypeRowData({ payload, callback }, { put }) {
+      yield put({
+        type: 'getChoosenTypeRowData2',
+        payload,
+      });
+      if (callback) callback();
+    },
+    * getChoosenRowData({ payload, callback }, { put }) {
       yield put({
         type: 'getChoosenRowData2',
         payload,
       });
-      if(callback)callback();
+      if (callback) callback();
     },
     * changeSelectedRowKeys({ payload }, { put }) {
       yield put({
@@ -107,6 +178,12 @@ export default {
         payload: { response, type },
       });
       if (callback) callback();
+    },
+    * clearSixList(_, { put }) {
+      yield put({
+        type: 'clearSixListData',
+        payload: {},
+      });
     },
     * addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
@@ -156,12 +233,100 @@ export default {
   },
 
   reducers: {
-    setSearchParams2(state,action){
+
+
+    getListMstWordbook3(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map((item) => {
+          return {...item, key: item.wordbookContentZh, value: item.wordbookCode };
+        });
+      }
       return {
         ...state,
-        searchParams:action.payload
-      }
+        listMstWordbookDroph015: listMstWordbookDrop,
+      };
     },
+    getListMstWordbook4(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map((item) => {
+          return { ...item,key: item.wordbookContentZh, value: item.wordbookCode };
+        });
+      }
+      return {
+        ...state,
+        listMstWordbookDroph016: listMstWordbookDrop,
+      };
+    },
+    getTypeByWordbookCode2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listMstWordbookDropH016001: list,
+      };
+    },
+    getCutDrop2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listCutDrop: list,
+      };
+    },
+    getColorDrop2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listColorDrop: list,
+      };
+    },
+    getQualityDrop2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
+      return {
+        ...state,
+        listQualityDrop: list,
+      };
+    },
+
+
     getData(state, action) {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -169,7 +334,7 @@ export default {
           : initData;
       return {
         ...state,
-        listBasicMeasureUnitDropDown:list,
+        listBasicMeasureUnitDropDown: list,
       };
     },
     getDevList2(state, action) {
@@ -197,6 +362,16 @@ export default {
         },
       };
     },
+    // table
+    getTypesPagination2(state, action) {
+      return {
+        ...state,
+        paginationTypes: {
+          ...state.paginationTypes,
+          ...action.payload,
+        },
+      };
+    },
     changeSelectedRowKeys2(state, action) {
       return {
         ...state,
@@ -219,6 +394,12 @@ export default {
         choosenRowData: action.payload,
       };
     },
+    getChoosenTypeRowData2(state, action) {
+      return {
+        ...state,
+        choosenTypesRowData: action.payload,
+      };
+    },
     // 成色
     getGemDropDown2(state, action) {
       let gemSetProcessDropDown =
@@ -226,9 +407,9 @@ export default {
           ? action.payload.body.records
           : initData;
       if (gemSetProcessDropDown.length > 0) {
-        gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
-          return { key: zhName, value: id }
-        })
+        gemSetProcessDropDown = gemSetProcessDropDown.map((item) => {
+          return {...item , key: item.zhName, value: item.id };
+        });
       }
       return {
         ...state,
@@ -236,15 +417,15 @@ export default {
       };
     },
 
-     // 形状
+    // 形状
     getshapeSettingList2(state, action) {
       let shapeSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
           : initData;
       if (shapeSettingList.length > 0) {
-        shapeSettingList = shapeSettingList.map(({ zhName, id }) => {
-          return { key: zhName, value: id };
+        shapeSettingList = shapeSettingList.map((item) => {
+          return { ...item ,key: item.zhName, value: item.id };
         });
       }
       return {
@@ -260,13 +441,13 @@ export default {
           ? action.payload.body.records
           : initData;
       if (list.length > 0) {
-        list = list.map(({ zhName, id }) => {
-          return { key: zhName, value: id };
+        list = list.map((item) => {
+          return { ...item,key: item.zhName, value: item.id };
         });
       }
       return {
         ...state,
-        specificationSettingList:list,
+        specificationSettingList: list,
       };
     },
     // 重量 计量单位
@@ -285,14 +466,32 @@ export default {
         getBUMropDown,
       };
     },
+    clearSixListData(state) {
+      return {
+        ...state,
+        materialList: initData,
+        accessoriesList: initData,
+        stoneList: initData,
+        wrapperList: initData,
+        auxiliaryMaterialList: initData,
+        otherMaterialList: initData,
+        choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
+        pagination: {
+          current: 1,
+          size: 10,
+        },
+        selectedRowKeys: [], // table select
+
+      };
+    },
     getListMstWordbook2(state, action) {
       let listMstWordbookDrop =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
           : initData;
       if (listMstWordbookDrop.length > 0) {
-        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode };
+        listMstWordbookDrop = listMstWordbookDrop.map((item) => {
+          return { ...item ,key:item.wordbookContentZh, value: item.wordbookCode};
         });
       }
 

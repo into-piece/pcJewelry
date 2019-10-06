@@ -24,6 +24,7 @@ import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
+import {statusConvert} from '@/utils/convert';
 
 const FormItem = Form.Item;
 
@@ -31,6 +32,10 @@ const { Description } = DescriptionList;
 
 const clientContentColumns = [
   {
+    title: '品牌编码',
+    dataIndex: 'brandNo',
+    key: 'brandNo',
+  }, {
     title: '中文名称',
     dataIndex: 'brandZhName',
     key: 'brandZhName',
@@ -47,11 +52,6 @@ const clientContentColumns = [
   },
 ];
 
-const paginationProps = {
-  // showSizeChanger: true,
-  showQuickJumper: true,
-  pageSize: 10,
-};
 
 @connect(({ loading, basic }) => {
   const { rtnCode, head, rtnMsg } = basic;
@@ -168,9 +168,10 @@ class BrandCompoenet extends Component {
   };
 
   handleDone = () => {
-    const { dispatch } = this.props;
+    const { dispatch,body } = this.props;
     dispatch({
       type: 'basic/fetchListBrands',
+      payload:{ current:body.current, size: body.size }
     });
 
     this.setState({
@@ -189,6 +190,7 @@ class BrandCompoenet extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/fetchListBrands',
+      payload:{ current:1, size: 10 }
     });
   }
 
@@ -392,6 +394,7 @@ class BrandCompoenet extends Component {
     return (
       <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
+          <Description term="品牌英文">{item.brandNo}</Description>
           <Description term="品牌英文">{item.brandEnName}</Description>
           <Description term="品牌中文">{item.brandZhName}</Description>
         </DescriptionList>
@@ -423,13 +426,7 @@ class BrandCompoenet extends Component {
       if (body && body.data && body.data.length > 0) {
         const newdata = body.data.map(value => {
           const s = value.status;
-          if (s == 0) {
-            value.status = '输入';
-          } else if (s == 1) {
-            value.status = '使用中';
-          } else if (s == 2) {
-            value.status = '审批';
-          }
+           value.status =statusConvert[s];
           return value;
         });
 
@@ -482,7 +479,12 @@ class BrandCompoenet extends Component {
     const getModalContent = () => {
       return (
         <Form size="small" onSubmit={this.handleSubmit}>
-          <FormItem label="英文名称" {...this.formLayout}>
+          <FormItem label="品牌编码" {...this.formLayout}>
+            {getFieldDecorator('brandNo', {
+              rules: [{ required: true, message: '请输入品牌编码' }],
+              initialValue: current.brandEnName,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>  <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('brandEnName', {
               rules: [{ required: true, message: '请输入品牌编号' }],
               initialValue: current.brandEnName,
@@ -510,6 +512,20 @@ class BrandCompoenet extends Component {
     } = this.props;
 
 
+    const onChange = (pagination, filters, sorter) => {
+      const { current:currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'basic/fetchListBrands',
+        payload:{ current:currentIndex, size: pageSize }
+      });
+
+    };
+
+    const paginationProps = {
+      showQuickJumper: true,
+      pageSize: 10,
+      total:body.total
+    };
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
@@ -543,6 +559,8 @@ class BrandCompoenet extends Component {
                       },
                     };
                   }}
+                  onChange={onChange}
+
                   rowClassName={this.onSelectRowClass}
                   size="middle"
                   columns={clientContentColumns}
@@ -651,7 +669,7 @@ class BrandCompoenet extends Component {
                                                  disabled={isEdit}
                                                >
                     审批
-                                                             </Button>)}
+                                               </Button>)}
 
                 </div>
               </Card>
