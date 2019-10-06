@@ -440,9 +440,11 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-
-
 }
+
+manuArr.forEach(subItem => {
+  columnsArr[subItem] = columnsArr[subItem].map(row => ({ ...row, sorter: true }))
+})
 
 @Form.create()
 @connect(({ dev }) => {
@@ -530,7 +532,7 @@ class Info extends Component {
       payload: { params: pagination, type: key },
       callback: () => {
         const { dev } = this.props;
-        dev[`${dev.selectKey}List`].records.map((item) => {
+        dev[`${dev.selectKey}List`].records.forEach((item) => {
           if (item.id === dev.choosenRowData.id) {
             dispatch({
               type: 'dev/getChoosenRowData',
@@ -911,19 +913,21 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
     pagination: dev.pagination,
     choosenRowData: dev.choosenRowData,
     selectedRowKeys: dev.selectedRowKeys,
+    selectKey: dev.selectKey
   };
 })
 class CenterInfo extends Component {
-  changePagination = obj => {
-    const { dispatch } = this.props;
+  handleTableChange = obj => {
+    const { dispatch, selectKey } = this.props;
+    debugger
     dispatch({
-      type: 'dev/getDevList',
-      payload: obj,
+      type: 'dev/getList',
+      payload: { type: selectKey, params: obj },
     });
-    dispatch({
-      type: 'dev/getPagination',
-      payload: obj,
-    });
+    // dispatch({
+    //   type: 'dev/getPagination',
+    //   payload: ,
+    // });
   };
 
   changeChoosenRow = rowData => {
@@ -944,7 +948,7 @@ class CenterInfo extends Component {
   };
 
   render() {
-    const { onSelectChange, props } = this
+    const { onSelectChange, props, handleTableChange } = this
     const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
     const columns = columnsArr[type]
     const list = dev[`${type}List`]
@@ -965,10 +969,10 @@ class CenterInfo extends Component {
             changeChoosenRow={this.changeChoosenRow}
             selectKey={choosenRowData.id}
             pagination={pagination}
-            changePagination={this.changePagination}
             selectedRowKeys={selectedRowKeys}
             onSelectChange={onSelectChange}
             listLoading={listLoading}
+            handleTableChange={handleTableChange}
           />
         </div>
       </div>

@@ -510,7 +510,7 @@ class Info extends Component {
               return <Radio value={value} key={value}>{key}</Radio>
             })
           }
-        </Radio.Group>
+               </Radio.Group>
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>
       case 8:
