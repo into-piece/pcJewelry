@@ -214,7 +214,7 @@ customerColumns = customerColumns.map(item => ({ ...item, sorter: true }))
 
 // 报价主页的筛选参数
 const searchParamsArr = [
-  { key: '客户编号', value: 'customerNo' },
+  { key: '客户编号', value: 'customerId' },
   { key: '报价单号', value: 'quoteNumber' },
   { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
@@ -511,7 +511,7 @@ class Info extends Component {
               return <Radio value={value} key={value}>{key}</Radio>
             })
           }
-               </Radio.Group>
+        </Radio.Group>
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>
       case 8:
