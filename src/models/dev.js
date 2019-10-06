@@ -38,8 +38,8 @@ export default {
 
     gemSetProcessDropDown: [],
     listMstWordbookDrop: [],
-    gemSetProcessDropDownh015:[],
-    gemSetProcessDropDownh016:[]
+    gemSetProcessDropDownh015: [],
+    gemSetProcessDropDownh016: []
   },
 
   effects: {
@@ -79,16 +79,17 @@ export default {
         payload: response,
       });
     },
-    * getList({ payload ,callback}, { call, put }) {
+    * getList({ payload, callback }, { call, put }) {
       const { type, params } = payload
       console.log(servicesConfig)
       console.log(type, params, servicesConfig[`listBasic${type}`])
+      debugger
       const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
         type: 'getDevList2',
         payload: { response, type },
       });
-      if(callback)callback();
+      if (callback) callback();
     },
     *addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
@@ -113,12 +114,12 @@ export default {
     },
     *getListMstWordbookParams({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload);
-      if(payload.wordbookTypeCode==='H015'){
+      if (payload.wordbookTypeCode === 'H015') {
         yield put({
           type: 'getListMstWordbook3',
           payload: response,
         });
-      }else if(payload.wordbookTypeCode==='H016'){
+      } else if (payload.wordbookTypeCode === 'H016') {
         yield put({
           type: 'getListMstWordbook4',
           payload: response,
@@ -360,7 +361,7 @@ export default {
       }
       return {
         ...state,
-        listMstWordbookDroph015:listMstWordbookDrop,
+        listMstWordbookDroph015: listMstWordbookDrop,
       };
     },
     getListMstWordbook4(state, action) {
@@ -375,7 +376,7 @@ export default {
       }
       return {
         ...state,
-        listMstWordbookDroph016:listMstWordbookDrop,
+        listMstWordbookDroph016: listMstWordbookDrop,
       };
     },
   },
