@@ -13,8 +13,8 @@
     },
     { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
     { "key": "客户简称", "value": "customerShotName", "type": 7, "noNeed": true },
-    { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList" },
-    { "key": "终客简称", "value": "endShotName" },
+    { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList", "noNeed": true },
+    { "key": "终客简称", "value": "endShotName", "noNeed": true },
     {
       "key": "报价方式",
       "value": "quoteMethod",

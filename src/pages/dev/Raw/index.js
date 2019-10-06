@@ -88,7 +88,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -128,7 +128,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -184,7 +184,7 @@ const columnsArr = {
     },
   ],
   // 其他材料
-  otherMaterial:[
+  otherMaterial: [
     {
       title: '成色',
       dataIndex: 'assayingName',
@@ -193,7 +193,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -228,7 +228,7 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-  wrapper:[
+  wrapper: [
     {
       title: '原料编号',
       dataIndex: 'fCode',
@@ -237,7 +237,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -317,7 +317,7 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-  auxiliaryMaterial:[
+  auxiliaryMaterial: [
     {
       title: '原料编号',
       dataIndex: 'fCode',
@@ -326,7 +326,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -381,7 +381,7 @@ const columnsArr = {
       render: data => statusConvert[data],
     },
   ],
-  stone:[
+  stone: [
     {
       title: '原料编号',
       dataIndex: 'fCode',
@@ -390,7 +390,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -492,12 +492,12 @@ class Info extends Component {
 
 
   // 获取对应key=》页面进行数据请求
-  getList = ({key,params}) => {
+  getList = ({ key, params }) => {
     const { dispatch, pagination, selectKey, searchParams } = this.props;
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination,  ...searchParams ,...params}, type: key || selectKey },
+      payload: { params: { ...pagination, ...searchParams, ...params }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -553,12 +553,12 @@ class Info extends Component {
           {dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
-        </Select>);
-      case 3 :
+                </Select>);
+      case 3:
         return (<Radio.Group disabled={disable || false}>
           <Radio value="0">计重</Radio>
           <Radio value="1">计件</Radio>
-        </Radio.Group>);
+                </Radio.Group>);
       default:
         return <Input placeholder="请输入" disabled={disable || false} />;
     }
@@ -618,7 +618,7 @@ class Info extends Component {
               }}
             />
           </FormItem>
-        </Col>}
+                                          </Col>}
         {content}
 
       </Form>
@@ -813,7 +813,7 @@ class Info extends Component {
                 returnElement={this.returnElement}
                 onSearch={onSearch}
                 getList={(p) => {
-                      this.getList(p);
+                  this.getList(p);
                 }}
 
                 type={selectKey}
@@ -974,12 +974,12 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/getSelectKey',
       payload: key,
-      callback:()=>{
+      callback: () => {
         dispatch({
           type: 'devRaw/getPagination',
           payload: { current: 1 },
           callback: () => {
-            getList({key});
+            getList({ key });
           },
         });
       }
@@ -1009,13 +1009,13 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/setSearchParams',
       payload: params,
-      callback:()=>{
+      callback: () => {
         // 搜索变第一页
         dispatch({
           type: 'devRaw/getPagination',
           payload: { current: 1 },
           callback: () => {
-            getList({params:{...params,current: 1}});
+            getList({ params: { ...params, current: 1 } });
           },
         });
       }
@@ -1156,10 +1156,10 @@ const GetRenderitem = ({ data, type }) => {
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
-                : <Description
-                  key={key}
-                  term={key}
-                >{value === 'status' ? statusConvert[data[value]] : data[value]}
+              : <Description
+                key={key}
+                term={key}
+              >{value === 'status' ? statusConvert[data[value]] : data[value]}
                 </Description>
             );
           })
