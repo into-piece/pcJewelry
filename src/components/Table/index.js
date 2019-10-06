@@ -16,7 +16,7 @@ import styles from './index.less';
  * onSelectChange 触发勾选回调  返回选中数据对应id的数组=》进行本地model存储
  * listLoading 列表的loading
  * scroll 可以固定前后的列，横向滚动
- * handleTableChange 为翻页或排序触发回调 传入列表请求函数 返回筛选参数对象 
+ * handleTableChange 为翻页或排序触发回调 传入列表请求函数 返回筛选参数对象
  */
 
 class MyTable extends Component {
@@ -61,7 +61,6 @@ class MyTable extends Component {
    * 直接传参数触发更新
    */
   onChange = (pagination, filters, sorter) => {
-    console.log(sorter)
     const { current, pageSize } = pagination
     const { handleTableChange } = this.props
     const { order, field } = sorter

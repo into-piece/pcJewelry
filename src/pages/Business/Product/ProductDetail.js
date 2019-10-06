@@ -255,7 +255,7 @@ class ProductDetail extends Component {
             {(showItem && showItem !== '') ? (
               <div>
                 <Spin spinning={isLoading}>
-                  <Carousel {...this.carouselsettings} className={business.carousel_content} initialSlide={0} autoplay>
+                  <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
                     {this.getImages(paths)}
                   </Carousel>
                   <DescriptionList size="small" col="1">

@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Carousel } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
-import styles from '../base.less';
-
-const { Description } = DescriptionList;
 
 import jsonp from 'fetch-jsonp';
 import Zmage from 'react-zmage';
+import styles from '../base.less';
 import HttpFetch from '../../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../../utils/authority';
+
+const { Description } = DescriptionList;
 
 class PackageListItem extends PureComponent {
 
@@ -20,7 +20,7 @@ class PackageListItem extends PureComponent {
 
   fetch = item => {
     const _this = this;
-    let params = {};
+    const params = {};
     params.dataNo = item.packNo;
     fetch(HttpFetch.queryMarkImage, {
       method: 'POST',
@@ -36,7 +36,7 @@ headers: {
         return response.json();
       })
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             const imageObject = body.records;
@@ -176,7 +176,7 @@ headers: {
     this.setState({
       loading: true,
     });
-    let params = {};
+    const params = {};
     params.id = id;
 
     const mythis = this;
@@ -191,16 +191,16 @@ headers: {
     })
       .then(response => response.json())
       .then(d => {
-        const body = d.body;
+        const {body} = d;
         if (body && body.records) {
-          let records = body.records;
+          const {records} = body;
 
 
           // console.log("terminal records ",records)
           if (records && records.length > 0) {
             const item = records[0];
-            const endNo = item.endNo;
-            const endShotName = item.endShotName;
+            const {endNo} = item;
+            const {endShotName} = item;
             // console.log(" end item ",item)
 
             // console.log('list update ', records);

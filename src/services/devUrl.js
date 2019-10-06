@@ -135,9 +135,9 @@ export  const   serviceArr = [
     "name": "stone",
     "path": "stone",
     "arr": [
-      "listStone",
+      "list",
       "saveOrUpdate",
-      "deleteStone",
+      "delete",
       "approval",
       "revoke"
     ]

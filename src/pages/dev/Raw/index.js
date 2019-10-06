@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import {
-  Menu,
+  Carousel,
   Row,
   Col,
   Card,
@@ -16,13 +16,14 @@ import {
   Modal,
   Form,
   Input,
+  Divider,
   notification,
   Select,
   Radio,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import Zmage from 'react-zmage';
 import styles from './index.less';
-import SvgUtil from '@/utils/SvgUtil';
 import Table from '@/components/Table';
 import UploadImg from '@/components/UploadImg';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
@@ -34,7 +35,6 @@ import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import SearchFrom from './components/SearchFrom';
 import SearchFromTab0 from './components/SearchFromTab0';
-import Deliver from '../../Business/Deliver/Deliver';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -104,15 +104,19 @@ const columnsArr = {
   // 主材表头
   material: [
     {
-      title: '成色',
-      dataIndex: 'assayingName',
-      key: 'assaying',
+      title: '原料编号',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
         </LockTag>
         )
         : (data),
+    }, {
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assayingName',
     },
     {
       title: '中文名',
@@ -127,12 +131,22 @@ const columnsArr = {
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnit',
+      key: 'weightUnitName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuationClassName',
+    },
+    {
+      title: '库存重量',
+      dataIndex: 'repertoryWeight',
+      key: 'repertoryWeight',
+    },
+    {
+      title: '最低采购量',
+      dataIndex: 'minimumPurchaseQuantity',
+      key: 'minimumPurchaseQuantity',
     },
     {
       title: '状态',
@@ -145,8 +159,8 @@ const columnsArr = {
   accessories: [
     {
       title: '原料编号',
-      dataIndex: 'accessorieCode',
-      key: 'accessorieCode',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -157,17 +171,17 @@ const columnsArr = {
     {
       title: '成色',
       dataIndex: 'assayingName',
-      key: 'assaying',
+      key: 'assayingName',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shape',
+      key: 'shapeName',
     },
     {
       title: '规格',
       dataIndex: 'specificationName',
-      key: 'specification',
+      key: 'specificationName',
     },
     {
       title: '中文名',
@@ -182,17 +196,17 @@ const columnsArr = {
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnit',
+      key: 'measureUnitName',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnit',
+      key: 'weightUnitName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuationClassName',
     },
     {
       title: '单重',
@@ -407,8 +421,8 @@ const columnsArr = {
   stone: [
     {
       title: '原料编号',
-      dataIndex: 'fCode',
-      key: 'fCode',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -417,19 +431,29 @@ const columnsArr = {
         : (data),
     },
     {
-      title: '成色',
-      dataIndex: 'assayingName',
-      key: 'assaying',
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specificationName',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shape',
+      key: 'shapeName',
     },
     {
-      title: '规格',
-      dataIndex: 'specificationName',
-      key: 'specification',
+      title: '切工',
+      dataIndex: 'cutName',
+      key: 'cutName',
+    },
+    {
+      title: '颜色',
+      dataIndex: 'colorName',
+      key: 'colorName',
+    },
+    {
+      title: '等级',
+      dataIndex: 'qualityName',
+      key: 'qualityName',
     },
     {
       title: '中文名',
@@ -439,22 +463,27 @@ const columnsArr = {
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'zhName',
+    },
+    {
+      title: '是否配料模块',
+      dataIndex: 'isIngredientName',
+      key: 'isIngredientName',
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnit',
+      key: 'measureUnitName',
     },
     {
       title: '重量单位',
-      dataIndex: 'assayingName',
-      key: 'weightUnit',
+      dataIndex: 'weightUnitName',
+      key: 'weightUnitName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuationClassName',
     },
     {
       title: '单重',
@@ -510,15 +539,58 @@ class Info extends Component {
     filelist: [],
   };
 
+
   componentDidMount() {
     const { dispatch } = this.props;
+    // 切工下拉
+    dispatch({
+      type: 'devRaw/getCutDrop',
+      payload: { },
+    });
+    // 等级下拉
+    dispatch({
+      type: 'devRaw/getQualityDrop',
+      payload: { },
+    });
+    // 颜色下拉
+    dispatch({
+      type: 'devRaw/getColorDrop',
+      payload: { },
+    });
+    // 类别下拉
+    dispatch({
+      type: 'devRaw/getTypeByWordbookCode',
+      payload: { key: 'H016001' },
+    });
+    // 大类下拉
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
       payload: { wordbookTypeCode: 'H015' },
     });
+    // 小类下拉
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
       payload: { wordbookTypeCode: 'H016' },
+    });
+    // 成色列表
+    dispatch({
+      type: 'devRaw/getGemDropDown',
+      payload: {},
+    });
+    // 形状下拉
+    dispatch({
+      type: 'devRaw/getShapeDropDown',
+      payload: {},
+    });
+    // 规格下拉
+    dispatch({
+      type: 'devRaw/getSpecificationDropDown',
+      payload: {},
+    });
+    // 重量单位列表
+    dispatch({
+      type: 'devRaw/getBUMDropDown',
+      payload: {},
     });
     this.getTypeList();
 
@@ -544,7 +616,7 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params, cId: choosenTypesRowData.id }, type: key || selectKey },
+      payload: { params: { ...pagination, ...params, sId: choosenTypesRowData.id }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -568,9 +640,6 @@ class Info extends Component {
       case 'plus':
       case 'edit':
       default:
-        // console.log(selectKey, '==============selectKey');
-
-
         this.setState({ modalType });
         break;
       case 'delete':
@@ -606,6 +675,11 @@ class Info extends Component {
           <Radio value="0">计重</Radio>
           <Radio value="1">计件</Radio>
         </Radio.Group>);
+      case 4 :
+        return (<Radio.Group disabled={disable || false}>
+          <Radio value="0">否</Radio>
+          <Radio value="1">是</Radio>
+        </Radio.Group>);
       default:
         return <Input placeholder="请输入" disabled={disable || false} />;
     }
@@ -616,30 +690,50 @@ class Info extends Component {
   getModalContent = () => {
     const {
       selectKey,
+      dev,
       choosenRowData,
-      form: { getFieldDecorator, getFieldsValue },
+      form: { getFieldDecorator, getFieldValue, setFieldsValue },
     } = this.props;
     const { modalType } = this.state;
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
-    const { dev } = this.props;
 
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable,noedit }) => {
 
-            return (
-              <Col span={span || 12} key={value}>
+            const selectData = { ...choosenRowData };
+            if (value === 'materialNo' && selectKey === 'accessories') {
+              const assayingId = `${getFieldValue('assaying')}`;
+              const shapeId = `${getFieldValue('shape')}`;
+              const sId = `${getFieldValue('sId')}`;
+              const specificationId = `${getFieldValue('specification')}`;
+
+              const a1 = dev.gemSetProcessDropDown.filter(e => e.id === assayingId);
+              const a2 = dev.listMstWordbookDropH016001.filter(e => e.id === sId);
+              const a3 = dev.shapeSettingList.filter(e => e.id === shapeId);
+              const a4 = dev.specificationSettingList.filter(e => e.id === specificationId);
+
+              const va = `${a1.length > 0 ? (`${a1[0].productMaterial }-`) : ''  }${
+                a2.length > 0 ? (`${a2[0].unitCode}-`) : ''  }${
+                a3.length > 0 ? (`${a3[0].shapeCode}-`) : ''  }${
+                a4.length > 0 ? a4[0].specificationCode : ''}`;
+              dfv = va;
+              selectData[value] = va || choosenRowData[value];
+            }
+
+            return (!noedit&&
+              <Col span={span || 12} key={`k${value}`}>
                 <FormItem label={key} {...formLayout} key={key}>
                   {
                     getFieldDecorator(value, {
                       rules: [{
                         required: !noNeed,
-                        message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
+                        message: `请${type && (type === 2 || type === 3|| type === 4) ? '选择' : '输入'}${key}`,
                       }],
-                      initialValue: isEdit ? choosenRowData[value] : (dfv || ''),
+                      initialValue: isEdit ? selectData[value] : (dfv || ''),
                     })(this.returnElement({ type, dev, list, disable }))
                   }
                 </FormItem>
@@ -647,7 +741,7 @@ class Info extends Component {
             );
           })
         }
-        {(selectKey === 'accessories') && <Col span={18}>
+        {(selectKey !== 'material' || selectKey !== 'otherMaterial') && <Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -660,6 +754,7 @@ class Info extends Component {
             <UploadImg
               key="uimg"
               maxcount={10}
+              defaultFileList={isEdit?choosenRowData.pictures:[]}
               fileListFun={(list) => {
                 this.setState({ filelist: list });
               }}
@@ -691,16 +786,23 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = () => {
-    const { selectKey, form } = this.props;
-    const { addData } = this.state;
+    const { selectKey, form, choosenTypesRowData } = this.props;
+    const filelist = this.state.filelist.flatMap(e => e.url);
+
 
     form.validateFields((err, values) => {
       if (!err) {
-        // this.setState({
-        //   [selectKey]
-        // })
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
+        values = { ...values, sId: choosenTypesRowData.id };
+
+        if (selectKey !== 'material'||selectKey !== 'otherMaterial') {
+          values = {
+            ...values, picPath: filelist,
+          };
+        }
         serviceObj[`addBasic${selectKey}`](values).then(res => {
+          if (!res.head) {
+            return;
+          }
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
@@ -710,6 +812,8 @@ class Info extends Component {
             this.btnFn('');
           }
         });
+        this.setState({filelist:[]});
+
       }
     });
   };
@@ -717,7 +821,7 @@ class Info extends Component {
   // 编辑按钮回调
   handleEdit = () => {
     const { selectKey, form } = this.props;
-    const { addData } = this.state;
+    const filelist = this.state.filelist.flatMap(e => e.url);
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -727,12 +831,20 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        const { choosenRowData } = this.props;
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        const params = {
+        const { choosenRowData, choosenTypesRowData } = this.props;
+
+        let params = {
           ...values,
           id: choosenRowData.id,
+          sId: choosenTypesRowData.id,
         };
+
+        if (selectKey !== 'material'||selectKey !== 'otherMaterial') {
+          params = {
+            ...params, picPath: filelist,
+          };
+        }
+
         serviceObj[`addBasic${selectKey}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
@@ -743,18 +855,24 @@ class Info extends Component {
             this.btnFn('');
           }
         });
+        this.setState({filelist:[]});
+
       }
     });
   };
 
   // 删除按钮回调
   handleDelect = () => {
-    const { selectKey, selectedRowKeys } = this.props;
+    const { selectKey, selectedRowKeys ,dispatch} = this.props;
     serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
+        });
+        dispatch({
+          type: 'devRaw/getChoosenRowData',
+          payload: { id: '', zhName: '', enName: '', unitCode: '' },
         });
         this.getList({ key: selectKey });
       }
@@ -822,8 +940,8 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys,choosenTypesRowData } = this.props;
-    if (tag === 'plus') return (!choosenTypesRowData||choosenTypesRowData.id==='');
+    const { selectedRowKeys, choosenTypesRowData } = this.props;
+    if (tag === 'plus') return (!choosenTypesRowData || choosenTypesRowData.id === '');
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
@@ -831,7 +949,7 @@ class Info extends Component {
   };
 
 
-  // 第一部分table  排序 页面切换 触发
+  // 第一部分table 排序 页面切换 触发
   onSearchType = (v) => {
     const { dispatch } = this.props;
     dispatch({
@@ -841,7 +959,7 @@ class Info extends Component {
     this.getTypeList(v);
   };
 
-  // 第二部分table  排序 页面切换 触发
+  // 第二部分table 排序 页面切换 触发
   onSearch = (v) => {
     const { dispatch, selectKey } = this.props;
     dispatch({
@@ -886,13 +1004,14 @@ class Info extends Component {
         <Modal
           maskClosable={false}
           title={returnTitle()}
-          width={selectKey === 'accessories' ? 960 : 640}
+          width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
           onOk={handleModalOk}
           visible={modalType !== ''}
           onCancel={() => {
+            this.setState({filelist:[]});
             btnFn('');
           }}
         >
@@ -904,65 +1023,66 @@ class Info extends Component {
 }
 
 // 右手边正文内容
-const RightContent = ({ onSearchType, getTypeList, getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch, returnElement }) => (
-  <GridContent>
-    <Row gutter={24} className={styles.row_content}>
-      {/* 中间table组件 */}
-      <Col lg={16} md={16}>
-        <CenterInfo
-          returnElement={returnElement}
-          getList={getList}
-          getTypeList={getTypeList}
-          type={type}
-          onSearch={onSearch}
-          onSearchType={onSearchType}
-        />
-      </Col>
-      {/* 右边显示详细信息和按钮操作 */}
-      <Col lg={8} md={16}>
-        <div className={styles.view_right_content}>
-          <Card bordered={false}>
-            <div>
-              <span
-                style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: '#35B0F4',
-                }}
-              >
-                <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-              </span>
-              <GetRenderitem data={choosenRowData} type={type} />
-            </div>
-          </Card>
-
-          {/* </Card> */}
-          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag, type }) => (
-                <Button
-                  key={tag}
-                  className={styles.buttomControl}
-                  type={type || 'primary'}
-                  icon={tag}
-                  size="small"
-                  disabled={returnSisabled(tag)}
-                  onClick={() => {
-                    btnFn(tag);
+const RightContent =
+  ({ onSearchType, getTypeList, getList, type, choosenRowData, btnFn, returnLockType, returnSisabled, onSearch, returnElement }) => (
+    <GridContent>
+      <Row gutter={24} className={styles.row_content}>
+        {/* 中间table组件 */}
+        <Col lg={16} md={16}>
+          <CenterInfo
+            returnElement={returnElement}
+            getList={getList}
+            getTypeList={getTypeList}
+            type={type}
+            onSearch={onSearch}
+            onSearchType={onSearchType}
+          />
+        </Col>
+        {/* 右边显示详细信息和按钮操作 */}
+        <Col lg={8} md={16}>
+          <div className={styles.view_right_content}>
+            <Card bordered={false}>
+              <div>
+                <span
+                  style={{
+                    marginBottom: 32,
+                    paddingLeft: 10,
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#35B0F4',
                   }}
                 >
-                  {tag === 'lock' ? returnLockType().name : name}
-                </Button>
-              ))}
-            </div>
-          </Card>
-        </div>
-      </Col>
-    </Row>
-  </GridContent>
-);
+                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
+                </span>
+                <GetRenderitem data={choosenRowData} type={type} />
+              </div>
+            </Card>
+
+            {/* </Card> */}
+            <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {btnGroup.map(({ name, tag, type }) => (
+                  <Button
+                    key={tag}
+                    className={styles.buttomControl}
+                    type={type || 'primary'}
+                    icon={tag}
+                    size="small"
+                    disabled={returnSisabled(tag)}
+                    onClick={() => {
+                      btnFn(tag);
+                    }}
+                  >
+                    {tag === 'lock' ? returnLockType().name : name}
+                  </Button>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </Col>
+      </Row>
+    </GridContent>
+  );
 
 // Table 中间列表内容
 @connect(({ loading, devRaw }) => {
@@ -978,41 +1098,6 @@ const RightContent = ({ onSearchType, getTypeList, getList, type, choosenRowData
 })
 class CenterInfo extends Component {
 
-  componentDidMount() {
-    const { type } = this.props;
-    this.initDropList(type);
-  }
-
-
-  initDropList(type) {
-    const { dispatch } = this.props;
-    // 主材
-    if (type === 'material' || type === 'accessories') {
-      // 成色列表
-      dispatch({
-        type: 'devRaw/getGemDropDown',
-        payload: {},
-      });
-      // 重量单位列表
-      dispatch({
-        type: 'devRaw/getBUMDropDown',
-        payload: {},
-      });
-    }
-    // 配件
-    if (type === 'accessories') {
-      // 形状下拉
-      dispatch({
-        type: 'devRaw/getShapeDropDown',
-        payload: {},
-      });
-      // 规格下拉
-      dispatch({
-        type: 'devRaw/getSpecificationDropDown',
-        payload: {},
-      });
-    }
-  }
 
   changeChoosenTypeRow = rowData => {
     const { dispatch } = this.props;
@@ -1023,11 +1108,12 @@ class CenterInfo extends Component {
     // 清空右边 下边
     dispatch({
       type: 'devRaw/clearSixList',
-      payload:  {},
+      payload: {},
     });
   };
 
   changeChoosenRow = rowData => {
+    console.log('rowData', rowData);
     const { dispatch } = this.props;
     dispatch({
       type: 'devRaw/getChoosenRowData',
@@ -1047,7 +1133,6 @@ class CenterInfo extends Component {
   turnTab(e) {
     const key = e.target.value;
     const { dispatch, getList } = this.props;
-    this.initDropList(key);
 
     dispatch({
       type: 'devRaw/getSelectKey',
@@ -1098,7 +1183,7 @@ class CenterInfo extends Component {
   // 类型搜索
   searchType(params) {
     const { dispatch, getTypeList, paginationTypes } = this.props;
-    getTypeList(  { ...paginationTypes, ...params, current: 1 } );
+    getTypeList({ ...paginationTypes, ...params, current: 1 });
 
     dispatch({
       type: 'devRaw/getTypesPagination',
@@ -1109,7 +1194,7 @@ class CenterInfo extends Component {
 
   render() {
     const { onSelectChange, props } = this;
-    const { type, onSearchType, choosenRowData, paginationTypes,choosenTypesRowData, pagination, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
+    const { type, onSearchType, choosenRowData, paginationTypes, choosenTypesRowData, pagination, dev, selectedRowKeys, listLoading, onSearch, returnElement } = props;
     const columns = columnsArr[type];
     const list = dev[`${type}List`];
     const typeslist = dev.typesList;
@@ -1125,6 +1210,7 @@ class CenterInfo extends Component {
         </div>
         <div className={styles.tableBox}>
           <Table
+            key={`ta${Math.random(1)}`}
             columns={typeTable}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}
@@ -1203,6 +1289,8 @@ class CenterInfo extends Component {
           />
 
           <Table
+            key={`tb${Math.random(1)}`}
+
             columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}
@@ -1231,21 +1319,41 @@ const GetRenderitem = ({ data, type }) => {
 
   if (modalContent[type]) {
     arr = [
-      { 'key': '类型', 'value': 'fCode' },
       ...modalContent[type],
-      { 'key': '状态', 'value': 'status' },
     ];
   }
+  const getImages = (paths) => {
+    if (!paths) return;
+    return paths.map((
+      v, // src={v}
+    ) => (
+      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image.picPath }))}
+        />
+      </div>
+    ));
+  };
 
-
+  const images = data.pictures&&data.pictures.flatMap(e=>e.picPath)
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem} key={type}>
+
+      {(type !== 'material' && type !== 'otherMaterial') &&
+      <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
+        {getImages(images)}
+      </Carousel>}
+      {images&& images.length > 0 && <Divider />}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
-            return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
+            return (name ? <Description key={`c${key}`} term={key}>{data[`${value}Name`]}</Description>
                 : <Description
-                  key={key}
+                  key={`c${key}`}
                   term={key}
                 >{value === 'status' ? statusConvert[data[value]] : data[value]}
                 </Description>

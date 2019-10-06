@@ -6,6 +6,7 @@ import {
   freezeTheSpecimen,
   unFreezeTheSpecimen,
   queryTheSpecimenLock,
+  specimenTransferProduct,
   updateTheSpecimenUnLock,
 } from '@/services/api';
 
@@ -55,6 +56,16 @@ export default {
       });
       if (callback) callback();
     },
+
+    *transferProduct({ payload, callback }, { call, put }) {
+      const response = yield call(specimenTransferProduct, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
 
     *freezeSpecimen({ payload, callback }, { call, put }) {
       const response = yield call(freezeTheSpecimen, payload);

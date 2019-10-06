@@ -25,7 +25,7 @@ export default {
   'menu.erp.dev.specimen': '新款档案',
   'menu.erp.dev.report': '报表',
   'menu.erp.dev.Mould':'模具设定',
-  'menu.erp.dev.Raw':'类型管理',
+  'menu.erp.dev.Raw':'类别管理',
   'menu.erp.dev.FinishedProduct':'成品设定',
 
 
