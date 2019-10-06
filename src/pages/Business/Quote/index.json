@@ -52,15 +52,15 @@
       "text": "客户备料",
       "type": 5,
       "noNeed": true,
-      "initValue": 1
+      "initValue": 0
     },
     {
       "key": "向客户采购用料",
       "value": "purchasingMaterialsFromCustomers",
-      "text": "向客户备料",
+      "text": "向客户采购",
       "type": 5,
       "noNeed": true,
-      "initValue": 1
+      "initValue": 0
     },
     { "key": "说明", "value": "explains", "type": 8, "noNeed": true },
     { "key": "备注", "value": "remark", "type": 8, "noNeed": true }
