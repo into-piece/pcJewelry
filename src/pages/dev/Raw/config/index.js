@@ -111,10 +111,10 @@ export const modalContent = {
   otherMaterial: [
     // 1)	原料编号：必填项；系统自动生成；1)	；生成规则为“类别代码”+流水号；
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo' ,search:true},
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
-    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2 },
-    {span:8, 'key': '中文名', 'value': 'zhName', 'noNeed': true },
-    {span:8, 'key': '英文名', 'value': 'enName', 'noNeed': true },
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 ,search:true  },
+    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2  ,search:true },
+    {span:8, 'key': '中文名', 'value': 'zhName', 'noNeed': true  ,search:true },
+    {span:8, 'key': '英文名', 'value': 'enName', 'noNeed': true  ,search:true },
     {
       span:8,
       'key': '重量单位',
@@ -125,19 +125,19 @@ export const modalContent = {
     },
     {span:8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
     {span:8, 'key': '最低采购量', 'value': 'minimumPurchaseQuantity', 'noNeed': true },
-    {span:8, 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2 ,search:true ,noedit:true},
+    {span:8, 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2,noedit:true},
 
     {span:8, 'key': '备注', 'value': 'remarks', 'noNeed': true },
   ],
   auxiliaryMaterial:[
     //  “类别代码-形状代码-颜色代码-规格代码”；
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo' ,search:true},
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
-    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2 },
-    {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2  },
-    {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2 },
-    {span:8, 'key': '中文名', 'value': 'zhName', 'noNeed': true },
-    {span:8, 'key': '英文名', 'value': 'enName', 'noNeed': true },
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2  ,search:true},
+    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2 ,search:true },
+    {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2   ,search:true},
+    {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2  ,search:true},
+    {span:8, 'key': '中文名', 'value': 'zhName', 'noNeed': true ,search:true },
+    {span:8, 'key': '英文名', 'value': 'enName', 'noNeed': true ,search:true },
     {span:8, 'key': '计量单位', 'value': 'measureUnit', 'name': true , 'list': 'getBUMropDown', 'type': 2 },
     {
       span:8,
@@ -149,7 +149,7 @@ export const modalContent = {
     },
     {span:8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
     {span:8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true },
-    {span:8, 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2 ,search:true ,noedit:true},
+    {span:8, 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2 ,noedit:true},
     {span:8, 'key': '备注', 'value': 'remarks', 'noNeed': true },
   ]
 
