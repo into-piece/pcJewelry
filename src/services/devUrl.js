@@ -147,9 +147,9 @@ export  const   serviceArr = [
     "name": "wrapper",
     "path": "wrapper",
     "arr": [
-      "listWrapper",
-      "saveWrapper",
-      "deleteWrapper",
+      "list",
+      "saveOrUpdate",
+      "delete",
       "approval",
       "revoke"
     ]
@@ -159,9 +159,9 @@ export  const   serviceArr = [
     "name": "auxiliaryMaterial",
     "path": "auxiliary-material",
     "arr": [
-      "listAuxiliaryMaterial",
-      "saveAuxiliaryMaterial",
-      "deleteAuxiliaryMaterial",
+      "list",
+      "saveOrUpdate",
+      "delete",
       "approval",
       "revoke"
     ]
@@ -171,9 +171,9 @@ export  const   serviceArr = [
     "name": "otherMaterial",
     "path": "other-material",
     "arr": [
-      "listOtherMaterial",
-      "saveOtherMaterial",
-      "deleteOtherMaterial",
+      "list",
+      "saveOrUpdate",
+      "delete",
       "approval",
       "revoke"
     ]
