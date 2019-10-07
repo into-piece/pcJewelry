@@ -224,15 +224,20 @@ const columnsArr = {
   // 其他材料
   otherMaterial: [
     {
-      title: '成色',
-      dataIndex: 'assayingName',
-      key: 'assaying',
+      title: '原料编号',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
         </LockTag>
         )
         : (data),
+    },
+    {
+      title: '成色',
+      dataIndex: 'assayingName',
+      key: 'assaying',
     },
     {
       title: '中文名',
@@ -353,8 +358,8 @@ const columnsArr = {
   auxiliaryMaterial: [
     {
       title: '原料编号',
-      dataIndex: 'fCode',
-      key: 'fCode',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
