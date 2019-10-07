@@ -48,6 +48,8 @@ export default {
     markingEnName: '',
     brandsList: [],
     materialPriceList: [],
+    searchParams: {},
+    searchDetailParams: {}
   },
 
   effects: {
@@ -83,6 +85,20 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: initData, typeName: 'quoteDatialList' },
+      });
+    },
+
+    * changeSearchParams({ payload }, { put }) {
+      yield put({
+        type: 'changeSearchParams2',
+        payload,
+      });
+    },
+
+    * changeSearchDetailParams({ payload }, { put }) {
+      yield put({
+        type: 'changeSearchDetailParams2',
+        payload,
       });
     },
 
@@ -290,6 +306,24 @@ export default {
         rightMenu: action.payload,
       };
     },
+    changeSearchParams2(state, action) {
+      debugger
+      return {
+        ...state,
+        searchParams: {
+          ...state.searchParams,
+          ...action.payload,
+        }
+      };
+    },
+    changeSearchDetailParams2(state, action) {
+      return {
+        ...state,
+        searchDetailParams: {
+          ...state.searchDetailParams,
+          ...action.payload,
+        }
+      };
+    },
   },
-
 };
