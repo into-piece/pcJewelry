@@ -24,10 +24,9 @@ import 'moment/locale/zh-cn';
 import 'moment/locale/zh-tw';
 
 const baseNavigator = true;
-const baseSeparator = '-';
 const useLocalStorage = true;
 
-import { LocaleProvider, version } from 'antd';
+import { LocaleProvider } from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 let defaultAntd = require('antd/lib/locale-provider/zh_CN');
@@ -36,7 +35,7 @@ defaultAntd = defaultAntd.default || defaultAntd;
 const localeInfo = {
   'en-US': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/en-US.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/apple/Documents/workplace/jewelry/src/locales/en-US.js')),
     },
     locale: 'en-US',
     antd: require('antd/lib/locale-provider/en_US'),
@@ -45,7 +44,7 @@ const localeInfo = {
   },
   'pt-BR': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/pt-BR.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/apple/Documents/workplace/jewelry/src/locales/pt-BR.js')),
     },
     locale: 'pt-BR',
     antd: require('antd/lib/locale-provider/pt_BR'),
@@ -54,7 +53,7 @@ const localeInfo = {
   },
   'zh-CN': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/zh-CN.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/apple/Documents/workplace/jewelry/src/locales/zh-CN.js')),
     },
     locale: 'zh-CN',
     antd: require('antd/lib/locale-provider/zh_CN'),
@@ -63,7 +62,7 @@ const localeInfo = {
   },
   'zh-TW': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/zh-TW.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/apple/Documents/workplace/jewelry/src/locales/zh-TW.js')),
     },
     locale: 'zh-TW',
     antd: require('antd/lib/locale-provider/zh_TW'),
@@ -105,8 +104,8 @@ class LocaleWrapper extends React.Component{
       appLocale = localeInfo['zh-CN'] || appLocale;
     }
     window.g_lang = appLocale.locale;
-    window.g_langSeparator = baseSeparator || '-';
     appLocale.data && addLocaleData(appLocale.data);
+
     return appLocale;
   }
   reloadAppLocale = () => {
@@ -118,14 +117,12 @@ class LocaleWrapper extends React.Component{
 
   render(){
     const appLocale = this.getAppLocale();
-    // react-intl must use `-` separator
-    const reactIntlLocale = appLocale.locale.split(baseSeparator).join('-');
     const LangContextValue = {
-      locale: reactIntlLocale,
+      locale: appLocale.locale,
       reloadAppLocale: this.reloadAppLocale,
     };
     let ret = this.props.children;
-    ret = (<IntlProvider locale={reactIntlLocale} messages={appLocale.messages}>
+    ret = (<IntlProvider locale={appLocale.locale} messages={appLocale.messages}>
       <InjectedWrapper>
         <LangContext.Provider value={LangContextValue}>
           <LangContext.Consumer>{(value) => {
@@ -135,20 +132,9 @@ class LocaleWrapper extends React.Component{
         </LangContext.Provider>
       </InjectedWrapper>
     </IntlProvider>)
-     // avoid antd ConfigProvider not found
-     let AntdProvider = LocaleProvider;
-     const [major, minor] = `${version || ''}`.split('.');
-     // antd 3.21.0 use ConfigProvider not LocaleProvider
-     const isConfigProvider = Number(major) > 3 || (Number(major) >= 3 && Number(minor) >= 21);
-     if (isConfigProvider) {
-       try {
-         AntdProvider = require('antd/lib/config-provider').default;
-       } catch (e) {}
-     }
-
-     return (<AntdProvider locale={appLocale.antd ? (appLocale.antd.default || appLocale.antd) : defaultAntd}>
+     return (<LocaleProvider locale={appLocale.antd ? (appLocale.antd.default || appLocale.antd) : defaultAntd}>
       {ret}
-    </AntdProvider>);
+    </LocaleProvider>);
     return ret;
   }
 }

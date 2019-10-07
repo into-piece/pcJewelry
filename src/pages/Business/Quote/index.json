@@ -13,8 +13,8 @@
     },
     { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
     { "key": "客户简称", "value": "customerShotName", "type": 7, "noNeed": true },
-    { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList" },
-    { "key": "终客简称", "value": "endShotName" },
+    { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList", "noNeed": true },
+    { "key": "终客简称", "value": "endShotName", "noNeed": true },
     {
       "key": "报价方式",
       "value": "quoteMethod",
@@ -52,15 +52,15 @@
       "text": "客户备料",
       "type": 5,
       "noNeed": true,
-      "initValue": 1
+      "initValue": 0
     },
     {
       "key": "向客户采购用料",
       "value": "purchasingMaterialsFromCustomers",
-      "text": "向客户备料",
+      "text": "向客户采购",
       "type": 5,
       "noNeed": true,
-      "initValue": 1
+      "initValue": 0
     },
     { "key": "说明", "value": "explains", "type": 8, "noNeed": true },
     { "key": "备注", "value": "remark", "type": 8, "noNeed": true }

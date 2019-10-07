@@ -67,7 +67,7 @@ let typeTable = [
       <LockTag>
         {data}
       </LockTag>
-      )
+    )
       : (data),
   },
   {
@@ -111,7 +111,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     }, {
       title: '成色',
@@ -165,7 +165,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -230,7 +230,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -274,7 +274,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -363,7 +363,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -427,7 +427,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -545,17 +545,17 @@ class Info extends Component {
     // 切工下拉
     dispatch({
       type: 'devRaw/getCutDrop',
-      payload: { },
+      payload: {},
     });
     // 等级下拉
     dispatch({
       type: 'devRaw/getQualityDrop',
-      payload: { },
+      payload: {},
     });
     // 颜色下拉
     dispatch({
       type: 'devRaw/getColorDrop',
-      payload: { },
+      payload: {},
     });
     // 类别下拉
     dispatch({
@@ -669,17 +669,17 @@ class Info extends Component {
           {dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
-        </Select>);
-      case 3 :
+                </Select>);
+      case 3:
         return (<Radio.Group disabled={disable || false}>
           <Radio value="0">计重</Radio>
           <Radio value="1">计件</Radio>
-        </Radio.Group>);
-      case 4 :
+                </Radio.Group>);
+      case 4:
         return (<Radio.Group disabled={disable || false}>
           <Radio value="0">否</Radio>
           <Radio value="1">是</Radio>
-        </Radio.Group>);
+                </Radio.Group>);
       default:
         return <Input placeholder="请输入" disabled={disable || false} />;
     }
@@ -702,7 +702,7 @@ class Info extends Component {
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable,noedit }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit }) => {
 
             const selectData = { ...choosenRowData };
             if (value === 'materialNo' && selectKey === 'accessories') {
@@ -716,22 +716,22 @@ class Info extends Component {
               const a3 = dev.shapeSettingList.filter(e => e.id === shapeId);
               const a4 = dev.specificationSettingList.filter(e => e.id === specificationId);
 
-              const va = `${a1.length > 0 ? (`${a1[0].productMaterial }-`) : ''  }${
-                a2.length > 0 ? (`${a2[0].unitCode}-`) : ''  }${
-                a3.length > 0 ? (`${a3[0].shapeCode}-`) : ''  }${
+              const va = `${a1.length > 0 ? (`${a1[0].productMaterial}-`) : ''}${
+                a2.length > 0 ? (`${a2[0].unitCode}-`) : ''}${
+                a3.length > 0 ? (`${a3[0].shapeCode}-`) : ''}${
                 a4.length > 0 ? a4[0].specificationCode : ''}`;
               dfv = va;
               selectData[value] = va || choosenRowData[value];
             }
 
-            return (!noedit&&
+            return (!noedit &&
               <Col span={span || 12} key={`k${value}`}>
                 <FormItem label={key} {...formLayout} key={key}>
                   {
                     getFieldDecorator(value, {
                       rules: [{
                         required: !noNeed,
-                        message: `请${type && (type === 2 || type === 3|| type === 4) ? '选择' : '输入'}${key}`,
+                        message: `请${type && (type === 2 || type === 3 || type === 4) ? '选择' : '输入'}${key}`,
                       }],
                       initialValue: isEdit ? selectData[value] : (dfv || ''),
                     })(this.returnElement({ type, dev, list, disable }))
@@ -754,13 +754,13 @@ class Info extends Component {
             <UploadImg
               key="uimg"
               maxcount={10}
-              defaultFileList={isEdit?choosenRowData.pictures:[]}
+              defaultFileList={isEdit ? choosenRowData.pictures : []}
               fileListFun={(list) => {
                 this.setState({ filelist: list });
               }}
             />
           </FormItem>
-        </Col>}
+                                                                        </Col>}
         {content}
 
       </Form>
@@ -794,7 +794,7 @@ class Info extends Component {
       if (!err) {
         values = { ...values, sId: choosenTypesRowData.id };
 
-        if (selectKey !== 'material'||selectKey !== 'otherMaterial') {
+        if (selectKey !== 'material' || selectKey !== 'otherMaterial') {
           values = {
             ...values, picPath: filelist,
           };
@@ -812,7 +812,7 @@ class Info extends Component {
             this.btnFn('');
           }
         });
-        this.setState({filelist:[]});
+        this.setState({ filelist: [] });
 
       }
     });
@@ -839,7 +839,7 @@ class Info extends Component {
           sId: choosenTypesRowData.id,
         };
 
-        if (selectKey !== 'material'||selectKey !== 'otherMaterial') {
+        if (selectKey !== 'material' || selectKey !== 'otherMaterial') {
           params = {
             ...params, picPath: filelist,
           };
@@ -855,7 +855,7 @@ class Info extends Component {
             this.btnFn('');
           }
         });
-        this.setState({filelist:[]});
+        this.setState({ filelist: [] });
 
       }
     });
@@ -863,7 +863,7 @@ class Info extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const { selectKey, selectedRowKeys ,dispatch} = this.props;
+    const { selectKey, selectedRowKeys, dispatch } = this.props;
     serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
@@ -1011,7 +1011,7 @@ class Info extends Component {
           onOk={handleModalOk}
           visible={modalType !== ''}
           onCancel={() => {
-            this.setState({filelist:[]});
+            this.setState({ filelist: [] });
             btnFn('');
           }}
         >
@@ -1173,8 +1173,18 @@ class CenterInfo extends Component {
     getList({ params: { ...pagination, ...params, current: 1 } });
 
     dispatch({
-      type: 'devRaw/getPagination',
-      payload: { current: 1 },
+      type: 'devRaw/setSearchParams',
+      payload: params,
+      callback: () => {
+        // 搜索变第一页
+        dispatch({
+          type: 'devRaw/getPagination',
+          payload: { current: 1 },
+          callback: () => {
+            getList({ params: { ...params, current: 1 } });
+          },
+        });
+      }
     });
 
 
@@ -1328,34 +1338,34 @@ const GetRenderitem = ({ data, type }) => {
       v, // src={v}
     ) => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
-        <Zmage
-          alt="图片"
-          align="center"
-          className={styles.carousel_image}
-          src={v}
-          set={paths.map(image => ({ src: image.picPath }))}
-        />
-      </div>
-    ));
+          <Zmage
+            alt="图片"
+            align="center"
+            className={styles.carousel_image}
+            src={v}
+            set={paths.map(image => ({ src: image.picPath }))}
+          />
+        </div>
+      ));
   };
 
-  const images = data.pictures&&data.pictures.flatMap(e=>e.picPath)
+  const images = data.pictures && data.pictures.flatMap(e => e.picPath)
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem} key={type}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-      <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
-        {getImages(images)}
-      </Carousel>}
-      {images&& images.length > 0 && <Divider />}
+        <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
+          {getImages(images)}
+        </Carousel>}
+      {images && images.length > 0 && <Divider />}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={`c${key}`} term={key}>{data[`${value}Name`]}</Description>
-                : <Description
-                  key={`c${key}`}
-                  term={key}
-                >{value === 'status' ? statusConvert[data[value]] : data[value]}
+              : <Description
+                key={`c${key}`}
+                term={key}
+              >{value === 'status' ? statusConvert[data[value]] : data[value]}
                 </Description>
             );
           })

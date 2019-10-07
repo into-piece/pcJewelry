@@ -213,8 +213,8 @@ customerColumns = customerColumns.map(item => ({ ...item, sorter: true }))
 
 
 // 报价主页的筛选参数
-const searchParams = [
-  { key: '客户编号', value: 'customerNo' },
+const searchParamsArr = [
+  { key: '客户编号', value: 'customerId' },
   { key: '报价单号', value: 'quoteNumber' },
   { key: '类别', value: 'type', "type": 2, "list": "wordbookdropdown", noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
@@ -261,6 +261,8 @@ const productSearchParams = [
     productselectedKeys: quote.productselectedKeys,
     productChoosenRowData: quote.productChoosenRowData,
     productListLoading: loading.effects['quote/getProductList'],
+    searchParams: quote.searchParams,
+    searchDetailParams: quote.searchDetailParams,
   };
 })
 class Info extends Component {
@@ -299,11 +301,11 @@ class Info extends Component {
 
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
-    const { dispatch, pagination } = this.props;
+    const { dispatch, pagination, searchParams } = this.props;
     // getDevList
     dispatch({
       type: `quote/getList`,
-      payload: { params: { ...pagination, ...param }, ...args },
+      payload: { params: { ...pagination, ...searchParams, ...param }, ...args },
     });
     dispatch({
       type: `quote/clearDetailList`,
@@ -351,7 +353,6 @@ class Info extends Component {
         this.getList({ sendReq: 'currentQuote' });
       }
     })
-
   }
 
   // 列表对应操作button回调
@@ -468,8 +469,8 @@ class Info extends Component {
 
   handleDatePicker = (date, dateString) => {
     console.log(date, dateString)
-    const quoteDateFrom = moment(date[1]).valueOf()
-    const quoteDateTo = moment(date[2]).valueOf()
+    const quoteDateFrom = moment(date[0]).valueOf()
+    const quoteDateTo = moment(date[1]).valueOf()
     this.setState({
       quoteDateFrom,
       quoteDateTo
@@ -1094,7 +1095,16 @@ const GetRenderitem = ({ data, type, returnListName }) => {
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, belong, list }) =>
-            <Description key={value} term={key}>{belong === 2 ? returnName(value, data[value]) : belong === 3 ? returnListName(list, data[value]) : data[value]}</Description>
+            <Description key={value} term={key}>
+              {
+                belong === 2 ?
+                  returnName(value, data[value])
+                  :
+                  belong === 3 ?
+                    returnListName(list, data[value]) :
+                    data[value]
+              }
+            </Description>
           )
         }
       </DescriptionList>
@@ -1177,8 +1187,24 @@ class CenterInfo extends Component {
     }
   }
 
+  changeSearchParams = (v) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `quote/changeSearchParams`,
+      payload: v,
+    });
+  }
+
+  changeSearchDetailParams = (v) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `quote/changeSearchParams`,
+      payload: v,
+    });
+  }
+
   render() {
-    const { onSelectChange, props, clearFn, getDetailList } = this
+    const { onSelectChange, props, clearFn, getDetailList, changeSearchParams, changeSearchDetailParams } = this
     const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement, listDetailLoading, onSearch } = props;
     console.log(quotelist, quoteDatialList, choosenRowData, returnElement, '================quotelist')
     return (
@@ -1195,7 +1221,7 @@ class CenterInfo extends Component {
             </Radio.Button>
           </Radio.Group>
         </div>
-        <SearchForm data={searchParams} source={quote} onSearch={onSearch} returnElement={returnElement} />
+        <SearchForm data={searchParamsArr} source={quote} onSearch={onSearch} returnElement={returnElement} onchange={changeSearchParams} />
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 1400 }}
@@ -1227,7 +1253,7 @@ class CenterInfo extends Component {
             }
           </Radio.Group>
         </div>
-        <SearchForm data={searchDetailParams} source={quote} onSearch={getDetailList} returnElement={returnElement} />
+        <SearchForm data={searchDetailParams} source={quote} onSearch={getDetailList} returnElement={returnElement} onchange={changeSearchDetailParams} />
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 1600 }}

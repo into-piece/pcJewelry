@@ -3,7 +3,11 @@ import { Button, Form, Icon, Input } from 'antd';
 import styles from './index.less';
 
 const FormItem = Form.Item;
-@Form.create()
+@Form.create({
+  onValuesChange(props, changedFields) {
+    props.onchange(changedFields);
+  }
+})
 class SearchFrom extends Component {
   state = {
     expandForm: false, // 是否展开
