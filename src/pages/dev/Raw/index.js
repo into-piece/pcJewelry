@@ -235,11 +235,6 @@ const columnsArr = {
         : (data),
     },
     {
-      title: '成色',
-      dataIndex: 'assayingName',
-      key: 'assaying',
-    },
-    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
@@ -250,19 +245,19 @@ const columnsArr = {
       key: 'enName',
     },
     {
+      title: '计量单位',
+      dataIndex: 'measureUnitName',
+      key: 'measureUnit',
+    },
+    {
       title: '重量单位',
-      dataIndex: 'assayingName',
+      dataIndex: 'weightUnitName',
       key: 'weightUnit',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
       key: 'valuationClass',
-    },
-    {
-      title: '最低采购量',
-      dataIndex: 'minimumPurchaseQuantity',
-      key: 'minimumPurchaseQuantity',
     },
     {
       title: '状态',
@@ -335,7 +330,7 @@ const columnsArr = {
     },
     {
       title: '重量单位',
-      dataIndex: 'assayingName',
+      dataIndex: 'weightUnitName',
       key: 'weightUnit4',
     },
     {
@@ -345,8 +340,8 @@ const columnsArr = {
     },
     {
       title: '单重',
-      dataIndex: 'inventoryWeight',
-      key: 'inventoryWeight4',
+      dataIndex: 'singleWeight',
+      key: 'singleWeight4',
     },
     {
       title: '状态',
@@ -369,7 +364,7 @@ const columnsArr = {
     },
     {
       title: '颜色',
-      dataIndex: 'colourName',
+      dataIndex: 'colorName',
       key: 'colour',
     },
     {
@@ -399,7 +394,7 @@ const columnsArr = {
     },
     {
       title: '重量单位',
-      dataIndex: 'assayingName',
+      dataIndex: 'weightUnitName',
       key: 'weightUnit',
     },
     {
@@ -409,8 +404,8 @@ const columnsArr = {
     },
     {
       title: '单重',
-      dataIndex: 'inventoryWeight',
-      key: 'inventoryWeight',
+      dataIndex: 'singleWeight',
+      key: 'singleWeight',
     },
     {
       title: '状态',
