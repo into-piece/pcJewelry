@@ -271,9 +271,9 @@ class ProductDetail extends Component {
                   <Divider className={business.divder} />
                   <DescriptionList size="small" col="2">
                     <Description term="颜色">{showItem.gemColorName}</Description>
-                    <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
+                    <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
                     <Description term="报价重量">{showItem.finishedWeight}</Description>
-                    <Description term="成色重量">{showItem.unitOfWeightName}</Description>
+                    <Description term="成品重量">{showItem.unitOfWeightName}</Description>
                     <Description term="电镀">{showItem.platingColorName}</Description>
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
@@ -789,18 +789,7 @@ class ProductDetail extends Component {
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
-            <Col lg={5} md={5} sm={5} xs={5}>
-              <FormItem
-                label="产品描述"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('productDesc', {
-                  rules: [{ message: '请输入产品描述' }],
-                  initialValue: current.productDesc,
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-            </Col>
+
             <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
                 label="备注"
@@ -852,7 +841,7 @@ class ProductDetail extends Component {
           <Divider className={business.divder} />
           <Row>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label='客户编号'
                 {...this.centerFormLayout}
@@ -884,7 +873,7 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label="客户简称"
                 {...this.centerFormLayout}
@@ -903,7 +892,7 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
 
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={6} md={6} sm={6} xs={6}>
               <FormItem
                 label='客户货号'
                 {...this.centerFormLayout}
@@ -912,6 +901,18 @@ class ProductDetail extends Component {
                 {getFieldDecorator('custoerProductNo', {
                   rules: [{ message: '请输入货号' }],
                   initialValue: current.custoerProductNo,
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+            </Col>
+            <Col lg={6} md={6} sm={6} xs={6}>
+              <FormItem
+                label="产品描述"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('productDesc', {
+                  rules: [{ message: '请输入产品描述' }],
+                  initialValue: current.productDesc,
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
