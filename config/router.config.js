@@ -263,12 +263,19 @@ export default [
                 icon: 'inbox',
                 component: './dev/Mould',
               },
-              //原料设定
+              //类别管理
               {
                 path: '/erp/dev/Raw',
                 name: 'Raw',
                 icon: 'inbox',
                 component: './dev/Raw',
+              },
+              //生产流程
+              {
+                path: '/erp/dev/productflow',
+                name: 'productflow',
+                icon: 'build',
+                component: './dev/Productflow',
               },
               {
                 path: '/erp/dev/FinishedProduct',

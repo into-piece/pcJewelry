@@ -1645,6 +1645,28 @@ const routes = [
                 exact: true,
               },
               {
+                path: '/erp/dev/productflow',
+                name: 'productflow',
+                icon: 'build',
+                component: __IS_BROWSER
+                  ? _dvaDynamic({
+                      app: require('@tmp/dva').getApp(),
+                      models: () => [
+                        import(/* webpackChunkName: 'p__dev__Productflow__models__productflow.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/Productflow/models/productflow.js').then(
+                          m => {
+                            return { namespace: 'productflow', ...m.default };
+                          },
+                        ),
+                      ],
+                      component: () =>
+                        import(/* webpackChunkName: "layouts__BasicLayout" */ '../dev/Productflow'),
+                      LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                        .default,
+                    })
+                  : require('../dev/Productflow').default,
+                exact: true,
+              },
+              {
                 path: '/erp/dev/FinishedProduct',
                 name: 'FinishedProduct',
                 icon: 'deployment-unit',

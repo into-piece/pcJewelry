@@ -8,7 +8,7 @@ export const manuArr = [
 export const modalContent = {
   material: [
     { 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2  ,search:true},
-    { 'key': '类别', 'value': 'sId', 'name': true, 'list': '', 'type': 2},
+    { 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2},
     { 'key': '中文名', 'value': 'zhName', 'noNeed': true ,search:true },
     { 'key': '英文名', 'value': 'enName', 'noNeed': true  ,search:true},
     {

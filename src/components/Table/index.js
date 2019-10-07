@@ -32,7 +32,6 @@ class MyTable extends Component {
     if (selectedRowKeys.includes(record.id)) {
       selectedRow = selectedRowKeys.filter(item => item !== record.id);
       clearFn && clearFn(this.props.type)
-      debugger
       onSelectChange && onSelectChange(selectedRow)
       // selectedRowKeys = []
       return
