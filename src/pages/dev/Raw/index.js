@@ -228,9 +228,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
@@ -361,9 +361,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
@@ -768,7 +768,7 @@ class Info extends Component {
             );
           })
         }
-        {(selectKey !== 'material' || selectKey !== 'otherMaterial') && <Col span={18}>
+        {(selectKey !== 'material' && selectKey !== 'otherMaterial') && <Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -821,7 +821,7 @@ class Info extends Component {
       if (!err) {
         values = { ...values, sId: choosenTypesRowData.id };
 
-        if (selectKey !== 'material' || selectKey !== 'otherMaterial') {
+        if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
           values = {
             ...values, picPath: filelist,
           };
@@ -866,7 +866,7 @@ class Info extends Component {
           sId: choosenTypesRowData.id,
         };
 
-        if (selectKey !== 'material' || selectKey !== 'otherMaterial') {
+        if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
           params = {
             ...params, picPath: filelist,
           };
