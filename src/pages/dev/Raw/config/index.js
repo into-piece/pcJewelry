@@ -8,7 +8,7 @@ export const manuArr = [
 export const modalContent = {
   material: [
     { 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2  ,search:true},
-    { 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2},
+    { 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016001', 'type': 2},
     { 'key': '中文名', 'value': 'zhName', 'noNeed': true ,search:true },
     { 'key': '英文名', 'value': 'enName', 'noNeed': true  ,search:true},
     {
@@ -32,7 +32,7 @@ export const modalContent = {
     // 1)	原料编号：必填项；系统自动生成；生成规则为“成色代码-类别代码-形状代码-规格代码”；输入框禁用，根据下拉的选择自动拼接并显示。
 
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo'  ,search:true},
-    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2 ,search:true },
+    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'H016003', 'type': 2 ,search:true },
     {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
     {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2  ,search:true },
     {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2  ,search:true},
@@ -58,7 +58,7 @@ export const modalContent = {
   stone: [
     // 1)	原料编号：必填项；系统自动生成；生成规则为“类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码”
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo' ,search:true},
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016002', 'type': 2 },
     {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2 ,search:true },
     {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2,search:true },
     {span:8, 'key': '切工', 'value': 'cut', 'name': true , 'list': 'listCutDrop', 'type': 2 ,search:true},
@@ -84,7 +84,7 @@ export const modalContent = {
   wrapper: [
     // 1)	原料编号：必填项；系统自动生成；生成规则为“类别代码-形状代码-颜色代码-规格代码”
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo' ,search:true},
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016004', 'type': 2 },
     {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2 ,search:true },
     {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2,search:true },
     {span:8, 'key': '颜色', 'value': 'color', 'name': true , 'list': 'listColorDrop', 'type': 2,search:true },
@@ -111,7 +111,7 @@ export const modalContent = {
   otherMaterial: [
     // 1)	原料编号：必填项；系统自动生成；1)	；生成规则为“类别代码”+流水号；
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo' ,search:true},
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 ,search:true  },
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016005', 'type': 2 ,search:true  },
     {span:8, 'key': '中文名', 'value': 'zhName', 'noNeed': true  ,search:true },
     {span:8, 'key': '英文名', 'value': 'enName', 'noNeed': true  ,search:true },
     {span:8, 'key': '计量单位', 'value': 'measureUnit', 'name': true , 'list': 'getBUMropDown', 'type': 2 },
@@ -131,7 +131,7 @@ export const modalContent = {
   auxiliaryMaterial:[
     //  “类别代码-形状代码-颜色代码-规格代码”；
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo' ,search:true},
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2  ,search:true},
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016005', 'type': 2  ,search:true},
     {span:8, 'key': '颜色', 'value': 'color', 'name': true, 'list': 'listColorDrop', 'type': 2 ,search:true },
     {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2   ,search:true},
     {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2  ,search:true},

@@ -11,6 +11,7 @@ import {
   Select,
   Radio,
   Checkbox,
+  DatePicker,
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
@@ -20,10 +21,11 @@ import GetRenderitem from './components/GetRenderitem';
 import MiddleTable from './components/MiddleTable';
 
 // 弹窗输入配置&显示配置
-import items from './config/modalInput';
 import modalInput from './config/modalInput';
 import styles from './index.less';
 
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 // 右手边按钮集合
@@ -168,7 +170,7 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input disabled={this.disabledCondition(value, form)} style={{ width: '100' }} placeholder="请输入" />;
+        return <Input style={{ width: '100' }} placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -267,7 +269,6 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
-        this.openAddModal();
         this.setState({ modalType });
         break;
       case 'delete':
@@ -390,7 +391,7 @@ class Index extends Component {
                                   textalign: 'center',
                                   lineHeight: '40px',
                                 }}
-                                value={index + 1}
+                                value={item.value}
                               >{item.key}
                               </Radio.Button>)
                           }
@@ -399,7 +400,7 @@ class Index extends Component {
                           data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
                           type={rightActive}
                           returnListName={returnListName}
-                          items={items}
+                          items={modalInput}
                         />
                       </Card>
 

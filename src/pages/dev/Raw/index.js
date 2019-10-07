@@ -553,11 +553,36 @@ class Info extends Component {
       type: 'devRaw/getColorDrop',
       payload: {},
     });
-    // 类别下拉
+    // 主材类别下拉
     dispatch({
       type: 'devRaw/getTypeByWordbookCode',
       payload: { key: 'H016001' },
     });
+    // 石材类别下拉
+    dispatch({
+      type: 'devRaw/getTypeByWordbookCode',
+      payload: { key: 'H016002' },
+    });
+    // 配件类别下拉
+    dispatch({
+      type: 'devRaw/getTypeByWordbookCode',
+      payload: { key: 'H016003' },
+    });
+
+    // 包装类别下拉
+    dispatch({
+      type: 'devRaw/getTypeByWordbookCode',
+      payload: { key: 'H016004' },
+    });
+    // 辅材类别下拉
+    dispatch({
+      type: 'devRaw/getTypeByWordbookCode',
+      payload: { key: 'H016005' },
+    });
+
+
+
+
     // 大类下拉
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
@@ -606,7 +631,7 @@ class Info extends Component {
   };
 
   // 获取对应key=》页面进行数据请求
-  getList = ({ key, params }) => {
+  getList = ({ key, params ,sId}) => {
     const { dispatch, pagination, selectKey, choosenTypesRowData } = this.props;
 
     // 没有选择类型就没有查询下面
@@ -617,7 +642,7 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params, sId: choosenTypesRowData.id }, type: key || selectKey },
+      payload: { params: { ...pagination, ...params, sId: sId||choosenTypesRowData.id }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -716,7 +741,10 @@ class Info extends Component {
               const qualityId = `${getFieldValue('quality')}`;
 
               const assaying = dev.gemSetProcessDropDown.filter(e => e.id === assayingId);
-              const s = dev.listMstWordbookDropH016001.filter(e => e.id === sId);
+              let  s = dev.H016001.filter(e => e.id === sId);
+
+
+
               const shape = dev.shapeSettingList.filter(e => e.id === shapeId);
               const specification = dev.specificationSettingList.filter(e => e.id === specificationId);
               const color = dev.listColorDrop.filter(e => e.id === colorId);
@@ -724,12 +752,15 @@ class Info extends Component {
               const quality = dev.listQualityDrop.filter(e => e.id === qualityId);
               let va = '';
               if (selectKey === 'accessories') {
+                s = dev.H016003.filter(e => e.id === sId);
                 va = `${assaying.length > 0 ? (`${assaying[0].productMaterial}-`) : ''}${
                   s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
                   shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
                   specification.length > 0 ? specification[0].specificationCode : ''}`;
               }
               if (selectKey === 'stone') {
+                s = dev.H016002.filter(e => e.id === sId);
+
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
                   shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
                   cut.length > 0 ? (`${cut[0].cuttingCode}-`) : ''}${
@@ -738,12 +769,21 @@ class Info extends Component {
                   specification.length > 0 ? specification[0].specificationCode : ''}`;
               }
               if (selectKey === 'wrapper'||selectKey === 'auxiliaryMaterial') {
+                if(selectKey === 'wrapper'){
+                  s = dev.H016004.filter(e => e.id === sId);
+                }
+                if(selectKey === 'auxiliaryMaterial'){
+                  s = dev.H016005.filter(e => e.id === sId);
+                }
+
+
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
                   shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
                   color.length > 0 ? (`${color[0].colorCode}-`) : ''}${
                   specification.length > 0 ? specification[0].specificationCode : ''}`;
               }
               if (selectKey === 'otherMaterial') {
+                s = dev.H016005.filter(e => e.id === sId);
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
               }
 
@@ -1127,7 +1167,7 @@ class CenterInfo extends Component {
 
 
   changeChoosenTypeRow = rowData => {
-    const { dispatch } = this.props;
+    const { dispatch,getList } = this.props;
     dispatch({
       type: 'devRaw/getChoosenTypeRowData',
       payload: rowData,
@@ -1137,10 +1177,10 @@ class CenterInfo extends Component {
       type: 'devRaw/clearSixList',
       payload: {},
     });
+    getList({sId:rowData.id});
   };
 
   changeChoosenRow = rowData => {
-    console.log('rowData', rowData);
     const { dispatch } = this.props;
     dispatch({
       type: 'devRaw/getChoosenRowData',
@@ -1158,7 +1198,7 @@ class CenterInfo extends Component {
   };
 
   turnTab(e) {
-    const key = e.target.value;
+    const key =e.target? e.target.value:e;
     const { dispatch, getList } = this.props;
     dispatch({
       type: 'devRaw/setsearchparams',

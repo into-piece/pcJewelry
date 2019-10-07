@@ -20,6 +20,14 @@ const { queryProductQuoteHeadersNotDone,
   listEndCustomerDropDown,
   listBrands,
   listBasicColourSettingsDropDown } = servicesConfig
+
+
+const getTableList = listProductQuoteDetail;
+const getListTableSecond = {
+  productProcess: listProductQuoteDetail
+};
+
+
 export default {
   namespace: 'productflow',
 
@@ -51,9 +59,7 @@ export default {
 
   effects: {
     * getList({ payload }, { call, put }) {
-      const { params, sendReq } = payload
-      const sendType = sendReq === 'currentQuote' ? queryProductQuoteHeadersNotDone : queryProductQuoteHeadersAlreadyDone
-      const response = yield call(sendType, params);
+      const response = yield call(getTableList, payload);
       const list =
         response.head && response.head.rtnCode === '000000'
           ? response.body
@@ -66,8 +72,8 @@ export default {
     },
 
     * getListSecond({ payload }, { call, put }) {
-      const {  params } = payload
-      const response = yield call(listProductQuoteDetail, params);
+      const {  params,type } = payload
+      const response = yield call(getListTableSecond[type], params);
       const listSecond =
         response.head && response.head.rtnCode === '000000'
           ? response.body

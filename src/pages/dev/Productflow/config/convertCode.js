@@ -1,5 +1,9 @@
 
-const returnNameObj = {
+export const isCheck = {
+  0: '是',
+  1: '否'
+}
+export const returnNameObj = {
   status: {
     0: '输入',
     2: '已审批'
@@ -21,7 +25,7 @@ const returnNameObj = {
   purchasingMaterialsFromCustomers: isCheck
 }
 
-const returnName = (key, value) => returnNameObj[key][value]
+export const returnName = (key, value) => returnNameObj[key][value]
 
 export default {
   returnNameObj,

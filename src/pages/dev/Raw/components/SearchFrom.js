@@ -71,7 +71,7 @@ class SearchFrom extends Component {
           </Col>
           <Col lg={8}>
             <FormItem label="中文名">
-              {getFieldDecorator('enName')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('zhName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>

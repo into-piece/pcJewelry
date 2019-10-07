@@ -36,7 +36,11 @@ export default {
     listMstWordbookDrop: [],
     listMstWordbookDroph015: [],
     listMstWordbookDroph016: [],
-    listMstWordbookDropH016001: [],
+    H016001: [],
+    H016002: [],
+    H016003: [],
+    H016004: [],
+    H016005: [],
 
     listCutDrop:[],
     listColorDrop:[],
@@ -114,9 +118,18 @@ export default {
       },
     * getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload);
+      let list =
+        response&& response.head && response.head.rtnCode === '000000'
+          ? response.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key:item.zhName , value:item.id  };
+        });
+      }
       yield put({
         type: 'getTypeByWordbookCode2',
-        payload: response,
+        payload: {list,fieldName:payload.key},
       });
       },
     * getListMstWordbookParams({ payload }, { call, put }) {
@@ -296,18 +309,9 @@ export default {
       };
     },
     getTypeByWordbookCode2(state, action) {
-      let list =
-        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
-          ? action.payload.body.records
-          : initData;
-      if (list.length > 0) {
-        list = list.map((item) => {
-          return { ...item,key:item.zhName , value:item.id  };
-        });
-      }
       return {
         ...state,
-        listMstWordbookDropH016001: list,
+      [action.payload.fieldName]: action.payload.list,
       };
     },
     getCutDrop2(state, action) {
