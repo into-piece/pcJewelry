@@ -107,7 +107,7 @@ const columnsArr = {
     {
       title: '原料编号',
       dataIndex: 'materialNo',
-      key: 'materialNo',
+      key: 'materialNo1',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -117,42 +117,42 @@ const columnsArr = {
     }, {
       title: '成色',
       dataIndex: 'assayingName',
-      key: 'assayingName',
+      key: 'assayingName1',
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
-      key: 'zhName',
+      key: 'zhName1',
     },
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'enName1',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnitName',
+      key: 'weightUnitName1',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClassName',
+      key: 'valuationClassName1',
     },
     {
       title: '库存重量',
       dataIndex: 'repertoryWeight',
-      key: 'repertoryWeight',
+      key: 'repertoryWeight1',
     },
     {
       title: '最低采购量',
       dataIndex: 'minimumPurchaseQuantity',
-      key: 'minimumPurchaseQuantity',
+      key: 'minimumPurchaseQuantity1',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      key: 'status',
+      key: 'status1',
       render: data => statusConvert[data],
     },
   ],
@@ -161,7 +161,7 @@ const columnsArr = {
     {
       title: '原料编号',
       dataIndex: 'materialNo',
-      key: 'materialNo',
+      key: 'materialNo2',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -172,52 +172,52 @@ const columnsArr = {
     {
       title: '成色',
       dataIndex: 'assayingName',
-      key: 'assayingName',
+      key: 'assayingName2',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shapeName',
+      key: 'shapeNam2e',
     },
     {
       title: '规格',
       dataIndex: 'specificationName',
-      key: 'specificationName',
+      key: 'specificationNa2me',
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
-      key: 'zhName',
+      key: 'zhNa2me',
     },
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'enNa2me',
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnitName',
+      key: 'measureU2nitName',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnitName',
+      key: 'weightUn2itName',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClassName',
+      key: 'valuationC2lassName',
     },
     {
       title: '单重',
       dataIndex: 'inventoryWeight',
-      key: 'inventoryWeight',
+      key: 'inventor2yWeight',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      key: 'status',
+      key: 'statu2s',
       render: data => statusConvert[data],
     },
   ],
@@ -226,7 +226,7 @@ const columnsArr = {
     {
       title: '原料编号',
       dataIndex: 'materialNo',
-      key: 'materialNo',
+      key: 'mater3ialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -237,32 +237,32 @@ const columnsArr = {
     {
       title: '中文名',
       dataIndex: 'zhName',
-      key: 'zhName',
+      key: 'zhN3ame',
     },
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'enN3ame',
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnit',
+      key: 'meas3ureUnit',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnit',
+      key: 'weigh3tUnit',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valua3tionClass',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      key: 'status',
+      key: 'statu3s',
       render: data => statusConvert[data],
     },
   ],
@@ -270,7 +270,7 @@ const columnsArr = {
     {
       title: '原料编号',
       dataIndex: 'materialNo',
-      key: 'materialNo',
+      key: 'mater4ialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -354,7 +354,7 @@ const columnsArr = {
     {
       title: '原料编号',
       dataIndex: 'materialNo',
-      key: 'materialNo',
+      key: 'material5No',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -365,52 +365,52 @@ const columnsArr = {
     {
       title: '颜色',
       dataIndex: 'colorName',
-      key: 'colour',
+      key: 'color5',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shape',
+      key: 'shape5',
     },
     {
       title: '规格',
       dataIndex: 'specificationName',
-      key: 'specification',
+      key: 'specific5ation',
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
-      key: 'zhName',
+      key: 'zhNam5e',
     },
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'enNam5e',
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnit',
+      key: 'measu5reUnit',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnit',
+      key: 'weigh5tUnit',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClass',
+      key: 'valuat5ionClass',
     },
     {
       title: '单重',
       dataIndex: 'singleWeight',
-      key: 'singleWeight',
+      key: 'single5Weight',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      key: 'status',
+      key: 'stat5us',
       render: data => statusConvert[data],
     },
   ],
@@ -418,7 +418,7 @@ const columnsArr = {
     {
       title: '原料编号',
       dataIndex: 'materialNo',
-      key: 'materialNo',
+      key: 'materi6alNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
@@ -429,67 +429,67 @@ const columnsArr = {
     {
       title: '规格',
       dataIndex: 'specificationName',
-      key: 'specificationName',
+      key: 'speci6ficationName',
     },
     {
       title: '形状',
       dataIndex: 'shapeName',
-      key: 'shapeName',
+      key: 'shap6eName',
     },
     {
       title: '切工',
       dataIndex: 'cutName',
-      key: 'cutName',
+      key: 'cutN6ame',
     },
     {
       title: '颜色',
       dataIndex: 'colorName',
-      key: 'colorName',
+      key: 'color6Name',
     },
     {
       title: '等级',
       dataIndex: 'qualityName',
-      key: 'qualityName',
+      key: 'qualit6yName',
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
-      key: 'zhName',
+      key: 'zhName6',
     },
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'enName',
+      key: 'enName6',
     },
     {
       title: '是否配料模块',
       dataIndex: 'isIngredientName',
-      key: 'isIngredientName',
+      key: 'isIngredientName6',
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnitName',
-      key: 'measureUnitName',
+      key: 'measureUnitName6',
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnitName',
-      key: 'weightUnitName',
+      key: 'weightUnitNam6e',
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClassName',
-      key: 'valuationClassName',
+      key: 'valuationCl6assName',
     },
     {
       title: '单重',
       dataIndex: 'inventoryWeight',
-      key: 'inventoryWeight',
+      key: 'inventory6Weight',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      key: 'status',
+      key: 'stat6us',
       render: data => statusConvert[data],
     },
   ],
@@ -599,6 +599,10 @@ class Info extends Component {
       type: `devRaw/getList`,
       payload: { params: { ...paginationTypes, ...params }, type: 'types' },
     });
+    dispatch({
+      type: 'devRaw/setsearchparams',
+      payload: {},
+    });
   };
 
   // 获取对应key=》页面进行数据请求
@@ -609,6 +613,7 @@ class Info extends Component {
     if (!choosenTypesRowData || choosenTypesRowData.id === '') {
       return;
     }
+
     // getDevList
     dispatch({
       type: `devRaw/getList`,
@@ -973,22 +978,22 @@ class Info extends Component {
 
   // 第一部分table 排序 页面切换 触发
   onSearchType = (v) => {
-    const { dispatch } = this.props;
+    const { dispatch,dev } = this.props;
     dispatch({
       type: 'devRaw/getTypesPagination',
       payload: v,
     });
-    this.getTypeList(v);
+    this.getTypeList({...v,...dev.searchparamsTypes});
   };
 
   // 第二部分table 排序 页面切换 触发
   onSearch = (v) => {
-    const { dispatch, selectKey } = this.props;
+    const { dispatch, selectKey ,dev} = this.props;
     dispatch({
       type: 'devRaw/getPagination',
       payload: v,
     });
-    this.getList({ key: selectKey, params: v });
+    this.getList({ key: selectKey, params: {...v,...dev.searchparams} });
   };
 
   render() {
@@ -1155,7 +1160,10 @@ class CenterInfo extends Component {
   turnTab(e) {
     const key = e.target.value;
     const { dispatch, getList } = this.props;
-
+    dispatch({
+      type: 'devRaw/setsearchparams',
+      payload: {},
+    });
     dispatch({
       type: 'devRaw/getSelectKey',
       payload: key,
@@ -1238,11 +1246,25 @@ class CenterInfo extends Component {
             onSearch={(p) => {
               this.searchType(p);
             }}
+
+            onReset={() => {
+              const { dispatch } = this.props;
+              dispatch({
+                type: 'devRaw/setsearchparamsTypes',
+                payload: {},
+              });
+            }}
+            onChange={(e)=>{
+              const {dispatch} = this.props;
+              dispatch({
+                type: 'devRaw/setsearchparamsTypes',
+                payload: e,
+              });
+            }}
           />
         </div>
         <div className={styles.tableBox}>
           <Table
-            key={`ta${Math.random(1)}`}
             columns={typeTable}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}
@@ -1316,13 +1338,24 @@ class CenterInfo extends Component {
               this.search(p);
             }}
             onReset={() => {
+              const { dispatch } = this.props;
+              dispatch({
+                type: 'devRaw/setsearchparams',
+                payload: {},
+              });
+            }}
+
+            onChange={(e)=>{
+              const {dispatch} = this.props;
+              dispatch({
+                type: 'devRaw/setsearchparams',
+                payload: e,
+              });
             }}
             wrappedComponentRef={(e) => this.SearchFromTab0 = e}
           />
 
           <Table
-            key={`tb${Math.random(1)}`}
-
             columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}

@@ -42,7 +42,7 @@ export default {
     },
 
     *updateBrand({ payload, callback }, { call, put }) {
-      console.log('model updateBrand');
+      console.log('models updateBrand');
       const response = yield call(updateTheBrand, payload);
       yield put({
         type: 'saveBrand',
@@ -52,7 +52,7 @@ export default {
     },
 
     *deleteBrand({ payload, callback }, { call, put }) {
-      // console.log('model deleteBrand');
+      // console.log('models deleteBrand');
       const response = yield call(deleteTheBrand, payload);
       yield put({
         type: 'saveBrand',
@@ -62,7 +62,7 @@ export default {
     },
 
     *freeBrand({ payload, callback }, { call, put }) {
-      // console.log('model freeBrand');
+      // console.log('models freeBrand');
       const response = yield call(freezeTheBrand, payload);
       yield put({
         type: 'saveBrand',
@@ -72,7 +72,7 @@ export default {
     },
 
     *unfreeBrand({ payload, callback }, { call, put }) {
-      // console.log('model freeBrand');
+      // console.log('models freeBrand');
       const response = yield call(unfreezeTheBrand, payload);
       yield put({
         type: 'saveBrand',

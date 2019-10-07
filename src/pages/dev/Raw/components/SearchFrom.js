@@ -5,7 +5,12 @@ import styles from '../../../Account/Center/Center.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 
-@Form.create()
+@Form.create({
+  onValuesChange(props, changeFields) {
+    props.onChange && props.onChange(changeFields);
+
+  },
+})
 class SearchFrom extends Component {
   constructor(props) {
     super(props);

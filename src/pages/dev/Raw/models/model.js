@@ -26,6 +26,10 @@ export default {
 
 
   state: {
+    searchparamsTypes:{},
+    searchparams:{},
+
+
     dropDownList: [],
     gemSetProcessDropDown: [],
     getBUMropDown: [],
@@ -72,6 +76,21 @@ export default {
   },
 
   effects: {
+    * setsearchparamsTypes({ payload }, {  put }) {
+      yield put({
+        type: 'setsearchparamsTypes2',
+        payload,
+      });
+    },
+    * setsearchparams({ payload }, {  put }) {
+      yield put({
+        type: 'setsearchparams2',
+        payload,
+      });
+    },
+
+
+
     * getCutDrop({ payload }, { call, put }) {
       const response = yield call(getCutDrop, payload);
       yield put({
@@ -233,7 +252,18 @@ export default {
   },
 
   reducers: {
-
+    setsearchparamsTypes2(state, action) {
+      return {
+        ...state,
+        searchparamsTypes: action.payload,
+      };
+    },
+    setsearchparams2(state, action) {
+      return {
+        ...state,
+        searchparams: action.payload,
+      };
+    },
 
     getListMstWordbook3(state, action) {
       let listMstWordbookDrop =
