@@ -23,6 +23,7 @@ import {
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import Zmage from 'react-zmage';
+import moment from 'moment';
 import styles from './index.less';
 import Table from '@/components/Table';
 import UploadImg from '@/components/UploadImg';
@@ -67,7 +68,7 @@ let typeTable = [
       <LockTag>
         {data}
       </LockTag>
-    )
+      )
       : (data),
   },
   {
@@ -111,7 +112,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     }, {
       title: '成色',
@@ -165,7 +166,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     },
     {
@@ -230,7 +231,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     },
     {
@@ -268,89 +269,84 @@ const columnsArr = {
   wrapper: [
     {
       title: '原料编号',
-      dataIndex: 'fCode',
-      key: 'fCode',
+      dataIndex: 'materialNo',
+      key: 'materialNo',
       render: data => isLockList ? (
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     },
     {
       title: '颜色',
       dataIndex: 'colourName',
-      key: 'colour',
+      key: 'colour4',
     },
     {
-      title: '形状',
-      dataIndex: 'shapeName',
-      key: 'shape',
-    },
-    {
-      title: '规格',
-      dataIndex: 'specificationName',
-      key: 'specification',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '计量单位',
-      dataIndex: 'measureUnitName',
-      key: 'measureUnit',
-    },
-    {
-      title: '重量单位',
-      dataIndex: 'assayingName',
-      key: 'weightUnit',
-    },
-    {
-      title: '计价类别',
-      dataIndex: 'valuationClassName',
-      key: 'valuationClass',
-    },
-    {
-      title: '单重',
-      dataIndex: 'inventoryWeight',
-      key: 'inventoryWeight',
-    },
-    {
-      title: '基本材料"',
+      title: '基本材料',
       dataIndex: 'basicMaterials',
-      key: 'basicMaterials',
+      key: 'basicMaterials4',
     },
     {
       title: '条码',
       dataIndex: 'barCode',
-      key: 'barCode',
+      key: 'barCode4',
+    },
+    {
+      title: '形状',
+      dataIndex: 'shapeName',
+      key: 'shape4',
+    },
+    {
+      title: '规格',
+      dataIndex: 'specificationName',
+      key: 'specification4',
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName4',
+    },
+    {
+      title: '英文名',
+      dataIndex: 'enName',
+      key: 'enName4',
     },
     {
       title: '售价',
       dataIndex: 'price',
-      key: 'price',
+      key: 'price4',
     },
     {
       title: '成本价',
       dataIndex: 'costPirce',
-      key: 'costPirce',
+      key: 'costPirce4',
     },
     {
-      title: '币种',
-      dataIndex: 'currency',
-      key: 'currency',
+      title: '计量单位',
+      dataIndex: 'measureUnitName',
+      key: 'measureUnit4',
+    },
+    {
+      title: '重量单位',
+      dataIndex: 'assayingName',
+      key: 'weightUnit4',
+    },
+    {
+      title: '计价类别',
+      dataIndex: 'valuationClassName',
+      key: 'valuationClassName4',
+    },
+    {
+      title: '单重',
+      dataIndex: 'inventoryWeight',
+      key: 'inventoryWeight4',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      key: 'status',
+      key: 'status4',
       render: data => statusConvert[data],
     },
   ],
@@ -363,7 +359,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     },
     {
@@ -427,7 +423,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     },
     {
@@ -463,7 +459,7 @@ const columnsArr = {
     {
       title: '英文名',
       dataIndex: 'enName',
-      key: 'zhName',
+      key: 'enName',
     },
     {
       title: '是否配料模块',
@@ -669,17 +665,17 @@ class Info extends Component {
           {dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
-                </Select>);
+        </Select>);
       case 3:
         return (<Radio.Group disabled={disable || false}>
           <Radio value="0">计重</Radio>
           <Radio value="1">计件</Radio>
-                </Radio.Group>);
+        </Radio.Group>);
       case 4:
         return (<Radio.Group disabled={disable || false}>
           <Radio value="0">否</Radio>
           <Radio value="1">是</Radio>
-                </Radio.Group>);
+        </Radio.Group>);
       default:
         return <Input placeholder="请输入" disabled={disable || false} />;
     }
@@ -705,21 +701,47 @@ class Info extends Component {
           dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit }) => {
 
             const selectData = { ...choosenRowData };
-            if (value === 'materialNo' && selectKey === 'accessories') {
-              const assayingId = `${getFieldValue('assaying')}`;
-              const shapeId = `${getFieldValue('shape')}`;
+            if (value === 'materialNo') {
               const sId = `${getFieldValue('sId')}`;
+              const shapeId = `${getFieldValue('shape')}`;
+              const assayingId = `${getFieldValue('assaying')}`;
               const specificationId = `${getFieldValue('specification')}`;
+              const colorId = `${getFieldValue('color')}`;
+              const cutId = `${getFieldValue('cut')}`;
+              const qualityId = `${getFieldValue('quality')}`;
 
-              const a1 = dev.gemSetProcessDropDown.filter(e => e.id === assayingId);
-              const a2 = dev.listMstWordbookDropH016001.filter(e => e.id === sId);
-              const a3 = dev.shapeSettingList.filter(e => e.id === shapeId);
-              const a4 = dev.specificationSettingList.filter(e => e.id === specificationId);
+              const assaying = dev.gemSetProcessDropDown.filter(e => e.id === assayingId);
+              const s = dev.listMstWordbookDropH016001.filter(e => e.id === sId);
+              const shape = dev.shapeSettingList.filter(e => e.id === shapeId);
+              const specification = dev.specificationSettingList.filter(e => e.id === specificationId);
+              const color = dev.listColorDrop.filter(e => e.id === colorId);
+              const cut = dev.listCutDrop.filter(e => e.id === cutId);
+              const quality = dev.listQualityDrop.filter(e => e.id === qualityId);
+              let va = '';
+              if (selectKey === 'accessories') {
+                va = `${assaying.length > 0 ? (`${assaying[0].productMaterial}-`) : ''}${
+                  s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
+                  specification.length > 0 ? specification[0].specificationCode : ''}`;
+              }
+              if (selectKey === 'stone') {
+                va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
+                  cut.length > 0 ? (`${cut[0].cuttingCode}-`) : ''}${
+                  color.length > 0 ? (`${color[0].colorCode}-` ): ''}${
+                  quality.length > 0 ?( `${quality[0].gradeCode}-`) : ''}${
+                  specification.length > 0 ? specification[0].specificationCode : ''}`;
+              }
+              if (selectKey === 'wrapper'||selectKey === 'auxiliaryMaterial') {
+                va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
+                  color.length > 0 ? (`${color[0].colorCode}-`) : ''}${
+                  specification.length > 0 ? specification[0].specificationCode : ''}`;
+              }
+              if (selectKey === 'otherMaterial') {
+                va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+              }
 
-              const va = `${a1.length > 0 ? (`${a1[0].productMaterial}-`) : ''}${
-                a2.length > 0 ? (`${a2[0].unitCode}-`) : ''}${
-                a3.length > 0 ? (`${a3[0].shapeCode}-`) : ''}${
-                a4.length > 0 ? a4[0].specificationCode : ''}`;
               dfv = va;
               selectData[value] = va || choosenRowData[value];
             }
@@ -760,7 +782,7 @@ class Info extends Component {
               }}
             />
           </FormItem>
-                                                                        </Col>}
+        </Col>}
         {content}
 
       </Form>
@@ -1184,7 +1206,7 @@ class CenterInfo extends Component {
             getList({ params: { ...params, current: 1 } });
           },
         });
-      }
+      },
     });
 
 
@@ -1338,34 +1360,34 @@ const GetRenderitem = ({ data, type }) => {
       v, // src={v}
     ) => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
-          <Zmage
-            alt="图片"
-            align="center"
-            className={styles.carousel_image}
-            src={v}
-            set={paths.map(image => ({ src: image.picPath }))}
-          />
-        </div>
-      ));
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image.picPath }))}
+        />
+      </div>
+    ));
   };
 
-  const images = data.pictures && data.pictures.flatMap(e => e.picPath)
+  const images = data.pictures && data.pictures.flatMap(e => e.picPath);
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem} key={type}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-        <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
-          {getImages(images)}
-        </Carousel>}
+      <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
+        {getImages(images)}
+      </Carousel>}
       {images && images.length > 0 && <Divider />}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={`c${key}`} term={key}>{data[`${value}Name`]}</Description>
-              : <Description
-                key={`c${key}`}
-                term={key}
-              >{value === 'status' ? statusConvert[data[value]] : data[value]}
+                : <Description
+                  key={`c${key}`}
+                  term={key}
+                >{value === 'status' ? statusConvert[data[value]] : data[value]}
                 </Description>
             );
           })

@@ -29,7 +29,7 @@ const result = serviceArr.map(({ name, arr, path }) => (
   ))
 
 ))
-console.log(JSON.stringify(result))
+// console.log(JSON.stringify(result))
 
 const resultArr = [
   ...result.flat(),
