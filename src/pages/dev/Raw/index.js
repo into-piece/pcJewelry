@@ -859,7 +859,9 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        values = { ...values, sId: choosenTypesRowData.id };
+        values = { ...values,
+          // sId: choosenTypesRowData.id
+        };
 
         if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
           values = {
@@ -903,7 +905,7 @@ class Info extends Component {
         let params = {
           ...values,
           id: choosenRowData.id,
-          sId: choosenTypesRowData.id,
+          // sId: choosenTypesRowData.id,
         };
 
         if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
@@ -1430,6 +1432,7 @@ const GetRenderitem = ({ data, type }) => {
     ];
   }
   const getImages = (paths) => {
+    debugger
     if (!paths) return;
     return paths.map((
       v, // src={v}
@@ -1440,7 +1443,7 @@ const GetRenderitem = ({ data, type }) => {
           align="center"
           className={styles.carousel_image}
           src={v}
-          set={paths.map(image => ({ src: image.picPath }))}
+          set={paths.map(image => ({ src: image }))}
         />
       </div>
     ));
