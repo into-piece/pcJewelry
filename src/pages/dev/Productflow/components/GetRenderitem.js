@@ -30,7 +30,7 @@ const GetRenderitem = ({ data, type, returnListName,items}) => {
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, belong, list }) =>
-            <Description key={value} term={key}>
+            <Description key={key} term={key}>
               {
                 belong === 2 ?
                   returnName(value, data[value])

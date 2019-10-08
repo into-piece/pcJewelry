@@ -1,7 +1,7 @@
 
 
 // 生产流程的筛选参数
-const productFlow = [
+export const productFlow = [
   { key: '客户编号', value: 'customerId' },
   { key: '报价单号', value: 'quoteNumber' },
   { key: '类别', value: 'type', 'type': 2, 'list': 'wordbookdropdown', noNeed: true },
@@ -10,7 +10,7 @@ const productFlow = [
 ];
 
 // 员工工序的筛选参数
-const productProcess = [
+export const productProcess = [
   { key: '产品编号', value: 'productNo' },
   { key: '客户货号', value: 'custoerProductNo' },
   { key: '前次工费/克', value: 'lastCount' },

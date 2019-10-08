@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import {  Form} from 'antd';
+import {  Form,Divider} from 'antd';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
@@ -30,17 +30,8 @@ const defaultModelName = 'productflow';
 })
 class MiddleTable extends Component {
 
-  getDetailList = (params) => {
-    const { dispatch, pagination, choosenRowData } = this.props;
-    dispatch({
-      type: `${defaultModelName}/getDetailList`,
-      payload: {
-        params: { quoteHeadId: choosenRowData.id, ...pagination, ...params },
-      },
-    });
-  }
 
-  // 选中某行
+  // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
     const { dispatch, pagination } = this.props;
     const str = type === 1 ? '' : 'Detail'
@@ -140,7 +131,7 @@ class MiddleTable extends Component {
             listLoading={listLoading}
           />
         </div>
-
+<Divider/>
         <SearchForm data={searchParamsArrConfig[secondType]} source={model} onSearch={getDetailList} returnElement={returnElement} onchange={changeSearchDetailParams} />
         <div className={styles.tableBox}>
           <Table
@@ -148,7 +139,7 @@ class MiddleTable extends Component {
             columns={columnsConfig[secondType]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}
-            handleTableChange={getDetailList}
+            handleTableChange={onSearch}
             selectedRowKeys={selectedRowKeysSecond}
             body={listSecond}
             changeChoosenRow={record => { this.changeChoosenRow(record, 2) }}
