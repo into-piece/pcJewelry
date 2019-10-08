@@ -7,7 +7,7 @@ export const manuArr = [
 // modalContent => 每个menu不同的增加弹窗填写信息
 export const modalContent = {
   material: [
-    { 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'gemSetProcessDropDown', 'type': 2  ,search:true},
+    { 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'listBasicColourSetDropDown', 'type': 2  ,search:true},
     { 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016001', 'type': 2},
     { 'key': '中文名', 'value': 'zhName', 'noNeed': true ,search:true },
     { 'key': '英文名', 'value': 'enName', 'noNeed': true  ,search:true},
@@ -32,7 +32,7 @@ export const modalContent = {
     // 1)	原料编号：必填项；系统自动生成；生成规则为“成色代码-类别代码-形状代码-规格代码”；输入框禁用，根据下拉的选择自动拼接并显示。
 
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo'  ,search:true},
-    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'H016003', 'type': 2 ,search:true },
+    {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'listBasicColourSetDropDown', 'type': 2 ,search:true },
     {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
     {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2  ,search:true },
     {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2  ,search:true},

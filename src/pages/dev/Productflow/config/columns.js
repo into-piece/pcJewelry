@@ -2,83 +2,82 @@ import styles from './columns.less'
 
 let  productFlow = [
   {
-    title: <div className={styles.row_normal2}>客户编号</div>,
-    dataIndex: 'customerNo',
-    key: 'customerNo',
+    title: <div className={styles.row_normal2}>流程编号</div>,
+    dataIndex: 'flowCode',
+    key: 'flowCode',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     )
   },
   {
-    title: <div className={styles.row_normal2}>简称</div>,
-    dataIndex: 'customerShotName',
-    key: 'customerShotName',
+    title: <div className={styles.row_normal2}>流程名称</div>,
+    dataIndex: 'flowName',
+    key: 'flowName',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>报价单号</div>,
-    dataIndex: 'quoteNumber',
-    key: 'quoteNumber',
+    title: <div className={styles.row_normal2}>所属部门</div>,
+    dataIndex: 'departmentName',
+    key: 'departmentName',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>类别</div>, // ?
-    dataIndex: 'typeName',
-    key: 'typeName',
+    title: <div className={styles.row_normal2}>成品类别</div>, // ?
+    dataIndex: 'productType',
+    key: 'productType',
     width: 100,
   },
 
   {
-    title: <div className={styles.row_normal2}>报价日期</div>,
-    dataIndex: 'quoteDate',
-    key: 'quoteDate',
+    title: <div className={styles.row_normal2}>损耗</div>,
+    dataIndex: 'isWastage',
+    key: 'isWastage',
     width: 100,
     render: (data) => (data)
   },
 
   {
-    title: <div className={styles.row_normal2}>数量</div>,
-    dataIndex: 'quoteTotalCount',
-    key: 'quoteTotalCount',
+    title: <div className={styles.row_normal2}>重量范围</div>,
+    dataIndex: 'weightRange',
+    key: 'weightRange',
     width: 100,
   },
 
   {
-    title: <div className={styles.row_normal2}>重量</div>,
-    dataIndex: 'quoteTotalWeight',
-    key: 'quoteTotalWeight',
+    title: <div className={styles.row_normal2}>标准工时</div>,
+    dataIndex: 'workingHour',
+    key: 'workingHour',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>总额</div>,
-    dataIndex: 'quoteTotalAmount',
-    key: 'quoteTotalAmount',
+    title: <div className={styles.row_normal2}>是否外发</div>,
+    dataIndex: 'isOutbound',
+    key: 'isOutbound',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>终客号</div>,
-    dataIndex: 'endNo',
-    key: 'endNo',
+    title: <div className={styles.row_normal2}>状态</div>,
+    dataIndex: 'status',
+    key: 'status',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>终客简称</div>,
-    dataIndex: 'endShotName',
-    key: 'endShotName',
-    width: 100,
-  },
-  {
-    title: <div className={styles.row_normal2}>产品说明</div>,// ?
-    dataIndex: 'explains',
-    key: 'explains',
+    title: <div className={styles.row_normal2}>创建人</div>,
+    dataIndex: 'status',
+    key: 'status1',
     width: 100,
   },
 ];
 
 
 
-let productProcess =[]
+let productProcess =[{
+  title: <div className={styles.row_normal2}>创建人</div>,
+  dataIndex: 'status',
+  key: 'status1',
+  width: 100,
+},]
 
 productFlow = productFlow.map(item => ({ ...item, sorter: true }))
 productProcess = productProcess.map(item => ({ ...item, sorter: true }))

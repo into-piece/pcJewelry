@@ -12,7 +12,7 @@ import {
   Radio,
   Checkbox,
   DatePicker,
-} from 'antd';
+ notification } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
@@ -23,6 +23,8 @@ import MiddleTable from './components/MiddleTable';
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
 import styles from './index.less';
+
+import serviceObj from '@/services/dev';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -51,7 +53,7 @@ const radioArr = [{ key: '生产流程', value: 'productFlow' },
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
-    listLoadingSecond: loading.effects[`${defaultModelName}/getDetailList`],
+    listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
     list: model.list,
     listSecond: model.listSecond,
     pagination: model.pagination,
@@ -75,10 +77,27 @@ class Index extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // 获取客户编号下拉
+    // 类别下拉
     dispatch({
-      type: `${defaultModelName}/getlistCustomerDropDown`,
+      type: `${defaultModelName}/getwordbookdropdown`,
+      payload: {params: { 'wordbookTypeCode': 'H017' },listName:"listH017"}
     });
+    // 成品类别下拉
+    dispatch({
+      type: `${defaultModelName}/getTypeByWordbookCode`,
+      payload: {params: {"key":"H016009"},listName:"listH016009"}
+    });
+    // 部门下拉
+    dispatch({
+      type: `${defaultModelName}/listDeptDropDown`,
+    });
+    // 镶石工艺下拉
+    dispatch({
+      type: `${defaultModelName}/listGemSetProcessDropDown`,
+      payload:{}
+    });
+
+
     // 获取初始表单数据
     this.getList();
   }
@@ -92,18 +111,43 @@ class Index extends Component {
     });
   };
 
-  // 获取对应key=》页面进行数据请求
+
+  // table 搜索
+  onSearch = () => {
+    this.getList();
+  };
+
+  // 第一table获取list
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getList`,
-      payload: { params: { ...pagination, ...searchParams, ...param }, ...args },
+      payload: { type:firstTabFlag,params: { ...pagination, ...searchParams, ...param }, ...args },
     });
+
+    // 清除第二table内容
     dispatch({
-      type: `${defaultModelName}/clearDetailList`,
+      type: `${defaultModelName}/clearListScond`,
     });
   };
+
+  // 第二table获取list
+  getListSecond = (args, param) => {
+    const { dispatch, paginationSecond, searchParamsSecond } = this.props;
+    const { secondTableActive } = this.props;
+    // getDevList
+    dispatch({
+      type: `${defaultModelName}/getListSecond`,
+      payload: { type:secondTableActive,params: { ...paginationSecond, ...searchParamsSecond, ...param }, ...args },
+    });
+
+  };
+
+
+
+
+
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -120,7 +164,7 @@ class Index extends Component {
             style={{ width: 180 }}
             placeholder="请选择"
             onChange={(v) => {
-              this.handleSelectChange(v, value);
+              this.handleSelectChange&&this.handleSelectChange(v, value);
             }}
           >
             {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
@@ -198,16 +242,99 @@ class Index extends Component {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-        this.handleAdd();
-        break;
       case 'edit':
-        this.handleEdit();
+        this.handleAdd();
         break;
       default:
         break;
     }
 
   };
+
+  // 删除按钮回调
+  handleDelect = () => {
+    const {  selectedRowKeys, selectedRowKeysSecond } = this.props
+    const { rightActive ,secondTableActive} = this.state
+    const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
+    serviceObj[`del${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ type: rightActive });
+        }else{
+          this.getListSecond({ type: secondTableActive });
+        }
+      }
+    })
+  }
+
+  // 审批/撤销 按钮回调
+  handleLock = () => {
+    const {  selectedRowKeys, selectedRowKeysSecond } = this.props
+    const { rightActive ,secondTableActive} = this.state
+    const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
+    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const serviceType = isLock ? 'approve' : 'revoke';
+
+    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ type: rightActive });
+        }else{
+          this.getListSecond({ type: secondTableActive });
+        }
+      }
+    })
+  }
+
+  // 新增||编辑 按钮事件回调
+  handleAdd = () => {
+    const {  form, choosenRowData,choosenRowDataSecond } = this.props
+    const { secondTableActive,rightActive,modalType } = this.state
+    let params = {}
+    if (rightActive !== firstTabFlag) {
+      params = { quoteHeadId: choosenRowData.id }
+    }
+    if(modalType ==="edit"){
+      params ={...params,id:(rightActive !== firstTabFlag?choosenRowDataSecond.id:choosenRowData.id)}
+    }
+
+    form.validateFields((err, values) => {
+      if (!err) {
+        params = {
+          ...params,
+          ...values,
+        }
+
+        serviceObj[`add${rightActive}`](params).then(res => {
+          if (!res.head) {
+            return;
+          }
+          const { rtnCode, rtnMsg } = res.head;
+          if (rtnCode === '000000') {
+            notification.success({
+              message: rtnMsg,
+            });
+            if (rightActive === firstTabFlag) {
+              this.getList({ type: rightActive });
+            }else{
+              this.getListSecond({ type: secondTableActive });
+            }
+
+            this.btnFn('');
+          }
+        });
+      }
+    });
+
+  }
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
@@ -318,15 +445,14 @@ class Index extends Component {
     const { selectedRowKeys, selectedRowKeysSecond } = this.props;
 
     if (tag === 'plus') return false;
-    if (tag === 'lock') return  selectedRowKeys.length === 0 ||  selectedRowKeysSecond.length === 0 || this.returnLockType().disabled;
-    return   selectedRowKeys.length === 0 ||   selectedRowKeysSecond.length === 0;
+    if (tag === 'lock') return  selectedRowKeys.length === 0 &&  selectedRowKeysSecond.length === 0 || this.returnLockType().disabled;
+    return   selectedRowKeys.length === 0 &&   selectedRowKeysSecond.length === 0;
   };
 
-
-  // table 搜索
-  onSearch = () => {
-
-  };
+  // 取消弹窗回调
+  onCancel = () => {
+    this.btnFn('');
+  }
 
   // 下拉反编译
   returnListName = (list, v) => v && this.props.model[list].length > 0 && this.props.model[list].find(item => item.value === v).key;
@@ -411,7 +537,7 @@ class Index extends Component {
                             <Button
                               key={tag}
                               className={styles.buttomControl}
-                              type="primary"
+                              type={tag==='delete'?'danger':"primary"}
                               icon={tag}
                               size="small"
                               disabled={returnSisabled(tag)}

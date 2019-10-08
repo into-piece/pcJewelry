@@ -39,17 +39,17 @@ class UploadImg extends Component {
     const { maxcount, fileListFun } = this.props;
 
     if (file.type) {
-      const isJPG = file.type.indexOf('image') != -1;
+      const isJPG = file.type.indexOf('image') !== -1;
       if (!isJPG) {
         message.error('只能上传图片格式的文件');
         return;
       }
     }
 
-    if (maxcount && fileList.length > maxcount) {
-      message.error(`只能上传${maxcount}张图片`);
-      return;
-    }
+    // if (maxcount && fileList.length > maxcount) {
+    //   message.error(`只能上传${maxcount}张图片`);
+    //   return;
+    // }
 
     fileList.map(f => {
       if (f.uid === info.file.uid && !f.url) {
