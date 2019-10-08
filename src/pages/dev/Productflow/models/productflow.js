@@ -5,27 +5,14 @@
  * @LastEditTime: 2019-08-17 15:15:50
  * @LastEditors: Please set LastEditors
  */
-import servicesConfig from '@/services/quote';
+import servicesConfig from '@/services/dev';
 
-const initData = { records: [] }
+const initData = { records: [] };
 
-const { queryProductQuoteHeadersNotDone,
-  queryProductQuoteHeadersAlreadyDone,
-  listProductQuoteDetail,
-  deleteProductQuoteHeader,
-  listProductNotCreateQoute,
-  listMstWordbook,
-  listCustomerDropDown,
-  listMarkingDropDown,
-  listEndCustomerDropDown,
-  listBrands,
-  listBasicColourSettingsDropDown } = servicesConfig
+const {
+  listMstWordbook,listDeptDropDown,getTypeByWordbookCode
+} = servicesConfig;
 
-
-const getTableList = listProductQuoteDetail;
-const getListTableSecond = {
-  productProcess: listProductQuoteDetail
-};
 
 
 export default {
@@ -53,13 +40,16 @@ export default {
     searchParamsSecond: {},
 
 
-    wordbookdropdown: [{ key: '', value: '' }],
+    listDeptDrop: [{ key: '', value: '' }],
+    listH017: [{ key: '', value: '' }],
+    listH016009: [{ key: '', value: '' }],
 
   },
 
   effects: {
     * getList({ payload }, { call, put }) {
-      const response = yield call(getTableList, payload);
+      const { type, params } = payload;
+      const response = yield call(servicesConfig[`list${type}`], params);
       const list =
         response.head && response.head.rtnCode === '000000'
           ? response.body
@@ -72,8 +62,8 @@ export default {
     },
 
     * getListSecond({ payload }, { call, put }) {
-      const {  params,type } = payload
-      const response = yield call(getListTableSecond[type], params);
+      const { type, params } = payload;
+      const response = yield call(servicesConfig[`list${type}`], params);
       const listSecond =
         response.head && response.head.rtnCode === '000000'
           ? response.body
@@ -131,15 +121,41 @@ export default {
       });
     },
 
-    * getwordbookdropdown(data, { call, put }) {
-      const response = yield call(listMstWordbook, { "wordbookTypeCode": "H007" });
-      const wordbookData = response.body.records
+    * getwordbookdropdown({ payload }, { call, put }) {
+      const response = yield call(listMstWordbook,payload.params);
+      const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
-        return { value: wordbookCode, key: wordbookContentZh }
-      })
+        return { value: wordbookCode, key: wordbookContentZh };
+      });
       yield put({
         type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'wordbookdropdown' },
+        payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
+    },
+
+    * getTypeByWordbookCode({ payload }, { call, put }) {
+      const response = yield call(getTypeByWordbookCode,payload.params);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
+    },
+
+    * listDeptDropDown(_, { call, put }) {
+      const response = yield call(listDeptDropDown);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: "listDeptDrop" },
       });
 
     },
@@ -148,7 +164,7 @@ export default {
 
   reducers: {
     changeState(state, action) {
-      const { typeName, data } = action.payload
+      const { typeName, data } = action.payload;
       return {
         ...state,
         [typeName]: data,
@@ -192,7 +208,7 @@ export default {
         searchParams: {
           ...state.searchParams,
           ...action.payload,
-        }
+        },
       };
     },
     changeSearchParamsSecond2(state, action) {
@@ -201,7 +217,7 @@ export default {
         searchParamsSecond: {
           ...state.searchParamsSecond,
           ...action.payload,
-        }
+        },
       };
     },
   },

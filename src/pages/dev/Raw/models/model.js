@@ -211,11 +211,12 @@ export default {
       });
       if (callback) callback();
     },
-    * clearSixList(_, { put }) {
+    * clearSixList({callback}, { put }) {
       yield put({
         type: 'clearSixListData',
         payload: {},
       });
+      if(callback)callback();
     },
     * addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);

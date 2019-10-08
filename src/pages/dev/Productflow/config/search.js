@@ -4,7 +4,7 @@
 export const productFlow = [
   { key: '客户编号', value: 'customerId' },
   { key: '报价单号', value: 'quoteNumber' },
-  { key: '类别', value: 'type', 'type': 2, 'list': 'wordbookdropdown', noNeed: true },
+  { key: '类别', value: 'type', 'type': 2, 'list': 'listH017', noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
   { key: '终客编号', value: 'endId' },
 ];

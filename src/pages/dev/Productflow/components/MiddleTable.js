@@ -15,7 +15,7 @@ const defaultModelName = 'productflow';
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
-    listLoadingSecond: loading.effects[`${defaultModelName}/getDetailList`],
+    listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
     list: model.list,
     listSecond: model.listSecond,
     pagination: model.pagination,
@@ -131,7 +131,7 @@ class MiddleTable extends Component {
             listLoading={listLoading}
           />
         </div>
-<Divider/>
+        <Divider />
         <SearchForm data={searchParamsArrConfig[secondType]} source={model} onSearch={getDetailList} returnElement={returnElement} onchange={changeSearchDetailParams} />
         <div className={styles.tableBox}>
           <Table

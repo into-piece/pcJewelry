@@ -635,7 +635,7 @@ class Info extends Component {
     const { dispatch, pagination, selectKey, choosenTypesRowData } = this.props;
 
     // 没有选择类型就没有查询下面
-    if (!choosenTypesRowData || choosenTypesRowData.id === '') {
+    if (!sId&&(!choosenTypesRowData || choosenTypesRowData.id === '')) {
       return;
     }
 
@@ -1176,8 +1176,10 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/clearSixList',
       payload: {},
+      callback:()=>{
+        getList({sId:rowData.id});
+      }
     });
-    getList({sId:rowData.id});
   };
 
   changeChoosenRow = rowData => {
