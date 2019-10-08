@@ -70,7 +70,7 @@ const resultArr = [
   ...resultBasic.flat(),
   ...resultRaw.flat(),
   ...resultFLow.flat(),
-  { key: 'listGemSetProcessDropDown', path: '/colour-set/listBasicColourSetDropDown' },
+  { key: 'listGemSetProcessDropDown', path: '/gem-set-process/listGemSetProcessDropDown' },
   { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
   { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },
   {
@@ -127,6 +127,7 @@ const resultArr = [
 
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', prefix1: `${env}/business/sys` },// 获取为报价的产品参数
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
+  { key: 'listBasicColourSetDropDown', path: '/colour-set/listBasicColourSetDropDown' },// 成色下拉
 ];
 
 // console.log(resultArr, '============')

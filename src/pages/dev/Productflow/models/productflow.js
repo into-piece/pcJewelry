@@ -10,7 +10,7 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-  listMstWordbook,listDeptDropDown,getTypeByWordbookCode
+  listMstWordbook,listDeptDropDown,getTypeByWordbookCode,listGemSetProcessDropDown
 } = servicesConfig;
 
 
@@ -40,6 +40,7 @@ export default {
     searchParamsSecond: {},
 
 
+    listGemSetProcessDropDown: [{ key: '', value: '' }],
     listDeptDrop: [{ key: '', value: '' }],
     listH017: [{ key: '', value: '' }],
     listH016009: [{ key: '', value: '' }],
@@ -121,6 +122,8 @@ export default {
       });
     },
 
+    // 下拉获取
+
     * getwordbookdropdown({ payload }, { call, put }) {
       const response = yield call(listMstWordbook,payload.params);
       const wordbookData = response.body.records;
@@ -156,6 +159,19 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: "listDeptDrop" },
+      });
+
+    },
+
+    * listGemSetProcessDropDown({payload}, { call, put }) {
+      const response = yield call(listGemSetProcessDropDown,payload);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: "listGemSetProcessDropDown" },
       });
 
     },

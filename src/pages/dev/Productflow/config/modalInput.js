@@ -5,7 +5,7 @@ export const productFlow = [
   { 'key': '所属部门', 'value': 'department', 'type': 2, 'list': 'listDeptDrop', 'noNeed': true },
   { 'key': '英文名称', 'value': 'enName', 'noNeed': true },
   { 'key': '类别', 'value': 'type', 'type': 2, 'list': 'listH017', 'noNeed': true },
-  { 'key': '镶石工艺', 'value': 'stoneCraft', 'type': 2, 'list': 'listH017', 'noNeed': true },
+  { 'key': '镶石工艺', 'value': 'stoneCraft', 'type': 2, 'list': 'listGemSetProcessDropDown', 'noNeed': true },
   {
     'key': '是否外发',
     'value': 'isOutbound',

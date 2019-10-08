@@ -12,6 +12,7 @@ const initData = { records: [] };
 const {
   addBasicMeasureUnit,
   listGemSetProcessDropDown,
+  listBasicColourSetDropDown,
   listBasicShapeSettingsDropDown,
   listBasicSpecificationSettingsDropDown,
   listBasicMeasureUnitDropDown,
@@ -32,6 +33,7 @@ export default {
 
     dropDownList: [],
     gemSetProcessDropDown: [],
+    listBasicColourSetDropDown: [],
     getBUMropDown: [],
     listMstWordbookDrop: [],
     listMstWordbookDroph015: [],
@@ -229,6 +231,13 @@ export default {
       const response = yield call(listGemSetProcessDropDown, payload);
       yield put({
         type: 'getGemDropDown2',
+        payload: response,
+      });
+    },
+    * getlistBasicColourSetDropDown({ payload }, { call, put }) {
+      const response = yield call(listBasicColourSetDropDown, payload);
+      yield put({
+        type: 'getlistBasicColourSetDropDown2',
         payload: response,
       });
     },
@@ -435,7 +444,7 @@ export default {
         choosenTypesRowData: action.payload,
       };
     },
-    // 成色
+    // 镶石工艺
     getGemDropDown2(state, action) {
       let gemSetProcessDropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
@@ -449,6 +458,22 @@ export default {
       return {
         ...state,
         gemSetProcessDropDown,
+      };
+    },
+    // 成色
+    getlistBasicColourSetDropDown2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return {...item , key: item.zhName, value: item.id };
+        });
+      }
+      return {
+        ...state,
+        listBasicColourSetDropDown:list,
       };
     },
 

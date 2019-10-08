@@ -595,7 +595,7 @@ class Info extends Component {
     });
     // 成色列表
     dispatch({
-      type: 'devRaw/getGemDropDown',
+      type: 'devRaw/getlistBasicColourSetDropDown',
       payload: {},
     });
     // 形状下拉

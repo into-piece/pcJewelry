@@ -89,6 +89,11 @@ class Index extends Component {
     dispatch({
       type: `${defaultModelName}/listDeptDropDown`,
     });
+    // 镶石工艺下拉
+    dispatch({
+      type: `${defaultModelName}/listGemSetProcessDropDown`,
+      payload:{}
+    });
 
 
     // 获取初始表单数据
