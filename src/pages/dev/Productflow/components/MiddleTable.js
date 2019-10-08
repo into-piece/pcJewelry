@@ -34,26 +34,26 @@ class MiddleTable extends Component {
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
     const { dispatch, pagination } = this.props;
-    const str = type === 1 ? '' : 'Detail'
+    const str = type === 1 ? '' : 'Second'
     dispatch({
-      type: `${defaultModelName}/getChoosen${str}RowData`,
+      type: `${defaultModelName}/setChoosenRowData${str}`,
       payload: rowData,
     });
     if (type === 1) {
-      this.getDetailList({ quoteHeadId: rowData.id })
+      // this.getDetailList({ quoteHeadId: rowData.id })
     } else {
-      dispatch({
-        type: `${defaultModelName}/changeRightMenu`,
-        payload: 2,
-      });
+      // dispatch({
+      //   type: `${defaultModelName}/changeRightMenu`,
+      //   payload: 2,
+      // });
     }
   };
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
-    const str = type === 2 ? 'Detail' : ''
+    const str = type === 2 ? 'Second' : ''
     this.props.dispatch({
-      type: `${defaultModelName}/changeSelected${str}RowKeys`,
+      type: `${defaultModelName}/changeSelectedRowKeys${str}`,
       payload: selectedRowKeys,
     })
   };
@@ -83,7 +83,7 @@ class MiddleTable extends Component {
   changeSearchDetailParams = (v) => {
     const { dispatch } = this.props;
     dispatch({
-      type: `${defaultModelName}/changeSearchParams`,
+      type: `${defaultModelName}/changeSearchParamsSecond`,
       payload: v,
     });
   }
