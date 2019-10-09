@@ -22,6 +22,7 @@ import MiddleTable from './components/MiddleTable';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
+import showItem from './config/showItem';
 import styles from './index.less';
 
 import serviceObj from '@/services/dev';
@@ -113,8 +114,13 @@ class Index extends Component {
 
 
   // table 搜索
-  onSearch = () => {
-    this.getList();
+  onSearch = (params,table) => {
+    if(table===1){
+      this.getList({},params);
+    }
+    if(table===2){
+      this.getListSecond({},params);
+    }
   };
 
   // 第一table获取list
@@ -134,8 +140,8 @@ class Index extends Component {
 
   // 第二table获取list
   getListSecond = (args, param) => {
-    const { dispatch, paginationSecond, searchParamsSecond } = this.props;
-    const { secondTableActive } = this.props;
+    const { dispatch, paginationSecond, searchParamsSecond,choosenRowDataSecond} = this.props;
+    const { secondTableActive } = this.state;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getListSecond`,
@@ -156,7 +162,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form ,number}) => {
     switch (type) {
       case 2:
         return (
@@ -214,7 +220,7 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input style={{ width: '100' }} placeholder="请输入" />;
+        return <Input style={{ width: '100' }} type={number?'number':'text'} placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -253,10 +259,10 @@ class Index extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const {  selectedRowKeys, selectedRowKeysSecond } = this.props
+    const {  selectedRowKeys, selectedRowKeysSecond,dispatch } = this.props
     const { rightActive ,secondTableActive} = this.state
     const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
-    serviceObj[`del${rightActive}`](data).then(res => {
+    serviceObj[`delete${rightActive}`](data).then(res => {
       const { rtnCode, rtnMsg } = res.head
       if (rtnCode === '000000') {
         notification.success({
@@ -264,8 +270,21 @@ class Index extends Component {
         });
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
+          dispatch({
+            type: `${defaultModelName}/choosenRowData`,
+            payload:{id:""}
+          });
+          // 清除第二table内容
+          dispatch({
+            type: `${defaultModelName}/clearListScond`,
+          });
         }else{
           this.getListSecond({ type: secondTableActive });
+          // 清除第二table 选中
+          dispatch({
+            type: `${defaultModelName}/choosenRowDataSecond`,
+            payload:{id:""}
+          });
         }
       }
     })
@@ -300,7 +319,7 @@ class Index extends Component {
     const { secondTableActive,rightActive,modalType } = this.state
     let params = {}
     if (rightActive !== firstTabFlag) {
-      params = { quoteHeadId: choosenRowData.id }
+      params = { flowCode: choosenRowData.flowCode }
     }
     if(modalType ==="edit"){
       params ={...params,id:(rightActive !== firstTabFlag?choosenRowDataSecond.id:choosenRowData.id)}
@@ -370,6 +389,7 @@ class Index extends Component {
                       key,
                       value,
                       noNeed,
+                      number,
                       type,
                       list,
                       clickFn,
@@ -435,18 +455,28 @@ class Index extends Component {
     }, []);
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 };
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 };
-    return { name: '审批', disabled: true, type: 1 }; // 当两种状态都有 禁止点击
+    if (isShenPi) return { name: '审批', disabled: false, type: 1 ,isShenPi,isChexiao};
+    if (isChexiao) return { name: '撤销', disabled: false, type: 2 ,isShenPi,isChexiao};
+    return { name: '审批', disabled: true, type: 1 ,isShenPi,isChexiao}; // 当两种状态都有 禁止点击
   };
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    const { selectedRowKeys, selectedRowKeysSecond,choosenRowData,choosenRowDataSecond } = this.props;
+    const { rightActive } = this.state;
 
-    if (tag === 'plus') return false;
-    if (tag === 'lock') return  selectedRowKeys.length === 0 &&  selectedRowKeysSecond.length === 0 || this.returnLockType().disabled;
-    return   selectedRowKeys.length === 0 &&   selectedRowKeysSecond.length === 0;
+    if (tag === 'plus') return  (firstTabFlag===rightActive?false:!choosenRowData.id);
+    if (tag === 'lock') return  (firstTabFlag===rightActive&& selectedRowKeys.length === 0) ||  (firstTabFlag!==rightActive&&selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
+
+    if (tag ==='delete'){
+      return (firstTabFlag===rightActive&& selectedRowKeys.length === 0) ||  (firstTabFlag!==rightActive&&selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
+    }
+    if (tag ==='edit'){
+      const d =firstTabFlag===rightActive? choosenRowData:choosenRowDataSecond;
+      return   (firstTabFlag===rightActive&&selectedRowKeys.length === 0 )||(firstTabFlag!==rightActive&&   selectedRowKeysSecond.length === 0)||Number(d.status)===2;
+    }
+
+    return   (firstTabFlag===rightActive&&selectedRowKeys.length === 0 )||(firstTabFlag!==rightActive&&   selectedRowKeysSecond.length === 0);
   };
 
   // 取消弹窗回调
@@ -526,7 +556,7 @@ class Index extends Component {
                           data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
                           type={rightActive}
                           returnListName={returnListName}
-                          items={modalInput}
+                          items={showItem}
                         />
                       </Card>
 

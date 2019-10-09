@@ -1,5 +1,5 @@
 const serviceArr = [
-  // 主材
+  // 生产流程
   {
     'name': 'productFlow',
     'path': 'production-flow',
@@ -11,12 +11,12 @@ const serviceArr = [
       'revoke',
     ],
   },
-  // 配件
+  // 员工工序
   {
     'name': 'productProcess',
-    'path': 'product-process',
+    'path': 'production-process-relation',
     'arr': [
-      'listProductProcess',
+      'listProductionProcessRelation',
       'saveOrUpdate',
       'delete',
       'approval',

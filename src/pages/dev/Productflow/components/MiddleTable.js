@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import {  Form,Divider} from 'antd';
+import { Form, Divider } from 'antd';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
@@ -11,7 +11,7 @@ const defaultModelName = 'productflow';
 
 
 @Form.create()
-@connect(({ loading, productflow :model }) => {
+@connect(({ loading, productflow: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
@@ -33,14 +33,15 @@ class MiddleTable extends Component {
 
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
-    const { dispatch, pagination } = this.props;
-    const str = type === 1 ? '' : 'Second'
+    const { dispatch, pagination, onSearch } = this.props;
+    const str = type === 1 ? '' : 'Second';
     dispatch({
       type: `${defaultModelName}/setChoosenRowData${str}`,
       payload: rowData,
     });
     if (type === 1) {
-      // this.getDetailList({ quoteHeadId: rowData.id })
+      this.searchSecond.handleReset();
+      if (onSearch) onSearch({ flowCode: rowData.flowCode }, 2);
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -51,26 +52,29 @@ class MiddleTable extends Component {
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
-    const str = type === 2 ? 'Second' : ''
-    this.props.dispatch({
+    const { dispatch } = this.props;
+
+    const str = type === 2 ? 'Second' : '';
+    dispatch({
       type: `${defaultModelName}/changeSelectedRowKeys${str}`,
       payload: selectedRowKeys,
-    })
+    });
   };
 
   // 当表头重复点击选中 清空选中 清空表体
   clearFn = (type) => {
     const { dispatch } = this.props;
     if (type === 1) {
+      // 清除第二table数据
       dispatch({
-        type: `${defaultModelName}/clearDetailList`,
+        type: `${defaultModelName}/clearListSecond`,
       });
       dispatch({
-        type: `${defaultModelName}/getChoosenRowData`,
-        payload: {}
+        type: `${defaultModelName}/setChoosenRowData`,
+        payload: {},
       });
     }
-  }
+  };
 
   changeSearchParams = (v) => {
     const { dispatch } = this.props;
@@ -78,7 +82,7 @@ class MiddleTable extends Component {
       type: `${defaultModelName}/changeSearchParams`,
       payload: v,
     });
-  }
+  };
 
   changeSearchDetailParams = (v) => {
     const { dispatch } = this.props;
@@ -86,10 +90,10 @@ class MiddleTable extends Component {
       type: `${defaultModelName}/changeSearchParamsSecond`,
       payload: v,
     });
-  }
+  };
 
   render() {
-    const { onSelectChange, props, getDetailList, changeSearchParams, changeSearchDetailParams } = this
+    const { onSelectChange, props, changeSearchParams, changeSearchDetailParams,clearFn } = this;
     const {
       firstType,
       secondType,
@@ -111,46 +115,81 @@ class MiddleTable extends Component {
 
       listLoading,
       listLoadingSecond,
-        } = props;
+    } = props;
     return (
       <div className={styles.view_left_content}>
 
-        <SearchForm data={searchParamsArrConfig[firstType]} source={model} onSearch={onSearch} returnElement={returnElement} onchange={changeSearchParams} />
+        <SearchForm
+          data={searchParamsArrConfig[firstType]}
+          source={model}
+          onSearch={(p) => {
+            onSearch(p, 1);
+          }}
+          returnElement={returnElement}
+          onchange={changeSearchParams}
+        />
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 1400 }}
             columns={columnsConfig[firstType]}
             pagination={pagination}
             selectKey={choosenRowData.id}
-            handleTableChange={onSearch}
+            handleTableChange={(p) => {
+              onSearch(p, 1);
+            }}
             body={list}
             selectedRowKeys={selectedRowKeys}
-            changeChoosenRow={record => { this.changeChoosenRow(record, 1) }}
-            onSelectChange={(data) => { onSelectChange(data, 1) }}
+            changeChoosenRow={record => {
+              this.changeChoosenRow(record, 1);
+            }}
+            onSelectChange={(data) => {
+              onSelectChange(data, 1);
+            }}
 
             listLoading={listLoading}
+            clearFn={clearFn}
+            type={1}
           />
         </div>
         <Divider />
-        <SearchForm data={searchParamsArrConfig[secondType]} source={model} onSearch={getDetailList} returnElement={returnElement} onchange={changeSearchDetailParams} />
+        <SearchForm
+          wrappedComponentRef={ref => {
+            this.searchSecond = ref;
+          }}
+          data={searchParamsArrConfig[secondType]}
+          source={model}
+          onSearch={(p) => {
+            onSearch(p, 2);
+          }}
+          returnElement={returnElement}
+          onchange={changeSearchDetailParams}
+        />
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 1600 }}
             columns={columnsConfig[secondType]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}
-            handleTableChange={onSearch}
+            handleTableChange={(p) => {
+              onSearch(p, 2);
+            }}
             selectedRowKeys={selectedRowKeysSecond}
             body={listSecond}
-            changeChoosenRow={record => { this.changeChoosenRow(record, 2) }}
-            onSelectChange={data => { onSelectChange(data, 2) }}
+            changeChoosenRow={record => {
+              this.changeChoosenRow(record, 2);
+            }}
+            onSelectChange={data => {
+              onSelectChange(data, 2);
+            }}
 
             listLoading={listLoadingSecond}
-
+            clearFn={clearFn}
+            type={2}
           />
         </div>
       </div>
     );
   }
 }
+
 export default MiddleTable;

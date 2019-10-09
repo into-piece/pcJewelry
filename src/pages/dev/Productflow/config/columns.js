@@ -1,6 +1,6 @@
-import styles from './columns.less'
+import styles from './columns.less';
 
-let  productFlow = [
+let productFlow = [
   {
     title: <div className={styles.row_normal2}>流程编号</div>,
     dataIndex: 'flowCode',
@@ -8,7 +8,7 @@ let  productFlow = [
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-    )
+    ),
   },
   {
     title: <div className={styles.row_normal2}>流程名称</div>,
@@ -34,7 +34,7 @@ let  productFlow = [
     dataIndex: 'isWastage',
     key: 'isWastage',
     width: 100,
-    render: (data) => (data)
+    render: (data) => (data),
   },
 
   {
@@ -64,25 +64,71 @@ let  productFlow = [
   },
   {
     title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'status',
-    key: 'status1',
+    dataIndex: 'createUser',
+    key: 'createUser',
     width: 100,
   },
 ];
 
 
+let productProcess = [
+  {
+    title: <div className={styles.row_normal2}>员工工序编号</div>,
+    dataIndex: 'processCode',
+    key: 'processCode',
+    width: 100,
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+    ),
+  },
+  {
+    title: <div className={styles.row_normal2}>工序名称</div>,
+    dataIndex: 'processName',
+    key: 'processName',
+    width: 100,
+  },
+  {
+    title: <div className={styles.row_normal2}>英文名称</div>,
+    dataIndex: 'engName',
+    key: 'engName',
+    width: 60,
+  },
+  {
+    title: <div className={styles.row_normal2}>排序号码</div>,
+    dataIndex: 'sortNum',
+    key: 'sortNum',
+    width: 50,
+  },
+  {
+    title: <div className={styles.row_normal2}>耗损(%)</div>,
+    dataIndex: 'isWastage',
+    key: 'isWastage',
+    width: 40,
+  },
+  {
+    title: <div className={styles.row_normal2}>员工工序产能(件/小时)</div>,
+    dataIndex: 'processCapacity',
+    key: 'processCapacity',
+    width: 60,
+  },
+  {
+    title: <div className={styles.row_normal2}>创建时间</div>,
+    dataIndex: 'createTime',
+    key: 'createTime',
+    width: 80,
+  },
+  {
+    title: <div className={styles.row_normal2}>创建人</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+    width: 40,
+  },
+];
 
-let productProcess =[{
-  title: <div className={styles.row_normal2}>创建人</div>,
-  dataIndex: 'status',
-  key: 'status1',
-  width: 100,
-},]
-
-productFlow = productFlow.map(item => ({ ...item, sorter: true }))
-productProcess = productProcess.map(item => ({ ...item, sorter: true }))
+productFlow = productFlow.map(item => ({ ...item, sorter: true }));
+productProcess = productProcess.map(item => ({ ...item, sorter: true }));
 
 export default {
   productFlow,
-  productProcess
-}
+  productProcess,
+};

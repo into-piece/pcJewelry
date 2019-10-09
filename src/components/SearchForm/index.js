@@ -4,8 +4,8 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 @Form.create({
-  onValuesChange(props, changedFields) {
-    props.onchange(changedFields);
+  onValuesChange(props, changedFields,allValues) {
+    props.onchange(allValues);
   }
 })
 class SearchFrom extends Component {
@@ -19,7 +19,8 @@ class SearchFrom extends Component {
       form,
       data,
       source,
-      returnElement
+      returnElement,
+      onchange
     } = this.props;
     const { getFieldDecorator } = form
     return (
@@ -29,13 +30,13 @@ class SearchFrom extends Component {
         >
           {
             type ?
-              data && data.map(({ key, value, type, list, clickFn, text, arr }) => {
+              data && data.map(({ key, value, type, list, clickFn, text, arr,number }) => {
                 return (
                   <div className="addModal" key={key}>
                     <FormItem label={key} className={styles.from_content_col}>
                       {getFieldDecorator(value, {
                         initialValue: undefined,
-                      })(returnElement({ key, value, data: source, type, list, clickFn, text, arr, form }))}
+                      })(returnElement({ key, value, data: source, type, list, clickFn, text, arr, form,number }))}
                     </FormItem>
                   </div>
                 )
@@ -81,12 +82,15 @@ class SearchFrom extends Component {
   // 重置回调
   handleReset = () => {
     const { onCustomerReset, form } = this.props;
+    if(onchange){onchange({})}
     form.resetFields();
     if (onCustomerReset) onCustomerReset();
   };
 
   // 切换展开
   toggleForm = () => {
+    const {onchange} = this.props;
+    if(onchange){onchange({})}
     this.setState((state) => ({
       expandForm: !state.expandForm,
     }));

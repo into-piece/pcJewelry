@@ -92,7 +92,7 @@ export default {
       if (callback) callback();
 
     },
-    * clearListScond(data, { put }) {
+    * clearListSecond(_, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: initData, typeName: 'listSecond' },
@@ -100,6 +100,10 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'selectedRowKeysSecond' },
       });
     },
 
@@ -136,9 +140,9 @@ export default {
         payload,
       });
     },
-    * changeselectedRowKeysSecond({ payload }, { put }) {
+    * changeSelectedRowKeysSecond({ payload }, { put }) {
       yield put({
-        type: 'changeselectedRowKeysSecond2',
+        type: 'changeSelectedRowKeysSecond2',
         payload,
       });
     },
@@ -217,7 +221,7 @@ export default {
         ],
       };
     },
-    changeselectedRowKeysSecond2(state, action) {
+    changeSelectedRowKeysSecond2(state, action) {
       return {
         ...state,
         selectedRowKeysSecond: [
@@ -243,7 +247,6 @@ export default {
       return {
         ...state,
         searchParams: {
-          ...state.searchParams,
           ...action.payload,
         },
       };
@@ -252,7 +255,6 @@ export default {
       return {
         ...state,
         searchParamsSecond: {
-          ...state.searchParamsSecond,
           ...action.payload,
         },
       };
