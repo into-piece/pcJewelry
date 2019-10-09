@@ -4,7 +4,7 @@ const serviceArr = [
     'name': 'productFlow',
     'path': 'production-flow',
     'arr': [
-      'listProductionFlow',
+      'list',
       'saveOrUpdate',
       'delete',
       'approval',
@@ -16,7 +16,7 @@ const serviceArr = [
     'name': 'productProcess',
     'path': 'production-process-relation',
     'arr': [
-      'listProductionProcessRelation',
+      'list',
       'saveOrUpdate',
       'delete',
       'approval',

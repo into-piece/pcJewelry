@@ -9,6 +9,7 @@ import request from '@/utils/request';
 import devBasicUrls from './dev/devBasicUrls';
 import devRawUrls from './dev/devRawUrls';
 import devFlowUrls from './dev/devFlowUrls';
+import devFlowCostUrls from './dev/devFlowCostUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
@@ -62,6 +63,18 @@ const resultFLow = devFlowUrls.map(({ name, arr, path }) => (
 
 ));
 
+// 开发-流程工费
+const resultFLowCost = devFlowCostUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: rType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix1:`${env}/business/develop/cost`
+    }
+  ))
+
+));
+
 
 
 
@@ -70,6 +83,7 @@ const resultArr = [
   ...resultBasic.flat(),
   ...resultRaw.flat(),
   ...resultFLow.flat(),
+  ...resultFLowCost.flat(),
   { key: 'listGemSetProcessDropDown', path: '/gem-set-process/listGemSetProcessDropDown' },
   { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
   { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },
@@ -128,6 +142,7 @@ const resultArr = [
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', prefix1: `${env}/business/sys` },// 获取为报价的产品参数
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
   { key: 'listBasicColourSetDropDown', path: '/colour-set/listBasicColourSetDropDown' },// 成色下拉
+  { key: 'listProductionFlowDropDown', path: '/production-flow/listDropDown',prefix1:`${env}/develop/production` },// 生产流程下拉
 ];
 
 // console.log(resultArr, '============')
