@@ -1667,6 +1667,28 @@ const routes = [
                 exact: true,
               },
               {
+                path: '/erp/dev/flowCostType',
+                name: 'flowCostType',
+                icon: 'money-collect',
+                component: __IS_BROWSER
+                  ? _dvaDynamic({
+                      app: require('@tmp/dva').getApp(),
+                      models: () => [
+                        import(/* webpackChunkName: 'p__dev__FlowCostType__models__productflow.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/FlowCostType/models/productflow.js').then(
+                          m => {
+                            return { namespace: 'productflow', ...m.default };
+                          },
+                        ),
+                      ],
+                      component: () =>
+                        import(/* webpackChunkName: "layouts__BasicLayout" */ '../dev/FlowCostType'),
+                      LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                        .default,
+                    })
+                  : require('../dev/FlowCostType').default,
+                exact: true,
+              },
+              {
                 path: '/erp/dev/FinishedProduct',
                 name: 'FinishedProduct',
                 icon: 'deployment-unit',

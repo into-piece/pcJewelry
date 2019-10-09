@@ -277,6 +277,13 @@ export default [
                 icon: 'build',
                 component: './dev/Productflow',
               },
+              //流程工费
+              {
+                path: '/erp/dev/flowCostType',
+                name: 'flowCostType',
+                icon: 'money-collect',
+                component: './dev/FlowCostType',
+              },
               {
                 path: '/erp/dev/FinishedProduct',
                 name: 'FinishedProduct',
