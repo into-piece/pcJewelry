@@ -33,7 +33,7 @@ export const modalContent = {
 
     {span:8, disable:true,'key': '原料编号', 'value': 'materialNo'  ,search:true},
     {span:8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'listBasicColourSetDropDown', 'type': 2 ,search:true },
-    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'listMstWordbookDropH016001', 'type': 2 },
+    {span:8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016003', 'type': 2 },
     {span:8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2  ,search:true },
     {span:8, 'key': '规格', 'value': 'specification', 'name': true , 'list': 'specificationSettingList', 'type': 2  ,search:true},
     {span:8, 'key': '中文名', 'value': 'zhName', 'noNeed': true  ,search:true},
