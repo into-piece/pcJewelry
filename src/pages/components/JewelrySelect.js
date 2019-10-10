@@ -13,12 +13,6 @@ class JewelrySelect extends PureComponent {
     firstSelected: true,
   };
 
-  onSearch = value => {
-    this.setState({
-      value,
-      isFirst: false,
-    });
-  };
 
   handleChange = value => {
     const { onChange, onSelect } = this.props;
@@ -67,7 +61,6 @@ class JewelrySelect extends PureComponent {
         style={{ width: '100%', height: '100%' }}
         showArrow={false}
         value={showValue}
-        onSearch={this.onSearch}
         onChange={this.handleChange}
         notFoundContent={null}
       >
@@ -82,7 +75,6 @@ class JewelrySelect extends PureComponent {
   }
 
   getOption = list => {
-    console.log(list);
     return this.getOptionList(list);
 
   };
