@@ -740,7 +740,7 @@ class Info extends Component {
               const cutId = `${getFieldValue('cut')}`;
               const qualityId = `${getFieldValue('quality')}`;
 
-              const assaying = dev.gemSetProcessDropDown.filter(e => e.id === assayingId);
+              const assaying = dev.listBasicColourSetDropDown.filter(e => e.id === assayingId);
               let  s = dev.H016001.filter(e => e.id === sId);
 
 
@@ -764,7 +764,7 @@ class Info extends Component {
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
                   shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
                   cut.length > 0 ? (`${cut[0].cuttingCode}-`) : ''}${
-                  color.length > 0 ? (`${color[0].colorCode}-` ): ''}${
+                  color.length > 0 ? (`${color[0].unitCode}-` ): ''}${
                   quality.length > 0 ?( `${quality[0].gradeCode}-`) : ''}${
                   specification.length > 0 ? specification[0].specificationCode : ''}`;
               }
@@ -779,7 +779,7 @@ class Info extends Component {
 
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
                   shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
-                  color.length > 0 ? (`${color[0].colorCode}-`) : ''}${
+                  color.length > 0 ? (`${color[0].unitCode}-`) : ''}${
                   specification.length > 0 ? specification[0].specificationCode : ''}`;
               }
               if (selectKey === 'otherMaterial') {
@@ -1440,7 +1440,6 @@ const GetRenderitem = ({ data, type }) => {
     ];
   }
   const getImages = (paths) => {
-    debugger
     if (!paths) return;
     return paths.map((
       v, // src={v}
