@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import {  Select } from 'antd';
+import { Select } from 'antd';
 import { getCurrentUser } from '../../utils/authority';
 
 const { Option } = Select;
@@ -10,13 +10,19 @@ class JewelrySelect extends PureComponent {
     dicts: [],
     value: undefined,
     isFirst: true,
-    firstSelected:true,
+    firstSelected: true,
+  };
+
+  onSearch = value => {
+    this.setState({
+      value,
+      isFirst: false,
+    });
   };
 
   handleChange = value => {
     const { onChange, onSelect } = this.props;
     const { dicts } = this.state;
-    console.log('dicts',dicts)
     this.setState({
       value,
       isFirst: false,
@@ -61,6 +67,7 @@ class JewelrySelect extends PureComponent {
         style={{ width: '100%', height: '100%' }}
         showArrow={false}
         value={showValue}
+        onSearch={this.onSearch}
         onChange={this.handleChange}
         notFoundContent={null}
       >
@@ -75,51 +82,51 @@ class JewelrySelect extends PureComponent {
   }
 
   getOption = list => {
-    console.log(list)
+    console.log(list);
     return this.getOptionList(list);
 
   };
 
   loadSelect = () => {
-    const { content ,onSelect } = this.props;
+    const { content, onSelect } = this.props;
     const { firstSelected } = this.state;
-    const params = {};
+    const params = this.getParams ? this.getParams() : {};
     const _this = this;
     const url = this.getUrl();
-    if(url){
-    fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {body} = d;
-        if (body.records) {
-          _this.setState({
-            loading: false,
-            dicts: body.records,
-          });
-          if(firstSelected&&content)
-          {
-            if (onSelect) {
-              const selectItem = body.records.filter((v) => {
-                if (v.id === content)
-                  return v;
-              });
-              if (selectItem.length > 0)
-                onSelect(selectItem[0]);
+    if (url) {
+      fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': getCurrentUser() ? getCurrentUser().token : '',
+        },
+        body: JSON.stringify(params),
+      })
+        .then(response => response.json())
+        .then(d => {
+          const { body } = d;
+          if (body.records) {
+            _this.setState({
+              loading: false,
+              dicts: body.records,
+            });
+            if (firstSelected && content) {
+              if (onSelect) {
+                const selectItem = body.records.filter((v) => {
+                  if (v.id === content)
+                    return v;
+                });
+                if (selectItem.length > 0) {
+                  onSelect(selectItem[0]);
+                }
+
+              }
 
             }
-
           }
-        }
-        this.state.firstSelected = false
-      }).catch(function(ex) {
+          this.state.firstSelected = false;
+        }).catch(function(ex) {
         // message.error('加载图片失败！');
       });
     }

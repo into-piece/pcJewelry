@@ -14,10 +14,11 @@ const {
   getTypeByWordbookCode
 
 } = servicesConfig;
+const defaultModelName = 'flowCostType';
 
 
 export default {
-  namespace: 'flowCostType',
+  namespace: defaultModelName,
 
   state: {
 
@@ -53,7 +54,7 @@ export default {
         payload: { data: list, typeName: 'list' },
       });
 
-      const choosenRowData = yield select(state => state.productflow.choosenRowData);
+      const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
       const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
       if (selectRow && selectRow.length > 0) {
@@ -94,11 +95,11 @@ export default {
     },
     // 下拉获取
 
-    * getListProductionFlowDropDown(_, { call, put }) {
-      const response = yield call(listProductionFlowDropDown);
+    * getListProductionFlowDropDown({ payload }, { call, put }) {
+      const response = yield call(listProductionFlowDropDown,payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map((item) => {
-        return { ...item,value: item.flowCode, key: item.flowName };
+        return { ...item,value: item.flowCode, key: item.flowCode  };
       });
       yield put({
         type: 'changeState',

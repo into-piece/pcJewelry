@@ -97,6 +97,7 @@ export const queryBrands = `${priefx}/business/basic/brand/listBrands`
  * @type {string}
  */
 export const queryproductDropDown = `${priefx}/business/develop/basic/finished-product/listFinishedProductDropDown`
+export const queryproductDropDown2 = `${priefx}/business/develop/category/develop-basic-category-set/dropdown`
 
 /**
  * 加载宝石材料
@@ -273,6 +274,7 @@ export default {
   queryMstWordList,
   queryBrands,
   queryproductDropDown,
+  queryproductDropDown2,
   queryProductMaterial,
   queryunitColor,
   queryPlatingColor,

@@ -1,4 +1,5 @@
 import styles from './columns.less';
+import {statusConvert} from '@/utils/convert';
 
 let flowCostType = [
   {
@@ -27,6 +28,9 @@ let flowCostType = [
     dataIndex: 'productType',
     key: 'productType',
     width: 100,
+    render: (data,record) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{record.productTypeName}</div>
+    ),
   },
   {
     title: <div className={styles.row_normal2}>工费类别</div>, // ?
@@ -55,6 +59,9 @@ let flowCostType = [
     dataIndex: 'status',
     key: 'status',
     width: 100,
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
+    ),
   },
   {
     title: <div className={styles.row_normal2}>创建时间</div>,

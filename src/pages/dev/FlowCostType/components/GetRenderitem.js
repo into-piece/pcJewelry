@@ -5,9 +5,6 @@
 
 import DescriptionList from '@/components/DescriptionList';
 import styles from './GetRenderitem.less';
-import {
-  returnName,
-} from '../config/convertCode';
 
 const { Description } = DescriptionList;
 
@@ -18,7 +15,7 @@ const { Description } = DescriptionList;
 *
 * items 配置数据
 * */
-const GetRenderitem = ({ data, type, returnListName,items}) => {
+const GetRenderitem = ({ data, type,items}) => {
   const selectRowItem = () => {
     // console.log('select the item');
   };
@@ -29,15 +26,10 @@ const GetRenderitem = ({ data, type, returnListName,items}) => {
     <div style={{ marginLeft: 10, marginTop: 10 }} className={styles.getRenderitem} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, belong, list }) =>
+          arr.map(({ key, value, cName ,convert}) =>
             <Description key={key} term={key}>
               {
-                belong === 2 ?
-                  returnName(value, data[value])
-                  :
-                  belong === 3 ?
-                    returnListName(list, data[value]) :
-                    data[value]
+                convert ? convert[data[value]] : (cName ? data[`${value}Name`] : data[value])
               }
             </Description>,
           )

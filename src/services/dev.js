@@ -142,7 +142,7 @@ const resultArr = [
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', prefix1: `${env}/business/sys` },// 获取为报价的产品参数
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
   { key: 'listBasicColourSetDropDown', path: '/colour-set/listBasicColourSetDropDown' },// 成色下拉
-  { key: 'listProductionFlowDropDown', path: '/production-flow/listDropDown',prefix1:`${env}/develop/production` },// 生产流程下拉
+  { key: 'listProductionFlowDropDown', path: '/production-flow/listDropDown',prefix1:`${env}/business/develop/production` },// 生产流程下拉
 ];
 
 // console.log(resultArr, '============')

@@ -75,6 +75,7 @@ class Index extends Component {
     // 生产流程下拉
     dispatch({
       type: `${defaultModelName}/getListProductionFlowDropDown`,
+      payload: {},
     });
 
     // 获取初始表单数据
@@ -113,7 +114,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, disabled }) => {
     switch (type) {
       case 2:
         return (
@@ -171,7 +172,12 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+        return <Input
+          style={{ width: '100' }}
+          type={number ? 'number' : 'text'}
+          placeholder="请输入"
+          disabled={disabled}
+        />;
     }
     //  type === 7 ?
   };
@@ -286,21 +292,30 @@ class Index extends Component {
     const {
       choosenRowData,
       form,
+      model,
     } = this.props;
     const {
       modalType,
       rightActive,
     } = this.state;
-    const { getFieldDecorator } = form;
+    const { getFieldDecorator, getFieldValue } = form;
 
     const content = '';
     const isEdit = modalType === 'edit';
-    const { model } = this.props;
     const addArr = modalInput[rightActive];
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, disabled }) => {
+            const selectData = { ...choosenRowData };
+            if (value === 'flowName') {
+              const flowCode = `${getFieldValue('flowCode')}`;
+              const flowName = model.listProductionFlowDropDown.filter(e => e.value === flowCode);
+              initValue = flowName && flowName.length > 0 && flowName[0].flowName;
+              selectData[value] = initValue || choosenRowData[value];
+            }
+
+
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -309,7 +324,7 @@ class Index extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (  choosenRowData[value] ) : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (selectData[value]) : initValue || (number ? 0 : undefined),
                     })(this.returnElement({
                       key,
                       value,
@@ -323,6 +338,7 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
+                      disabled,
                     }))
                   }
                 </FormItem>
@@ -370,8 +386,8 @@ class Index extends Component {
   returnLockType = () => {
     const { selectedRowKeys, model, list } = this.props;
     const { rightActive } = this.state;
-    const listr =   list ;
-    const selectedKeys = selectedRowKeys ;
+    const listr = list;
+    const selectedKeys = selectedRowKeys;
     if (listr && listr.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = listr.records.find(subItem => subItem.id === cur);
@@ -391,26 +407,23 @@ class Index extends Component {
     const { rightActive } = this.state;
 
     if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
-    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0)  || this.returnLockType().disabled;
+    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || this.returnLockType().disabled;
 
     if (tag === 'delete') {
       return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || !this.returnLockType().isShenPi;
     }
     if (tag === 'edit') {
-      const d =  choosenRowData;
-      return (firstTabFlag === rightActive && selectedRowKeys.length === 0)  || Number(d.status) === 2;
+      const d = choosenRowData;
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || Number(d.status) === 2;
     }
 
-    return (firstTabFlag === rightActive && selectedRowKeys.length === 0) ;
+    return (firstTabFlag === rightActive && selectedRowKeys.length === 0);
   };
 
   // 取消弹窗回调
   onCancel = () => {
     this.btnFn('');
   };
-
-  // 下拉反编译
-  returnListName = (list, v) => v && this.props.model[list].length > 0 && this.props.model[list].find(item => item.value === v).key;
 
   render() {
     const {
@@ -419,8 +432,6 @@ class Index extends Component {
       btnFn,
       returnSisabled,
       returnLockType,
-      returnListName,
-      changeRightActive,
       getModalContent,
       handleModalOk,
       onCancel,
@@ -456,7 +467,6 @@ class Index extends Component {
                         <GetRenderitem
                           data={choosenRowData}
                           type={rightActive}
-                          returnListName={returnListName}
                           items={showItem}
                         />
                       </Card>
