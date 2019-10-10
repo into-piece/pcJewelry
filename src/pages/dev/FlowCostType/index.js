@@ -12,7 +12,8 @@ import {
   Radio,
   Checkbox,
   DatePicker,
- notification } from 'antd';
+  notification,
+} from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
@@ -42,85 +43,56 @@ const btnGroup = [
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-const defaultModelName = 'productflow';
+const defaultModelName = 'flowCostType';
 
-const firstTabFlag = 'productFlow';
-
-const radioArr = [{ key: '生产流程', value: 'productFlow' },
-  { key: '员工工序', value: 'productProcess' }];
+const firstTabFlag = 'flowCostType';
 
 @Form.create()
-@connect(({  loading, productflow: model }) => {
+@connect(({ loading, flowCostType: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
-    listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
     list: model.list,
-    listSecond: model.listSecond,
     pagination: model.pagination,
-    paginationSecond: model.paginationSecond,
     choosenRowData: model.choosenRowData,
-    choosenRowDataSecond: model.choosenRowDataSecond,
     selectedRowKeys: model.selectedRowKeys,
-    selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
-    searchParamsSecond: model.searchParamsSecond,
   };
 })
 class Index extends Component {
   state = {
     modalType: '',
-    // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'productProcess',
-    // 右边默认选中tab标志
     rightActive: firstTabFlag,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // 类别下拉
-    dispatch({
-      type: `${defaultModelName}/getwordbookdropdown`,
-      payload: {params: { 'wordbookTypeCode': 'H017' },listName:"listH017"}
-    });
-    // 成品类别下拉
+    // 产品类别下拉
     dispatch({
       type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: {params: {"key":"H016009"},listName:"listH016009"}
+      payload: { params: { 'key': 'H016003' }, listName: 'H016003' },
     });
-    // 部门下拉
+    // 生产流程下拉
     dispatch({
-      type: `${defaultModelName}/listDeptDropDown`,
+      type: `${defaultModelName}/getListProductionFlowDropDown`,
+      payload: {},
     });
-    // 镶石工艺下拉
-    dispatch({
-      type: `${defaultModelName}/listGemSetProcessDropDown`,
-      payload:{}
-    });
-
 
     // 获取初始表单数据
     this.getList();
   }
 
   // 右边顶部tab切换
-  changeRightActive = (v) => {
-    const { secondTableActive } = this.state;
-    this.setState({
-      rightActive: v.target.value,
-      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
-    });
-  };
+  // changeRightActive = (v) => {
+  //   this.setState({
+  //     rightActive: v.target.value,
+  //   });
+  // };
 
 
   // table 搜索
-  onSearch = (params,table) => {
-    if(table===1){
-      this.getList({},params);
-    }
-    if(table===2){
-      this.getListSecond({},params);
-    }
+  onSearch = (params) => {
+    this.getList({}, params);
   };
 
   // 第一table获取list
@@ -129,31 +101,11 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getList`,
-      payload: { type:firstTabFlag,params: { ...pagination, ...searchParams, ...param }, ...args },
+      payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
     });
 
-    // 清除第二table内容
-    dispatch({
-      type: `${defaultModelName}/clearListScond`,
-    });
-  };
-
-  // 第二table获取list
-  getListSecond = (args, param) => {
-    const { dispatch, paginationSecond, searchParamsSecond,choosenRowDataSecond} = this.props;
-    const { secondTableActive } = this.state;
-    // getDevList
-    dispatch({
-      type: `${defaultModelName}/getListSecond`,
-      payload: { type:secondTableActive,params: { ...paginationSecond, ...searchParamsSecond, ...param }, ...args },
-    });
 
   };
-
-
-
-
-
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -162,7 +114,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form ,number}) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, disabled }) => {
     switch (type) {
       case 2:
         return (
@@ -170,7 +122,7 @@ class Index extends Component {
             style={{ width: 180 }}
             placeholder="请选择"
             onChange={(v) => {
-              this.handleSelectChange&&this.handleSelectChange(v, value);
+              this.handleSelectChange && this.handleSelectChange(v, value);
             }}
           >
             {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
@@ -220,7 +172,12 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input style={{ width: '100' }} type={number?'number':'text'} placeholder="请输入" />;
+        return <Input
+          style={{ width: '100' }}
+          type={number ? 'number' : 'text'}
+          placeholder="请输入"
+          disabled={disabled}
+        />;
     }
     //  type === 7 ?
   };
@@ -259,70 +216,49 @@ class Index extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const {  selectedRowKeys, selectedRowKeysSecond,dispatch } = this.props
-    const { rightActive ,secondTableActive} = this.state
-    const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
-    serviceObj[`delete${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+    const { selectedRowKeys, dispatch } = this.props;
+    const { rightActive } = this.state;
+    serviceObj[`delete${rightActive}`](selectedRowKeys).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        if (rightActive === firstTabFlag) {
-          this.getList({ type: rightActive });
-          dispatch({
-            type: `${defaultModelName}/choosenRowData`,
-            payload:{id:""}
-          });
-          // 清除第二table内容
-          dispatch({
-            type: `${defaultModelName}/clearListScond`,
-          });
-        }else{
-          this.getListSecond({ type: secondTableActive });
-          // 清除第二table 选中
-          dispatch({
-            type: `${defaultModelName}/choosenRowDataSecond`,
-            payload:{id:""}
-          });
-        }
+        this.getList({ type: rightActive });
+        dispatch({
+          type: `${defaultModelName}/choosenRowData`,
+          payload: { id: '' },
+        });
       }
-    })
-  }
+    });
+  };
 
   // 审批/撤销 按钮回调
   handleLock = () => {
-    const {  selectedRowKeys, selectedRowKeysSecond } = this.props
-    const { rightActive ,secondTableActive} = this.state
-    const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
-    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const { selectedRowKeys } = this.props;
+    const { rightActive } = this.state;
+    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
 
-    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+    serviceObj[`${serviceType}${rightActive}`](selectedRowKeys).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        if (rightActive === firstTabFlag) {
-          this.getList({ type: rightActive });
-        }else{
-          this.getListSecond({ type: secondTableActive });
-        }
+        this.getList({ type: rightActive });
       }
-    })
-  }
+    });
+  };
 
   // 新增||编辑 按钮事件回调
   handleAdd = () => {
-    const {  form, choosenRowData,choosenRowDataSecond } = this.props
-    const { secondTableActive,rightActive,modalType } = this.state
-    let params = {}
-    if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode }
-    }
-    if(modalType ==="edit"){
-      params ={...params,id:(rightActive !== firstTabFlag?choosenRowDataSecond.id:choosenRowData.id)}
+    const { form, choosenRowData } = this.props;
+    const { rightActive, modalType } = this.state;
+    let params = {};
+
+    if (modalType === 'edit') {
+      params = { ...params, id: choosenRowData.id };
     }
 
     form.validateFields((err, values) => {
@@ -330,7 +266,7 @@ class Index extends Component {
         params = {
           ...params,
           ...values,
-        }
+        };
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res.head) {
@@ -341,11 +277,7 @@ class Index extends Component {
             notification.success({
               message: rtnMsg,
             });
-            if (rightActive === firstTabFlag) {
-              this.getList({ type: rightActive });
-            }else{
-              this.getListSecond({ type: secondTableActive });
-            }
+            this.getList({ type: rightActive });
 
             this.btnFn('');
           }
@@ -353,29 +285,37 @@ class Index extends Component {
       }
     });
 
-  }
+  };
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
     const {
       choosenRowData,
-      choosenRowDataSecond,
       form,
+      model,
     } = this.props;
     const {
       modalType,
       rightActive,
     } = this.state;
-    const { getFieldDecorator } = form;
+    const { getFieldDecorator, getFieldValue } = form;
 
     const content = '';
     const isEdit = modalType === 'edit';
-    const { model } = this.props;
     const addArr = modalInput[rightActive];
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, disabled }) => {
+            const selectData = { ...choosenRowData };
+            if (value === 'flowName') {
+              const flowCode = `${getFieldValue('flowCode')}`;
+              const flowName = model.listProductionFlowDropDown.filter(e => e.value === flowCode);
+              initValue = flowName && flowName.length > 0 && flowName[0].flowName;
+              selectData[value] = initValue || choosenRowData[value];
+            }
+
+
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -384,7 +324,7 @@ class Index extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (selectData[value]) : initValue || (number ? 0 : undefined),
                     })(this.returnElement({
                       key,
                       value,
@@ -398,6 +338,7 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
+                      disabled,
                     }))
                   }
                 </FormItem>
@@ -443,10 +384,10 @@ class Index extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const { selectedRowKeys, selectedRowKeysSecond, model, list, listSecond } = this.props;
+    const { selectedRowKeys, model, list } = this.props;
     const { rightActive } = this.state;
-    const listr = rightActive === firstTabFlag  ? list : listSecond;
-    const selectedKeys =  rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const listr = list;
+    const selectedKeys = selectedRowKeys;
     if (listr && listr.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = listr.records.find(subItem => subItem.id === cur);
@@ -455,37 +396,34 @@ class Index extends Component {
     }, []);
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 ,isShenPi,isChexiao};
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 ,isShenPi,isChexiao};
-    return { name: '审批', disabled: true, type: 1 ,isShenPi,isChexiao}; // 当两种状态都有 禁止点击
+    if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
+    if (isChexiao) return { name: '撤销', disabled: false, type: 2, isShenPi, isChexiao };
+    return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys, selectedRowKeysSecond,choosenRowData,choosenRowDataSecond } = this.props;
+    const { selectedRowKeys, choosenRowData } = this.props;
     const { rightActive } = this.state;
 
-    if (tag === 'plus') return  (firstTabFlag===rightActive?false:!choosenRowData.id);
-    if (tag === 'lock') return  (firstTabFlag===rightActive&& selectedRowKeys.length === 0) ||  (firstTabFlag!==rightActive&&selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
+    if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
+    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || this.returnLockType().disabled;
 
-    if (tag ==='delete'){
-      return (firstTabFlag===rightActive&& selectedRowKeys.length === 0) ||  (firstTabFlag!==rightActive&&selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
+    if (tag === 'delete') {
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || !this.returnLockType().isShenPi;
     }
-    if (tag ==='edit'){
-      const d =firstTabFlag===rightActive? choosenRowData:choosenRowDataSecond;
-      return   (firstTabFlag===rightActive&&selectedRowKeys.length === 0 )||(firstTabFlag!==rightActive&&   selectedRowKeysSecond.length === 0)||Number(d.status)===2;
+    if (tag === 'edit') {
+      const d = choosenRowData;
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || Number(d.status) === 2;
     }
 
-    return   (firstTabFlag===rightActive&&selectedRowKeys.length === 0 )||(firstTabFlag!==rightActive&&   selectedRowKeysSecond.length === 0);
+    return (firstTabFlag === rightActive && selectedRowKeys.length === 0);
   };
 
   // 取消弹窗回调
   onCancel = () => {
     this.btnFn('');
-  }
-
-  // 下拉反编译
-  returnListName = (list, v) => v && this.props.model[list].length > 0 && this.props.model[list].find(item => item.value === v).key;
+  };
 
   render() {
     const {
@@ -494,8 +432,6 @@ class Index extends Component {
       btnFn,
       returnSisabled,
       returnLockType,
-      returnListName,
-      changeRightActive,
       getModalContent,
       handleModalOk,
       onCancel,
@@ -503,8 +439,8 @@ class Index extends Component {
       onSearch,
       returnTitle,
     } = this;
-    const { modalType, rightActive, secondTableActive } = state;
-    const { choosenRowData, choosenRowDataSecond } = props;
+    const { modalType, rightActive } = state;
+    const { choosenRowData } = props;
 
 
     return (
@@ -520,7 +456,6 @@ class Index extends Component {
                   <Col lg={16} md={24}>
                     <MiddleTable
                       firstType={firstTabFlag}
-                      secondType={secondTableActive}
                       returnElement={returnElement}
                       onSearch={onSearch}
                     />
@@ -529,33 +464,9 @@ class Index extends Component {
                   <Col lg={8} md={24}>
                     <div className={styles.view_right_content}>
                       <Card bordered={false}>
-                        <Radio.Group
-                          size="small"
-                          className={styles.right_content_tabgroud}
-                          onChange={changeRightActive}
-                          buttonStyle="solid"
-                          value={rightActive}
-                          style={{ textAlign: 'center' }}
-                        >
-                          {
-                            radioArr.map((item, index) =>
-                              <Radio.Button
-                                key={item.value}
-                                style={{
-                                  height: 40,
-                                  width: 130,
-                                  textalign: 'center',
-                                  lineHeight: '40px',
-                                }}
-                                value={item.value}
-                              >{item.key}
-                              </Radio.Button>)
-                          }
-                        </Radio.Group>
                         <GetRenderitem
-                          data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
+                          data={choosenRowData}
                           type={rightActive}
-                          returnListName={returnListName}
                           items={showItem}
                         />
                       </Card>
@@ -567,7 +478,7 @@ class Index extends Component {
                             <Button
                               key={tag}
                               className={styles.buttomControl}
-                              type={tag==='delete'?'danger':"primary"}
+                              type={tag === 'delete' ? 'danger' : 'primary'}
                               icon={tag}
                               size="small"
                               disabled={returnSisabled(tag)}
@@ -587,6 +498,7 @@ class Index extends Component {
             </div>
           </div>
         </div>
+
         {handleModalOk &&
         <Modal
           maskClosable={false}

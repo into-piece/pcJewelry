@@ -12,10 +12,11 @@ const initData = { records: [] };
 const {
   listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,
 } = servicesConfig;
+const defaultModelName = 'productflow';
 
 
 export default {
-  namespace: 'productflow',
+  namespace: defaultModelName,
 
   state: {
 
@@ -60,7 +61,7 @@ export default {
         payload: { data: list, typeName: 'list' },
       });
 
-      const choosenRowData = yield select(state => state.productflow.choosenRowData);
+      const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
       const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
       if (selectRow && selectRow.length > 0) {

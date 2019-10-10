@@ -2,16 +2,19 @@ import React, { PureComponent } from 'react';
 import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
 import querystring from 'querystring';
 
-const { Option } = Select;
-
 import JewelrySelect from '../../../components/JewelrySelect';
 import HttpFetch from '../../../../utils/HttpFetch';
 
+const { Option } = Select;
+
 
 class ProductTypeSelect extends JewelrySelect {
+  getParams=()=>{
+    return {bType:"H015002"}
+  }
 
   getUrl=()=>{
-    return HttpFetch.queryproductDropDown;
+    return HttpFetch.queryproductDropDown2;
   }
 
   getOptionList =(list)=>{
@@ -25,7 +28,7 @@ class ProductTypeSelect extends JewelrySelect {
 
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.fCode} value={item.id}>
+      <Option key={item.id} value={item.id}>
         {item.zhName}
       </Option>
     ));

@@ -7,73 +7,50 @@ import SearchForm from '@/components/SearchForm';
 import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
 
-const defaultModelName = 'productflow';
+const defaultModelName = 'flowCostType';
 
 
 @Form.create()
-@connect(({ loading, productflow: model }) => {
+@connect(({ loading, flowCostType: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
-    listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
     list: model.list,
-    listSecond: model.listSecond,
     pagination: model.pagination,
-    paginationSecond: model.paginationSecond,
     choosenRowData: model.choosenRowData,
-    choosenRowDataSecond: model.choosenRowDataSecond,
     selectedRowKeys: model.selectedRowKeys,
-    selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
-    searchParamsSecond: model.searchParamsSecond,
   };
 })
 class MiddleTable extends Component {
 
 
   // 选中某行   type  1 主table
-  changeChoosenRow = (rowData, type) => {
-    const { dispatch, pagination, onSearch } = this.props;
-    const str = type === 1 ? '' : 'Second';
+  changeChoosenRow = (rowData) => {
+    const { dispatch } = this.props;
     dispatch({
-      type: `${defaultModelName}/setChoosenRowData${str}`,
+      type: `${defaultModelName}/setChoosenRowData`,
       payload: rowData,
     });
-    if (type === 1) {
-      this.searchSecond.handleReset();
-      if (onSearch) onSearch({ flowCode: rowData.flowCode }, 2);
-    } else {
-      // dispatch({
-      //   type: `${defaultModelName}/changeRightMenu`,
-      //   payload: 2,
-      // });
-    }
   };
 
   // 更改table select数组
-  onSelectChange = (selectedRowKeys, type) => {
+  onSelectChange = (selectedRowKeys) => {
     const { dispatch } = this.props;
 
-    const str = type === 2 ? 'Second' : '';
     dispatch({
-      type: `${defaultModelName}/changeSelectedRowKeys${str}`,
+      type: `${defaultModelName}/changeSelectedRowKeys`,
       payload: selectedRowKeys,
     });
   };
 
   // 当表头重复点击选中 清空选中 清空表体
-  clearFn = (type) => {
+  clearFn = (e) => {
     const { dispatch } = this.props;
-    if (type === 1) {
-      // 清除第二table数据
-      dispatch({
-        type: `${defaultModelName}/clearListSecond`,
-      });
-      dispatch({
-        type: `${defaultModelName}/setChoosenRowData`,
-        payload: {},
-      });
-    }
+    dispatch({
+      type: `${defaultModelName}/setChoosenRowData`,
+      payload: {},
+    });
   };
 
   changeSearchParams = (v) => {
@@ -84,37 +61,24 @@ class MiddleTable extends Component {
     });
   };
 
-  changeSearchDetailParams = (v) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: `${defaultModelName}/changeSearchParamsSecond`,
-      payload: v,
-    });
-  };
 
   render() {
-    const { onSelectChange, props, changeSearchParams, changeSearchDetailParams,clearFn } = this;
+    const { onSelectChange, props, changeSearchParams, clearFn } = this;
     const {
       firstType,
-      secondType,
       returnElement,
       onSearch,
 
       list,
-      listSecond,
 
       choosenRowData,
-      choosenRowDataSecond,
       pagination,
-      paginationSecond,
 
       selectedRowKeys,
-      selectedRowKeysSecond,
 
       model,
 
       listLoading,
-      listLoadingSecond,
     } = props;
     return (
       <div className={styles.view_left_content}>
@@ -123,7 +87,7 @@ class MiddleTable extends Component {
           data={searchParamsArrConfig[firstType]}
           source={model}
           onSearch={(p) => {
-            onSearch(p, 1);
+            onSearch(p);
           }}
           returnElement={returnElement}
           onchange={changeSearchParams}
@@ -135,56 +99,20 @@ class MiddleTable extends Component {
             pagination={pagination}
             selectKey={choosenRowData.id}
             handleTableChange={(p) => {
-              onSearch(p, 1);
+              onSearch(p);
             }}
             body={list}
             selectedRowKeys={selectedRowKeys}
             changeChoosenRow={record => {
-              this.changeChoosenRow(record, 1);
+              this.changeChoosenRow(record);
             }}
             onSelectChange={(data) => {
-              onSelectChange(data, 1);
+              onSelectChange(data);
             }}
 
             listLoading={listLoading}
             clearFn={clearFn}
             type={1}
-          />
-        </div>
-        <Divider />
-        <SearchForm
-          wrappedComponentRef={ref => {
-            this.searchSecond = ref;
-          }}
-          data={searchParamsArrConfig[secondType]}
-          source={model}
-          onSearch={(p) => {
-            onSearch(p, 2);
-          }}
-          returnElement={returnElement}
-          onchange={changeSearchDetailParams}
-        />
-        <div className={styles.tableBox}>
-          <Table
-            scroll={{ x: 1600 }}
-            columns={columnsConfig[secondType]}
-            pagination={paginationSecond}
-            selectKey={choosenRowDataSecond.id}
-            handleTableChange={(p) => {
-              onSearch(p, 2);
-            }}
-            selectedRowKeys={selectedRowKeysSecond}
-            body={listSecond}
-            changeChoosenRow={record => {
-              this.changeChoosenRow(record, 2);
-            }}
-            onSelectChange={data => {
-              onSelectChange(data, 2);
-            }}
-
-            listLoading={listLoadingSecond}
-            clearFn={clearFn}
-            type={2}
           />
         </div>
       </div>

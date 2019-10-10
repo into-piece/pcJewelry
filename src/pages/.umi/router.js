@@ -1674,9 +1674,9 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(/* webpackChunkName: 'p__dev__FlowCostType__models__productflow.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/FlowCostType/models/productflow.js').then(
+                        import(/* webpackChunkName: 'p__dev__FlowCostType__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/FlowCostType/models/model.js').then(
                           m => {
-                            return { namespace: 'productflow', ...m.default };
+                            return { namespace: 'model', ...m.default };
                           },
                         ),
                       ],

@@ -1,4 +1,5 @@
 import styles from './columns.less';
+import {statusConvert,YoNConvert} from '@/utils/convert';
 
 let productFlow = [
   {
@@ -27,6 +28,9 @@ let productFlow = [
     dataIndex: 'productType',
     key: 'productType',
     width: 100,
+    render: (data,record) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{record.productTypeName}</div>
+    ),
   },
 
   {
@@ -55,12 +59,18 @@ let productFlow = [
     dataIndex: 'isOutbound',
     key: 'isOutbound',
     width: 100,
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{YoNConvert[data]}</div>
+    ),
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,
     dataIndex: 'status',
     key: 'status',
     width: 100,
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
+    ),
   },
   {
     title: <div className={styles.row_normal2}>创建人</div>,
@@ -122,6 +132,15 @@ let productProcess = [
     dataIndex: 'createUser',
     key: 'createUser',
     width: 40,
+  },
+  {
+    title: <div className={styles.row_normal2}>状态</div>,
+    dataIndex: 'status',
+    key: 'status',
+    width: 100,
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
+    ),
   },
 ];
 

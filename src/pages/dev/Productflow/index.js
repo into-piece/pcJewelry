@@ -484,8 +484,6 @@ class Index extends Component {
     this.btnFn('');
   }
 
-  // 下拉反编译
-  returnListName = (list, v) => v && this.props.model[list].length > 0 && this.props.model[list].find(item => item.value === v).key;
 
   render() {
     const {
@@ -553,9 +551,9 @@ class Index extends Component {
                           }
                         </Radio.Group>
                         <GetRenderitem
+                          key={firstTabFlag === rightActive ? choosenRowData.id : choosenRowDataSecond.id}
                           data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
                           type={rightActive}
-                          returnListName={returnListName}
                           items={showItem}
                         />
                       </Card>

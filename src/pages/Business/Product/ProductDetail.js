@@ -570,11 +570,12 @@ class ProductDetail extends Component {
                   rules: [{ required: true, message: '请输入类别' }],
                 })(<ProductTypeSelect
                   content={current.productType}
+                  placeholder="请输入"
                   onSelect={(v) => {
                     // console.log(" select  ",v)
                     if (v.zhName) {
                       this.state.cNofCodezhName = v.zhName;
-                      this.state.cNofCode = v.fCode;
+                      this.state.cNofCode = v.unitCode;
                       this.parseProductNo();
                     }
                   }
@@ -686,17 +687,31 @@ class ProductDetail extends Component {
                 {getFieldDecorator('mouldNo', {
                   rules: [{ required: true, message: '请输入' }],
                   initialValue: current.mouldNo,
-                })(<MoldListSelect
-                  content={current.mouldNo}
-                  placeholder="请输入"
-                  onSelect={(v) => {
+                })(
+                  <Input
+                    onChange={(v) => {
+                      console.log(v);
+                      this.state.cNomainMold = v.target.value;
+                      this.parseProductNo();
+                    }}
+                    placeholder="请输入"
+                  />
+                  )}
+                {/* <MoldListSelect */}
+                {/* // showSearch */}
+                {/* content={current.mouldNo} */}
+                {/* placeholder="请输入" */}
+                {/* onChange={(v)=>{ */}
+                {/* this.setState({current:{...this.state.current,mouldNo:v}}) */}
+                {/* }} */}
+                {/* onSelect={(v) => { */}
 
-                    // console.log(" select mold ",v)
-                    if (v && v.mainMold)
-                      this.state.cNomainMold = v.mainMold;
-                    this.parseProductNo();
-                  }}
-                />)}
+                {/* if (v && v.mainMold) */}
+                {/* this.state.cNomainMold = v.mainMold; */}
+                {/* this.parseProductNo(); */}
+                {/* }} */}
+                {/* /> */}
+
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -741,7 +756,7 @@ class ProductDetail extends Component {
                     required: (this.state.cNofCodezhName === '耳环' || this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链'),
                     message: '请输入规格',
                   }],
-                  initialValue: current.specification||'0.00',
+                  initialValue: current.specification || '0.00',
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
@@ -1000,11 +1015,11 @@ class ProductDetail extends Component {
           payload: {
             ...params,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
-              visible:false
-            })
-          }
+              visible: false,
+            });
+          },
         });
         // todo
 
@@ -1020,11 +1035,11 @@ class ProductDetail extends Component {
           payload: {
             ...params,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
-              visible:false
-            })
-          }
+              visible: false,
+            });
+          },
         });
       }
 
@@ -1273,7 +1288,7 @@ class ProductDetail extends Component {
           ref="cropper"
           src={uploadFile}
           className={baseStyles.cropper}
-          style={{ height: '400px',width:'400px' }}
+          style={{ height: '400px', width: '400px' }}
           preview=".img-preview"
           cropBoxResizable={false}
           viewMode={0} // 定义cropper的视图模式
@@ -1370,9 +1385,10 @@ class ProductDetail extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '',cNoProductMaterial='', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
-    const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
+    const showMold = cNomainMold;
+    // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
     const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoProductMaterial}${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
