@@ -277,7 +277,7 @@ class ProductDetail extends Component {
                     <Description term="电镀">{showItem.platingColorName}</Description>
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                    <Description term="模具">{showItem.mouldNoName}</Description>
+                    <Description term="模具">{showItem.mouldNo}</Description>
                     <Description term="客户货号">{showItem.custoerProductNo}</Description>
                     <Description term="客户">{showItem.customerNo}</Description>
                     <Description term="供应商货号">{showItem.supplierId}</Description>
@@ -688,29 +688,23 @@ class ProductDetail extends Component {
                   rules: [{ required: true, message: '请输入' }],
                   initialValue: current.mouldNo,
                 })(
-                  <Input
+                  <MoldListSelect
+                    // showSearch
+                    content={current.mouldNo}
+                    placeholder="请输入"
                     onChange={(v) => {
-                      console.log(v);
-                      this.state.cNomainMold = v.target.value;
+                      this.setState({ current: { ...this.state.current, mouldNo: v } });
+                    }}
+                    onSelect={(v) => {
+console.log(v)
+                      // if (v && v.mainMold)
+                      //   this.state.cNomainMold = v.mainMold;
+                        this.state.cNomainMold = v;
                       this.parseProductNo();
                     }}
-                    placeholder="请输入"
-                  />
-                  )}
-                {/* <MoldListSelect */}
-                {/* // showSearch */}
-                {/* content={current.mouldNo} */}
-                {/* placeholder="请输入" */}
-                {/* onChange={(v)=>{ */}
-                {/* this.setState({current:{...this.state.current,mouldNo:v}}) */}
-                {/* }} */}
-                {/* onSelect={(v) => { */}
+                  />,
+                )}
 
-                {/* if (v && v.mainMold) */}
-                {/* this.state.cNomainMold = v.mainMold; */}
-                {/* this.parseProductNo(); */}
-                {/* }} */}
-                {/* /> */}
 
               </FormItem>
             </Col>
