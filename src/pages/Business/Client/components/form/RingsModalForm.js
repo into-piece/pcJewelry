@@ -4,6 +4,7 @@ import clientStyle from '../../Client.less';
 import styles from '../../../../Account/Center/Center.less';
 import HttpFetch from '@/utils/HttpFetch';
 import { getCurrentUser } from '@/utils/authority';
+import { statusConvert } from '@/utils/convert';
 
 
 const ringsStandColumn = [
@@ -13,6 +14,25 @@ const ringsStandColumn = [
     dataIndex: 'zhName',
     key: 'zhName',
   },
+  {
+    title: '英文名称',
+    field: 'enName',
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: '备注',
+    field: 'remarks',
+    dataIndex: 'remarks',
+    key: 'remarks',
+  },
+  {
+    title: '状态',
+    field: 'status',
+    dataIndex: 'status',
+    key: 'status',
+    render:data=>statusConvert[data]
+  }
 ];
 const ringsColumn = [
   {
