@@ -487,6 +487,7 @@ class ClientView extends PureComponent {
       maintainerAddVisible: false,
       contactsAddVisible: false,
       ringsAddVisible: false,
+      modalkey: 'a',
       contactsTableContent: [],
       ringsTableContent:[],
       contactsTableBody: {},
@@ -596,6 +597,7 @@ class ClientView extends PureComponent {
       selectCustomerItem,
       contactsAddVisible,
       ringsAddVisible,
+      modalkey,
       contactsLoading,
       ringsLoading,
       selectedRowKeys,
@@ -828,6 +830,7 @@ class ClientView extends PureComponent {
                       this.setState({
                         contactsCurrent: {},
                         ringsAddVisible: true,
+                        modalkey:`a${Math.random(1)}`
                       })
                     }
                     disabled={!selectCustomerItem || selectCustomerItem === ''}
@@ -1023,7 +1026,7 @@ class ClientView extends PureComponent {
           visible={ringsAddVisible}
           handleCancel={this.handleCancel}
           Submit={this.handleRingsSubmit}
-          key={`table${ringsItem.id}`}
+          key={`table${modalkey}`}
         />
         {/* <Modal maskClosable={false} */}
         {/* width={720} */}
