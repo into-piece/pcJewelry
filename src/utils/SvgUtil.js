@@ -381,7 +381,11 @@ export const accessories =()=>(
 )
 
 export const categorySet =()=>(
-  <svg viewBox="0 0 1365 1024"  version="1.1" x="0px" y="0px" enableBackground="new 0 0 1024 1024"><path d="M604.8 642.3L830 417.1 604.8 192 383.2 417.1l221.6 225.2z m0-348.3L728 417.1 604.8 540.2 481.7 420.6 604.8 294z" fill="#F57052" p-id="2498" /><path d="M235.5 593h211v211h-211V593z" fill="#f4ea2a" p-id="2499" /><path d="M332.9 417.1l138.3-140.5v-0.2H200.3v281.4h270.9v-0.2L332.9 417.1z m271.9 275.4l-98-99.5h-25.1v246.3h281.4V593h-58.8l-99.5 99.5z" fill="#4582F7" p-id="2500" /></svg>
+  <svg viewBox="0 0 1365 1024" version="1.1" x="0px" y="0px" enableBackground="new 0 0 1024 1024"><path d="M604.8 642.3L830 417.1 604.8 192 383.2 417.1l221.6 225.2z m0-348.3L728 417.1 604.8 540.2 481.7 420.6 604.8 294z" fill="#F57052" p-id="2498" /><path d="M235.5 593h211v211h-211V593z" fill="#f4ea2a" p-id="2499" /><path d="M332.9 417.1l138.3-140.5v-0.2H200.3v281.4h270.9v-0.2L332.9 417.1z m271.9 275.4l-98-99.5h-25.1v246.3h281.4V593h-58.8l-99.5 99.5z" fill="#4582F7" p-id="2500" /></svg>
+ )
+
+export const cushionWeightInfo =()=>(
+  <svg viewBox="0 0 1365 1024" version="1.1" x="0px" y="0px" enableBackground="new 0 0 1024 1024"><path d="M838.967614 572.220419v-114.407959h126.943343a457.08996 457.08996 0 0 0-907.785789 0h137.2751v114.407959H58.883793a457.08996 457.08996 0 0 0 906.232414 0zM512 751.40055A239.54505 239.54505 0 1 1 751.40055 512 239.54505 239.54505 0 0 1 512 751.40055z" p-id="2561" /></svg>
  )
 
 export default {
@@ -399,4 +403,5 @@ export default {
   rubberMouldSetting,
   mouldPosition,
   insertStoneTechnology,
+  cushionWeightInfo,
 }
