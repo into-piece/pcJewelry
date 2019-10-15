@@ -26,4 +26,8 @@ export default {
   'app.dev.menuMap.insertStoneTechnology': '镶嵌工艺',
   'app.dev.menuMap.rubberMouldSetting': '胶膜管理',
   'app.dev.menuMap.mouldPosition': '模具仓位',
+
+
+
+  'app.production.menuMap.cushionWeightInfo':'胶膜重量',
 };

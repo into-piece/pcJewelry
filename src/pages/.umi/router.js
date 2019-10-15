@@ -1713,6 +1713,43 @@ const routes = [
             ],
           },
           {
+            path: '/erp/production',
+            icon: 'form',
+            name: 'production',
+            routes: [
+              {
+                path: '/erp/production/basic',
+                name: 'basic',
+                icon: 'bulb',
+                component: __IS_BROWSER
+                  ? _dvaDynamic({
+                      app: require('@tmp/dva').getApp(),
+                      models: () => [
+                        import(/* webpackChunkName: 'p__production__Basic__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/production/Basic/models/model.js').then(
+                          m => {
+                            return { namespace: 'model', ...m.default };
+                          },
+                        ),
+                      ],
+                      component: () =>
+                        import(/* webpackChunkName: "layouts__BasicLayout" */ '../production/Basic'),
+                      LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                        .default,
+                    })
+                  : require('../production/Basic').default,
+                exact: true,
+              },
+              {
+                component: () =>
+                  React.createElement(
+                    require('/Users/frank-zeng/WebstormProjects/jewelry/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                      .default,
+                    { pagesPath: 'src/pages', hasRoutesInConfig: true },
+                  ),
+              },
+            ],
+          },
+          {
             path: '/erp/system',
             icon: 'setting',
             name: 'system',

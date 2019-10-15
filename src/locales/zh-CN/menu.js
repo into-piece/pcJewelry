@@ -31,10 +31,19 @@ export default {
   'menu.erp.dev.FinishedProduct':'成品设定',
 
 
+
+  'menu.erp.production':'生产',
+  'menu.erp.production.basic':'基础资料',
+
+
   'menu.erp.system':'系统',
   'menu.erp.system.department':'部门设置',
   'menu.erp.system.personnel':'员工设置',
   'menu.erp.system.authority':'权限设置',
+
+
+
+
 
 
 

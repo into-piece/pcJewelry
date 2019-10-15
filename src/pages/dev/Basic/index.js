@@ -919,7 +919,6 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 class CenterInfo extends Component {
   handleTableChange = obj => {
     const { dispatch, selectKey } = this.props;
-    debugger
     dispatch({
       type: 'dev/getList',
       payload: { type: selectKey, params: obj },
