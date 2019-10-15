@@ -1125,25 +1125,6 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                 headers={{
                   token: getCurrentUser() ? getCurrentUser().token : '',
                 }}
-                // customRequest={(file) => {
-                //   const formData = new FormData();
-                //   debugger;
-                //   console.log(file);
-                //   formData.append('file', file.file);
-                //   fetch(HttpFetch.productExcelImport, {
-                //     method: 'POST',
-                //     headers: {
-                //       'token': getCurrentUser() ? getCurrentUser().token : '',
-                //     },
-                //     body: formData,
-                //   }).then(response => response.json())
-                //     .then(e => {
-                //       console.log(e);
-                //       if (e.head && e.head.rtnCode === '000000') {
-                //
-                //       }
-                //     });
-                // }}
                 onChange={(info) => {
                   if (info.file.status !== 'uploading') {
                     // console.log(info.file, info.fileList);
