@@ -249,9 +249,16 @@ export const deleteRings = `${priefx}/business/business.customer/ring/delete`
  */
 export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
 
+/**
+ *   产品报价 导入excel
+ * @type {string}
+ */
+export const productExcelImport = `${priefx}/business/product/product-quote-header/excelImport`
+
 
 export default {
   priefx,
+  productExcelImport,
   listRingStandAround,
   listRingAround,
   uploadImg,
