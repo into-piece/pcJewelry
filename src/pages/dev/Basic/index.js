@@ -681,7 +681,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList()
-            this.btnFn('');
+            // this.btnFn('');
           }
         })
       }
@@ -714,7 +714,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList()
-            this.btnFn('');
+            // this.btnFn('');
           }
         })
       }

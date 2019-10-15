@@ -904,11 +904,11 @@ class IndexDetail extends Component {
           payload: {
             ...params,
           },
-          callback:()=>{
-            this.setState({
-              visible:false
-            })
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible:false
+          //   })
+          // }
         });
         // todo
 
@@ -924,11 +924,11 @@ class IndexDetail extends Component {
           payload: {
             ...params,
           },
-          callback:()=>{
-            this.setState({
-              visible:false
-            })
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible:false
+          //   })
+          // }
         });
       }
 

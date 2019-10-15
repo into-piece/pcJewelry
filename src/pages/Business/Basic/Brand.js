@@ -122,11 +122,11 @@ class BrandCompoenet extends Component {
           payload: {
             ...fieldsValue,
           },
-          callback:()=>{
-            this.setState({
-              visible: false,
-            });
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // }
         });
 
         this.setState({
@@ -154,16 +154,16 @@ class BrandCompoenet extends Component {
           payload: {
             ...data,
           },
-          callback:()=>{
-            this.setState({
-              visible: false,
-            });
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // }
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 

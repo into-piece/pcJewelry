@@ -17,7 +17,7 @@ export default {
   'menu.erp.dev': '开发',
   'menu.erp.dev.productflow': '生产流程',
   'menu.erp.dev.flowCostType': '流程工费',
-  'menu.erp.dev.Raw':'类别管理',
+  'menu.erp.dev.Raw':'原料档案',
   'menu.erp.dev.basic': '基础数据',
 
   'menu.erp.dev.eliver': '出货',

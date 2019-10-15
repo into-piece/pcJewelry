@@ -857,7 +857,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ key: selectKey });
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
         this.setState({ filelist: [] });
@@ -900,7 +900,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ key: selectKey });
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
         this.setState({ filelist: [] });

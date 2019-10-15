@@ -128,11 +128,11 @@ class Royalty extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
 
         this.setState({
@@ -161,16 +161,16 @@ class Royalty extends PureComponent {
           payload: {
             ...data,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 

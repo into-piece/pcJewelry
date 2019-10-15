@@ -347,7 +347,7 @@ class Index extends Component {
               this.getListSecond({ type: secondTableActive });
             }
 
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
       }

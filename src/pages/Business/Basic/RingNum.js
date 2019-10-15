@@ -162,11 +162,11 @@ class RingNum extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
 
         this.setState({
@@ -188,17 +188,17 @@ class RingNum extends PureComponent {
           type: 'ringnum/updateRingNum',
           payload: {
             ...data,
-            callback: () => {
-              this.setState({
-                visible: false,
-              });
-            },
+            // callback: () => {
+            //   this.setState({
+            //     visible: false,
+            //   });
+            // },
           },
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 

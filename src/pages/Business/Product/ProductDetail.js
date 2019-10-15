@@ -1009,11 +1009,11 @@ console.log(v)
           payload: {
             ...params,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
         // todo
 
@@ -1029,11 +1029,11 @@ console.log(v)
           payload: {
             ...params,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
       }
 

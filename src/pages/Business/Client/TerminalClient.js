@@ -604,11 +604,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
-          callback:()=>{
-            this.setState({
-              visible: false,
-            });
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // }
         });
       } else {
         params.id = selectedItem.id;
@@ -619,11 +619,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
-          callback:()=>{
-            this.setState({
-              visible: false,
-            });
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // }
         });
       }
     });

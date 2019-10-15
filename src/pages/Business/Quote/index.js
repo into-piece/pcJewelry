@@ -680,7 +680,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
       }
@@ -724,7 +724,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
       }

@@ -279,7 +279,7 @@ class Index extends Component {
             });
             this.getList({ type: rightActive });
 
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
       }

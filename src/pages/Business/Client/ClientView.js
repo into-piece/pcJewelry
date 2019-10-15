@@ -1607,11 +1607,11 @@ class ClientView extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
 
         this.setState({
@@ -1638,11 +1638,11 @@ class ClientView extends PureComponent {
           payload: {
             ...data,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
       }
     });
