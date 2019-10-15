@@ -253,7 +253,7 @@ export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
  *   产品报价 导入excel
  * @type {string}
  */
-export const productExcelImport = `${priefx}/business/product/product-quote-header/excelImport`
+export const productExcelImport = `${priefx}/business/business/product/product-quote-header/excelImport`
 
 
 export default {

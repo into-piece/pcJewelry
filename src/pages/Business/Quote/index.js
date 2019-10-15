@@ -1120,42 +1120,42 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 
               <Upload
                 name='file'
-                // action={HttpFetch.productExcelImport}
+                action={HttpFetch.productExcelImport}
                 showUploadList={false}
-                // headers={{
-                //   token: getCurrentUser() ? getCurrentUser().token : '',
-                // }}
-                customRequest={(file) => {
-                  const formData = new FormData();
-                  debugger;
-                  console.log(file);
-                  formData.append('file', file.file);
-                  fetch(HttpFetch.productExcelImport, {
-                    method: 'POST',
-                    headers: {
-                      'token': getCurrentUser() ? getCurrentUser().token : '',
-                    },
-                    body: formData,
-                  }).then(response => response.json())
-                    .then(e => {
-                      console.log(e);
-                      if (e.head && e.head.rtnCode === '000000') {
-
-                      }
-                    });
+                headers={{
+                  token: getCurrentUser() ? getCurrentUser().token : '',
                 }}
-                // onChange={(info) => {
-                //   if (info.file.status !== 'uploading') {
-                //     // console.log(info.file, info.fileList);
-                //   }
-                //   if (info.file.status === 'done') {
-                //     // 获取初始表单数据
-                //     btnFn("freshList");
-                //     message.success(`file import successfully`);
-                //   } else if (info.file.status === 'error') {
-                //     message.error(`import fail`);
-                //   }
+                // customRequest={(file) => {
+                //   const formData = new FormData();
+                //   debugger;
+                //   console.log(file);
+                //   formData.append('file', file.file);
+                //   fetch(HttpFetch.productExcelImport, {
+                //     method: 'POST',
+                //     headers: {
+                //       'token': getCurrentUser() ? getCurrentUser().token : '',
+                //     },
+                //     body: formData,
+                //   }).then(response => response.json())
+                //     .then(e => {
+                //       console.log(e);
+                //       if (e.head && e.head.rtnCode === '000000') {
+                //
+                //       }
+                //     });
                 // }}
+                onChange={(info) => {
+                  if (info.file.status !== 'uploading') {
+                    // console.log(info.file, info.fileList);
+                  }
+                  if (info.file.status === 'done') {
+                    // 获取初始表单数据
+                    btnFn("freshList");
+                    message.success(`file import successfully`);
+                  } else if (info.file.status === 'error') {
+                    message.error(`import fail`);
+                  }
+                }}
               > <Button type="primary" size="small" className={styles.buttomControl}><Icon type="upload" />导入</Button>
               </Upload>
             </div>}
