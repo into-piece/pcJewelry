@@ -24,15 +24,15 @@ import DescriptionList from '@/components/DescriptionList';
 import styles from './specimen.less';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '../Client/Client.less';
-import BrandListSelect from "../Product/components/BrandListSelect";
-import ProductTypeSelect from "../Product/components/ProductTypeSelect";
-import UnitColorListSelect from "../Product/components/UnitColorListSelect";
-import PlatingColorListSelect from "../Product/components/PlatingColorListSelect";
+import BrandListSelect from '../Product/components/BrandListSelect';
+import ProductTypeSelect from '../Product/components/ProductTypeSelect';
+import UnitColorListSelect from '../Product/components/UnitColorListSelect';
+import PlatingColorListSelect from '../Product/components/PlatingColorListSelect';
 import Dict from '../Client/components/Dict';
-import MoldListSelect from "../Product/components/MoldListSelect";
-import PercentageSelect from "../Product/components/ProcentageSelect";
-import BasicMeasureListSelect from "../Product/components/BasicMeasureListSelect";
-import TerminalListSelected from "../Product/components/TerminalListSelected";
+import MoldListSelect from '../Product/components/MoldListSelect';
+import PercentageSelect from '../Product/components/ProcentageSelect';
+import BasicMeasureListSelect from '../Product/components/BasicMeasureListSelect';
+import TerminalListSelected from '../Product/components/TerminalListSelected';
 import Cropper from 'react-cropper';
 import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
@@ -135,7 +135,7 @@ class SpecimenDetaill extends Component {
 
 
     const isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading ||transferProductLoading|| productDeleteloading || productUnFreezeloading;
+      productUpdateloading || productSaveloading || productFreezeloading || transferProductLoading || productDeleteloading || productUnFreezeloading;
 
     if (isUpdate) {
       this.state.update = true;
@@ -143,26 +143,26 @@ class SpecimenDetaill extends Component {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-
-        this.productRefresh();
-        // this.handleUpdateImage(productParams)
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-        }
-
-        if (refarshList)
-          refarshList();
-
-
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
       }
+
+      this.productRefresh();
+      // this.handleUpdateImage(productParams)
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+      }
+
+      if (refarshList)
+        refarshList();
+
+
+    }
 
 
     const updat = isUpdate || productListloading;
@@ -367,7 +367,7 @@ class SpecimenDetaill extends Component {
                     disabled={!showItem || showItem === '' || !isProductUpdate}
                   >
                       取消审批
-                                                        </Button>
+                  </Button>
                     : <Button
                       className={business.buttomControl}
                       size="small"
@@ -474,7 +474,7 @@ class SpecimenDetaill extends Component {
 
       let fileList = [...info.fileList];
 
-      const {file} = info;
+      const { file } = info;
 
 
       if (file.type) {
@@ -541,22 +541,23 @@ class SpecimenDetaill extends Component {
           onSubmit={this.handleContactsSubmit}
         >
           <Row gutter={4}>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="流水号"
-                className={business.from_content_col}
-                {...this.centerFormLayout}
-              >
-                {getFieldDecorator('productNo', {
-                  rules: [{ required: true, message: '请输入姓名' }],
-                  initialValue: current.productNo,
-                  // })(<text>系统自动生成</text>)}
-                })(<Input
-                  placeholder="自动生成流水号"
-                  readOnly
-                />)}
-              </FormItem>
-            </Col>
+            {/* <Col lg={4} md={4} sm={4} xs={4}> */}
+            {/* <FormItem */}
+            {/* label="流水号" */}
+            {/* className={business.from_content_col} */}
+            {/* {...this.centerFormLayout} */}
+            {/* > */}
+            {/* {getFieldDecorator('productNo', { */}
+            {/* rules: [{ required: true, message: '请输入姓名' }], */}
+            {/* initialValue: current.productNo, */}
+            {/* // })(<text>系统自动生成</text>)} */}
+            {/* })(<Input */}
+            {/* placeholder="自动生成流水号" */}
+            {/* readOnly */}
+            {/* />)} */}
+            {/* </FormItem> */}
+            {/* </Col> */}
+
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="品牌"
@@ -664,6 +665,22 @@ class SpecimenDetaill extends Component {
                 )}
               </FormItem>
             </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+
+              <FormItem
+                label="重量单位"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('unitOfWeight', {
+                  rules: [{ message: '请输入' }],
+                  initialValue: current.unitOfWeight,
+                })(<BasicMeasureListSelect
+                  content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
+                  placeholder="请输入"
+                />)}
+              </FormItem>
+            </Col>
           </Row>
 
           <Row>
@@ -713,11 +730,11 @@ class SpecimenDetaill extends Component {
                   placeholder="请输入"
                   onSelect={(v) => {
 
-                                     // console.log(" select mold ",v)
-                                     if (v && v.mainMold)
-                                       this.state.cNomainMold = v.mainMold;
-                                     this.parseProductNo();
-                                   }}
+                    // console.log(" select mold ",v)
+                    if (v && v.mainMold)
+                      this.state.cNomainMold = v.mainMold;
+                    this.parseProductNo();
+                  }}
                 />)}
               </FormItem>
             </Col>
@@ -781,21 +798,7 @@ class SpecimenDetaill extends Component {
           </Row>
 
           <Row>
-            <Col lg={5} md={5} sm={5} xs={5}>
-              <FormItem
-                label="重量单位"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('unitOfWeight', {
-                  rules: [{ message: '请输入' }],
-                  initialValue: current.unitOfWeight,
-                })(<BasicMeasureListSelect
-                  content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
-                  placeholder="请输入"
-                />)}
-              </FormItem>
-            </Col>
+
             <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
                 label="成品重量"
@@ -1017,11 +1020,11 @@ class SpecimenDetaill extends Component {
           payload: {
             ...params,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
-              visible:false
-            })
-          }
+              visible: false,
+            });
+          },
         });
         // todo
 
@@ -1037,11 +1040,11 @@ class SpecimenDetaill extends Component {
           payload: {
             ...params,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
-              visible:false
-            })
-          }
+              visible: false,
+            });
+          },
         });
       }
 
@@ -1081,7 +1084,7 @@ class SpecimenDetaill extends Component {
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
+        const { head } = d;
 
         if (head.rtnCode !== '000000') {
           message.error(head.rtnMsg);
@@ -1100,7 +1103,7 @@ class SpecimenDetaill extends Component {
 
     const item = this.state.showItem;
 
-    const {isEditItem} = this.state;
+    const { isEditItem } = this.state;
 
     if (!item.id) return;
 
@@ -1125,8 +1128,8 @@ class SpecimenDetaill extends Component {
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
-        const {body} = d;
+        const { head } = d;
+        const { body } = d;
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
@@ -1279,7 +1282,7 @@ class SpecimenDetaill extends Component {
     });
   };
 
-  handleTransferProduct =()=>{
+  handleTransferProduct = () => {
     const { selectProductData = [] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
@@ -1289,7 +1292,7 @@ class SpecimenDetaill extends Component {
       type: 'specimen/transferProduct',
       payload: ids,
     });
-  }
+  };
 
   openCutImageModal = () => {
 
@@ -1333,7 +1336,7 @@ class SpecimenDetaill extends Component {
     })
       .then(response => response.json())
       .then(d => {
-        const {body} = d;
+        const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
             const imageObject = body.records;
@@ -1398,26 +1401,26 @@ class SpecimenDetaill extends Component {
   };
 
   parseProductNo = () => {
-    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
-    const { form: { setFieldsValue } } = this.props;
-    const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
-    // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
-    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
-    const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
-    // 成色+宝石颜色+类别
-    this.setState({
-      productNo,
-      zhName,
-      enName,
-    });
-    setFieldsValue({
-      productNo,
-      zhName,
-      enName,
-    });
+    // const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    // const { form: { setFieldsValue } } = this.props;
+    // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
+    // // console.log(" showMold ",cNomainMold,showMold)
+    // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
+    // const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
+    // const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
+    // // 成色+宝石颜色+类别
+    // this.setState({
+    //   productNo,
+    //   zhName,
+    //   enName,
+    // });
+    // setFieldsValue({
+    //   productNo,
+    //   zhName,
+    //   enName,
+    // });
 
-    // setFieldsValue('productNo', productNo);
+   // // setFieldsValue('productNo', productNo);
 
   };
 

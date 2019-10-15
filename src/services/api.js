@@ -25,7 +25,7 @@ export async function specimenTransferProduct(params) {
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
     },
-    data:params,
+    data: params,
   });
 }
 
@@ -675,8 +675,7 @@ export async function updateTheRingNum(params) {
 }
 
 export async function freezeTheRingNum(params) {
-  return request(`${priefx  }/business/basic/ring-around-the-standard/freeze`, {
-    // return request(priefx+'/business/basic/ring-around-the-standard/freeze', {
+  return request(`${priefx}/business/basic/ring-around-the-standard/approval`, {
     method: 'POST',
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',
@@ -686,8 +685,7 @@ export async function freezeTheRingNum(params) {
 }
 
 export async function unfreezeTheRingNum(params) {
-  return request(`${priefx  }/business/basic/ring-around/cancelApproval`, {
-    // return request(priefx+'/business/basic/ring-around-the-standard/freeze', {
+  return request(`${priefx}/business/basic/ring-around-the-standard/revoke`, {
     method: 'POST',
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',

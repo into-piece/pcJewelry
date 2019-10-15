@@ -61,28 +61,7 @@ const btnGroup = [
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 let typeTable = [
   {
-    title: '类别编码',
-    dataIndex: 'unitCode',
-    key: 'unitCode',
-    render: data => isLockList ? (
-      <LockTag>
-        {data}
-      </LockTag>
-      )
-      : (data),
-  },
-  {
-    title: '中文名',
-    dataIndex: 'zhName',
-    key: 'zhName',
-  },
-  {
-    title: '英文名',
-    dataIndex: 'enName',
-    key: 'enName',
-  },
-  {
-    title: '大类',
+    title: '类别',
     dataIndex: 'bTypeName',
     key: 'bType',
   },
@@ -92,11 +71,11 @@ let typeTable = [
     key: 'sType',
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: data => statusConvert[data],
+    title: '名称',
+    dataIndex: 'zhName',
+    key: 'zhName',
   },
+
 ];
 typeTable = typeTable.map(item => ({ ...item, sorter: true }));
 

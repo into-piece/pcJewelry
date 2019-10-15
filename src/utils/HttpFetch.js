@@ -220,10 +220,12 @@ export const loadRings = `${priefx}/business/business.customer/ring/getRingAroun
 
 
 /**
- *   戒围下拉
+ * 客户资料 圈戒资料新建  戒围下拉
  * @type {string}
  */
-export const listRingAround = `${priefx}/business/basic/ring-around/listRingAround`
+// export const listRingAround = `${priefx}/business/basic/ring-around/listRingAround`
+export const listRingAround = `${priefx}/business/basic/ring-around/dropDownByStandardId`
+export const listRingStandAround = `${priefx}/business/basic/ring-around-the-standard/dropDownRAT`
 
 
 
@@ -247,9 +249,17 @@ export const deleteRings = `${priefx}/business/business.customer/ring/delete`
  */
 export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
 
+/**
+ *   产品报价 导入excel
+ * @type {string}
+ */
+export const productExcelImport = `${priefx}/business/business/product/product-quote-header/excelImport`
+
 
 export default {
   priefx,
+  productExcelImport,
+  listRingStandAround,
   listRingAround,
   uploadImg,
   deleteRings,

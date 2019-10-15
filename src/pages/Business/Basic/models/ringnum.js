@@ -4,6 +4,7 @@ import {
   deleteTheRingNum,
   updateTheRingNum,
   freezeTheRingNum,
+  unfreezeTheRingNum,
   querylistSonRingNum,
   saveTheSonRingNum,
   deleteTheSonRingNum,
@@ -68,7 +69,7 @@ export default {
     },
 
     *unfreezeRingNum({ payload, callback }, { call, put }) {
-      const response = yield call(freezeTheRingNum, payload);
+      const response = yield call(unfreezeTheRingNum, payload);
       yield put({
         type: 'save',
         payload: response,
