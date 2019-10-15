@@ -395,7 +395,6 @@ class Info extends Component {
           });
           if (!isEdit) return;
         }
-        console.log(selectKey, '==============selectKey');
         this.openAddModal();
         this.setState({ modalType });
         break;
@@ -498,7 +497,6 @@ class Info extends Component {
   };
 
   handleDatePicker = (date, dateString) => {
-    console.log(date, dateString);
     const quoteDateFrom = moment(date[0]).valueOf();
     const quoteDateTo = moment(date[1]).valueOf();
     this.setState({
@@ -538,7 +536,7 @@ class Info extends Component {
               this[clickFn](1);
             }}
           > {text}
-          </span>
+                                                                          </span>
           </p>
         );
       case 4:
@@ -552,7 +550,7 @@ class Info extends Component {
             this.handleCheckChange(e, value);
           }}
         >{text}
-        </Checkbox>;
+               </Checkbox>;
       case 6:
         return <Radio.Group>
           {
@@ -560,7 +558,7 @@ class Info extends Component {
               return <Radio value={value} key={value}>{key}</Radio>;
             })
           }
-        </Radio.Group>;
+               </Radio.Group>;
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
@@ -885,7 +883,7 @@ class Info extends Component {
     } = this.props.productChoosenRowData;
     let lastCount = 0;
     let topCount = 0;
-    let listProductLine = '';
+    let productLineCoefficientQuotation = '';
     let packPrice = '';
     let actualCount = '';
     // await getLastQuoteDetailByProductId({ productId: id }).then(res => {
@@ -901,7 +899,7 @@ class Info extends Component {
     // })
     await getlistProductLine({ productId: id }).then(res => {
       if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
-        listProductLine = res.body.records[0].productLineCoefficientQuotation;
+        productLineCoefficientQuotation = res.body.records[0].productLineCoefficientQuotation;
       }
     });
     await geInitializeCountByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {
@@ -945,7 +943,7 @@ class Info extends Component {
       productLineName,
       packPrice,
       actualCount,
-      listProductLine,
+      productLineCoefficientQuotation,
     });
     this.setState({
       productLineId,
@@ -1007,19 +1005,19 @@ class Info extends Component {
           </div>
         </div>
         {handleModalOk &&
-        <Modal
-          maskClosable={false}
-          title={returnTitle()}
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          onOk={handleModalOk}
-          visible={modalType !== ''}
-          onCancel={onCancel}
-        >
-          {getModalContent()}
-        </Modal>
+          <Modal
+            maskClosable={false}
+            title={returnTitle()}
+            width={1000}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            onOk={handleModalOk}
+            visible={modalType !== ''}
+            onCancel={onCancel}
+          >
+            {getModalContent()}
+          </Modal>
         }
 
         <Modal
@@ -1045,6 +1043,7 @@ class Info extends Component {
             onSelectChange={onSelectChange}
             listLoading={productListLoading}
             onSearch={getProduct}
+            changeProductSearch={getProduct}
           />
         </Modal>
       </div>
@@ -1139,7 +1138,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                 }}
               > <Button type="primary" size="small" className={styles.buttomControl}><Icon type="upload" />导入</Button>
               </Upload>
-            </div>}
+             </div>}
 
           </Card>
         </div>
@@ -1303,7 +1302,6 @@ class CenterInfo extends Component {
   render() {
     const { onSelectChange, props, clearFn, getDetailList, changeSearchParams, changeSearchDetailParams } = this;
     const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement, listDetailLoading, onSearch } = props;
-    console.log(quotelist, quoteDatialList, choosenRowData, returnElement, '================quotelist');
     return (
       <div className={styles.view_left_content}>
         <div style={{ marginBottom: 20 }}>
