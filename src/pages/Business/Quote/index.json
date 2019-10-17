@@ -81,7 +81,12 @@
     { "key": "电镀颜色", "value": "platingColorName", "noNeed": true, "type": 7 },
     { "key": "成品重量", "value": "finishedWeight", "number": true },
     { "key": "产品系列", "value": "productLineName", "noNeed": true },
-    { "key": "产品报价系数", "value": "productLineCoefficientQuotation", "type": 7 },
+    {
+      "key": "产品报价系数",
+      "value": "productLineCoefficientQuotation",
+      "type": 7,
+      "noNeed": true
+    },
     { "key": "计量单位", "value": "unitOfMeasurementName", "type": 7, "noNeed": true },
     { "key": "重量单位", "value": "unitOfWeightName", "type": 7, "noNeed": true },
     { "key": "前次工费/克", "value": "lastCount", "number": true, "type": 7, "noNeed": true },
