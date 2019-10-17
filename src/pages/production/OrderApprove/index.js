@@ -12,7 +12,8 @@ import {
   Radio,
   Checkbox,
   DatePicker,
- notification } from 'antd';
+  notification,
+} from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
@@ -24,9 +25,9 @@ import MiddleTable from './components/MiddleTable';
 import modalInput from './config/modalInput';
 import showItem from './config/showItem';
 import styles from './index.less';
-import BuildTitle from '@/components/BuildTitle';
 
-import serviceObj from '@/services/dev';
+import serviceObj from '@/services/production';
+import BuildTitle from '@/components/BuildTitle';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -43,7 +44,7 @@ const btnGroup = [
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-const defaultModelName = 'productflow';
+const defaultModelName = 'productionOrderApprove';
 
 const firstTabFlag = 'productFlow';
 
@@ -51,7 +52,7 @@ const radioArr = [{ key: '生产流程', value: 'productFlow' },
   { key: '员工工序', value: 'productProcess' }];
 
 @Form.create()
-@connect(({  loading, productflow: model }) => {
+@connect(({ loading, productionOrderApprove: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
@@ -82,12 +83,12 @@ class Index extends Component {
     // 类别下拉
     dispatch({
       type: `${defaultModelName}/getwordbookdropdown`,
-      payload: {params: { 'wordbookTypeCode': 'H017' },listName:"listH017"}
+      payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
     });
     // 成品类别下拉
     dispatch({
       type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: {params: {"key":"H016009"},listName:"listH016009"}
+      payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
     });
     // 部门下拉
     dispatch({
@@ -96,7 +97,7 @@ class Index extends Component {
     // 镶石工艺下拉
     dispatch({
       type: `${defaultModelName}/listGemSetProcessDropDown`,
-      payload:{}
+      payload: {},
     });
 
 
@@ -115,12 +116,12 @@ class Index extends Component {
 
 
   // table 搜索
-  onSearch = (params,table) => {
-    if(table===1){
-      this.getList({},params);
+  onSearch = (params, table) => {
+    if (table === 1) {
+      this.getList({}, params);
     }
-    if(table===2){
-      this.getListSecond({},params);
+    if (table === 2) {
+      this.getListSecond({}, params);
     }
   };
 
@@ -130,7 +131,7 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getList`,
-      payload: { type:firstTabFlag,params: { ...pagination, ...searchParams, ...param }, ...args },
+      payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
     });
 
     // 清除第二table内容
@@ -141,19 +142,15 @@ class Index extends Component {
 
   // 第二table获取list
   getListSecond = (args, param) => {
-    const { dispatch, paginationSecond, searchParamsSecond,choosenRowDataSecond} = this.props;
+    const { dispatch, paginationSecond, searchParamsSecond, choosenRowDataSecond } = this.props;
     const { secondTableActive } = this.state;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getListSecond`,
-      payload: { type:secondTableActive,params: { ...paginationSecond, ...searchParamsSecond, ...param }, ...args },
+      payload: { type: secondTableActive, params: { ...paginationSecond, ...searchParamsSecond, ...param }, ...args },
     });
 
   };
-
-
-
-
 
 
   // type 2 下啦选择
@@ -163,7 +160,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form ,number}) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
     switch (type) {
       case 2:
         return (
@@ -171,7 +168,7 @@ class Index extends Component {
             style={{ width: 180 }}
             placeholder="请选择"
             onChange={(v) => {
-              this.handleSelectChange&&this.handleSelectChange(v, value);
+              this.handleSelectChange && this.handleSelectChange(v, value);
             }}
           >
             {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
@@ -221,7 +218,7 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input style={{ width: '100' }} type={number?'number':'text'} placeholder="请输入" />;
+        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -260,11 +257,11 @@ class Index extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const {  selectedRowKeys, selectedRowKeysSecond,dispatch } = this.props
-    const { rightActive ,secondTableActive} = this.state
-    const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
+    const { selectedRowKeys, selectedRowKeysSecond, dispatch } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     serviceObj[`delete${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -273,57 +270,57 @@ class Index extends Component {
           this.getList({ type: rightActive });
           dispatch({
             type: `${defaultModelName}/choosenRowData`,
-            payload:{id:""}
+            payload: { id: '' },
           });
           // 清除第二table内容
           dispatch({
             type: `${defaultModelName}/clearListScond`,
           });
-        }else{
+        } else {
           this.getListSecond({ type: secondTableActive });
           // 清除第二table 选中
           dispatch({
             type: `${defaultModelName}/choosenRowDataSecond`,
-            payload:{id:""}
+            payload: { id: '' },
           });
         }
       }
-    })
-  }
+    });
+  };
 
   // 审批/撤销 按钮回调
   handleLock = () => {
-    const {  selectedRowKeys, selectedRowKeysSecond } = this.props
-    const { rightActive ,secondTableActive} = this.state
-    const data = rightActive === firstTabFlag?selectedRowKeys:selectedRowKeysSecond;
-    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
-        }else{
+        } else {
           this.getListSecond({ type: secondTableActive });
         }
       }
-    })
-  }
+    });
+  };
 
   // 新增||编辑 按钮事件回调
   handleAdd = () => {
-    const {  form, choosenRowData,choosenRowDataSecond } = this.props
-    const { secondTableActive,rightActive,modalType } = this.state
-    let params = {}
+    const { form, choosenRowData, choosenRowDataSecond } = this.props;
+    const { secondTableActive, rightActive, modalType } = this.state;
+    let params = {};
     if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode }
+      params = { flowCode: choosenRowData.flowCode };
     }
-    if(modalType ==="edit"){
-      params ={...params,id:(rightActive !== firstTabFlag?choosenRowDataSecond.id:choosenRowData.id)}
+    if (modalType === 'edit') {
+      params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
 
     form.validateFields((err, values) => {
@@ -331,7 +328,7 @@ class Index extends Component {
         params = {
           ...params,
           ...values,
-        }
+        };
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res.head) {
@@ -344,7 +341,7 @@ class Index extends Component {
             });
             if (rightActive === firstTabFlag) {
               this.getList({ type: rightActive });
-            }else{
+            } else {
               this.getListSecond({ type: secondTableActive });
             }
 
@@ -354,7 +351,7 @@ class Index extends Component {
       }
     });
 
-  }
+  };
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
@@ -446,8 +443,8 @@ class Index extends Component {
   returnLockType = () => {
     const { selectedRowKeys, selectedRowKeysSecond, model, list, listSecond } = this.props;
     const { rightActive } = this.state;
-    const listr = rightActive === firstTabFlag  ? list : listSecond;
-    const selectedKeys =  rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const listr = rightActive === firstTabFlag ? list : listSecond;
+    const selectedKeys = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     if (listr && listr.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = listr.records.find(subItem => subItem.id === cur);
@@ -456,34 +453,34 @@ class Index extends Component {
     }, []);
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 ,isShenPi,isChexiao};
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 ,isShenPi,isChexiao};
-    return { name: '审批', disabled: true, type: 1 ,isShenPi,isChexiao}; // 当两种状态都有 禁止点击
+    if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
+    if (isChexiao) return { name: '撤销', disabled: false, type: 2, isShenPi, isChexiao };
+    return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys, selectedRowKeysSecond,choosenRowData,choosenRowDataSecond } = this.props;
+    const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
     const { rightActive } = this.state;
 
-    if (tag === 'plus') return  (firstTabFlag===rightActive?false:!choosenRowData.id);
-    if (tag === 'lock') return  (firstTabFlag===rightActive&& selectedRowKeys.length === 0) ||  (firstTabFlag!==rightActive&&selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
+    if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
+    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
 
-    if (tag ==='delete'){
-      return (firstTabFlag===rightActive&& selectedRowKeys.length === 0) ||  (firstTabFlag!==rightActive&&selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
+    if (tag === 'delete') {
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
     }
-    if (tag ==='edit'){
-      const d =firstTabFlag===rightActive? choosenRowData:choosenRowDataSecond;
-      return   (firstTabFlag===rightActive&&selectedRowKeys.length === 0 )||(firstTabFlag!==rightActive&&   selectedRowKeysSecond.length === 0)||Number(d.status)===2;
+    if (tag === 'edit') {
+      const d = firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond;
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
     }
 
-    return   (firstTabFlag===rightActive&&selectedRowKeys.length === 0 )||(firstTabFlag!==rightActive&&   selectedRowKeysSecond.length === 0);
+    return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
   };
 
   // 取消弹窗回调
   onCancel = () => {
     this.btnFn('');
-  }
+  };
 
 
   render() {
@@ -566,7 +563,7 @@ class Index extends Component {
                             <Button
                               key={tag}
                               className={styles.buttomControl}
-                              type={tag==='delete'?'danger':"primary"}
+                              type={tag === 'delete' ? 'danger' : 'primary'}
                               icon={tag}
                               size="small"
                               disabled={returnSisabled(tag)}
@@ -590,7 +587,6 @@ class Index extends Component {
         <Modal
           maskClosable={false}
           title={<BuildTitle title={returnTitle()} />}
-
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

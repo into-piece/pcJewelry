@@ -36,6 +36,7 @@ import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import SearchFrom from './components/SearchFrom';
 import SearchFromTab0 from './components/SearchFromTab0';
+import BuildTitle from '@/components/BuildTitle';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -1059,7 +1060,8 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={returnTitle()}
+          title={<BuildTitle title={returnTitle()} />}
+
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

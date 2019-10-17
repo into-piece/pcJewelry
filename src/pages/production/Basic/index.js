@@ -18,6 +18,7 @@ import serviceObj from '@/services/production';
 import { manuArr, modalContent, columnsArr } from './config';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
+import BuildTitle from '@/components/BuildTitle';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -416,7 +417,7 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={returnTitle()}
+          title={<BuildTitle title={returnTitle()} />}
           width={640}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

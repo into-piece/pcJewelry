@@ -34,6 +34,7 @@ export default {
 
   'menu.erp.production':'生产',
   'menu.erp.production.basic':'基础资料',
+  'menu.erp.production.orderApprove':'新订单审批',
 
 
   'menu.erp.system':'系统',

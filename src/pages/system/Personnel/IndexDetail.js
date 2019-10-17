@@ -10,7 +10,7 @@ import {
   Divider, Carousel, Modal, message, Spin,Empty
 } from 'antd';
 import { statusConvert, YoNConvert, genderConvert } from '@/utils/convert';
-
+import BuildTitle from '@/components/BuildTitle';
 import moment from 'moment';
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
@@ -395,6 +395,8 @@ class IndexDetail extends Component {
 
             </div>
             <Modal
+              title={<BuildTitle title={"员工"} />}
+
               maskClosable={false}
               width={1200}
               className={styles.standardListForm}
@@ -436,8 +438,6 @@ class IndexDetail extends Component {
 
     return (
       <div className={clientStyle.list_info}>
-        <span className={business.sun_title_info}>员工</span>
-        <Divider className={business.divder} />
         <Form
           size="small"
           labelAlign="left"

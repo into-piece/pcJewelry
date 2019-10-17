@@ -305,6 +305,12 @@ export default [
                 icon: 'bulb',
                 component: './production/Basic',
               },
+              {
+                path: '/erp/production/orderApprove',
+                name: 'orderApprove',
+                icon: 'bulb',
+                component: './production/OrderApprove',
+              },
             ],
           },
 

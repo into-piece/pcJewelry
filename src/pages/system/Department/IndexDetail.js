@@ -9,7 +9,7 @@ import {
   Divider, Carousel, Modal, message, Spin,
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
-import {statusConvert} from '@/utils/convert';
+import { statusConvert } from '@/utils/convert';
 
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
@@ -21,6 +21,8 @@ import HttpFetch from '@/utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '@/utils/authority';
+
+import BuildTitle from '@/components/BuildTitle';
 
 const { Description } = DescriptionList;
 
@@ -230,7 +232,7 @@ class IndexDetail extends Component {
         <span className={business.title_info} onClick={this.clickToggleDrawer}>
             部门信息
         </span>
-        <Divider className={business.divder} />
+        <Divider className={business.divder}/>
 
         <div className={baseStyles.content}>
           <div className={baseStyles.right_info}>
@@ -251,14 +253,14 @@ class IndexDetail extends Component {
                   <span className={business.title_info}>
                     备注
                   </span>
-                  <Divider className={business.divder} />
+                  <Divider className={business.divder}/>
                   <DescriptionList size="small" col="1">
                     <Description>{showItem.remarks}</Description>
                   </DescriptionList>
                 </Spin>
               </div>
             ) : (
-              <div />
+              <div/>
             )}
           </div>
 
@@ -310,21 +312,21 @@ class IndexDetail extends Component {
                 </Button>
                 {
                   showItem && showItem.status === '2' ? <Button
-                    className={business.buttomControl}
-                    size="small"
-                    type="danger"
-                    icon="unlock"
-                    onClick={() => {
+                      className={business.buttomControl}
+                      size="small"
+                      type="danger"
+                      icon="unlock"
+                      onClick={() => {
                         ModalConfirm({
                           content: '确定取消审批吗？', onOk: () => {
                             this.handleUnFreezeProduct();
                           },
                         });
                       }}
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
-                  >
+                      disabled={!showItem || showItem === '' || !isProductUpdate}
+                    >
                       取消审批
-                  </Button>
+                    </Button>
                     : <Button
                       className={business.buttomControl}
                       size="small"
@@ -348,6 +350,8 @@ class IndexDetail extends Component {
 
             </div>
             <Modal
+              title={<BuildTitle title={'部门信息'}/>}
+
               maskClosable={false}
               width={600}
               className={styles.standardListForm}
@@ -391,8 +395,6 @@ class IndexDetail extends Component {
 
     return (
       <div className={clientStyle.list_info}>
-        <span className={business.sun_title_info}>部门信息</span>
-        <Divider className={business.divder} />
         <Form
           size="small"
           labelAlign="left"
@@ -411,7 +413,7 @@ class IndexDetail extends Component {
                   rules: [{ required: true, message: '请输入部门编号' }],
                   initialValue: current.role,
                 })
-                (<Input />)
+                (<Input/>)
                 }
               </FormItem>
             </Col>
@@ -425,7 +427,7 @@ class IndexDetail extends Component {
                 {getFieldDecorator('shortName', {
                   initialValue: current.shortName,
                   rules: [{ required: true, message: '请输入部门简称' }],
-                })(<Input />)}
+                })(<Input/>)}
               </FormItem>
             </Col>
           </Row>
@@ -440,7 +442,7 @@ class IndexDetail extends Component {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入部门中文名称' }],
                   initialValue: current.zhName,
-                })(<Input />)}
+                })(<Input/>)}
               </FormItem>
             </Col>
 
@@ -453,7 +455,7 @@ class IndexDetail extends Component {
                 {getFieldDecorator('enName', {
                   rules: [{ message: '请输入部门英文名称' }],
                   initialValue: current.enName,
-                })(<Input />)}
+                })(<Input/>)}
               </FormItem>
             </Col>
           </Row>
@@ -467,7 +469,7 @@ class IndexDetail extends Component {
               >
                 {getFieldDecorator('remarks', {
                   initialValue: current.remarks,
-                })(<TextArea placeholder="请输入" />)}
+                })(<TextArea placeholder="请输入"/>)}
               </FormItem>
             </Col>
 

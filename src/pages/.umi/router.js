@@ -1652,9 +1652,9 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(/* webpackChunkName: 'p__dev__Productflow__models__productflow.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/Productflow/models/productflow.js').then(
+                        import(/* webpackChunkName: 'p__dev__Productflow__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/Productflow/models/model.js').then(
                           m => {
-                            return { namespace: 'productflow', ...m.default };
+                            return { namespace: 'model', ...m.default };
                           },
                         ),
                       ],
@@ -1737,6 +1737,28 @@ const routes = [
                         .default,
                     })
                   : require('../production/Basic').default,
+                exact: true,
+              },
+              {
+                path: '/erp/production/orderApprove',
+                name: 'orderApprove',
+                icon: 'bulb',
+                component: __IS_BROWSER
+                  ? _dvaDynamic({
+                      app: require('@tmp/dva').getApp(),
+                      models: () => [
+                        import(/* webpackChunkName: 'p__production__OrderApprove__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/production/OrderApprove/models/model.js').then(
+                          m => {
+                            return { namespace: 'model', ...m.default };
+                          },
+                        ),
+                      ],
+                      component: () =>
+                        import(/* webpackChunkName: "layouts__BasicLayout" */ '../production/OrderApprove'),
+                      LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
+                        .default,
+                    })
+                  : require('../production/OrderApprove').default,
                 exact: true,
               },
               {

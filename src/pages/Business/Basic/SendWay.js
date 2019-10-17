@@ -6,7 +6,6 @@ import {
   Col,
   Icon,
   Form,
-  Select,
   Modal,
   Input,
   Button,
@@ -21,6 +20,7 @@ import { sendWay } from '@/utils/SvgUtil';
 import DescriptionList from '@/components/DescriptionList';
 import ModalConfirm from '@/utils/modal';
 import { statusConvert } from '@/utils/convert';
+import BuildTitle from '@/components/BuildTitle';
 
 const FormItem = Form.Item;
 const clientContentColumns = [
@@ -325,7 +325,7 @@ class SendWay extends PureComponent {
                 />
                 <Modal
                   maskClosable={false}
-                  title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
+                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
