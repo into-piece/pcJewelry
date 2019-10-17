@@ -35,21 +35,26 @@ const FormItem = Form.Item;
 const { Option } = Select;
 // 右手边按钮集合
 const btnGroup = [
-  { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
-  { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
-  // { name: '复制', tag: 'copy' },
 ];
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
 const defaultModelName = 'productionOrderApprove';
 
-const firstTabFlag = 'productFlow';
+const firstTabFlag = 'orderApproveInfo';
 
-const radioArr = [{ key: '生产流程', value: 'productFlow' },
-  { key: '员工工序', value: 'productProcess' }];
+const radioArr01 = [
+  { key: '当前审批', value: '0' },
+  { key: '历史审批', value: '2' }];
+
+const radioArr02 = [
+  { key: '产品信息', value: 'orderApproveProduct' },
+  { key: '审批结果', value: 'orderApproveResult' }];
+const radioArr = [
+  { key: '审批信息', value: 'orderApproveInfo' },
+  { key: '产品信息', value: 'orderApproveProduct' },
+  { key: '审批结果', value: 'orderApproveResult' }];
 
 @Form.create()
 @connect(({ loading, productionOrderApprove: model }) => {
@@ -73,7 +78,7 @@ class Index extends Component {
   state = {
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'productProcess',
+    secondTableActive: 'orderApproveProduct',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
   };
@@ -102,16 +107,32 @@ class Index extends Component {
 
 
     // 获取初始表单数据
-    this.getList();
+    this.getList({}, { status: '0' });
   }
 
   // 右边顶部tab切换
-  changeRightActive = (v) => {
+  changeRightActive = (v,clear) => {
     const { secondTableActive } = this.state;
     this.setState({
       rightActive: v.target.value,
       secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
     });
+
+    if (clear) {
+      const {  dispatch, paginationSecond, choosenRowData } = this.props;
+      // 清除第二右边详细
+      dispatch({
+        type: `${defaultModelName}/clearSecondDetail`,
+      });
+      // 搜索
+      dispatch({
+        type: `${defaultModelName}/getListSecond`,
+        payload: {
+          type: v.target.value,
+          params: { ...paginationSecond, approveNo: choosenRowData.approveNo },
+        },
+      });
+    }
   };
 
 
@@ -134,20 +155,24 @@ class Index extends Component {
       payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
     });
 
-    // 清除第二table内容
+    // 清除第二table内容 右边详细
     dispatch({
-      type: `${defaultModelName}/clearListScond`,
+      type: `${defaultModelName}/clearListSecond`,
     });
   };
 
   // 第二table获取list
   getListSecond = (args, param) => {
-    const { dispatch, paginationSecond, searchParamsSecond, choosenRowDataSecond } = this.props;
+    const { dispatch, paginationSecond, searchParamsSecond, choosenRowData } = this.props;
     const { secondTableActive } = this.state;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getListSecond`,
-      payload: { type: secondTableActive, params: { ...paginationSecond, ...searchParamsSecond, ...param }, ...args },
+      payload: {
+        type: secondTableActive,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, approveNo: choosenRowData.approveNo },
+        ...args,
+      },
     });
 
   };
@@ -229,11 +254,8 @@ class Index extends Component {
     const { modalType } = this.state;
     let text = '';
     switch (modalType) {
-      case 'plus':
-        text = '新增';
-        break;
-      case 'edit':
-        text = '编辑';
+      case 'lock':
+        text = '审批';
         break;
       default:
         break;
@@ -245,9 +267,12 @@ class Index extends Component {
   handleModalOk = () => {
     const { modalType } = this.state;
     switch (modalType) {
-      case 'plus':
-      case 'edit':
-        this.handleAdd();
+      case 'lock':
+        // ModalConfirm({
+        //   content: '确定审批吗？', onOk: () => {
+        this.handleLock();
+        //   },
+        // });
         break;
       default:
         break;
@@ -255,40 +280,8 @@ class Index extends Component {
 
   };
 
-  // 删除按钮回调
-  handleDelect = () => {
-    const { selectedRowKeys, selectedRowKeysSecond, dispatch } = this.props;
-    const { rightActive, secondTableActive } = this.state;
-    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-    serviceObj[`delete${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head;
-      if (rtnCode === '000000') {
-        notification.success({
-          message: rtnMsg,
-        });
-        if (rightActive === firstTabFlag) {
-          this.getList({ type: rightActive });
-          dispatch({
-            type: `${defaultModelName}/choosenRowData`,
-            payload: { id: '' },
-          });
-          // 清除第二table内容
-          dispatch({
-            type: `${defaultModelName}/clearListScond`,
-          });
-        } else {
-          this.getListSecond({ type: secondTableActive });
-          // 清除第二table 选中
-          dispatch({
-            type: `${defaultModelName}/choosenRowDataSecond`,
-            payload: { id: '' },
-          });
-        }
-      }
-    });
-  };
 
-  // 审批/撤销 按钮回调
+  // 审批 按钮回调
   handleLock = () => {
     const { selectedRowKeys, selectedRowKeysSecond } = this.props;
     const { rightActive, secondTableActive } = this.state;
@@ -311,49 +304,8 @@ class Index extends Component {
     });
   };
 
-  // 新增||编辑 按钮事件回调
-  handleAdd = () => {
-    const { form, choosenRowData, choosenRowDataSecond } = this.props;
-    const { secondTableActive, rightActive, modalType } = this.state;
-    let params = {};
-    if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode };
-    }
-    if (modalType === 'edit') {
-      params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
-    }
 
-    form.validateFields((err, values) => {
-      if (!err) {
-        params = {
-          ...params,
-          ...values,
-        };
-
-        serviceObj[`add${rightActive}`](params).then(res => {
-          if (!res.head) {
-            return;
-          }
-          const { rtnCode, rtnMsg } = res.head;
-          if (rtnCode === '000000') {
-            notification.success({
-              message: rtnMsg,
-            });
-            if (rightActive === firstTabFlag) {
-              this.getList({ type: rightActive });
-            } else {
-              this.getListSecond({ type: secondTableActive });
-            }
-
-            // this.btnFn('');
-          }
-        });
-      }
-    });
-
-  };
-
-  // 获取新增/编辑弹窗内容
+  // 获取审批弹窗内容
   getModalContent = () => {
     const {
       choosenRowData,
@@ -411,71 +363,17 @@ class Index extends Component {
   // 列表对应操作button回调
   btnFn = async (modalType) => {
     switch (modalType) {
-      case 'plus':
-      case 'edit':
-      default:
-        this.setState({ modalType });
-        break;
-      case 'delete':
-        ModalConfirm({
-          content: '确定删除吗？', onOk: () => {
-            this.handleDelect();
-          },
-        });
-        break;
       case 'lock':
-        ModalConfirm({
-          content: '确定审批吗？', onOk: () => {
-            this.handleLock();
-          },
-        });
+        this.setState({ modalType });
+        // ModalConfirm({
+        //   content: '确定审批吗？', onOk: () => {
+        //     this.handleLock();
+        //   },
+        // });
         break;
     }
   };
 
-  /**
-   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
-   * return obj
-   * params: name 名称
-   * params: disabled 是否可点击
-   * params: type 1为审批 2为撤销
-   */
-  returnLockType = () => {
-    const { selectedRowKeys, selectedRowKeysSecond, model, list, listSecond } = this.props;
-    const { rightActive } = this.state;
-    const listr = rightActive === firstTabFlag ? list : listSecond;
-    const selectedKeys = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-    if (listr && listr.records.length === 0) return { name: '审批', disabled: true, type: 1 };
-    const isLock1 = selectedKeys.reduce((res, cur) => {
-      const singleObjcect = listr.records.find(subItem => subItem.id === cur);
-      if (singleObjcect) res.push(singleObjcect.status);
-      return res;
-    }, []);
-    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
-    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2, isShenPi, isChexiao };
-    return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
-  };
-
-  // 判断按钮是否禁止 返回boolean
-  returnSisabled = (tag) => {
-    const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
-    const { rightActive } = this.state;
-
-    if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
-    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
-
-    if (tag === 'delete') {
-      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
-    }
-    if (tag === 'edit') {
-      const d = firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond;
-      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
-    }
-
-    return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
-  };
 
   // 取消弹窗回调
   onCancel = () => {
@@ -488,9 +386,6 @@ class Index extends Component {
       state,
       props,
       btnFn,
-      returnSisabled,
-      returnLockType,
-      returnListName,
       changeRightActive,
       getModalContent,
       handleModalOk,
@@ -515,10 +410,17 @@ class Index extends Component {
                   {/* 中间table组件 */}
                   <Col lg={16} md={24}>
                     <MiddleTable
+                      wrappedComponentRef={ref => {
+                        this.middleTab = ref;
+                      }}
+
                       firstType={firstTabFlag}
                       secondType={secondTableActive}
                       returnElement={returnElement}
                       onSearch={onSearch}
+                      changeRightActive={changeRightActive}
+                      radioArr01={radioArr01}
+                      radioArr02={radioArr02}
                     />
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}
@@ -528,7 +430,7 @@ class Index extends Component {
                         <Radio.Group
                           size="small"
                           className={styles.right_content_tabgroud}
-                          onChange={changeRightActive}
+                          onChange={v=>{changeRightActive(v,true)}}
                           buttonStyle="solid"
                           value={rightActive}
                           style={{ textAlign: 'center' }}
@@ -538,10 +440,10 @@ class Index extends Component {
                               <Radio.Button
                                 key={item.value}
                                 style={{
-                                  height: 40,
-                                  width: 130,
+                                  height: 30,
+                                  width: 80,
                                   textalign: 'center',
-                                  lineHeight: '40px',
+                                  lineHeight: '30px',
                                 }}
                                 value={item.value}
                               >{item.key}
@@ -563,15 +465,15 @@ class Index extends Component {
                             <Button
                               key={tag}
                               className={styles.buttomControl}
-                              type={tag === 'delete' ? 'danger' : 'primary'}
+                              type="primary"
                               icon={tag}
                               size="small"
-                              disabled={returnSisabled(tag)}
+                              disabled={secondTableActive !== 'orderApproveProduct'}
                               onClick={() => {
                                 btnFn(tag);
                               }}
                             >
-                              {tag === 'lock' ? returnLockType().name : name}
+                              审批
                             </Button>
                           ))}
                         </div>

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Form, Divider } from 'antd';
+import { Form, Divider, Radio } from 'antd';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
 import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
 
-const defaultModelName = 'productflow';
+const defaultModelName = 'productionOrderApprove';
 
 
 @Form.create()
-@connect(({ loading, productflow: model }) => {
+@connect(({ loading, productionOrderApprove: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
@@ -29,6 +29,13 @@ const defaultModelName = 'productflow';
   };
 })
 class MiddleTable extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstRadioValue: '0',
+    };
+  }
 
 
   // 选中某行   type  1 主table
@@ -84,16 +91,50 @@ class MiddleTable extends Component {
     });
   };
 
-  changeSearchDetailParams = (v) => {
+  changeSearchDetailParams = (v, callback) => {
     const { dispatch } = this.props;
     dispatch({
       type: `${defaultModelName}/changeSearchParamsSecond`,
       payload: v,
+      callback,
     });
   };
 
+  // 首table切换tab 条件搜索
+  changeFirstTabActive = (v) => {
+    const { onSearch } = this.props;
+    const { firstRadioValue } = this.state;
+
+    this.setState({ firstRadioValue: v.target.value }, () => {
+      onSearch && onSearch({ status: v.target.value }, 1);
+    });
+  };
+
+
+  // 第二table 切换tab
+  changeTabActive = (v, clear) => {
+    const { changeRightActive, dispatch, paginationSecond, choosenRowData } = this.props;
+
+    // 右边tab也变
+    if (changeRightActive) changeRightActive(v, false);
+
+
+    // 清空搜索条件
+    this.changeSearchDetailParams({});
+
+    // 搜索
+    dispatch({
+      type: `${defaultModelName}/getListSecond`,
+      payload: {
+        type: v.target.value,
+        params: { ...paginationSecond, approveNo: choosenRowData.approveNo },
+      },
+    });
+
+  };
+
   render() {
-    const { onSelectChange, props, changeSearchParams, changeSearchDetailParams,clearFn } = this;
+    const { changeFirstTabActive, changeTabActive, onSelectChange, props, changeSearchParams, changeSearchDetailParams, clearFn } = this;
     const {
       firstType,
       secondType,
@@ -112,18 +153,43 @@ class MiddleTable extends Component {
       selectedRowKeysSecond,
 
       model,
-
+      radioArr01,
+      radioArr02,
       listLoading,
       listLoadingSecond,
     } = props;
+    const { firstRadioValue } = this.state;
     return (
       <div className={styles.view_left_content}>
-
+        {radioArr01 && <Radio.Group
+          size="small"
+          className={styles.right_content_tabgroud}
+          onChange={changeFirstTabActive}
+          buttonStyle="solid"
+          value={firstRadioValue}
+          style={{ paddingBottom: '20px' }}
+        >
+          {
+            radioArr01.map((item, index) =>
+              <Radio.Button
+                key={item.value}
+                style={{
+                  height: 30,
+                  width: 80,
+                  textAlign: 'center',
+                  lineHeight: '30px',
+                }}
+                value={item.value}
+              >{item.key}
+              </Radio.Button>)
+          }
+        </Radio.Group>}
         <SearchForm
+          key={firstType}
           data={searchParamsArrConfig[firstType]}
           source={model}
           onSearch={(p) => {
-            onSearch(p, 1);
+            onSearch({ ...p, status: firstRadioValue }, 1);
           }}
           returnElement={returnElement}
           onchange={changeSearchParams}
@@ -135,7 +201,7 @@ class MiddleTable extends Component {
             pagination={pagination}
             selectKey={choosenRowData.id}
             handleTableChange={(p) => {
-              onSearch(p, 1);
+              onSearch({ ...p, status: firstRadioValue }, 1);
             }}
             body={list}
             selectedRowKeys={selectedRowKeys}
@@ -152,7 +218,32 @@ class MiddleTable extends Component {
           />
         </div>
         <Divider />
+        {
+          radioArr02 && <Radio.Group
+            size="small"
+            className={styles.right_content_tabgroud}
+            onChange={changeTabActive}
+            buttonStyle="solid"
+            value={secondType}
+            style={{ paddingBottom: '20px' }}
+          >
+            {
+              radioArr02.map((item, index) =>
+                <Radio.Button
+                  key={item.value}
+                  style={{
+                    height: 30,
+                    width: 80,
+                    textAlign: 'center',
+                    lineHeight: '30px',
+                  }}
+                  value={item.value}
+                >{item.key}
+                </Radio.Button>)
+            }
+          </Radio.Group>}
         <SearchForm
+          key={secondType}
           wrappedComponentRef={ref => {
             this.searchSecond = ref;
           }}

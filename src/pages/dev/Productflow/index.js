@@ -141,12 +141,12 @@ class Index extends Component {
 
   // 第二table获取list
   getListSecond = (args, param) => {
-    const { dispatch, paginationSecond, searchParamsSecond,choosenRowDataSecond} = this.props;
+    const { dispatch, paginationSecond, searchParamsSecond,choosenRowData} = this.props;
     const { secondTableActive } = this.state;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getListSecond`,
-      payload: { type:secondTableActive,params: { ...paginationSecond, ...searchParamsSecond, ...param }, ...args },
+      payload: { type:secondTableActive,params: { ...paginationSecond, ...searchParamsSecond, ...param,flowCode: choosenRowData.flowCode }, ...args },
     });
 
   };

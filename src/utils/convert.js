@@ -10,6 +10,10 @@ export const YoNConvert = {
   0:'否',
   1:'是',
 };
+export const HasConvert = {
+  0:'无',
+  1:'有',
+};
 export const genderConvert = {
   0:'女',
   1:'男',

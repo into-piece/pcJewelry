@@ -7,10 +7,10 @@
  */
 import request from '@/utils/request';
 import devBasicUrls from './production/BasicUrls';
+import productionApproveUrls from './production/productionApproveUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
-const prefix = `${env}/business/production/basic`;
 
 const rType = {
   1: 'list',
@@ -26,6 +26,19 @@ const resultBasic = devBasicUrls.map(({ name, arr, path }) => (
     {
       key: rType[index + 1] + name,
       path: `/${path}/${item}`,
+      prefix1 : `${env}/business/production/basic`
+    }
+  ))
+));
+
+// 新订单审核
+const resultOrderApprove = productionApproveUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: rType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix1 : `${env}/business/production/order/approve`
+
     }
   ))
 ));
@@ -35,6 +48,7 @@ const resultBasic = devBasicUrls.map(({ name, arr, path }) => (
 
 const resultArr = [
   ...resultBasic.flat(),
+  ...resultOrderApprove.flat(),
 
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
 ];

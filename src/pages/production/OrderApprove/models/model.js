@@ -108,6 +108,17 @@ export default {
       });
     },
 
+    * clearSecondDetail(_, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'selectedRowKeysSecond' },
+      });
+    },
+
     * changeSearchParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchParams2',
@@ -115,11 +126,12 @@ export default {
       });
     },
 
-    * changeSearchParamsSecond({ payload }, { put }) {
+    * changeSearchParamsSecond({ payload ,callback}, { put }) {
       yield put({
         type: 'changeSearchParamsSecond2',
         payload,
       });
+      if(callback)callback();
     },
 
     * setChoosenRowData({ payload }, { put }) {
