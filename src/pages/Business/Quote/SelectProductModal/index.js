@@ -62,13 +62,14 @@ const columns = [
     )
   },
 ]
-export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch }) => (
+export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeProductSearch }) => (
   <div className={styles.productModal}>
     <SearchForm
       onSearch={onSearch}
       data={productSearchParams}
       returnElement={returnElement}
       source={source}
+      onchange={changeProductSearch}
     />
     <Table
       columns={columns}

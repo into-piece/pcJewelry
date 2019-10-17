@@ -20,6 +20,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
+import BuildTitle from '@/components/BuildTitle';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -279,7 +280,7 @@ class Index extends Component {
             });
             this.getList({ type: rightActive });
 
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
       }
@@ -502,7 +503,7 @@ class Index extends Component {
         {handleModalOk &&
         <Modal
           maskClosable={false}
-          title={returnTitle()}
+          title={<BuildTitle title={returnTitle()} />}
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

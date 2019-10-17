@@ -9,7 +9,7 @@ import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import {statusConvert} from '@/utils/convert';
-import ModalConfirm from '@/utils/modal';
+import BuildTitle from '@/components/BuildTitle';
 
 const FormItem = Form.Item;
 
@@ -121,11 +121,11 @@ class Currency extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
 
         this.setState({
@@ -154,16 +154,16 @@ class Currency extends PureComponent {
           payload: {
             ...data,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 
@@ -356,7 +356,8 @@ class Currency extends PureComponent {
                 />
                 <Modal
                   maskClosable={false}
-                  title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
+                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
+
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}

@@ -18,6 +18,7 @@ import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag'
 import jsonData from './index.json'
 // import Bread from '@/components/BreadCrumb'
+import BuildTitle from '@/components/BuildTitle';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -617,7 +618,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList()
-            this.btnFn('');
+            // this.btnFn('');
           }
         })
       }
@@ -650,7 +651,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList()
-            this.btnFn('');
+            // this.btnFn('');
           }
         })
       }
@@ -768,8 +769,9 @@ class Info extends Component {
             </div>
           </div>
         </div>
-        <Modal maskClosable={false}
-          title={returnTitle()}
+        <Modal
+          maskClosable={false}
+          title={<BuildTitle title={returnTitle()} />}
           width={640}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

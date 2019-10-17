@@ -106,7 +106,7 @@ class History extends PureComponent {
     ];
 
     const amount = 3;
-    let tempHistory = historyData.concat({
+    const tempHistory = historyData.concat({
       code: '总计',
       amount,
     });
@@ -114,34 +114,34 @@ class History extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
-          {/*<Form layout="inline">*/}
-            {/*<FormItem label="订单号码">{<Input placeholder="请输入" />}</FormItem>*/}
-            {/*<Button type="primary" htmlType="submit">*/}
-              {/*查询*/}
-            {/*</Button>*/}
-          {/*</Form>*/}
-          {/*<Table*/}
-            {/*// style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}}*/}
-            {/*style={{ marginBottom: 5 }}*/}
-            {/*pagination={false}*/}
-            {/*loading={false}*/}
-            {/*dataSource={tempHistory}*/}
-            {/*rowClassName={this.onSelectRowClass}*/}
-            {/*onRow={(record, index) => {*/}
-              {/*return {*/}
-                {/*onClick: event => {*/}
-                  {/*this.setState({*/}
-                    {/*selectIndexAt: index,*/}
-                  {/*});*/}
-                {/*},*/}
-                {/*onMouseEnter: event => {*/}
-                  {/*// console.log('mouse '+index);*/}
-                {/*},*/}
-              {/*};*/}
-            {/*}}*/}
-            {/*columns={historyColumn}*/}
-            {/*rowKey="id"*/}
-          {/*/>*/}
+          {/* <Form layout="inline"> */}
+          {/* <FormItem label="订单号码">{<Input placeholder="请输入" />}</FormItem> */}
+          {/* <Button type="primary" htmlType="submit"> */}
+          {/* 查询 */}
+          {/* </Button> */}
+          {/* </Form> */}
+          {/* <Table */}
+          {/* // style={{ marginBottom: 5 ,paddingLeft:3,paddingRight:3}} */}
+          {/* style={{ marginBottom: 5 }} */}
+          {/* pagination={false} */}
+          {/* loading={false} */}
+          {/* dataSource={tempHistory} */}
+          {/* rowClassName={this.onSelectRowClass} */}
+          {/* onRow={(record, index) => { */}
+          {/* return { */}
+          {/* onClick: event => { */}
+          {/* this.setState({ */}
+          {/* selectIndexAt: index, */}
+          {/* }); */}
+          {/* }, */}
+          {/* onMouseEnter: event => { */}
+          {/* // console.log('mouse '+index); */}
+          {/* }, */}
+          {/* }; */}
+          {/* }} */}
+          {/* columns={historyColumn} */}
+          {/* rowKey="id" */}
+          {/* /> */}
         </div>
         <Card
           bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
@@ -160,7 +160,7 @@ class History extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="primary"
                 icon="plus"
-                size={'small'}
+                size="small"
               >
                 新增
               </Button>
@@ -168,21 +168,21 @@ class History extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="danger"
                 icon="delete"
-                size={'small'}
+                size="small"
               >
                 删除
               </Button>
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="edit"
               >
                 编辑
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="lock"
               >
@@ -201,14 +201,14 @@ class History extends PureComponent {
               <Button
                 className={clientStyle.buttomControl}
                 type="primary"
-                size={'small'}
+                size="small"
                 icon="copy"
               >
                 复制
               </Button>
               <Button
                 className={clientStyle.buttomControl}
-                size={'small'}
+                size="small"
                 type="primary"
                 icon="rollback"
               >
@@ -222,7 +222,7 @@ class History extends PureComponent {
   }
 
   onSelectRowClass = (record, index) => {
-    console.log(' inx ' + index);
+    console.log(` inx ${  index}`);
     return index == this.state.selectIndexAt ? styles.row_select : styles.row_noselect;
     // return (index==this.state.selectIndexAt||index==this.state.mouseIndexAt)?styles.row_select:""
   };

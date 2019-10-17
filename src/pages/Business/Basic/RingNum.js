@@ -6,7 +6,6 @@ import {
   Col,
   Icon,
   Form,
-  Select,
   Modal,
   Input,
   Button,
@@ -19,14 +18,12 @@ import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { ring } from '@/utils/SvgUtil';
-import formstyles from './BasicForm.less';
-import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import clientStyle from '../Client/Client.less';
 import ModalConfirm from '@/utils/modal';
 import { statusConvert } from '@/utils/convert';
+import BuildTitle from '@/components/BuildTitle';
 
-const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -162,11 +159,11 @@ class RingNum extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
 
         this.setState({
@@ -188,17 +185,17 @@ class RingNum extends PureComponent {
           type: 'ringnum/updateRingNum',
           payload: {
             ...data,
-            callback: () => {
-              this.setState({
-                visible: false,
-              });
-            },
+            // callback: () => {
+            //   this.setState({
+            //     visible: false,
+            //   });
+            // },
           },
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 
@@ -588,7 +585,7 @@ class RingNum extends PureComponent {
 
                 <Modal
                   maskClosable={false}
-                  // title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
+                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}

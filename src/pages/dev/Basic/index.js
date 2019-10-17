@@ -19,6 +19,7 @@ import LockTag from '@/components/LockTag'
 import { manuArr, modalContent } from './config.json'
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
+import BuildTitle from '@/components/BuildTitle';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -681,7 +682,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList()
-            this.btnFn('');
+            // this.btnFn('');
           }
         })
       }
@@ -714,7 +715,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList()
-            this.btnFn('');
+            // this.btnFn('');
           }
         })
       }
@@ -834,7 +835,7 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={returnTitle()}
+          title={<BuildTitle title={returnTitle()} />}
           width={640}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
@@ -919,7 +920,6 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 class CenterInfo extends Component {
   handleTableChange = obj => {
     const { dispatch, selectKey } = this.props;
-    debugger
     dispatch({
       type: 'dev/getList',
       payload: { type: selectKey, params: obj },

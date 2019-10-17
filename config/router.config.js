@@ -79,7 +79,7 @@ export default [
         path:'/erp',
         component: '../layouts/BasicLayout',
         routes:[
-          // bussiness route
+          // 业务 bussiness route
           {
             path: '/erp/business',
             icon: 'code',
@@ -243,7 +243,7 @@ export default [
           },
 
 
-          // dev route
+          // 开发 dev route
           {
             path: '/erp/dev',
             icon: 'form',
@@ -293,7 +293,30 @@ export default [
             ],
           },
 
+             // 生产 production route
+          {
+            path: '/erp/production',
+            icon: 'form',
+            name: 'production',
+            routes: [
+              {
+                path: '/erp/production/basic',
+                name: 'basic',
+                icon: 'bulb',
+                component: './production/Basic',
+              },
+              {
+                path: '/erp/production/orderApprove',
+                name: 'orderApprove',
+                icon: 'bulb',
+                component: './production/OrderApprove',
+              },
+            ],
+          },
 
+
+
+          //系统
           {
             path: '/erp/system',
             icon: 'setting',

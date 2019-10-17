@@ -510,11 +510,11 @@ class Mark extends PureComponent {
         payload: {
           ...params,
         },
-        callback:()=>{
-          this.setState({
-            visible: false,
-          });
-        }
+        // callback:()=>{
+        //   this.setState({
+        //     visible: false,
+        //   });
+        // }
       });
     });
   };

@@ -6,12 +6,10 @@ import {
   Col,
   Icon,
   Form,
-  Select,
   Modal,
   Input,
   Button,
   Divider,
-  List,
   message,
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
@@ -20,11 +18,10 @@ import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './brand.less';
 import { brand as Brand } from '@/utils/SvgUtil';
-import formstyles from './BasicForm.less';
-import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
-import {statusConvert} from '@/utils/convert';
+import { statusConvert } from '@/utils/convert';
+import BuildTitle from '@/components/BuildTitle';
 
 const FormItem = Form.Item;
 
@@ -122,11 +119,11 @@ class BrandCompoenet extends Component {
           payload: {
             ...fieldsValue,
           },
-          callback:()=>{
-            this.setState({
-              visible: false,
-            });
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // }
         });
 
         this.setState({
@@ -154,24 +151,24 @@ class BrandCompoenet extends Component {
           payload: {
             ...data,
           },
-          callback:()=>{
-            this.setState({
-              visible: false,
-            });
-          }
+          // callback:()=>{
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // }
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 
   handleDone = () => {
-    const { dispatch,body } = this.props;
+    const { dispatch, body } = this.props;
     dispatch({
       type: 'basic/fetchListBrands',
-      payload:{ current:body.current, size: body.size }
+      payload: { current: body.current, size: body.size },
     });
 
     this.setState({
@@ -190,7 +187,7 @@ class BrandCompoenet extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/fetchListBrands',
-      payload:{ current:1, size: 10 }
+      payload: { current: 1, size: 10 },
     });
   }
 
@@ -426,7 +423,7 @@ class BrandCompoenet extends Component {
       if (body && body.data && body.data.length > 0) {
         const newdata = body.data.map(value => {
           const s = value.status;
-           value.status =statusConvert[s];
+          value.status = statusConvert[s];
           return value;
         });
 
@@ -484,11 +481,11 @@ class BrandCompoenet extends Component {
               rules: [{ required: true, message: '请输入品牌编码' }],
               initialValue: current.brandEnName,
             })(<Input placeholder="请输入" />)}
-          </FormItem>  <FormItem label="英文名称" {...this.formLayout}>
+          </FormItem> <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('brandEnName', {
-              rules: [{ required: true, message: '请输入品牌编号' }],
-              initialValue: current.brandEnName,
-            })(<Input placeholder="请输入" />)}
+            rules: [{ required: true, message: '请输入品牌编号' }],
+            initialValue: current.brandEnName,
+          })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('brandZhName', {
@@ -513,10 +510,10 @@ class BrandCompoenet extends Component {
 
 
     const onChange = (pagination, filters, sorter) => {
-      const { current:currentIndex, pageSize } = pagination;
+      const { current: currentIndex, pageSize } = pagination;
       dispatch({
         type: 'basic/fetchListBrands',
-        payload:{ current:currentIndex, size: pageSize }
+        payload: { current: currentIndex, size: pageSize },
       });
 
     };
@@ -524,7 +521,7 @@ class BrandCompoenet extends Component {
     const paginationProps = {
       showQuickJumper: true,
       pageSize: 10,
-      total:body.total
+      total: body.total,
     };
     return (
       <GridContent>
@@ -568,7 +565,7 @@ class BrandCompoenet extends Component {
 
                 <Modal
                   maskClosable={false}
-                  title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}
+                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`} />}
                   className={styles.standardListForm}
                   width={640}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -587,12 +584,12 @@ class BrandCompoenet extends Component {
                 <div>
                   <span
                     style={{
-                      marginBottom: 32,
-                      paddingLeft: 10,
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                      color: '#35B0F4',
-                    }}
+                        marginBottom: 32,
+                        paddingLeft: 10,
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: '#35B0F4',
+                      }}
                   >
                     品牌信息
                   </span>
@@ -679,7 +676,6 @@ class BrandCompoenet extends Component {
       </GridContent>
     );
   }
-
 
 
 }

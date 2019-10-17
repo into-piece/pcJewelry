@@ -17,7 +17,7 @@ export default {
   'menu.erp.dev': '开发',
   'menu.erp.dev.productflow': '生产流程',
   'menu.erp.dev.flowCostType': '流程工费',
-  'menu.erp.dev.Raw':'类别管理',
+  'menu.erp.dev.Raw':'原料档案',
   'menu.erp.dev.basic': '基础数据',
 
   'menu.erp.dev.eliver': '出货',
@@ -31,10 +31,20 @@ export default {
   'menu.erp.dev.FinishedProduct':'成品设定',
 
 
+
+  'menu.erp.production':'生产',
+  'menu.erp.production.basic':'基础资料',
+  'menu.erp.production.orderApprove':'新订单审批',
+
+
   'menu.erp.system':'系统',
   'menu.erp.system.department':'部门设置',
   'menu.erp.system.personnel':'员工设置',
   'menu.erp.system.authority':'权限设置',
+
+
+
+
 
 
 

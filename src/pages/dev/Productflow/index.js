@@ -24,6 +24,7 @@ import MiddleTable from './components/MiddleTable';
 import modalInput from './config/modalInput';
 import showItem from './config/showItem';
 import styles from './index.less';
+import BuildTitle from '@/components/BuildTitle';
 
 import serviceObj from '@/services/dev';
 
@@ -347,7 +348,7 @@ class Index extends Component {
               this.getListSecond({ type: secondTableActive });
             }
 
-            this.btnFn('');
+            // this.btnFn('');
           }
         });
       }
@@ -588,7 +589,8 @@ class Index extends Component {
         {handleModalOk &&
         <Modal
           maskClosable={false}
-          title={returnTitle()}
+          title={<BuildTitle title={returnTitle()} />}
+
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

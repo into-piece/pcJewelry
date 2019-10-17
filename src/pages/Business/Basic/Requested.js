@@ -7,7 +7,6 @@ import {
   Col,
   Icon,
   Form,
-  Select,
   Modal,
   Input,
   Button,
@@ -19,11 +18,10 @@ import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { requested as Requested } from '@/utils/SvgUtil';
-import formstyles from './BasicForm.less';
-import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import ModalConfirm from '@/utils/modal';
 import { statusConvert } from '@/utils/convert';
+import BuildTitle from '@/components/BuildTitle';
 
 const FormItem = Form.Item;
 const clientContentColumns = [
@@ -115,11 +113,11 @@ class RequestedComponent extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
 
         this.setState({
@@ -145,16 +143,16 @@ class RequestedComponent extends PureComponent {
           payload: {
             ...data,
           },
-          callback: () => {
-            this.setState({
-              visible: false,
-            });
-          },
+          // callback: () => {
+          //   this.setState({
+          //     visible: false,
+          //   });
+          // },
         });
       }
-      this.setState({
-        visible: false,
-      });
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
 
@@ -257,13 +255,13 @@ class RequestedComponent extends PureComponent {
             {getFieldDecorator('qualityEnName', {
               rules: [{ required: true, message: '请输入英文名称' }],
               initialValue: current.qualityEnName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="品质要求中文名" {...this.formLayout}>
             {getFieldDecorator('qualityZhName', {
               rules: [{ message: '请输入中文名称' }],
               initialValue: current.qualityZhName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
         </Form>
       );
@@ -302,7 +300,7 @@ class RequestedComponent extends PureComponent {
                   }}
                   component={Requested}
                 />
-                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求"/>
+                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
               </div>
               <Card bordered={false} loading={false}>
                 <Table
@@ -326,7 +324,8 @@ class RequestedComponent extends PureComponent {
                 />
                 <Modal
                   maskClosable={false}
-                  title={this.state.done ? null : `任务${current.brandNo ? '编辑' : '添加'}`}
+                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
+
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -355,7 +354,7 @@ class RequestedComponent extends PureComponent {
                   >
                     品质要求信息
                   </span>
-                  <Divider/>
+                  <Divider />
                   {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
                 </div>
               </Card>
@@ -413,21 +412,21 @@ class RequestedComponent extends PureComponent {
                   >
                     取消审批
                   </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={() => {
+                                                            className={styles.buttomControl}
+                                                            size="small"
+                                                            type="primary"
+                                                            icon="lock"
+                                                            onClick={() => {
                       ModalConfirm({
                         content: '确定审批吗？', onOk: () => {
                           this.clickFreezeFrom();
                         },
                       });
                     }}
-                    disabled={isEdit}
-                  >
+                                                            disabled={isEdit}
+                                                          >
                     审批
-                  </Button>)}
+                                                          </Button>)}
                 </div>
               </Card>
             </div>
