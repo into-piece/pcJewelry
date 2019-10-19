@@ -1,37 +1,33 @@
-import {statusConvert,YoNConvert} from '@/utils/convert';
+import {statusConvert} from '@/utils/convert';
 
-export const productFlow = [
-  { 'key': '成品类别', 'value': 'productType',cName:true },
-  { 'key': '流程名称', 'value': 'flowName' },
-  { 'key': '流程编号', 'value': 'flowCode' },
-  { 'key': '所属部门', 'value': 'department'  ,cName:true},
-  { 'key': '英文名称', 'value': 'engName' },
-  { 'key': '类别', 'value': 'type' ,cName:true},
-  { 'key': '镶石工艺', 'value': 'stoneCraft',cName:true },
-  {
-    'key': '是否外发',
-    'value': 'isOutbound',
-    'convert':YoNConvert,
-  },
-  { 'key': '允许损耗(%)', 'value': 'isWastage' },
-  { 'key': '出货重量范围', 'value': 'weightRange' },
-  { 'key': '标准工时', 'value': 'workingHour' },
-  { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
+export const dieSet = [
+  { key: '主模具号', value: 'mainMoldCode' },
+  { key: '产品类别', value: 'productTypeName' },
+  { key: '胶膜代码', value: 'filmCode' },
+  { key: '存放地点', value: 'position' },
+  { key: '创建人', value: 'createUserName' },
+  { key: '创建时间', value: 'createTime' },
+  { key: '修改人', value: 'modifierName' },
+  { key: '修改时间', value: 'mtime' },
+  { key: '状态', value: 'status' ,convert:statusConvert},
+
 ];
 
-export const productProcess = [
-  { 'key': '流程编号', 'value': 'flowCode' },
-  { 'key': '工序编号', 'value': 'processCode' },
-  { 'key': '工序名称', 'value': 'processName' },
-  { 'key': '英文名称', 'value': 'engName' },
-  { 'key': '排序号码', 'value': 'sortNum' },
-  { 'key': '损耗(%)', 'value': 'isWastage' },
-  { 'key': '产能(件/小时)', 'value': 'processCapacity' },
+export const dieSetChild = [
+  { 'key': '子模具号', 'value': 'childMoldCode' },
+  { 'key': '石头重量', 'value': 'stoneWeight' },
+  { 'key': '配膜比例', 'value': 'membraneProportion' },
+  { 'key': '注蜡气压', 'value': 'waxInjectionPressure' },
+  { 'key': '进模压力', 'value': 'intoFilmPressure' },
+  { 'key': '压膜压力', 'value': 'squeezeFilmPressure' },
+  { 'key': '注蜡时间', 'value': 'waxInjectionTime' },
+  { 'key': '真空时间', 'value': 'vacuumTime' },
+  { 'key': '注蜡机号', 'value': 'noteWaxImmediately' },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
 ];
 
 
 export default {
-  productFlow,
-  productProcess,
+  dieSet,
+  dieSetChild,
 };

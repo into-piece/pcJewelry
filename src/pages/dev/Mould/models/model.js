@@ -10,7 +10,7 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-  listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,
+   getTypeByWordbookCode, listFilmSettingsDropDown,listMoldPositioningSettingsDropDown
 } = servicesConfig;
 const defaultModelName = 'devMould';
 
@@ -40,10 +40,9 @@ export default {
     searchParamsSecond: {},
 
 
-    listGemSetProcessDropDown: [{ key: '', value: '' }],
-    listDeptDrop: [{ key: '', value: '' }],
-    listH017: [{ key: '', value: '' }],
-    listH016009: [{ key: '', value: '' }],
+    listFilmSettingsDropDown: [{ key: '', value: '' }],
+    listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
+    H016003: [{ key: '', value: '' }],
 
   },
 
@@ -150,19 +149,6 @@ export default {
 
     // 下拉获取
 
-    * getwordbookdropdown({ payload }, { call, put }) {
-      const response = yield call(listMstWordbook, payload.params);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
-        return { value: wordbookCode, key: wordbookContentZh };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: payload.listName },
-      });
-
-    },
-
     * getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload.params);
       const wordbookData = response.body.records;
@@ -176,28 +162,28 @@ export default {
 
     },
 
-    * listDeptDropDown(_, { call, put }) {
-      const response = yield call(listDeptDropDown);
+    * getlistMoldPositioningSettingsDropDown({payload}, { call, put }) {
+      const response = yield call(listMoldPositioningSettingsDropDown,payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
         return { value: id, key: zhName };
       });
       yield put({
         type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listDeptDrop' },
+        payload: { data: wordbookdropdown, typeName: 'listMoldPositioningSettingsDropDown' },
       });
 
     },
 
-    * listGemSetProcessDropDown({ payload }, { call, put }) {
-      const response = yield call(listGemSetProcessDropDown, payload);
+    * getlistFilmSettingsDropDown({ payload }, { call, put }) {
+      const response = yield call(listFilmSettingsDropDown, payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
         return { value: id, key: zhName };
       });
       yield put({
         type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listGemSetProcessDropDown' },
+        payload: { data: wordbookdropdown, typeName: 'listFilmSettingsDropDown' },
       });
 
     },

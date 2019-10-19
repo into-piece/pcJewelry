@@ -1,67 +1,48 @@
 import styles from './columns.less';
-import {statusConvert,YoNConvert} from '@/utils/convert';
+import {statusConvert} from '@/utils/convert';
 
-let productFlow = [
+let dieSet = [
   {
-    title: <div className={styles.row_normal2}>流程编号</div>,
-    dataIndex: 'flowCode',
-    key: 'flowCode',
+    title: <div className={styles.row_normal2}>主模具号</div>,
+    dataIndex: 'mainMoldCode',
+    key: 'mainMoldCode',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
   },
   {
-    title: <div className={styles.row_normal2}>流程名称</div>,
-    dataIndex: 'flowName',
-    key: 'flowName',
+    title: <div className={styles.row_normal2}>产品类别</div>,
+    dataIndex: 'productTypeName',
+    key: 'productTypeName',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>所属部门</div>,
-    dataIndex: 'departmentName',
-    key: 'departmentName',
+    title: <div className={styles.row_normal2}>胶膜代码</div>,
+    dataIndex: 'filmCode',
+    key: 'filmCode',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>成品类别</div>, // ?
-    dataIndex: 'productType',
-    key: 'productType',
+    title: <div className={styles.row_normal2}>存放地点</div>, // ?
+    dataIndex: 'position',
+    key: 'position',
     width: 100,
-    render: (data,record) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{record.productTypeName}</div>
-    ),
   },
 
   {
-    title: <div className={styles.row_normal2}>损耗</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
+    title: <div className={styles.row_normal2}>创建人</div>,
+    dataIndex: 'createUserName',
+    key: 'createUserName',
     width: 100,
     render: (data) => (data),
   },
 
   {
-    title: <div className={styles.row_normal2}>重量范围</div>,
-    dataIndex: 'weightRange',
-    key: 'weightRange',
+    title: <div className={styles.row_normal2}>创建时间</div>,
+    dataIndex: 'createTime',
+    key: 'createTime',
     width: 100,
-  },
-
-  {
-    title: <div className={styles.row_normal2}>标准工时</div>,
-    dataIndex: 'workingHour',
-    key: 'workingHour',
-    width: 100,
-  },
-  {
-    title: <div className={styles.row_normal2}>是否外发</div>,
-    dataIndex: 'isOutbound',
-    key: 'isOutbound',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{YoNConvert[data]}</div>
-    ),
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,
@@ -72,65 +53,65 @@ let productFlow = [
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
     ),
   },
-  {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-    width: 100,
-  },
 ];
 
 
-let productProcess = [
+let dieSetChild = [
   {
-    title: <div className={styles.row_normal2}>员工工序编号</div>,
-    dataIndex: 'processCode',
-    key: 'processCode',
+    title: <div className={styles.row_normal2}>子模具号</div>,
+    dataIndex: 'childMoldCode',
+    key: 'childMoldCode',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
   },
   {
-    title: <div className={styles.row_normal2}>工序名称</div>,
-    dataIndex: 'processName',
-    key: 'processName',
+    title: <div className={styles.row_normal2}>石头重量</div>,
+    dataIndex: 'stoneWeight',
+    key: 'stoneWeight',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>英文名称</div>,
-    dataIndex: 'engName',
-    key: 'engName',
+    title: <div className={styles.row_normal2}>配膜比例</div>,
+    dataIndex: 'membraneProportion',
+    key: 'membraneProportion',
     width: 60,
   },
   {
-    title: <div className={styles.row_normal2}>排序号码</div>,
-    dataIndex: 'sortNum',
-    key: 'sortNum',
+    title: <div className={styles.row_normal2}>注蜡气压</div>,
+    dataIndex: 'waxInjectionPressure',
+    key: 'waxInjectionPressure',
     width: 50,
   },
   {
-    title: <div className={styles.row_normal2}>耗损(%)</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
+    title: <div className={styles.row_normal2}>进模压力</div>,
+    dataIndex: 'intoFilmPressure',
+    key: 'intoFilmPressure',
     width: 40,
   },
   {
-    title: <div className={styles.row_normal2}>员工工序产能(件/小时)</div>,
-    dataIndex: 'processCapacity',
-    key: 'processCapacity',
+    title: <div className={styles.row_normal2}>压膜压力</div>,
+    dataIndex: 'squeezeFilmPressure',
+    key: 'squeezeFilmPressure',
     width: 60,
   },
   {
-    title: <div className={styles.row_normal2}>创建时间</div>,
-    dataIndex: 'createTime',
-    key: 'createTime',
+    title: <div className={styles.row_normal2}>注蜡时间</div>,
+    dataIndex: 'waxInjectionTime',
+    key: 'waxInjectionTime',
     width: 80,
   },
   {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
+    title: <div className={styles.row_normal2}>真空时间</div>,
+    dataIndex: 'noteWaxImmediately',
+    key: 'noteWaxImmediately',
+    width: 40,
+  },
+  {
+    title: <div className={styles.row_normal2}>注蜡机号</div>,
+    dataIndex: 'vacuumTime',
+    key: 'vacuumTime',
     width: 40,
   },
   {
@@ -144,10 +125,10 @@ let productProcess = [
   },
 ];
 
-productFlow = productFlow.map(item => ({ ...item, sorter: true }));
-productProcess = productProcess.map(item => ({ ...item, sorter: true }));
+dieSet = dieSet.map(item => ({ ...item, sorter: true }));
+dieSetChild = dieSetChild.map(item => ({ ...item, sorter: true }));
 
 export default {
-  productFlow,
-  productProcess,
+  dieSet,
+  dieSetChild,
 };

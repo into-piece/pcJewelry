@@ -1,34 +1,26 @@
-export const productFlow = [
-  { 'key': '成品类别', 'value': 'productType', 'type': 2, 'list': 'listH016009',  },
-  { 'key': '流程名称', 'value': 'flowName',},
-  { 'key': '流程编号', 'value': 'flowCode',},
-  { 'key': '所属部门', 'value': 'department', 'type': 2, 'list': 'listDeptDrop',},
-  { 'key': '英文名称', 'value': 'engName', 'noNeed': true },
-  { 'key': '类别', 'value': 'type', 'type': 2, 'list': 'listH017',},
-  { 'key': '镶石工艺', 'value': 'stoneCraft', 'type': 2, 'list': 'listGemSetProcessDropDown',},
-  {
-    'key': '是否外发',
-    'value': 'isOutbound',
-    'type': 6,
-    'arr': [{ 'key': '是', 'value': 1 }, { 'key': '否', 'value': 0 }],
-    'initValue': 1,
-  },
-  { 'key': '允许损耗(%)', 'value': 'isWastage',  'number': true, },
-  { 'key': '出货重量范围', 'value': 'weightRange',},
-  { 'key': '标准工时', 'value': 'workingHour', 'noNeed': true, 'number': true, },
+export const dieSet = [
+  { 'key': '主模具号', 'value': 'mainMoldCode',},
+  { 'key': '胶膜代码', 'value': 'filmCode', 'type': 2, 'list': 'listFilmSettingsDropDown',  },
+  { 'key': '存放地点', 'value': 'position', 'type': 2, 'list': 'listMoldPositioningSettingsDropDown',},
+  { 'key': '产品类别', 'value': 'productType', 'type': 2, 'list': 'H016003',},
+
 ];
 
-export const productProcess = [
-  { 'key': '工序编号', 'value': 'processCode',  },
-  { 'key': '工序名称', 'value': 'processName',},
-  { 'key': '英文名称', 'value': 'engName', 'noNeed': true},
-  { 'key': '排序号码', 'value': 'sortNum',  'number': true },
-  { 'key': '损耗(%)', 'value': 'isWastage',   'number': true },
-  { 'key': '产能(件/小时)', 'value': 'processCapacity', 'number': true,  },
+export const dieSetChild = [
+  { 'key': '子模具号', 'value': 'childMoldCode',  },
+  { 'key': '进模压力', 'value': 'intoFilmPressure','number': true,'initValue':0.0},
+  { 'key': '配膜比例', 'value': 'membraneProportion',},
+  { 'key': '注蜡机号', 'value': 'noteWaxImmediately','number': true,'initValue':1},
+  { 'key': '压膜压力', 'value': 'squeezeFilmPressure','number': true,'initValue':0.0},
+  { 'key': '石头重量', 'value': 'stoneWeight','number': true,'initValue':0.0},
+  { 'key': '真空时间', 'value': 'vacuumTime','number': true,'initValue':3.0},
+
+  { 'key': '注蜡气压', 'value': 'waxInjectionPressure','number': true,'initValue':0.0},
+  { 'key': '注蜡时间', 'value': 'waxInjectionTime','number': true,'initValue':3.0},
 ];
 
 
 export default {
-  productFlow,
-  productProcess
+  dieSet,
+  dieSetChild,
 }

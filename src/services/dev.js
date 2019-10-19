@@ -157,6 +157,8 @@ const resultArr = [
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
   { key: 'listBasicColourSetDropDown', path: '/colour-set/listBasicColourSetDropDown' },// 成色下拉
   { key: 'listProductionFlowDropDown', path: '/production-flow/listDropDown',prefix1:`${env}/business/develop/production` },// 生产流程下拉
+  { key: 'listFilmSettingsDropDown', path: '/film-settings/listFilmSettingsDropDown',prefix1:`${env}/business/develop/basic` },// 胶膜代码下拉
+  { key: 'listMoldPositioningSettingsDropDown', path: '/mold-positioning-settings/listMoldPositioningSettingsDropDown',prefix1:`${env}/business/develop/basic` },// 模具仓位编号下拉
 ];
 
 // console.log(resultArr, '============')

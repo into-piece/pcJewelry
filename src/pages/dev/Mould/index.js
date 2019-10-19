@@ -82,30 +82,36 @@ class Index extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // 类别下拉
-    dispatch({
-      type: `${defaultModelName}/getwordbookdropdown`,
-      payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
-    });
-    // 成品类别下拉
-    dispatch({
-      type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
-    });
-    // 部门下拉
-    dispatch({
-      type: `${defaultModelName}/listDeptDropDown`,
-    });
-    // 镶石工艺下拉
-    dispatch({
-      type: `${defaultModelName}/listGemSetProcessDropDown`,
-      payload: {},
-    });
 
+
+    this.initDrop();
 
     // 获取初始表单数据
     this.getList();
   }
+
+
+  initDrop = () => {
+    const { dispatch } = this.props;
+
+    // 成品类别下拉
+    dispatch({
+      type: `${defaultModelName}/getTypeByWordbookCode`,
+      payload: { params: { 'key': 'H016003' }, listName: 'H016003' },
+    });
+
+    // 胶膜代码下拉
+    dispatch({
+      type: `${defaultModelName}/getlistFilmSettingsDropDown`,
+    });
+
+    // 模具仓位编号下拉
+    dispatch({
+      type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
+      payload: {},
+    });
+  };
+
 
   // 右边顶部tab切换
   changeRightActive = (v) => {
@@ -231,7 +237,7 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const {rightActive} = this.state;
+    const { rightActive } = this.state;
 
     const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
     return menuText;
@@ -313,7 +319,7 @@ class Index extends Component {
     const { secondTableActive, rightActive, modalType } = this.state;
     let params = {};
     if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode };
+      params = { mainMoldCode: choosenRowData.mainMoldCode };
     }
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
@@ -410,6 +416,7 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
+        this.initDrop();
         this.setState({ modalType });
         break;
       case 'delete':
