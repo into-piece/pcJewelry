@@ -101,6 +101,7 @@ class TerminalClient extends PureComponent {
       terminalFreezeloading,
       terminalUnFreezeloading,
       terminalListloading,
+      customLock,
       params,
     } = this.props;
 
@@ -110,7 +111,7 @@ class TerminalClient extends PureComponent {
       terminalUpdateloading ||
       terminalSaveloading ||
       terminalDeleteloading ||
-      terminalFreezeloading||
+      terminalFreezeloading ||
       terminalUnFreezeloading;
     if (isUpdate) {
       this.state.update = true;
@@ -118,22 +119,22 @@ class TerminalClient extends PureComponent {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
-        // console.log('code '+body.rtnCode)
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-        this.handleDone();
-
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
-        }
+      // console.log('code '+body.rtnCode)
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
       }
+      this.handleDone();
+
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        this.state.showItem = { ...current };
+      }
+    }
 
     if (params) {
       const data = params;
@@ -152,7 +153,6 @@ class TerminalClient extends PureComponent {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
     }
-
 
 
     const modalFooter = this.state.done
@@ -320,7 +320,8 @@ class TerminalClient extends PureComponent {
       );
     };
 
-    const isFreeze = (selectedItem&&selectedItem.status==='2');
+    const isFreeze = (selectedItem && selectedItem.status === '2');
+
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
@@ -352,7 +353,7 @@ class TerminalClient extends PureComponent {
                 type="primary"
                 icon="plus"
                 size="small"
-                disabled={this.state.isAddEdit}
+                disabled={this.state.isAddEdit|| customLock}
                 onClick={this.clickNewFrom}
               >
                 新增
@@ -362,7 +363,7 @@ class TerminalClient extends PureComponent {
                 type="danger"
                 icon="delete"
                 size="small"
-                disabled={this.state.isEdit||isFreeze}
+                disabled={this.state.isEdit || isFreeze|| customLock}
                 onClick={this.clickDeleteFrom}
               >
                 删除
@@ -372,31 +373,31 @@ class TerminalClient extends PureComponent {
                 type="primary"
                 size="small"
                 icon="edit"
-                disabled={this.state.isEdit||isFreeze}
+                disabled={this.state.isEdit || isFreeze|| customLock}
                 onClick={this.clickEditFrom}
               >
                 编辑
               </Button>
               {
-                isFreeze?<Button
+                isFreeze ? <Button
                   className={clientStyle.buttomControl}
                   size="small"
                   type="danger"
                   icon="unlock"
-                  disabled={this.state.isEdit}
+                  disabled={this.state.isEdit|| customLock}
                   onClick={this.clickUnFreezeFrom}
                 >
                   取消审批
-                </Button>:<Button
-                           className={clientStyle.buttomControl}
-                           size="small"
-                           type="primary"
-                           icon="lock"
-                           disabled={this.state.isEdit}
-                           onClick={this.clickFreezeFrom}
-                         >
+                </Button> : <Button
+                             className={clientStyle.buttomControl}
+                             size="small"
+                             type="primary"
+                             icon="lock"
+                             disabled={this.state.isEdit || customLock}
+                             onClick={this.clickFreezeFrom}
+                           >
                   审批
-                                   </Button>
+                                       </Button>
               }
 
             </div>
@@ -520,7 +521,7 @@ class TerminalClient extends PureComponent {
   clickDeleteFrom = () => {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
-    const {id} = selectedItem;
+    const { id } = selectedItem;
     if (id) {
       const keys = [];
       keys.push(id);
@@ -541,7 +542,7 @@ class TerminalClient extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const {id} = selectedItem;
+    const { id } = selectedItem;
     if (id) {
       const keys = [];
       keys.push(id);
@@ -556,7 +557,7 @@ class TerminalClient extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const {id} = selectedItem;
+    const { id } = selectedItem;
     if (id) {
       const keys = [];
       keys.push(id);

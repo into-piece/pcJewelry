@@ -135,32 +135,7 @@ const maintainsColumn = [
   },
 ];
 
-const operationTabList = [
-  {
-    key: 'client',
-    tab: <span>客户</span>,
-  },
-  {
-    key: 'devclient',
-    tab: <span>终客</span>,
-  },
-  {
-    key: 'marking',
-    tab: <span>字印</span>,
-  },
-  {
-    key: 'package',
-    tab: <span>包装</span>,
-  },
-  {
-    key: 'product',
-    tab: <span>产品</span>,
-  },
-  {
-    key: 'history',
-    tab: <span>历史订单</span>,
-  },
-];
+
 const defaultPageSize = 5;
 
 @connect(({ client, loading, customer }) => {
@@ -245,15 +220,14 @@ class ClientView extends PureComponent {
     },
   ];
 
- ringsColumn =[
-   {
-     title:  '圈戒编号',
-     field: 'ringAroundName',
-     dataIndex: 'ringAroundName',
-     key: 'ringAroundName',
-   },
- ]
-
+  ringsColumn = [
+    {
+      title: '圈戒编号',
+      field: 'ringAroundName',
+      dataIndex: 'ringAroundName',
+      key: 'ringAroundName',
+    },
+  ];
 
 
   contactsColumn = [
@@ -452,6 +426,7 @@ class ClientView extends PureComponent {
       },
       dataIndex: 'status',
       key: 'status',
+      render: data => statusConvert[data],
     },
   ];
 
@@ -489,7 +464,7 @@ class ClientView extends PureComponent {
       ringsAddVisible: false,
       modalkey: 'a',
       contactsTableContent: [],
-      ringsTableContent:[],
+      ringsTableContent: [],
       contactsTableBody: {},
       ringsTableBody: {},
       ringsItem: '',
@@ -691,20 +666,6 @@ class ClientView extends PureComponent {
       // console.log('update list row ', rowCustomerData);
     }
 
-    if (customerBody.data) {
-      customerBody.data.map(value => {
-        const s = value.status;
-        if (s == 0) {
-          value.status = '输入';
-        } else if (s == 1) {
-          value.status = '使用中';
-        } else if (s == 2) {
-          value.status = '审批';
-        }
-        return value;
-      });
-    }
-
     if (isCurstomerUpdate) {
       this.state.customerLoading = true;
     } else if (this.state.customerLoading) {
@@ -830,10 +791,10 @@ class ClientView extends PureComponent {
                       this.setState({
                         contactsCurrent: {},
                         ringsAddVisible: true,
-                        modalkey:`a${Math.random(1)}`
+                        modalkey: `a${Math.random(1)}`,
                       })
                     }
-                    disabled={!selectCustomerItem || selectCustomerItem === ''}
+                    disabled={!selectCustomerItem || selectCustomerItem === '' || this.state.selectCustomerItem.status === '2'}
                   >
                     新建
                   </Button>
@@ -848,7 +809,7 @@ class ClientView extends PureComponent {
                         },
                       });
                     }}
-                    disabled={!ringsItem || ringsItem === ''}
+                    disabled={!ringsItem || ringsItem === '' || this.state.selectCustomerItem.status === '2'}
                   >
                     删除
                   </Button>
@@ -868,7 +829,7 @@ class ClientView extends PureComponent {
                         contactsAddVisible: true,
                       })
                     }
-                    disabled={!selectCustomerItem || selectCustomerItem === ''}
+                    disabled={!selectCustomerItem || selectCustomerItem === '' || this.state.selectCustomerItem.status === '2'}
                   >
                     新建
                   </Button>
@@ -895,7 +856,7 @@ class ClientView extends PureComponent {
                         contactsAddVisible: true,
                       });
                     }}
-                    disabled={!contactsItem || contactsItem === ''}
+                    disabled={!contactsItem || contactsItem === '' || this.state.selectCustomerItem.status === '2'}
                   >
                     编辑
                   </Button>
@@ -911,7 +872,7 @@ class ClientView extends PureComponent {
                         },
                       });
                     }}
-                    disabled={!contactsItem || contactsItem === ''}
+                    disabled={!contactsItem || contactsItem === '' || this.state.selectCustomerItem.status === '2'}
                   >
                     删除
                   </Button>
@@ -1159,8 +1120,7 @@ class ClientView extends PureComponent {
   };
 
   getAddType = () => {
-    const { showItem, isEdit } = this.state;
-    const data = { ...showItem };
+    const { showItem, isEdit, selectedRowKeys, rowSelectedData } = this.state;
 
     return (
       <div className={baseStyles.content}>
@@ -1208,7 +1168,7 @@ class ClientView extends PureComponent {
                     },
                   });
                 }}
-                disabled={isEdit}
+                disabled={selectedRowKeys.length === 0 || !(rowSelectedData.every(e => e.status === '0'))}
               >
                 删除
               </Button>
@@ -1217,19 +1177,19 @@ class ClientView extends PureComponent {
                 size="small"
                 className={clientStyle.buttomControl}
                 icon="edit"
-                disabled={isEdit}
+                disabled={selectedRowKeys.length === 0 || !showItem || showItem.status === '2'}
                 onClick={this.handleEditClient}
               >
                 编辑
               </Button>
 
-              {showItem.status === '审批' ? (
+              {showItem.status === '2' ? (
                 <Button
                   className={clientStyle.buttomControl}
                   size="small"
                   type="danger"
                   icon="unlock"
-                  disabled={isEdit}
+                  disabled={selectedRowKeys.length === 0 || !(rowSelectedData.every(e => e.status === '2'))}
                   onClick={() => {
                     ModalConfirm({
                       content: '确定取消审批吗？', onOk: () => {
@@ -1246,7 +1206,7 @@ class ClientView extends PureComponent {
                   size="small"
                   type="primary"
                   icon="lock"
-                  disabled={isEdit}
+                  disabled={selectedRowKeys.length === 0 || !(rowSelectedData.every(e => e.status === '0'))}
                   onClick={() => {
                     ModalConfirm({
                       content: '确定审批吗？', onOk: () => {
@@ -1409,6 +1369,7 @@ class ClientView extends PureComponent {
     const selects = customerSelectedRowKeys || [];
     const { id } = record;
 
+
     if (selects.includes(id)) {
       selects.splice(selects.findIndex(index => index === id), 1);
       if (rowCustomerData.includes(record)) rowCustomerData = [];
@@ -1533,18 +1494,18 @@ class ClientView extends PureComponent {
     });
   };
 
-  handleRingsSubmit= ids=>{
-    const {selectCustomerItem} =this.state;
+  handleRingsSubmit = ids => {
+    const { selectCustomerItem } = this.state;
     if (!selectCustomerItem || selectCustomerItem === '') {
       this.setState({
         ringsLoading: false,
       });
       return;
     }
-    const _this =this;
-    const params={
-      ringSizeIds:ids,
-      customerId:selectCustomerItem.id
+    const _this = this;
+    const params = {
+      ringSizeIds: ids,
+      customerId: selectCustomerItem.id,
     };
     fetch(HttpFetch.saveRings, {
       method: 'POST',
@@ -1576,7 +1537,7 @@ class ClientView extends PureComponent {
           contactsLoading: false,
         });
       });
-  }
+  };
 
   // 联系人添加
   handleContactsSubmit = contacts => {
@@ -1732,6 +1693,7 @@ class ClientView extends PureComponent {
     this.setState({
       selectedRowKeys: '',
       showItem: false,
+      rowSelectedData: [],
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
       isEdit: true,
@@ -1754,6 +1716,7 @@ class ClientView extends PureComponent {
       selectedRowKeys: '',
       showItem: false,
       customerSelectedRowKeys: '',
+      rowSelectedData: [],
       selectCustomerItem: '',
       isEdit: true,
     });
@@ -1908,7 +1871,7 @@ class ClientView extends PureComponent {
     this.startShowTab();
   };
 
-  // merchange
+  // 客户列表选中 客户
   selectCustomerChange = (selectedRowKeys, selectedRows) => {
     console.log('selectCustomerChange', selectedRowKeys, selectedRows);
 
@@ -1917,8 +1880,6 @@ class ClientView extends PureComponent {
       const record = selectedRows.filter(value => value.id == recordK);
       const d = record[0];
       const selectCustomerItem = { ...d };
-      console.log('selectedRows', selectedRows);
-      console.log('selectedRowKeys', selectedRowKeys);
       this.setState({
         selectCustomerItem,
         rowCustomerData: selectedRows,
@@ -2082,7 +2043,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <TerminalClient params={params} />,
+      Component: <TerminalClient params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // console.log('select customer t', selectCustomerItem, params);
     // router.replace({ pathname: '/business/client/terminal', params: params });
@@ -2141,7 +2102,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <Mark params={params} />,
+      Component: <Mark params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // router.replace({ pathname: '/business/client/marking', params: params });
   };
@@ -2153,7 +2114,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <Product />,
+      Component: <Product customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // router.replace({ pathname: '/business/client/product', query: { id: 3 } });
   };
@@ -2172,7 +2133,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <PackageInfo params={params} />,
+      Component: <PackageInfo params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // router.replace({ pathname: '/business/client/package', params: params });
   };
@@ -2184,9 +2145,8 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <History />,
+      Component: <History customLock={this.state.selectCustomerItem.status === '2'}  />,
     });
-    // router.replace({ pathname: '/business/client/history', query: { id: 5 } });
   };
 
   onChange = e => {
@@ -2223,7 +2183,7 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        console.log(11111,d)
+        console.log(11111, d);
         const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
@@ -2296,7 +2256,7 @@ class ClientView extends PureComponent {
     });
   };
 
-  loadRingsList =()=>{
+  loadRingsList = () => {
     const { selectCustomerItem, ringsPage } = this.state;
     const _this = this;
     if (!selectCustomerItem || selectCustomerItem === '') {
