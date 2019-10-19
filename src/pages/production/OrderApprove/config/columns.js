@@ -3,7 +3,7 @@ import {statusConvert,HasConvert} from '@/utils/convert';
 
 let orderApproveInfo = [
   {
-    title: <div className={styles.row_normal2}>审批单号</div>,
+    title: <div className={styles.row_normal2}>审批编号</div>,
     dataIndex: 'approveNo',
     key: 'approveNo',
     width: 100,
@@ -11,46 +11,53 @@ let orderApproveInfo = [
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
   }, {
-    title: <div className={styles.row_normal2}>订单号码</div>,
-    dataIndex: 'orderNo',
-    key: 'orderNo',
+    title: <div className={styles.row_normal2}>客户编号</div>,
+    dataIndex: 'customerNo',
+    key: 'customerNo',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>订单类别</div>,
+    title: <div className={styles.row_normal2}>客户中文名称</div>,
     dataIndex: 'customerGoodNo',
     key: 'customerGoodNo',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>客户简称</div>,
+    title: <div className={styles.row_normal2}>客户英文名称</div>,
     dataIndex: 'customerShotName',
     key: 'customerShotName',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>客户编号</div>, // ?
-    dataIndex: 'customerNo',
-    key: 'customerNo',
+    title: <div className={styles.row_normal2}>订单号码</div>, // ?
+    dataIndex: 'orderNo',
+    key: 'orderNo',
     width: 100,
   },
 
   {
+    title: <div className={styles.row_normal2}>订单类别</div>,
+    dataIndex: 'type',
+    key: 'type',
+    width: 100,
+    render:(data,item)=>item.typeName
+  },
+  {
+    title: <div className={styles.row_normal2}>订单数量</div>,
+    dataIndex: 'orderNum',
+    key: 'orderNum',
+    width: 100,
+  },
+  {
     title: <div className={styles.row_normal2}>紧急程度</div>,
-    dataIndex: 'weightRange',
-    key: 'weightRange',
+    dataIndex: 'emergency',
+    key: 'emergency',
     width: 100,
   },
   {
     title: <div className={styles.row_normal2}>审批日期</div>,
-    dataIndex: 'orderNo2',
-    key: 'orderNo2',
-    width: 100,
-  },
-  {
-    title: <div className={styles.row_normal2}>订单数量</div>,
-    dataIndex: 'workingHour',
-    key: 'workingHour',
+    dataIndex: 'mtime',
+    key: 'mtime',
     width: 100,
   }
 ];
@@ -59,104 +66,119 @@ let orderApproveInfo = [
 let orderApproveProduct = [
   {
     title: <div className={styles.row_normal2}>产品编号</div>,
-    dataIndex: 'processCode',
-    key: 'processCode',
+    dataIndex: 'productNo',
+    key: 'productNo',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
   },
   {
-    title: <div className={styles.row_normal2}>产品名称</div>,
-    dataIndex: 'processName',
-    key: 'processName',
+    title: <div className={styles.row_normal2}>中文名</div>,
+    dataIndex: 'zhName',
+    key: 'zhName',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>模具号</div>,
-    dataIndex: 'engName',
-    key: 'engName',
+    title: <div className={styles.row_normal2}>电镀颜色</div>,
+    dataIndex: 'platingColor',
+    key: 'platingColor',
     width: 60,
   },
   {
-    title: <div className={styles.row_normal2}>电镀颜色</div>,
-    dataIndex: 'sortNum',
-    key: 'sortNum',
+    title: <div className={styles.row_normal2}>宝石颜色</div>,
+    dataIndex: 'gemColor',
+    key: 'gemColor',
     width: 50,
   },
   {
-    title: <div className={styles.row_normal2}>成色</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
+    title: <div className={styles.row_normal2}>重量范围</div>,
+    dataIndex: 'unitOfWeight',
+    key: 'unitOfWeight',
     width: 40,
   },
   {
-    title: <div className={styles.row_normal2}>重量范围</div>,
-    dataIndex: 'processCapacity',
-    key: 'processCapacity',
+    title: <div className={styles.row_normal2}>模具号</div>,
+    dataIndex: 'mouldNo',
+    key: 'mouldNo',
+    width: 60,
+  },
+  {
+    title: <div className={styles.row_normal2}>成色</div>,
+    dataIndex: 'productColor',
+    key: 'productColor',
+    width: 80,
+  },
+  {
+    title: <div className={styles.row_normal2}>成色重量</div>,
+    dataIndex: 'finishedWeight',
+    key: 'finishedWeight',
     width: 60,
   },
   {
     title: <div className={styles.row_normal2}>创建时间</div>,
     dataIndex: 'createTime',
     key: 'createTime',
-    width: 80,
-  },
-  {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-    width: 60,
-  },
-  {
-    title: <div className={styles.row_normal2}>有无BOM</div>,
-    dataIndex: 'status',
-    key: 'status',
     width: 40,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 40 }}>{HasConvert[data]}</div>
-    ),
+  },
+  {
+    title: <div className={styles.row_normal2}>客户货号</div>,
+    dataIndex: 'custoerProductNo',
+    key: 'custoerProductNo',
+    width: 40,
   },
 ];
 
 let orderApproveResult = [
   {
-    title: <div className={styles.row_normal2}>员工编号</div>,
-    dataIndex: 'processCode',
-    key: 'processCode',
+    title: <div className={styles.row_normal2}>产品编号</div>,
+    dataIndex: 'productNo',
+    key: 'productNo',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
   },
   {
-    title: <div className={styles.row_normal2}>员工姓名</div>,
-    dataIndex: 'processName',
-    key: 'processName',
+    title: <div className={styles.row_normal2}>审批单号</div>,
+    dataIndex: 'approveNo',
+    key: 'approveNo',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>审批部门</div>,
-    dataIndex: 'engName',
-    key: 'engName',
+    title: <div className={styles.row_normal2}>审批人</div>,
+    dataIndex: 'approveUser',
+    key: 'approveUser',
     width: 60,
   },
   {
-    title: <div className={styles.row_normal2}>产品编号</div>,
-    dataIndex: 'sortNum',
-    key: 'sortNum',
+    title: <div className={styles.row_normal2}>审批人姓名</div>,
+    dataIndex: 'userName',
+    key: 'userName',
     width: 50,
   },
   {
-    title: <div className={styles.row_normal2}>审批结果</div>,
-    dataIndex: 'status',
-    key: 'status',
+    title: <div className={styles.row_normal2}>审批部门</div>,
+    dataIndex: 'approveDep',
+    key: 'approveDep',
     width: 40,
   },
   {
+    title: <div className={styles.row_normal2}>部门名称</div>,
+    dataIndex: 'depName',
+    key: 'depName',
+    width: 60,
+  },
+  {
     title: <div className={styles.row_normal2}>审批时间</div>,
-    dataIndex: 'processCapacity',
-    key: 'processCapacity',
+    dataIndex: 'approveTime',
+    key: 'approveTime',
+    width: 40,
+  },
+  {
+    title: <div className={styles.row_normal2}>审批结果</div>,
+    dataIndex: 'approveResult',
+    key: 'approveResult',
     width: 60,
   }
 ];

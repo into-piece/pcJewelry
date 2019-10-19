@@ -1,581 +1,402 @@
-/*
- * @Description: In User Settings Edit
- * @Author: your name
- * @Date: 2019-08-16 23:48:54
- * @LastEditTime: 2019-08-17 15:47:00
- * @LastEditors: Please set LastEditors
- */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
-import { FormattedMessage } from 'umi-plugin-react/locale';
-import styles from './index.less';
-import SvgUtil from '@/utils/SvgUtil';
-import Table from '@/components/Table';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Divider,
+  Select,
+  Radio,
+  Checkbox,
+  DatePicker,
+  notification,
+} from 'antd';
+import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import DescriptionList from '@/components/DescriptionList';
-import serviceObj from '@/services/dev';
-import LockTag from '@/components/LockTag'
-import jsonData from './index.json'
-// import Bread from '@/components/BreadCrumb'
+// 详情内容
+import GetRenderitem from './components/GetRenderitem';
+// 中间Table
+import MiddleTable from './components/MiddleTable';
+import { FormattedMessage } from 'umi-plugin-react/locale';
+
+// 弹窗输入配置&显示配置
+import modalInput from './config/modalInput';
+import showItem from './config/showItem';
+import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
-const { Description } = DescriptionList;
-const { Item } = Menu;
+import serviceObj from '@/services/dev';
+
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
-
-// manuArr是 =》menu配置提供遍历
-// modalContent => 每个menu不同的增加弹窗填写信息
-const { manuArr, modalContent } = jsonData
-
-// 左边menu遍历配置
-const menuMap = manuArr.map(item => ({
-  value: <FormattedMessage id={`app.dev.menuMap.${item}`} defaultMessage="Basic Settings" />,
-  key: item,
-}));
-
-// 弹窗form表单样式
-const formLayout = {
-  labelCol: { span: 7 },
-  wrapperCol: {
-    span: 13,
-  },
-};
-
-// 面包屑数据
-// const breadData = [
-//   {
-//     name: '主页', link: '/'
-//   },
-//   {
-//     name: '开发', link: '/dev/basic'
-//   },
-//   {
-//     name: '基础数据', link: ''
-//   }
-// ]
-
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete',type:'danger' },
+  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
+  // { name: '复制', tag: 'copy' },
 ];
 
-const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
+// const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-function returnStatus(v) {
-  return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : ''
-}
+const defaultModelName = 'devMould';
 
-// table 当前页对应的表头配置
-const columnsArr = {
-  // 计量单位表头
-  measureUnit: [
-    {
-      title: '单位代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
-      render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
-        : (data)
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名称',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data)
-    },
-  ],
+const firstTabFlag = 'dieSet';
 
-  // 成色设定表头
-  colorPercentage: [
-    {
-      title: '产品材料',
-      dataIndex: 'productMaterial',
-      key: 'productMaterial',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '成色系列',
-      dataIndex: 'assayingTheCoefficient',
-      key: 'assayingTheCoefficient',
-    },
-    {
-      title: '返主材类别',
-      dataIndex: 'rtnMainMaterial',
-      key: 'rtnMainMaterial',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 颜色设定表头
-  colorSetting: [
-    {
-      title: '颜色代码',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 电镀表头
-  electroplateSetting: [
-    {
-      title: '电镀颜色代码',
-      dataIndex: 'colorCode',
-      key: 'colorCode',
-    },
-    {
-      title: '简称',
-      dataIndex: 'shotName',
-      key: 'shotName',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '含镍',
-      dataIndex: 'isNickel',
-      key: 'isNickel',
-      render: (data) => (Number(data) === 1 ? '是' : '否')
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 形状设定表头
-  shapeSetting: [
-    {
-      title: '形状代码',
-      dataIndex: 'shapeCode',
-      key: 'shapeCode',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 规格设定表头
-  specificationSetting: [
-    {
-      title: '规格代码',
-      dataIndex: 'specificationCode',
-      key: 'specificationCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 原料等级设定表头
-  materialsGrade: [
-    {
-      title: '等级代码',
-      dataIndex: 'gradeCode',
-      key: 'gradeCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 石头切工设定列表
-  stoneCutter: [
-    {
-      title: '切工代码',
-      dataIndex: 'cuttingCode',
-      key: 'cuttingCode',
-    },
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 镶石工艺
-  insertStoneTechnology: [
-    {
-      title: '成色',
-      dataIndex: 'basicColourSet',
-      key: 'basicColourSet',
-      render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
-      )
-    },
-    {
-      title: '类别',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '公费',
-      dataIndex: 'costs',
-      key: 'costs',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remarks',
-      key: 'remarks',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 胶膜设定
-  rubberMouldSetting: [
-    {
-      title: '中文名称',
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-    {
-      title: '英文名',
-      dataIndex: 'enName',
-      key: 'enName',
-    },
-    {
-      title: '胶膜尺寸',
-      dataIndex: 'filmSize',
-      key: 'filmSize',
-    },
-    {
-      title: '胶膜片数',
-      dataIndex: 'filmNumber',
-      key: 'filmNumber',
-    },
-    {
-      title: '工费',
-      dataIndex: 'costs',
-      key: 'costs',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-  // 模具仓位设定
-  mouldPosition: [
-    {
-      title: '仓位编号',
-      dataIndex: 'positionCode',
-      key: 'positionCode',
-    },
-    {
-      title: '房间号',
-      dataIndex: 'roomNum',
-      key: 'roomNum',
-    },
-    {
-      title: '橱柜号',
-      dataIndex: 'cabinetNum',
-      key: 'cabinetNum',
-    },
-    {
-      title: '抽屉号',
-      dataIndex: 'drawerNum',
-      key: 'drawerNum',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remarks',
-      key: 'remarks',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: data => returnStatus(data),
-    },
-  ],
-
-}
-
-
+const radioArr = [{ key: '模具明细', value: 'dieSet' },
+  { key: '子模明细', value: 'dieSetChild' }];
 
 @Form.create()
-@connect(({ dev }) => {
+@connect(({ loading, devMould: model }) => {
   return {
-    dev,
-    list: dev.list,
-    pagination: dev.pagination,
-    selectKey: dev.selectKey,
-    choosenRowData: dev.choosenRowData,
-    colorSetList: dev.colorSetList,
-    selectedRowKeys: dev.selectedRowKeys,
-    gemSetProcessDropDown: dev.gemSetProcessDropDown,
-    listMstWordbookDrop: dev.listMstWordbookDrop
+    model,
+    listLoading: loading.effects[`${defaultModelName}/getList`],
+    listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
+    list: model.list,
+    listSecond: model.listSecond,
+    pagination: model.pagination,
+    paginationSecond: model.paginationSecond,
+    choosenRowData: model.choosenRowData,
+    choosenRowDataSecond: model.choosenRowDataSecond,
+    selectedRowKeys: model.selectedRowKeys,
+    selectedRowKeysSecond: model.selectedRowKeysSecond,
+    searchParams: model.searchParams,
+    searchParamsSecond: model.searchParamsSecond,
   };
 })
-class Info extends Component {
+class Index extends Component {
   state = {
-    mode: 'inline',
     modalType: '',
-    addData: {
-      measureUnit: {
-        unitCode: '',
-        zhName: '',
-        enName: ''
-      },
-      colorPercentage: {}
-    }
+    // 第二个table选中tab标志 没有tab则冗余
+    secondTableActive: 'dieSetChild',
+    // 右边默认选中tab标志
+    rightActive: firstTabFlag,
   };
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    // 类别下拉
+    dispatch({
+      type: `${defaultModelName}/getwordbookdropdown`,
+      payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
+    });
+    // 成品类别下拉
+    dispatch({
+      type: `${defaultModelName}/getTypeByWordbookCode`,
+      payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
+    });
+    // 部门下拉
+    dispatch({
+      type: `${defaultModelName}/listDeptDropDown`,
+    });
+    // 镶石工艺下拉
+    dispatch({
+      type: `${defaultModelName}/listGemSetProcessDropDown`,
+      payload: {},
+    });
+
+
     // 获取初始表单数据
     this.getList();
   }
 
-  // 获取对应menu
-  getmenu = () => {
-    return menuMap.map(({ key, value }) => (
-      <Item key={key} style={{ textAlign: 'vertical-center' }}>
-        <span style={{ display: 'flex', alignItems: 'center' }}>
-          <Icon style={{ width: 25, height: 25 }} component={this.getMenuIcon(key)} />
-          {value}
-        </span>
-      </Item>
-    ));
+  // 右边顶部tab切换
+  changeRightActive = (v) => {
+    const { secondTableActive } = this.state;
+    this.setState({
+      rightActive: v.target.value,
+      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
+    });
   };
 
-  // 根据当前页面的key 返回对应的icon
-  getMenuIcon = key => {
-    console.log(SvgUtil)
-    return SvgUtil[key];
-  };
 
-  // 点击menu 更换子页面回调 请求list数据
-  handleSelectKey = ({ key }) => {
-    const { dispatch, pagination } = this.props;
-    dispatch({
-      type: 'dev/getSelectKey',
-      payload: key,
-    });
-    this.getList(key)
-
-    // 还要清空所选中项
-    dispatch({
-      type: 'dev/changeSelectedRowKeys',
-      payload: [],
-    });
-
-    dispatch({
-      type: 'dev/getChoosenRowData',
-      payload: { id: '', zhName: '', enName: '', unitCode: '' },
-    });
-
-  };
-
-  // 获取对应key=》页面进行数据请求
-  getList = (key = this.props.selectKey) => {
-    const { dispatch, pagination } = this.props;
-    const obj = {}
-    manuArr.forEach(item => {
-      obj[item] = `get${item}List`
-    })
-    // getDevList
-    dispatch({
-      type: `dev/getList`,
-      payload: { params: pagination, type: key },
-    });
-  }
-
-  // 列表对应操作button回调
-  btnFn = modalType => {
-    const { selectKey, dispatch } = this.props
-    switch (modalType) {
-      case 'plus':
-      case 'edit':
-      default:
-        console.log(selectKey, '==============selectKey')
-        // 镶石工艺
-        if (selectKey === 'insertStoneTechnology') {
-          dispatch({
-            type: 'dev/getGemDropDown',
-            payload: {},
-          });
-        }
-        // 成色设定
-        if (selectKey === 'colorPercentage') {
-          dispatch({
-            type: 'dev/getListMstWordbook',
-            payload: {},
-          });
-        }
-        this.setState({ modalType });
-        break;
-      case 'delete':
-        this.handleDelect()
-        break;
-      case 'lock':
-        this.handleLock()
-        break;
+  // table 搜索
+  onSearch = (params, table) => {
+    if (table === 1) {
+      this.getList({}, params);
+    }
+    if (table === 2) {
+      this.getListSecond({}, params);
     }
   };
 
-  // 根据btn点击 返回对应弹窗内容
+  // 第一table获取list
+  getList = (args, param) => {
+    const { dispatch, pagination, searchParams } = this.props;
+    // getDevList
+    dispatch({
+      type: `${defaultModelName}/getList`,
+      payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
+    });
+
+    // 清除第二table内容
+    dispatch({
+      type: `${defaultModelName}/clearListScond`,
+    });
+  };
+
+  // 第二table获取list
+  getListSecond = (args, param) => {
+    const { dispatch, paginationSecond, searchParamsSecond, choosenRowData } = this.props;
+    const { secondTableActive } = this.state;
+    // getDevList
+    dispatch({
+      type: `${defaultModelName}/getListSecond`,
+      payload: {
+        type: secondTableActive,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, flowCode: choosenRowData.flowCode }, ...args,
+      },
+    });
+
+  };
+
+
+  // type 2 下啦选择
+  // type 3 点击事件
+  // type 4 文字
+  // type 5 check
+  // type 6 radio
+  // type 7 被顺带出的文字
+  // type 8 inputext
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+    switch (type) {
+      case 2:
+        return (
+          <Select
+            style={{ width: 180 }}
+            placeholder="请选择"
+            onChange={(v) => {
+              this.handleSelectChange && this.handleSelectChange(v, value);
+            }}
+          >
+            {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
+            )}
+          </Select>
+        );
+      case 3:
+        return (
+          <p style={{ maxWidth: 180 }}> {form.getFieldValue(value) || ''} <span
+            style={{ color: '#40a9ff', cursor: 'pointer' }}
+            onClick={() => {
+              this[clickFn](1);
+            }}
+          > {text}
+          </span>
+          </p>
+        );
+      case 4:
+        return (
+          <span>{value || ''}</span>
+        );
+      case 5:
+        return <Checkbox
+          checked={form.getFieldValue(value)}
+          onChange={e => {
+            this.handleCheckChange(e, value);
+          }}
+        >{text}
+        </Checkbox>;
+      case 6:
+        return <Radio.Group>
+          {
+            arr.map(({ key, value }) => {
+              return <Radio value={value} key={value}>{key}</Radio>;
+            })
+          }
+        </Radio.Group>;
+      case 7:
+        return <span>{form.getFieldValue(value) || ''}</span>;
+      case 8:
+        return <TextArea rows={2} placeholder="请输入" />;
+      case 9:
+        return <RangePicker
+          style={{ marginRight: 10 }}
+          onChange={(date, dateString) => {
+            this.handleDatePicker(date, dateString, value);
+          }}
+        />;
+      default:
+        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+    }
+    //  type === 7 ?
+  };
+
+
+  // 获取Modal的标题
+  returnTitle = () => {
+    const {rightActive} = this.state;
+
+    const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
+    return menuText;
+  };
+
+  // 弹窗确定提交回调
+  handleModalOk = () => {
+    const { modalType } = this.state;
+    switch (modalType) {
+      case 'plus':
+      case 'edit':
+        this.handleAdd();
+        break;
+      default:
+        break;
+    }
+
+  };
+
+  // 删除按钮回调
+  handleDelect = () => {
+    const { selectedRowKeys, selectedRowKeysSecond, dispatch } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    serviceObj[`delete${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ type: rightActive });
+          dispatch({
+            type: `${defaultModelName}/choosenRowData`,
+            payload: { id: '' },
+          });
+          // 清除第二table内容
+          dispatch({
+            type: `${defaultModelName}/clearListScond`,
+          });
+        } else {
+          this.getListSecond({ type: secondTableActive });
+          // 清除第二table 选中
+          dispatch({
+            type: `${defaultModelName}/choosenRowDataSecond`,
+            payload: { id: '' },
+          });
+        }
+      }
+    });
+  };
+
+  // 审批/撤销 按钮回调
+  handleLock = () => {
+    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const serviceType = isLock ? 'approve' : 'revoke';
+
+    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ type: rightActive });
+        } else {
+          this.getListSecond({ type: secondTableActive });
+        }
+      }
+    });
+  };
+
+  // 新增||编辑 按钮事件回调
+  handleAdd = () => {
+    const { form, choosenRowData, choosenRowDataSecond } = this.props;
+    const { secondTableActive, rightActive, modalType } = this.state;
+    let params = {};
+    if (rightActive !== firstTabFlag) {
+      params = { flowCode: choosenRowData.flowCode };
+    }
+    if (modalType === 'edit') {
+      params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
+    }
+
+    form.validateFields((err, values) => {
+      if (!err) {
+        params = {
+          ...params,
+          ...values,
+        };
+
+        serviceObj[`add${rightActive}`](params).then(res => {
+          if (!res.head) {
+            return;
+          }
+          const { rtnCode, rtnMsg } = res.head;
+          if (rtnCode === '000000') {
+            notification.success({
+              message: rtnMsg,
+            });
+            if (rightActive === firstTabFlag) {
+              this.getList({ type: rightActive });
+            } else {
+              this.getListSecond({ type: secondTableActive });
+            }
+
+            // this.btnFn('');
+          }
+        });
+      }
+    });
+
+  };
+
+  // 获取新增/编辑弹窗内容
   getModalContent = () => {
     const {
-      selectKey,
       choosenRowData,
-      form: { getFieldDecorator },
+      choosenRowDataSecond,
+      form,
     } = this.props;
-    const { modalType } = this.state
-    const content = ''
-    const dataArr = modalContent[selectKey]
-    const isEdit = modalType === 'edit'
-    const { dev } = this.props
+    const {
+      modalType,
+      rightActive,
+    } = this.state;
+    const { getFieldDecorator } = form;
+
+    const content = '';
+    const isEdit = modalType === 'edit';
+    const { model } = this.props;
+    const addArr = modalInput[rightActive];
     return (
-      <Form size="small">
+      <Form size="small" key="1">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
-            console.log(list)
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
             return (
-              <FormItem label={key} {...formLayout} key={key}>
-                {
-                  getFieldDecorator(value, {
-                    rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
-                    initialValue: isEdit ? choosenRowData[value] : '',
-                  })(type && type === 2 ?
-                    <Select placeholder="请选择">
-                      {dev[list] && dev[list].map(({ value, key }) =>
-                        <Option value={value}>{key}</Option>
-                      )}
-                    </Select> :
-                    type && type === 3 ?
-                      <Radio.Group value={value}>
-                        <Radio value={1}>是</Radio>
-                        <Radio value={2}>否</Radio>
-                      </Radio.Group>
-                      :
-                      <Input placeholder="请输入" />
-                  )
-                }
-              </FormItem>
-            )
+              <div className="addModal" key={key}>
+                <FormItem
+                  label={key}
+                >
+                  {
+                    getFieldDecorator(value, {
+                      rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
+                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : undefined),
+                    })(this.returnElement({
+                      key,
+                      value,
+                      noNeed,
+                      number,
+                      type,
+                      list,
+                      clickFn,
+                      text,
+                      arr,
+                      initValue,
+                      data: model,
+                      form,
+                    }))
+                  }
+                </FormItem>
+              </div>
+            );
           })
         }
         {content}
@@ -583,110 +404,30 @@ class Info extends Component {
     );
   };
 
-  // 获取Modal的标题
-  returnTitle = () => {
-    const { modalType } = this.state;
-    let text = '';
+  // 列表对应操作button回调
+  btnFn = async (modalType) => {
     switch (modalType) {
       case 'plus':
-        text = '添加';
-        break;
       case 'edit':
-        text = '编辑';
-        break;
       default:
+        this.setState({ modalType });
+        break;
+      case 'delete':
+        ModalConfirm({
+          content: '确定删除吗？', onOk: () => {
+            this.handleDelect();
+          },
+        });
+        break;
+      case 'lock':
+        ModalConfirm({
+          content: '确定审批吗？', onOk: () => {
+            this.handleLock();
+          },
+        });
         break;
     }
-    return `任务${text}`;
   };
-
-  // 新增按钮事件回调
-  handleAdd = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
-
-    form.validateFields((err, values) => {
-      if (!err) {
-        // this.setState({
-        //   [selectKey]
-        // })
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        serviceObj[`addBasic${selectKey}`](values).then(res => {
-          const { rtnCode, rtnMsg } = res.head
-          if (rtnCode === '000000') {
-            notification.success({
-              message: rtnMsg,
-            });
-            this.getList()
-            // this.btnFn('');
-          }
-        })
-      }
-    });
-  }
-
-  // 编辑按钮回调
-  handleEdit = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
-
-    // 还要清空所选中项
-    this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
-      payload: [],
-    });
-
-    form.validateFields((err, values) => {
-      if (!err) {
-        const { choosenRowData } = this.props
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        const params = {
-          ...values,
-          id: choosenRowData.id
-        }
-        serviceObj[`addBasic${selectKey}`](params).then(res => {
-          const { rtnCode, rtnMsg } = res.head
-          if (rtnCode === '000000') {
-            notification.success({
-              message: rtnMsg,
-            });
-            this.getList()
-            // this.btnFn('');
-          }
-        })
-      }
-    });
-  }
-
-  // 删除按钮回调
-  handleDelect = () => {
-    const { selectKey, selectedRowKeys } = this.props
-    serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
-      const { rtnCode, rtnMsg } = res.head
-      if (rtnCode === '000000') {
-        notification.success({
-          message: rtnMsg,
-        });
-        this.getList()
-      }
-    })
-  }
-
-  // 审批/撤销 按钮回调
-  handleLock = () => {
-    const { selectKey, selectedRowKeys } = this.props
-    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke'
-    serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
-      const { rtnCode, rtnMsg } = res.head
-      if (rtnCode === '000000') {
-        notification.success({
-          message: rtnMsg,
-        });
-        this.getList()
-      }
-    })
-  }
 
   /**
    * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
@@ -696,249 +437,178 @@ class Info extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const { selectedRowKeys, dev, selectKey } = this.props
-    console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============')
-    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
-    const isLock1 = selectedRowKeys.reduce((res, cur) => {
-      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur)
-      if (singleObjcect) res.push(singleObjcect.status)
-      return res
-    }, [])
-    const isShenPi = isLock1.every((item) => Number(item) === 0) // 是否全是0
-    const isChexiao = isLock1.every((item) => Number(item) === 2) // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 }
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 }
-    return { name: '审批', disabled: true, type: 1 } // 当两种状态都有 禁止点击
-  }
-
-  // 弹窗确定提交回调
-  handleModalOk = () => {
-    const { modalType } = this.state;
-    switch (modalType) {
-      case 'plus':
-        this.handleAdd()
-        break;
-      case 'edit':
-        this.handleEdit()
-        break;
-      default:
-        break;
-    }
-
-  }
+    const { selectedRowKeys, selectedRowKeysSecond, model, list, listSecond } = this.props;
+    const { rightActive } = this.state;
+    const listr = rightActive === firstTabFlag ? list : listSecond;
+    const selectedKeys = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    if (listr && listr.records.length === 0) return { name: '审批', disabled: true, type: 1 };
+    const isLock1 = selectedKeys.reduce((res, cur) => {
+      const singleObjcect = listr.records.find(subItem => subItem.id === cur);
+      if (singleObjcect) res.push(singleObjcect.status);
+      return res;
+    }, []);
+    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
+    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
+    if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
+    return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
+  };
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props
-    if (tag === 'plus') return false
-    if (tag === 'lock') {
-      return selectedRowKeys.length === 0 || this.returnLockType().disabled
+    const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
+    const { rightActive } = this.state;
+
+    if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
+    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
+
+    if (tag === 'delete') {
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
     }
-    return selectedRowKeys.length === 0
-  }
+    if (tag === 'edit') {
+      const d = firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond;
+      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
+    }
+
+    return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
+  };
+
+  // 取消弹窗回调
+  onCancel = () => {
+    this.btnFn('');
+  };
+
 
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
-    const { mode, modalType } = state;
-    const { list, selectKey, choosenRowData } = props;
+    const {
+      state,
+      props,
+      btnFn,
+      returnSisabled,
+      returnLockType,
+      returnListName,
+      changeRightActive,
+      getModalContent,
+      handleModalOk,
+      onCancel,
+      returnElement,
+      onSearch,
+      returnTitle,
+    } = this;
+    const { modalType, rightActive, secondTableActive } = state;
+    const { choosenRowData, choosenRowDataSecond } = props;
+
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
         <div className={styles.center_content}>
           {/* lg={17} md={24} */}
           <div className={styles.main}>
-            <div
-              className={styles.leftmenu}
-              ref={ref => {
-                this.main = ref;
-              }}
-            >
-              <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.handleSelectKey}>
-                {this.getmenu()}
-              </Menu>
-            </div>
-            <div className={styles.right}>
-              <RightContent
-                type={selectKey}
-                sourceList={list}
-                choosenRowData={choosenRowData}
-                btnFn={btnFn}
-                returnLockType={returnLockType}
-                returnSisabled={returnSisabled}
-              />
+            <div className={styles.right} style={{ width: '100%' }}>
+              <GridContent>
+                <Row gutter={24} className={styles.row_content}>
+                  {/* 中间table组件 */}
+                  <Col lg={16} md={24}>
+                    <MiddleTable
+                      firstType={firstTabFlag}
+                      secondType={secondTableActive}
+                      returnElement={returnElement}
+                      onSearch={onSearch}
+                    />
+                  </Col>
+                  {/* 右边显示详细信息和按钮操作 */}
+                  <Col lg={8} md={24}>
+                    <div className={styles.view_right_content}>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                      }}
+                      >
+
+                        <div>
+                          <Radio.Group
+                            size="small"
+                            className={styles.right_content_tabgroud}
+                            onChange={changeRightActive}
+                            buttonStyle="solid"
+                            value={rightActive}
+                            style={{ textAlign: 'center' }}
+                          >
+                            {
+                              radioArr.map((item, index) =>
+                                <Radio.Button
+                                  key={item.value}
+                                  style={{
+                                    height: 40,
+                                    width: 130,
+                                    textalign: 'center',
+                                    lineHeight: '40px',
+                                  }}
+                                  value={item.value}
+                                >{item.key}
+                                </Radio.Button>)
+                            }
+                          </Radio.Group>
+                          <Divider className={styles.divder} />
+                        </div>
+                        <GetRenderitem
+                          key={firstTabFlag === rightActive ? choosenRowData.id : choosenRowDataSecond.id}
+                          data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
+                          type={rightActive}
+                          items={showItem}
+                        />
+                      </div>
+                      {/*  */}
+                      <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {btnGroup.map(({ name, tag }) => (
+                            <Button
+                              key={tag}
+                              className={styles.buttomControl}
+                              type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
+                              icon={tag}
+                              size="small"
+                              disabled={returnSisabled(tag)}
+                              onClick={() => {
+                                btnFn(tag);
+                              }}
+                            >
+                              {tag === 'lock' ? returnLockType().name : name}
+                            </Button>
+                          ))}
+                        </div>
+                      </Card>
+                    </div>
+                  </Col>
+                </Row>
+              </GridContent>
             </div>
           </div>
         </div>
+        {handleModalOk &&
         <Modal
           maskClosable={false}
           title={<BuildTitle title={returnTitle()} />}
-          width={640}
+
+          width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
           onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={() => {
-            btnFn('');
-          }}
-
+          onCancel={onCancel}
         >
           {getModalContent()}
         </Modal>
-      </div>
-    );
-  }
-}
-
-// 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled }) => (
-  <GridContent>
-    <Row gutter={24} className={styles.row_content}>
-      {/* 中间table组件 */}
-      <Col lg={16} md={24}>
-        <CenterInfo type={type} />
-      </Col>
-      {/* 右边显示详细信息和按钮操作 */}
-      <Col lg={8} md={24}>
-        <div className={styles.view_right_content}>
-          <Card bordered={false}>
-            <div>
-              <span
-                style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: '#35B0F4',
-                }}
-              >
-                <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-              </span>
-              <GetRenderitem data={choosenRowData} type={type} />
-            </div>
-          </Card>
-
-          {/* </Card> */}
-          <Card bodyStyle={{ display: 'flex',paddingLeft: 5, paddingRight: 5 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag }) => (
-                <Button
-                  key={tag}
-                  className={styles.buttomControl}
-                  type="primary"
-                  icon={tag}
-                  size="small"
-                  disabled={returnSisabled(tag)}
-                  onClick={() => { btnFn(tag) }}
-                >
-                  {tag === 'lock' ? returnLockType().name : name}
-                </Button>
-              ))}
-            </div>
-          </Card>
-        </div>
-      </Col>
-    </Row>
-  </GridContent>
-);
-
-// Table 中间列表内容
-@connect(({ loading, dev }) => {
-  return {
-    dev,
-    listLoading: loading.effects['dev/getList'],
-    pagination: dev.pagination,
-    choosenRowData: dev.choosenRowData,
-    selectedRowKeys: dev.selectedRowKeys,
-  };
-})
-class CenterInfo extends Component {
-  changePagination = obj => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dev/getDevList',
-      payload: obj,
-    });
-    dispatch({
-      type: 'dev/getPagination',
-      payload: obj,
-    });
-  };
-
-  changeChoosenRow = rowData => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dev/getChoosenRowData',
-      payload: rowData,
-    });
-  };
-
-
-  // 更改table select数组
-  onSelectChange = (selectedRowKeys) => {
-    this.props.dispatch({
-      type: 'dev/changeSelectedRowKeys',
-      payload: selectedRowKeys,
-    })
-  };
-
-  render() {
-    const { onSelectChange, props } = this
-    const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
-    const columns = columnsArr[type]
-    const list = dev[`${type}List`]
-    return (
-      <div className={styles.view_left_content}>
-        <div className={styles.contentTitle}>
-          <Icon
-            className={styles.titleIcon}
-            component={SvgUtil[type]}
-          />
-          <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-        </div>
-
-        <div className={styles.tableBox}>
-          <Table
-            columns={columns}
-            body={list}
-            changeChoosenRow={this.changeChoosenRow}
-            selectKey={choosenRowData.id}
-            pagination={pagination}
-            changePagination={this.changePagination}
-            selectedRowKeys={selectedRowKeys}
-            onSelectChange={onSelectChange}
-            listLoading={listLoading}
-          />
-        </div>
-      </div>
-    );
-  }
-}
-
-
-// 右手边显示的详情信息
-const GetRenderitem = ({ data, type }) => {
-  const selectRowItem = () => {
-    // console.log('select the item');
-  };
-  const arr = [
-    ...modalContent[type],
-    { "key": "状态", "value": "status" },
-  ]
-
-  return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
-      <DescriptionList className={styles.headerList} size="small" col="1">
-        {
-          arr.map(({ key, value }) => {
-            return (
-              <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
-            )
-          })
         }
-      </DescriptionList>
-    </div>
-  );
-};
+      </div>
+    );
+  }
 
-export default Info;
+
+}
+
+export default Index;

@@ -10,6 +10,7 @@ import devBasicUrls from './dev/devBasicUrls';
 import devRawUrls from './dev/devRawUrls';
 import devFlowUrls from './dev/devFlowUrls';
 import devFlowCostUrls from './dev/devFlowCostUrls';
+import devDieUrls from './dev/devDieUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
@@ -63,6 +64,18 @@ const resultFLow = devFlowUrls.map(({ name, arr, path }) => (
 
 ));
 
+// 开发-模具设定
+const resultSet = devDieUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: rType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix1:`${env}/business/develop.die`
+    }
+  ))
+
+));
+
 // 开发-流程工费
 const resultFLowCost = devFlowCostUrls.map(({ name, arr, path }) => (
   arr.map((item, index) => (
@@ -84,6 +97,7 @@ const resultArr = [
   ...resultRaw.flat(),
   ...resultFLow.flat(),
   ...resultFLowCost.flat(),
+  ...resultSet.flat(),
   { key: 'listGemSetProcessDropDown', path: '/gem-set-process/listGemSetProcessDropDown' },
   { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
   { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },

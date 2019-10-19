@@ -1,7 +1,6 @@
 @import '~antd/lib/style/themes/default.less';
 @import '~@/common';
 .main {
-  display: flex;
   width: 100%;
   height: 100%;
   padding-bottom: 16px;
@@ -42,22 +41,25 @@
     }
   }
 }
+
+.row_content {
+  display: flex;
+  justify-content: space-between;
+}
 .tableBox {
   padding: 20px;
+  padding-left: 0;
 }
 .view_left_content {
   background-color: @globalbgcolor;
-  height: 100%;
   min-height: 85vh;
   max-height: 85vh;
   overflow: auto;
-  padding-top: 20px;
-  //margin-bottom: 12px;
+  padding: 24px;
 }
 .contentTitle {
   font-size: 25px;
   text-align: left;
-  padding-left: 10px;
 }
 
 .right_content_tbs {
@@ -67,6 +69,7 @@
   width: 100%;
 }
 .right_content_tabgroud {
+  padding: 20px 0;
   width: 100%;
 }
 .right_content_tabs {
@@ -99,13 +102,6 @@
   backgroundcolor: @globalbgcolor;
   height: 100%;
 }
-.view_left_content {
-  background-color: @globalbgcolor;
-  height: 100%;
-  min-height: 85vh;
-  max-height: 85vh;
-  overflow: auto;
-}
 .list_info {
   background-color: @globalbgcolor;
   display: flex;
@@ -115,13 +111,22 @@
   overflow: auto;
 }
 .view_dwon {
-  background-color: @globalbgcolor;
+  background-color: #fff;
   display: flex;
   flex: 1 1;
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
   overflow: auto;
+}
+
+.divder {
+  margin-top: 5px;
+  padding-top: 0;
+  margin-bottom: 5px;
+  padding-bottom: 0;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .view_right_content {
   background-color: @globalbgcolor;
@@ -132,7 +137,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: auto;
+  overflow: hidden;
 }
 .rignum_right_card_view {
   width: 100%;
@@ -213,6 +218,9 @@
       border-radius: @border-radius-base;
     }
   }
+  .addModal .ant-row > .ant-col.ant-form-item-label {
+    width: 120px;
+  }
 
   // 密码强度
   font.strong {
@@ -239,7 +247,6 @@
   height: 50px;
   padding-right: 10px;
   padding-top: 10px;
-  padding-left: 20px;
 }
 
 .tableRow1 {

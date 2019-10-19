@@ -20,6 +20,8 @@ export default {
   'menu.erp.dev.flowCostType': '流程工费',
   'menu.erp.dev.Raw':'原料档案',
   'menu.erp.dev.basic': '基础数据',
+  'menu.erp.dev.mould':'模具设定',
+
 
   'menu.erp.dev.eliver': '出货',
   'menu.erp.dev.product': '产品',
@@ -28,7 +30,6 @@ export default {
   'menu.erp.dev.receiving': '收付款',
   'menu.erp.dev.specimen': '新款档案',
   'menu.erp.dev.report': '报表',
-  'menu.erp.dev.Mould':'模具设定',
   'menu.erp.dev.FinishedProduct':'成品设定',
 
 

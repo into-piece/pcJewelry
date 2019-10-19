@@ -10,8 +10,8 @@ export const orderApproveProduct = [
 
 
 export const orderApproveResult = [
-  { 'key': '产品编号', 'value': 'productNo',  },
-  { 'key': '审批人', 'value': 'approveUser',},
+  { 'key': '产品编号', 'value': 'productNo',},
+  { 'key': '审批人', 'value': 'approveUser'},
   { 'key': '审批部门', 'value': 'approveDep'},
   { 'key': '审批结果', 'value': 'approveResult',type:2,list:'approveResultList'},
 ];
