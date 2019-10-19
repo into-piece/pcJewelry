@@ -111,7 +111,7 @@ class Index extends Component {
   }
 
   // 右边顶部tab切换
-  changeRightActive = (v,clear) => {
+  changeRightActive = (v, clear) => {
     const { secondTableActive } = this.state;
     this.setState({
       rightActive: v.target.value,
@@ -119,7 +119,7 @@ class Index extends Component {
     });
 
     if (clear) {
-      const {  dispatch, paginationSecond, choosenRowData } = this.props;
+      const { dispatch, paginationSecond, choosenRowData } = this.props;
       // 清除第二右边详细
       dispatch({
         type: `${defaultModelName}/clearSecondDetail`,
@@ -426,38 +426,48 @@ class Index extends Component {
                   {/* 右边显示详细信息和按钮操作 */}
                   <Col lg={8} md={24}>
                     <div className={styles.view_right_content}>
-                      <Card bordered={false}>
-                        <Radio.Group
-                          size="small"
-                          className={styles.right_content_tabgroud}
-                          onChange={v=>{changeRightActive(v,true)}}
-                          buttonStyle="solid"
-                          value={rightActive}
-                          style={{ textAlign: 'center' }}
-                        >
-                          {
-                            radioArr.map((item, index) =>
-                              <Radio.Button
-                                key={item.value}
-                                style={{
-                                  height: 30,
-                                  width: 80,
-                                  textalign: 'center',
-                                  lineHeight: '30px',
-                                }}
-                                value={item.value}
-                              >{item.key}
-                              </Radio.Button>)
-                          }
-                        </Radio.Group>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          flexDirection: 'column',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <div>
+                          <Radio.Group
+                            size="small"
+                            className={styles.right_content_tabgroud}
+                            onChange={v => {
+                              changeRightActive(v, true);
+                            }}
+                            buttonStyle="solid"
+                            value={rightActive}
+                            style={{ textAlign: 'center' }}
+                          >
+                            {
+                              radioArr.map((item, index) =>
+                                <Radio.Button
+                                  key={item.value}
+                                  style={{
+                                    height: 30,
+                                    width: 80,
+                                    textalign: 'center',
+                                    lineHeight: '30px',
+                                  }}
+                                  value={item.value}
+                                >{item.key}
+                                </Radio.Button>)
+                            }
+                          </Radio.Group>
+                        </div>
                         <GetRenderitem
                           key={firstTabFlag === rightActive ? choosenRowData.id : choosenRowDataSecond.id}
                           data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
                           type={rightActive}
                           items={showItem}
                         />
-                      </Card>
-
+                      </div>
                       {/*  */}
                       <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -485,23 +495,25 @@ class Index extends Component {
             </div>
           </div>
         </div>
-        {handleModalOk &&
-        <Modal
-          maskClosable={false}
-          title={<BuildTitle title={returnTitle()} />}
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          onOk={handleModalOk}
-          visible={modalType !== ''}
-          onCancel={onCancel}
-        >
-          {getModalContent()}
-        </Modal>
+        {
+          handleModalOk &&
+          <Modal
+            maskClosable={false}
+            title={<BuildTitle title={returnTitle()} />}
+            width={1000}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            onOk={handleModalOk}
+            visible={modalType !== ''}
+            onCancel={onCancel}
+          >
+            {getModalContent()}
+          </Modal>
         }
       </div>
-    );
+    )
+
   }
 
 

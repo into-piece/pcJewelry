@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio,Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -815,6 +815,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               >
                 <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
               </span>
+
               <GetRenderitem data={choosenRowData} type={type} />
             </div>
           </Card>

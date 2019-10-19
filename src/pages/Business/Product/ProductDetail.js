@@ -237,67 +237,67 @@ class ProductDetail extends Component {
       });
     }
 
-    // console.log(" fetch isload ",showItem)
-    // console.log(" data status ",showItem?showItem.status:'nudefine')
 
     if (!paths) paths = [];
 
     return (<div className={business.right_info}>
-      <div className={business.list_info}>
-
-        <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            产品
-        </span>
-        <Divider className={business.divder} />
-
-        <div className={baseStyles.content}>
-          <div className={baseStyles.right_info}>
-            {(showItem && showItem !== '') ? (
-              <div>
-                <Spin spinning={isLoading}>
-                  <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
-                    {this.getImages(paths)}
-                  </Carousel>
-                  <DescriptionList size="small" col="1">
-                    <Description term="名称">{showItem.zhName}</Description>
-                    <Description term="编号">{showItem.productNo}</Description>
-                    <Description term="类别">{showItem.productTypeName}</Description>
-                    <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价" />
-                  </DescriptionList>
-                  <span className={business.title_info}>
-            参数详情
-                  </span>
-                  <Divider className={business.divder} />
-                  <DescriptionList size="small" col="2">
-                    <Description term="颜色">{showItem.gemColorName}</Description>
-                    <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
-                    <Description term="报价重量">{showItem.finishedWeight}</Description>
-                    <Description term="成品重量">{showItem.unitOfWeightName}</Description>
-                    <Description term="电镀">{showItem.platingColorName}</Description>
-                    <Description term="成色">{showItem.productColorName}</Description>
-                    <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                    <Description term="模具">{showItem.mouldNo}</Description>
-                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
-                    <Description term="客户">{showItem.customerNo}</Description>
-                    <Description term="供应商货号">{showItem.supplierId}</Description>
-                    <Description term="供应商">{showItem.supplierProductNo}</Description>
-                    <Description term="品牌">{showItem.brandNo}</Description>
-                  </DescriptionList>
-                  <span className={business.title_info}>
-            备注
-                  </span>
-                  <Divider className={business.divder} />
-                  <DescriptionList size="small" col="1">
-                    <Description>{showItem.marks}</Description>
-                  </DescriptionList>
-                </Spin>
-              </div>
-            ) : (
-              <div />
-            )}
+        <div
+          style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
+        >
+          <div>
+            <span className={business.title_info} onClick={this.clickToggleDrawer}>产品</span>
+            <Divider className={business.divder} />
           </div>
+          <div className={baseStyles.content}>
+            <div className={baseStyles.right_info}>
 
+              {(showItem && showItem !== '') ? (
+                <div>
+                  <Spin spinning={isLoading}>
+                    <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
+                      {this.getImages(paths)}
+                    </Carousel>
+                    <DescriptionList size="small" col="1">
+                      <Description term="名称">{showItem.zhName}</Description>
+                      <Description term="编号">{showItem.productNo}</Description>
+                      <Description term="类别">{showItem.productTypeName}</Description>
+                      <Description term="重量">{showItem.finishedWeight}</Description>
+                      <Description term="工价" />
+                    </DescriptionList>
+                    <span className={business.title_info}>
+            参数详情
+                    </span>
+                    <Divider className={business.divder} />
+                    <DescriptionList size="small" col="2">
+                      <Description term="颜色">{showItem.gemColorName}</Description>
+                      <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
+                      <Description term="报价重量">{showItem.finishedWeight}</Description>
+                      <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                      <Description term="电镀">{showItem.platingColorName}</Description>
+                      <Description term="成色">{showItem.productColorName}</Description>
+                      <Description term="产品来源">{showItem.sourceOfProductName}</Description>
+                      <Description term="模具">{showItem.mouldNo}</Description>
+                      <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                      <Description term="客户">{showItem.customerNo}</Description>
+                      <Description term="供应商货号">{showItem.supplierId}</Description>
+                      <Description term="供应商">{showItem.supplierProductNo}</Description>
+                      <Description term="品牌">{showItem.brandNo}</Description>
+                    </DescriptionList>
+                    <span className={business.title_info}>
+            备注
+                    </span>
+                    <Divider className={business.divder} />
+                    <DescriptionList size="small" col="1">
+                      <Description>{showItem.marks}</Description>
+                    </DescriptionList>
+                  </Spin>
+                </div>
+              ) : (
+                <div />
+              )}
+            </div>
+          </div>
+          </div>
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
             <div
               style={{
@@ -361,7 +361,7 @@ class ProductDetail extends Component {
                     disabled={!showItem || showItem === '' || !isProductUpdate}
                   >
                       取消审批
-                                                        </Button>
+                  </Button>
                     : <Button
                       className={business.buttomControl}
                       size="small"
@@ -421,11 +421,9 @@ class ProductDetail extends Component {
               {this.getProductModalContent()}
             </Modal>
           </Card>
-        </div>
 
       </div>
-
-    </div>);
+ );
 
 
   };
@@ -696,10 +694,9 @@ class ProductDetail extends Component {
                       this.setState({ current: { ...this.state.current, mouldNo: v } });
                     }}
                     onSelect={(v) => {
-console.log(v)
                       // if (v && v.mainMold)
                       //   this.state.cNomainMold = v.mainMold;
-                        this.state.cNomainMold = v;
+                      this.state.cNomainMold = v;
                       this.parseProductNo();
                     }}
                   />,

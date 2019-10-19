@@ -27,6 +27,7 @@ import HttpFetch from '@/utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '@/utils/authority';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -242,10 +243,15 @@ class IndexDetail extends Component {
 
     return (<div className={styles.right_info}>
       <div className={business.list_info}>
-
-        <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            员工信息
-        </span>
+        <div style={{
+          padding: "20px 20px 10px",
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: '#35B0F4',
+        }}
+        >
+          <FormattedMessage id="menu.erp.system.personnel" defaultMessage="Authority" />
+        </div>
         <Divider className={business.divder} />
 
         <div className={baseStyles.content}>

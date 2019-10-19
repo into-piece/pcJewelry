@@ -4,7 +4,7 @@
 * */
 
 import {
-  Divider,
+  Card,
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import styles from './GetRenderitem.less';
@@ -18,7 +18,7 @@ const { Description } = DescriptionList;
 *
 * items 配置数据
 * */
-const GetRenderitem = ({ data, type, items, itemsTitle }) => {
+const GetRenderitem = ({ data, type, items }) => {
   const selectRowItem = () => {
     // console.log('select the item');
   };
@@ -26,11 +26,8 @@ const GetRenderitem = ({ data, type, items, itemsTitle }) => {
   const arr = items[type];
 
   return (
-    <div className={styles.getRenderitem} onClick={selectRowItem}>
-      <span className={styles.title_info}>
-        {itemsTitle}
-      </span>
-      <Divider className={styles.divder} />
+    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
+
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, cName, convert }) =>
@@ -42,7 +39,7 @@ const GetRenderitem = ({ data, type, items, itemsTitle }) => {
           )
         }
       </DescriptionList>
-    </div>
+    </Card>
   );
 };
 

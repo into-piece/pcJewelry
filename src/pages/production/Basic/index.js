@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio,Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -171,7 +171,7 @@ class Info extends Component {
         break;
       case 'lock':
         const isLock = this.returnLockType().type === 1;
-        const setvicetypename = isLock ? '审批':'取消审批';
+        const setvicetypename = isLock ? '审批' : '取消审批';
         ModalConfirm({
           content: `确定${setvicetypename}吗？`, onOk: () => {
             this.handleLock();
@@ -235,19 +235,23 @@ class Info extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const { modalType } = this.state;
-    let text = '';
-    switch (modalType) {
-      case 'plus':
-        text = '添加';
-        break;
-      case 'edit':
-        text = '编辑';
-        break;
-      default:
-        break;
-    }
-    return `任务${text}`;
+    const { selectKey } = this.props;
+    //
+    // const { modalType } = this.state;
+    // let text = '';
+    // switch (modalType) {
+    //   case 'plus':
+    //     text = '添加';
+    //     break;
+    //   case 'edit':
+    //     text = '编辑';
+    //     break;
+    //   default:
+    //     break;
+    // }
+
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Basic Settings" />;
+    return menuText;
   };
 
   // 新增按钮事件回调
@@ -447,22 +451,26 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
-          <Card bordered={false}>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
+          >
             <div>
-              <span
+              <div
                 style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
+                  padding: "20px 20px 10px",
                   fontSize: 20,
                   fontWeight: 'bold',
                   color: '#35B0F4',
                 }}
               >
                 <FormattedMessage id={`app.production.menuMap.${type}`} defaultMessage="" />
-              </span>
-              <GetRenderitem data={choosenRowData} type={type} />
+              </div>
+              <Divider className={styles.divder} />
+
             </div>
-          </Card>
+
+            <GetRenderitem data={choosenRowData} type={type} />
+          </div>
 
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
@@ -574,7 +582,7 @@ const GetRenderitem = ({ data, type }) => {
   ];
 
   return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
+    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
@@ -588,7 +596,7 @@ const GetRenderitem = ({ data, type }) => {
           })
         }
       </DescriptionList>
-    </div>
+    </Card>
   );
 };
 

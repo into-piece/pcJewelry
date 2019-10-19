@@ -101,6 +101,7 @@ class SpecimenDetaill extends Component {
       isLoadImage: true,
       productParams: {},
       isEditItem: false,
+      showItem: {},
     };
   }
 
@@ -251,60 +252,64 @@ class SpecimenDetaill extends Component {
 
     return (<div className={business.right_info}>
       <div className={business.list_info}>
-
-        <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            新款输入
-        </span>
-        <Divider className={business.divder} />
-
         <div className={baseStyles.content}>
-          <div className={baseStyles.right_info}>
-            {(showItem && showItem !== '') ? (
-              <div>
-                <Spin spinning={isLoading}>
-                  <Carousel {...this.carouselsettings} className={business.carousel_content} initialSlide={0} autoplay>
-                    {this.getImages(paths)}
-                  </Carousel>
-                  <DescriptionList size="small" col="1">
-                    <Description term="名称">{showItem.zhName}</Description>
-                    <Description term="编号">{showItem.productNo}</Description>
-                    <Description term="类别">{showItem.productTypeName}</Description>
-                    <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价" />
-                  </DescriptionList>
-                  <span className={business.title_info}>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
+          >
+            <div>
+                <span className={business.title_info} onClick={this.clickToggleDrawer}>
+                  新款输入
+                </span>
+              <Divider className={business.divder}/>
+            </div>
+            <div className={baseStyles.right_info}>
+              {(showItem && showItem !== '' ) ? (
+                <div>
+                  <Spin spinning={isLoading}>
+                    <Carousel {...this.carouselsettings} className={business.carousel_content} initialSlide={0}
+                              autoplay>
+                      {this.getImages(paths)}
+                    </Carousel>
+                    <DescriptionList size="small" col="1">
+                      <Description term="名称">{showItem.zhName}</Description>
+                      <Description term="编号">{showItem.productNo}</Description>
+                      <Description term="类别">{showItem.productTypeName}</Description>
+                      <Description term="重量">{showItem.finishedWeight}</Description>
+                      <Description term="工价"/>
+                    </DescriptionList>
+                    <span className={business.title_info}>
             参数详情
                   </span>
-                  <Divider className={business.divder} />
-                  <DescriptionList size="small" col="2">
-                    <Description term="颜色">{showItem.gemColorName}</Description>
-                    <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
-                    <Description term="报价重量">{showItem.finishedWeight}</Description>
-                    <Description term="成色重量">{showItem.unitOfWeightName}</Description>
-                    <Description term="电镀">{showItem.platingColorName}</Description>
-                    <Description term="成色">{showItem.productColorName}</Description>
-                    <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                    <Description term="模具">{showItem.mouldNoName}</Description>
-                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
-                    <Description term="客户">{showItem.customerNo}</Description>
-                    <Description term="供应商货号">{showItem.supplierId}</Description>
-                    <Description term="供应商">{showItem.supplierProductNo}</Description>
-                    <Description term="品牌">{showItem.brandNo}</Description>
-                  </DescriptionList>
-                  <span className={business.title_info}>
+                    <Divider className={business.divder}/>
+                    <DescriptionList size="small" col="2">
+                      <Description term="颜色">{showItem.gemColorName}</Description>
+                      <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
+                      <Description term="报价重量">{showItem.finishedWeight}</Description>
+                      <Description term="成色重量">{showItem.unitOfWeightName}</Description>
+                      <Description term="电镀">{showItem.platingColorName}</Description>
+                      <Description term="成色">{showItem.productColorName}</Description>
+                      <Description term="产品来源">{showItem.sourceOfProductName}</Description>
+                      <Description term="模具">{showItem.mouldNoName}</Description>
+                      <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                      <Description term="客户">{showItem.customerNo}</Description>
+                      <Description term="供应商货号">{showItem.supplierId}</Description>
+                      <Description term="供应商">{showItem.supplierProductNo}</Description>
+                      <Description term="品牌">{showItem.brandNo}</Description>
+                    </DescriptionList>
+                    <span className={business.title_info}>
             备注
                   </span>
-                  <Divider className={business.divder} />
-                  <DescriptionList size="small" col="1">
-                    <Description>{showItem.marks}</Description>
-                  </DescriptionList>
-                </Spin>
-              </div>
-            ) : (
-              <div />
-            )}
+                    <Divider className={business.divder}/>
+                    <DescriptionList size="small" col="1">
+                      <Description>{showItem.marks}</Description>
+                    </DescriptionList>
+                  </Spin>
+                </div>
+              ) : (
+                <div/>
+              )}
+            </div>
           </div>
-
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
             <div
               style={{
@@ -353,21 +358,21 @@ class SpecimenDetaill extends Component {
                 </Button>
                 {
                   showItem && showItem.status === '2' ? <Button
-                    className={business.buttomControl}
-                    size="small"
-                    type="danger"
-                    icon="unlock"
-                    onClick={() => {
+                      className={business.buttomControl}
+                      size="small"
+                      type="danger"
+                      icon="unlock"
+                      onClick={() => {
                         ModalConfirm({
                           content: '确定取消审批吗？', onOk: () => {
                             this.handleUnFreezeProduct();
                           },
                         });
                       }}
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
-                  >
+                      disabled={!showItem || showItem === '' || !isProductUpdate}
+                    >
                       取消审批
-                  </Button>
+                    </Button>
                     : <Button
                       className={business.buttomControl}
                       size="small"
@@ -532,7 +537,7 @@ class SpecimenDetaill extends Component {
     return (
       <div className={clientStyle.list_info}>
         <span className={business.sun_title_info}>新款输入</span>
-        <Divider className={business.divder} />
+        <Divider className={business.divder}/>
         <Form
           size="small"
           labelAlign="left"
@@ -661,7 +666,7 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('zhName', {
                   rules: [{ required: true, message: '请输入中文名称' }],
                   initialValue: current.zhName,
-                })(<Input placeholder="自动生成" readOnly />,
+                })(<Input placeholder="自动生成" readOnly/>,
                 )}
               </FormItem>
             </Col>
@@ -777,7 +782,7 @@ class SpecimenDetaill extends Component {
                     message: '请输入规格',
                   }],
                   initialValue: current.specification,
-                })(<Input placeholder="请输入" />)}
+                })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -807,7 +812,7 @@ class SpecimenDetaill extends Component {
               >
                 {getFieldDecorator('finishedWeight', {
                   initialValue: current.finishedWeight,
-                })(<Input placeholder="请输入" />)}
+                })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -819,7 +824,7 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('productDesc', {
                   rules: [{ message: '请输入产品描述' }],
                   initialValue: current.productDesc,
-                })(<Input placeholder="请输入" />)}
+                })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
             <Col lg={5} md={5} sm={5} xs={5}>
@@ -830,7 +835,7 @@ class SpecimenDetaill extends Component {
               >
                 {getFieldDecorator('marks', {
                   initialValue: current.marks,
-                })(<Input placeholder="请输入" />)}
+                })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -853,7 +858,7 @@ class SpecimenDetaill extends Component {
                   onChange={handleChange}
                 >
                   <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
+                    <Icon type={this.state.loading ? 'loading' : 'plus'}/>
                     <div className="ant-upload-text">上传图片</div>
                   </div>
                 </Upload>
@@ -870,7 +875,7 @@ class SpecimenDetaill extends Component {
           className={business.from_content}
         >
           <span className={business.sun_title_info}>客户信息</span>
-          <Divider className={business.divder} />
+          <Divider className={business.divder}/>
           <Row>
 
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -933,7 +938,7 @@ class SpecimenDetaill extends Component {
                 {getFieldDecorator('custoerProductNo', {
                   rules: [{ message: '请输入货号' }],
                   initialValue: current.custoerProductNo,
-                })(<Input placeholder="请输入" />)}
+                })(<Input placeholder="请输入"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -951,7 +956,7 @@ class SpecimenDetaill extends Component {
             className={business.from_content}
           >
             <span className={business.sun_title_info}>供应商信息</span>
-            <Divider className={business.divder} />
+            <Divider className={business.divder}/>
             <Row style={{ width: '100%' }}>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem
@@ -962,7 +967,7 @@ class SpecimenDetaill extends Component {
                   {getFieldDecorator('supplierId', {
                     rules: [{ required: true, message: '请输入供应商编号' }],
                     initialValue: current.supplierId,
-                  })(<Input placeholder="请输入" />)}
+                  })(<Input placeholder="请输入"/>)}
                 </FormItem>
               </Col>
 
@@ -976,7 +981,7 @@ class SpecimenDetaill extends Component {
                   {getFieldDecorator('supplierProductNo', {
                     rules: [{ message: '请输入供应商货号' }],
                     initialValue: current.supplierProductNo,
-                  })(<Input placeholder="请输入" />)}
+                  })(<Input placeholder="请输入"/>)}
                 </FormItem>
               </Col>
             </Row>
@@ -1315,7 +1320,7 @@ class SpecimenDetaill extends Component {
           // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
-          <div className="img-preview" style={{ width: '100%', height: '100%' }} />
+          <div className="img-preview" style={{ width: '100%', height: '100%' }}/>
         </div>
       </div>
     );
@@ -1420,7 +1425,7 @@ class SpecimenDetaill extends Component {
     //   enName,
     // });
 
-   // // setFieldsValue('productNo', productNo);
+    // // setFieldsValue('productNo', productNo);
 
   };
 

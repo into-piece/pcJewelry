@@ -54,7 +54,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete',type:'danger', type: 'danger' },
+  { name: '删除', tag: 'delete', type: 'danger', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -561,8 +561,6 @@ class Info extends Component {
     });
 
 
-
-
     // 大类下拉
     dispatch({
       type: 'devRaw/getListMstWordbookParams',
@@ -611,18 +609,18 @@ class Info extends Component {
   };
 
   // 获取对应key=》页面进行数据请求
-  getList = ({ key, params ,sId}) => {
+  getList = ({ key, params, sId }) => {
     const { dispatch, pagination, selectKey, choosenTypesRowData } = this.props;
 
     // 没有选择类型就没有查询下面
-    if (!sId&&(!choosenTypesRowData || choosenTypesRowData.id === '')) {
+    if (!sId && (!choosenTypesRowData || choosenTypesRowData.id === '')) {
       return;
     }
 
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params, sId: sId||choosenTypesRowData.id }, type: key || selectKey },
+      payload: { params: { ...pagination, ...params, sId: sId || choosenTypesRowData.id }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -721,8 +719,7 @@ class Info extends Component {
               const qualityId = `${getFieldValue('quality')}`;
 
               const assaying = dev.listBasicColourSetDropDown.filter(e => e.id === assayingId);
-              let  s = dev.H016001.filter(e => e.id === sId);
-
+              let s = dev.H016001.filter(e => e.id === sId);
 
 
               const shape = dev.shapeSettingList.filter(e => e.id === shapeId);
@@ -744,15 +741,15 @@ class Info extends Component {
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${
                   shape.length > 0 ? (`${shape[0].shapeCode}-`) : ''}${
                   cut.length > 0 ? (`${cut[0].cuttingCode}-`) : ''}${
-                  color.length > 0 ? (`${color[0].unitCode}-` ): ''}${
-                  quality.length > 0 ?( `${quality[0].gradeCode}-`) : ''}${
+                  color.length > 0 ? (`${color[0].unitCode}-`) : ''}${
+                  quality.length > 0 ? (`${quality[0].gradeCode}-`) : ''}${
                   specification.length > 0 ? specification[0].specificationCode : ''}`;
               }
-              if (selectKey === 'wrapper'||selectKey === 'auxiliaryMaterial') {
-                if(selectKey === 'wrapper'){
+              if (selectKey === 'wrapper' || selectKey === 'auxiliaryMaterial') {
+                if (selectKey === 'wrapper') {
                   s = dev.H016004.filter(e => e.id === sId);
                 }
-                if(selectKey === 'auxiliaryMaterial'){
+                if (selectKey === 'auxiliaryMaterial') {
                   s = dev.H016005.filter(e => e.id === sId);
                 }
 
@@ -839,7 +836,8 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        values = { ...values,
+        values = {
+          ...values,
           // sId: choosenTypesRowData.id
         };
 
@@ -966,9 +964,9 @@ class Info extends Component {
     }, []);
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1,isChexiao ,isShenPi};
-    if (isChexiao) return { name: '取消审批', disabled: false, type: 2,isChexiao ,isShenPi };
-    return { name: '审批', disabled: true, type: 1,isChexiao ,isShenPi }; // 当两种状态都有 禁止点击
+    if (isShenPi) return { name: '审批', disabled: false, type: 1, isChexiao, isShenPi };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isChexiao, isShenPi };
+    return { name: '审批', disabled: true, type: 1, isChexiao, isShenPi }; // 当两种状态都有 禁止点击
   };
 
   // 弹窗确定提交回调
@@ -989,17 +987,17 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys, choosenTypesRowData,choosenRowData } = this.props;
+    const { selectedRowKeys, choosenTypesRowData, choosenRowData } = this.props;
     if (tag === 'plus') return (!choosenTypesRowData || choosenTypesRowData.id === '');
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
 
-    if (tag ==='delete'){
+    if (tag === 'delete') {
       return selectedRowKeys.length === 0 || !this.returnLockType().isShenPi;
     }
-    if (tag ==='edit'){
-      return    selectedRowKeys.length === 0 ||Number(choosenRowData.status)===2;
+    if (tag === 'edit') {
+      return selectedRowKeys.length === 0 || Number(choosenRowData.status) === 2;
     }
 
     return selectedRowKeys.length === 0;
@@ -1008,22 +1006,22 @@ class Info extends Component {
 
   // 第一部分table 排序 页面切换 触发
   onSearchType = (v) => {
-    const { dispatch,dev } = this.props;
+    const { dispatch, dev } = this.props;
     dispatch({
       type: 'devRaw/getTypesPagination',
       payload: v,
     });
-    this.getTypeList({...v,...dev.searchparamsTypes});
+    this.getTypeList({ ...v, ...dev.searchparamsTypes });
   };
 
   // 第二部分table 排序 页面切换 触发
   onSearch = (v) => {
-    const { dispatch, selectKey ,dev} = this.props;
+    const { dispatch, selectKey, dev } = this.props;
     dispatch({
       type: 'devRaw/getPagination',
       payload: v,
     });
-    this.getList({ key: selectKey, params: {...v,...dev.searchparams} });
+    this.getList({ key: selectKey, params: { ...v, ...dev.searchparams } });
   };
 
   render() {
@@ -1099,23 +1097,25 @@ const RightContent =
         {/* 右边显示详细信息和按钮操作 */}
         <Col lg={8} md={16}>
           <div className={styles.view_right_content}>
-            <Card bordered={false} style={{overflow:'auto' }}>
+            <div
+              style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
+            >
+
               <div>
-                <span
+                <div
                   style={{
-                    marginBottom: 32,
-                    paddingLeft: 10,
+                    padding: '20px 20px 10px',
                     fontSize: 20,
                     fontWeight: 'bold',
                     color: '#35B0F4',
                   }}
                 >
                   <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
-                </span>
-                <GetRenderitem data={choosenRowData} type={type} />
+                </div>
+                <Divider className={styles.divder} />
               </div>
-            </Card>
-
+              <GetRenderitem data={choosenRowData} type={type} />
+            </div>
             {/* </Card> */}
             <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1123,7 +1123,7 @@ const RightContent =
                   <Button
                     key={tag}
                     className={styles.buttomControl}
-                    type={(tag==='delete'||(tag==='lock'&&returnLockType().type===2))?'danger':"primary"}
+                    type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
                     icon={tag}
                     size="small"
                     disabled={returnSisabled(tag)}
@@ -1158,7 +1158,7 @@ class CenterInfo extends Component {
 
 
   changeChoosenTypeRow = rowData => {
-    const { dispatch,getList } = this.props;
+    const { dispatch, getList } = this.props;
     dispatch({
       type: 'devRaw/getChoosenTypeRowData',
       payload: rowData,
@@ -1167,9 +1167,9 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/clearSixList',
       payload: {},
-      callback:()=>{
-        getList({sId:rowData.id});
-      }
+      callback: () => {
+        getList({ sId: rowData.id });
+      },
     });
   };
 
@@ -1191,7 +1191,7 @@ class CenterInfo extends Component {
   };
 
   turnTab(e) {
-    const key =e.target? e.target.value:e;
+    const key = e.target ? e.target.value : e;
     const { dispatch, getList } = this.props;
     dispatch({
       type: 'devRaw/setsearchparams',
@@ -1287,8 +1287,8 @@ class CenterInfo extends Component {
                 payload: {},
               });
             }}
-            onChange={(e)=>{
-              const {dispatch} = this.props;
+            onChange={(e) => {
+              const { dispatch } = this.props;
               dispatch({
                 type: 'devRaw/setsearchparamsTypes',
                 payload: e,
@@ -1378,8 +1378,8 @@ class CenterInfo extends Component {
               });
             }}
 
-            onChange={(e)=>{
-              const {dispatch} = this.props;
+            onChange={(e) => {
+              const { dispatch } = this.props;
               dispatch({
                 type: 'devRaw/setsearchparams',
                 payload: e,
@@ -1439,7 +1439,7 @@ const GetRenderitem = ({ data, type }) => {
 
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
   return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem} key={type}>
+    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
       <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
@@ -1459,7 +1459,7 @@ const GetRenderitem = ({ data, type }) => {
           })
         }
       </DescriptionList>
-    </div>
+    </Card>
   );
 };
 

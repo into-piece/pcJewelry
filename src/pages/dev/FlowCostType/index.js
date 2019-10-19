@@ -12,8 +12,12 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  Divider,
   notification,
+
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
+
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
@@ -186,19 +190,8 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const { modalType } = this.state;
-    let text = '';
-    switch (modalType) {
-      case 'plus':
-        text = '新增';
-        break;
-      case 'edit':
-        text = '编辑';
-        break;
-      default:
-        break;
-    }
-    return `${text}`;
+    const menuText = <FormattedMessage id="menu.erp.dev.flowCostType" defaultMessage="Basic Settings" />;
+    return menuText;
   };
 
   // 弹窗确定提交回调
@@ -465,15 +458,17 @@ class Index extends Component {
                   <Col lg={8} md={24}>
                     <div className={styles.view_right_content}>
 
-
-                      <Card bordered={false} style={{overflow:'auto' }}>
+                      <div style={{display:"flex",justifyContent:"space-between",flexDirection: "column",    overflow: "hidden"}}>
+                        <div>
+                          <div className={styles.title_info}>{returnTitle()}详情</div>
+                          <Divider className={styles.divder} />
+                        </div>
                         <GetRenderitem
                           data={choosenRowData}
                           type={rightActive}
                           items={showItem}
-                          itemsTitle="流程工费信息"
                         />
-                      </Card>
+                      </div>
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           {btnGroup.map(({ name, tag }) => (

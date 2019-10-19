@@ -562,7 +562,7 @@ class Info extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入"/>;
+        return <TextArea rows={2} placeholder="请输入" />;
       case 9:
         return <RangePicker
           style={{ marginRight: 10 }}
@@ -571,7 +571,7 @@ class Info extends Component {
           }}
         />;
       default:
-        return <Input disabled={this.disabledCondition(value, form)} style={{ width: '100' }} placeholder="请输入"/>;
+        return <Input disabled={this.disabledCondition(value, form)} style={{ width: '100' }} placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -1060,35 +1060,35 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
-        <CenterInfo type={type} handleRadio={handleRadio} returnElement={returnElement} onSearch={onSearch}/>
+        <CenterInfo type={type} handleRadio={handleRadio} returnElement={returnElement} onSearch={onSearch} />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
-          <Card bordered={false}>
-            <Radio.Group
-              size="small"
-              className={styles.right_content_tabgroud}
-              onChange={changeRightMenu}
-              buttonStyle="solid"
-              value={rightMenu}
-              style={{ textAlign: 'center' }}
-            >
-              {
-                radioArr.map((item, index) =>
-                  <Radio.Button
-                    key={item}
-                    style={{
-                      height: 40,
-                      width: 130,
-                      textalign: 'center',
-                      lineHeight: '40px',
-                    }}
-                    value={index + 1}
-                  >{item}
-                  </Radio.Button>)
-              }
-            </Radio.Group>
+          <Radio.Group
+            size="small"
+            className={styles.right_content_tabgroud}
+            onChange={changeRightMenu}
+            buttonStyle="solid"
+            value={rightMenu}
+            style={{ textAlign: 'center' }}
+          >
+            {
+              radioArr.map((item, index) =>
+                <Radio.Button
+                  key={item}
+                  style={{
+                    height: 40,
+                    width: 130,
+                    textalign: 'center',
+                    lineHeight: '40px',
+                  }}
+                  value={index + 1}
+                >{item}
+                </Radio.Button>)
+            }
+          </Radio.Group>
+          <Card bordered={false} style={{ overflow: 'auto' }}>
             <GetRenderitem
               data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
               type={rightMenu}
@@ -1097,9 +1097,16 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           </Card>
 
           {/*  */}
-          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Card bodyStyle={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            paddingLeft: 5,
+            paddingRight: 5,
+          }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag, type:t }) => (
+              {btnGroup.map(({ name, tag, type: t }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
@@ -1115,7 +1122,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                 </Button>
               ))}
             </div>
-            {<div style={{ padding: '10px' }}>
+            {<div style={{ paddingTop: '10px' }}>
 
               <Upload
                 name='file'
@@ -1136,7 +1143,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                     message.error(`import fail`);
                   }
                 }}
-              > <Button type="primary" size="small" className={styles.buttomControl}><Icon type="upload"/>导入</Button>
+              > <Button type="primary" size="small" className={styles.buttomControl}><Icon type="upload" />导入</Button>
               </Upload>
             </div>}
 
