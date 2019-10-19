@@ -357,7 +357,7 @@ class IndexDetail extends Component {
 
             </div>
             <Modal
-              title={<BuildTitle title={`${isAdd?'新增部门信息':'编辑部门信息'}`} />}
+              title={<BuildTitle title={ <FormattedMessage id="menu.erp.system.department" defaultMessage="Authority" />} />}
 
               maskClosable={false}
               width={600}

@@ -14,8 +14,10 @@ import {
   message,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import { formatMessage } from 'umi/locale';
+
 import { connect } from 'dva';
-import styles from './Royalty.less';
+import styles from './Requested.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { requested as Requested } from '@/utils/SvgUtil';
 import DescriptionList from '@/components/DescriptionList';
@@ -324,7 +326,9 @@ class RequestedComponent extends PureComponent {
                 />
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
+                  title={<BuildTitle
+                    title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.requested' })}
+                  />}
 
                   width={640}
                   className={styles.standardListForm}
@@ -340,25 +344,28 @@ class RequestedComponent extends PureComponent {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <Card bordered={false}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}
+              >
                 <div>
-                  <span
-                    title="品质要求"
+                  <div
                     style={{
-                      marginBottom: 32,
-                      paddingLeft: 10,
+                      padding: '20px 20px 10px',
                       fontSize: 20,
                       fontWeight: 'bold',
                       color: '#35B0F4',
                     }}
                   >
-                    品质要求信息
-                  </span>
-                  <Divider />
-                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+                    {formatMessage({ id: 'app.basic.menuMap.requested' })}
+                  </div>
+                  <Divider className={styles.divder} />
                 </div>
-              </Card>
-
+                {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+              </div>
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Button
@@ -426,7 +433,7 @@ class RequestedComponent extends PureComponent {
                                                             disabled={isEdit}
                                                           >
                     审批
-                                                          </Button>)}
+                                                                        </Button>)}
                 </div>
               </Card>
             </div>
@@ -632,14 +639,14 @@ class RequestedComponent extends PureComponent {
 
   getRenderitem = item => {
     return (
-      <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
+      <Card bordered={false} style={{ overflow: 'auto' }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="品质要求中文名">{item.qualityZhName}</Description>
           <Description term="品质要求英文名">{item.qualityEnName}</Description>
           <Description term="状态">{item.status}</Description>
         </DescriptionList>
         {/* <Divider/> */}
-      </span>
+      </Card>
     );
   };
 }

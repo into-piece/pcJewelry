@@ -653,20 +653,7 @@ class Info extends Component {
   // 获取Modal的标题
   returnTitle = () => {
     const { selectKey } = this.props;
-    // const { modalType } = this.state;
-    // let text = '';
-    // switch (modalType) {
-    //   case 'plus':
-    //     text = '添加';
-    //     break;
-    //   case 'edit':
-    //     text = '编辑';
-    //     break;
-    //   default:
-    //     break;
-    // }
-
-    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Basic Settings" />;
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
     return menuText;
   };
 

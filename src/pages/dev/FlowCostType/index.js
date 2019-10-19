@@ -190,7 +190,7 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const menuText = <FormattedMessage id="menu.erp.dev.flowCostType" defaultMessage="Basic Settings" />;
+    const menuText = <FormattedMessage id="menu.erp.dev.flowCostType" defaultMessage="Settings" />;
     return menuText;
   };
 

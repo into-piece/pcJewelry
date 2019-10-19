@@ -21,6 +21,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -230,19 +231,10 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const { modalType } = this.state;
-    let text = '';
-    switch (modalType) {
-      case 'plus':
-        text = '新增';
-        break;
-      case 'edit':
-        text = '编辑';
-        break;
-      default:
-        break;
-    }
-    return `${text}`;
+    const {rightActive} = this.state;
+
+    const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
+    return menuText;
   };
 
   // 弹窗确定提交回调
