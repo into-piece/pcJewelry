@@ -796,7 +796,7 @@ class ClientView extends PureComponent {
                     <Radio.Button value="show_contacts" onClick={this.selectContacts}>
                       联系人
                     </Radio.Button>
-                    <Radio.Button value="show_ring" onClick={this.selectRings}>圈戒资料</Radio.Button>
+                    <Radio.Button value="show_ring" onClick={this.selectRings}>戒围资料</Radio.Button>
                   </Radio.Group>
                   <div
                     style={{

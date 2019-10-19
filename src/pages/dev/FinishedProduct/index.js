@@ -59,7 +59,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete',type:'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -820,7 +820,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           </Card>
 
           {/* </Card> */}
-          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Card bodyStyle={{display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {btnGroup.map(({ name, tag }) => (
                 <Button

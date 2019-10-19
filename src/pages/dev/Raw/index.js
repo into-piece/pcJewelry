@@ -54,7 +54,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete', type: 'danger' },
+  { name: '删除', tag: 'delete',type:'danger', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -657,7 +657,7 @@ class Info extends Component {
         break;
       case 'lock':
         const isLock = this.returnLockType().type === 1;
-        const setvicetypename = isLock ? '审核' : '撤销';
+        const setvicetypename = isLock ? '审批' : '取消审批';
         ModalConfirm({
           content: `确定${setvicetypename}吗？`, onOk: () => {
             this.handleLock();
@@ -928,7 +928,7 @@ class Info extends Component {
     });
   };
 
-  // 审批/撤销 按钮回调
+  // 审批/取消审批 按钮回调
   handleLock = () => {
     const { selectKey, selectedRowKeys } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
@@ -945,11 +945,11 @@ class Info extends Component {
   };
 
   /**
-   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
+   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示取消审批或审批 按钮是否可用
    * return obj
    * params: name 名称
    * params: disabled 是否可点击
-   * params: type 1为审批 2为撤销
+   * params: type 1为审批 2为取消审批
    */
   returnLockType = () => {
     const { selectedRowKeys, dev, selectKey } = this.props;
@@ -967,7 +967,7 @@ class Info extends Component {
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1,isChexiao ,isShenPi};
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2,isChexiao ,isShenPi };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2,isChexiao ,isShenPi };
     return { name: '审批', disabled: true, type: 1,isChexiao ,isShenPi }; // 当两种状态都有 禁止点击
   };
 
@@ -1099,7 +1099,7 @@ const RightContent =
         {/* 右边显示详细信息和按钮操作 */}
         <Col lg={8} md={16}>
           <div className={styles.view_right_content}>
-            <Card bordered={false}>
+            <Card bordered={false} style={{overflow:'auto' }}>
               <div>
                 <span
                   style={{
@@ -1117,13 +1117,13 @@ const RightContent =
             </Card>
 
             {/* </Card> */}
-            <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+            <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {btnGroup.map(({ name, tag, type }) => (
+                {btnGroup.map(({ name, tag }) => (
                   <Button
                     key={tag}
                     className={styles.buttomControl}
-                    type={type || 'primary'}
+                    type={(tag==='delete'||(tag==='lock'&&returnLockType().type===2))?'danger':"primary"}
                     icon={tag}
                     size="small"
                     disabled={returnSisabled(tag)}

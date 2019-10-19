@@ -6,6 +6,7 @@ import {
   Divider, Tree, message, Spin,
 } from 'antd';
 
+import styles from './Index.less';
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
 import 'cropperjs/dist/cropper.css';
@@ -138,7 +139,7 @@ class IndexDetail extends Component {
 
     if (!paths) paths = [];
 
-    return (<div className={business.right_info}>
+    return (<div className={styles.right_info}>
       <div className={business.list_info}>
 
         <span className={business.title_info} onClick={this.clickToggleDrawer}>

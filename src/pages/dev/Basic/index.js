@@ -588,7 +588,7 @@ class Info extends Component {
         break;
       case 'lock':
         const isLock = this.returnLockType().type === 1;
-        const setvicetypename = isLock ? '审核' : '撤销';
+        const setvicetypename = isLock ? '审批' : '取消审批';
         ModalConfirm({
           content: `确定${setvicetypename}吗？`, onOk: () => {
             this.handleLock();
@@ -736,7 +736,7 @@ class Info extends Component {
     })
   }
 
-  // 审批/撤销 按钮回调
+  // 审批/取消审批 按钮回调
   handleLock = () => {
     const { selectKey, selectedRowKeys } = this.props
     const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
@@ -753,11 +753,11 @@ class Info extends Component {
   }
 
   /**
-   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
+   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示取消审批或审批 按钮是否可用
    * return obj
    * params: name 名称
    * params: disabled 是否可点击
-   * params: type 1为审批 2为撤销
+   * params: type 1为审批 2为取消审批
    */
   returnLockType = () => {
     const { selectedRowKeys, dev, selectKey } = this.props
@@ -771,7 +771,7 @@ class Info extends Component {
     const isShenPi = isLock1.every((item) => Number(item) === 0) // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2) // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1 }
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 }
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2 }
     return { name: '审批', disabled: true, type: 1 } // 当两种状态都有 禁止点击
   }
 
@@ -793,12 +793,21 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props
-    if (tag === 'plus') return false
+
+    const { selectedRowKeys, choosenRowData } = this.props;
+    if (tag === 'plus') return false;
     if (tag === 'lock') {
-      return selectedRowKeys.length === 0 || this.returnLockType().disabled
+      return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
-    return selectedRowKeys.length === 0
+
+    if (tag ==='delete'){
+      return selectedRowKeys.length === 0 || !this.returnLockType().isShenPi;
+    }
+    if (tag ==='edit'){
+      return    selectedRowKeys.length === 0 ||Number(choosenRowData.status)===2;
+    }
+
+    return selectedRowKeys.length === 0;
   }
 
   render() {
@@ -883,13 +892,13 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           </Card>
 
           {/* </Card> */}
-          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Card bodyStyle={{display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag, type }) => (
+              {btnGroup.map(({ name, tag }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type={type || "primary"}
+                  type={(tag==='delete'||(tag==='lock'&&returnLockType().type===2))?'danger':"primary"}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}

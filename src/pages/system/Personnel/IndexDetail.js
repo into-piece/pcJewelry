@@ -215,7 +215,7 @@ class IndexDetail extends Component {
 
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading } = this.state;
+    const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
     const { isProductUpdate } = this.props;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
@@ -240,7 +240,7 @@ class IndexDetail extends Component {
 
     if (!paths) paths = [];
 
-    return (<div className={business.right_info}>
+    return (<div className={styles.right_info}>
       <div className={business.list_info}>
 
         <span className={business.title_info} onClick={this.clickToggleDrawer}>
@@ -395,7 +395,7 @@ class IndexDetail extends Component {
 
             </div>
             <Modal
-              title={<BuildTitle title={"员工"} />}
+              title={<BuildTitle title={isAdd?"新增员工信息":"编辑员工信息"} />}
 
               maskClosable={false}
               width={1200}
@@ -694,7 +694,7 @@ class IndexDetail extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('dept', {
-                  initialValue: current.dept,
+                  required: true, initialValue: current.dept,
                 })(<DeptListSelect showSearch />)}
               </FormItem>
             </Col>

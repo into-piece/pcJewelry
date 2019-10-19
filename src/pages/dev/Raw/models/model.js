@@ -49,12 +49,12 @@ export default {
     listQualityDrop:[],
 
 
-    statusList: [{key:"输入",value:0},{key:"已审核",value:2}],
+    statusList: [{key:"输入",value:0},{key:"已审批",value:2}],
     shapeSettingList: [],
     specificationSettingList: [],
     pagination: {
       current: 1,
-      size: 10,
+      size: 5,
     },
 
     selectKey: 'material',
@@ -65,7 +65,7 @@ export default {
     choosenTypesRowData: { id: '', zhName: '', enName: '' }, // select to show
     paginationTypes: {
       current: 1,
-      size: 10,
+      size: 5,
     },
 
 
@@ -538,7 +538,7 @@ export default {
         choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
         pagination: {
           current: 1,
-          size: 10,
+          size: 5,
         },
         selectedRowKeys: [], // table select
 
