@@ -1,3 +1,4 @@
+import moment from 'moment'
 import styles from './columns.less';
 import {statusConvert} from '@/utils/convert';
 
@@ -22,18 +23,21 @@ let dieSet = [
     dataIndex: 'filmCode',
     key: 'filmCode',
     width: 100,
+    render:(d,i) => i.filmCodeName
+
   },
   {
     title: <div className={styles.row_normal2}>存放地点</div>, // ?
     dataIndex: 'position',
     key: 'position',
     width: 100,
+    render:(d,i) => i.positionName
   },
 
   {
     title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUserName',
-    key: 'createUserName',
+    dataIndex: 'createUser',
+    key: 'createUser',
     width: 100,
     render: (data) => (data),
   },
@@ -43,6 +47,7 @@ let dieSet = [
     dataIndex: 'createTime',
     key: 'createTime',
     width: 100,
+    render: d=>moment(d).format("YYYY-MM-DD HH:mm:ss")
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,

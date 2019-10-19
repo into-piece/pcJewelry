@@ -357,7 +357,7 @@ class Info extends Component {
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2, isShenPi, isChexiao };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
     return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
@@ -379,11 +379,20 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props;
+
+    const { selectedRowKeys, choosenRowData } = this.props;
     if (tag === 'plus') return false;
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
+
+    if (tag === 'delete') {
+      return selectedRowKeys.length === 0 || this.returnLockType().type === 2;
+    }
+    if (tag === 'edit') {
+      return selectedRowKeys.length === 0 || Number(choosenRowData.status) === 2;
+    }
+
     return selectedRowKeys.length === 0;
   };
 
@@ -478,8 +487,8 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               {btnGroup.map(({ name, tag, type }) => (
                 <Button
                   key={tag}
+                  type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
                   className={styles.buttomControl}
-                  type={type || 'primary'}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}

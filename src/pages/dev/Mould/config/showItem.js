@@ -2,13 +2,13 @@ import {statusConvert} from '@/utils/convert';
 
 export const dieSet = [
   { key: '主模具号', value: 'mainMoldCode' },
-  { key: '产品类别', value: 'productTypeName' },
-  { key: '胶膜代码', value: 'filmCode' },
-  { key: '存放地点', value: 'position' },
-  { key: '创建人', value: 'createUserName' },
-  { key: '创建时间', value: 'createTime' },
-  { key: '修改人', value: 'modifierName' },
-  { key: '修改时间', value: 'mtime' },
+  { key: '产品类别', value: 'productType',cName:true },
+  { key: '胶膜代码', value: 'filmCode',cName:true },
+  { key: '存放地点', value: 'position' ,cName:true},
+  { key: '创建人', value: 'createUser' ,cName:true},
+  { key: '创建时间', value: 'createTime' ,date:"YYYY-MM-DD HH:mm:ss"},
+  { key: '修改人', value: 'modifier',cName:true },
+  { key: '修改时间', value: 'mtime' ,date:"YYYY-MM-DD HH:mm:ss"},
   { key: '状态', value: 'status' ,convert:statusConvert},
 
 ];

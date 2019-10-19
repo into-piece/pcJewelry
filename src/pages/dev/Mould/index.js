@@ -157,7 +157,7 @@ class Index extends Component {
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, flowCode: choosenRowData.flowCode }, ...args,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode: choosenRowData.mainMoldCode }, ...args,
       },
     });
 
@@ -280,10 +280,9 @@ class Index extends Component {
           });
         } else {
           this.getListSecond({ type: secondTableActive });
-          // 清除第二table 选中
+          // 清除第二table 选中 详情
           dispatch({
-            type: `${defaultModelName}/choosenRowDataSecond`,
-            payload: { id: '' },
+            type: `${defaultModelName}/clearDetailSecond`,
           });
         }
       }

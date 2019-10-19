@@ -78,7 +78,7 @@ export default {
       if (callback) callback();
     },
 
-    * getListSecond({ payload, callback }, { call, put }) {
+    * getListSecond({ payload, callback }, { call, put,select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
       const listSecond =
@@ -89,6 +89,21 @@ export default {
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
       });
+
+      const choosenRowDataSecond = yield select(state => state[defaultModelName].choosenRowDataSecond);
+
+      const selectRow = listSecond.records && listSecond.records.filter(e => (e.id === choosenRowDataSecond.id));
+      if (selectRow && selectRow.length > 0) {
+        yield put({
+          type: 'changeState',
+          payload: { data: selectRow[0], typeName: 'choosenRowDataSecond' },
+        });
+      } else {
+        yield put({
+          type: 'changeState',
+          payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
+        });
+      }
       if (callback) callback();
 
     },
@@ -97,6 +112,16 @@ export default {
         type: 'changeState',
         payload: { data: initData, typeName: 'listSecond' },
       });
+      yield put({
+        type: 'changeState',
+        payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'selectedRowKeysSecond' },
+      });
+    },
+    * clearDetailSecond(_, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
@@ -165,8 +190,8 @@ export default {
     * getlistMoldPositioningSettingsDropDown({payload}, { call, put }) {
       const response = yield call(listMoldPositioningSettingsDropDown,payload);
       const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
+      const wordbookdropdown = wordbookData.map(({ id, positionCode }) => {
+        return { value: id, key: positionCode };
       });
       yield put({
         type: 'changeState',
