@@ -54,7 +54,7 @@ export default {
     specificationSettingList: [],
     pagination: {
       current: 1,
-      size: 5,
+      size: 10,
     },
 
     selectKey: 'material',
@@ -65,7 +65,7 @@ export default {
     choosenTypesRowData: { id: '', zhName: '', enName: '' }, // select to show
     paginationTypes: {
       current: 1,
-      size: 5,
+      size: 4,
     },
 
 
@@ -538,7 +538,7 @@ export default {
         choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
         pagination: {
           current: 1,
-          size: 5,
+          size: 10,
         },
         selectedRowKeys: [], // table select
 

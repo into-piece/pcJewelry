@@ -31,7 +31,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag';
-import { manuArr, modalContent } from './config/index';
+import { modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import SearchFrom from './components/SearchFrom';
@@ -42,6 +42,7 @@ const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
 
+const { TextArea } = Input;
 // 弹窗form表单样式
 const formLayout = {
   labelCol: { span: 7 },
@@ -54,7 +55,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete', type: 'danger', type: 'danger' },
+  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -89,9 +90,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo1',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
+          <LockTag>
+            {data}
+          </LockTag>
         )
         : (data),
     }, {
@@ -113,6 +114,11 @@ const columnsArr = {
       title: '重量单位',
       dataIndex: 'weightUnitName',
       key: 'weightUnitName1',
+    },
+    {
+      title: '单价',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '计价类别',
@@ -143,9 +149,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo2',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
+          <LockTag>
+            {data}
+          </LockTag>
         )
         : (data),
     },
@@ -163,6 +169,16 @@ const columnsArr = {
       title: '规格',
       dataIndex: 'specificationName',
       key: 'specificationNa2me',
+    },
+    {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
     },
     {
       title: '中文名',
@@ -183,6 +199,11 @@ const columnsArr = {
       title: '重量单位',
       dataIndex: 'weightUnitName',
       key: 'weightUn2itName',
+    },
+    {
+      title: '单价',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '计价类别',
@@ -208,9 +229,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater3ialNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
+          <LockTag>
+            {data}
+          </LockTag>
         )
         : (data),
     },
@@ -252,9 +273,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater4ialNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
+          <LockTag>
+            {data}
+          </LockTag>
         )
         : (data),
     },
@@ -284,6 +305,16 @@ const columnsArr = {
       key: 'specification4',
     },
     {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
+    },
+    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName4',
@@ -294,7 +325,7 @@ const columnsArr = {
       key: 'enName4',
     },
     {
-      title: '售价',
+      title: '单价',
       dataIndex: 'price',
       key: 'price4',
     },
@@ -336,9 +367,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'material5No',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
+          <LockTag>
+            {data}
+          </LockTag>
         )
         : (data),
     },
@@ -356,6 +387,16 @@ const columnsArr = {
       title: '规格',
       dataIndex: 'specificationName',
       key: 'specific5ation',
+    },
+    {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
     },
     {
       title: '中文名',
@@ -376,6 +417,11 @@ const columnsArr = {
       title: '重量单位',
       dataIndex: 'weightUnitName',
       key: 'weigh5tUnit',
+    },
+    {
+      title: '单价',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '计价类别',
@@ -400,9 +446,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materi6alNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
+          <LockTag>
+            {data}
+          </LockTag>
         )
         : (data),
     },
@@ -432,6 +478,16 @@ const columnsArr = {
       key: 'qualit6yName',
     },
     {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
+    },
+    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName6',
@@ -455,6 +511,11 @@ const columnsArr = {
       title: '重量单位',
       dataIndex: 'weightUnitName',
       key: 'weightUnitNam6e',
+    },
+    {
+      title: '单价',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '计价类别',
@@ -666,7 +727,7 @@ class Info extends Component {
   };
 
 
-  returnElement = ({ type, dev, list, disable }) => {
+  returnElement = ({ type, dev, list, disable, number }) => {
     switch (type) {
       case 2:
         return (<Select placeholder="请选择" disabled={disable || false}>
@@ -684,8 +745,22 @@ class Info extends Component {
           <Radio value="0">否</Radio>
           <Radio value="1">是</Radio>
         </Radio.Group>);
+      case 5:
+        return (<Select placeholder="请选择"
+                        disabled={disable || false}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }>
+          {dev[list] && dev[list].map(({ value, key }) =>
+            <Option value={value} key={value}>{key}</Option>,
+          )}
+        </Select>);
+      case 9:
+        return (<TextArea disabled={disable || false}/>);
       default:
-        return <Input placeholder="请输入" disabled={disable || false} />;
+        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'}/>;
     }
   };
 
@@ -706,7 +781,7 @@ class Info extends Component {
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit, number }) => {
 
             const selectData = { ...choosenRowData };
             if (value === 'materialNo') {
@@ -767,22 +842,23 @@ class Info extends Component {
               dfv = va;
               selectData[value] = va || choosenRowData[value];
             }
-
-            return (!noedit &&
-              <Col span={span || 12} key={`k${value}`}>
-                <FormItem label={key} {...formLayout} key={key}>
-                  {
-                    getFieldDecorator(value, {
-                      rules: [{
-                        required: !noNeed,
-                        message: `请${type && (type === 2 || type === 3 || type === 4) ? '选择' : '输入'}${key}`,
-                      }],
-                      initialValue: isEdit ? selectData[value] : (dfv || ''),
-                    })(this.returnElement({ type, dev, list, disable }))
-                  }
-                </FormItem>
-              </Col>
-            );
+            const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
+              <FormItem label={key} {...formLayout} key={key}>
+                {
+                  getFieldDecorator(value, {
+                    rules: [{
+                      required: !noNeed,
+                      message: `请${type && (type === 2 || type === 3 || type === 4) ? '选择' : '输入'}${key}`,
+                    }],
+                    initialValue: isEdit ? selectData[value] : (dfv || ''),
+                  })(this.returnElement({ type, dev, list, disable, number }))
+                }
+              </FormItem>
+            </Col> : null;
+            if (type === 9) {
+              return <Row>{col}</Row>;
+            }
+            return (col);
           })
         }
         {(selectKey !== 'material' && selectKey !== 'otherMaterial') && <Col span={18}>
@@ -813,9 +889,9 @@ class Info extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const {selectKey} = this.props;
+    const { selectKey } = this.props;
 
-    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings"/>;
     return menuText;
   };
 
@@ -1049,7 +1125,7 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()} />}
+          title={<BuildTitle title={returnTitle()}/>}
 
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
@@ -1101,11 +1177,11 @@ const RightContent =
                     color: '#35B0F4',
                   }}
                 >
-                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
+                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage=""/>
                 </div>
-                <Divider className={styles.divder} />
+                <Divider className={styles.divder}/>
               </div>
-              <GetRenderitem data={choosenRowData} type={type} />
+              <GetRenderitem data={choosenRowData} type={type}/>
             </div>
             {/* </Card> */}
             <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
@@ -1436,7 +1512,7 @@ const GetRenderitem = ({ data, type }) => {
       <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
         {getImages(images)}
       </Carousel>}
-      {images && images.length > 0 && <Divider />}
+      {images && images.length > 0 && <Divider/>}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
