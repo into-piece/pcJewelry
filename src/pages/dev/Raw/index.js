@@ -90,9 +90,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo1',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     }, {
@@ -149,9 +149,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo2',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
@@ -229,9 +229,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater3ialNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
@@ -273,15 +273,15 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater4ialNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
     {
       title: '颜色',
-      dataIndex: 'colourName',
+      dataIndex: 'colorName',
       key: 'colour4',
     },
     {
@@ -367,9 +367,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'material5No',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
@@ -446,9 +446,9 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materi6alNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
+        <LockTag>
+          {data}
+        </LockTag>
         )
         : (data),
     },
@@ -578,6 +578,12 @@ class Info extends Component {
 
 
   componentDidMount() {
+    this.initDropList();
+    this.getTypeList();
+
+  }
+
+  initDropList = () => {
     const { dispatch } = this.props;
     // 切工下拉
     dispatch({
@@ -652,9 +658,7 @@ class Info extends Component {
       type: 'devRaw/getBUMDropDown',
       payload: {},
     });
-    this.getTypeList();
-
-  }
+  };
 
   getTypeList = (params) => {
     const { dispatch, paginationTypes } = this.props;
@@ -705,6 +709,7 @@ class Info extends Component {
       case 'plus':
       case 'edit':
       default:
+        this.initDropList();
         this.setState({ modalType });
         break;
       case 'delete':
@@ -746,21 +751,23 @@ class Info extends Component {
           <Radio value="1">是</Radio>
         </Radio.Group>);
       case 5:
-        return (<Select placeholder="请选择"
-                        disabled={disable || false}
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }>
+        return (<Select
+          placeholder="请选择"
+          disabled={disable || false}
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
           {dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
       case 9:
-        return (<TextArea disabled={disable || false}/>);
+        return (<TextArea disabled={disable || false} />);
       default:
-        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'}/>;
+        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'} />;
     }
   };
 
@@ -891,7 +898,7 @@ class Info extends Component {
   returnTitle = () => {
     const { selectKey } = this.props;
 
-    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings"/>;
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -1125,7 +1132,7 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()}/>}
+          title={<BuildTitle title={returnTitle()} />}
 
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
@@ -1177,11 +1184,11 @@ const RightContent =
                     color: '#35B0F4',
                   }}
                 >
-                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage=""/>
+                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
                 </div>
-                <Divider className={styles.divder}/>
+                <Divider className={styles.divder} />
               </div>
-              <GetRenderitem data={choosenRowData} type={type}/>
+              <GetRenderitem data={choosenRowData} type={type} />
             </div>
             {/* </Card> */}
             <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
@@ -1512,7 +1519,7 @@ const GetRenderitem = ({ data, type }) => {
       <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
         {getImages(images)}
       </Carousel>}
-      {images && images.length > 0 && <Divider/>}
+      {images && images.length > 0 && <Divider />}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
