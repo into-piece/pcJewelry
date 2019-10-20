@@ -22,6 +22,7 @@ const returnType = {
   3: 'deleteBasic',
   4: 'approve',
   5: 'revoke',
+  6: 'copy',
 };
 const rType = {
   1: 'list',
@@ -29,6 +30,7 @@ const rType = {
   3: 'delete',
   4: 'approve',
   5: 'revoke',
+  6: 'copy',
 };
 
 // 开发-基础资料

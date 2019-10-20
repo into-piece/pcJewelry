@@ -41,7 +41,6 @@ const btnGroup = [
   { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
-  // { name: '复制', tag: 'copy' },
 ];
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
@@ -312,6 +311,28 @@ class Index extends Component {
     });
   };
 
+  // 复制 按钮回调
+  handleCopy = () => {
+    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const serviceType = 'copy';
+
+    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ type: rightActive });
+        } else {
+          this.getListSecond({ type: secondTableActive });
+        }
+      }
+    });
+  };
+
   // 新增||编辑 按钮事件回调
   handleAdd = () => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
@@ -429,6 +450,13 @@ class Index extends Component {
         ModalConfirm({
           content: '确定审批吗？', onOk: () => {
             this.handleLock();
+          },
+        });
+        break;
+      case 'copy':
+        ModalConfirm({
+          content: '确定复制吗？', onOk: () => {
+            this.handleCopy();
           },
         });
         break;
@@ -569,7 +597,7 @@ class Index extends Component {
                       </div>
                       {/*  */}
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start',flexWrap: 'wrap' }}>
                           {btnGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
@@ -585,6 +613,23 @@ class Index extends Component {
                               {tag === 'lock' ? returnLockType().name : name}
                             </Button>
                           ))}
+
+                          {rightActive===firstTabFlag&&
+                            <Button
+                              key="copy"
+                              className={styles.buttomControl}
+                              icon="copy"
+                              type="primary"
+                              size="small"
+                              onClick={() => {
+                                btnFn('copy');
+                              }}
+                            >
+                              复制
+                            </Button>
+                        }
+
+
                         </div>
                       </Card>
                     </div>

@@ -9,6 +9,7 @@ const serviceArr = [
       'delete',
       'approval',
       'revoke',
+      'copy',
     ],
   },
   // 子模
