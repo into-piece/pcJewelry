@@ -22,7 +22,7 @@ export const modalContent = {
     { 'key': '库存重量', 'value': 'repertoryWeight', 'noNeed': true,'dfv': '0'  ,search:true },
     { 'key': '最低采购量', 'value': 'minimumPurchaseQuantity', 'noNeed': true  ,search:true},
     { 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2  ,noedit:true},
-    {  'key': '备注', 'value': 'remarks', 'noNeed': true  ,search:true,type:9},
+    {  'key': '备注', 'value': 'remarks', 'noNeed': true   ,type:9},
 
   ],
   accessories: [
@@ -52,7 +52,7 @@ export const modalContent = {
     {span:8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1',search:true },
     {span:8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true ,search:true},
     {span:8,  'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2  ,noedit:true},
-    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true  ,search:true,type:9},
+    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true  ,type:9},
 
 
   ],
@@ -85,7 +85,7 @@ export const modalContent = {
     {span:8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
     {span:8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true },
     {span:8,  'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2  ,noedit:true},
-    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true  ,search:true,type:9},
+    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true ,type:9},
 
   ],
   wrapper: [
@@ -135,7 +135,7 @@ export const modalContent = {
     },
     {span:8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
     {span:8, 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2,noedit:true},
-    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true  ,search:true,type:9},
+    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true ,type:9},
 
   ],
   auxiliaryMaterial:[
@@ -162,7 +162,7 @@ export const modalContent = {
     {span:8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
     {span:8, 'key': '单重', 'value': 'singleWeight', 'noNeed': true },
     {span:8, 'key': '状态', 'value': 'status',   'list': 'statusList', 'type': 2 ,noedit:true},
-    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true  ,search:true,type:9},
+    {span:8,  'key': '备注', 'value': 'remarks', 'noNeed': true ,type:9},
 
   ]
 
