@@ -90,6 +90,20 @@ export default {
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
       });
+      const choosenRowDataSecond = yield select(state => state[defaultModelName].choosenRowDataSecond);
+
+      const selectRow = listSecond.records && listSecond.records.filter(e => (e.id === choosenRowDataSecond.id));
+      if (selectRow && selectRow.length > 0) {
+        yield put({
+          type: 'changeState',
+          payload: { data: selectRow[0], typeName: 'choosenRowDataSecond' },
+        });
+      } else {
+        yield put({
+          type: 'changeState',
+          payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
+        });
+      }
       if (callback) callback();
 
     },

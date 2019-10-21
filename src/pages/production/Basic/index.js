@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio,Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -171,7 +171,7 @@ class Info extends Component {
         break;
       case 'lock':
         const isLock = this.returnLockType().type === 1;
-        const setvicetypename = isLock ? '审核' : '撤销';
+        const setvicetypename = isLock ? '审批' : '取消审批';
         ModalConfirm({
           content: `确定${setvicetypename}吗？`, onOk: () => {
             this.handleLock();
@@ -235,19 +235,23 @@ class Info extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const { modalType } = this.state;
-    let text = '';
-    switch (modalType) {
-      case 'plus':
-        text = '添加';
-        break;
-      case 'edit':
-        text = '编辑';
-        break;
-      default:
-        break;
-    }
-    return `任务${text}`;
+    const { selectKey } = this.props;
+    //
+    // const { modalType } = this.state;
+    // let text = '';
+    // switch (modalType) {
+    //   case 'plus':
+    //     text = '添加';
+    //     break;
+    //   case 'edit':
+    //     text = '编辑';
+    //     break;
+    //   default:
+    //     break;
+    // }
+
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Basic Settings" />;
+    return menuText;
   };
 
   // 新增按钮事件回调
@@ -353,7 +357,7 @@ class Info extends Component {
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2, isShenPi, isChexiao };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
     return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
@@ -375,11 +379,20 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props;
+
+    const { selectedRowKeys, choosenRowData } = this.props;
     if (tag === 'plus') return false;
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
+
+    if (tag === 'delete') {
+      return selectedRowKeys.length === 0 || this.returnLockType().type === 2;
+    }
+    if (tag === 'edit') {
+      return selectedRowKeys.length === 0 || Number(choosenRowData.status) === 2;
+    }
+
     return selectedRowKeys.length === 0;
   };
 
@@ -447,22 +460,26 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
-          <Card bordered={false}>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
+          >
             <div>
-              <span
+              <div
                 style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
+                  padding: "20px 20px 10px",
                   fontSize: 20,
                   fontWeight: 'bold',
                   color: '#35B0F4',
                 }}
               >
                 <FormattedMessage id={`app.production.menuMap.${type}`} defaultMessage="" />
-              </span>
-              <GetRenderitem data={choosenRowData} type={type} />
+              </div>
+              <Divider className={styles.divder} />
+
             </div>
-          </Card>
+
+            <GetRenderitem data={choosenRowData} type={type} />
+          </div>
 
           {/* </Card> */}
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
@@ -470,8 +487,8 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               {btnGroup.map(({ name, tag, type }) => (
                 <Button
                   key={tag}
+                  type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
                   className={styles.buttomControl}
-                  type={type || 'primary'}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
@@ -574,7 +591,7 @@ const GetRenderitem = ({ data, type }) => {
   ];
 
   return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
+    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
@@ -588,7 +605,7 @@ const GetRenderitem = ({ data, type }) => {
           })
         }
       </DescriptionList>
-    </div>
+    </Card>
   );
 };
 

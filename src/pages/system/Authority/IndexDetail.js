@@ -6,12 +6,14 @@ import {
   Divider, Tree, message, Spin,
 } from 'antd';
 
+import styles from './Index.less';
 import business from '@/pages/dev/business.less';
 import baseStyles from '@/pages/Business/Client/base.less';
 import 'cropperjs/dist/cropper.css';
 import HttpFetch from '@/utils/HttpFetch';
 import { connect } from 'dva';
 import { getCurrentUser } from '@/utils/authority';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 import ModalConfirm from '@/utils/modal';
 
@@ -96,7 +98,10 @@ class IndexDetail extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'permission/userpermission',
-      payload: { permissionData: checkedKeys.checked||checkedKeys,halfpermissionData:checkedKeys.halfChecked||[] },
+      payload: {
+        permissionData: checkedKeys.checked || checkedKeys,
+        halfpermissionData: checkedKeys.halfChecked || [],
+      },
     });
   };
 
@@ -124,7 +129,7 @@ class IndexDetail extends Component {
 
   getDetailInfo = () => {
     const { imageObject, showItem, isLoad } = this.state;
-    const { isProductUpdate, treeData, permissionData, halfpermissionData,selectProductData } = this.props;
+    const { isProductUpdate, treeData, permissionData, halfpermissionData, selectProductData } = this.props;
 
 
     let paths = [];
@@ -138,12 +143,18 @@ class IndexDetail extends Component {
 
     if (!paths) paths = [];
 
-    return (<div className={business.right_info}>
+    return (<div className={styles.right_info}>
       <div className={business.list_info}>
 
-        <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            权限信息
-        </span>
+        <div style={{
+          padding: "20px 20px 10px",
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: '#35B0F4',
+        }}
+        >
+          <FormattedMessage id="menu.erp.system.authority" defaultMessage="Authority" />
+        </div>
         <Divider className={business.divder} />
 
         <div className={baseStyles.content}>
@@ -240,15 +251,15 @@ class IndexDetail extends Component {
 
   // 保存
   handleSubmit = () => {
-    const {halfCheckedKeys} = this.treecompnent.tree.state;
-    console.log(halfCheckedKeys)
+    const { halfCheckedKeys } = this.treecompnent.tree.state;
+    console.log(halfCheckedKeys);
 
     const { dispatch, selectProductData = [], permissionData } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
     const params = {};
-    params.permissions = [...permissionData,...halfCheckedKeys];
+    params.permissions = [...permissionData, ...halfCheckedKeys];
     params.userIds = ids;
 
 
@@ -341,7 +352,7 @@ class IndexDetail extends Component {
 
   productStatusRefresh = () => {
     const item = this.state.showItem;
-    console.log("123213",item.id)
+    console.log('123213', item.id);
 
     if (!item.id) return;
     const _this = this;

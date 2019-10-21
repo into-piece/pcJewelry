@@ -80,6 +80,7 @@ class PackageInfo extends PureComponent {
       packageunFreezeloading,
       packageListloading,
       params,
+      customLock
     } = this.props;
 
     const { selectedItem, visible, current = {}, update, fileList } = this.state;
@@ -172,7 +173,7 @@ class PackageInfo extends PureComponent {
                 className={clientStyle.buttomControl}
                 type="primary"
                 icon="plus"
-                disabled={this.state.isAddEdit}
+                disabled={this.state.isAddEdit||customLock}
                 size="small"
                 onClick={this.clickNewFrom}
               >
@@ -184,7 +185,7 @@ class PackageInfo extends PureComponent {
                 icon="delete"
                 size="small"
                 onClick={this.clickDeleteFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit||isFreeze}
+                disabled={this.state.isEdit || this.state.isAddEdit||isFreeze||customLock}
               >
                 删除
               </Button>
@@ -194,7 +195,7 @@ class PackageInfo extends PureComponent {
                 size="small"
                 icon="edit"
                 onClick={this.clickEditFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit||isFreeze}
+                disabled={this.state.isEdit || this.state.isAddEdit||isFreeze||customLock}
               >
                 编辑
               </Button>
@@ -205,7 +206,7 @@ class PackageInfo extends PureComponent {
                   type="danger"
                   icon="unlock"
                   onClick={this.clickUnFreezeFrom}
-                  disabled={this.state.isEdit || this.state.isAddEdit}
+                  disabled={this.state.isEdit || this.state.isAddEdit||customLock}
                 >
                   取消审批
                 </Button>: <Button
@@ -214,7 +215,7 @@ class PackageInfo extends PureComponent {
                             type="primary"
                             icon="lock"
                             onClick={this.clickFreezeFrom}
-                            disabled={this.state.isEdit || this.state.isAddEdit}
+                            disabled={this.state.isEdit || this.state.isAddEdit||customLock}
                           >
                   审批
                           </Button>

@@ -12,6 +12,7 @@ export default {
   'app.basic.menuMap.way': '送货方式',
   'app.basic.menuMap.royalty': '业务提成设定',
   'app.basic.menuMap.num': '戒围标准',
+  'app.basic.menuMap.numson': '戒围号',
   'app.basic.menuMap.currency': '币种&银价',
 
   'app.dev.menuMap.measureUnit': '计量单位',

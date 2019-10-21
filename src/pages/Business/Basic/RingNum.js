@@ -14,6 +14,8 @@ import {
   message,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import { formatMessage } from 'umi/locale';
+
 import { connect } from 'dva';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
@@ -585,7 +587,7 @@ class RingNum extends PureComponent {
 
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
+                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: `app.basic.menuMap.${this.state.modalType === 'number'?'numson':'num'}` })} />}
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -615,14 +617,14 @@ class RingNum extends PureComponent {
                       className={styles.right_radio_tab}
                       onClick={this.switchTabStandrad}
                     >
-                      戒围标准
+                      {formatMessage({ id: 'app.basic.menuMap.num' })}
                     </Radio.Button>
                     <Radio.Button
                       value="number"
                       className={styles.right_radio_tab}
                       onClick={this.switchTabNumber}
                     >
-                      戒围号
+                      {formatMessage({ id: 'app.basic.menuMap.numson' })}
                     </Radio.Button>
                   </RadioGroup>
                 </div>
@@ -744,26 +746,28 @@ class RingNum extends PureComponent {
     const { isEdit, showItem } = this.state;
     return (
       <div className={styles.view_dwon}>
-        <div className={clientStyle.list_info}>
-          {/* {this.getRingStandrad()} */}
-          <Card bordered={false} className={styles.rignum_right_card_view}>
-            <div>
-              <span
-                title="戒围标准"
-                style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
+        {/* {this.getRingStandrad()} */}
+        <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
+          <div>
+            <div
+              style={{
+                  padding: '20px 20px 10px',
                   fontSize: 20,
                   fontWeight: 'bold',
                   color: '#35B0F4',
                 }}
-              >
-                戒围标准信息
-              </span>
-              <Divider />
-              {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+            >
+              {formatMessage({ id: 'app.basic.menuMap.num' })}
             </div>
-          </Card>
+            <Divider className={styles.divder} />
+          </div>
+          {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
         </div>
 
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
@@ -844,27 +848,29 @@ class RingNum extends PureComponent {
     const { isEditNumber, isEdit } = this.state;
     return (
       <div className={styles.view_dwon}>
-        <div className={clientStyle.list_info}>
-          {/* {this.getRingStandrad()} */}
-          <Card className={styles.rignum_right_card_view} bordered={false}>
-            <div>
-              <span
-                title="戒围号"
-                style={{
-                  marginBottom: 32,
-                  paddingLeft: 10,
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: '#35B0F4',
-                }}
-              >
-                戒围号信息
-              </span>
-              <Divider />
-              {this.state.showNumberItem ? this.getRenderSonitem(this.state.showNumberItem) : ''}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}
+        >
+          <div>
+            <div
+              style={{
+                padding: '20px 20px 10px',
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: '#35B0F4',
+              }}
+            >
+              {formatMessage({ id: 'app.basic.menuMap.numson' })}
             </div>
-          </Card>
+            <Divider className={styles.divder} />
+          </div>
+          {this.state.showItem ? this.getRenderSonitem(this.state.showNumberItem) : ''}
         </div>
+
 
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1313,18 +1319,18 @@ class RingNum extends PureComponent {
 
   getRenderSonitem = item => {
     return (
-      <span style={{ marginLeft: 10, marginTop: 10 }}>
+      <Card bordered={false} style={{ overflow: 'auto' }}>
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="戒围号">{item.sizeCode}</Description>
         </DescriptionList>
         {/* <Divider/> */}
-      </span>
+      </Card>
     );
   };
 
   getRenderitem = item => {
     return (
-      <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
+      <Card bordered={false} style={{ overflow: 'auto' }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="中文名称">{item.zhName}</Description>
           <Description term="英文名称">{item.enName}</Description>
@@ -1332,7 +1338,7 @@ class RingNum extends PureComponent {
           <Description term="状态">{statusConvert[item.status]}</Description>
         </DescriptionList>
         {/* <Divider/> */}
-      </span>
+      </Card>
     );
   };
 }

@@ -10,6 +10,7 @@ import devBasicUrls from './dev/devBasicUrls';
 import devRawUrls from './dev/devRawUrls';
 import devFlowUrls from './dev/devFlowUrls';
 import devFlowCostUrls from './dev/devFlowCostUrls';
+import devDieUrls from './dev/devDieUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
@@ -21,6 +22,7 @@ const returnType = {
   3: 'deleteBasic',
   4: 'approve',
   5: 'revoke',
+  6: 'copy',
 };
 const rType = {
   1: 'list',
@@ -28,6 +30,7 @@ const rType = {
   3: 'delete',
   4: 'approve',
   5: 'revoke',
+  6: 'copy',
 };
 
 // 开发-基础资料
@@ -63,6 +66,18 @@ const resultFLow = devFlowUrls.map(({ name, arr, path }) => (
 
 ));
 
+// 开发-模具设定
+const resultSet = devDieUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: rType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix1:`${env}/business/develop.die`
+    }
+  ))
+
+));
+
 // 开发-流程工费
 const resultFLowCost = devFlowCostUrls.map(({ name, arr, path }) => (
   arr.map((item, index) => (
@@ -84,6 +99,7 @@ const resultArr = [
   ...resultRaw.flat(),
   ...resultFLow.flat(),
   ...resultFLowCost.flat(),
+  ...resultSet.flat(),
   { key: 'listGemSetProcessDropDown', path: '/gem-set-process/listGemSetProcessDropDown' },
   { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
   { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },
@@ -143,6 +159,8 @@ const resultArr = [
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
   { key: 'listBasicColourSetDropDown', path: '/colour-set/listBasicColourSetDropDown' },// 成色下拉
   { key: 'listProductionFlowDropDown', path: '/production-flow/listDropDown',prefix1:`${env}/business/develop/production` },// 生产流程下拉
+  { key: 'listFilmSettingsDropDown', path: '/film-settings/listFilmSettingsDropDown',prefix1:`${env}/business/develop/basic` },// 胶膜代码下拉
+  { key: 'listMoldPositioningSettingsDropDown', path: '/mold-positioning-settings/listMoldPositioningSettingsDropDown',prefix1:`${env}/business/develop/basic` },// 模具仓位编号下拉
 ];
 
 // console.log(resultArr, '============')

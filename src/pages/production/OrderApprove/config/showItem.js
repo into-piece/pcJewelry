@@ -1,37 +1,41 @@
 import {statusConvert,YoNConvert} from '@/utils/convert';
 
-export const productFlow = [
-  { 'key': '成品类别', 'value': 'productType',cName:true },
-  { 'key': '流程名称', 'value': 'flowName' },
-  { 'key': '流程编号', 'value': 'flowCode' },
-  { 'key': '所属部门', 'value': 'department'  ,cName:true},
-  { 'key': '英文名称', 'value': 'engName' },
-  { 'key': '类别', 'value': 'type' ,cName:true},
-  { 'key': '镶石工艺', 'value': 'stoneCraft',cName:true },
-  {
-    'key': '是否外发',
-    'value': 'isOutbound',
-    'convert':YoNConvert,
-  },
-  { 'key': '允许损耗(%)', 'value': 'isWastage' },
-  { 'key': '出货重量范围', 'value': 'weightRange' },
-  { 'key': '标准工时', 'value': 'workingHour' },
-  { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
+export const orderApproveInfo = [
+  { 'key': '审批编号', 'value': 'approveNo' },
+  { 'key': '客户编号', 'value': 'customerNo' },
+  { 'key': '客户中文名称', 'value': 'customerZhName' },
+  { 'key': '客户英文名称', 'value': 'customerEnName' },
+  { 'key': '客户简称', 'value': 'customerShotName' },
+  { 'key': '订单类别', 'value': 'type',cName:true  },
+  { 'key': '订单数量', 'value': 'orderNum'},
+  { 'key': '紧急程度', 'value': 'emergency' },
 ];
 
-export const productProcess = [
-  { 'key': '流程编号', 'value': 'flowCode' },
-  { 'key': '工序编号', 'value': 'processCode' },
-  { 'key': '工序名称', 'value': 'processName' },
-  { 'key': '英文名称', 'value': 'engName' },
-  { 'key': '排序号码', 'value': 'sortNum' },
-  { 'key': '损耗(%)', 'value': 'isWastage' },
-  { 'key': '产能(件/小时)', 'value': 'processCapacity' },
-  { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
+export const orderApproveProduct = [
+  { 'key': '产品编号', 'value': 'productNo' },
+  { 'key': '中文名', 'value': 'zhName' },
+  { 'key': '电镀颜色', 'value': 'platingColor' },
+  { 'key': '宝石颜色', 'value': 'gemColor' },
+  { 'key': '重量范围', 'value': 'unitOfWeight' },
+  { 'key': '模具号', 'value': 'mouldNo' },
+  { 'key': '成色', 'value': 'productColor' },
+  { 'key': '成色重量', 'value': 'finishedWeight'  },
+  { 'key': '客户货号', 'value': 'custoerProductNo'  },
 ];
 
+export const orderApproveResult = [
+  { 'key': '产品编号', 'value': 'productNo' },
+  { 'key': '审批单号', 'value': 'approveNo' },
+  { 'key': '审批人', 'value': 'approveUser' },
+  { 'key': '审批人姓名', 'value': 'userName' },
+  { 'key': '审批部门', 'value': 'approveDep' },
+  { 'key': '部门名称', 'value': 'depName' },
+  { 'key': '审批时间', 'value': 'approveTime' },
+  { 'key': '审批结果', 'value': 'approveResult'  },
+];
 
 export default {
-  productFlow,
-  productProcess,
+  orderApproveInfo,
+  orderApproveProduct,
+  orderApproveResult,
 };

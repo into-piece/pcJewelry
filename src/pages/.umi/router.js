@@ -1609,11 +1609,19 @@ const routes = [
                 exact: true,
               },
               {
-                path: '/erp/dev/Mould',
-                name: 'Mould',
+                path: '/erp/dev/mould',
+                name: 'mould',
                 icon: 'inbox',
                 component: __IS_BROWSER
                   ? _dvaDynamic({
+                      app: require('@tmp/dva').getApp(),
+                      models: () => [
+                        import(/* webpackChunkName: 'p__dev__Mould__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/dev/Mould/models/model.js').then(
+                          m => {
+                            return { namespace: 'model', ...m.default };
+                          },
+                        ),
+                      ],
                       component: () =>
                         import(/* webpackChunkName: "layouts__BasicLayout" */ '../dev/Mould'),
                       LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')

@@ -258,8 +258,8 @@ export default [
               },
               //模具设定
               {
-                path: '/erp/dev/Mould',
-                name: 'Mould',
+                path: '/erp/dev/mould',
+                name: 'mould',
                 icon: 'inbox',
                 component: './dev/Mould',
               },

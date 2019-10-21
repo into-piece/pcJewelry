@@ -3,6 +3,9 @@
 * 右边详情内容部分
 * */
 
+import {
+  Card,
+} from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import styles from './GetRenderitem.less';
 
@@ -23,7 +26,8 @@ const GetRenderitem = ({ data, type, items }) => {
   const arr = items[type];
 
   return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} className={styles.getRenderitem} onClick={selectRowItem}>
+    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
+
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, cName, convert }) =>
@@ -35,7 +39,7 @@ const GetRenderitem = ({ data, type, items }) => {
           )
         }
       </DescriptionList>
-    </div>
+    </Card>
   );
 };
 

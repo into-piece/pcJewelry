@@ -3,40 +3,23 @@ import {
   Card,
   Row,
   Col,
-  Icon,
   Form,
-  Select,
-  Tabs,
-  Radio,
-  Button,
-  Input,
   Divider,
-  Modal,
   Breadcrumb,
   message,
-  Drawer, Upload, Carousel,
+  Drawer,
 } from 'antd';
 import { connect } from 'dva';
-// const { Option } = Select;
-// const { TabPane } = Tabs;
-// const RadioButton = Radio.Button;
-// const RadioGroup = Radio.Group;
 
-import Cropper from 'react-cropper';
 import business from '../business.less';
-import DescriptionList from '@/components/DescriptionList';
 import specimen from './specimen.less';
 import 'cropperjs/dist/cropper.css';
-import Zmage from 'react-zmage';
 import HttpFetch from '../../../utils/HttpFetch';
 import SpecimenDetaill from './SpecimenDetaill';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
 import ProductSearchFrom from '../Product/components/ProductSearchFrom';
 import JewelryTable from '../../components/JewelryTable';
-
-const FormItem = Form.Item;
-
 
 const defaultPageSize = 10;
 

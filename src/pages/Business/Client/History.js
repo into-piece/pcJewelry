@@ -74,6 +74,7 @@ class History extends PureComponent {
   componentWillMount() {}
 
   render() {
+    const {customLock} =this.props;
     const historyData = [
       {
         code: 'PI_20171125_APP',
@@ -161,6 +162,7 @@ class History extends PureComponent {
                 type="primary"
                 icon="plus"
                 size="small"
+                disabled={customLock}
               >
                 新增
               </Button>
@@ -169,6 +171,7 @@ class History extends PureComponent {
                 type="danger"
                 icon="delete"
                 size="small"
+                disabled={customLock}
               >
                 删除
               </Button>
@@ -177,6 +180,7 @@ class History extends PureComponent {
                 type="primary"
                 size="small"
                 icon="edit"
+                disabled={customLock}
               >
                 编辑
               </Button>
@@ -185,6 +189,7 @@ class History extends PureComponent {
                 size="small"
                 type="primary"
                 icon="lock"
+                disabled={customLock}
               >
                 审批
               </Button>
@@ -203,6 +208,7 @@ class History extends PureComponent {
                 type="primary"
                 size="small"
                 icon="copy"
+                disabled={customLock}
               >
                 复制
               </Button>
@@ -211,6 +217,7 @@ class History extends PureComponent {
                 size="small"
                 type="primary"
                 icon="rollback"
+                disabled={customLock}
               >
                 撤销
               </Button>

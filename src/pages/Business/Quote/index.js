@@ -53,7 +53,7 @@ const { headList, detailList } = jsonData;
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
   { name: '复制', tag: 'copy' },
@@ -550,7 +550,7 @@ class Info extends Component {
             this.handleCheckChange(e, value);
           }}
         >{text}
-               </Checkbox>;
+        </Checkbox>;
       case 6:
         return <Radio.Group>
           {
@@ -558,7 +558,7 @@ class Info extends Component {
               return <Radio value={value} key={value}>{key}</Radio>;
             })
           }
-               </Radio.Group>;
+        </Radio.Group>;
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
@@ -794,9 +794,9 @@ class Info extends Component {
     }, []);
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 };
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 };
-    return { name: '审批', disabled: true, type: 1 }; // 当两种状态都有 禁止点击
+    if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
+    return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
   // 弹窗确定提交回调
@@ -1005,19 +1005,19 @@ class Info extends Component {
           </div>
         </div>
         {handleModalOk &&
-          <Modal
-            maskClosable={false}
-            title={returnTitle()}
-            width={1000}
-            className={styles.standardListForm}
-            bodyStyle={{ padding: '28px 0 0' }}
-            destroyOnClose
-            onOk={handleModalOk}
-            visible={modalType !== ''}
-            onCancel={onCancel}
-          >
-            {getModalContent()}
-          </Modal>
+        <Modal
+          maskClosable={false}
+          title={returnTitle()}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={handleModalOk}
+          visible={modalType !== ''}
+          onCancel={onCancel}
+        >
+          {getModalContent()}
+        </Modal>
         }
 
         <Modal
@@ -1065,30 +1065,30 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
         <div className={styles.view_right_content}>
-          <Card bordered={false}>
-            <Radio.Group
-              size="small"
-              className={styles.right_content_tabgroud}
-              onChange={changeRightMenu}
-              buttonStyle="solid"
-              value={rightMenu}
-              style={{ textAlign: 'center' }}
-            >
-              {
-                radioArr.map((item, index) =>
-                  <Radio.Button
-                    key={item}
-                    style={{
-                      height: 40,
-                      width: 130,
-                      textalign: 'center',
-                      lineHeight: '40px',
-                    }}
-                    value={index + 1}
-                  >{item}
-                  </Radio.Button>)
-              }
-            </Radio.Group>
+          <Radio.Group
+            size="small"
+            className={styles.right_content_tabgroud}
+            onChange={changeRightMenu}
+            buttonStyle="solid"
+            value={rightMenu}
+            style={{ textAlign: 'center' }}
+          >
+            {
+              radioArr.map((item, index) =>
+                <Radio.Button
+                  key={item}
+                  style={{
+                    height: 40,
+                    width: 130,
+                    textalign: 'center',
+                    lineHeight: '40px',
+                  }}
+                  value={index + 1}
+                >{item}
+                </Radio.Button>)
+            }
+          </Radio.Group>
+          <Card bordered={false} style={{ overflow: 'auto' }}>
             <GetRenderitem
               data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
               type={rightMenu}
@@ -1097,13 +1097,20 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           </Card>
 
           {/*  */}
-          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Card bodyStyle={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            paddingLeft: 5,
+            paddingRight: 5,
+          }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag }) => (
+              {btnGroup.map(({ name, tag, type: t }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type="primary"
+                  type={(t === 'danger' || (returnLockType().type === 2 && tag === 'lock')) ? 'danger' : 'primary'}
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
@@ -1115,7 +1122,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                 </Button>
               ))}
             </div>
-            {<div style={{ padding: '10px' }}>
+            {<div style={{ paddingTop: '10px' }}>
 
               <Upload
                 name='file'
@@ -1130,7 +1137,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   }
                   if (info.file.status === 'done') {
                     // 获取初始表单数据
-                    btnFn("freshList");
+                    btnFn('freshList');
                     message.success(`file import successfully`);
                   } else if (info.file.status === 'error') {
                     message.error(`import fail`);
@@ -1138,7 +1145,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                 }}
               > <Button type="primary" size="small" className={styles.buttomControl}><Icon type="upload" />导入</Button>
               </Upload>
-             </div>}
+            </div>}
 
           </Card>
         </div>

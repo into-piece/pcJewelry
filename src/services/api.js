@@ -811,7 +811,7 @@ export async function deleteTheClient(params) {
 }
 
 export async function updateTheClient(params) {
-  return request(`${priefx  }/business//business/customer-type/saveOrUpdate`, {
+  return request(`${priefx  }/business/business/customer-type/saveOrUpdate`, {
     // return request('/basic/ring-around/saveOrUpdateRingAround', {
     method: 'POST',
     headers: {
@@ -825,7 +825,7 @@ export async function updateTheClient(params) {
 
 export async function freezeTheClient(params) {
   // return request('/basic/ring-around/freeze', {
-  return request(`${priefx  }/business//business/customer-type/freeze`, {
+  return request(`${priefx  }/business/business/customer-type/freeze`, {
     method: 'POST',
     headers: {
       token: getCurrentUser() ? getCurrentUser().token : '',

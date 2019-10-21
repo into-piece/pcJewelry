@@ -389,14 +389,14 @@ class BrandCompoenet extends Component {
   getRenderitem = item => {
     // console.log(" renderitem  ",item)
     return (
-      <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
+      <Card bordered={false} style={{ overflow: "auto" }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="品牌英文">{item.brandNo}</Description>
           <Description term="品牌英文">{item.brandEnName}</Description>
           <Description term="品牌中文">{item.brandZhName}</Description>
         </DescriptionList>
         {/* <Divider/> */}
-      </span>
+      </Card>
     );
   };
 
@@ -565,7 +565,7 @@ class BrandCompoenet extends Component {
 
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`} />}
+                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.brand' })} />}
                   className={styles.standardListForm}
                   width={640}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -580,23 +580,28 @@ class BrandCompoenet extends Component {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <Card bordered={false}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}
+              >
                 <div>
-                  <span
+                  <div
                     style={{
-                        marginBottom: 32,
-                        paddingLeft: 10,
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        color: '#35B0F4',
-                      }}
+                      padding: '20px 20px 10px',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#35B0F4',
+                    }}
                   >
-                    品牌信息
-                  </span>
-                  <Divider />
-                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+                    {formatMessage({ id: 'app.basic.menuMap.brand' })}
+                  </div>
+                  <Divider className={styles.divder} />
                 </div>
-              </Card>
+                {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+              </div>
 
               {/* </Card> */}
               <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>

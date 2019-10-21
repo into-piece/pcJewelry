@@ -28,32 +28,6 @@ import { getCurrentUser } from '../../../utils/authority';
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
 const { TextArea } = Input;
-const listdata = [
-  {
-    name: '张三',
-    phone: '0755-88888888',
-    email: 'zengwl@gs.com',
-    phone2: '1380013800',
-    QQ: '274372131',
-    wechat: 'zhangsan',
-  },
-  {
-    name: '张三',
-    phone: '0755-88888888',
-    email: 'zengwl@gs.com',
-    phone2: '1380013800',
-    QQ: '274372131',
-    wechat: 'zhangsan',
-  },
-  {
-    name: '张三',
-    phone: '0755-88888888',
-    email: 'zengwl@gs.com',
-    phone2: '1380013800',
-    QQ: '274372131',
-    wechat: 'zhangsan',
-  },
-];
 
 const validatorGeographic = (rule, value, callback) => {
   // console.log('validatorGeographic = ', value);
@@ -177,13 +151,13 @@ class ClientInfo extends PureComponent {
       if (customerUpdateloading) this.state.customerUpdate = true;
     } else if (update) {
       this.loadCustomeForId();
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
+      }
 
       if (this.state.customerUpdate) {
         const { updateCustomer } = this.state;
@@ -194,7 +168,6 @@ class ClientInfo extends PureComponent {
       }
 
       this.handleDone(customerDelete);
-
 
 
       this.state.update = false;
@@ -552,7 +525,7 @@ class ClientInfo extends PureComponent {
     if (info.ckeys) {
       const keys = info.ckeys;
 
-      console.log("keysdelete",keys)
+      console.log('keysdelete', keys);
       dispatch({
         type: 'customer/deleteCustomer',
         payload: { list: info.ckeys },
@@ -905,9 +878,9 @@ class ClientInfo extends PureComponent {
         console.log('assign params = ', updateCustomer);
         this.state.updateCustomer = updateCustomer;
         params.id = info.content.id;
-        if (params.status === '审批') params.status = 2;
-        else if (params.status === '使用中') params.status = 1;
-        else if (params.status === '输入') params.status = 0;
+        // if (params.status === '审批') params.status = 2;
+        // else if (params.status === '使用中') params.status = 1;
+        // else if (params.status === '输入') params.status = 0;
       }
 
       dispatch({

@@ -10,6 +10,7 @@ import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import {statusConvert} from '@/utils/convert';
 import BuildTitle from '@/components/BuildTitle';
+import { formatMessage } from 'umi/locale';
 
 const FormItem = Form.Item;
 
@@ -356,7 +357,7 @@ class Currency extends PureComponent {
                 />
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : `任务${current.id ? '编辑' : '添加'}`}/>}
+                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.currency' })} />}
 
                   width={640}
                   className={styles.standardListForm}
@@ -372,24 +373,28 @@ class Currency extends PureComponent {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <Card bordered={false}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}
+              >
                 <div>
-                  <span
-                    title="币种&银价信息"
+                  <div
                     style={{
-                      marginBottom: 32,
-                      paddingLeft: 10,
+                      padding: '20px 20px 10px',
                       fontSize: 20,
                       fontWeight: 'bold',
                       color: '#35B0F4',
                     }}
                   >
-                    币种&银价信息
-                  </span>
-                  <Divider />
-                  {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+                    {formatMessage({ id: 'app.basic.menuMap.currency' })}
+                  </div>
+                  <Divider className={styles.divder} />
                 </div>
-              </Card>
+                {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+              </div>
 
               {/* <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}> */}
               {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> */}
@@ -525,7 +530,7 @@ class Currency extends PureComponent {
 
   getRenderitem = item => {
     return (
-      <span style={{ marginLeft: 10, marginTop: 10 }} onClick={this.selectRowItem}>
+      <Card bordered={false} style={{ overflow: 'auto' }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="币种">{item.currency}</Description>
           <Description term="买入汇率">{item.buyingRate}</Description>
@@ -534,7 +539,7 @@ class Currency extends PureComponent {
           <Description term="现货销售价格">{item.spotSellingPrice}</Description>
         </DescriptionList>
         {/* <Divider/> */}
-      </span>
+      </Card>
     );
   };
 }

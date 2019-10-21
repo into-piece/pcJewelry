@@ -27,6 +27,7 @@ import HttpFetch from '@/utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '@/utils/authority';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 const { TextArea } = Input;
 const { Description } = DescriptionList;
@@ -215,7 +216,7 @@ class IndexDetail extends Component {
 
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading } = this.state;
+    const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
     const { isProductUpdate } = this.props;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
@@ -240,12 +241,17 @@ class IndexDetail extends Component {
 
     if (!paths) paths = [];
 
-    return (<div className={business.right_info}>
+    return (<div className={styles.right_info}>
       <div className={business.list_info}>
-
-        <span className={business.title_info} onClick={this.clickToggleDrawer}>
-            员工信息
-        </span>
+        <div style={{
+          padding: "20px 20px 10px",
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: '#35B0F4',
+        }}
+        >
+          <FormattedMessage id="menu.erp.system.personnel" defaultMessage="Authority" />
+        </div>
         <Divider className={business.divder} />
 
         <div className={baseStyles.content}>
@@ -395,7 +401,7 @@ class IndexDetail extends Component {
 
             </div>
             <Modal
-              title={<BuildTitle title={"员工"} />}
+              title={<BuildTitle title={<FormattedMessage id="menu.erp.system.personnel" defaultMessage="Authority" />} />}
 
               maskClosable={false}
               width={1200}
@@ -694,7 +700,7 @@ class IndexDetail extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('dept', {
-                  initialValue: current.dept,
+                  required: true, initialValue: current.dept,
                 })(<DeptListSelect showSearch />)}
               </FormItem>
             </Col>

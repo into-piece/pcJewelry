@@ -49,7 +49,7 @@ class ProformInvoice extends Component {
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
                 <div style={{ marginBottom: 16 }}>
-                  proforminvoice
+                  还没做
                 </div>
               </Card>
             </Col>

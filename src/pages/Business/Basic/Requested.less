@@ -1,0 +1,267 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+@import '~@/common.less';
+
+.row_controller {
+  width: 100%;
+}
+
+.menu_content {
+  backgroundcolor: #fff;
+  height: 100%;
+}
+
+.divder {
+  margin-top: 5px!important;
+  padding-top: 0!important;
+  margin-bottom: 5px!important;
+  padding-bottom: 0!important;
+  padding-left: 3px!important;
+  padding-right: 3px!important;
+}
+
+//.view_left_content{
+//  background-color: #fff;
+//  height: 100%;
+//  min-height: 70vh;
+//  max-height: 70vh;
+//  overflow: auto;
+//  //margin-bottom: 12px;
+//}
+
+//.view_right_content{
+//  background-color: @globalbgcolor;
+//  height: 100% ;
+//  min-height: 70vh;
+//  max-height: 70vh;
+//  display: flex;
+//  flex-direction: column;
+//  justify-content: space-between;
+//  overflow: auto;
+//}
+
+.buttomControl {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.view_right_list_content {
+  background-color: @globalbgcolor;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.view_right_list {
+  background-color: @globalbgcolor;
+  height: 100%;
+}
+
+.view_edit_list {
+  background-color: @globalbgcolor;
+  width: 100%;
+}
+
+.headerList {
+  margin-bottom: 5px;
+}
+
+.bottom_view {
+  width: 100%;
+  position: 'absolute';
+  bottom: 30px;
+  aligntext: 'center';
+}
+
+.list_info {
+  background-color: @globalbgcolor;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+.divder {
+  margin-top: 5px;
+  padding-top: 0;
+  margin-bottom: 5px;
+  padding-bottom: 0;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.title_info {
+  margin-bottom: 5px;
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #35b0f4;
+}
+
+.right_content_tbs {
+  display: flex;
+  jusitify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.right_content_tabgroud {
+  width: 100%;
+}
+
+.right_content_tabs {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.right_radio_tab {
+  width: 50%;
+}
+
+.row_controller {
+  width: 100%;
+}
+
+.row_select {
+  background-color: #2eabff;
+}
+
+.row_table {
+  border-width: 0;
+  border-color: @globalbgcolor;
+  padding: 0;
+  border-radius: 0;
+  background-color: @globalbgcolor;
+}
+
+.row_normal {
+  background-color: #e5f6fe;
+}
+
+.menu_content {
+  backgroundcolor: @globalbgcolor;
+  height: 100%;
+}
+
+.view_left_content {
+  background-color: @globalbgcolor;
+  height: 100%;
+  min-height: 85vh;
+  max-height: 85vh;
+  overflow: auto;
+  //margin-bottom: 12px;
+}
+
+.list_info {
+  background-color: @globalbgcolor;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+.view_dwon {
+  background-color: @globalbgcolor;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+}
+
+.view_right_content {
+  background-color: @globalbgcolor;
+  height: 100%;
+  width: 100%;
+  min-height: 85vh;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+}
+
+.rignum_right_card_view {
+  width: 100%;
+}
+
+.buttomControl {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.view_right_list_content {
+  background-color: @globalbgcolor;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.view_right_list {
+  background-color: @globalbgcolor;
+  height: 100%;
+}
+
+.view_edit_list {
+  background-color: @globalbgcolor;
+  width: 100%;
+}
+
+.headerList {
+  margin-bottom: 5px;
+}
+
+.bottom_view {
+  width: 100%;
+  position: 'absolute';
+  bottom: 30px;
+  aligntext: 'center';
+}
+
+.tableListForm {
+  :global {
+    .ant-form-item {
+      display: flex;
+      margin-right: 0;
+      margin-bottom: 24px;
+
+      > .ant-form-item-label {
+        width: auto;
+        padding-right: 8px;
+        line-height: 32px;
+      }
+
+      .ant-form-item-control {
+        line-height: 32px;
+      }
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
+
+  .submitButtons {
+    display: block;
+    margin-bottom: 24px;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 24px;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 8px;
+  }
+}

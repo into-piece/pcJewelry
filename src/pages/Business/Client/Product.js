@@ -100,6 +100,7 @@ class Product extends PureComponent {
   componentWillMount() {}
 
   render() {
+    const {customLock} = this.props;
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
@@ -140,6 +141,7 @@ class Product extends PureComponent {
                 type="primary"
                 icon="plus"
                 size="small"
+                disabled={customLock}
               >
                 新增
               </Button>
@@ -148,6 +150,7 @@ class Product extends PureComponent {
                 type="danger"
                 icon="delete"
                 size="small"
+                disabled={customLock}
               >
                 删除
               </Button>
@@ -156,6 +159,7 @@ class Product extends PureComponent {
                 type="primary"
                 size="small"
                 icon="edit"
+                disabled={customLock}
               >
                 编辑
               </Button>
@@ -164,6 +168,7 @@ class Product extends PureComponent {
                 size="small"
                 type="primary"
                 icon="lock"
+                disabled={customLock}
               >
                 审批
               </Button>
@@ -182,6 +187,7 @@ class Product extends PureComponent {
                 type="primary"
                 size="small"
                 icon="copy"
+                disabled={customLock}
               >
                 复制
               </Button>
@@ -190,6 +196,7 @@ class Product extends PureComponent {
                 size="small"
                 type="primary"
                 icon="rollback"
+                disabled={customLock}
               >
                 撤销
               </Button>

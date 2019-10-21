@@ -12,8 +12,12 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  Divider,
   notification,
+
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
+
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
@@ -36,7 +40,7 @@ const { Option } = Select;
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
   // { name: '复制', tag: 'copy' },
@@ -186,19 +190,8 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const { modalType } = this.state;
-    let text = '';
-    switch (modalType) {
-      case 'plus':
-        text = '新增';
-        break;
-      case 'edit':
-        text = '编辑';
-        break;
-      default:
-        break;
-    }
-    return `${text}`;
+    const menuText = <FormattedMessage id="menu.erp.dev.flowCostType" defaultMessage="Settings" />;
+    return menuText;
   };
 
   // 弹窗确定提交回调
@@ -398,7 +391,7 @@ class Index extends Component {
     const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
     const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2, isShenPi, isChexiao };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
     return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
@@ -464,22 +457,25 @@ class Index extends Component {
                   {/* 右边显示详细信息和按钮操作 */}
                   <Col lg={8} md={24}>
                     <div className={styles.view_right_content}>
-                      <Card bordered={false}>
+
+                      <div style={{display:"flex",justifyContent:"space-between",flexDirection: "column",    overflow: "hidden"}}>
+                        <div>
+                          <div className={styles.title_info}>{returnTitle()}详情</div>
+                          <Divider className={styles.divder} />
+                        </div>
                         <GetRenderitem
                           data={choosenRowData}
                           type={rightActive}
                           items={showItem}
                         />
-                      </Card>
-
-                      {/*  */}
-                      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+                      </div>
+                      <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           {btnGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
                               className={styles.buttomControl}
-                              type={tag === 'delete' ? 'danger' : 'primary'}
+                              type={(tag === 'delete' || (returnLockType().type === 2 && tag === 'lock')) ? 'danger' : 'primary'}
                               icon={tag}
                               size="small"
                               disabled={returnSisabled(tag)}
@@ -493,6 +489,7 @@ class Index extends Component {
                         </div>
                       </Card>
                     </div>
+
                   </Col>
                 </Row>
               </GridContent>

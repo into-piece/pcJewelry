@@ -104,6 +104,7 @@ class Mark extends PureComponent {
       markunFreezeloading,
       markListloading,
       params,
+      customLock
     } = this.props;
 
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
@@ -198,7 +199,7 @@ class Mark extends PureComponent {
                 icon="plus"
                 size="small"
                 onClick={this.clickNewFrom}
-                disabled={this.state.isAddEdit}
+                disabled={this.state.isAddEdit||customLock}
               >
                 新增
               </Button>
@@ -208,7 +209,7 @@ class Mark extends PureComponent {
                 icon="delete"
                 size="small"
                 onClick={this.clickDeleteFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze}
+                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze||customLock}
               >
                 删除
               </Button>
@@ -218,7 +219,7 @@ class Mark extends PureComponent {
                 size="small"
                 icon="edit"
                 onClick={this.clickEditFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze}
+                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze||customLock}
               >
                 编辑
               </Button>
@@ -229,7 +230,7 @@ class Mark extends PureComponent {
                   type="danger"
                   icon="unlock"
                   onClick={this.clickUnFreezeFrom}
-                  disabled={this.state.isEdit || this.state.isAddEdit}
+                  disabled={this.state.isEdit || this.state.isAddEdit||customLock}
                 >
                   取消审批
                 </Button> : <Button
@@ -238,7 +239,7 @@ class Mark extends PureComponent {
                              type="primary"
                              icon="lock"
                              onClick={this.clickFreezeFrom}
-                             disabled={this.state.isEdit || this.state.isAddEdit}
+                             disabled={this.state.isEdit || this.state.isAddEdit||customLock}
                            >
                   审批
                            </Button>

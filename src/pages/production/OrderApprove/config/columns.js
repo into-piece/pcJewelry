@@ -1,153 +1,194 @@
 import styles from './columns.less';
-import {statusConvert,YoNConvert} from '@/utils/convert';
+import {statusConvert,HasConvert} from '@/utils/convert';
 
-let productFlow = [
+let orderApproveInfo = [
   {
-    title: <div className={styles.row_normal2}>流程编号</div>,
-    dataIndex: 'flowCode',
-    key: 'flowCode',
+    title: <div className={styles.row_normal2}>审批编号</div>,
+    dataIndex: 'approveNo',
+    key: 'approveNo',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
-  },
-  {
-    title: <div className={styles.row_normal2}>流程名称</div>,
-    dataIndex: 'flowName',
-    key: 'flowName',
+  }, {
+    title: <div className={styles.row_normal2}>客户编号</div>,
+    dataIndex: 'customerNo',
+    key: 'customerNo',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>所属部门</div>,
-    dataIndex: 'departmentName',
-    key: 'departmentName',
+    title: <div className={styles.row_normal2}>客户中文名称</div>,
+    dataIndex: 'customerGoodNo',
+    key: 'customerGoodNo',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>成品类别</div>, // ?
-    dataIndex: 'productType',
-    key: 'productType',
+    title: <div className={styles.row_normal2}>客户英文名称</div>,
+    dataIndex: 'customerShotName',
+    key: 'customerShotName',
     width: 100,
-    render: (data,record) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{record.productTypeName}</div>
-    ),
   },
-
   {
-    title: <div className={styles.row_normal2}>损耗</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
-    width: 100,
-    render: (data) => (data),
-  },
-
-  {
-    title: <div className={styles.row_normal2}>重量范围</div>,
-    dataIndex: 'weightRange',
-    key: 'weightRange',
+    title: <div className={styles.row_normal2}>订单号码</div>, // ?
+    dataIndex: 'orderNo',
+    key: 'orderNo',
     width: 100,
   },
 
   {
-    title: <div className={styles.row_normal2}>标准工时</div>,
-    dataIndex: 'workingHour',
-    key: 'workingHour',
+    title: <div className={styles.row_normal2}>订单类别</div>,
+    dataIndex: 'type',
+    key: 'type',
+    width: 100,
+    render:(data,item)=>item.typeName
+  },
+  {
+    title: <div className={styles.row_normal2}>订单数量</div>,
+    dataIndex: 'orderNum',
+    key: 'orderNum',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>是否外发</div>,
-    dataIndex: 'isOutbound',
-    key: 'isOutbound',
+    title: <div className={styles.row_normal2}>紧急程度</div>,
+    dataIndex: 'emergency',
+    key: 'emergency',
     width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{YoNConvert[data]}</div>
-    ),
   },
   {
-    title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'status',
-    key: 'status',
+    title: <div className={styles.row_normal2}>审批日期</div>,
+    dataIndex: 'mtime',
+    key: 'mtime',
     width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
-    ),
-  },
-  {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-    width: 100,
-  },
+  }
 ];
 
 
-let productProcess = [
+let orderApproveProduct = [
   {
-    title: <div className={styles.row_normal2}>员工工序编号</div>,
-    dataIndex: 'processCode',
-    key: 'processCode',
+    title: <div className={styles.row_normal2}>产品编号</div>,
+    dataIndex: 'productNo',
+    key: 'productNo',
     width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
   },
   {
-    title: <div className={styles.row_normal2}>工序名称</div>,
-    dataIndex: 'processName',
-    key: 'processName',
+    title: <div className={styles.row_normal2}>中文名</div>,
+    dataIndex: 'zhName',
+    key: 'zhName',
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>英文名称</div>,
-    dataIndex: 'engName',
-    key: 'engName',
+    title: <div className={styles.row_normal2}>电镀颜色</div>,
+    dataIndex: 'platingColor',
+    key: 'platingColor',
     width: 60,
   },
   {
-    title: <div className={styles.row_normal2}>排序号码</div>,
-    dataIndex: 'sortNum',
-    key: 'sortNum',
+    title: <div className={styles.row_normal2}>宝石颜色</div>,
+    dataIndex: 'gemColor',
+    key: 'gemColor',
     width: 50,
   },
   {
-    title: <div className={styles.row_normal2}>耗损(%)</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
+    title: <div className={styles.row_normal2}>重量范围</div>,
+    dataIndex: 'unitOfWeight',
+    key: 'unitOfWeight',
     width: 40,
   },
   {
-    title: <div className={styles.row_normal2}>员工工序产能(件/小时)</div>,
-    dataIndex: 'processCapacity',
-    key: 'processCapacity',
+    title: <div className={styles.row_normal2}>模具号</div>,
+    dataIndex: 'mouldNo',
+    key: 'mouldNo',
+    width: 60,
+  },
+  {
+    title: <div className={styles.row_normal2}>成色</div>,
+    dataIndex: 'productColor',
+    key: 'productColor',
+    width: 80,
+  },
+  {
+    title: <div className={styles.row_normal2}>成色重量</div>,
+    dataIndex: 'finishedWeight',
+    key: 'finishedWeight',
     width: 60,
   },
   {
     title: <div className={styles.row_normal2}>创建时间</div>,
     dataIndex: 'createTime',
     key: 'createTime',
-    width: 80,
-  },
-  {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
     width: 40,
   },
   {
-    title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'status',
-    key: 'status',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
-    ),
+    title: <div className={styles.row_normal2}>客户货号</div>,
+    dataIndex: 'custoerProductNo',
+    key: 'custoerProductNo',
+    width: 40,
   },
 ];
 
-productFlow = productFlow.map(item => ({ ...item, sorter: true }));
-productProcess = productProcess.map(item => ({ ...item, sorter: true }));
+let orderApproveResult = [
+  {
+    title: <div className={styles.row_normal2}>产品编号</div>,
+    dataIndex: 'productNo',
+    key: 'productNo',
+    width: 100,
+    render: (data) => (
+      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+    ),
+  },
+  {
+    title: <div className={styles.row_normal2}>审批单号</div>,
+    dataIndex: 'approveNo',
+    key: 'approveNo',
+    width: 100,
+  },
+  {
+    title: <div className={styles.row_normal2}>审批人</div>,
+    dataIndex: 'approveUser',
+    key: 'approveUser',
+    width: 60,
+  },
+  {
+    title: <div className={styles.row_normal2}>审批人姓名</div>,
+    dataIndex: 'userName',
+    key: 'userName',
+    width: 50,
+  },
+  {
+    title: <div className={styles.row_normal2}>审批部门</div>,
+    dataIndex: 'approveDep',
+    key: 'approveDep',
+    width: 40,
+  },
+  {
+    title: <div className={styles.row_normal2}>部门名称</div>,
+    dataIndex: 'depName',
+    key: 'depName',
+    width: 60,
+  },
+  {
+    title: <div className={styles.row_normal2}>审批时间</div>,
+    dataIndex: 'approveTime',
+    key: 'approveTime',
+    width: 40,
+  },
+  {
+    title: <div className={styles.row_normal2}>审批结果</div>,
+    dataIndex: 'approveResult',
+    key: 'approveResult',
+    width: 60,
+  }
+];
+
+orderApproveInfo = orderApproveInfo.map(item => ({ ...item, sorter: true }));
+orderApproveProduct = orderApproveProduct.map(item => ({ ...item, sorter: true }));
+orderApproveResult = orderApproveResult.map(item => ({ ...item, sorter: true }));
 
 export default {
-  productFlow,
-  productProcess,
+  orderApproveInfo,
+  orderApproveProduct,
+  orderApproveResult,
 };

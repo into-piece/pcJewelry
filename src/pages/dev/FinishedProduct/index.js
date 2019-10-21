@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio,Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -59,7 +59,7 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete' },
+  { name: '删除', tag: 'delete',type:'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
@@ -815,12 +815,13 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
               >
                 <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
               </span>
+
               <GetRenderitem data={choosenRowData} type={type} />
             </div>
           </Card>
 
           {/* </Card> */}
-          <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Card bodyStyle={{display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {btnGroup.map(({ name, tag }) => (
                 <Button
