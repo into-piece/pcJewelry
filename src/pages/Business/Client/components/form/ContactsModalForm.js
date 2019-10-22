@@ -7,6 +7,18 @@ const FormItem = Form.Item;
 
 @Form.create()
 class ContactsModalForm extends Component {
+  formLayout = {
+    labelCol: { span: 7 },
+    wrapperCol: { span: 13 },
+  };
+
+  centerFormLayout = {
+    labelCol: { span: 12 },
+    wrapperCol: {
+      span: 24,
+    },
+  };
+
   render() {
     const { handleCancel } = this.props;
 
@@ -155,8 +167,8 @@ class ContactsModalForm extends Component {
   handleContactsSubmit = () => {
     const { form, contactsSubmit } = this.props;
     form.validateFields((err, fieldsValue) => {
+
       if (err) return;
-      console.log('contactsSubmit', fieldsValue);
 
       if (contactsSubmit)
         contactsSubmit(fieldsValue);

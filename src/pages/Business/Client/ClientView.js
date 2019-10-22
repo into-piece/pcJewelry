@@ -536,7 +536,6 @@ class ClientView extends PureComponent {
   }
 
   render() {
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const maintainermodalFooter = {
       okText: '保存',
@@ -559,6 +558,7 @@ class ClientView extends PureComponent {
       leftlg,
       visible,
       current = {},
+      isAdd,
       update,
       contactsTableBody,
       ringsTableBody,
@@ -587,6 +587,7 @@ class ClientView extends PureComponent {
       ringsTableContent,
       contactsSelectedRowKeys,
     } = this.state;
+
 
     const rowSelection = {
       selectedRowKeys,
@@ -703,6 +704,52 @@ class ClientView extends PureComponent {
       }
     }
 
+
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={clientSaveloading}
+        onClick={() => {
+          this.handleSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={clientSaveloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={clientUpdateloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
     const { contactsItem } = this.state;
 
     return (
@@ -961,7 +1008,7 @@ class ClientView extends PureComponent {
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
-          {...modalFooter}
+          footer={modalFooter}
         >
           {this.getModalContent()}
         </Modal>
@@ -1541,9 +1588,6 @@ class ClientView extends PureComponent {
 
   // 联系人添加
   handleContactsSubmit = contacts => {
-    // if (err) console.log(err);
-
-    // console.log("handle   ",contacts)
 
     this.setState({
       contactsLoading: true,
@@ -1556,7 +1600,7 @@ class ClientView extends PureComponent {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (close) => {
     const { dispatch, form } = this.props;
     const { showItem, isAdd } = this.state;
     form.validateFields((err, fieldsValue) => {
@@ -1568,11 +1612,11 @@ class ClientView extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
 
         this.setState({
@@ -1599,11 +1643,11 @@ class ClientView extends PureComponent {
           payload: {
             ...data,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
       }
     });

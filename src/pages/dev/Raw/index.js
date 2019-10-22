@@ -945,7 +945,7 @@ class Info extends Component {
   };
 
   // 编辑按钮回调
-  handleEdit = () => {
+  handleEdit = (close) => {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
 

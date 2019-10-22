@@ -82,6 +82,23 @@ class Index extends Component {
   };
 
   componentDidMount() {
+
+
+    this.initDrop();
+    // 获取初始表单数据
+    this.getList();
+  }
+
+  // 右边顶部tab切换
+  changeRightActive = (v) => {
+    const { secondTableActive } = this.state;
+    this.setState({
+      rightActive: v.target.value,
+      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
+    });
+  };
+
+  initDrop = () => {
     const { dispatch } = this.props;
     // 类别下拉
     dispatch({
@@ -102,21 +119,7 @@ class Index extends Component {
       type: `${defaultModelName}/listGemSetProcessDropDown`,
       payload: {},
     });
-
-
-    // 获取初始表单数据
-    this.getList();
-  }
-
-  // 右边顶部tab切换
-  changeRightActive = (v) => {
-    const { secondTableActive } = this.state;
-    this.setState({
-      rightActive: v.target.value,
-      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
-    });
   };
-
 
   // table 搜索
   onSearch = (params, table) => {
@@ -232,7 +235,7 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const {rightActive} = this.state;
+    const { rightActive } = this.state;
 
     const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
     return menuText;
@@ -342,10 +345,8 @@ class Index extends Component {
             } else {
               this.getListSecond({ type: secondTableActive });
             }
-            if(close) this.btnFn('');
-
+            if (close) this.btnFn('');
           }
-
         });
       }
       this.setState({ addloading: false });
@@ -500,7 +501,7 @@ class Index extends Component {
       onSearch,
       returnTitle,
     } = this;
-    const { modalType, rightActive, secondTableActive ,addloading} = state;
+    const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
     const modalFooter = modalType === 'plus' ? [
