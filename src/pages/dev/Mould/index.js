@@ -72,6 +72,7 @@ const radioArr = [{ key: '模具明细', value: 'dieSet' },
 })
 class Index extends Component {
   state = {
+    addloading: false,
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
     secondTableActive: 'dieSetChild',
@@ -243,12 +244,12 @@ class Index extends Component {
   };
 
   // 弹窗确定提交回调
-  handleModalOk = () => {
+  handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
       case 'edit':
-        this.handleAdd();
+        this.handleAdd(close);
         break;
       default:
         break;
@@ -334,7 +335,7 @@ class Index extends Component {
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = () => {
+  handleAdd = (close) => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
     const { secondTableActive, rightActive, modalType } = this.state;
     let params = {};
@@ -344,6 +345,8 @@ class Index extends Component {
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
+
+    this.setState({ addloading: true });
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -367,10 +370,13 @@ class Index extends Component {
               this.getListSecond({ type: secondTableActive });
             }
 
-            // this.btnFn('');
+            if(close)this.btnFn('');
           }
+
         });
       }
+      this.setState({ addloading: false });
+
     });
 
   };
@@ -529,9 +535,59 @@ class Index extends Component {
       onSearch,
       returnTitle,
     } = this;
-    const { modalType, rightActive, secondTableActive } = state;
+    const { modalType, rightActive, secondTableActive,addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
+
+    const modalFooter = modalType === 'plus' ? [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
 
     return (
       <div className={styles.page}>
@@ -648,9 +704,8 @@ class Index extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={onCancel}
+          footer={modalFooter}
         >
           {getModalContent()}
         </Modal>

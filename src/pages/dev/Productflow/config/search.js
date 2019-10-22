@@ -1,6 +1,6 @@
 
 // 生产流程的筛选参数
-export const productFlow = [
+export const productflow = [
   { key: '流程编号', value: 'flowCode' },
   { key: '流程名字', value: 'flowName' },
   { key: '英文名称', value: 'engName' },
@@ -32,6 +32,6 @@ export const productProcess = [
 
 
 export default {
-  productFlow,
+  productflow,
   productProcess
 }

@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio,Divider } from 'antd';
+import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
@@ -15,8 +15,8 @@ import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
-import LockTag from '@/components/LockTag'
-import jsonData from './index.json'
+import LockTag from '@/components/LockTag';
+import jsonData from './index.json';
 // import Bread from '@/components/BreadCrumb'
 import BuildTitle from '@/components/BuildTitle';
 
@@ -27,7 +27,7 @@ const { Option } = Select;
 
 // manuArr是 =》menu配置提供遍历
 // modalContent => 每个menu不同的增加弹窗填写信息
-const { manuArr, modalContent } = jsonData
+const { manuArr, modalContent } = jsonData;
 
 // 左边menu遍历配置
 const menuMap = manuArr.map(item => ({
@@ -59,15 +59,15 @@ const formLayout = {
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete',type:'danger' },
+  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
 
-const isLockList = false // table是否锁定=》显示锁定标签做判断 先设定为否
+const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
 function returnStatus(v) {
-  return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : ''
+  return Number(v) === 2 ? '已审批' : Number(v) === 0 ? '输入' : '';
 }
 
 // table 当前页对应的表头配置
@@ -82,8 +82,8 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
-        : (data)
+        )
+        : (data),
     },
     {
       title: '中文名称',
@@ -99,7 +99,7 @@ const columnsArr = {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: data => returnStatus(data)
+      render: data => returnStatus(data),
     },
   ],
 
@@ -189,7 +189,7 @@ const columnsArr = {
       title: '含镍',
       dataIndex: 'isNickel',
       key: 'isNickel',
-      render: (data) => (Number(data) === 1 ? '是' : '否')
+      render: (data) => (Number(data) === 1 ? '是' : '否'),
     },
     {
       title: '状态',
@@ -307,7 +307,7 @@ const columnsArr = {
       key: 'basicColourSet',
       render: (data) => (
         <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
-      )
+      ),
     },
     {
       title: '类别',
@@ -412,8 +412,7 @@ const columnsArr = {
     },
   ],
 
-}
-
+};
 
 
 @Form.create()
@@ -427,21 +426,22 @@ const columnsArr = {
     colorSetList: dev.colorSetList,
     selectedRowKeys: dev.selectedRowKeys,
     gemSetProcessDropDown: dev.gemSetProcessDropDown,
-    listMstWordbookDrop: dev.listMstWordbookDrop
+    listMstWordbookDrop: dev.listMstWordbookDrop,
   };
 })
 class Info extends Component {
   state = {
     mode: 'inline',
     modalType: '',
+    addloading: false,
     addData: {
       measureUnit: {
         unitCode: '',
         zhName: '',
-        enName: ''
+        enName: '',
       },
-      colorPercentage: {}
-    }
+      colorPercentage: {},
+    },
   };
 
   componentDidMount() {
@@ -463,7 +463,7 @@ class Info extends Component {
 
   // 根据当前页面的key 返回对应的icon
   getMenuIcon = key => {
-    console.log(SvgUtil)
+    console.log(SvgUtil);
     return SvgUtil[key];
   };
 
@@ -474,7 +474,7 @@ class Info extends Component {
       type: 'dev/getSelectKey',
       payload: key,
     });
-    this.getList(key)
+    this.getList(key);
 
     // 还要清空所选中项
     dispatch({
@@ -492,25 +492,25 @@ class Info extends Component {
   // 获取对应key=》页面进行数据请求
   getList = (key = this.props.selectKey) => {
     const { dispatch, pagination } = this.props;
-    const obj = {}
+    const obj = {};
     manuArr.forEach(item => {
-      obj[item] = `get${item}List`
-    })
+      obj[item] = `get${item}List`;
+    });
     // getDevList
     dispatch({
       type: `dev/getList`,
       payload: { params: pagination, type: key },
     });
-  }
+  };
 
   // 列表对应操作button回调
   btnFn = modalType => {
-    const { selectKey, dispatch } = this.props
+    const { selectKey, dispatch } = this.props;
     switch (modalType) {
       case 'plus':
       case 'edit':
       default:
-        console.log(selectKey, '==============selectKey')
+        console.log(selectKey, '==============selectKey');
         // 镶石工艺
         if (selectKey === 'insertStoneTechnology') {
           dispatch({
@@ -528,10 +528,10 @@ class Info extends Component {
         this.setState({ modalType });
         break;
       case 'delete':
-        this.handleDelect()
+        this.handleDelect();
         break;
       case 'lock':
-        this.handleLock()
+        this.handleLock();
         break;
     }
   };
@@ -543,26 +543,29 @@ class Info extends Component {
       choosenRowData,
       form: { getFieldDecorator },
     } = this.props;
-    const { modalType } = this.state
-    const content = ''
-    const dataArr = modalContent[selectKey]
-    const isEdit = modalType === 'edit'
-    const { dev } = this.props
+    const { modalType } = this.state;
+    const content = '';
+    const dataArr = modalContent[selectKey];
+    const isEdit = modalType === 'edit';
+    const { dev } = this.props;
     return (
       <Form size="small">
         {
           dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
-            console.log(list)
+            console.log(list);
             return (
               <FormItem label={key} {...formLayout} key={key}>
                 {
                   getFieldDecorator(value, {
-                    rules: [{ required: !noNeed, message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}` }],
+                    rules: [{
+                      required: !noNeed,
+                      message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
+                    }],
                     initialValue: isEdit ? choosenRowData[value] : '',
                   })(type && type === 2 ?
                     <Select placeholder="请选择">
                       {dev[list] && dev[list].map(({ value, key }) =>
-                        <Option value={value}>{key}</Option>
+                        <Option value={value}>{key}</Option>,
                       )}
                     </Select> :
                     type && type === 3 ?
@@ -571,11 +574,11 @@ class Info extends Component {
                         <Radio value={2}>否</Radio>
                       </Radio.Group>
                       :
-                      <Input placeholder="请输入" />
+                      <Input placeholder="请输入" />,
                   )
                 }
               </FormItem>
-            )
+            );
           })
         }
         {content}
@@ -601,34 +604,34 @@ class Info extends Component {
   };
 
   // 新增按钮事件回调
-  handleAdd = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
+  handleAdd = (close) => {
+    const { selectKey, form } = this.props;
+    const { addData } = this.state;
 
     form.validateFields((err, values) => {
       if (!err) {
-        // this.setState({
-        //   [selectKey]
-        // })
+        this.setState({ addloading: true });
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         serviceObj[`addBasic${selectKey}`](values).then(res => {
-          const { rtnCode, rtnMsg } = res.head
+          const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
               message: rtnMsg,
             });
-            this.getList()
-            // this.btnFn('');
+            this.getList();
+            if(close) this.btnFn('');
           }
-        })
+        });
       }
+      this.setState({ addloading: false });
+
     });
-  }
+  };
 
   // 编辑按钮回调
-  handleEdit = () => {
-    const { selectKey, form } = this.props
-    const { addData } = this.state
+  handleEdit = (close) => {
+    const { selectKey, form } = this.props;
+    const { addData } = this.state;
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -638,55 +641,61 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        const { choosenRowData } = this.props
+        const { choosenRowData } = this.props;
         // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         const params = {
           ...values,
-          id: choosenRowData.id
-        }
+          id: choosenRowData.id,
+        };
+        this.setState({ addloading: true });
+
         serviceObj[`addBasic${selectKey}`](params).then(res => {
-          const { rtnCode, rtnMsg } = res.head
+          const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
               message: rtnMsg,
             });
-            this.getList()
-            // this.btnFn('');
+            this.getList();
+            if(close) this.btnFn('');
           }
-        })
+
+
+        });
       }
+      this.setState({ addloading: false });
+
     });
-  }
+  };
 
   // 删除按钮回调
   handleDelect = () => {
-    const { selectKey, selectedRowKeys } = this.props
+    const { selectKey, selectedRowKeys } = this.props;
     serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        this.getList()
+        this.getList();
       }
-    })
-  }
+    });
+  };
 
   // 审批/撤销 按钮回调
   handleLock = () => {
-    const { selectKey, selectedRowKeys } = this.props
-    const isLock = this.returnLockType().type === 1  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke'
+    const { selectKey, selectedRowKeys } = this.props;
+    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const serviceType = isLock ? 'approve' : 'revoke';
     serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
-      const { rtnCode, rtnMsg } = res.head
+      const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        this.getList()
+        this.getList();
       }
-    })
-  }
+    });
+  };
 
   /**
    * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示撤销或审批 按钮是否可用
@@ -696,51 +705,106 @@ class Info extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const { selectedRowKeys, dev, selectKey } = this.props
-    console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============')
-    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return { name: '审批', disabled: true, type: 1 }
+    const { selectedRowKeys, dev, selectKey } = this.props;
+    console.log(dev[`${selectKey}List`], dev[`${selectKey}List`].records, '============');
+    if (dev[`${selectKey}List`] && dev[`${selectKey}List`].records.length === 0) return {
+      name: '审批',
+      disabled: true,
+      type: 1,
+    };
     const isLock1 = selectedRowKeys.reduce((res, cur) => {
-      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur)
-      if (singleObjcect) res.push(singleObjcect.status)
-      return res
-    }, [])
-    const isShenPi = isLock1.every((item) => Number(item) === 0) // 是否全是0
-    const isChexiao = isLock1.every((item) => Number(item) === 2) // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1 }
-    if (isChexiao) return { name: '撤销', disabled: false, type: 2 }
-    return { name: '审批', disabled: true, type: 1 } // 当两种状态都有 禁止点击
-  }
+      const singleObjcect = dev[`${selectKey}List`].records.find(subItem => subItem.id === cur);
+      if (singleObjcect) res.push(singleObjcect.status);
+      return res;
+    }, []);
+    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
+    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
+    if (isShenPi) return { name: '审批', disabled: false, type: 1 };
+    if (isChexiao) return { name: '撤销', disabled: false, type: 2 };
+    return { name: '审批', disabled: true, type: 1 }; // 当两种状态都有 禁止点击
+  };
 
   // 弹窗确定提交回调
-  handleModalOk = () => {
+  handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-        this.handleAdd()
+        this.handleAdd(close);
         break;
       case 'edit':
-        this.handleEdit()
+        this.handleEdit(close);
         break;
       default:
         break;
     }
 
-  }
+  };
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
-    const { selectedRowKeys } = this.props
-    if (tag === 'plus') return false
+    const { selectedRowKeys } = this.props;
+    if (tag === 'plus') return false;
     if (tag === 'lock') {
-      return selectedRowKeys.length === 0 || this.returnLockType().disabled
+      return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
-    return selectedRowKeys.length === 0
-  }
+    return selectedRowKeys.length === 0;
+  };
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
-    const { mode, modalType } = state;
+    const { mode, modalType,addloading } = state;
     const { list, selectKey, choosenRowData } = props;
+
+    const modalFooter = modalType === 'plus' ? [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        handleModalOk(true);
+      }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        handleModalOk(false);
+      }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        handleModalOk(false);
+      }}
+      >
+        保存
+      </Button>,
+    ];
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -777,11 +841,9 @@ class Info extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={() => {
-            btnFn('');
-          }}
+          footer={modalFooter}
+
 
         >
           {getModalContent()}
@@ -821,7 +883,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           </Card>
 
           {/* </Card> */}
-          <Card bodyStyle={{display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
+          <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {btnGroup.map(({ name, tag }) => (
                 <Button
@@ -831,7 +893,9 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
-                  onClick={() => { btnFn(tag) }}
+                  onClick={() => {
+                    btnFn(tag);
+                  }}
                 >
                   {tag === 'lock' ? returnLockType().name : name}
                 </Button>
@@ -881,14 +945,14 @@ class CenterInfo extends Component {
     this.props.dispatch({
       type: 'dev/changeSelectedRowKeys',
       payload: selectedRowKeys,
-    })
+    });
   };
 
   render() {
-    const { onSelectChange, props } = this
+    const { onSelectChange, props } = this;
     const { type, choosenRowData, pagination, dev, selectedRowKeys, listLoading } = props;
-    const columns = columnsArr[type]
-    const list = dev[`${type}List`]
+    const columns = columnsArr[type];
+    const list = dev[`${type}List`];
     return (
       <div className={styles.view_left_content}>
         <div className={styles.contentTitle}>
@@ -925,8 +989,8 @@ const GetRenderitem = ({ data, type }) => {
   };
   const arr = [
     ...modalContent[type],
-    { "key": "状态", "value": "status" },
-  ]
+    { 'key': '状态', 'value': 'status' },
+  ];
 
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} onClick={selectRowItem}>
@@ -935,7 +999,7 @@ const GetRenderitem = ({ data, type }) => {
           arr.map(({ key, value }) => {
             return (
               <Description term={key}>{value === 'status' ? returnStatus(data[value]) : data[value]}</Description>
-            )
+            );
           })
         }
       </DescriptionList>

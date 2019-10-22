@@ -68,6 +68,7 @@ class Index extends Component {
   state = {
     modalType: '',
     rightActive: firstTabFlag,
+    addloading: false,
   };
 
   componentDidMount() {
@@ -195,12 +196,12 @@ class Index extends Component {
   };
 
   // 弹窗确定提交回调
-  handleModalOk = () => {
+  handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
       case 'edit':
-        this.handleAdd();
+        this.handleAdd(close);
         break;
       default:
         break;
@@ -246,7 +247,7 @@ class Index extends Component {
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = () => {
+  handleAdd = (close) => {
     const { form, choosenRowData } = this.props;
     const { rightActive, modalType } = this.state;
     let params = {};
@@ -254,6 +255,7 @@ class Index extends Component {
     if (modalType === 'edit') {
       params = { ...params, id: choosenRowData.id };
     }
+    this.setState({ addloading: true });
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -261,6 +263,7 @@ class Index extends Component {
           ...params,
           ...values,
         };
+
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res.head) {
@@ -273,10 +276,13 @@ class Index extends Component {
             });
             this.getList({ type: rightActive });
 
-            // this.btnFn('');
+            if(close) this.btnFn('');
           }
+
         });
       }
+      this.setState({ addloading: false });
+
     });
 
   };
@@ -433,10 +439,59 @@ class Index extends Component {
       onSearch,
       returnTitle,
     } = this;
-    const { modalType, rightActive } = state;
+    const { modalType, rightActive,addloading } = state;
     const { choosenRowData } = props;
 
 
+    const modalFooter = modalType === 'plus' ? [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -505,9 +560,8 @@ class Index extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={onCancel}
+          footer={modalFooter}
         >
           {getModalContent()}
         </Modal>
