@@ -785,7 +785,7 @@ class Info extends Component {
     const { selectedRowKeys, selectedDetailRowKeys, quote, rightMenu, quotelist, quoteDatialList } = this.props;
     const list = rightMenu === 1 ? quotelist : quoteDatialList;
     const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
-    console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
+    // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
     if (list && list.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = list.records.find(subItem => subItem.id === cur);
@@ -1138,7 +1138,14 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   if (info.file.status === 'done') {
                     // 获取初始表单数据
                     btnFn('freshList');
-                    message.success(`file import successfully`);
+                    const {response} = info.file;
+
+                    if (response.head&&response.head.btnCode !== '000000') {
+                      message.error(response.head.rtnMsg);
+                    }
+
+                    // console.log(JSON.stringify(info.file.response))
+                    // message.success(info.file.response);
                   } else if (info.file.status === 'error') {
                     message.error(`import fail`);
                   }

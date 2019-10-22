@@ -113,8 +113,7 @@ class Royalty extends PureComponent {
     });
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = close => {
     const { dispatch, form, rtnCode = {} } = this.props;
 
     const { showItem, isAdd } = this.state;
@@ -130,11 +129,11 @@ class Royalty extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
 
         this.setState({
@@ -163,16 +162,13 @@ class Royalty extends PureComponent {
           payload: {
             ...data,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
       }
-      // this.setState({
-      //   visible: false,
-      // });
     });
   };
 
@@ -196,7 +192,7 @@ class Royalty extends PureComponent {
   };
 
   render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update, showItem } = this.state;
+    const { selectedRowKeys = [], current = {}, isEdit, update,isAdd, showItem } = this.state;
 
     const {
       listLoading,
@@ -303,10 +299,51 @@ class Royalty extends PureComponent {
       );
     };
 
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        this.handleSubmit(true);
+      }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        this.handleSubmit(false);
+      }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={upateloading}
+        onClick={() => {
+        this.handleSubmit(false);
+      }}
+      >
+        保存
+      </Button>,
+    ];
 
     const onChange = (pagination, filters, sorter) => {
       const { current: currentIndex, pageSize } = pagination;
@@ -368,7 +405,7 @@ class Royalty extends PureComponent {
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
                   destroyOnClose
                   visible={this.state.visible}
-                  {...modalFooter}
+                  footer={modalFooter}
                 >
                   {getModalContent()}
                 </Modal>
@@ -467,7 +504,7 @@ class Royalty extends PureComponent {
                                                             disabled={isEdit}
                                                           >
                     审批
-                                                                        </Button>)}
+                                                          </Button>)}
                 </div>
               </Card>
             </div>

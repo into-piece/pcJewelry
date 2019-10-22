@@ -262,7 +262,7 @@ class Index extends Component {
     const { rightActive, secondTableActive } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     serviceObj[`delete${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head;
+      const { rtnCode, rtnMsg } =res?res.head:{};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -297,7 +297,7 @@ class Index extends Component {
     const serviceType = isLock ? 'approve' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head;
+      const { rtnCode, rtnMsg } = res?res.head:{};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -319,7 +319,7 @@ class Index extends Component {
     const serviceType = 'copy';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res.head;
+      const { rtnCode, rtnMsg } = res?res.head:{};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -353,7 +353,7 @@ class Index extends Component {
         };
 
         serviceObj[`add${rightActive}`](params).then(res => {
-          if (!res.head) {
+          if (!res||!res.head) {
             return;
           }
           const { rtnCode, rtnMsg } = res.head;
