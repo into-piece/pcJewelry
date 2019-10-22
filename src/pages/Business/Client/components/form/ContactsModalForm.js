@@ -20,13 +20,55 @@ class ContactsModalForm extends Component {
   };
 
   render() {
-    const { handleCancel } = this.props;
+    const { handleCancel,contactsCurrent ,contactsLoading} = this.props;
 
-    const contactsModalFooter = {
-      okText: '保存',
-      onOk: this.handleContactsSubmit,
-      onCancel: handleCancel,
-    };
+    const contactsModalFooter = !contactsCurrent.id ? [
+      <Button
+        key="back"
+        onClick={handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={contactsLoading}
+        onClick={() => {
+          this.handleContactsSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={contactsLoading}
+        onClick={() => {
+          this.handleContactsSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={contactsLoading}
+        onClick={() => {
+          this.handleContactsSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
+
+
 
     return (
       <Modal
@@ -35,7 +77,7 @@ class ContactsModalForm extends Component {
         width={720}
         className={styles.standardListForm}
         destroyOnClose
-        {...contactsModalFooter}
+        footer={contactsModalFooter}
       >
         {this.getContactsContent()}
       </Modal>
@@ -57,7 +99,7 @@ class ContactsModalForm extends Component {
           labelAlign="left"
           layout="inline"
           className={clientStyle.from_content}
-          onSubmit={this.handleContactsSubmit}
+          // onSubmit={this.handleContactsSubmit}
         >
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -164,14 +206,14 @@ class ContactsModalForm extends Component {
   };
 
 
-  handleContactsSubmit = () => {
+  handleContactsSubmit = (close) => {
     const { form, contactsSubmit } = this.props;
     form.validateFields((err, fieldsValue) => {
 
       if (err) return;
 
       if (contactsSubmit)
-        contactsSubmit(fieldsValue);
+        contactsSubmit(fieldsValue,close);
     });
 
 

@@ -461,6 +461,7 @@ class ClientView extends PureComponent {
       drawVisible: false,
       maintainerAddVisible: false,
       contactsAddVisible: false,
+      contactsCurrent:{},
       ringsAddVisible: false,
       modalkey: 'a',
       contactsTableContent: [],
@@ -1027,6 +1028,7 @@ class ClientView extends PureComponent {
         <ContactsModalForm
           contactsCurrent={this.state.contactsCurrent}
           visible={contactsAddVisible}
+          contactsLoading={contactsLoading}
           handleCancel={this.handleCancel}
           contactsSubmit={this.handleContactsSubmit}
         />
@@ -1587,7 +1589,7 @@ class ClientView extends PureComponent {
   };
 
   // 联系人添加
-  handleContactsSubmit = contacts => {
+  handleContactsSubmit = (contacts,close) => {
 
     this.setState({
       contactsLoading: true,
@@ -1595,8 +1597,9 @@ class ClientView extends PureComponent {
 
     this.saveContactsList({ ...contacts });
 
+
     this.setState({
-      contactsAddVisible: false,
+      contactsAddVisible: !close,
     });
   };
 
@@ -2537,7 +2540,6 @@ class ClientView extends PureComponent {
         }
         _this.setState({
           contactsLoading: false,
-          contactsCurrent: '',
         });
 
         this.loadContactsList();
