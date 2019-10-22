@@ -69,7 +69,7 @@ export const modalContent = {
     {span:8, 'key': '等级', 'value': 'quality', 'name': true , 'list': 'listQualityDrop', 'type': 2,search:true },
     {span:8, 'key': '中文名', 'value': 'zhName' ,search:true },
     {span:8, 'key': '英文名', 'value': 'enName'  ,search:true},
-    {span:8, 'key': '是否配料模块', 'value': 'isIngredient', 'name': true , 'type': 4 , 'noNeed': true,dfv:'0' },
+    {span:8, 'key': '是否配料', 'value': 'isIngredient', 'name': true , 'type': 4 , 'noNeed': true,dfv:'0' },
     {span:8, 'key': '计量单位', 'value': 'measureUnit', 'name': true , 'list': 'getBUMropDown', 'type': 2 },
     {
       span:8,

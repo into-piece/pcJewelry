@@ -498,7 +498,7 @@ const columnsArr = {
       key: 'enName6',
     },
     {
-      title: '是否配料模块',
+      title: '是否配料',
       dataIndex: 'isIngredientName',
       key: 'isIngredientName6',
     },
