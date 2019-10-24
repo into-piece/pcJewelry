@@ -226,9 +226,54 @@ class ProductDetail extends Component {
 
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading } = this.state;
-    const { isProductUpdate } = this.props;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
+    const { isProductUpdate ,productSaveloading,productUpdateloading} = this.props;
+
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productSaveloading}
+        onClick={() => {
+          this.handleSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={productSaveloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productUpdateloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
 
 
     let paths = [];
@@ -427,7 +472,7 @@ class ProductDetail extends Component {
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
-          {...modalFooter}
+          footer={modalFooter}
         >
           {this.getProductModalContent()}
         </Modal>
@@ -988,7 +1033,7 @@ class ProductDetail extends Component {
     reader.readAsDataURL(img);
   };
 
-  handleSubmit = () => {
+  handleSubmit = (close) => {
 
     const { dispatch, form } = this.props;
     const { isAdd, fileList, showItem } = this.state;
@@ -1013,11 +1058,11 @@ class ProductDetail extends Component {
           payload: {
             ...params,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
         // todo
 
@@ -1033,11 +1078,11 @@ class ProductDetail extends Component {
           payload: {
             ...params,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
       }
 

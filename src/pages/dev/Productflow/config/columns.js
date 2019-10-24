@@ -1,7 +1,7 @@
 import styles from './columns.less';
 import {statusConvert,YoNConvert} from '@/utils/convert';
 
-let productFlow = [
+let productflow = [
   {
     title: <div className={styles.row_normal2}>流程编号</div>,
     dataIndex: 'flowCode',
@@ -144,10 +144,10 @@ let productProcess = [
   },
 ];
 
-productFlow = productFlow.map(item => ({ ...item, sorter: true }));
+productflow = productflow.map(item => ({ ...item, sorter: true }));
 productProcess = productProcess.map(item => ({ ...item, sorter: true }));
 
 export default {
-  productFlow,
+  productflow,
   productProcess,
 };

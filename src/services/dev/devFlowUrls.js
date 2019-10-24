@@ -1,7 +1,7 @@
 const serviceArr = [
   // 生产流程
   {
-    'name': 'productFlow',
+    'name': 'productflow',
     'path': 'production-flow',
     'arr': [
       'list',

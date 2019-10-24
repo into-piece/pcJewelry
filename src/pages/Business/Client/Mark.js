@@ -107,9 +107,54 @@ class Mark extends PureComponent {
       customLock
     } = this.props;
 
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
-    const { selectedItem, visible, current = {}, update, fileList } = this.state;
+    const { selectedItem, visible, current = {}, update, fileList ,isAdd} = this.state;
+
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={markUpdateloading}
+        onClick={() => {
+          this.handleSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={markUpdateloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={markUpdateloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
 
     const isUpdate = markUpdateloading || markSaveloading || markDeleteloading || markFreezeloading || markunFreezeloading;
     if (isUpdate) {
@@ -282,7 +327,7 @@ class Mark extends PureComponent {
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
-          {...modalFooter}
+          footer={modalFooter}
         >
           {this.getModalContent()}
         </Modal>
@@ -481,7 +526,7 @@ class Mark extends PureComponent {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (close) => {
     const { dispatch, form } = this.props;
     const { isAdd, customerId, selectedItem, imageUrl, imageName, fileList } = this.state;
 
@@ -511,11 +556,11 @@ class Mark extends PureComponent {
         payload: {
           ...params,
         },
-        // callback:()=>{
-        //   this.setState({
-        //     visible: false,
-        //   });
-        // }
+        callback:()=>{
+          this.setState({
+            visible: !close,
+          });
+        }
       });
     });
   };

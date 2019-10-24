@@ -120,6 +120,14 @@ class RingsModalForm extends Component {
               listLoading01: false,
             });
           }
+          _this.setState({
+            dataBody: [],
+            data: [],
+            listLoading: false,
+            dataBody01: body,
+            data01: [],
+            listLoading01: false,
+          });
         }
       }).catch(() => {
       message.error('加载失败！');

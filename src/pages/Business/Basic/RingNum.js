@@ -146,8 +146,7 @@ class RingNum extends PureComponent {
     this.state.data2 = [];
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = close => {
     const { dispatch, form, rtnCode = {} } = this.props;
 
     const { showItem, isAdd } = this.state;
@@ -161,11 +160,11 @@ class RingNum extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
 
         this.setState({
@@ -187,11 +186,11 @@ class RingNum extends PureComponent {
           type: 'ringnum/updateRingNum',
           payload: {
             ...data,
-            // callback: () => {
-            //   this.setState({
-            //     visible: false,
-            //   });
-            // },
+            callback: () => {
+              this.setState({
+                visible: !close,
+              });
+            },
           },
         });
       }
@@ -201,9 +200,7 @@ class RingNum extends PureComponent {
     });
   };
 
-  handleNumberSubmit = e => {
-    console.log('handleNumberSubmit');
-    e.preventDefault();
+  handleNumberSubmit = close => {
     const { dispatch, form, rtnCode = {} } = this.props;
 
     const { showItem, isAdd, showNumberItem } = this.state;
@@ -221,6 +218,9 @@ class RingNum extends PureComponent {
             type: 'ringnum2/addSonRingNum',
             payload: {
               ...params,
+            },
+            callback: () => {
+              this.setState({ visiable: !close });
             },
           });
 
@@ -241,11 +241,11 @@ class RingNum extends PureComponent {
           payload: {
             ...data,
           },
+          callback: () => {
+            this.setState({ visiable: !close });
+          },
         });
       }
-      this.setState({
-        visible: false,
-      });
     });
   };
 
@@ -297,6 +297,7 @@ class RingNum extends PureComponent {
       currentNumber = {},
       update,
       updateNumber,
+      isAdd,
       isEdit,
       modalType,
       fristLoad,
@@ -420,14 +421,9 @@ class RingNum extends PureComponent {
 
     }
 
-    // if (this.state.done) {
-    //   if (this.state.requestState == 'success') {
-    //     message.success(this.state.requestMes);
-    //   } else {
-    //     message.error(this.state.requestMes);
-    //   }
-    //   this.handleDone();
-    // }
+    if (this.state.done) {
+      this.handleDone();
+    }
 
     // console.log('rntCode2=' + body2.rtnCode + ',data2 = ' + (this.state.data2));
 
@@ -490,11 +486,54 @@ class RingNum extends PureComponent {
       }
     };
 
-    const modalFooter = {
-      okText: '保存',
-      onOk: this.state.modalType === 'standard' ? this.handleSubmit : this.handleNumberSubmit,
-      onCancel: this.handleCancel,
-    };
+
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={this.state.modalType === 'standard' ?addloading:addsonloading}
+        onClick={() => {
+        this.state.modalType === 'standard' ? this.handleSubmit(true) : this.handleNumberSubmit(true);
+      }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={this.state.modalType === 'standard' ?addloading:addsonloading}
+        onClick={() => {
+        this.state.modalType === 'standard' ? this.handleSubmit(false) : this.handleNumberSubmit(false);
+
+      }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={this.state.modalType === 'standard' ?upateloading:upatesonloading}
+        onClick={() => {
+        this.state.modalType === 'standard' ? this.handleSubmit(false) : this.handleNumberSubmit(false);
+      }}
+      >
+        保存
+      </Button>,
+    ];
+
 
     // console.log('modalType ' + modalType);
 
@@ -587,13 +626,15 @@ class RingNum extends PureComponent {
 
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: `app.basic.menuMap.${this.state.modalType === 'number'?'numson':'num'}` })} />}
+                  title={<BuildTitle
+                    title={this.state.done ? null : formatMessage({ id: `app.basic.menuMap.${this.state.modalType === 'number' ? 'numson' : 'num'}` })}
+                  />}
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
                   destroyOnClose
                   visible={this.state.visible}
-                  {...modalFooter}
+                  footer={modalFooter}
                 >
                   {getModalContent()}
                 </Modal>
@@ -748,20 +789,20 @@ class RingNum extends PureComponent {
       <div className={styles.view_dwon}>
         {/* {this.getRingStandrad()} */}
         <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'column',
-            overflow: 'hidden',
-          }}
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}
         >
           <div>
             <div
               style={{
-                  padding: '20px 20px 10px',
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: '#35B0F4',
-                }}
+                padding: '20px 20px 10px',
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: '#35B0F4',
+              }}
             >
               {formatMessage({ id: 'app.basic.menuMap.num' })}
             </div>
@@ -940,7 +981,7 @@ class RingNum extends PureComponent {
                                                            disabled={isEditNumber}
                                                          >
               审批
-                                                         </Button>)}
+                                                                       </Button>)}
           </div>
         </Card>
       </div>

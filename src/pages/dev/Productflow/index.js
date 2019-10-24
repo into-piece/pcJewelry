@@ -48,9 +48,9 @@ const btnGroup = [
 
 const defaultModelName = 'productflow';
 
-const firstTabFlag = 'productFlow';
+const firstTabFlag = 'productflow';
 
-const radioArr = [{ key: '生产流程', value: 'productFlow' },
+const radioArr = [{ key: '生产流程', value: 'productflow' },
   { key: '员工工序', value: 'productProcess' }];
 
 @Form.create()
@@ -73,6 +73,7 @@ const radioArr = [{ key: '生产流程', value: 'productFlow' },
 })
 class Index extends Component {
   state = {
+    addloading: false,
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
     secondTableActive: 'productProcess',
@@ -81,6 +82,23 @@ class Index extends Component {
   };
 
   componentDidMount() {
+
+
+    this.initDrop();
+    // 获取初始表单数据
+    this.getList();
+  }
+
+  // 右边顶部tab切换
+  changeRightActive = (v) => {
+    const { secondTableActive } = this.state;
+    this.setState({
+      rightActive: v.target.value,
+      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
+    });
+  };
+
+  initDrop = () => {
     const { dispatch } = this.props;
     // 类别下拉
     dispatch({
@@ -101,21 +119,7 @@ class Index extends Component {
       type: `${defaultModelName}/listGemSetProcessDropDown`,
       payload: {},
     });
-
-
-    // 获取初始表单数据
-    this.getList();
-  }
-
-  // 右边顶部tab切换
-  changeRightActive = (v) => {
-    const { secondTableActive } = this.state;
-    this.setState({
-      rightActive: v.target.value,
-      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
-    });
   };
-
 
   // table 搜索
   onSearch = (params, table) => {
@@ -231,19 +235,19 @@ class Index extends Component {
 
   // 获取Modal的标题
   returnTitle = () => {
-    const {rightActive} = this.state;
+    const { rightActive } = this.state;
 
     const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
     return menuText;
   };
 
   // 弹窗确定提交回调
-  handleModalOk = () => {
+  handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
       case 'edit':
-        this.handleAdd();
+        this.handleAdd(close);
         break;
       default:
         break;
@@ -308,7 +312,7 @@ class Index extends Component {
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = () => {
+  handleAdd = (close) => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
     const { secondTableActive, rightActive, modalType } = this.state;
     let params = {};
@@ -318,6 +322,7 @@ class Index extends Component {
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
+    this.setState({ addloading: true });
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -340,11 +345,12 @@ class Index extends Component {
             } else {
               this.getListSecond({ type: secondTableActive });
             }
-
-            // this.btnFn('');
+            if (close) this.btnFn('');
           }
         });
       }
+      this.setState({ addloading: false });
+
     });
 
   };
@@ -495,9 +501,58 @@ class Index extends Component {
       onSearch,
       returnTitle,
     } = this;
-    const { modalType, rightActive, secondTableActive } = state;
+    const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
+    const modalFooter = modalType === 'plus' ? [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
 
     return (
       <div className={styles.page}>
@@ -597,9 +652,8 @@ class Index extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={onCancel}
+          footer={modalFooter}
         >
           {getModalContent()}
         </Modal>

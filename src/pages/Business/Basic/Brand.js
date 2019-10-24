@@ -104,8 +104,7 @@ class BrandCompoenet extends Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = close => {
     const { dispatch, form, rtnCode = {} } = this.props;
 
     const { showItem, isAdd } = this.state;
@@ -119,11 +118,11 @@ class BrandCompoenet extends Component {
           payload: {
             ...fieldsValue,
           },
-          // callback:()=>{
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // }
+          callback: () => {
+          this.setState({
+            visible: !close,
+          });
+        },
         });
 
         this.setState({
@@ -151,16 +150,14 @@ class BrandCompoenet extends Component {
           payload: {
             ...data,
           },
-          // callback:()=>{
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // }
+          callback:()=>{
+            this.setState({
+              visible: !close
+            });
+          }
         });
       }
-      // this.setState({
-      //   visible: false,
-      // });
+
     });
   };
 
@@ -389,7 +386,7 @@ class BrandCompoenet extends Component {
   getRenderitem = item => {
     // console.log(" renderitem  ",item)
     return (
-      <Card bordered={false} style={{ overflow: "auto" }} onClick={this.selectRowItem}>
+      <Card bordered={false} style={{ overflow: 'auto' }} onClick={this.selectRowItem}>
         <DescriptionList className={styles.headerList} size="small" col="1">
           <Description term="品牌英文">{item.brandNo}</Description>
           <Description term="品牌英文">{item.brandEnName}</Description>
@@ -401,7 +398,7 @@ class BrandCompoenet extends Component {
   };
 
   render() {
-    const { addSuccessData, selectedRowKeys, current = {}, isEdit, update, showItem } = this.state;
+    const { addSuccessData, selectedRowKeys, current = {}, isEdit,isAdd, update, showItem } = this.state;
 
     const {
       listLoading,
@@ -458,11 +455,36 @@ class BrandCompoenet extends Component {
         // this.state.showItem = { ...current };
       }
     }
-
-
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={addloading} onClick={() => {
+        this.handleSubmit(true);
+      }}>
+        保存
+      </Button>,
+      <Button key="continue" type="primary" loading={addloading} onClick={() => {
+        this.handleSubmit(false);
+      }}>
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={upateloading} onClick={() => {
+        this.handleSubmit(false);
+      }}>
+        保存
+      </Button>,
+    ];
 
     if (this.state.done) {
       if (this.state.requestState == 'success') {
@@ -480,18 +502,18 @@ class BrandCompoenet extends Component {
             {getFieldDecorator('brandNo', {
               rules: [{ required: true, message: '请输入品牌编码' }],
               initialValue: current.brandEnName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem> <FormItem label="英文名称" {...this.formLayout}>
-            {getFieldDecorator('brandEnName', {
+          {getFieldDecorator('brandEnName', {
             rules: [{ required: true, message: '请输入品牌编号' }],
             initialValue: current.brandEnName,
-          })(<Input placeholder="请输入" />)}
-          </FormItem>
+          })(<Input placeholder="请输入"/>)}
+        </FormItem>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('brandZhName', {
               rules: [{ message: '请输入中文名称' }],
               initialValue: current.brandZhName,
-            })(<Input placeholder="请输入" />)}
+            })(<Input placeholder="请输入"/>)}
           </FormItem>
         </Form>
       );
@@ -523,6 +545,7 @@ class BrandCompoenet extends Component {
       pageSize: 10,
       total: body.total,
     };
+
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
@@ -539,7 +562,7 @@ class BrandCompoenet extends Component {
                   }}
                   component={Brand}
                 />
-                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
+                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌"/>
               </div>
               <Card bordered={false} loading={false}>
                 <Table
@@ -565,13 +588,14 @@ class BrandCompoenet extends Component {
 
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.brand' })} />}
+                  title={<BuildTitle
+                    title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.brand' })}/>}
                   className={styles.standardListForm}
                   width={640}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
                   destroyOnClose
                   visible={this.state.visible}
-                  {...modalFooter}
+                  footer={modalFooter}
                 >
                   {getModalContent()}
                 </Modal>
@@ -598,7 +622,7 @@ class BrandCompoenet extends Component {
                   >
                     {formatMessage({ id: 'app.basic.menuMap.brand' })}
                   </div>
-                  <Divider className={styles.divder} />
+                  <Divider className={styles.divder}/>
                 </div>
                 {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
               </div>
@@ -657,21 +681,21 @@ class BrandCompoenet extends Component {
                   >
                     取消审批
                   </Button>) : (<Button
-                                                 className={styles.buttomControl}
-                                                 size="small"
-                                                 type="primary"
-                                                 icon="lock"
-                                                 onClick={() => {
+                    className={styles.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    onClick={() => {
                       ModalConfirm({
                         content: '确定审批吗？', onOk: () => {
                           this.clickFreezeFrom();
                         },
                       });
                     }}
-                                                 disabled={isEdit}
-                                               >
+                    disabled={isEdit}
+                  >
                     审批
-                                               </Button>)}
+                  </Button>)}
 
                 </div>
               </Card>

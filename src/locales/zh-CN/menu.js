@@ -21,6 +21,8 @@ export default {
   'menu.erp.dev.Raw':'原料档案',
   'menu.erp.dev.basic': '基础数据',
   'menu.erp.dev.mould':'模具设定',
+  'menu.erp.dev.dieSet':'模具设定',
+  'menu.erp.dev.dieSetChild':'子模明细',
 
 
   'menu.erp.dev.eliver': '出货',
