@@ -1,6 +1,6 @@
 import {statusConvert,YoNConvert} from '@/utils/convert';
 
-export const productFlow = [
+export const productflow = [
   { 'key': '成品类别', 'value': 'productType',cName:true },
   { 'key': '流程名称', 'value': 'flowName' },
   { 'key': '流程编号', 'value': 'flowCode' },
@@ -32,6 +32,6 @@ export const productProcess = [
 
 
 export default {
-  productFlow,
+  productflow,
   productProcess,
 };

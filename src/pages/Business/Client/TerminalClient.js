@@ -105,7 +105,7 @@ class TerminalClient extends PureComponent {
       params,
     } = this.props;
 
-    const { selectedItem, visible, current = {}, update } = this.state;
+    const { selectedItem, visible, current = {}, update ,isAdd} = this.state;
 
     const isUpdate =
       terminalUpdateloading ||
@@ -154,10 +154,53 @@ class TerminalClient extends PureComponent {
       this.state.isEdit = true;
     }
 
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={terminalSaveloading}
+        onClick={() => {
+          this.handleSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={terminalSaveloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={terminalUpdateloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
 
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
 
     const getModalContent = () => {
       const {
@@ -437,7 +480,7 @@ class TerminalClient extends PureComponent {
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
-          {...modalFooter}
+          footer={modalFooter}
         >
           {getModalContent()}
         </Modal>
@@ -586,7 +629,7 @@ class TerminalClient extends PureComponent {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (close) => {
     const { dispatch, form } = this.props;
     const { isAdd, customerId, selectedItem } = this.state;
 
@@ -605,11 +648,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
-          // callback:()=>{
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // }
+          callback:()=>{
+            this.setState({
+              visible: !close,
+            });
+          }
         });
       } else {
         params.id = selectedItem.id;
@@ -620,11 +663,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
-          // callback:()=>{
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // }
+          callback:()=>{
+            this.setState({
+              visible: !close,
+            });
+          }
         });
       }
     });

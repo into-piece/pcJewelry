@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { currency } from '@/utils/SvgUtil';
@@ -10,7 +11,6 @@ import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import {statusConvert} from '@/utils/convert';
 import BuildTitle from '@/components/BuildTitle';
-import { formatMessage } from 'umi/locale';
 
 const FormItem = Form.Item;
 
@@ -105,8 +105,7 @@ class Currency extends PureComponent {
     });
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = close => {
     const { dispatch, form, rtnCode = {} } = this.props;
 
     const { showItem, isAdd } = this.state;
@@ -122,11 +121,11 @@ class Currency extends PureComponent {
           payload: {
             ...fieldsValue,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close,
+            });
+          },
         });
 
         this.setState({
@@ -155,16 +154,13 @@ class Currency extends PureComponent {
           payload: {
             ...data,
           },
-          // callback: () => {
-          //   this.setState({
-          //     visible: false,
-          //   });
-          // },
+          callback: () => {
+            this.setState({
+              visible: !close
+            });
+          },
         });
       }
-      // this.setState({
-      //   visible: false,
-      // });
     });
   };
 
@@ -187,7 +183,7 @@ class Currency extends PureComponent {
   };
 
   render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update } = this.state;
+    const { selectedRowKeys = [], current = {}, isAdd,isEdit, update } = this.state;
 
     const {
       listLoading,
@@ -299,9 +295,51 @@ class Currency extends PureComponent {
       );
     };
 
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        this.handleSubmit(true);
+      }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+        this.handleSubmit(false);
+      }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={upateloading}
+        onClick={() => {
+        this.handleSubmit(false);
+      }}
+      >
+        保存
+      </Button>,
+    ];
 
     const onChange = (pagination, filters, sorter) => {
       const { current:currentIndex, pageSize } = pagination;
@@ -364,7 +402,7 @@ class Currency extends PureComponent {
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
                   destroyOnClose
                   visible={this.state.visible}
-                  {...modalFooter}
+                  footer={modalFooter}
                 >
                   {getModalContent()}
                 </Modal>

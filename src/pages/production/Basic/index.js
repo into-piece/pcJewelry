@@ -60,6 +60,7 @@ class Info extends Component {
   state = {
     mode: 'inline',
     modalType: '',
+    addLoading: false,
 
   };
 
@@ -255,9 +256,11 @@ class Info extends Component {
   };
 
   // 新增按钮事件回调
-  handleAdd = () => {
+  handleAdd = (close) => {
     const { selectKey, form } = this.props;
-
+    this.setState({
+      addLoading:true
+    })
     form.validateFields((err, values) => {
       if (!err) {
         serviceObj[`add${selectKey}`](values).then(res => {
@@ -267,15 +270,18 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList();
-            // this.btnFn('');
+            if(close) this.btnFn('');
           }
+          this.setState({
+            addLoading:false
+          })
         });
       }
     });
   };
 
   // 编辑按钮回调
-  handleEdit = () => {
+  handleEdit = (close) => {
     const { selectKey, form } = this.props;
 
     // 还要清空所选中项
@@ -283,7 +289,9 @@ class Info extends Component {
       type: `${defaultModelName}/changeSelectedRowKeys`,
       payload: [],
     });
-
+    this.setState({
+      addLoading:true
+    })
     form.validateFields((err, values) => {
       if (!err) {
         const { choosenRowData } = this.props;
@@ -298,8 +306,12 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList();
-            // this.btnFn('');
+            if(close) this.btnFn('');
+
           }
+          this.setState({
+            addLoading:false
+          })
         });
       }
     });
@@ -362,14 +374,14 @@ class Info extends Component {
   };
 
   // 弹窗确定提交回调
-  handleModalOk = () => {
+  handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-        this.handleAdd();
+        this.handleAdd(close);
         break;
       case 'edit':
-        this.handleEdit();
+        this.handleEdit(close);
         break;
       default:
         break;
@@ -398,8 +410,37 @@ class Info extends Component {
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
-    const { mode, modalType } = state;
+    const { mode, modalType,addLoading } = state;
     const { list, selectKey, choosenRowData } = props;
+    const modalFooter = modalType==='plus'?[
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={addLoading} onClick={()=>{handleModalOk(true)}}>
+        保存
+      </Button>,
+      <Button key="continue" type="primary" loading={addLoading} onClick={()=>{handleModalOk(false)}}>
+        继续添加
+      </Button>,
+    ]:[
+      <Button
+        key="back"
+        onClick={() => {
+          btnFn('');
+        }}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={addLoading} onClick={()=>{handleModalOk(false)}}>
+        保存
+      </Button>
+    ];
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -435,11 +476,9 @@ class Info extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={() => {
-            btnFn('');
-          }}
+
+          footer={modalFooter}
 
         >
           {getModalContent()}

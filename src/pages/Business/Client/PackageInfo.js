@@ -83,7 +83,53 @@ class PackageInfo extends PureComponent {
       customLock
     } = this.props;
 
-    const { selectedItem, visible, current = {}, update, fileList } = this.state;
+    const { selectedItem, visible, current = {}, update, fileList ,isAdd} = this.state;
+
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={packageSaveloading}
+        onClick={() => {
+          this.handleSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={packageSaveloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={packageSaveloading}
+        onClick={() => {
+          this.handleSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
 
     const isUpdate =
       packageUpdateloading || packageSaveloading || packageDeleteloading || packageFreezeloading ||packageunFreezeloading;
@@ -133,10 +179,6 @@ class PackageInfo extends PureComponent {
       this.state.isAddEdit = true;
       this.state.isEdit = true;
     }
-
-    const modalFooter = this.state.done
-      ? { footer: null, onCancel: this.handleDone }
-      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const isFreeze = (selectedItem&&selectedItem.status==='2');
 
@@ -257,7 +299,7 @@ class PackageInfo extends PureComponent {
           className={styles.standardListForm}
           destroyOnClose
           visible={visible}
-          {...modalFooter}
+          footer={modalFooter}
         >
           {this.getModalContent()}
         </Modal>
@@ -670,7 +712,7 @@ class PackageInfo extends PureComponent {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (close) => {
     const { dispatch, form } = this.props;
     const { isAdd, selectedItem, fileList, imageUrl, imageName } = this.state;
 
@@ -702,11 +744,11 @@ class PackageInfo extends PureComponent {
         payload: {
           ...params,
         },
-        // callback:()=>{
-        //   this.setState({
-        //     visible:false
-        //   })
-        // }
+        callback:()=>{
+          this.setState({
+            visible:!close
+          })
+        }
       });
 
 

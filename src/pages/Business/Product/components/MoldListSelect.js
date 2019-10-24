@@ -15,19 +15,23 @@ class MoldListSelect  extends Component{
     firstSelected: true,
   };
 
+
+  componentDidMount() {
+    this.loadSelect();
+  }
+
   getOptionList = list => {
     if (!list || list.length < 1) {
       return (
-        <Option key={0} value={0}>
+        <Option key={0} value="">
           没有找到选项
         </Option>
       );
     }
 
     return list.map(item => (
-      // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
-      <Option key={item.id} value={item.mainMold}>
-        {item.mainMold}
+      <Option key={item.id} value={item.mainMoldCode}>
+        {`${item.mainMoldCode}`}
       </Option>
     ));
   };
@@ -37,6 +41,7 @@ class MoldListSelect  extends Component{
   }
 
   handleChange = value => {
+    console.log(111111111,value)
     const { onChange, onSelect } = this.props;
     const { dicts } = this.state;
     this.setState({
@@ -57,17 +62,13 @@ class MoldListSelect  extends Component{
     // }
   };
 
-  componentDidMount() {
-    this.loadSelect();
-  }
-
   render() {
     const { content } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
     if (isFirst) {
-      showValue = content;
+      showValue = content||'';
 
     } else {
       showValue = value;
@@ -130,7 +131,7 @@ class MoldListSelect  extends Component{
             if (firstSelected && content) {
               if (onSelect) {
                 const selectItem = body.records.filter((v) => {
-                  if (v.id === content)
+                  if (v.mainMoldCode === content)
                     return v;
                 });
                 if (selectItem.length > 0) {

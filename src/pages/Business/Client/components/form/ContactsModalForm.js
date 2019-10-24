@@ -7,14 +7,68 @@ const FormItem = Form.Item;
 
 @Form.create()
 class ContactsModalForm extends Component {
-  render() {
-    const { handleCancel } = this.props;
+  formLayout = {
+    labelCol: { span: 7 },
+    wrapperCol: { span: 13 },
+  };
 
-    const contactsModalFooter = {
-      okText: '保存',
-      onOk: this.handleContactsSubmit,
-      onCancel: handleCancel,
-    };
+  centerFormLayout = {
+    labelCol: { span: 12 },
+    wrapperCol: {
+      span: 24,
+    },
+  };
+
+  render() {
+    const { handleCancel,contactsCurrent ,contactsLoading} = this.props;
+
+    const contactsModalFooter = !contactsCurrent.id ? [
+      <Button
+        key="back"
+        onClick={handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={contactsLoading}
+        onClick={() => {
+          this.handleContactsSubmit(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={contactsLoading}
+        onClick={() => {
+          this.handleContactsSubmit(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={handleCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={contactsLoading}
+        onClick={() => {
+          this.handleContactsSubmit(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
+
+
 
     return (
       <Modal
@@ -23,7 +77,7 @@ class ContactsModalForm extends Component {
         width={720}
         className={styles.standardListForm}
         destroyOnClose
-        {...contactsModalFooter}
+        footer={contactsModalFooter}
       >
         {this.getContactsContent()}
       </Modal>
@@ -45,7 +99,7 @@ class ContactsModalForm extends Component {
           labelAlign="left"
           layout="inline"
           className={clientStyle.from_content}
-          onSubmit={this.handleContactsSubmit}
+          // onSubmit={this.handleContactsSubmit}
         >
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
@@ -152,14 +206,14 @@ class ContactsModalForm extends Component {
   };
 
 
-  handleContactsSubmit = () => {
+  handleContactsSubmit = (close) => {
     const { form, contactsSubmit } = this.props;
     form.validateFields((err, fieldsValue) => {
+
       if (err) return;
-      console.log('contactsSubmit', fieldsValue);
 
       if (contactsSubmit)
-        contactsSubmit(fieldsValue);
+        contactsSubmit(fieldsValue,close);
     });
 
 

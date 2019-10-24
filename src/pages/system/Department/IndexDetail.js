@@ -212,9 +212,38 @@ class IndexDetail extends Component {
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
     const { isProductUpdate } = this.props;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
 
+    const modalFooter = isAdd ? [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={addloading} onClick={() => {
+        this.handleSubmit(true);
+      }}>
+        保存
+      </Button>,
+      <Button key="continue" type="primary" loading={addloading} onClick={() => {
+        this.handleSubmit(false);
+      }}>
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={upateloading} onClick={() => {
+        this.handleSubmit(false);
+      }}>
+        保存
+      </Button>,
+    ];
     let paths = [];
 
     if (imageObject.length > 0) {
@@ -357,14 +386,14 @@ class IndexDetail extends Component {
 
             </div>
             <Modal
-              title={<BuildTitle title={ <FormattedMessage id="menu.erp.system.department" defaultMessage="Authority" />} />}
+              title={<BuildTitle title={<FormattedMessage id="menu.erp.system.department" defaultMessage="Authority" />} />}
 
               maskClosable={false}
               width={600}
               className={styles.standardListForm}
               destroyOnClose
               visible={visible}
-              {...modalFooter}
+              footer={modalFooter}
             >
               {this.getProductModalContent()}
             </Modal>
@@ -632,7 +661,7 @@ class IndexDetail extends Component {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (close) => {
 
     const { dispatch, form } = this.props;
     const { isAdd, fileList, showItem } = this.state;
@@ -651,11 +680,11 @@ class IndexDetail extends Component {
           payload: {
             ...params,
           },
-          // callback:()=>{
-          //   this.setState({
-          //     visible:false
-          //   })
-          // }
+          callback:()=>{
+            this.setState({
+              visible:!close
+            })
+          }
         });
         // todo
 
@@ -671,11 +700,11 @@ class IndexDetail extends Component {
           payload: {
             ...params,
           },
-          // callback:()=>{
-          //   this.setState({
-          //     visible:false
-          //   })
-          // }
+          callback:()=>{
+            this.setState({
+              visible:close
+            })
+          }
         });
       }
 

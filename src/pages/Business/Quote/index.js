@@ -286,6 +286,7 @@ const productSearchParams = [
 })
 class Info extends Component {
   state = {
+    addLoading: false,
     modalType: '',
     quoteDateFrom: null,
     quoteDateTo: null,
@@ -647,7 +648,7 @@ class Info extends Component {
   };
 
   // 新增按钮事件回调
-  handleAdd = () => {
+  handleAdd = (close) => {
     const { rightMenu, form, choosenRowData } = this.props;
     const { productLineId } = this.state;
     const isHead = rightMenu === 1;
@@ -660,6 +661,7 @@ class Info extends Component {
     form.validateFields((err, values) => {
       if (!err) {
 
+        this.setState({addLoading:true});
         params = {
           ...params,
           ...values,
@@ -667,10 +669,6 @@ class Info extends Component {
           customerPreparation: values.customerPreparation ? 1 : 0,
           purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0,
         };
-        // this.setState({
-        //   [selectKey]
-        // })
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
         serviceObj[`add${str}`]({ ...params }).then(res => {
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
@@ -678,15 +676,17 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
-            // this.btnFn('');
+            if(close) this.btnFn('');
           }
+          this.setState({addLoading:false});
+
         });
       }
     });
   };
 
   // 编辑按钮回调
-  handleEdit = () => {
+  handleEdit = (close) => {
     const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData } = this.props;
     const { productLineId } = choosenDetailRowData;
     const isHead = rightMenu === 1;
@@ -708,6 +708,8 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
+        this.setState({addLoading:true});
+
         params = {
           ...params,
           ...values,
@@ -722,8 +724,11 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
-            // this.btnFn('');
+            if(close) this.btnFn('');
+
           }
+          this.setState({addLoading:false});
+
         });
       }
     });
@@ -785,7 +790,7 @@ class Info extends Component {
     const { selectedRowKeys, selectedDetailRowKeys, quote, rightMenu, quotelist, quoteDatialList } = this.props;
     const list = rightMenu === 1 ? quotelist : quoteDatialList;
     const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
-    console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
+    // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
     if (list && list.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = list.records.find(subItem => subItem.id === cur);
@@ -800,14 +805,14 @@ class Info extends Component {
   };
 
   // 弹窗确定提交回调
-  handleModalOk = () => {
+  handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-        this.handleAdd();
+        this.handleAdd(close);
         break;
       case 'edit':
-        this.handleEdit();
+        this.handleEdit(close);
         break;
       default:
         break;
@@ -977,8 +982,55 @@ class Info extends Component {
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct, onSearch, returnListName } = this;
-    const { modalType } = state;
+    const { modalType ,addloading} = state;
     const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData, productListLoading } = props;
+
+
+    const modalFooter = modalType === 'plus' ? [
+      <Button
+        key="back"
+        onClick={onCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(true);
+        }}
+      >
+        保存
+      </Button>,
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        继续添加
+      </Button>,
+    ] : [
+      <Button
+        key="back"
+        onClick={onCancel}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        保存
+      </Button>,
+    ];
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1012,9 +1064,8 @@ class Info extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleModalOk}
           visible={modalType !== ''}
-          onCancel={onCancel}
+          footer={modalFooter}
         >
           {getModalContent()}
         </Modal>
@@ -1138,7 +1189,14 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   if (info.file.status === 'done') {
                     // 获取初始表单数据
                     btnFn('freshList');
-                    message.success(`file import successfully`);
+                    const {response} = info.file;
+
+                    if (response.head&&response.head.btnCode !== '000000') {
+                      message.error(response.head.rtnMsg);
+                    }
+
+                    // console.log(JSON.stringify(info.file.response))
+                    // message.success(info.file.response);
                   } else if (info.file.status === 'error') {
                     message.error(`import fail`);
                   }
