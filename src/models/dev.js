@@ -137,17 +137,17 @@ export default {
       };
     },
     getDevList2(state, action) {
-      console.log(action.payload)
       const { type, response } = action.payload
       const listName = `${type}List`
       const listData =
         response && response.head && response.head.rtnCode === '000000'
           ? response.body
           : initData;
-      console.log(listData);
       return {
         ...state,
         [listName]: listData,
+
+
       };
     },
 

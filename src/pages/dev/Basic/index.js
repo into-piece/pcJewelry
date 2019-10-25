@@ -1015,6 +1015,7 @@ class CenterInfo extends Component {
           <Table
             columns={columns}
             body={list}
+            key={type}
             changeChoosenRow={this.changeChoosenRow}
             selectKey={choosenRowData.id}
             pagination={pagination}

@@ -478,16 +478,6 @@ const columnsArr = {
       key: 'qualit6yName',
     },
     {
-      title: '客户编号',
-      dataIndex: 'customerNo',
-      key: 'customerNo',
-    },
-    {
-      title: '供应商编号',
-      dataIndex: 'supplierNo',
-      key: 'supplierNo',
-    },
-    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName6',
@@ -526,6 +516,16 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventory6Weight',
+    },
+    {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
     },
     {
       title: '状态',
@@ -857,7 +857,7 @@ class Info extends Component {
 
             // 带出中文名初始值
             // 主材：取成色的中文名与英文名，只有一个字段
-            // 石材：类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码 
+            // 石材：类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码
             // 配件：成色代码-类别代码-形状代码-规格代码
             // 包装材料：类别代码-形状代码-颜色代码-规格代码
             // 辅助材料：类别代码-形状代码-颜色代码-规格代码
@@ -1424,7 +1424,7 @@ class CenterInfo extends Component {
     });
   };
 
-  turnTab(e) {
+  turnTab= (e)=> {
     const key = e.target ? e.target.value : e;
     const { dispatch, getList } = this.props;
     dispatch({

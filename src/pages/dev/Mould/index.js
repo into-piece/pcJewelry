@@ -97,7 +97,7 @@ class Index extends Component {
     // 成品类别下拉
     dispatch({
       type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016003' }, listName: 'H016003' },
+      payload: { params: { 'key': 'H016009' }, listName: 'H016009' },
     });
 
     // 胶膜代码下拉

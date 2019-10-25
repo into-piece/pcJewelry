@@ -42,7 +42,7 @@ export default {
 
     listFilmSettingsDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
-    H016003: [{ key: '', value: '' }],
+    H016009: [{ key: '', value: '' }],
 
   },
 
