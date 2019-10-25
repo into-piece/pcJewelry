@@ -93,7 +93,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     }, {
       title: '成色',
@@ -152,7 +152,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -232,7 +232,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -276,7 +276,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -370,7 +370,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -449,7 +449,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-        )
+      )
         : (data),
     },
     {
@@ -790,26 +790,31 @@ class Info extends Component {
       <Form size="small">
         {
           dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit, number }) => {
-
             const selectData = { ...choosenRowData };
+            const sId = `${getFieldValue('sId')}`;
+            const shapeId = `${getFieldValue('shape')}`;
+            const assayingId = `${getFieldValue('assaying')}`;
+            const specificationId = `${getFieldValue('specification')}`;
+            const colorId = `${getFieldValue('color')}`;
+            const cutId = `${getFieldValue('cut')}`;
+            const qualityId = `${getFieldValue('quality')}`;
+            let assaying = []
+            let shape = []
+            let specification = []
+            let color = []
+            let cut = []
+            let quality = []
+            let s = []
+            if (assayingId) assaying = dev.listBasicColourSetDropDown.filter(e => e.id === assayingId);
+            if (shapeId) shape = dev.shapeSettingList.filter(e => e.id === shapeId);
+            if (specificationId) specification = dev.specificationSettingList.filter(e => e.id === specificationId);
+            if (colorId) color = dev.listColorDrop.filter(e => e.id === colorId);
+            if (cutId) cut = dev.listCutDrop.filter(e => e.id === cutId);
+            if (qualityId) quality = dev.listQualityDrop.filter(e => e.id === qualityId);
+            if (sId) s = dev.H016001.filter(e => e.id === sId);
+
+            // modalContent => 每个menu不同的增加弹窗填写信息
             if (value === 'materialNo') {
-              const sId = `${getFieldValue('sId')}`;
-              const shapeId = `${getFieldValue('shape')}`;
-              const assayingId = `${getFieldValue('assaying')}`;
-              const specificationId = `${getFieldValue('specification')}`;
-              const colorId = `${getFieldValue('color')}`;
-              const cutId = `${getFieldValue('cut')}`;
-              const qualityId = `${getFieldValue('quality')}`;
-
-              const assaying = dev.listBasicColourSetDropDown.filter(e => e.id === assayingId);
-              let s = dev.H016001.filter(e => e.id === sId);
-
-
-              const shape = dev.shapeSettingList.filter(e => e.id === shapeId);
-              const specification = dev.specificationSettingList.filter(e => e.id === specificationId);
-              const color = dev.listColorDrop.filter(e => e.id === colorId);
-              const cut = dev.listCutDrop.filter(e => e.id === cutId);
-              const quality = dev.listQualityDrop.filter(e => e.id === qualityId);
               let va = '';
               if (selectKey === 'accessories') {
                 s = dev.H016003.filter(e => e.id === sId);
@@ -846,10 +851,104 @@ class Info extends Component {
                 s = dev.H016005.filter(e => e.id === sId);
                 va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
               }
-
               dfv = va;
               selectData[value] = va || choosenRowData[value];
             }
+
+            // 带出中文名初始值
+            // 主材：取成色的中文名与英文名，只有一个字段
+            // 石材：类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码 
+            // 配件：成色代码-类别代码-形状代码-规格代码
+            // 包装材料：类别代码-形状代码-颜色代码-规格代码
+            // 辅助材料：类别代码-形状代码-颜色代码-规格代码
+            if (value === 'zhName') {
+              let va = '';
+              if (selectKey === 'material' && assaying.length > 0) {
+                va = assaying[0].zhName
+              }
+              if (selectKey === 'stone') {
+                s = dev.H016002.filter(e => e.id === sId);
+                va = `${s.length > 0 ? (`${s[0].zhName}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].zhName}-`) : ''}${
+                  cut.length > 0 ? (`${cut[0].zhName}-`) : ''}${
+                  color.length > 0 ? (`${color[0].zhName}-`) : ''}${
+                  quality.length > 0 ? (`${quality[0].zhName}-`) : ''}${
+                  specification.length > 0 ? specification[0].zhName : ''}`;
+              }
+              if (selectKey === 'accessories') {
+                s = dev.H016003.filter(e => e.id === sId);
+                va = `${assaying.length > 0 ? (`${assaying[0].zhName}-`) : ''}${
+                  s.length > 0 ? (`${s[0].zhName}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].zhName}-`) : ''}${
+                  specification.length > 0 ? specification[0].zhName : ''}`;
+              }
+
+              if (selectKey === 'wrapper' || selectKey === 'auxiliaryMaterial') {
+                if (selectKey === 'wrapper') {
+                  s = dev.H016004.filter(e => e.id === sId);
+                }
+                if (selectKey === 'auxiliaryMaterial') {
+                  s = dev.H016005.filter(e => e.id === sId);
+                }
+
+                va = `${s.length > 0 ? (`${s[0].zhName}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].zhName}-`) : ''}${
+                  color.length > 0 ? (`${color[0].zhName}-`) : ''}${
+                  specification.length > 0 ? specification[0].zhName : ''}`;
+              }
+
+              if (selectKey === 'otherMaterial') {
+                s = dev.H016005.filter(e => e.id === sId);
+                va = `${s.length > 0 ? (`${s[0].zhName}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+              }
+              dfv = va;
+            }
+
+            if (value === 'enName') {
+              let va = '';
+              if (selectKey === 'material' && assaying.length > 0) {
+                va = assaying[0].enName
+              }
+              if (selectKey === 'stone') {
+                s = dev.H016002.filter(e => e.id === sId);
+                va = `${s.length > 0 ? (`${s[0].enName}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].enName}-`) : ''}${
+                  cut.length > 0 ? (`${cut[0].enName}-`) : ''}${
+                  color.length > 0 ? (`${color[0].enName}-`) : ''}${
+                  quality.length > 0 ? (`${quality[0].enName}-`) : ''}${
+                  specification.length > 0 ? specification[0].enName : ''}`;
+              }
+              if (selectKey === 'accessories') {
+                s = dev.H016003.filter(e => e.id === sId);
+                va = `${assaying.length > 0 ? (`${assaying[0].enName}-`) : ''}${
+                  s.length > 0 ? (`${s[0].enName}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].enName}-`) : ''}${
+                  specification.length > 0 ? specification[0].enName : ''}`;
+              }
+
+              if (selectKey === 'wrapper' || selectKey === 'auxiliaryMaterial') {
+                if (selectKey === 'wrapper') {
+                  s = dev.H016004.filter(e => e.id === sId);
+                }
+                if (selectKey === 'auxiliaryMaterial') {
+                  s = dev.H016005.filter(e => e.id === sId);
+                }
+
+                va = `${s.length > 0 ? (`${s[0].enName}-`) : ''}${
+                  shape.length > 0 ? (`${shape[0].enName}-`) : ''}${
+                  color.length > 0 ? (`${color[0].enName}-`) : ''}${
+                  specification.length > 0 ? specification[0].enName : ''}`;
+              }
+
+              if (selectKey === 'otherMaterial') {
+                s = dev.H016005.filter(e => e.id === sId);
+                va = `${s.length > 0 ? (`${s[0].enName}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+              }
+
+              dfv = va;
+            }
+
+
             const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
               <FormItem label={key} {...formLayout} key={key}>
                 {
@@ -1447,49 +1546,37 @@ class CenterInfo extends Component {
           <Radio.Group defaultValue="material" value={type} buttonStyle="solid">
             <Radio.Button
               value="material"
-              onChange={(e) => {
-                this.turnTab(e);
-              }}
+              onChange={this.turnTab}
             >
               主材
             </Radio.Button>
             <Radio.Button
               value="stone"
-              onChange={(e) => {
-                this.turnTab(e);
-              }}
+              onChange={this.turnTab}
             >
               石材
             </Radio.Button>
             <Radio.Button
               value="accessories"
-              onChange={(e) => {
-                this.turnTab(e);
-              }}
+              onChange={this.turnTab}
             >
               配件
             </Radio.Button>
             <Radio.Button
               value="wrapper"
-              onChange={(e) => {
-                this.turnTab(e);
-              }}
+              onChange={this.turnTab}
             >
               包装
             </Radio.Button>
             <Radio.Button
               value="auxiliaryMaterial"
-              onChange={(e) => {
-                this.turnTab(e);
-              }}
+              onChange={this.turnTab}
             >
               辅材
             </Radio.Button>
             <Radio.Button
               value="otherMaterial"
-              onChange={(e) => {
-                this.turnTab(e);
-              }}
+              onChange={this.turnTab}
             >
               其他
             </Radio.Button>
@@ -1520,7 +1607,7 @@ class CenterInfo extends Component {
                 payload: e,
               });
             }}
-            wrappedComponentRef={(e) => this.SearchFromTab0 = e}
+            wrappedComponentRef={e => this.SearchFromTab0 = e}
           />
 
           <Table
@@ -1557,9 +1644,7 @@ const GetRenderitem = ({ data, type }) => {
   }
   const getImages = (paths) => {
     if (!paths) return;
-    return paths.map((
-      v, // src={v}
-    ) => (
+    return paths.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
         <Zmage
           alt="图片"
@@ -1577,19 +1662,19 @@ const GetRenderitem = ({ data, type }) => {
     <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-      <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
-        {getImages(images)}
-      </Carousel>}
+        <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
+          {getImages(images)}
+        </Carousel>}
       {images && images.length > 0 && <Divider />}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={`c${key}`} term={key}>{data[`${value}Name`]}</Description>
-                : <Description
-                  key={`c${key}`}
-                  term={key}
-                >{value === 'status' ? statusConvert[data[value]] : data[value]}
-                </Description>
+              : <Description
+                key={`c${key}`}
+                term={key}
+              >{value === 'status' ? statusConvert[data[value]] : data[value]}
+              </Description>
             );
           })
         }
