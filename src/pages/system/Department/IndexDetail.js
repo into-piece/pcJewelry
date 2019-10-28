@@ -211,7 +211,7 @@ class IndexDetail extends Component {
 
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
-    const { isProductUpdate } = this.props;
+    const { isProductUpdate ,deptUpdateloading,addDeptloading} = this.props;
 
 
     const modalFooter = isAdd ? [
@@ -224,7 +224,7 @@ class IndexDetail extends Component {
       <Button
         key="submit"
         type="primary"
-        loading={addloading}
+        loading={addDeptloading}
         onClick={() => {
         this.handleSubmit(true);
       }}
@@ -234,7 +234,7 @@ class IndexDetail extends Component {
       <Button
         key="continue"
         type="primary"
-        loading={addloading}
+        loading={addDeptloading}
         onClick={() => {
         this.handleSubmit(false);
       }}
@@ -251,7 +251,7 @@ class IndexDetail extends Component {
       <Button
         key="submit"
         type="primary"
-        loading={upateloading}
+        loading={deptUpdateloading}
         onClick={() => {
         this.handleSubmit(false);
       }}

@@ -262,9 +262,17 @@ export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
 export const productExcelImport = `${priefx}/business/business/product/product-quote-header/excelImport`
 
 
+/**
+ *   共同维护人下拉
+ * @type {string}
+ */
+export const coMaintainerDD = `${priefx}/coMaintainerDD`
+
+
 export default {
   priefx,
   productExcelImport,
+  coMaintainerDD,
   listRingStandAround,
   listRingAround,
   uploadImg,
