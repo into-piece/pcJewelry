@@ -5,7 +5,7 @@ export const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
  * 加载共同维护人
  * @type {string}
  */
-export const loadMaintainer = `${priefx}/business/business/co-maintainer/listCoMaintainer`
+export const loadMaintainer = `${priefx}/business/business/co-maintainer/list`
 /**
  * 加载联系人
  * @type {string}
@@ -22,7 +22,13 @@ export const saveContacts = `${priefx}/business/business.customer/business-conta
  * 保存共同维护人
  * @type {string}
  */
-export const saveMaintainer = `${priefx}/business/business/co-maintainer/saveCoMaintainer`
+export const saveMaintainer = `${priefx}/business/business/co-maintainer/save`
+
+/**
+ * 保存共同维护人
+ * @type {string}
+ */
+export const deleteMaintainer = `${priefx}/business/business/co-maintainer/delete`
 
 /**
  * 删除联系人
@@ -272,6 +278,7 @@ export default {
   loadRings,
   saveContacts,
   saveMaintainer,
+  deleteMaintainer,
   deleteContacts,
   queryDelivery,
   queryDelivery2,

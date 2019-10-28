@@ -453,6 +453,8 @@ class IndexDetail extends Component {
               destroyOnClose
               visible={visible}
               footer={modalFooter}
+              onCancel={this.handleCancel}
+
             >
               {this.getProductModalContent()}
             </Modal>

@@ -654,6 +654,9 @@ class Index extends Component {
           destroyOnClose
           visible={modalType !== ''}
           footer={modalFooter}
+          onCancel={() => {
+            btnFn('');
+          }}
         >
           {getModalContent()}
         </Modal>

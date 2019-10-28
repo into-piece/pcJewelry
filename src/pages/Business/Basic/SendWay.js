@@ -270,14 +270,24 @@ class SendWay extends PureComponent {
       >
         取消
       </Button>,
-      <Button key="submit" type="primary" loading={addloading} onClick={() => {
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
         this.handleSubmit(true);
-      }}>
+      }}
+      >
         保存
       </Button>,
-      <Button key="continue" type="primary" loading={addloading} onClick={() => {
+      <Button
+        key="continue"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
         this.handleSubmit(false);
-      }}>
+      }}
+      >
         继续添加
       </Button>,
     ] : [
@@ -287,9 +297,14 @@ class SendWay extends PureComponent {
       >
         取消
       </Button>,
-      <Button key="submit" type="primary" loading={upateloading} onClick={() => {
+      <Button
+        key="submit"
+        type="primary"
+        loading={upateloading}
+        onClick={() => {
         this.handleSubmit(false);
-      }}>
+      }}
+      >
         保存
       </Button>,
     ];
@@ -357,6 +372,7 @@ class SendWay extends PureComponent {
                   destroyOnClose
                   visible={this.state.visible}
                   footer={modalFooter}
+                  onCancel={this.handleCancel}
                 >
                   {getModalContent()}
                 </Modal>

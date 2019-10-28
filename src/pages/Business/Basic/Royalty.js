@@ -406,6 +406,8 @@ class Royalty extends PureComponent {
                   destroyOnClose
                   visible={this.state.visible}
                   footer={modalFooter}
+                  onCancel={this.handleCancel}
+
                 >
                   {getModalContent()}
                 </Modal>

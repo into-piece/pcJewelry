@@ -37,7 +37,7 @@ import business from '../business.less';
 import clientInfoStyle from './ClientInfo.less';
 import JewelryTable from '../../components/JewelryTable';
 import CustomerSearchFrom from './components/CustomerSearchFrom';
-import HttpFetch from '../../../utils/HttpFetch';
+import HttpFetch, { deleteMaintainer } from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
 import RingsModalForm from './components/form/RingsModalForm';
 import TableSortView from '../../components/TableSortView';
@@ -218,6 +218,19 @@ class ClientView extends PureComponent {
       key: 'status',
       render: data => statusConvert[data],
     },
+  ];
+
+  maintainsColumns = [
+    {
+      title: "员工编号",
+      dataIndex: 'zhName',
+      key: 'zhName',
+    },
+    {
+      title: "姓名",
+      dataIndex: 'zhName',
+      key: 'zhName',
+    }
   ];
 
   ringsColumn = [
@@ -584,6 +597,8 @@ class ClientView extends PureComponent {
       drawVisible,
       ringsItem,
       ringsData,
+      maintainsItem,
+      maintainsData,
       contactsTableContent,
       ringsTableContent,
       contactsSelectedRowKeys,
@@ -826,6 +841,41 @@ class ClientView extends PureComponent {
                   {/* })} disabled={(!selectCustomerItem) || selectCustomerItem === ''}> 新建</Button> */}
 
 
+                  {/* 共同维护人按钮 */}
+                  <Button
+                    icon="plus"
+                    type="primary"
+                    style={{
+                      marginBottom: 10,
+                      marginRight: 20,
+                      display: selectType === 'maintains' ? '' : 'none',
+                    }}
+                    onClick={() =>
+                      this.setState({
+                        contactsCurrent: {},
+                        maintainerAddVisible: true,
+                        modalkey: `a${Math.random(1)}`,
+                      })
+                    }
+                    disabled={!selectCustomerItem || selectCustomerItem === '' || this.state.selectCustomerItem.status === '2'}
+                  >
+                    新建
+                  </Button>
+                  <Button
+                    icon="delete"
+                    type="danger"
+                    style={{ marginBottom: 10, display: selectType === 'maintains' ? '' : 'none' }}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？', onOk: () => {
+                          this.deleteMaintainsList();
+                        },
+                      });
+                    }}
+                    disabled={!maintainsItem || maintainsItem === '' || this.state.selectCustomerItem.status === '2'}
+                  >
+                    删除
+                  </Button>
                   {/* 圈戒按钮 */}
                   <Button
                     icon="plus"
@@ -947,17 +997,20 @@ class ClientView extends PureComponent {
                     columns={this.clientContentColumns}
                   />
                   {/* 第二部分列表  维护人 */}
-                  <Table
+                  <JewelryTable
                     style={{ display: selectType === 'maintains' ? '' : 'none' }}
+                    onSelectItem={(item, rows) => {
+                      this.setState({
+                        maintainsItem: item,
+                        maintainsData: rows,
+                      });
+                    }}
                     loading={maintainsLoading}
-                    dataSource={maintainTableContent}
-                    size="middle"
-                    rowKey={record => record.id}
-                    rowSelection={rowMaintainerSelection}
-                    rowClassName={this.onSelectRowClass}
-                    columns={maintainsColumn}
+                    body={maintainTableContent}
+                    columns={this.maintainsColumns}
+                    onChange={this.handleContactsTableChange}
+                    pageChange={this.pageContactsChange}
                   />
-
                   {/* 第二部分列表  联系人 */}
                   <JewelryTable
                     style={{ display: selectType === 'contacts' ? '' : 'none' }}
@@ -1010,6 +1063,8 @@ class ClientView extends PureComponent {
           destroyOnClose
           visible={visible}
           footer={modalFooter}
+          onCancel={this.handleCancel}
+
         >
           {this.getModalContent()}
         </Modal>
@@ -1021,6 +1076,8 @@ class ClientView extends PureComponent {
           destroyOnClose
           visible={maintainerAddVisible}
           {...maintainermodalFooter}
+          onCancel={this.handleCancel}
+
         >
           {this.getMaintainerContent()}
         </Modal>
@@ -2230,7 +2287,6 @@ class ClientView extends PureComponent {
     })
       .then(response => response.json())
       .then(d => {
-        console.log(11111, d);
         const { body } = d;
         if (body && body.records) {
           if (body.records.length > 0) {
@@ -2453,7 +2509,6 @@ class ClientView extends PureComponent {
   saveMaintainerList = item => {
     const { selectCustomerItem } = this.state;
     const _this = this;
-    console.log('saveMaintainerList （', selectCustomerItem);
     if (!selectCustomerItem || selectCustomerItem === '') {
       this.setState({
         maintainsLoading: false,
@@ -2485,7 +2540,6 @@ class ClientView extends PureComponent {
         _this.setState({
           maintainsLoading: false,
         });
-        // console.log('result ', d);
       })
       .catch(function(ex) {
         message.error('保存数据失败！ 请重试');
@@ -2549,6 +2603,53 @@ class ClientView extends PureComponent {
         message.error('保存数据失败！ 请重试');
         _this.setState({
           contactsLoading: false,
+        });
+      });
+    // }
+  };
+
+  deleteMaintainsList = () => {
+    const { selectCustomerItem, maintainsData } = this.state;
+    const _this = this;
+    if (!selectCustomerItem || selectCustomerItem === '') {
+      this.setState({
+        contactsLoading: false,
+      });
+      return;
+    }
+
+    const ids = maintainsData.map(v => {
+      return v.id;
+    });
+
+    fetch(HttpFetch.deleteMaintainer, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(ids),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { head } = d;
+
+        if (!head) message.error('删除失败！');
+        else {
+          message.success(head.rtnMsg);
+        }
+        _this.setState({
+          maintainsLoading: false,
+          maintainsItem: '',
+        });
+
+        this.loadmaintainerList();
+      })
+      .catch(function(ex) {
+        message.error('保存数据失败！ 请重试');
+        _this.setState({
+          maintainsLoading: false,
         });
       });
     // }

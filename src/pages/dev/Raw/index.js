@@ -1304,6 +1304,10 @@ class Info extends Component {
           destroyOnClose
           footer={modalFooter}
           visible={modalType !== ''}
+          onCancel={() => {
+            this.setState({ filelist: [] });
+            btnFn('');
+          }}
         >
           {getModalContent()}
         </Modal>

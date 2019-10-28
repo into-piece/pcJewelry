@@ -868,6 +868,7 @@ class Info extends Component {
       <Button
         key="back"
         onClick={() => {
+            this.setState({ filelist: [] });
         btnFn('');
       }}
       >
@@ -931,6 +932,10 @@ class Info extends Component {
           destroyOnClose
           visible={modalType !== ''}
           footer={modalFooter}
+          onCancel={() => {
+            this.setState({ filelist: [] });
+            btnFn('');
+          }}
 
         >
           {getModalContent()}

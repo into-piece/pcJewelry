@@ -481,6 +481,8 @@ class TerminalClient extends PureComponent {
           destroyOnClose
           visible={visible}
           footer={modalFooter}
+          onCancel={this.handleCancel}
+
         >
           {getModalContent()}
         </Modal>

@@ -495,6 +495,8 @@ class SpecimenDetaill extends Component {
               destroyOnClose
               visible={visible}
               footer={modalFooter}
+              onClick={this.handleCancel}
+
             >
               {this.getProductModalContent()}
             </Modalœ>
