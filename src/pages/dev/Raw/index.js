@@ -948,9 +948,13 @@ class Info extends Component {
               dfv = va;
             }
 
+            if (value === 'materialNo') {
+              console.log(value,selectData[value])
+              console.log(value,dfv)
+            }
 
             const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
-              <FormItem label={key} {...formLayout} key={key}>
+              <FormItem label={key} {...formLayout} key={`${key}=${dfv}`}>
                 {
                   getFieldDecorator(value, {
                     rules: [{
@@ -1006,6 +1010,7 @@ class Info extends Component {
   handleAdd = (close) => {
     const { selectKey, form, choosenTypesRowData } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
+    const {resetFields} = form
 
 
     form.validateFields((err, values) => {
@@ -1035,9 +1040,13 @@ class Info extends Component {
             });
             this.getList({ key: selectKey });
             if(close) this.btnFn('');
+
           }
         });
         this.setState({ filelist: [] });
+        resetFields(['materialNo']);
+        resetFields(['zhName']);
+        resetFields(['enName']);
 
       }
     });
@@ -1047,6 +1056,7 @@ class Info extends Component {
   handleEdit = (close) => {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
+    const {resetFields} = form
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -1089,6 +1099,9 @@ class Info extends Component {
           }
         });
         this.setState({ filelist: [] });
+        resetFields(['materialNo']);
+        resetFields(['zhName']);
+        resetFields(['enName']);
 
       }
     });

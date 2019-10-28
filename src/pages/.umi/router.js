@@ -1492,13 +1492,20 @@ const routes = [
                 icon: 'form',
                 component: __IS_BROWSER
                   ? _dvaDynamic({
+                      app: require('@tmp/dva').getApp(),
+                      models: () => [
+                        import(/* webpackChunkName: 'p__Business__proforminvoice__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/Business/proforminvoice/models/model.js').then(
+                          m => {
+                            return { namespace: 'model', ...m.default };
+                          },
+                        ),
+                      ],
                       component: () =>
-                        import(/* webpackChunkName: "layouts__BasicLayout" */ '../Business/Proforminvoice/Proforminvoice'),
+                        import(/* webpackChunkName: "layouts__BasicLayout" */ '../Business/proforminvoice'),
                       LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
                         .default,
                     })
-                  : require('../Business/Proforminvoice/Proforminvoice')
-                      .default,
+                  : require('../Business/proforminvoice').default,
                 routes: [
                   {
                     component: () =>
