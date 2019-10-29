@@ -40,24 +40,23 @@ const btnGroup = [
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-const defaultModelName = 'productionOrderApprove';
+const defaultModelName = 'businessPI';
 
-const firstTabFlag = 'orderApproveInfo';
+const firstTabFlag = 'piHead';
 
 const radioArr01 = [
   { key: '当前审批', value: '0' },
   { key: '历史审批', value: '2' }];
 
 const radioArr02 = [
-  { key: '产品信息', value: 'orderApproveProduct' },
-  { key: '审批结果', value: 'orderApproveResult' }];
+  { key: '产品信息', value: 'piDetail' }];
 const radioArr = [
-  { key: '审批信息', value: 'orderApproveInfo' },
-  { key: '产品信息', value: 'orderApproveProduct' },
-  { key: '审批结果', value: 'orderApproveResult' }];
+  { key: '订单主页', value: 'piHead' },
+  { key: '产品详细信息', value: 'piDetail' },
+];
 
 @Form.create()
-@connect(({ loading, productionOrderApprove: model }) => {
+@connect(({ loading, businessPI: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
@@ -78,32 +77,32 @@ class Index extends Component {
   state = {
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'orderApproveProduct',
+    secondTableActive: 'piDetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // 类别下拉
-    dispatch({
-      type: `${defaultModelName}/getwordbookdropdown`,
-      payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
-    });
-    // 成品类别下拉
-    dispatch({
-      type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
-    });
-    // 部门下拉
-    dispatch({
-      type: `${defaultModelName}/listDeptDropDown`,
-    });
-    // 镶石工艺下拉
-    dispatch({
-      type: `${defaultModelName}/listGemSetProcessDropDown`,
-      payload: {},
-    });
+    // // 类别下拉
+    // dispatch({
+    //   type: `${defaultModelName}/getwordbookdropdown`,
+    //   payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
+    // });
+    // // 成品类别下拉
+    // dispatch({
+    //   type: `${defaultModelName}/getTypeByWordbookCode`,
+    //   payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
+    // });
+    // // 部门下拉
+    // dispatch({
+    //   type: `${defaultModelName}/listDeptDropDown`,
+    // });
+    // // 镶石工艺下拉
+    // dispatch({
+    //   type: `${defaultModelName}/listGemSetProcessDropDown`,
+    //   payload: {},
+    // });
 
 
     // 获取初始表单数据
@@ -451,7 +450,7 @@ class Index extends Component {
                                   key={item.value}
                                   style={{
                                     height: 30,
-                                    width: 80,
+                                    minWidth: 80,
                                     textalign: 'center',
                                     lineHeight: '30px',
                                   }}
@@ -512,7 +511,7 @@ class Index extends Component {
           </Modal>
         }
       </div>
-    )
+    );
 
   }
 

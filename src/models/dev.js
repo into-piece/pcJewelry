@@ -320,7 +320,7 @@ export default {
       let gemSetProcessDropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : [];
       if (gemSetProcessDropDown.length > 0) {
         gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
           return { key: zhName, value: id }

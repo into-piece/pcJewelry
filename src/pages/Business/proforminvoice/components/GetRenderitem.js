@@ -4,9 +4,10 @@
 * */
 
 import {
-  Card,
+  Card
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
+import moment from 'moment';
 import styles from './GetRenderitem.less';
 
 const { Description } = DescriptionList;
@@ -26,14 +27,15 @@ const GetRenderitem = ({ data, type, items }) => {
   const arr = items[type];
 
   return (
-    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
+    <Card bordered={false} style={{overflow:"auto"}} onClick={selectRowItem}>
 
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, cName, convert }) =>
+          arr.map(({ key, value, cName, convert ,date}) =>
             <Description key={key} term={key}>
               {
-                convert ? convert[data[value]] : (cName ? data[`${value}Name`] : data[value])
+                (date&&data[value])?moment(data[value]).format(date):(convert ? convert[data[value]] : (cName ? data[`${value}Name`] : data[value]))
+
               }
             </Description>,
           )

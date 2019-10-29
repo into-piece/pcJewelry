@@ -487,7 +487,7 @@ class SpecimenDetaill extends Component {
                 </Button>
               </div>
             </div>
-            <Modalœ
+            <Modal
               title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'menu.erp.business.specimen' })} />}
               maskClosable={false}
               width={1200}
@@ -499,7 +499,7 @@ class SpecimenDetaill extends Component {
 
             >
               {this.getProductModalContent()}
-            </Modalœ>
+            </Modal>
           </Card>
         </div>
 

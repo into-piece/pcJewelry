@@ -5,14 +5,14 @@
  * @LastEditTime: 2019-08-17 15:15:50
  * @LastEditors: Please set LastEditors
  */
-import servicesConfig from '@/services/production';
+import servicesConfig from '@/services/business';
 
 const initData = { records: [] };
 
 const {
   listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,
 } = servicesConfig;
-const defaultModelName = 'productionOrderApprove';
+const defaultModelName = 'businessPI';
 
 
 export default {

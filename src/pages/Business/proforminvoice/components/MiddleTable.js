@@ -7,11 +7,11 @@ import SearchForm from '@/components/SearchForm';
 import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
 
-const defaultModelName = 'productionOrderApprove';
+const defaultModelName = 'businessPI';
 
 
 @Form.create()
-@connect(({ loading, productionOrderApprove: model }) => {
+@connect(({ loading, businessPI: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
