@@ -1103,9 +1103,9 @@ const GetRenderitem = ({ data, type }) => {
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
 
   return (
-    <Card bordered={false} style={{maxWidth:"360px", overflow: 'auto' }} onClick={selectRowItem}>
+    <Card bordered={false} style={{maxWidth:"360px", overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
       {(type !== 'measureUnit' ) &&
-      <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
+      <Carousel speed={150} initialSlide={0} key={data.id} className={styles.carousel_content} autoplay>
         {getImages(images)}
       </Carousel>}
       {images && images.length > 0 && <Divider />}
