@@ -103,8 +103,6 @@ class MiddleTable extends Component {
   // 首table切换tab 条件搜索
   changeFirstTabActive = (v) => {
     const { onSearch } = this.props;
-    const { firstRadioValue } = this.state;
-
     this.setState({ firstRadioValue: v.target.value }, () => {
       onSearch && onSearch({ status: v.target.value }, 1);
     });

@@ -50,8 +50,9 @@ export default {
   effects: {
 
     * getList({ payload, callback }, { call, put,select }) {
-      const { type, params } = payload;
-      const response = yield call(servicesConfig[`list${type}`], params);
+      const { type,piListType, params } = payload;
+      const listtype =piListType==='0'?"listnotdone":"listalready";
+      const response = yield call(servicesConfig[`${listtype}${type}`], params);
       const list =
         response.head && response.head.rtnCode === '000000'
           ? response.body

@@ -1,6 +1,6 @@
+import moment from 'moment';
 import styles from './columns.less';
 import { statusConvert, HasConvert } from '@/utils/convert';
-import moment from 'moment';
 
 let piHead = [
   {

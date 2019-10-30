@@ -309,7 +309,7 @@ class ProductDetail extends Component {
           {(showItem && showItem !== '') ? (
             <div>
               <Spin spinning={isLoading}>
-                <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
+                <Carousel {...this.carouselsettings} key={showItem.id} className={business.carousel_content} autoplay>
                   {this.getImages(paths)}
                 </Carousel>
                 <DescriptionList size="small" col="1">
@@ -977,8 +977,13 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal maskClosable={false}
-          {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
+          <Modal
+            maskClosable={false}
+            {...modalCropperFooter}
+            width={768}
+            destroyOnClose
+            visible={cropperVisible}
+          >
             {this.openCutImageModal()}
           </Modal>
         </Form>

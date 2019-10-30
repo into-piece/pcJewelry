@@ -362,6 +362,7 @@ class Index extends Component {
 
   // 列表对应操作button回调
   btnFn = async (modalType) => {
+
     switch (modalType) {
       case 'lock':
         this.setState({ modalType });
@@ -370,6 +371,9 @@ class Index extends Component {
         //     this.handleLock();
         //   },
         // });
+        break;
+      default:
+        this.setState({ modalType });
         break;
     }
   };
@@ -469,8 +473,8 @@ class Index extends Component {
                         />
                       </div>
                       {/*  */}
-                      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
+                        <div>
                           {btnGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
@@ -478,7 +482,7 @@ class Index extends Component {
                               type="primary"
                               icon={tag}
                               size="small"
-                              disabled={secondTableActive !== 'orderApproveProduct'}
+                              disabled={secondTableActive !== 'orderApproveProduct'||!showItem.id}
                               onClick={() => {
                                 btnFn(tag);
                               }}
