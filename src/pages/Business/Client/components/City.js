@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Icon, message, Upload, Form, Card, Spin, Select } from 'antd';
-import querystring from 'querystring';
+import {   Select } from 'antd';
 
 import { connect } from 'dva';
 
@@ -95,7 +94,6 @@ class City extends PureComponent {
   };
 
   loadImageUrl = item => {
-    console.log('load image url ', item);
     const params = {};
     params.name = item;
     params.size = 10;

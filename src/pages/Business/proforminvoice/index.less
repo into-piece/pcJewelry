@@ -1,7 +1,6 @@
 @import '~antd/lib/style/themes/default.less';
 @import '~@/common';
 .main {
-  display: flex;
   width: 100%;
   height: 100%;
   padding-bottom: 16px;
@@ -42,22 +41,25 @@
     }
   }
 }
+
+.row_content {
+  display: flex;
+  justify-content: space-between;
+}
 .tableBox {
   padding: 20px;
+  padding-left: 0;
 }
 .view_left_content {
   background-color: @globalbgcolor;
-  height: 100%;
   min-height: 85vh;
   max-height: 85vh;
   overflow: auto;
-  padding-top: 20px;
-  //margin-bottom: 12px;
+  padding: 24px;
 }
 .contentTitle {
   font-size: 25px;
   text-align: left;
-  padding-left: 10px;
 }
 
 .right_content_tbs {
@@ -68,6 +70,7 @@
 }
 .right_content_tabgroud {
   width: 100%;
+  padding: 20px 0;
 }
 .right_content_tabs {
   padding-top: 10px;
@@ -99,13 +102,6 @@
   backgroundcolor: @globalbgcolor;
   height: 100%;
 }
-.view_left_content {
-  background-color: @globalbgcolor;
-  height: 100%;
-  min-height: 85vh;
-  max-height: 85vh;
-  overflow: auto;
-}
 .list_info {
   background-color: @globalbgcolor;
   display: flex;
@@ -115,7 +111,7 @@
   overflow: auto;
 }
 .view_dwon {
-  background-color: @globalbgcolor;
+  background-color: #fff;
   display: flex;
   flex: 1 1;
   width: 100%;
@@ -123,16 +119,6 @@
   justify-content: space-between;
   overflow: auto;
 }
-
-.divder {
-  margin-top: 5px;
-  padding-top: 0;
-  margin-bottom: 5px;
-  padding-bottom: 0;
-  padding-left: 3px;
-  padding-right: 3px;
-}
-
 .view_right_content {
   background-color: @globalbgcolor;
   height: 100%;
@@ -142,7 +128,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
+  overflow: auto;
 }
 .rignum_right_card_view {
   width: 100%;
@@ -223,6 +209,9 @@
       border-radius: @border-radius-base;
     }
   }
+  .addModal .ant-row > .ant-col.ant-form-item-label {
+    width: 120px;
+  }
 
   // 密码强度
   font.strong {
@@ -249,41 +238,12 @@
   height: 50px;
   padding-right: 10px;
   padding-top: 10px;
-  padding-left: 20px;
 }
 
 .tableRow1 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.carousel_content {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-.carddiv{
-  :global{
-    .ant-carousel{
-      width: 240px;
-      margin: 0 auto;
-    }
-  }
-}
-.carousel_image {
-  width: 211px;
-  height: 211px;
-  border: 1px solid #f0f2f5;
-  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
-}
-
-.carousel_image_ground {
-  display: flex !important;
-  max-width: 300px;
-  max-height: 300px;
-  justify-content: center !important;
-  align-items: center;
 }
 
 @media screen and (max-width: @screen-md) {
@@ -296,25 +256,5 @@
     .right {
       padding: 20px;
     }
-  }
-}
-:global {
-  .ant-modal-body .ant-form {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 20px;
-  }
-  .adddevModal {
-    width: 288px;
-    float: left;
-  }
-  .adddevModal .ant-form-item {
-    display: flex;
-  }
-  .adddevModal input {
-    width: 180px;
-  }
-  .adddevModal .ant-row > .ant-col.ant-form-item-label {
-    width: 120px;
   }
 }

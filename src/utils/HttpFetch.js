@@ -5,7 +5,7 @@ export const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
  * 加载共同维护人
  * @type {string}
  */
-export const loadMaintainer = `${priefx}/business/business/co-maintainer/listCoMaintainer`
+export const loadMaintainer = `${priefx}/business/business/co-maintainer/list`
 /**
  * 加载联系人
  * @type {string}
@@ -22,7 +22,13 @@ export const saveContacts = `${priefx}/business/business.customer/business-conta
  * 保存共同维护人
  * @type {string}
  */
-export const saveMaintainer = `${priefx}/business/business/co-maintainer/saveCoMaintainer`
+export const saveMaintainer = `${priefx}/business/business/co-maintainer/save`
+
+/**
+ * 保存共同维护人
+ * @type {string}
+ */
+export const deleteMaintainer = `${priefx}/business/business/co-maintainer/delete`
 
 /**
  * 删除联系人
@@ -35,7 +41,7 @@ export const deleteContacts = `${priefx}/business/business.customer/business-con
  * @type {string}
  */
 export const queryDelivery2 = `${priefx}/business/basic/delivery-method/listDeliveryMethodsDropDown`
-export const queryDelivery = `${priefx}/business/business/basic/delivery-method/listDeliveryMethods`
+export const queryDelivery = `${priefx}/business/basic/delivery-method/listDeliveryMethods`
 
 /**
  * 加载图片
@@ -66,7 +72,7 @@ export const saveProductImage = `${priefx}/business/business/product-picture/sav
  * @type {string}
  */
 export const queryQuality2 = `${priefx}/business/basic/quality-requirements/listQualityRequirementssDropDown`
-export const queryQuality = `${priefx}/business/business/basic/quality-requirements/listQualityRequirementss`
+export const queryQuality = `${priefx}/business/basic/quality-requirements/listQualityRequirementss`
 
 /**
  * 加载终客列表
@@ -256,9 +262,17 @@ export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
 export const productExcelImport = `${priefx}/business/business/product/product-quote-header/excelImport`
 
 
+/**
+ *   共同维护人下拉
+ * @type {string}
+ */
+export const coMaintainerDD = `${priefx}/coMaintainerDD`
+
+
 export default {
   priefx,
   productExcelImport,
+  coMaintainerDD,
   listRingStandAround,
   listRingAround,
   uploadImg,
@@ -272,6 +286,7 @@ export default {
   loadRings,
   saveContacts,
   saveMaintainer,
+  deleteMaintainer,
   deleteContacts,
   queryDelivery,
   queryDelivery2,

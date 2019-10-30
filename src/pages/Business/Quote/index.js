@@ -1066,6 +1066,8 @@ class Info extends Component {
           destroyOnClose
           visible={modalType !== ''}
           footer={modalFooter}
+          onCancel={onCancel}
+
         >
           {getModalContent()}
         </Modal>

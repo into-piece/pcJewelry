@@ -328,6 +328,7 @@ class Mark extends PureComponent {
           destroyOnClose
           visible={visible}
           footer={modalFooter}
+          onCancel={this.handleCancel}
         >
           {this.getModalContent()}
         </Modal>

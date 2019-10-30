@@ -137,17 +137,17 @@ export default {
       };
     },
     getDevList2(state, action) {
-      console.log(action.payload)
       const { type, response } = action.payload
       const listName = `${type}List`
       const listData =
         response && response.head && response.head.rtnCode === '000000'
           ? response.body
           : initData;
-      console.log(listData);
       return {
         ...state,
         [listName]: listData,
+
+
       };
     },
 
@@ -320,7 +320,7 @@ export default {
       let gemSetProcessDropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : [];
       if (gemSetProcessDropDown.length > 0) {
         gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
           return { key: zhName, value: id }

@@ -5,14 +5,14 @@
  * @LastEditTime: 2019-08-17 15:15:50
  * @LastEditors: Please set LastEditors
  */
-import servicesConfig from '@/services/dev';
+import servicesConfig from '@/services/business';
 
 const initData = { records: [] };
 
 const {
-   getTypeByWordbookCode, listFilmSettingsDropDown,listMoldPositioningSettingsDropDown
+  listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,
 } = servicesConfig;
-const defaultModelName = 'devMould';
+const defaultModelName = 'businessPI';
 
 
 export default {
@@ -40,9 +40,10 @@ export default {
     searchParamsSecond: {},
 
 
-    listFilmSettingsDropDown: [{ key: '', value: '' }],
-    listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
-    H016009: [{ key: '', value: '' }],
+    listGemSetProcessDropDown: [{ key: '', value: '' }],
+    listDeptDrop: [{ key: '', value: '' }],
+    listH017: [{ key: '', value: '' }],
+    listH016009: [{ key: '', value: '' }],
 
   },
 
@@ -78,7 +79,7 @@ export default {
       if (callback) callback();
     },
 
-    * getListSecond({ payload, callback }, { call, put,select }) {
+    * getListSecond({ payload, callback }, { call, put }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
       const listSecond =
@@ -89,21 +90,6 @@ export default {
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
       });
-
-      const choosenRowDataSecond = yield select(state => state[defaultModelName].choosenRowDataSecond);
-
-      const selectRow = listSecond.records && listSecond.records.filter(e => (e.id === choosenRowDataSecond.id));
-      if (selectRow && selectRow.length > 0) {
-        yield put({
-          type: 'changeState',
-          payload: { data: selectRow[0], typeName: 'choosenRowDataSecond' },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
-        });
-      }
       if (callback) callback();
 
     },
@@ -121,7 +107,8 @@ export default {
         payload: { data: [], typeName: 'selectedRowKeysSecond' },
       });
     },
-    * clearDetailSecond(_, { put }) {
+
+    * clearSecondDetail(_, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
@@ -139,11 +126,12 @@ export default {
       });
     },
 
-    * changeSearchParamsSecond({ payload }, { put }) {
+    * changeSearchParamsSecond({ payload ,callback}, { put }) {
       yield put({
         type: 'changeSearchParamsSecond2',
         payload,
       });
+      if(callback)callback();
     },
 
     * setChoosenRowData({ payload }, { put }) {
@@ -174,6 +162,19 @@ export default {
 
     // 下拉获取
 
+    * getwordbookdropdown({ payload }, { call, put }) {
+      const response = yield call(listMstWordbook, payload.params);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
+        return { value: wordbookCode, key: wordbookContentZh };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
+    },
+
     * getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload.params);
       const wordbookData = response.body.records;
@@ -187,28 +188,28 @@ export default {
 
     },
 
-    * getlistMoldPositioningSettingsDropDown({payload}, { call, put }) {
-      const response = yield call(listMoldPositioningSettingsDropDown,payload);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, positionCode }) => {
-        return { value: id, key: positionCode };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listMoldPositioningSettingsDropDown' },
-      });
-
-    },
-
-    * getlistFilmSettingsDropDown({ payload }, { call, put }) {
-      const response = yield call(listFilmSettingsDropDown, payload);
+    * listDeptDropDown(_, { call, put }) {
+      const response = yield call(listDeptDropDown);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
         return { value: id, key: zhName };
       });
       yield put({
         type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listFilmSettingsDropDown' },
+        payload: { data: wordbookdropdown, typeName: 'listDeptDrop' },
+      });
+
+    },
+
+    * listGemSetProcessDropDown({ payload }, { call, put }) {
+      const response = yield call(listGemSetProcessDropDown, payload);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: 'listGemSetProcessDropDown' },
       });
 
     },

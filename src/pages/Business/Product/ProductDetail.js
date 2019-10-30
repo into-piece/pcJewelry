@@ -482,6 +482,8 @@ class ProductDetail extends Component {
           destroyOnClose
           visible={visible}
           footer={modalFooter}
+          onCancel={this.handleCancel}
+
         >
           {this.getProductModalContent()}
         </Modal>
@@ -984,7 +986,8 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal maskClosable={false} {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
+          <Modal maskClosable={false}
+          {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
             {this.openCutImageModal()}
           </Modal>
         </Form>

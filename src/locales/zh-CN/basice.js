@@ -18,7 +18,7 @@ export default {
   'app.dev.menuMap.measureUnit': '计量单位',
   'app.dev.menuMap.categorySet': '类别设定',
   'app.dev.menuMap.colorPercentage': '产品成色',
-  'app.dev.menuMap.colorSetting': '原来颜色',
+  'app.dev.menuMap.colorSetting': '原料颜色',
   'app.dev.menuMap.electroplateSetting': '电镀颜色',
   'app.dev.menuMap.shapeSetting': '原料形状',
   'app.dev.menuMap.specificationSetting': '原料规格',

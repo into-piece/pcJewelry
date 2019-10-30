@@ -478,16 +478,6 @@ const columnsArr = {
       key: 'qualit6yName',
     },
     {
-      title: '客户编号',
-      dataIndex: 'customerNo',
-      key: 'customerNo',
-    },
-    {
-      title: '供应商编号',
-      dataIndex: 'supplierNo',
-      key: 'supplierNo',
-    },
-    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName6',
@@ -498,7 +488,7 @@ const columnsArr = {
       key: 'enName6',
     },
     {
-      title: '是否配料模块',
+      title: '是否配料',
       dataIndex: 'isIngredientName',
       key: 'isIngredientName6',
     },
@@ -526,6 +516,16 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventory6Weight',
+    },
+    {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
     },
     {
       title: '状态',
@@ -857,7 +857,7 @@ class Info extends Component {
 
             // 带出中文名初始值
             // 主材：取成色的中文名与英文名，只有一个字段
-            // 石材：类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码 
+            // 石材：类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码
             // 配件：成色代码-类别代码-形状代码-规格代码
             // 包装材料：类别代码-形状代码-颜色代码-规格代码
             // 辅助材料：类别代码-形状代码-颜色代码-规格代码
@@ -948,9 +948,13 @@ class Info extends Component {
               dfv = va;
             }
 
+            if (value === 'materialNo') {
+              console.log(value,selectData[value])
+              console.log(value,dfv)
+            }
 
             const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
-              <FormItem label={key} {...formLayout} key={key}>
+              <FormItem label={key} {...formLayout} key={`${key}=${dfv}`}>
                 {
                   getFieldDecorator(value, {
                     rules: [{
@@ -1006,6 +1010,7 @@ class Info extends Component {
   handleAdd = (close) => {
     const { selectKey, form, choosenTypesRowData } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
+    const {resetFields} = form
 
 
     form.validateFields((err, values) => {
@@ -1035,9 +1040,13 @@ class Info extends Component {
             });
             this.getList({ key: selectKey });
             if(close) this.btnFn('');
+
           }
         });
         this.setState({ filelist: [] });
+        resetFields(['materialNo']);
+        resetFields(['zhName']);
+        resetFields(['enName']);
 
       }
     });
@@ -1047,6 +1056,7 @@ class Info extends Component {
   handleEdit = (close) => {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
+    const {resetFields} = form
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -1089,6 +1099,9 @@ class Info extends Component {
           }
         });
         this.setState({ filelist: [] });
+        resetFields(['materialNo']);
+        resetFields(['zhName']);
+        resetFields(['enName']);
 
       }
     });
@@ -1304,6 +1317,10 @@ class Info extends Component {
           destroyOnClose
           footer={modalFooter}
           visible={modalType !== ''}
+          onCancel={() => {
+            this.setState({ filelist: [] });
+            btnFn('');
+          }}
         >
           {getModalContent()}
         </Modal>
@@ -1424,7 +1441,7 @@ class CenterInfo extends Component {
     });
   };
 
-  turnTab(e) {
+  turnTab= (e)=> {
     const key = e.target ? e.target.value : e;
     const { dispatch, getList } = this.props;
     dispatch({
@@ -1659,10 +1676,10 @@ const GetRenderitem = ({ data, type }) => {
 
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
   return (
-    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
+    <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-        <Carousel speed={150} initialSlide={0} className={styles.carousel_content} autoplay>
+        <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
           {getImages(images)}
         </Carousel>}
       {images && images.length > 0 && <Divider />}

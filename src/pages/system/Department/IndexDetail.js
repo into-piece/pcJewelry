@@ -211,7 +211,7 @@ class IndexDetail extends Component {
 
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
-    const { isProductUpdate } = this.props;
+    const { isProductUpdate ,deptUpdateloading,addDeptloading} = this.props;
 
 
     const modalFooter = isAdd ? [
@@ -221,14 +221,24 @@ class IndexDetail extends Component {
       >
         取消
       </Button>,
-      <Button key="submit" type="primary" loading={addloading} onClick={() => {
+      <Button
+        key="submit"
+        type="primary"
+        loading={addDeptloading}
+        onClick={() => {
         this.handleSubmit(true);
-      }}>
+      }}
+      >
         保存
       </Button>,
-      <Button key="continue" type="primary" loading={addloading} onClick={() => {
+      <Button
+        key="continue"
+        type="primary"
+        loading={addDeptloading}
+        onClick={() => {
         this.handleSubmit(false);
-      }}>
+      }}
+      >
         继续添加
       </Button>,
     ] : [
@@ -238,9 +248,14 @@ class IndexDetail extends Component {
       >
         取消
       </Button>,
-      <Button key="submit" type="primary" loading={upateloading} onClick={() => {
+      <Button
+        key="submit"
+        type="primary"
+        loading={deptUpdateloading}
+        onClick={() => {
         this.handleSubmit(false);
-      }}>
+      }}
+      >
         保存
       </Button>,
     ];
@@ -394,6 +409,8 @@ class IndexDetail extends Component {
               destroyOnClose
               visible={visible}
               footer={modalFooter}
+              onCancel={this.handleCancel}
+
             >
               {this.getProductModalContent()}
             </Modal>

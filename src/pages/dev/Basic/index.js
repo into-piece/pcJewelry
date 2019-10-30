@@ -7,8 +7,9 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Divider } from 'antd';
+import {Carousel, Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import Zmage from 'react-zmage';
 import styles from './index.less';
 import SvgUtil from '@/utils/SvgUtil';
 import Table from '@/components/Table';
@@ -20,6 +21,7 @@ import { manuArr, modalContent } from './config.json';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
+import UploadImg from '@/components/UploadImg';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -320,7 +322,7 @@ const columnsArr = {
       key: 'enName',
     },
     {
-      title: '公费',
+      title: '工费',
       dataIndex: 'costs',
       key: 'costs',
     },
@@ -466,6 +468,7 @@ class Info extends Component {
     mode: 'inline',
     modalType: '',
     addLoading:false,
+    filelist:[],
     addData: {
       measureUnit: {
         unitCode: '',
@@ -565,7 +568,7 @@ class Info extends Component {
         if (selectKey === 'colorPercentage') {
           dispatch({
             type: 'dev/getListMstWordbook',
-            payload: {},
+            payload: {wordbookTypeCode:'H014'},
           });
         }
         if (selectKey === 'categorySet') {
@@ -618,7 +621,10 @@ class Info extends Component {
             // console.log(list)
             return (
               <div className="adddevModal" key={key}>
-                <FormItem label={key} key={key}>
+                <FormItem
+                  label={key}
+                  key={key}
+                >
                   {
                     getFieldDecorator(value, {
                       rules: [{
@@ -637,8 +643,7 @@ class Info extends Component {
                           <Radio value={1}>是</Radio>
                           <Radio value={2}>否</Radio>
                         </Radio.Group>
-                        :
-                        <Input placeholder="请输入" />,
+                        :  <Input placeholder="请输入" />,
                     )
                   }
                 </FormItem>
@@ -646,6 +651,26 @@ class Info extends Component {
             );
           })
         }
+        {(selectKey !== 'measureUnit' ) && <Col span={24}>
+          <FormItem
+            label="上传图片"
+            key="uploadPic"
+            labelCol={{ span: 4 }}
+            wrapperCol={{
+              span: 20,
+            }
+            }
+          >
+            <UploadImg
+              key="uimg"
+              maxcount={10}
+              defaultFileList={isEdit ? choosenRowData.pictures : []}
+              fileListFun={(imglist) => {
+                this.setState({ filelist: imglist });
+              }}
+            />
+          </FormItem>
+        </Col>}
         {content}
       </Form>
     );
@@ -661,15 +686,23 @@ class Info extends Component {
   // 新增按钮事件回调
   handleAdd = (close) => {
     const { selectKey, form } = this.props;
-    const { addData } = this.state;
+    const filelist = this.state.filelist.flatMap(e => e.url);
 
     form.validateFields((err, values) => {
       if (!err) {
         this.setState({
           addLoading:true
         })
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        serviceObj[`addBasic${selectKey}`](values).then(res => {
+
+        let params = {
+          ...values,
+        };
+        if (selectKey !== 'measureUnit' ) {
+          params = {
+            ...params, picPath: filelist,
+          };
+        }
+        serviceObj[`addBasic${selectKey}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
@@ -682,6 +715,8 @@ class Info extends Component {
             addLoading:false
           })
         });
+        this.setState({ filelist: [] });
+
       }
     });
   };
@@ -689,7 +724,7 @@ class Info extends Component {
   // 编辑按钮回调
   handleEdit = (close) => {
     const { selectKey, form } = this.props;
-    const { addData } = this.state;
+    const filelist = this.state.filelist.flatMap(e => e.url);
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -700,11 +735,15 @@ class Info extends Component {
     form.validateFields((err, values) => {
       if (!err) {
         const { choosenRowData } = this.props;
-        // serviceObj[`addBasic${selectKey}`](addData[selectKey]).then()
-        const params = {
+        let params = {
           ...values,
           id: choosenRowData.id,
         };
+        if (selectKey !== 'measureUnit' ) {
+          params = {
+            ...params, picPath: filelist,
+          };
+        }
         this.setState({
           addLoading:true
         })
@@ -722,6 +761,8 @@ class Info extends Component {
             addLoading:false
           })
         });
+        this.setState({ filelist: [] });
+
       }
     });
   };
@@ -827,6 +868,7 @@ class Info extends Component {
       <Button
         key="back"
         onClick={() => {
+            this.setState({ filelist: [] });
         btnFn('');
       }}
       >
@@ -890,6 +932,10 @@ class Info extends Component {
           destroyOnClose
           visible={modalType !== ''}
           footer={modalFooter}
+          onCancel={() => {
+            this.setState({ filelist: [] });
+            btnFn('');
+          }}
 
         >
           {getModalContent()}
@@ -1015,6 +1061,7 @@ class CenterInfo extends Component {
           <Table
             columns={columns}
             body={list}
+            key={type}
             changeChoosenRow={this.changeChoosenRow}
             selectKey={choosenRowData.id}
             pagination={pagination}
@@ -1039,9 +1086,30 @@ const GetRenderitem = ({ data, type }) => {
     ...modalContent[type],
     { 'key': '状态', 'value': 'status' },
   ];
+  const getImages = (paths) => {
+    if (!paths) return;
+    return paths.map(v => (
+      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image }))}
+        />
+      </div>
+    ));
+  };
+  const images = data.pictures && data.pictures.flatMap(e => e.picPath);
 
   return (
-    <Card bordered={false} style={{ overflow: 'auto' }} onClick={selectRowItem}>
+    <Card bordered={false} style={{maxWidth:"360px", overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
+      {(type !== 'measureUnit' ) &&
+      <Carousel speed={150} initialSlide={0} key={data.id} className={styles.carousel_content} autoplay>
+        {getImages(images)}
+      </Carousel>}
+      {images && images.length > 0 && <Divider />}
+
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {

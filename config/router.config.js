@@ -212,7 +212,7 @@ export default [
                 path: '/erp/business/proforminvoice',
                 name: 'proforminvoice',
                 icon: 'form',
-                component: './Business/Proforminvoice/Proforminvoice',
+                component: './Business/proforminvoice',
                 routes: [],
               },
 

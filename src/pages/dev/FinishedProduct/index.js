@@ -844,7 +844,9 @@ class Info extends Component {
           visible={modalType !== ''}
           footer={modalFooter}
 
-
+          onCancel={() => {
+            btnFn('');
+          }}
         >
           {getModalContent()}
         </Modal>
