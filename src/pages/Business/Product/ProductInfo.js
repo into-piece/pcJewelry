@@ -44,6 +44,22 @@ const defaultPageSize = 10;
 
 class ProductInfo extends Component {
 
+  state = {
+    rightlg: 16,
+    leftlg: 8,
+    drawVisible: false,
+    isEdit: true,
+    visible: false,
+    cropperVisible: false,
+    pageCurrent: 1,
+    selectProductItem: {},
+    selectProductData: [],
+    isProductUpdate: true,
+    productPage: 1,
+    isLoad: false,
+    productSorts: [],
+    searchProductParams: {},
+  };
 
   productColumns = [
 
@@ -162,35 +178,12 @@ class ProductInfo extends Component {
 
   ];
 
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      rightlg: 16,
-      leftlg: 8,
-      drawVisible: false,
-      isEdit: true,
-      visible: false,
-      cropperVisible: false,
-      pageCurrent: 1,
-      selectProductItem: {},
-      selectProductData: [],
-      isProductUpdate: true,
-      productPage: 1,
-      isLoad: false,
-      productSorts: [],
-      searchProductParams: {},
-
-    };
-  }
-
   centerFormLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
       span: 24,
     },
   };
-
 
   componentDidMount() {
     this.loadProduct();
@@ -199,7 +192,6 @@ class ProductInfo extends Component {
       const { showItem } = this.state;
       if (showItem) {
         // console.log('执行解锁3');
-
         this.updateProductLock(showItem);
       }
     };
@@ -207,7 +199,6 @@ class ProductInfo extends Component {
   ;
 
   // router.replace('/business/client/emptyView');
-
   componentWillUnmount() {
     const { showItem } = this.state;
     if (showItem) {
@@ -216,119 +207,24 @@ class ProductInfo extends Component {
     }
   }
 
-  render() {
-    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-    const {
-      queryProductLocking,
-      body = {},
-    } = this.props;
-
-
-    if (isLoad) {
-      this.state.isLoadList = true;
-    } else if (this.state.isLoadList) {
-
-        this.refs.productTable.updateSelectDatas(body);
-        this.state.isLoadList = false;
-      }
-
-
-    // console.log("bod ",body.data)
-
-    return (
-      <div className={business.page}>
-        <div className={business.nav}>
-          <Breadcrumb style={{ display: 'none' }}>
-            <Breadcrumb.Item>主页</Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">业务</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="#/business/product">产品信息</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-        </div>
-        <div className={business.center_content}>
-          <Row gutter={24}>
-            <Col lg={rightlg} md={24}>
-              <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }} />
-                <ProductSearchFrom
-                  onSearch={this.handleProductSearch}
-                  onCustomerReset={this.handleProductFormReset}
-                />
-                <JewelryTable
-                  scroll={{x:1200}}
-                  onSelectItem={(item, rows) => {
-                    const { showItem } = this.state;
-                    if (showItem && showItem.id !== item.id) {
-                      // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
-                      // console.log('执行解锁 ： ',showItem.id);
-                    }
-
-                    if (item) {
-                      if (!showItem || showItem.id !== item.id)
-                      // this.fetchImages(item);
-                        this.loadProductLock(item);
-                    }
-                    this.state.showItem = item ? { ...item } : false;
-                    this.setState({
-                      showItem: this.state.showItem,
-                      selectProductData: [...rows],
-                    });
-                  }}
-                  ref="productTable"
-                  loading={isLoad}// productListloading || isUpdate
-                  columns={this.productColumns}
-                  className={business.small_table}
-                  rowClassName={this.onSelectRowClass}
-                  // scroll={{ y: 300 }}
-                  body={body}
-                  pageChange={this.pageProductChange}
-                />
-
-
-              </Card>
-            </Col>
-            <Col lg={leftlg} md={24}>
-              {this.getDetailInfow()}
-            </Col>
-          </Row>
-        </div>
-        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
-          {this.getDetailInfow()}
-        </Drawer>
-
-
-      </div>
-
-    );
-  }
 
 
   getDetailInfow = () => {
     const { showItem, isProductUpdate, selectProductData } = this.state;
-
-    // console.log(" detail product ",showItem)
-
     return <ProductDetail
       item={showItem}
       isProductUpdate={isProductUpdate}
       selectProductData={selectProductData}
       key="556"
       isloading={(isLoad) => {
-                            this.setState({
-                              isLoad,
-                            });
-                          }}
+        this.setState({
+          isLoad,
+        });
+      }}
       refarshList={() => {
-                            this.loadProduct();
-                          }}
+        this.loadProduct();
+      }}
     />;
-
   };
 
 
@@ -342,13 +238,10 @@ class ProductInfo extends Component {
 
   sortFilter = (field, sort) => {
     const { productSorts } = this.state;
-
     // console.log('contactsSortFilter ', field, sort, productSorts);
     let newContacts = [...productSorts];
     const findColumn = newContacts.find(item => item.field === field);
-
     // console.log('sort find ', findColumn);
-
     if (findColumn) {
       if (sort !== 'normal') {
         newContacts = newContacts.map(v => {
@@ -357,43 +250,38 @@ class ProductInfo extends Component {
           }
           return v;
         });
-
       } else {
         newContacts.splice(newContacts.findIndex(v => v.field === field), 1);
       }
-
     } else if (sort !== 'normal') {
-        newContacts.push({
-          field,
-          sort,
-        });
-      }
+      newContacts.push({
+        field,
+        sort,
+      });
+    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
 
   loadProduct = () => {
-
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
-
     const params = { ...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
-
     if (this.state.productSorts.length > 0) {
       let orderByAsc;
       let orderByDesc;
       this.state.productSorts.forEach(v => {
         if (v.sort === 'ascend') {
           if (orderByAsc) {
-            orderByAsc += `,${  v.field}`;
+            orderByAsc += `,${v.field}`;
           } else {
             orderByAsc = v.field;
           }
         } else if (v.sort === 'descend') {
           if (orderByDesc)
-            orderByDesc += `,${  v.field}`;
+            orderByDesc += `,${v.field}`;
           else
             orderByDesc = v.field;
         }
@@ -404,8 +292,6 @@ class ProductInfo extends Component {
       if (orderByDesc)
         params.orderByDesc = orderByDesc;
     }
-
-
     const { dispatch } = this.props;
     dispatch({
       type: 'product/fetchListProduct',
@@ -413,16 +299,11 @@ class ProductInfo extends Component {
     });
   };
 
-
   handleProductSearch = (productParams) => {
-
-      // data.typeId = showItem.id;
-      this.state.searchProductParams = { ...productParams };
-
-      this.state.current = 1;
-
-      this.loadProduct();
-
+    // data.typeId = showItem.id;
+    this.state.searchProductParams = { ...productParams };
+    this.state.current = 1;
+    this.loadProduct();
   };
 
   handleProductFormReset = () => {
@@ -432,7 +313,6 @@ class ProductInfo extends Component {
     });
 
   };
-
 
   /**
    * 获取锁定状态
@@ -455,7 +335,7 @@ class ProductInfo extends Component {
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
+        const { head } = d;
 
         const isProductUpdate = head.rtnCode === '000000';
 
@@ -467,7 +347,7 @@ class ProductInfo extends Component {
           isProductUpdate,
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         // message.error('加载图片失败！');
         _this.setState({
           loading: false,
@@ -475,7 +355,6 @@ class ProductInfo extends Component {
       });
 
   };
-
 
   /** *
    * 解锁
@@ -490,7 +369,6 @@ class ProductInfo extends Component {
         payload: { id: item.id },
       });
   };
-
 
   pageProductChange = (page, pageSize) => {
     this.setState({
@@ -520,6 +398,75 @@ class ProductInfo extends Component {
     });
   };
 
+
+  render() {
+    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
+    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const {
+      queryProductLocking,
+      body = {},
+    } = this.props;
+    if (isLoad) {
+      this.state.isLoadList = true;
+    } else if (this.state.isLoadList) {
+      this.refs.productTable.updateSelectDatas(body);
+      this.state.isLoadList = false;
+    }
+    return (
+      <div className={business.page}>
+        <div className={business.center_content}>
+          <Row gutter={24}>
+            <Col lg={rightlg} md={24}>
+              <Card bordered={false} className={business.left_content} loading={false}>
+                <div style={{ marginBottom: 16 }} />
+                <ProductSearchFrom
+                  onSearch={this.handleProductSearch}
+                  onCustomerReset={this.handleProductFormReset}
+                />
+                <JewelryTable
+                  scroll={{ x: 1200 }}
+                  onSelectItem={(item, rows) => {
+                    const { showItem } = this.state;
+                    if (showItem && showItem.id !== item.id) {
+                      // console.log("两个选中的对象 :",item.id,showItem.id)
+                      this.updateProductLock(showItem);
+                      // console.log('执行解锁 ： ',showItem.id);
+                    }
+
+                    if (item) {
+                      if (!showItem || showItem.id !== item.id)
+                        // this.fetchImages(item);
+                        this.loadProductLock(item);
+                    }
+                    this.state.showItem = item ? { ...item } : false;
+                    this.setState({
+                      showItem: this.state.showItem,
+                      selectProductData: [...rows],
+                    });
+                  }}
+                  ref="productTable"
+                  loading={isLoad}// productListloading || isUpdate
+                  columns={this.productColumns}
+                  className={business.small_table}
+                  rowClassName={this.onSelectRowClass}
+                  // scroll={{ y: 300 }}
+                  body={body}
+                  pageChange={this.pageProductChange}
+                />
+              </Card>
+            </Col>
+            <Col lg={leftlg} md={24}>
+              {this.getDetailInfow()}
+            </Col>
+          </Row>
+        </div>
+        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
+          {this.getDetailInfow()}
+        </Drawer>
+      </div>
+
+    );
+  }
 
 }
 

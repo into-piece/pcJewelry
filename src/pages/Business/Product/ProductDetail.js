@@ -10,8 +10,8 @@ import {
   Divider,
   Carousel, Modal, message, Upload, Spin,
 } from 'antd';
-import ModalConfirm from '@/utils/modal';
 import { formatMessage } from 'umi/locale';
+import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
 
 import business from '../business.less';
@@ -226,8 +226,8 @@ class ProductDetail extends Component {
 
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
-    const { isProductUpdate ,productSaveloading,productUpdateloading} = this.props;
+    const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
+    const { isProductUpdate, productSaveloading, productUpdateloading } = this.props;
 
     const modalFooter = isAdd ? [
       <Button
@@ -257,23 +257,23 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={productUpdateloading}
-        onClick={() => {
-          this.handleSubmit(false);
-        }}
-      >
-        保存
-      </Button>,
-    ];
+        <Button
+          key="back"
+          onClick={this.handleCancel}
+        >
+          取消
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          保存
+        </Button>,
+      ];
 
 
     let paths = [];
@@ -294,11 +294,11 @@ class ProductDetail extends Component {
         <div>
           <div
             style={{
-                padding: '20px 20px 10px',
-                fontSize: 20,
-                fontWeight: 'bold',
-                color: '#35B0F4',
-              }}
+              padding: '20px 20px 10px',
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: '#35B0F4',
+            }}
           >
             {formatMessage({ id: 'menu.erp.business.product' })}
           </div>
@@ -320,7 +320,7 @@ class ProductDetail extends Component {
                   <Description term="工价" />
                 </DescriptionList>
                 <span className={business.title_info}>
-            参数详情
+                  参数详情
                 </span>
                 <Divider className={business.divder} />
                 <DescriptionList size="small" col="2">
@@ -339,7 +339,7 @@ class ProductDetail extends Component {
                   <Description term="品牌">{showItem.brandNo}</Description>
                 </DescriptionList>
                 <span className={business.title_info}>
-            备注
+                  备注
                 </span>
                 <Divider className={business.divder} />
                 <DescriptionList size="small" col="1">
@@ -347,7 +347,7 @@ class ProductDetail extends Component {
                 </DescriptionList>
               </Spin>
             </div>
-            ) : (
+          ) : (
               <div />
             )}
         </Card>
@@ -357,11 +357,11 @@ class ProductDetail extends Component {
       <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
         <div
           style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-            }}
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            flexDirection: 'column',
+          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button
@@ -371,7 +371,7 @@ class ProductDetail extends Component {
               size="small"
               onClick={this.handleNewProduct}
             >
-                新增
+              新增
             </Button>
             <Button
               type="danger"
@@ -379,16 +379,16 @@ class ProductDetail extends Component {
               className={business.buttomControl}
               size="small"
               onClick={() => {
-                  ModalConfirm({
-                    content: '确定删除吗？', onOk: () => {
-                      this.handleDeleteProduct();
-                    },
-                  });
-                }}
+                ModalConfirm({
+                  content: '确定删除吗？', onOk: () => {
+                    this.handleDeleteProduct();
+                  },
+                });
+              }}
 
               disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
             >
-                删除
+              删除
             </Button>
             <Button
               type="primary"
@@ -398,52 +398,52 @@ class ProductDetail extends Component {
               disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
               onClick={this.handleEditProduct}
             >
-                编辑
+              编辑
             </Button>
             {
-                showItem && showItem.status === '2' ? <Button
+              showItem && showItem.status === '2' ?
+                <Button
                   className={business.buttomControl}
                   size="small"
                   type="danger"
                   icon="unlock"
                   onClick={() => {
-                      ModalConfirm({
-                        content: '确定取消审批吗？', onOk: () => {
-                          this.handleUnFreezeProduct();
-                        },
-                      });
-                    }}
+                    ModalConfirm({
+                      content: '确定取消审批吗？', onOk: () => {
+                        this.handleUnFreezeProduct();
+                      },
+                    });
+                  }}
                   disabled={!showItem || showItem === '' || !isProductUpdate}
                 >
-                    取消审批
-                                                      </Button>
-                  : <Button
-                    className={business.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
-                    onClick={() => {
-                      ModalConfirm({
-                        content: '确定审批吗？', onOk: () => {
-                          this.handleFreezeProduct();
-                        },
-                      });
-                    }}
-                  >
-                    审批
-                  </Button>
-              }
-
+                  取消审批
+                </Button>
+                :
+                <Button
+                  className={business.buttomControl}
+                  size="small"
+                  type="primary"
+                  icon="lock"
+                  disabled={!showItem || showItem === '' || !isProductUpdate}
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定审批吗？', onOk: () => {
+                        this.handleFreezeProduct();
+                      },
+                    });
+                  }}
+                >
+                  审批
+                </Button>
+            }
           </div>
-
           <div
             style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                paddingTop: 10,
-              }}
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              paddingTop: 10,
+            }}
           >
             <Button
               className={business.buttomControl}
@@ -452,7 +452,7 @@ class ProductDetail extends Component {
               icon="copy"
               disabled
             >
-                复制
+              复制
             </Button>
             <Button
               className={business.buttomControl}
@@ -461,7 +461,16 @@ class ProductDetail extends Component {
               icon="rollback"
               disabled
             >
-                撤销
+              撤销
+            </Button>
+            <Button
+              className={business.buttomControl}
+              size="small"
+              type="primary"
+              icon="rollback"
+              disabled={!showItem || showItem === '' || !isProductUpdate}
+            >
+              批量更新
             </Button>
           </div>
         </div>
@@ -486,16 +495,16 @@ class ProductDetail extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-      <div className={business.carousel_image_ground}>
-        <Zmage
-          alt="图片"
-          align="center"
-          className={styles.carousel_image}
-          src={v}
-          set={paths.map(image => ({ src: image }))}
-        />
-      </div>
-    ));
+        <div className={business.carousel_image_ground}>
+          <Zmage
+            alt="图片"
+            align="center"
+            className={styles.carousel_image}
+            src={v}
+            set={paths.map(image => ({ src: image }))}
+          />
+        </div>
+      ));
   };
 
   getProductModalContent = () => {
@@ -595,17 +604,17 @@ class ProductDetail extends Component {
                   rules: [{ required: true, message: '请输入品牌' }],
                   initialValue: current.brand,
                 })
-                (<BrandListSelect
-                  placeholder="请输入"
-                  onSelect={(v) => {
-                    if (v && v.brandNo) {
-                      this.state.cNoBrandNo = v.brandNo;
-                      this.parseProductNo();
+                  (<BrandListSelect
+                    placeholder="请输入"
+                    onSelect={(v) => {
+                      if (v && v.brandNo) {
+                        this.state.cNoBrandNo = v.brandNo;
+                        this.parseProductNo();
+                      }
                     }
-                  }
-                  }
-                  content={current.brand}
-                />)
+                    }
+                    content={current.brand}
+                  />)
                 }
               </FormItem>
             </Col>
@@ -1129,7 +1138,7 @@ class ProductDetail extends Component {
         }
 
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           loading: false,
         });
@@ -1191,7 +1200,7 @@ class ProductDetail extends Component {
 
 
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           isLoading: false,
         });
@@ -1339,7 +1348,7 @@ class ProductDetail extends Component {
           guides
           background
           aspectRatio={1 / 1}
-          // crop={this.crop}
+        // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
           <div className="img-preview" style={{ width: '100%', height: '100%' }} />
@@ -1380,7 +1389,7 @@ class ProductDetail extends Component {
           imageObject: [],
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log('parsing failed', ex);
         _this.setState({
           loading: false,
@@ -1396,7 +1405,7 @@ class ProductDetail extends Component {
 
     fileList.forEach((v, i) => {
       if (v.uid === uploadFileUid) {
-        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
+        fileList[i].name = `crop${Date.parse(new Date())}${fileList[i].name}`;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
         // console.log("set file url ",cropImage)
@@ -1433,7 +1442,7 @@ class ProductDetail extends Component {
     const showMold = cNomainMold;
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoProductMaterial}${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
+    const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${cNoCustomerCombine}`;
     const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
     const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
     // 成色+宝石颜色+类别
