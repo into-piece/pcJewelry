@@ -303,7 +303,7 @@ class IndexDetail extends Component {
             {(showItem && showItem !== '') ? (
               <div>
                 <Spin spinning={isLoading}>
-                  <Carousel {...this.carouselsettings} className={business.carousel_content} initialSlide={0} autoplay>
+                  <Carousel {...this.carouselsettings}  key={showItem.id}  className={business.carousel_content} initialSlide={0} autoplay>
                     {this.getImages(paths)}
                   </Carousel>
                   <DescriptionList size="small" col="1">

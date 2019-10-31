@@ -6,33 +6,49 @@
  * @LastEditors: Please set LastEditors
  */
 import request from '@/utils/request';
-import piUrls from './business/piUrls';
+import {piUrls,piDetailUrls} from './business/piUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
 
 const rType = {
-  1: 'list',
-  2: 'add',
-  3: 'delete',
-  4: 'approve',
-  5: 'revoke',
-  6: 'copy',
+  1: 'listnotdone',
+  2: 'listalready',
+  3: 'approve',
+  4: 'revoke',
+  5: 'merge',
+  6: 'split',
 };
 
-// 业务-PI 产品发票
+const pidType = {
+  1: 'list',
+  2: 'update',
+};
+
+// 业务-PI 订单主页
 const piUrlsList = piUrls.map(({ name, arr, path }) => (
   arr.map((item, index) => (
     {
       key: rType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix:'/business/business/order'
+      prefix:`${env}/business/business/order`
+    }
+  ))
+));
+// 业务-PI 产品详细
+const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: pidType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix:`${env}/business/business/order`
     }
   ))
 ));
 
 const resultArr = [
   ...piUrlsList.flat(),
+  ...piDetailUrlsList.flat(),
 
 ];
 

@@ -24,6 +24,7 @@ import MiddleTable from './components/MiddleTable';
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
 import showItem from './config/showItem';
+import btnGroup from './config/btnGroup';
 import styles from './index.less';
 
 import serviceObj from '@/services/production';
@@ -33,10 +34,6 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
-// 右手边按钮集合
-const btnGroup = [
-  { name: '审批', tag: 'lock' },
-];
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
@@ -106,7 +103,7 @@ class Index extends Component {
 
 
     // 获取初始表单数据
-    this.getList({}, { status: '0' });
+    this.getList({piListType:'0'},{});
   }
 
   // 右边顶部tab切换
@@ -138,7 +135,8 @@ class Index extends Component {
   // table 搜索
   onSearch = (params, table) => {
     if (table === 1) {
-      this.getList({}, params);
+      const pp = {...params,status:undefined}
+      this.getList({piListType:params.status},pp);
     }
     if (table === 2) {
       this.getListSecond({}, params);
@@ -379,6 +377,36 @@ class Index extends Component {
     this.btnFn('');
   };
 
+  /**
+   * 根据已经选中的列id 遍历获取对应status数组 判断返回是否显示取消审批或审批 按钮是否可用
+   * return obj
+   * params: name 名称
+   * params: disabled 是否可点击
+   * params: type 1为审批 2为取消审批
+   */
+  returnLockType = () => {
+    const { selectedRowKeys,selectedRowKeysSecond,list,listSecond } = this.props;
+    const { rightActive } = this.state;
+
+    const selectkeys =  rightActive ===firstTabFlag?selectedRowKeys:selectedRowKeysSecond
+    const listtt  = rightActive ===firstTabFlag?list:listSecond
+
+    if (listtt.records.length === 0) return {
+      name: '审批',
+      disabled: true,
+      type: 1,
+    };
+    const isLock1 = selectkeys.reduce((res, cur) => {
+      const singleObjcect = listtt.records.find(subItem => subItem.id === cur);
+      if (singleObjcect) res.push(singleObjcect.status);
+      return res;
+    }, []);
+    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
+    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
+    if (isShenPi) return { name: '审批', disabled: false, type: 1, isChexiao, isShenPi };
+    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isChexiao, isShenPi };
+    return { name: '审批', disabled: true, type: 1, isChexiao, isShenPi }; // 当两种状态都有 禁止点击
+  };
 
   render() {
     const {
@@ -392,6 +420,7 @@ class Index extends Component {
       returnElement,
       onSearch,
       returnTitle,
+      returnLockType,
     } = this;
     const { modalType, rightActive, secondTableActive } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
@@ -468,21 +497,21 @@ class Index extends Component {
                         />
                       </div>
                       {/*  */}
-                      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {btnGroup.map(({ name, tag }) => (
+                      <Card bodyStyle={{display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
+                        <div>
+                          {btnGroup[rightActive].map(({ name, tag ,icon}) => (
                             <Button
                               key={tag}
                               className={styles.buttomControl}
-                              type="primary"
-                              icon={tag}
+                              type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
+                              icon={icon || tag}
                               size="small"
-                              disabled={secondTableActive !== 'orderApproveProduct'}
+                              disabled={false}
                               onClick={() => {
                                 btnFn(tag);
                               }}
                             >
-                              审批
+                              {tag === 'lock' ? returnLockType().name : name}
                             </Button>
                           ))}
                         </div>

@@ -421,8 +421,53 @@ class ProductDetail extends Component {
                 fontWeight: 'bold',
                 color: '#35B0F4',
               }}
-            >
-              {formatMessage({ id: 'menu.erp.business.product' })}
+          >
+            {formatMessage({ id: 'menu.erp.business.product' })}
+          </div>
+          <Divider className={styles.divder} />
+        </div>
+        <Card bordered={false} style={{ overflow: 'auto' }}>
+
+          {(showItem && showItem !== '') ? (
+            <div>
+              <Spin spinning={isLoading}>
+                <Carousel {...this.carouselsettings} key={showItem.id} className={business.carousel_content} autoplay>
+                  {this.getImages(paths)}
+                </Carousel>
+                <DescriptionList size="small" col="1">
+                  <Description term="名称">{showItem.zhName}</Description>
+                  <Description term="编号">{showItem.productNo}</Description>
+                  <Description term="类别">{showItem.productTypeName}</Description>
+                  <Description term="重量">{showItem.finishedWeight}</Description>
+                  <Description term="工价" />
+                </DescriptionList>
+                <span className={business.title_info}>
+            参数详情
+                </span>
+                <Divider className={business.divder} />
+                <DescriptionList size="small" col="2">
+                  <Description term="颜色">{showItem.gemColorName}</Description>
+                  <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
+                  <Description term="报价重量">{showItem.finishedWeight}</Description>
+                  <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                  <Description term="电镀">{showItem.platingColorName}</Description>
+                  <Description term="成色">{showItem.productColorName}</Description>
+                  <Description term="产品来源">{showItem.sourceOfProductName}</Description>
+                  <Description term="模具">{showItem.mouldNo}</Description>
+                  <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                  <Description term="客户">{showItem.customerNo}</Description>
+                  <Description term="供应商货号">{showItem.supplierId}</Description>
+                  <Description term="供应商">{showItem.supplierProductNo}</Description>
+                  <Description term="品牌">{showItem.brandNo}</Description>
+                </DescriptionList>
+                <span className={business.title_info}>
+            备注
+                </span>
+                <Divider className={business.divder} />
+                <DescriptionList size="small" col="1">
+                  <Description>{showItem.marks}</Description>
+                </DescriptionList>
+              </Spin>
             </div>
             <Divider className={styles.divder} />
           </div>

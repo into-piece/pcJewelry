@@ -1369,7 +1369,7 @@ const RightContent =
             </div>
             {/* </Card> */}
             <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div>
                 {btnGroup.map(({ name, tag }) => (
                   <Button
                     key={tag}

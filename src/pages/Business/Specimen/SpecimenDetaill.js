@@ -314,6 +314,7 @@ class SpecimenDetaill extends Component {
                 <div>
                   <Spin spinning={isLoading}>
                     <Carousel
+                      key={showItem.id}
                       {...this.carouselsettings}
                       className={business.carousel_content}
                       initialSlide={0}
@@ -495,7 +496,7 @@ class SpecimenDetaill extends Component {
               destroyOnClose
               visible={visible}
               footer={modalFooter}
-              onClick={this.handleCancel}
+              onCancel={this.handleCancel}
 
             >
               {this.getProductModalContent()}

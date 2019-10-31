@@ -1,29 +1,27 @@
-const serviceArr = [
-  // 基础数据
+const piUrls = [
   {
     'name': 'piHead',
     'path': 'proforma-invoice-head',
     'arr': [
-      'queryPiHeadersnNotDone',
-      'saveBasicMeasureUnit',
-      'deleteBasicMeasureUnit',
+      'notdone/list',
+      'already/list',
       'approval',
-      'revoke',
+      'cancelApproval',
+      'merge',
+      'split',
     ],
   },
+
+];
+const piDetailUrls = [
   {
     'name': 'piDetail',
     'path': 'proforma-invoice-detail',
     'arr': [
-      'listBasicColourSet',
-      'saveBasicColourSet',
-      'deleteBasicColourSet',
-      'approval',
-      'revoke',
+      'list',
+      'update',
     ],
   },
 
-
-
 ];
-export default serviceArr;
+export  {piUrls,piDetailUrls};

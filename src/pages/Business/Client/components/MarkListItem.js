@@ -117,7 +117,7 @@ headers: {
         loading={loading}
         className={isSelected ? styles.list_selected_content : ''}
         cover={
-          <Carousel {...this.carouselsettings} className={styles.carousel_content} autoplay>
+          <Carousel {...this.carouselsettings} key={item.id} className={styles.carousel_content} autoplay>
             {this.getImages(paths)}
           </Carousel>
         }
