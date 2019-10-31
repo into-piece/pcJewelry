@@ -22,6 +22,11 @@ export default {
     city: [],
     head: [],
     isLoading: false,
+    productType: [{ key: 2, value: 2 }], //类别
+    productColorNameKeys: [],
+    gemColorKeys: [],
+    platingColorKeys: [],
+    customerIdKeys: [],
   },
 
   effects: {
@@ -40,7 +45,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback&&response.head.rtnCode==='000000') callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
     *updateProduct({ payload, callback }, { call, put }) {
@@ -49,7 +54,7 @@ export default {
         type: 'save',
         payload: response,
       });
-      if (callback&&response.head.rtnCode==='000000') callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
     *deleteProduct({ payload, callback }, { call, put }) {
@@ -144,8 +149,12 @@ export default {
       if (callback) callback();
     },
 
-
-
+    *changeState({ payload }, { put }) {
+      yield put({
+        type: 'changeStateAction',
+        payload,
+      });
+    },
   },
 
   reducers: {
@@ -176,5 +185,14 @@ export default {
         },
       };
     },
+
+    changeStateAction(state, action) {
+      const { key, value } = action.payload
+      return {
+        ...state,
+        [key]: value
+      };
+    },
+
   },
 };

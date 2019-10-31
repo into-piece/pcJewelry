@@ -1,0 +1,40 @@
+[
+  {
+    "key": "品牌",
+    "value": "brandNo",
+    "type": 2
+  },
+  { "key": "类别", "value": "productTypeName", "type": 2, "list": "productType" },
+  {
+    "key": "成色",
+    "value": "productColorName",
+    "type": 5
+  },
+  {
+    "key": "宝石颜色",
+    "value": "gemColor",
+    "type": 5
+  },
+  {
+    "key": "电镀颜色",
+    "value": "platingColor",
+    "type": 5
+  },
+  {
+    "key": "客户编号",
+    "type": 5,
+    "value": "customerId"
+  },
+  { "key": "中文名", "value": "zhName", "type": 1 },
+  { "key": "英文名", "value": "enName", "type": 1 },
+  { "key": "规格", "value": "specification", "noNeed": true, "type": 1 },
+  { "key": "产品来源", "value": "sourceOfProductName", "type": 2 },
+  { "key": "模具号", "value": "mouldNo", "type": 2 },
+  { "key": "数量单位", "value": "unitOfMeasurement", "noNeed": true, "type": 2 },
+  { "key": "重量单位", "value": "unitOfWeight", "noNeed": true, "type": 2 },
+  { "key": "成品重量", "value": "finishedWeight", "noNeed": true, "type": 2 },
+  { "key": "供应商编号", "value": "supplierId", "type": 2 },
+  { "key": "供应商货号", "value": "supplierProductNo", "noNeed": true, "type": 1 },
+  { "key": "客户产品描述", "value": "???", "noNeed": true, "type": 1 },
+  { "key": "备注", "value": "marks", "noNeed": true, "type": 3 }
+]

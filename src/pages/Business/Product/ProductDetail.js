@@ -8,12 +8,13 @@ import {
   Button,
   Input,
   Divider,
+  Select,
   Carousel, Modal, message, Upload, Spin,
+  Table
 } from 'antd';
 import { formatMessage } from 'umi/locale';
 import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
-
 import business from '../business.less';
 import baseStyles from '../Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
@@ -34,15 +35,78 @@ import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
-
+import batchUpdateArr from './config.json'
+import UploadImg from '@/components/UploadImg';
+const { Option } = Select
 const { Description } = DescriptionList;
-
 const FormItem = Form.Item;
+const { TextArea, Search } = Input;
+// productColorName,gemColor,platingColor,customerId
+const columnsArr = {
+  productColorName: [
+    {
+      title: '编号',
+      dataIndex: 'productNo',
+      key: 'productNo',
+      render: data => (data)
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+      render: data => (data)
+    },
+  ],
+  gemColor: [
+    {
+      title: '编号',
+      dataIndex: 'productNo',
+      key: 'productNo',
+      render: data => (data)
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+      render: data => (data)
+    },
+  ],
+  platingColor: [
+    {
+      title: '编号',
+      dataIndex: 'productNo',
+      key: 'productNo',
+      render: data => (data)
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+      render: data => (data)
+    },
+  ],
+  customerId: [
+    {
+      title: '编号',
+      dataIndex: 'productNo',
+      key: 'productNo',
+      render: data => (data)
+    },
+    {
+      title: '中文名',
+      dataIndex: 'zhName',
+      key: 'zhName',
+      render: data => (data)
+    },
+  ],
+}
 
+@Form.create()
 @connect(({ product, loading }) => {
   const { rtnCode, rtnMsg } = product;
   return {
     body: product.body,
+    product,
     rtnCode,
     rtnMsg,
     productListloading: loading.effects['product/fetchListProduct'],
@@ -55,9 +119,32 @@ const FormItem = Form.Item;
     updateProductUnLocking: loading.effects['product/updateProductUnLock'],
   };
 })
-@Form.create()
 class ProductDetail extends Component {
 
+  state = {
+    drawVisible: false,
+    visible: false,
+    isEdit: true,
+    imageObject: [],
+    cNoBrandNo: '',
+    cNofCode: '',
+    cNofCodezhName: '',
+    cNoUnitCode: '',
+    cNoColorCode: '',
+    productNo: '',
+    cNoCustomerCombine: '',
+    customerShotName: '',
+    cNoenNameUniCode: '',
+    cNozhNameUniCode: '',
+    cNomainMold: '',
+    cNoPercentageEnName: '',
+    cNoPercentageZhName: '',
+    isLoad: false,
+    isLoadImage: true,
+    productParams: {},
+    isEditItem: false,
+    batchUpdateShow: false
+  };
 
   centerFormLayout = {
     labelCol: { span: 12 },
@@ -72,106 +159,13 @@ class ProductDetail extends Component {
     initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawVisible: false,
-      visible: false,
-      isEdit: true,
-      imageObject: [],
-      cNoBrandNo: '',
-      cNofCode: '',
-      cNofCodezhName: '',
-      cNoUnitCode: '',
-      cNoColorCode: '',
-      productNo: '',
-      cNoCustomerCombine: '',
-      customerShotName: '',
-      cNoenNameUniCode: '',
-      cNozhNameUniCode: '',
-      cNomainMold: '',
-      cNoPercentageEnName: '',
-      cNoPercentageZhName: '',
-      isLoad: false,
-      isLoadImage: true,
-      productParams: {},
-      isEditItem: false,
-    };
-  }
+
 
 
   componentDidMount() {
     // const { item } = this.props;
     // if (item)
     //   this.fetchImages(item);
-  }
-
-  render() {
-
-    const {
-      productListloading,
-      productUpdateloading,
-      productSaveloading,
-      productFreezeloading,
-      productUnFreezeloading,
-      productDeleteloading,
-      queryProductLocking,
-      body = {},
-      isloading,
-      refarshList,
-      isLoad,
-      item,
-    } = this.props;
-
-    const { update, isLoadImage, productParams } = this.state;
-
-    // (item)
-
-
-    const isUpdate =
-      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
-
-    if (isUpdate) {
-      this.state.update = true;
-      if (productUpdateloading || productSaveloading) {
-        this.state.isUpdateFrom = true;
-      }
-    } else if (update) {
-      if (body.rtnCode === '000000') {
-        this.state.requestState = 'success';
-        message.success(body.rtnMsg);
-      } else {
-        message.error(body.rtnMsg);
-        this.state.requestState = 'error';
-      }
-
-      this.productRefresh();
-      // this.handleUpdateImage(productParams)
-      this.state.update = false;
-      if (this.state.isUpdateFrom) {
-        this.state.isUpdateFrom = false;
-      }
-
-      if (refarshList)
-        refarshList();
-
-
-    }
-
-
-    const updat = isUpdate || productListloading;
-    if (updat !== this.state.isLoad) {
-      if (isloading)
-        isloading(updat);
-      this.state.isLoad = updat;
-    }
-
-    // if(this.state.isLoadImage&&item) {
-    //   this.fetchImages(item);
-    //   this.state.isLoadImage = false;
-    // }
-
-    return this.getDetailInfo();
   }
 
   resetParse = () => {
@@ -224,6 +218,132 @@ class ProductDetail extends Component {
     return true;
   }
 
+  batchUpdate = () => {
+    this.setState({
+      batchUpdateShow: true
+    })
+  }
+
+  // 更改table select数组
+  onSelectChange = (selectedRowKeys, value) => {
+    console.log(selectedRowKeys, '==========selectedRowKeys')
+    this.props.dispatch({
+      type: 'product/changeState',
+      payload: { key: `${value}Keys`, value: selectedRowKeys },
+    });
+  };
+
+  onSearch = (v, type) => {
+
+  }
+
+  returnComplexSelect = (value) => {
+    const { product } = this.props
+    // productColorName,gemColor,platingColor,customerId
+    const rowSelection =
+    {
+      selectedRowKeys: product[`${value}Keys`],
+      type: 'checkbox',
+      onChange: selectedRowKeys => { this.onSelectChange(selectedRowKeys, value) },
+    };
+    console.log(columnsArr[value])
+    return (
+      <div>
+        <Search onSearch={v => { this.onSearch(v, value) }} placeholder={''} />
+        <Table
+          rowKey={record => record.productNo}
+          rowSelection={rowSelection}
+          dataSource={[{ zhName: '123', productNo: 123 }]}
+          columns={columnsArr[value]}
+        />
+      </div>
+
+    )
+  }
+
+  returnStyle = (v) => {
+    if (v === 'productTypeName') return { marginRight: 500 }
+    if (v === 'marks') return { width: 1200 }
+    return {}
+  }
+
+  getBatchUpdat = () => {
+    const {
+      selectKey,
+      product,
+      form: { getFieldDecorator },
+    } = this.props;
+    const content = '';
+
+    return (
+      <Form size="small">
+        {
+          batchUpdateArr.map(({ key, value, noNeed, type, list }) => {
+            const arr = list ? product[list] : [
+              { key: 1, value: 1 }
+            ]
+            console.log(arr, list, '==================list', product, product[list])
+            return (
+              <div className="adddevModal" key={key} style={this.returnStyle(value)}>
+                <FormItem
+                  label={key}
+                  key={key}
+                >
+                  {
+                    getFieldDecorator(value, {
+                      rules: [{
+                        required: !noNeed,
+                        message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
+                      }],
+                      initialValue: undefined,
+                    })(type && type === 2 ?
+                      <Select placeholder="请选择" style={{ width: 180 }}>
+                        {arr.map(({ value, key }) =>
+                          <Option value={value}>{key}</Option>,
+                        )}
+                      </Select> :
+                      type && type === 3 ?
+                        <TextArea rows={2} placeholder="请输入" />
+                        :
+                        type && type === 5 ?
+                          this.returnComplexSelect(value)
+                          :
+                          <Input placeholder="请输入" />,
+                    )
+                  }
+                </FormItem>
+              </div>
+            );
+          })
+        }
+        {
+          selectKey !== 'measureUnit' &&
+          <div className="adddevModal">
+            <FormItem
+              label="上传图片"
+              key="uploadPic"
+            >
+              <UploadImg
+                key="uimg"
+                maxcount={10}
+                // defaultFileList={choosenRowData.pictures}
+                fileListFun={imglist => {
+                  // this.setState({ filelist: imglist });
+                }}
+              />
+            </FormItem>
+          </div>
+        }
+        {content}
+      </Form>
+    );
+  };
+
+  closeModal = () => {
+    this.setState({
+      batchUpdateShow: false
+    });
+  }
 
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
@@ -287,209 +407,222 @@ class ProductDetail extends Component {
 
     if (!paths) paths = [];
 
-    return (<div className={business.right_info}>
-      <div
-        style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
-      >
-        <div>
-          <div
-            style={{
-              padding: '20px 20px 10px',
-              fontSize: 20,
-              fontWeight: 'bold',
-              color: '#35B0F4',
-            }}
-          >
-            {formatMessage({ id: 'menu.erp.business.product' })}
-          </div>
-          <Divider className={styles.divder} />
-        </div>
-        <Card bordered={false} style={{ overflow: 'auto' }}>
-
-          {(showItem && showItem !== '') ? (
-            <div>
-              <Spin spinning={isLoading}>
-                <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
-                  {this.getImages(paths)}
-                </Carousel>
-                <DescriptionList size="small" col="1">
-                  <Description term="名称">{showItem.zhName}</Description>
-                  <Description term="编号">{showItem.productNo}</Description>
-                  <Description term="类别">{showItem.productTypeName}</Description>
-                  <Description term="重量">{showItem.finishedWeight}</Description>
-                  <Description term="工价" />
-                </DescriptionList>
-                <span className={business.title_info}>
-                  参数详情
-                </span>
-                <Divider className={business.divder} />
-                <DescriptionList size="small" col="2">
-                  <Description term="颜色">{showItem.gemColorName}</Description>
-                  <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
-                  <Description term="报价重量">{showItem.finishedWeight}</Description>
-                  <Description term="成品重量">{showItem.unitOfWeightName}</Description>
-                  <Description term="电镀">{showItem.platingColorName}</Description>
-                  <Description term="成色">{showItem.productColorName}</Description>
-                  <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                  <Description term="模具">{showItem.mouldNo}</Description>
-                  <Description term="客户货号">{showItem.custoerProductNo}</Description>
-                  <Description term="客户">{showItem.customerNo}</Description>
-                  <Description term="供应商货号">{showItem.supplierId}</Description>
-                  <Description term="供应商">{showItem.supplierProductNo}</Description>
-                  <Description term="品牌">{showItem.brandNo}</Description>
-                </DescriptionList>
-                <span className={business.title_info}>
-                  备注
-                </span>
-                <Divider className={business.divder} />
-                <DescriptionList size="small" col="1">
-                  <Description>{showItem.marks}</Description>
-                </DescriptionList>
-              </Spin>
-            </div>
-          ) : (
-              <div />
-            )}
-        </Card>
-      </div>
-
-
-      <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
+    const { batchUpdateShow } = this.state
+    return (
+      <div className={business.right_info}>
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            flexDirection: 'column',
-          }}
+          style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', overflow: 'hidden' }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Button
-              type="primary"
-              icon="plus"
-              className={business.buttomControl}
-              size="small"
-              onClick={this.handleNewProduct}
-            >
-              新增
-            </Button>
-            <Button
-              type="danger"
-              icon="delete"
-              className={business.buttomControl}
-              size="small"
-              onClick={() => {
-                ModalConfirm({
-                  content: '确定删除吗？', onOk: () => {
-                    this.handleDeleteProduct();
-                  },
-                });
+          <div>
+            <div
+              style={{
+                padding: '20px 20px 10px',
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: '#35B0F4',
               }}
-
-              disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
             >
-              删除
-            </Button>
-            <Button
-              type="primary"
-              size="small"
-              className={business.buttomControl}
-              icon="edit"
-              disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
-              onClick={this.handleEditProduct}
-            >
-              编辑
-            </Button>
-            {
-              showItem && showItem.status === '2' ?
-                <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="danger"
-                  icon="unlock"
-                  onClick={() => {
-                    ModalConfirm({
-                      content: '确定取消审批吗？', onOk: () => {
-                        this.handleUnFreezeProduct();
-                      },
-                    });
-                  }}
-                  disabled={!showItem || showItem === '' || !isProductUpdate}
-                >
-                  取消审批
-                </Button>
-                :
-                <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="primary"
-                  icon="lock"
-                  disabled={!showItem || showItem === '' || !isProductUpdate}
-                  onClick={() => {
-                    ModalConfirm({
-                      content: '确定审批吗？', onOk: () => {
-                        this.handleFreezeProduct();
-                      },
-                    });
-                  }}
-                >
-                  审批
-                </Button>
-            }
+              {formatMessage({ id: 'menu.erp.business.product' })}
+            </div>
+            <Divider className={styles.divder} />
           </div>
+          <Card bordered={false} style={{ overflow: 'auto' }}>
+
+            {(showItem && showItem !== '') ? (
+              <div>
+                <Spin spinning={isLoading}>
+                  <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
+                    {this.getImages(paths)}
+                  </Carousel>
+                  <DescriptionList size="small" col="1">
+                    <Description term="名称">{showItem.zhName}</Description>
+                    <Description term="编号">{showItem.productNo}</Description>
+                    <Description term="类别">{showItem.productTypeName}</Description>
+                    <Description term="重量">{showItem.finishedWeight}</Description>
+                    <Description term="工价" />
+                  </DescriptionList>
+                  <span className={business.title_info}>
+                    参数详情
+                  </span>
+                  <Divider className={business.divder} />
+                  <DescriptionList size="small" col="2">
+                    <Description term="颜色">{showItem.gemColorName}</Description>
+                    <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
+                    <Description term="报价重量">{showItem.finishedWeight}</Description>
+                    <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                    <Description term="电镀">{showItem.platingColorName}</Description>
+                    <Description term="成色">{showItem.productColorName}</Description>
+                    <Description term="产品来源">{showItem.sourceOfProductName}</Description>
+                    <Description term="模具">{showItem.mouldNo}</Description>
+                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                    <Description term="客户">{showItem.customerNo}</Description>
+                    <Description term="供应商货号">{showItem.supplierId}</Description>
+                    <Description term="供应商">{showItem.supplierProductNo}</Description>
+                    <Description term="品牌">{showItem.brandNo}</Description>
+                  </DescriptionList>
+                  <span className={business.title_info}>
+                    备注
+                  </span>
+                  <Divider className={business.divder} />
+                  <DescriptionList size="small" col="1">
+                    <Description>{showItem.marks}</Description>
+                  </DescriptionList>
+                </Spin>
+              </div>
+            ) : (
+                <div />
+              )}
+          </Card>
+        </div>
+        <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
           <div
             style={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'flex-start',
-              paddingTop: 10,
+              flexDirection: 'column',
             }}
           >
-            <Button
-              className={business.buttomControl}
-              type="primary"
-              size="small"
-              icon="copy"
-              disabled
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Button
+                type="primary"
+                icon="plus"
+                className={business.buttomControl}
+                size="small"
+                onClick={this.handleNewProduct}
+              >
+                新增
+              </Button>
+              <Button
+                type="danger"
+                icon="delete"
+                className={business.buttomControl}
+                size="small"
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定删除吗？', onOk: () => {
+                      this.handleDeleteProduct();
+                    },
+                  });
+                }}
+
+                disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
+              >
+                删除
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className={business.buttomControl}
+                icon="edit"
+                disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
+                onClick={this.handleEditProduct}
+              >
+                编辑
+              </Button>
+              {
+                showItem && showItem.status === '2' ?
+                  <Button
+                    className={business.buttomControl}
+                    size="small"
+                    type="danger"
+                    icon="unlock"
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定取消审批吗？', onOk: () => {
+                          this.handleUnFreezeProduct();
+                        },
+                      });
+                    }}
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                  >
+                    取消审批
+                  </Button>
+                  :
+                  <Button
+                    className={business.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定审批吗？', onOk: () => {
+                          this.handleFreezeProduct();
+                        },
+                      });
+                    }}
+                  >
+                    审批
+                  </Button>
+              }
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingTop: 10,
+              }}
             >
-              复制
-            </Button>
-            <Button
-              className={business.buttomControl}
-              size="small"
-              type="primary"
-              icon="rollback"
-              disabled
-            >
-              撤销
-            </Button>
-            <Button
-              className={business.buttomControl}
-              size="small"
-              type="primary"
-              icon="rollback"
-              disabled={!showItem || showItem === '' || !isProductUpdate}
-            >
-              批量更新
-            </Button>
+              <Button
+                className={business.buttomControl}
+                type="primary"
+                size="small"
+                icon="copy"
+                disabled
+              >
+                复制
+              </Button>
+              <Button
+                className={business.buttomControl}
+                size="small"
+                type="primary"
+                icon="rollback"
+                disabled
+              >
+                撤销
+              </Button>
+              <Button
+                className={business.buttomControl}
+                size="small"
+                type="primary"
+                icon="rollback"
+                onClick={this.batchUpdate}
+              >
+                批量更新
+              </Button>
+            </div>
           </div>
-        </div>
+          <Modal
+            title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'menu.erp.business.product' })} />}
+            maskClosable={false}
+            width={1200}
+            className={styles.standardListForm}
+            destroyOnClose
+            visible={visible}
+            footer={modalFooter}
+            onCancel={this.handleCancel}
+
+          >
+            {this.getProductModalContent()}
+          </Modal>
+        </Card>
+
         <Modal
-          title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'menu.erp.business.product' })} />}
           maskClosable={false}
+          title={<BuildTitle title="批量新增" />}
           width={1200}
           className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          visible={visible}
+          visible={batchUpdateShow}
           footer={modalFooter}
-          onCancel={this.handleCancel}
-
+          onCancel={this.closeModal}
         >
-          {this.getProductModalContent()}
+          {this.getBatchUpdat()}
         </Modal>
-      </Card>
-
-    </div>
+      </div>
     )
   }
 
@@ -705,10 +838,7 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-
           <Row>
-
-
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='英文名称'
@@ -764,8 +894,6 @@ class ProductDetail extends Component {
                     }}
                   />,
                 )}
-
-
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -786,15 +914,9 @@ class ProductDetail extends Component {
 
                     if (v.enName)
                       this.state.cNoPercentageEnName = v.enName;
-
-
                     if (v.productMaterial)
                       this.state.cNoProductMaterial = v.productMaterial;
-
-
                     this.parseProductNo();
-
-
                   }}
                 />)}
               </FormItem>
@@ -830,7 +952,6 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-
           <Row>
             <Col lg={5} md={5} sm={5} xs={5}>
               <FormItem
@@ -986,8 +1107,13 @@ class ProductDetail extends Component {
               </FormItem>
             </Col>
           </Row>
-          <Modal maskClosable={false}
-          {...modalCropperFooter} width={768} destroyOnClose visible={cropperVisible}>
+          <Modal
+            maskClosable={false}
+            {...modalCropperFooter}
+            width={768}
+            destroyOnClose
+            visible={cropperVisible}
+          >
             {this.openCutImageModal()}
           </Modal>
         </Form>
@@ -1463,6 +1589,73 @@ class ProductDetail extends Component {
     // setFieldsValue('productNo', productNo);
 
   };
+
+  render() {
+    const {
+      productListloading,
+      productUpdateloading,
+      productSaveloading,
+      productFreezeloading,
+      productUnFreezeloading,
+      productDeleteloading,
+      queryProductLocking,
+      body = {},
+      isloading,
+      refarshList,
+      isLoad,
+      item,
+    } = this.props;
+
+    const { update, isLoadImage, productParams } = this.state;
+
+    // (item)
+
+
+    const isUpdate =
+      productUpdateloading || productSaveloading || productFreezeloading || productDeleteloading || productUnFreezeloading;
+
+    if (isUpdate) {
+      this.state.update = true;
+      if (productUpdateloading || productSaveloading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
+      }
+
+      this.productRefresh();
+      // this.handleUpdateImage(productParams)
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+      }
+
+      if (refarshList)
+        refarshList();
+
+
+    }
+
+
+    const updat = isUpdate || productListloading;
+    if (updat !== this.state.isLoad) {
+      if (isloading)
+        isloading(updat);
+      this.state.isLoad = updat;
+    }
+
+    // if(this.state.isLoadImage&&item) {
+    //   this.fetchImages(item);
+    //   this.state.isLoadImage = false;
+    // }
+
+    return this.getDetailInfo();
+  }
 
 
 }
