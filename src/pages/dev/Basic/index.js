@@ -455,6 +455,7 @@ manuArr.forEach(subItem => {
     dev,
     list: dev.list,
     pagination: dev.pagination,
+    initpagination: dev.initpagination,
     selectKey: dev.selectKey,
     choosenRowData: dev.choosenRowData,
     colorSetList: dev.colorSetList,
@@ -509,7 +510,7 @@ class Info extends Component {
       type: 'dev/getSelectKey',
       payload: key,
     });
-    this.getList(key);
+    this.getList(key,true);
 
     // 还要清空所选中项
     dispatch({
@@ -525,16 +526,22 @@ class Info extends Component {
   };
 
   // 获取对应key=》页面进行数据请求
-  getList = (key = this.props.selectKey) => {
-    const { dispatch, pagination } = this.props;
+  getList = (key = this.props.selectKey,init) => {
+    const { dispatch, initpagination ,pagination} = this.props;
     const obj = {};
+
+    let pp ={
+      current:pagination.current,
+      size:pagination.size
+    }
+
     manuArr.forEach(item => {
       obj[item] = `get${item}List`;
     });
     // getDevList
     dispatch({
       type: `dev/getList`,
-      payload: { params: pagination, type: key },
+      payload: { params: init?initpagination:pp, type: key },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.forEach((item) => {
@@ -977,7 +984,7 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
 
           {/* </Card> */}
           <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
-            <div  >
+            <div>
               {btnGroup.map(({ name, tag }) => (
                 <Button
                   key={tag}
@@ -1019,10 +1026,6 @@ class CenterInfo extends Component {
       type: 'dev/getList',
       payload: { type: selectKey, params: obj },
     });
-    // dispatch({
-    //   type: 'dev/getPagination',
-    //   payload: ,
-    // });
   };
 
   changeChoosenRow = rowData => {

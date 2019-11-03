@@ -166,9 +166,11 @@ class Currency extends PureComponent {
 
   handleDone = () => {
     const { dispatch } = this.props;
+    const { pagination } = this.state;
+
     dispatch({
       type: 'currency/fetchListCurrency',
-      payload:{}
+      payload:pagination,
     });
 
     this.setState({

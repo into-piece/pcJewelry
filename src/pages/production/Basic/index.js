@@ -93,7 +93,7 @@ class Info extends Component {
       type: `${defaultModelName}/getSelectKey`,
       payload: key,
     });
-    this.getList(key);
+    this.getList(key,true);
 
     // 还要清空所选中项
     dispatch({
@@ -109,13 +109,15 @@ class Info extends Component {
   };
 
   // 获取对应key=》页面进行数据请求
-  getList = (key = this.props.selectKey) => {
-    const { dispatch, pagination } = this.props;
-    const obj = {};
-
+  getList = (key = this.props.selectKey,init) => {
+    const { dispatch, pagination,initpagination } = this.props;
+    const pp ={
+      current:pagination.current,
+      size:pagination.size
+    }
     dispatch({
       type: `${defaultModelName}/getList`,
-      payload: { params: pagination, type: key },
+      payload: { params: init?initpagination:pp, type: key },
       callback: () => {
         const { model } = this.props;
         model[`${model.selectKey}List`].records.forEach((item) => {

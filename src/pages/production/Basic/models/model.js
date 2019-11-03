@@ -10,7 +10,7 @@ import servicesConfig from '@/services/production';
 const initData = { records: [] };
 
 const {
-  getTypeByWordbookCode
+  getTypeByWordbookCode,
 } = servicesConfig;
 const defaultModelName = 'productionBasic';
 
@@ -23,6 +23,10 @@ export default {
     choosenRowData: { id: '' }, // select to show table 1
     selectKey: 'cushionWeightInfo',
 
+    initpagination: {
+      current: 1,
+      size: 10,
+    },
     pagination: {
       current: 1,
       size: 10,
@@ -41,7 +45,7 @@ export default {
 
   effects: {
 
-    * getList({ payload, callback }, { call, put,select }) {
+    * getList({ payload, callback }, { call, put, select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
       const list =
@@ -53,6 +57,16 @@ export default {
         payload: { data: list, typeName: `${type}List` },
       });
 
+      yield put({
+        type: 'changeState',
+        payload: {
+          data: {
+            current: response.body.current,
+            size: response.body.size,
+          },
+          typeName: 'pagination',
+        },
+      });
       const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
       const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
@@ -123,6 +137,17 @@ export default {
       };
     },
 
+    // table
+    getPagination2(state, action) {
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          ...action.payload,
+        },
+      };
+    },
+
 
     changeSelectedRowKeys2(state, action) {
       return {
@@ -155,7 +180,6 @@ export default {
         selectKey: action.payload,
       };
     },
-
 
 
   },

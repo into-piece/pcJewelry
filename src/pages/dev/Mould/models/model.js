@@ -10,7 +10,7 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-   getTypeByWordbookCode, listFilmSettingsDropDown,listMoldPositioningSettingsDropDown
+  getTypeByWordbookCode, listFilmSettingsDropDown, listMoldPositioningSettingsDropDown,
 } = servicesConfig;
 const defaultModelName = 'devMould';
 
@@ -48,7 +48,16 @@ export default {
 
   effects: {
 
-    * getList({ payload, callback }, { call, put,select }) {
+    * changeProps({ payload, callback }, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: payload.data, typeName: payload.typeName },
+      });
+      if (callback) callback();
+
+    },
+
+    * getList({ payload, callback }, { call, put, select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
       const list =
@@ -59,7 +68,10 @@ export default {
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
       });
-
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'pagination' },
+      });
       const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
       const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
@@ -75,10 +87,11 @@ export default {
         });
       }
 
+
       if (callback) callback();
     },
 
-    * getListSecond({ payload, callback }, { call, put,select }) {
+    * getListSecond({ payload, callback }, { call, put, select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
       const listSecond =
@@ -89,7 +102,10 @@ export default {
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
       });
-
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'paginationSecond' },
+      });
       const choosenRowDataSecond = yield select(state => state[defaultModelName].choosenRowDataSecond);
 
       const selectRow = listSecond.records && listSecond.records.filter(e => (e.id === choosenRowDataSecond.id));
@@ -187,8 +203,8 @@ export default {
 
     },
 
-    * getlistMoldPositioningSettingsDropDown({payload}, { call, put }) {
-      const response = yield call(listMoldPositioningSettingsDropDown,payload);
+    * getlistMoldPositioningSettingsDropDown({ payload }, { call, put }) {
+      const response = yield call(listMoldPositioningSettingsDropDown, payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, positionCode }) => {
         return { value: id, key: positionCode };

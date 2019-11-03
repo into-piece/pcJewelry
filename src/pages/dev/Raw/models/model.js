@@ -204,8 +204,6 @@ export default {
     },
     * getList({ payload, callback }, { call, put }) {
       const { type, params } = payload;
-      // console.log(servicesConfig)
-      // console.log(type, params, servicesConfig[`listBasic${type}`])
       const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
         type: 'getDevList2',

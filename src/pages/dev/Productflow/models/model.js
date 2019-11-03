@@ -49,6 +49,15 @@ export default {
 
   effects: {
 
+    * changeProps({ payload, callback }, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: payload.data, typeName: payload.typeName },
+      });
+      if (callback) callback();
+
+    },
+
     * getList({ payload, callback }, { call, put,select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
@@ -60,7 +69,10 @@ export default {
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
       });
-
+      yield put({
+        type: 'changeState',
+        payload: { data: {size:response.body.size,current:response.body.current} , typeName: 'pagination' },
+      });
       const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
       const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
@@ -89,6 +101,10 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: {size:response.body.size,current:response.body.current} , typeName: 'paginationSecond' },
       });
       const choosenRowDataSecond = yield select(state => state[defaultModelName].choosenRowDataSecond);
 

@@ -21,6 +21,10 @@ export default {
       current: 1,
       size: 10,
     },
+    initpagination: {
+      current: 1,
+      size: 10,
+    },
     selectKey: 'measureUnit',
     colorSettingList: initData,
     selectedRowKeys: [], // table select
@@ -85,6 +89,14 @@ export default {
       yield put({
         type: 'getDevList2',
         payload: { response, type },
+      });
+
+      yield put({
+        type: 'getPagination2',
+        payload:{
+          total:response.body.total,
+          current:response.body.current,
+        }
       });
       if (callback) callback();
     },
