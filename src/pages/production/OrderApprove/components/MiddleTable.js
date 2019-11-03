@@ -189,7 +189,7 @@ class MiddleTable extends Component {
           data={searchParamsArrConfig[firstType]}
           source={model}
           onSearch={(p) => {
-            onSearch({ ...p, status: firstRadioValue }, 1);
+            onSearch({ ...p, status: firstRadioValue ,current:1}, 1);
           }}
           returnElement={returnElement}
           onchange={changeSearchParams}
@@ -250,7 +250,7 @@ class MiddleTable extends Component {
           data={searchParamsArrConfig[secondType]}
           source={model}
           onSearch={(p) => {
-            onSearch(p, 2);
+            onSearch({...p,current:1}, 2);
           }}
           returnElement={returnElement}
           onchange={changeSearchDetailParams}
