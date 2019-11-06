@@ -7,7 +7,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Carousel, Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Divider } from 'antd';
+import {Carousel, Menu, Icon, Row, Col, Card, Button, Modal, Form, Input, notification, Select, Radio, Divider } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import Zmage from 'react-zmage';
 import styles from './index.less';
@@ -79,7 +79,7 @@ const columnsArr = {
         <LockTag>
           {data}
         </LockTag>
-      )
+        )
         : (data),
     },
     {
@@ -300,10 +300,10 @@ const columnsArr = {
   insertStoneTechnology: [
     {
       title: '成色',
-      dataIndex: 'cuttingCode',
-      key: 'cuttingCode',
+      dataIndex: 'basicColourSet',
+      key: 'basicColourSet',
       render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
       ),
     },
     {
@@ -468,8 +468,8 @@ class Info extends Component {
   state = {
     mode: 'inline',
     modalType: '',
-    addLoading: false,
-    filelist: [],
+    addLoading:false,
+    filelist:[],
     addData: {
       measureUnit: {
         unitCode: '',
@@ -510,7 +510,7 @@ class Info extends Component {
       type: 'dev/getSelectKey',
       payload: key,
     });
-    this.getList(key, true);
+    this.getList(key,true);
 
     // 还要清空所选中项
     dispatch({
@@ -526,13 +526,13 @@ class Info extends Component {
   };
 
   // 获取对应key=》页面进行数据请求
-  getList = (key = this.props.selectKey, init) => {
-    const { dispatch, initpagination, pagination } = this.props;
+  getList = (key = this.props.selectKey,init) => {
+    const { dispatch, initpagination ,pagination} = this.props;
     const obj = {};
 
-    const pp = {
-      current: pagination.current,
-      size: pagination.size
+    const pp ={
+      current:pagination.current,
+      size:pagination.size
     }
 
     manuArr.forEach(item => {
@@ -541,7 +541,7 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `dev/getList`,
-      payload: { params: init ? initpagination : pp, type: key },
+      payload: { params: init?initpagination:pp, type: key },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.forEach((item) => {
@@ -575,7 +575,7 @@ class Info extends Component {
         if (selectKey === 'colorPercentage') {
           dispatch({
             type: 'dev/getListMstWordbook',
-            payload: { wordbookTypeCode: 'H014' },
+            payload: {wordbookTypeCode:'H014'},
           });
         }
         if (selectKey === 'categorySet') {
@@ -650,7 +650,7 @@ class Info extends Component {
                           <Radio value={1}>是</Radio>
                           <Radio value={2}>否</Radio>
                         </Radio.Group>
-                        : <Input placeholder="请输入" />,
+                        :  <Input placeholder="请输入" />,
                     )
                   }
                 </FormItem>
@@ -658,7 +658,7 @@ class Info extends Component {
             );
           })
         }
-        {(selectKey !== 'measureUnit') && <Col span={24}>
+        {(selectKey !== 'measureUnit' ) && <Col span={24}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -677,7 +677,7 @@ class Info extends Component {
               }}
             />
           </FormItem>
-                                          </Col>}
+        </Col>}
         {content}
       </Form>
     );
@@ -698,13 +698,13 @@ class Info extends Component {
     form.validateFields((err, values) => {
       if (!err) {
         this.setState({
-          addLoading: true
+          addLoading:true
         })
 
         let params = {
           ...values,
         };
-        if (selectKey !== 'measureUnit') {
+        if (selectKey !== 'measureUnit' ) {
           params = {
             ...params, picPath: filelist,
           };
@@ -716,10 +716,10 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList();
-            if (close) { this.btnFn('') };
+            if(close){this.btnFn('')};
           }
           this.setState({
-            addLoading: false
+            addLoading:false
           })
         });
         this.setState({ filelist: [] });
@@ -746,13 +746,13 @@ class Info extends Component {
           ...values,
           id: choosenRowData.id,
         };
-        if (selectKey !== 'measureUnit') {
+        if (selectKey !== 'measureUnit' ) {
           params = {
             ...params, picPath: filelist,
           };
         }
         this.setState({
-          addLoading: true
+          addLoading:true
         })
         serviceObj[`addBasic${selectKey}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head;
@@ -760,12 +760,12 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            if (close) { this.btnFn('') };
+            if(close){this.btnFn('')};
             this.getList();
           }
 
           this.setState({
-            addLoading: false
+            addLoading:false
           })
         });
         this.setState({ filelist: [] });
@@ -868,38 +868,38 @@ class Info extends Component {
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled } = this;
-    const { mode, modalType, addLoading } = state;
+    const { mode, modalType,addLoading } = state;
     const { list, selectKey, choosenRowData } = props;
 
-    const modalFooter = modalType === 'plus' ? [
+    const modalFooter = modalType==='plus'?[
       <Button
         key="back"
         onClick={() => {
-          this.setState({ filelist: [] });
+            this.setState({ filelist: [] });
+        btnFn('');
+      }}
+      >
+        取消
+      </Button>,
+      <Button key="submit" type="primary" loading={addLoading} onClick={()=>{handleModalOk(true)}}>
+        保存
+      </Button>,
+      <Button key="continue" type="primary" loading={addLoading} onClick={()=>{handleModalOk(false)}}>
+        继续添加
+      </Button>,
+    ]:[
+      <Button
+        key="back"
+        onClick={() => {
           btnFn('');
         }}
       >
         取消
       </Button>,
-      <Button key="submit" type="primary" loading={addLoading} onClick={() => { handleModalOk(true) }}>
+      <Button key="submit" type="primary" loading={addLoading} onClick={()=>{handleModalOk(false)}}>
         保存
-      </Button>,
-      <Button key="continue" type="primary" loading={addLoading} onClick={() => { handleModalOk(false) }}>
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-          key="back"
-          onClick={() => {
-            btnFn('');
-          }}
-        >
-          取消
-        </Button>,
-      <Button key="submit" type="primary" loading={addLoading} onClick={() => { handleModalOk(false) }}>
-          保存
-        </Button>
-      ];
+      </Button>
+    ];
 
 
     return (
@@ -1106,21 +1106,21 @@ const GetRenderitem = ({ data, type }) => {
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
 
   return (
-    <Card bordered={false} style={{ maxWidth: "360px", overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
-      {(type !== 'measureUnit') &&
-        <Carousel speed={150} initialSlide={0} key={data.id} className={styles.carousel_content} autoplay>
-          {getImages(images)}
-        </Carousel>}
+    <Card bordered={false} style={{maxWidth:"360px", overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
+      {(type !== 'measureUnit' ) &&
+      <Carousel speed={150} initialSlide={0} key={data.id} className={styles.carousel_content} autoplay>
+        {getImages(images)}
+      </Carousel>}
       {images && images.length > 0 && <Divider />}
 
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={key} term={key}>{data[`${value}Name`]}</Description>
-              : <Description
-                key={key}
-                term={key}
-              >{value === 'status' ? statusConvert[data[value]] : data[value]}
+                : <Description
+                  key={key}
+                  term={key}
+                >{value === 'status' ? statusConvert[data[value]] : data[value]}
                 </Description>
             );
           })

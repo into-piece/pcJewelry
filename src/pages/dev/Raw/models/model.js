@@ -399,7 +399,6 @@ export default {
       return {
         ...state,
         pagination: {
-          ...state.pagination,
           ...action.payload,
         },
       };
@@ -409,7 +408,6 @@ export default {
       return {
         ...state,
         paginationTypes: {
-          ...state.paginationTypes,
           ...action.payload,
         },
       };
