@@ -22,7 +22,7 @@ export default {
     city: [],
     head: [],
     isLoading: false,
-    productType: [{ key: 2, value: 2 }], //类别
+    productType: [{ key: 2, value: 2 }], // 类别
     productColorNameKeys: [],
     gemColorKeys: [],
     platingColorKeys: [],

@@ -530,7 +530,7 @@ class Info extends Component {
     const { dispatch, initpagination ,pagination} = this.props;
     const obj = {};
 
-    let pp ={
+    const pp ={
       current:pagination.current,
       size:pagination.size
     }

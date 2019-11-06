@@ -37,6 +37,7 @@ import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
 import batchUpdateArr from './config.json'
 import UploadImg from '@/components/UploadImg';
+
 const { Option } = Select
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -249,7 +250,7 @@ class ProductDetail extends Component {
     console.log(columnsArr[value])
     return (
       <div>
-        <Search onSearch={v => { this.onSearch(v, value) }} placeholder={''} />
+        <Search onSearch={v => { this.onSearch(v, value) }} placeholder="" />
         <Table
           rowKey={record => record.productNo}
           rowSelection={rowSelection}
@@ -377,22 +378,22 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-        <Button
-          key="back"
-          onClick={this.handleCancel}
-        >
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
           取消
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={productUpdateloading}
-          onClick={() => {
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productUpdateloading}
+        onClick={() => {
             this.handleSubmit(false);
           }}
-        >
+      >
           保存
-        </Button>,
+      </Button>,
       ];
 
 
@@ -470,7 +471,7 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-                <div />
+              <div />
               )}
           </Card>
         </div>
@@ -630,15 +631,15 @@ class ProductDetail extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-        <div className={business.carousel_image_ground}>
-          <Zmage
-            alt="图片"
-            align="center"
-            className={styles.carousel_image}
-            src={v}
-            set={paths.map(image => ({ src: image }))}
-          />
-        </div>
+      <div className={business.carousel_image_ground}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image }))}
+        />
+      </div>
       ));
   };
 
