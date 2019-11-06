@@ -69,8 +69,9 @@ let typeTable = [
   },
   {
     title: '小类',
-    dataIndex: 'sTypeName',
+    dataIndex: 'sType',
     key: 'sType',
+    render:(d,i)=>(i.sTypeName)
   },
   {
     title: '名称',
@@ -97,8 +98,10 @@ const columnsArr = {
         : (data),
     }, {
       title: '成色',
-      dataIndex: 'assayingName',
+      dataIndex: 'assaying',
       key: 'assayingName1',
+      render:(d,i)=>(i.assayingName)
+
     },
     {
       title: '中文名',
@@ -112,8 +115,10 @@ const columnsArr = {
     },
     {
       title: '重量单位',
-      dataIndex: 'weightUnitName',
+      dataIndex: 'weightUnit',
       key: 'weightUnitName1',
+      render:(d,i)=>(i.weightUnitName)
+
     },
     {
       title: '单价',
@@ -122,8 +127,10 @@ const columnsArr = {
     },
     {
       title: '计价类别',
-      dataIndex: 'valuationClassName',
+      dataIndex: 'valuationClass',
       key: 'valuationClassName1',
+      render:(d,i)=>(i.valuationClassName)
+
     },
     {
       title: '库存重量',
@@ -157,18 +164,24 @@ const columnsArr = {
     },
     {
       title: '成色',
-      dataIndex: 'assayingName',
+      dataIndex: 'assaying',
       key: 'assayingName2',
+      render:(d,i)=>(i.assayingName)
+
     },
     {
       title: '形状',
-      dataIndex: 'shapeName',
+      dataIndex: 'shape',
       key: 'shapeNam2e',
+      render:(d,i)=>(i.shapeName)
+
     },
     {
       title: '规格',
-      dataIndex: 'specificationName',
+      dataIndex: 'specification',
       key: 'specificationNa2me',
+      render:(d,i)=>(i.specificationName)
+
     },
     {
       title: '客户编号',
@@ -192,13 +205,17 @@ const columnsArr = {
     },
     {
       title: '计量单位',
-      dataIndex: 'measureUnitName',
+      dataIndex: 'measureUnit',
       key: 'measureU2nitName',
+      render:(d,i)=>(i.measureUnitName)
+
     },
     {
       title: '重量单位',
-      dataIndex: 'weightUnitName',
+      dataIndex: 'weightUnit',
       key: 'weightUn2itName',
+      render:(d,i)=>(i.weightUnitName)
+
     },
     {
       title: '单价',
@@ -207,8 +224,10 @@ const columnsArr = {
     },
     {
       title: '计价类别',
-      dataIndex: 'valuationClassName',
+      dataIndex: 'valuationClass',
       key: 'valuationC2lassName',
+      render:(d,i)=>(i.valuationClassName)
+
     },
     {
       title: '单重',
@@ -247,18 +266,24 @@ const columnsArr = {
     },
     {
       title: '计量单位',
-      dataIndex: 'measureUnitName',
+      dataIndex: 'measureUnit',
       key: 'meas3ureUnit',
+      render:(d,i)=>(i.measureUnitName)
+
     },
     {
       title: '重量单位',
-      dataIndex: 'weightUnitName',
+      dataIndex: 'weightUnit',
       key: 'weigh3tUnit',
+      render:(d,i)=>(i.weightUnitName)
+
     },
     {
       title: '计价类别',
-      dataIndex: 'valuationClassName',
+      dataIndex: 'valuationClass',
       key: 'valua3tionClass',
+      render:(d,i)=>(i.valuationClassName)
+
     },
     {
       title: '状态',
@@ -281,8 +306,10 @@ const columnsArr = {
     },
     {
       title: '颜色',
-      dataIndex: 'colorName',
+      dataIndex: 'color',
       key: 'colour4',
+      render:(d,i)=>(i.colorName)
+
     },
     {
       title: '基本材料',
@@ -296,8 +323,10 @@ const columnsArr = {
     },
     {
       title: '形状',
-      dataIndex: 'shapeName',
+      dataIndex: 'shape',
       key: 'shape4',
+      render:(d,i)=>(i.shapeName)
+
     },
     {
       title: '规格',
@@ -336,18 +365,24 @@ const columnsArr = {
     },
     {
       title: '计量单位',
-      dataIndex: 'measureUnitName',
+      dataIndex: 'measureUnit',
       key: 'measureUnit4',
+      render:(d,i)=>(i.measureUnitName)
+
     },
     {
       title: '重量单位',
-      dataIndex: 'weightUnitName',
+      dataIndex: 'weightUnit',
       key: 'weightUnit4',
+      render:(d,i)=>(i.weightUnitName)
+
     },
     {
       title: '计价类别',
-      dataIndex: 'valuationClassName',
+      dataIndex: 'valuationClass',
       key: 'valuationClassName4',
+      render:(d,i)=>(i.valuationClassName)
+
     },
     {
       title: '单重',
@@ -375,18 +410,24 @@ const columnsArr = {
     },
     {
       title: '颜色',
-      dataIndex: 'colorName',
+      dataIndex: 'color',
       key: 'color5',
+      render:(d,i)=>(i.colorName)
+
     },
     {
       title: '形状',
-      dataIndex: 'shapeName',
+      dataIndex: 'shape',
       key: 'shape5',
+      render:(d,i)=>(i.shapeName)
+
     },
     {
       title: '规格',
-      dataIndex: 'specificationName',
+      dataIndex: 'specification',
       key: 'specific5ation',
+      render:(d,i)=>(i.specificationName)
+
     },
     {
       title: '客户编号',
@@ -410,13 +451,17 @@ const columnsArr = {
     },
     {
       title: '计量单位',
-      dataIndex: 'measureUnitName',
+      dataIndex: 'measureUnit',
       key: 'measu5reUnit',
+      render:(d,i)=>(i.measureUnitName)
+
     },
     {
       title: '重量单位',
-      dataIndex: 'weightUnitName',
+      dataIndex: 'weightUnit',
       key: 'weigh5tUnit',
+      render:(d,i)=>(i.weightUnitName)
+
     },
     {
       title: '单价',
@@ -425,8 +470,10 @@ const columnsArr = {
     },
     {
       title: '计价类别',
-      dataIndex: 'valuationClassName',
+      dataIndex: 'valuationClass',
       key: 'valuat5ionClass',
+      render:(d,i)=>(i.valuationClassName)
+
     },
     {
       title: '单重',
@@ -454,28 +501,38 @@ const columnsArr = {
     },
     {
       title: '规格',
-      dataIndex: 'specificationName',
+      dataIndex: 'specification',
       key: 'speci6ficationName',
+      render:(d,i)=>(i.specificationName)
+
     },
     {
       title: '形状',
-      dataIndex: 'shapeName',
+      dataIndex: 'shape',
       key: 'shap6eName',
+      render:(d,i)=>(i.shapeName)
+
     },
     {
       title: '切工',
-      dataIndex: 'cutName',
+      dataIndex: 'cut',
       key: 'cutN6ame',
+      render:(d,i)=>(i.cutName)
+
     },
     {
       title: '颜色',
-      dataIndex: 'colorName',
+      dataIndex: 'color',
       key: 'color6Name',
+      render:(d,i)=>(i.colorName)
+
     },
     {
       title: '等级',
-      dataIndex: 'qualityName',
+      dataIndex: 'quality',
       key: 'qualit6yName',
+      render:(d,i)=>(i.qualityName)
+
     },
     {
       title: '中文名',
@@ -489,18 +546,24 @@ const columnsArr = {
     },
     {
       title: '是否配料',
-      dataIndex: 'isIngredientName',
+      dataIndex: 'isIngredient',
       key: 'isIngredientName6',
+      render:(d,i)=>(i.isIngredientName)
+
     },
     {
       title: '计量单位',
-      dataIndex: 'measureUnitName',
+      dataIndex: 'measureUnit',
       key: 'measureUnitName6',
+      render:(d,i)=>(i.measureUnitName)
+
     },
     {
       title: '重量单位',
-      dataIndex: 'weightUnitName',
+      dataIndex: 'weightUnit',
       key: 'weightUnitNam6e',
+      render:(d,i)=>(i.weightUnitName)
+
     },
     {
       title: '单价',
@@ -509,8 +572,10 @@ const columnsArr = {
     },
     {
       title: '计价类别',
-      dataIndex: 'valuationClassName',
+      dataIndex: 'valuationClass',
       key: 'valuationCl6assName',
+      render:(d,i)=>(i.valuationClassName)
+
     },
     {
       title: '单重',
