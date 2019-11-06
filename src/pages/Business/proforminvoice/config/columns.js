@@ -22,9 +22,11 @@ let piHead = [
   },
   {
     title: <div className={styles.row_normal2}>订单类别</div>,
-    dataIndex: 'piTypeName',
+    dataIndex: 'piType',
     key: 'piTypeName',
     width: 100,
+    render:(d,i)=>(i.piTypeName)
+
   },
   {
     title: <div className={styles.row_normal2}>要求交货日期</div>,

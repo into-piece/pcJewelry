@@ -169,7 +169,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column="中文名称" field="zh_name" sortChange={this.clientSortFilter}/>
+          <TableSortView column="中文名称" field="zh_name" sortChange={this.clientSortFilter} />
         );
       },
       dataIndex: 'zhName',
@@ -178,7 +178,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column="英文名称" field="en_name" sortChange={this.clientSortFilter}/>
+          <TableSortView column="英文名称" field="en_name" sortChange={this.clientSortFilter} />
         );
       },
       dataIndex: 'enName',
@@ -252,7 +252,7 @@ class ClientView extends PureComponent {
     },
     {
       title: () => {
-        return <TableSortView column="电话" field="tel" sortChange={this.contactsSortFilter}/>;
+        return <TableSortView column="电话" field="tel" sortChange={this.contactsSortFilter} />;
       },
       dataIndex: 'tel',
       key: 'tel',
@@ -261,7 +261,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column="手机" field="phone" sortChange={this.contactsSortFilter}/>
+          <TableSortView column="手机" field="phone" sortChange={this.contactsSortFilter} />
         );
       },
       dataIndex: 'phone',
@@ -270,7 +270,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column="email" field="email" sortChange={this.contactsSortFilter}/>
+          <TableSortView column="email" field="email" sortChange={this.contactsSortFilter} />
         );
       },
       dataIndex: 'email',
@@ -278,7 +278,7 @@ class ClientView extends PureComponent {
     },
     {
       title: () => {
-        return <TableSortView column="qq" field="qq" sortChange={this.contactsSortFilter}/>;
+        return <TableSortView column="qq" field="qq" sortChange={this.contactsSortFilter} />;
       },
       dataIndex: 'qq',
       key: 'qq',
@@ -286,7 +286,7 @@ class ClientView extends PureComponent {
     {
       title: () => {
         return (
-          <TableSortView column="wechat" field="wechat" sortChange={this.contactsSortFilter}/>
+          <TableSortView column="wechat" field="wechat" sortChange={this.contactsSortFilter} />
         );
       },
       dataIndex: 'wechat',
@@ -326,7 +326,7 @@ class ClientView extends PureComponent {
       // title: <div className={clientInfoStyle.row_normal2}>简称</div>,
       title: () => {
         return (
-          <TableSortView column="简称" field="shot_name" sortChange={this.customerSortFilter}/>
+          <TableSortView column="简称" field="shot_name" sortChange={this.customerSortFilter} />
         );
       },
       dataIndex: 'shotName',
@@ -377,7 +377,7 @@ class ClientView extends PureComponent {
     {
       // title: <div className={clientInfoStyle.row_normal2}>手机</div>,
       title: () => {
-        return <TableSortView column="手机" field="tel" sortChange={this.customerSortFilter}/>;
+        return <TableSortView column="手机" field="tel" sortChange={this.customerSortFilter} />;
       },
       dataIndex: 'tel',
       key: 'tel',
@@ -387,7 +387,7 @@ class ClientView extends PureComponent {
       // title: <div className={clientInfoStyle.row_normal2}>电话</div>,
       title: () => {
         return (
-          <TableSortView column="电话" field="phone" sortChange={this.customerSortFilter}/>
+          <TableSortView column="电话" field="phone" sortChange={this.customerSortFilter} />
         );
       },
       dataIndex: 'phone',
@@ -427,7 +427,7 @@ class ClientView extends PureComponent {
       // title: <div className={clientInfoStyle.row_normal2}>状态</div>,
       title: () => {
         return (
-          <TableSortView column="状态" field="status" sortChange={this.customerSortFilter}/>
+          <TableSortView column="状态" field="status" sortChange={this.customerSortFilter} />
         );
       },
       dataIndex: 'status',
@@ -514,12 +514,12 @@ class ClientView extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="中文名称" className={clientStyle.small_font}>
-              {getFieldDecorator('selectZhName')(<Input size="small" placeholder="请输入"/>)}
+              {getFieldDecorator('selectZhName')(<Input size="small" placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="英文名称" className={clientStyle.small_font}>
-              {getFieldDecorator('selectEnName')(<Input size="small" placeholder="请输入"/>)}
+              {getFieldDecorator('selectEnName')(<Input size="small" placeholder="请输入" />)}
             </FormItem>
           </Col>
 
@@ -827,7 +827,7 @@ class ClientView extends PureComponent {
                       onCustomerReset={this.handleCustomerFormReset}
                     />
                   </div>
-                  <Divider className={clientStyle.divder}/>
+                  <Divider className={clientStyle.divder} />
 
                   {/* <Button icon="plus" type="primary" style={{ marginBottom: 10 }} onClick={() => this.setState({ */}
                   {/* maintainerAddVisible: true, */}
@@ -1110,19 +1110,19 @@ class ClientView extends PureComponent {
     return (
       <div>
         <span className={clientStyle.sun_title_info}>类型</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="中文名称" {...this.formLayout}>
             {getFieldDecorator('zhName', {
               rules: [{ required: true, message: '请输入中文名称' }],
               initialValue: current.zhName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="英文名称" {...this.formLayout}>
             {getFieldDecorator('enName', {
               rules: [{ message: '请输入英文名称' }],
               initialValue: current.enName,
-            })(<Input placeholder="请输入"/>)}
+            })(<Input placeholder="请输入" />)}
           </FormItem>
         </Form>
       </div>
@@ -1137,12 +1137,12 @@ class ClientView extends PureComponent {
     return (
       <div>
         <span className={clientStyle.sun_title_info}>共同维护人</span>
-        <Divider className={clientStyle.divder}/>
+        <Divider className={clientStyle.divder} />
         <Form size="small" onSubmit={this.handleSubmit}>
           <FormItem label="共同维护人" {...this.formLayout}>
             {getFieldDecorator('salesmanId', {
               rules: [{ required: true, message: '请输入共同维护人' }],
-            })(<CoMaintainerDDs/>)}
+            })(<CoMaintainerDDs />)}
           </FormItem>
         </Form>
       </div>
@@ -1231,7 +1231,7 @@ class ClientView extends PureComponent {
               <Description term="状态">{statusConvert[showItem.status]}</Description>
             </DescriptionList>
           ) : (
-            <div/>
+            <div />
           )}
         </div>
 
@@ -1393,7 +1393,7 @@ class ClientView extends PureComponent {
           <span className={clientStyle.title_info} onClick={this.clickToggleDrawer}>
             {selectTitle}
           </span>
-          <Divider className={clientStyle.divder}/>
+          <Divider className={clientStyle.divder} />
 
           {/* { */}
           {/* selectTitle === '类型' ? this.getAddType() : children */}
@@ -2139,7 +2139,7 @@ class ClientView extends PureComponent {
     console.log('keysselectCustomerItem', selectCustomerItem);
     // router.replace({ pathname: '/business/client/client', params: params });
     this.setState({
-      Component: <ClientInfo params={params}/>,
+      Component: <ClientInfo params={params} />,
     });
   };
 
@@ -2157,7 +2157,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <TerminalClient params={params} customLock={this.state.selectCustomerItem.status === '2'}/>,
+      Component: <TerminalClient params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // console.log('select customer t', selectCustomerItem, params);
     // router.replace({ pathname: '/business/client/terminal', params: params });
@@ -2216,7 +2216,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <Mark params={params} customLock={this.state.selectCustomerItem.status === '2'}/>,
+      Component: <Mark params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // router.replace({ pathname: '/business/client/marking', params: params });
   };
@@ -2228,7 +2228,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <Product customLock={this.state.selectCustomerItem.status === '2'}/>,
+      Component: <Product customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // router.replace({ pathname: '/business/client/product', query: { id: 3 } });
   };
@@ -2247,7 +2247,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <PackageInfo params={params} customLock={this.state.selectCustomerItem.status === '2'}/>,
+      Component: <PackageInfo params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
     });
     // router.replace({ pathname: '/business/client/package', params: params });
   };
@@ -2259,7 +2259,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <History customLock={this.state.selectCustomerItem.status === '2'}/>,
+      Component: <History customLock={this.state.selectCustomerItem.status === '2'} />,
     });
   };
 

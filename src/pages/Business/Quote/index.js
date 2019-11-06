@@ -105,6 +105,8 @@ let clientContentColumns = [
     dataIndex: 'customerShotName',
     key: 'customerShotName',
     width: 100,
+    render:(d,i)=>(i.customerShotName)
+
   },
   {
     title: <div className={styles.row_normal2}>报价单号</div>,
@@ -114,9 +116,11 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>类别</div>, // ?
-    dataIndex: 'typeName',
+    dataIndex: 'type',
     key: 'typeName',
     width: 100,
+    render:(d,i)=>(i.typeName)
+
   },
 
   {

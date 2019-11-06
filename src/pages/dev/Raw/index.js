@@ -330,8 +330,10 @@ const columnsArr = {
     },
     {
       title: '规格',
-      dataIndex: 'specificationName',
+      dataIndex: 'specification',
       key: 'specification4',
+      render:(d,i)=>(i.specificationName)
+
     },
     {
       title: '客户编号',
