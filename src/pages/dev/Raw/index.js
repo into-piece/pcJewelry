@@ -666,7 +666,7 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...paginationTypes, ...params }, type: 'types' },
+      payload: { params: { ...(params&&params.current?{}:(paginationTypes)), ...params }, type: 'types' },
     });
     dispatch({
       type: 'devRaw/setsearchparams',
@@ -686,7 +686,7 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...pagination, ...params, sId: sId || choosenTypesRowData.id }, type: key || selectKey },
+      payload: { params: { ...(params&&params.current?{}:(pagination)), ...params, sId: sId || choosenTypesRowData.id }, type: key || selectKey },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -1206,11 +1206,15 @@ class Info extends Component {
   // 第一部分table 排序 页面切换 触发
   onSearchType = (v) => {
     const { dispatch, dev } = this.props;
+    console.log(v)
     dispatch({
       type: 'devRaw/getTypesPagination',
       payload: v,
+      callback:()=>{
+        this.getTypeList({ ...v, ...dev.searchparamsTypes });
+
+      }
     });
-    this.getTypeList({ ...v, ...dev.searchparamsTypes });
   };
 
   // 第二部分table 排序 页面切换 触发
@@ -1219,8 +1223,10 @@ class Info extends Component {
     dispatch({
       type: 'devRaw/getPagination',
       payload: v,
-    });
-    this.getList({ key: selectKey, params: { ...v, ...dev.searchparams } });
+      callback:()=>{
+        this.getList({ key: selectKey, params: { ...v, ...dev.searchparams } });
+      }
+      });
   };
 
   render() {
