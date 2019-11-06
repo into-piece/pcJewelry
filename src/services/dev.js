@@ -23,6 +23,7 @@ const returnType = {
   4: 'approve',
   5: 'revoke',
   6: 'copy',
+  7: 'batchAddBasic',
 };
 const rType = {
   1: 'list',

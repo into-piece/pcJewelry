@@ -772,7 +772,7 @@ class Info extends Component {
             addLoading:false
           })
         });
-        this.setState({ filelist: [] });
+        if(close)this.setState({ filelist: [] });
 
       }
     });

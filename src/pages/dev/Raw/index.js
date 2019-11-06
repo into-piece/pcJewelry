@@ -37,6 +37,7 @@ import ModalConfirm from '@/utils/modal';
 import SearchFrom from './components/SearchFrom';
 import SearchFromTab0 from './components/SearchFromTab0';
 import BuildTitle from '@/components/BuildTitle';
+import BatchModalForm from './components/BatchModalForm';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -64,8 +65,10 @@ const isLockList = false; // table是否锁定=》显示锁定标签做判断 �
 let typeTable = [
   {
     title: '类别',
-    dataIndex: 'bTypeName',
+    dataIndex: 'bType',
     key: 'bType',
+    render:(d,i)=>(i.bTypeName)
+
   },
   {
     title: '小类',
@@ -776,7 +779,7 @@ class Info extends Component {
     switch (modalType) {
       case 'plus':
       case 'edit':
-      default:
+      case 'batchAdd':
         this.initDropList();
         this.setState({ modalType });
         break;
@@ -795,6 +798,9 @@ class Info extends Component {
             this.handleLock();
           },
         });
+        break;
+      default:
+        this.setState({ modalType,filelist: [] });
         break;
     }
   };
@@ -832,6 +838,18 @@ class Info extends Component {
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
+      case 6:
+        return (<Select
+          placeholder="请选择"
+          mode="multiple"
+          disabled={disable || false}
+        >
+          {dev[list] && dev[list].map(({ value, key }) =>
+
+            <Option value={value} key={value}>{key}</Option>,
+          )}
+        </Select>);
+
       case 9:
         return (<TextArea disabled={disable || false} />);
       default:
@@ -852,6 +870,13 @@ class Info extends Component {
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
+
+    if(modalType==='batchAdd'){
+      return <BatchModalForm  wrappedComponentRef={e => this.BatchModalForm = e}   dev={dev} arr={dataArr} fileListFun={(list) => {
+        this.setState({ filelist: list });
+      }} returnElement={this.returnElement}/>
+    }
+
 
     return (
       <Form size="small">
@@ -1015,10 +1040,6 @@ class Info extends Component {
               dfv = va;
             }
 
-            if (value === 'materialNo') {
-              console.log(value,selectData[value])
-              console.log(value,dfv)
-            }
 
             const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
               <FormItem label={key} {...formLayout} key={`${key}=${dfv}`}>
@@ -1072,7 +1093,53 @@ class Info extends Component {
     const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
     return menuText;
   };
+  handleBatchAdd=(close)=>{
+    const { selectKey,dev } = this.props;
+    const filelist = this.state.filelist.flatMap(e => e.url);
+    this.BatchModalForm.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({ addloading: true });
+        if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
+          values = {
+            ...values, picPath: filelist,
+          };
+        }
 
+
+        const shape = dev.shapeSettingList.filter(e => values.shape.indexOf(e.id)>=0);
+        const color = dev.listColorDrop.filter(e => values.color.indexOf(e.id)>=0);
+        const cut = dev.listCutDrop.filter(e => values.cut.indexOf(e.id)>=0);
+        const quality = dev.listQualityDrop.filter(e => values.quality.indexOf(e.id)>=0);
+        const specification = dev.specificationSettingList.filter(e => values.specification===e.id);
+        const sId = dev.H016002.filter(e => values.sId===e.id);
+
+        values.shape = shape.map(e=>{return {id:e.id,value:e.shapeCode,zhName:e.zhName,enName:e.enName}})
+        values.color = color.map(e=>{return {id:e.id,value:e.unitCode,zhName:e.zhName,enName:e.enName}})
+        values.cut = cut.map(e=>{return {id:e.id,value:e.cuttingCode,zhName:e.zhName,enName:e.enName}})
+        values.quality = quality.map(e=>{return {id:e.id,value:e.gradeCode,zhName:e.zhName,enName:e.enName}})
+        values.specification = specification.map(e=>{return {id:e.id,value:e.specificationCode,zhName:e.zhName,enName:e.enName}})[0]
+        values.sId = sId.map(e=>{return {id:e.id,value:e.unitCode,zhName:e.zhName,enName:e.enName}})[0]
+
+
+
+        serviceObj[`batchAddBasic${selectKey}`](values).then(res => {
+          this.setState({ addloading: false });
+          if (!res||!res.head) {
+            return;
+          }
+          const { rtnCode, rtnMsg } = res.head;
+          if (rtnCode === '000000') {
+            notification.success({
+              message: rtnMsg,
+            });
+            this.getList({ key: selectKey });
+            if(close) this.btnFn('');
+
+          }
+        });
+      }
+    });
+  }
   // 新增按钮事件回调
   handleAdd = (close) => {
     const { selectKey, form, choosenTypesRowData } = this.props;
@@ -1110,7 +1177,6 @@ class Info extends Component {
 
           }
         });
-        this.setState({ filelist: [] });
         resetFields(['materialNo']);
         resetFields(['zhName']);
         resetFields(['enName']);
@@ -1239,6 +1305,9 @@ class Info extends Component {
   handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
+      case 'batchAdd':
+        this.handleBatchAdd(close);
+        break;
       case 'plus':
         this.handleAdd(close);
         break;
@@ -1254,7 +1323,7 @@ class Info extends Component {
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
     const { selectedRowKeys, choosenTypesRowData, choosenRowData } = this.props;
-    if (tag === 'plus') return (!choosenTypesRowData || choosenTypesRowData.id === '');
+    if (['plus','batchAdd'].indexOf(tag)>=0) return (!choosenTypesRowData || choosenTypesRowData.id === '');
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
@@ -1459,6 +1528,20 @@ const RightContent =
                   </Button>
                 ))}
               </div>
+              {(type==='stone')&&<Button
+                key={'batchAdd'}
+                className={styles.buttomControl}
+                type={ 'primary'}
+                icon={'plus'}
+                size="small"
+                disabled={returnSisabled('batchAdd')}
+
+                onClick={() => {
+                  btnFn('batchAdd');
+                }}
+              >
+                批量新增
+              </Button>}
             </Card>
           </div>
         </Col>

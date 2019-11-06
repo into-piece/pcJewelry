@@ -33,6 +33,8 @@ const serviceArr = [
       'delete',
       'approval',
       'revoke',
+      'copy',
+      'batch',
     ],
   },
   // 包装
