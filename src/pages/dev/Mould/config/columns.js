@@ -14,9 +14,11 @@ let dieSet = [
   },
   {
     title: <div className={styles.row_normal2}>产品类别</div>,
-    dataIndex: 'productTypeName',
+    dataIndex: 'productType',
     key: 'productTypeName',
     width: 100,
+    render:(d,i)=>(i.productTypeName)
+
   },
   {
     title: <div className={styles.row_normal2}>胶膜代码</div>,

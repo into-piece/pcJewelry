@@ -1525,7 +1525,7 @@ class CenterInfo extends Component {
       callback: () => {
         dispatch({
           type: 'devRaw/getPagination',
-          payload: { current: 1 },
+          payload: { current: 1 ,size:10},
           callback: () => {
             getList({ key });
           },
@@ -1555,21 +1555,14 @@ class CenterInfo extends Component {
   // 第二个表格搜索
   search(params) {
     const { dispatch, getList, pagination } = this.props;
-    getList({ params: { ...pagination, ...params, current: 1 } });
-
+    getList({ params: { ...pagination, ...params, current: 1,size:10 } });
+    dispatch({
+      type: 'devRaw/getPagination',
+      payload: { current: 1 ,size:10},
+    });
     dispatch({
       type: 'devRaw/setSearchParams',
       payload: params,
-      callback: () => {
-        // 搜索变第一页
-        dispatch({
-          type: 'devRaw/getPagination',
-          payload: { current: 1 },
-          callback: () => {
-            getList({ params: { ...params, current: 1 } });
-          },
-        });
-      },
     });
 
 
@@ -1578,11 +1571,11 @@ class CenterInfo extends Component {
   // 类型搜索
   searchType(params) {
     const { dispatch, getTypeList, paginationTypes } = this.props;
-    getTypeList({ ...paginationTypes, ...params, current: 1 });
+    getTypeList({ ...paginationTypes, ...params, current: 1 ,size:4});
 
     dispatch({
       type: 'devRaw/getTypesPagination',
-      payload: { current: 1 },
+      payload: { current: 1,size: 4 },
     });
 
   }

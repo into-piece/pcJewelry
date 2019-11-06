@@ -19,9 +19,11 @@ let productflow = [
   },
   {
     title: <div className={styles.row_normal2}>所属部门</div>,
-    dataIndex: 'departmentName',
+    dataIndex: 'department',
     key: 'departmentName',
     width: 100,
+    render:(d,i)=>(i.departmentName)
+
   },
   {
     title: <div className={styles.row_normal2}>成品类别</div>, // ?
@@ -96,6 +98,7 @@ let productProcess = [
     dataIndex: 'processName',
     key: 'processName',
     width: 100,
+    render:(d,i)=>(i.processName)
   },
   {
     title: <div className={styles.row_normal2}>英文名称</div>,

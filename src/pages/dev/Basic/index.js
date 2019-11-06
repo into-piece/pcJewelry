@@ -428,13 +428,17 @@ const columnsArr = {
     },
     {
       title: '类别',
-      dataIndex: 'bTypeName',
+      dataIndex: 'bType',
       key: 'bType',
+      render:(d,i)=>(i.bTypeName)
+
     },
     {
       title: '小类',
-      dataIndex: 'sTypeName',
+      dataIndex: 'sType',
       key: 'sType',
+      render:(d,i)=>(i.sTypeName)
+
     },
     {
       title: '状态',

@@ -24,9 +24,10 @@ let orderApproveInfo = [
   },
   {
     title: <div className={styles.row_normal2}>客户英文名称</div>,
-    dataIndex: 'customerShotName',
+    dataIndex: 'customerShot',
     key: 'customerShotName',
     width: 100,
+    render:(d,i)=>(i.customerShotName)
   },
   {
     title: <div className={styles.row_normal2}>订单号码</div>, // ?
