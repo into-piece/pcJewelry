@@ -303,7 +303,7 @@ const columnsArr = {
       dataIndex: 'basicColourSet',
       key: 'basicColourSet',
       render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data.zhName}</div>
+        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
       ),
     },
     {
