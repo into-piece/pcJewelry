@@ -16,7 +16,7 @@ export default {
   'app.basic.menuMap.currency': '币种&银价',
 
   'app.dev.menuMap.measureUnit': '计量单位',
-  'app.dev.menuMap.categorySet': '类别设定',
+  'app.dev.menuMap.categorySet': '类别管理',
   'app.dev.menuMap.colorPercentage': '产品成色',
   'app.dev.menuMap.colorSetting': '原料颜色',
   'app.dev.menuMap.electroplateSetting': '电镀颜色',
