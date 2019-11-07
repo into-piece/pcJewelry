@@ -842,6 +842,11 @@ class Info extends Component {
         return (<Select
           placeholder="请选择"
           mode="multiple"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           disabled={disable || false}
         >
           {dev[list] && dev[list].map(({ value, key }) =>
