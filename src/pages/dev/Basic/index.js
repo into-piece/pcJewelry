@@ -186,7 +186,6 @@ const columnsArr = {
       title: '含镍',
       dataIndex: 'isNickel',
       key: 'isNickel',
-      render: (data) => (Number(data) === 1 ? '是' : '否'),
     },
     {
       title: '状态',
