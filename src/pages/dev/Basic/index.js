@@ -299,16 +299,17 @@ const columnsArr = {
   insertStoneTechnology: [
     {
       title: '成色',
-      dataIndex: 'basicColourSet',
-      key: 'basicColourSet',
-      render: (data) => (
-        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
+      dataIndex: 'cuttingCode',
+      key: 'cuttingCode',
+      render: (data,i) => (
+        <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{i.cuttingCodeName}</div>
       ),
     },
     {
       title: '类别',
       dataIndex: 'category',
       key: 'category',
+      render:(d,i)=>(i.categoryName)
     },
     {
       title: '中文名',
@@ -538,9 +539,6 @@ class Info extends Component {
       size:pagination.size
     }
 
-    manuArr.forEach(item => {
-      obj[item] = `get${item}List`;
-    });
     // getDevList
     dispatch({
       type: `dev/getList`,
@@ -569,9 +567,15 @@ class Info extends Component {
         console.log(selectKey, '==============selectKey');
         // 镶石工艺
         if (selectKey === 'insertStoneTechnology') {
+          // 成色下拉
           dispatch({
-            type: 'dev/getGemDropDown',
+            type: 'dev/getlistBasicColourSetDropDown',
             payload: {},
+          });
+          // 类别下拉
+          dispatch({
+            type: 'dev/getListMstWordbookParams',
+            payload: {wordbookTypeCode: "H013"},
           });
         }
         // 成色设定
@@ -627,7 +631,7 @@ class Info extends Component {
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list }) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list ,dfv}) => {
             // console.log(list)
             return (
               <div className="adddevModal" key={key}>
@@ -641,7 +645,7 @@ class Info extends Component {
                         required: !noNeed,
                         message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
                       }],
-                      initialValue: isEdit ? choosenRowData[value] : undefined,
+                      initialValue: isEdit ? choosenRowData[value] :( dfv||undefined),
                     })(type && type === 2 ?
                       <Select placeholder="请选择" style={{ width: 180 }}>
                         {dev[list] && dev[list].map(({ value, key }) =>
@@ -713,6 +717,10 @@ class Info extends Component {
           };
         }
         serviceObj[`addBasic${selectKey}`](params).then(res => {
+          this.setState({
+            addLoading:false
+          })
+          if(!res)return;
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
@@ -721,9 +729,7 @@ class Info extends Component {
             this.getList();
             if(close){this.btnFn('')};
           }
-          this.setState({
-            addLoading:false
-          })
+
         });
         this.setState({ filelist: [] });
 
@@ -758,6 +764,11 @@ class Info extends Component {
           addLoading:true
         })
         serviceObj[`addBasic${selectKey}`](params).then(res => {
+          this.setState({
+            addLoading:false
+          })
+          if(!res)return;
+
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({
@@ -766,10 +777,6 @@ class Info extends Component {
             if(close){this.btnFn('')};
             this.getList();
           }
-
-          this.setState({
-            addLoading:false
-          })
         });
         if(close)this.setState({ filelist: [] });
 
@@ -781,6 +788,8 @@ class Info extends Component {
   handleDelect = () => {
     const { selectKey, selectedRowKeys } = this.props;
     serviceObj[`deleteBasic${selectKey}`](selectedRowKeys).then(res => {
+      if(!res)return;
+
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -797,6 +806,8 @@ class Info extends Component {
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
     serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
+      if(!res)return;
+
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({

@@ -7,9 +7,9 @@
  */
 import servicesConfig from '@/services/dev';
 
-const initData = { records: [] }
+const initData = { records: [] };
 
-const { getDevDropDown, addBasicMeasureUnit, listGemSetProcessDropDown, listMstWordbook } = servicesConfig
+const { getDevDropDown, addBasicMeasureUnit, listBasicColourSetDropDown, listGemSetProcessDropDown, listMstWordbook } = servicesConfig;
 export default {
   namespace: 'dev',
 
@@ -43,7 +43,8 @@ export default {
     gemSetProcessDropDown: [],
     listMstWordbookDrop: [],
     gemSetProcessDropDownh015: [],
-    gemSetProcessDropDownh016: []
+    gemSetProcessDropDownh016: [],
+    listBasicColourSetDropDown: [],
   },
 
   effects: {
@@ -84,7 +85,7 @@ export default {
       });
     },
     * getList({ payload, callback }, { call, put }) {
-      const { type, params } = payload
+      const { type, params } = payload;
       const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
         type: 'getDevList2',
@@ -93,35 +94,42 @@ export default {
 
       yield put({
         type: 'getPagination2',
-        payload:{
-          total:response.body.total,
-          current:response.body.current,
-        }
+        payload: {
+          total: response.body.total,
+          current: response.body.current,
+        },
       });
       if (callback) callback();
     },
-    *addMeasureUnit({ payload }, { call, put }) {
+    * addMeasureUnit({ payload }, { call, put }) {
       const response = yield call(addBasicMeasureUnit, payload);
       yield put({
         type: 'addMeasureUnit2',
         payload: response,
       });
     },
-    *getGemDropDown({ payload }, { call, put }) {
+    * getGemDropDown({ payload }, { call, put }) {
       const response = yield call(listGemSetProcessDropDown, payload);
       yield put({
         type: 'getGemDropDown2',
         payload: response,
       });
     },
-    *getListMstWordbook({ payload }, { call, put }) {
+    * getlistBasicColourSetDropDown({ payload }, { call, put }) {
+      const response = yield call(listBasicColourSetDropDown, payload);
+      yield put({
+        type: 'getlistBasicColourSetDropDown2',
+        payload: response,
+      });
+    },
+    * getListMstWordbook({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload);
       yield put({
         type: 'getListMstWordbook2',
         payload: response,
       });
     },
-    *getListMstWordbookParams({ payload }, { call, put }) {
+    * getListMstWordbookParams({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload);
       if (payload.wordbookTypeCode === 'H015') {
         yield put({
@@ -131,6 +139,11 @@ export default {
       } else if (payload.wordbookTypeCode === 'H016') {
         yield put({
           type: 'getListMstWordbook4',
+          payload: response,
+        });
+      } else if (payload.wordbookTypeCode === 'H013') {
+        yield put({
+          type: 'getListMstWordbook5',
           payload: response,
         });
       }
@@ -149,8 +162,8 @@ export default {
       };
     },
     getDevList2(state, action) {
-      const { type, response } = action.payload
-      const listName = `${type}List`
+      const { type, response } = action.payload;
+      const listName = `${type}List`;
       const listData =
         response && response.head && response.head.rtnCode === '000000'
           ? response.body
@@ -202,7 +215,7 @@ export default {
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
           : initData;
-      console.log(colorPercentageList)
+      console.log(colorPercentageList);
       return {
         ...state,
         colorPercentageList,
@@ -215,7 +228,7 @@ export default {
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
           : initData;
-      console.log(categorySetList)
+      console.log(categorySetList);
       return {
         ...state,
         categorySetList,
@@ -335,12 +348,27 @@ export default {
           : [];
       if (gemSetProcessDropDown.length > 0) {
         gemSetProcessDropDown = gemSetProcessDropDown.map(({ zhName, id }) => {
-          return { key: zhName, value: id }
-        })
+          return { key: zhName, value: id };
+        });
       }
       return {
         ...state,
         gemSetProcessDropDown,
+      };
+    },
+    getlistBasicColourSetDropDown2(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : [];
+      if (list.length > 0) {
+        list = list.map(({ zhName, id }) => {
+          return { key: zhName, value: id };
+        });
+      }
+      return {
+        ...state,
+        listBasicColourSetDropDown: list,
       };
     },
     getListMstWordbook2(state, action) {
@@ -350,8 +378,8 @@ export default {
           : initData;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode }
-        })
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
       }
       return {
         ...state,
@@ -365,8 +393,8 @@ export default {
           : initData;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode }
-        })
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
       }
       return {
         ...state,
@@ -380,12 +408,27 @@ export default {
           : initData;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
-          return { key: wordbookContentZh, value: wordbookCode }
-        })
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
       }
       return {
         ...state,
         listMstWordbookDroph016: listMstWordbookDrop,
+      };
+    },
+    getListMstWordbook5(state, action) {
+      let listMstWordbookDrop =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : initData;
+      if (listMstWordbookDrop.length > 0) {
+        listMstWordbookDrop = listMstWordbookDrop.map(({ wordbookCode, wordbookContentZh }) => {
+          return { key: wordbookContentZh, value: wordbookCode };
+        });
+      }
+      return {
+        ...state,
+        listMstWordbookDroph013: listMstWordbookDrop,
       };
     },
   },

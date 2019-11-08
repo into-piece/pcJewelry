@@ -37,57 +37,57 @@
     "colorSetting": [
       { "key": "颜色代码", "value": "unitCode" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" }
+      { "key": "英文名", "noNeed": true, "value": "enName" }
     ],
     "electroplateSetting": [
       { "key": "电镀颜色代码", "value": "colorCode" },
       { "key": "简称", "value": "shotName" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" },
-      { "key": "含镍", "value": "isNickel", "type": 3 }
+      { "key": "英文名", "noNeed": true, "value": "enName" },
+      { "key": "含镍", "value": "isNickel", "type": 3,"dfv":2 }
     ],
     "shapeSetting": [
       { "key": "形状代码", "value": "shapeCode" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" }
+      { "key": "英文名","noNeed": true, "value": "enName" }
     ],
     "specificationSetting": [
       { "key": "规格代码", "value": "specificationCode" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" }
+      { "key": "英文名","noNeed": true, "value": "enName" }
     ],
     "materialsGrade": [
       { "key": "等级代码", "value": "gradeCode" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" }
+      { "key": "英文名","noNeed": true, "value": "enName" }
     ],
     "stoneCutter": [
       { "key": "切工代码", "value": "cuttingCode" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" }
+      { "key": "英文名", "noNeed": true,"value": "enName" }
     ],
     "insertStoneTechnology": [
-      { "key": "成色", "value": "cuttingCode", "type": 2, "list": "gemSetProcessDropDown" },
-      { "key": "类别", "value": "category" },
+      { "key": "成色", "value": "cuttingCode", "type": 2, "list": "listBasicColourSetDropDown" },
+      { "key": "类别", "value": "category", "type": 2, "list": "listMstWordbookDroph013" },
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" },
-      { "key": "工费", "value": "costs" },
-      { "key": "备注", "value": "remarks" }
+      { "key": "英文名","noNeed": true, "value": "enName" },
+      { "key": "工费","noNeed": true, "value": "costs" },
+      { "key": "备注","noNeed": true, "value": "remarks" }
     ],
     "rubberMouldSetting": [
       { "key": "中文名", "value": "zhName" },
-      { "key": "英文名", "value": "enName" },
+      { "key": "英文名", "noNeed": true, "value": "enName" },
       { "key": "胶膜尺寸", "value": "filmSize" },
       { "key": "胶膜片数", "value": "filmNumber" },
       { "key": "工费", "value": "costs" },
-      { "key": "备注", "value": "remarks" }
+      { "key": "备注","noNeed": true, "value": "remarks" }
     ],
     "mouldPosition": [
       { "key": "仓位编号", "value": "positionCode" },
       { "key": "房间号", "value": "roomNum" },
       { "key": "橱柜号", "value": "cabinetNum" },
       { "key": "抽屉号", "value": "drawerNum" },
-      { "key": "备注", "value": "remarks" }
+      { "key": "备注","noNeed": true, "value": "remarks" }
     ],
     "categorySet": [
       { "key": "类别代码", "value": "unitCode" },

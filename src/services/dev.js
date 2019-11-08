@@ -123,7 +123,7 @@ const resultArr = [
   { key: 'revokecategorySet', path: '/develop/category/develop-basic-category-set/revoke', prefix1: `${env}/business` },
   {
     key: 'listBasiccategorySet',
-    path: '/develop/category/develop-basic-category-set/list',
+    path: '/develop/category/develop-basic-category-set/listCategorySet',
     prefix1: `${env}/business`,
   },
   {
