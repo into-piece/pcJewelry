@@ -26,9 +26,9 @@ export const modalContent = {
 
   ],
   accessories: [
+    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '中文名', 'value': 'zhName', search: true },
     { span: 8, 'key': '英文名', 'value': 'enName', search: true },
-    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '成色', 'value': 'assaying', 'name': true, 'list': 'listBasicColourSetDropDown', 'type':5, search: true },
     { span: 8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016003', 'type': 2 },
     { span: 8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 5, search: true },
@@ -56,9 +56,9 @@ export const modalContent = {
   ],
   stone: [
     // 1)	原料编号：必填项；系统自动生成；生成规则为“类别代码-形状代码-切工代码-颜色代码-等级编号-规格代码”
+    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '中文名', 'value': 'zhName', search: true },
     { span: 8, 'key': '英文名', 'value': 'enName', search: true },
-    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016002', 'type': 2 },
 
     { span: 8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 2, search: true },
@@ -88,9 +88,9 @@ export const modalContent = {
   ],
   wrapper: [
     // 1)	原料编号：必填项；系统自动生成；生成规则为“类别代码-形状代码-颜色代码-规格代码”
+    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '中文名', 'value': 'zhName', search: true },
     { span: 8, 'key': '英文名', 'value': 'enName', search: true },
-    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016004', 'type': 2 },
     { span: 8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 5, search: true },
     { span: 8, 'key': '规格', 'value': 'specification', 'name': true, 'list': 'specificationSettingList', 'type': 5, search: true },
@@ -117,9 +117,9 @@ export const modalContent = {
 
   ],
   otherMaterial: [
+    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '中文名', 'value': 'zhName', search: true },
     { span: 8, 'key': '英文名', 'value': 'enName', search: true },
-    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016005', 'type': 2, search: true },
     { span: 8, 'key': '计量单位', 'value': 'measureUnit', 'name': true, 'list': 'getBUMropDown', 'type': 2 },
     {
@@ -136,9 +136,9 @@ export const modalContent = {
 
   ],
   auxiliaryMaterial: [
+    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '中文名', 'value': 'zhName', search: true },
     { span: 8, 'key': '英文名', 'value': 'enName', search: true },
-    { span: 8, disable: true, 'key': '原料编号', 'value': 'materialNo', search: true },
     { span: 8, 'key': '类别', 'value': 'sId', 'name': true, 'list': 'H016005', 'type': 2, search: true },
     { span: 8, 'key': '颜色', 'value': 'color', 'name': true, 'list': 'listColorDrop', 'type': 5, search: true },
     { span: 8, 'key': '形状', 'value': 'shape', 'name': true, 'list': 'shapeSettingList', 'type': 5, search: true },
