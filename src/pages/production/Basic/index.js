@@ -263,7 +263,11 @@ class Info extends Component {
     this.setState({
       addLoading:true
     })
-    form.validateFields((err, values) => {
+
+
+    const dataArr = modalContent[selectKey];
+    const fieldslist = dataArr.map(e=>e.value);
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         serviceObj[`add${selectKey}`](values).then(res => {
           const { rtnCode, rtnMsg } = res.head;
@@ -294,7 +298,11 @@ class Info extends Component {
     this.setState({
       addLoading:true
     })
-    form.validateFields((err, values) => {
+
+
+    const dataArr = modalContent[selectKey];
+    const fieldslist = dataArr.map(e=>e.value);
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         const { choosenRowData } = this.props;
         const params = {

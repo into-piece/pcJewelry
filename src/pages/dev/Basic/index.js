@@ -22,6 +22,7 @@ import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
 import UploadImg from '@/components/UploadImg';
+import modalInput from '../FlowCostType/config/modalInput';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -702,7 +703,9 @@ class Info extends Component {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
 
-    form.validateFields((err, values) => {
+    const dataArr = modalContent[selectKey];
+    const fieldslist = dataArr.map(e=>e.value);
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         this.setState({
           addLoading:true
@@ -748,7 +751,9 @@ class Info extends Component {
       payload: [],
     });
 
-    form.validateFields((err, values) => {
+    const dataArr = modalContent[selectKey];
+    const fieldslist = dataArr.map(e=>e.value);
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         const { choosenRowData } = this.props;
         let params = {

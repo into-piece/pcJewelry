@@ -18,10 +18,10 @@ import {
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -30,6 +30,7 @@ import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
 import serviceObj from '@/services/dev';
+import { modalContent } from '../Raw/config';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -324,7 +325,9 @@ class Index extends Component {
     }
     this.setState({ addloading: true });
 
-    form.validateFields((err, values) => {
+    const dataArr = modalInput[rightActive];
+    const fieldslist = dataArr.map(e=>e.value)
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         params = {
           ...params,

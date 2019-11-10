@@ -348,7 +348,9 @@ class Index extends Component {
 
     this.setState({ addloading: true });
 
-    form.validateFields((err, values) => {
+    const dataArr = modalInput[rightActive];
+    const fieldslist = dataArr.map(e=>e.value)
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         params = {
           ...params,
