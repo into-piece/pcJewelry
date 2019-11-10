@@ -1,14 +1,12 @@
 @import '~antd/lib/style/themes/default.less';
 @import 'common.less';
 
-.ant-tabs-tab{
+.ant-tabs-tab {
   border-top-color: transparent !important;
   border-right-color: transparent !important;
-  border-bottom-color: transparent!important;
+  border-bottom-color: transparent !important;
   border-left-color: transparent !important;
 }
-
-
 
 //@globalbgcolor: #fbfbfb;
 .ant-modal-title {
@@ -119,7 +117,7 @@ p {
   text-align: center;
   background: @globalbgcolor;
 }
-.ant-carousel img{
+.ant-carousel img {
   width: 211px;
   height: 211px;
   border: 1px solid #f0f2f5;
@@ -180,6 +178,15 @@ body {
 ul,
 ol {
   list-style: none;
+}
+
+.ant-table-footer {
+  position: absolute !important;
+  right: 0 !important;
+  bottom: -72px !important;
+}
+.ant-table-pagination.ant-pagination {
+  margin-right: 120px !important;
 }
 
 @media (max-width: @screen-xs) {

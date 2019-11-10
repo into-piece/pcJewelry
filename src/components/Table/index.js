@@ -7,6 +7,7 @@
  */
 import React, { Component } from 'react';
 import { Table } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './index.less';
 
 /**
@@ -67,14 +68,24 @@ class MyTable extends Component {
     handleTableChange({ current, size: pageSize, [`orderBy${orderKey}`]: field });
   }
 
+  returnFooter = () => {
+    const { body } = this.props
+    return body.total ? (
+      <p>
+        <FormattedMessage id="app.table.total" defaultMessage="" />{body.total}
+        <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
+      </p>
+    ) : null
+  }
+
   render() {
-    const { props, onSelectRowClass, onRow, onChange } = this;
-    const {checkType, body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
+    const { props, onSelectRowClass, onRow, onChange, returnFooter } = this;
+    const { checkType, body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
     const paginationProps = {
       showQuickJumper: true,
-      pageSize: pagination?pagination.size:10,
+      pageSize: pagination ? pagination.size : 10,
       total: body ? body.total : 0,
-      current: pagination?pagination.current:1
+      current: pagination ? pagination.current : 1
       // total: 100, //做测试
     };
 
@@ -91,12 +102,13 @@ class MyTable extends Component {
         columns={columns}
         dataSource={body.records}
         rowSelection={rowSelection}
-        pagination={pagination?paginationProps:false}
+        pagination={pagination ? paginationProps : false}
         onChange={onChange}
         rowKey={record => record.id}
         rowClassName={onSelectRowClass}
         loading={listLoading}
         onRow={onRow}
+        footer={returnFooter}
       />
     );
   }

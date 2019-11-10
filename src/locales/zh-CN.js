@@ -13,6 +13,7 @@ import component from './zh-CN/component';
 import editor from './zh-CN/editor';
 import basic from './zh-CN/basice';
 import raw from './zh-CN/raw';
+import table from './zh-CN/table';
 
 export default {
   'navBar.lang': '语言',
@@ -38,4 +39,5 @@ export default {
   ...component,
   ...editor,
   ...basic,
+  ...table,
 };

@@ -12,6 +12,7 @@ import pwa from './en-US/pwa';
 import component from './en-US/component';
 import editor from './en-US/editor';
 import basic from './en-US/basice';
+import table from './en-US/table';
 
 export default {
   'navBar.lang': 'Languages',
@@ -36,4 +37,5 @@ export default {
   ...component,
   ...editor,
   ...basic,
+  ...table,
 };

@@ -1395,7 +1395,7 @@ class CenterInfo extends Component {
           onchange={changeSearchParams}
         />
         <div className={styles.tableBox}>
-          <Table
+          <Table 
             scroll={{ x: 1400 }}
             columns={clientContentColumns}
             body={quotelist}
