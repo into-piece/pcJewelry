@@ -757,7 +757,7 @@ class Info extends Component {
     const { dispatch, pagination, selectKey, choosenTypesRowData, searchparams } = this.props;
 
     // 没有选择类型就没有查询下面
-    if (!choosenTypesRowData || choosenTypesRowData.id === '') {
+    if ((!choosenTypesRowData || choosenTypesRowData.id === '')) {
       return;
     }
     dispatch({
@@ -976,18 +976,18 @@ class Info extends Component {
               }
               if (selectKey === 'stone') {
                 s = dev.H016002.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].zhName}-`) : ''}${
-                  shape.length > 0 ? (`${shape[0].zhName}-`) : ''}${
-                  cut.length > 0 ? (`${cut[0].zhName}-`) : ''}${
-                  color.length > 0 ? (`${color[0].zhName}-`) : ''}${
-                  quality.length > 0 ? (`${quality[0].zhName}-`) : ''}${
+                va = `${s.length > 0 ? (`${s[0].zhName} `) : ''}${
+                  shape.length > 0 ? (`${shape[0].zhName} `) : ''}${
+                  cut.length > 0 ? (`${cut[0].zhName} `) : ''}${
+                  color.length > 0 ? (`${color[0].zhName} `) : ''}${
+                  quality.length > 0 ? (`${quality[0].zhName} `) : ''}${
                   specification.length > 0 ? specification[0].zhName : ''}`;
               }
               if (selectKey === 'accessories') {
                 s = dev.H016003.filter(e => e.id === sId);
-                va = `${assaying.length > 0 ? (`${assaying[0].zhName}-`) : ''}${
-                  s.length > 0 ? (`${s[0].zhName}-`) : ''}${
-                  shape.length > 0 ? (`${shape[0].zhName}-`) : ''}${
+                va = `${assaying.length > 0 ? (`${assaying[0].zhName} `) : ''}${
+                  s.length > 0 ? (`${s[0].zhName} `) : ''}${
+                  shape.length > 0 ? (`${shape[0].zhName} `) : ''}${
                   specification.length > 0 ? specification[0].zhName : ''}`;
               }
 
@@ -999,15 +999,15 @@ class Info extends Component {
                   s = dev.H016005.filter(e => e.id === sId);
                 }
 
-                va = `${s.length > 0 ? (`${s[0].zhName}-`) : ''}${
-                  shape.length > 0 ? (`${shape[0].zhName}-`) : ''}${
-                  color.length > 0 ? (`${color[0].zhName}-`) : ''}${
+                va = `${s.length > 0 ? (`${s[0].zhName} `) : ''}${
+                  shape.length > 0 ? (`${shape[0].zhName} `) : ''}${
+                  color.length > 0 ? (`${color[0].zhName} `) : ''}${
                   specification.length > 0 ? specification[0].zhName : ''}`;
               }
 
               if (selectKey === 'otherMaterial') {
                 s = dev.H016005.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].zhName}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+                va = `${s.length > 0 ? (`${s[0].zhName} `) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
               }
               dfv = va;
             }
@@ -1019,18 +1019,18 @@ class Info extends Component {
               }
               if (selectKey === 'stone') {
                 s = dev.H016002.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].enName}-`) : ''}${
-                  shape.length > 0 ? (`${shape[0].enName}-`) : ''}${
-                  cut.length > 0 ? (`${cut[0].enName}-`) : ''}${
-                  color.length > 0 ? (`${color[0].enName}-`) : ''}${
-                  quality.length > 0 ? (`${quality[0].enName}-`) : ''}${
+                va = `${s.length > 0 ? (`${s[0].enName} `) : ''}${
+                  shape.length > 0 ? (`${shape[0].enName} `) : ''}${
+                  cut.length > 0 ? (`${cut[0].enName} `) : ''}${
+                  color.length > 0 ? (`${color[0].enName} `) : ''}${
+                  quality.length > 0 ? (`${quality[0].enName} `) : ''}${
                   specification.length > 0 ? specification[0].enName : ''}`;
               }
               if (selectKey === 'accessories') {
                 s = dev.H016003.filter(e => e.id === sId);
-                va = `${assaying.length > 0 ? (`${assaying[0].enName}-`) : ''}${
-                  s.length > 0 ? (`${s[0].enName}-`) : ''}${
-                  shape.length > 0 ? (`${shape[0].enName}-`) : ''}${
+                va = `${assaying.length > 0 ? (`${assaying[0].enName} `) : ''}${
+                  s.length > 0 ? (`${s[0].enName} `) : ''}${
+                  shape.length > 0 ? (`${shape[0].enName} `) : ''}${
                   specification.length > 0 ? specification[0].enName : ''}`;
               }
 
@@ -1042,15 +1042,15 @@ class Info extends Component {
                   s = dev.H016005.filter(e => e.id === sId);
                 }
 
-                va = `${s.length > 0 ? (`${s[0].enName}-`) : ''}${
-                  shape.length > 0 ? (`${shape[0].enName}-`) : ''}${
-                  color.length > 0 ? (`${color[0].enName}-`) : ''}${
+                va = `${s.length > 0 ? (`${s[0].enName} `) : ''}${
+                  shape.length > 0 ? (`${shape[0].enName} `) : ''}${
+                  color.length > 0 ? (`${color[0].enName} `) : ''}${
                   specification.length > 0 ? specification[0].enName : ''}`;
               }
 
               if (selectKey === 'otherMaterial') {
                 s = dev.H016005.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].enName}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+                va = `${s.length > 0 ? (`${s[0].enName} `) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
               }
 
               dfv = va;
@@ -1602,16 +1602,18 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/getChoosenTypeRowData',
       payload: rowData,
+      callback:()=>{
+        // 清空右边 下边
+        dispatch({
+          type: 'devRaw/clearSixList',
+          payload: {},
+          callback: () => {
+            setTimeout(()=>{this.turnTab(rowData.type)},200)
+          },
+        });
+      }
     });
-    // 清空右边 下边
-    dispatch({
-      type: 'devRaw/clearSixList',
-      payload: {},
-      callback: () => {
-        this.turnTab(rowData.type);
-        // getList();
-      },
-    });
+
   };
 
   changeChoosenRow = rowData => {
@@ -1656,7 +1658,7 @@ class CenterInfo extends Component {
           type: 'devRaw/getPagination',
           payload: { current: 1, size: 10 },
           callback: () => {
-            getList({ key });
+           setTimeout(()=>{ getList({ key });},200)
           },
         });
       },
@@ -1738,7 +1740,7 @@ class CenterInfo extends Component {
         <div className={styles.tableBox}>
           <Table
             columns={typeTable}
-            scroll={800}
+            scroll={{x:800}}
             checkType={'radio'}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}

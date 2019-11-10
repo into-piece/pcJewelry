@@ -83,6 +83,7 @@ class MyTable extends Component {
       selectedRowKeys,
       type: checkType || 'checkbox',
       onChange: onSelectChange,
+      // onSelect: onSelectChange,
     };
 
     return (
