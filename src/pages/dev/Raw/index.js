@@ -884,7 +884,7 @@ class Info extends Component {
 
 
     return (
-      <Form size="small">
+      <Form size="small" key={`form${selectKey}`}>
         {
           dataArr && dataArr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit, number }) => {
             const selectData = { ...choosenRowData };
@@ -1151,8 +1151,11 @@ class Info extends Component {
     const filelist = this.state.filelist.flatMap(e => e.url);
     const {resetFields} = form
 
+    const dataArr = modalContent[selectKey];
 
-    form.validateFields((err, values) => {
+    const fieldslist = dataArr.map(e=>e.value)
+
+    form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         this.setState({ addloading: true });
 
@@ -1195,6 +1198,9 @@ class Info extends Component {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
     const {resetFields} = form
+    const dataArr = modalContent[selectKey];
+
+    const fieldslist = dataArr.map(e=>e.value)
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -1202,7 +1208,7 @@ class Info extends Component {
       payload: [],
     });
 
-    form.validateFields((err, values) => {
+    form.validateFields(fieldslist,(err, values) => {
       this.setState({ addloading: true });
 
       if (!err) {
@@ -1457,7 +1463,7 @@ class Info extends Component {
         <Modal
           maskClosable={false}
           title={<BuildTitle title={returnTitle()} />}
-
+          key={`Modal-${selectKey}`}
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

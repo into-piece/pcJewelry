@@ -36,7 +36,7 @@ class ModalForm extends Component {
     } = this.props;
 
     return (
-      <Form size="small">
+      <Form size="small" key="batchform">
         {arr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit, number }) => {
           const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
             <FormItem label={key} {...formLayout} key={`${key}=${dfv}`}>
