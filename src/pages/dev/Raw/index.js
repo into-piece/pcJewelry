@@ -34,7 +34,7 @@ import LockTag from '@/components/LockTag';
 import { modalContent } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
-import SearchFrom from './components/SearchFrom';
+// import SearchFrom from './components/SearchFrom';
 import SearchFromTab0 from './components/SearchFromTab0';
 import BuildTitle from '@/components/BuildTitle';
 import BatchModalForm from './components/BatchModalForm';
@@ -1678,29 +1678,29 @@ class CenterInfo extends Component {
     const typeslist = dev.typesList;
     return (
       <div className={styles.view_left_content}>
-        <div className={styles.contentTitle}>
-          <SearchFrom
-            devRaw={dev}
-            onSearch={(p) => {
-              this.searchType(p);
-            }}
+        {/*<div className={styles.contentTitle}>*/}
+          {/*<SearchFrom*/}
+            {/*devRaw={dev}*/}
+            {/*onSearch={(p) => {*/}
+              {/*this.searchType(p);*/}
+            {/*}}*/}
 
-            onReset={() => {
-              const { dispatch } = this.props;
-              dispatch({
-                type: 'devRaw/setsearchparamsTypes',
-                payload: {},
-              });
-            }}
-            onChange={(e) => {
-              const { dispatch } = this.props;
-              dispatch({
-                type: 'devRaw/setsearchparamsTypes',
-                payload: e,
-              });
-            }}
-          />
-        </div>
+            {/*onReset={() => {*/}
+              {/*const { dispatch } = this.props;*/}
+              {/*dispatch({*/}
+                {/*type: 'devRaw/setsearchparamsTypes',*/}
+                {/*payload: {},*/}
+              {/*});*/}
+            {/*}}*/}
+            {/*onChange={(e) => {*/}
+              {/*const { dispatch } = this.props;*/}
+              {/*dispatch({*/}
+                {/*type: 'devRaw/setsearchparamsTypes',*/}
+                {/*payload: e,*/}
+              {/*});*/}
+            {/*}}*/}
+          {/*/>*/}
+        {/*</div>*/}
         <div className={styles.tableBox}>
           <Table
             columns={typeTable}

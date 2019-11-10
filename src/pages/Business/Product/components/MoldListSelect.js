@@ -41,25 +41,14 @@ class MoldListSelect  extends Component{
   }
 
   handleChange = value => {
-    console.log(111111111,value)
     const { onChange, onSelect } = this.props;
-    const { dicts } = this.state;
     this.setState({
       value,
       isFirst: false,
     });
     onChange(value);
     onSelect(value);
-    //
-    // if (onSelect) {
-    //   const selectItem = dicts.filter((v) => {
-    //     if (v.id === value)
-    //       return v;
-    //   });
-    //   if (selectItem.length > 0)
-    //     onSelect(selectItem[0]);
-    //
-    // }
+
   };
 
   render() {

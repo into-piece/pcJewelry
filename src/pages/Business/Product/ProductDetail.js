@@ -247,7 +247,6 @@ class ProductDetail extends Component {
       type: 'checkbox',
       onChange: selectedRowKeys => { this.onSelectChange(selectedRowKeys, value) },
     };
-    console.log(columnsArr[value])
     return (
       <div>
         <Search onSearch={v => { this.onSearch(v, value) }} placeholder="" />
@@ -283,7 +282,7 @@ class ProductDetail extends Component {
             const arr = list ? product[list] : [
               { key: 1, value: 1 }
             ]
-            console.log(arr, list, '==================list', product, product[list])
+            // console.log(arr, list, '==================list', product, product[list])
             return (
               <div className="adddevModal" key={key} style={this.returnStyle(value)}>
                 <FormItem
@@ -723,7 +722,6 @@ class ProductDetail extends Component {
                 {getFieldDecorator('productNo', {
                   rules: [{ required: true, message: '请输入姓名' }],
                   initialValue: current.productNo,
-                  // })(<text>系统自动生成</text>)}
                 })(<Input
                   placeholder="自动生成编号"
                   readOnly
@@ -816,6 +814,9 @@ class ProductDetail extends Component {
                 })(<PlatingColorListSelect
                   placeholder="请输入"
                   onSelect={(v) => {
+                    if(this.state.current.mouldNo){
+                      this.state.cNomainMold = this.state.current.mouldNo;
+                    }
                     if (v.colorCode) {
                       this.state.cNoColorCode = v.colorCode;
                       this.parseProductNo();
@@ -885,9 +886,11 @@ class ProductDetail extends Component {
                     content={current.mouldNo}
                     placeholder="请输入"
                     onChange={(v) => {
-                      this.setState({ current: { ...this.state.current, mouldNo: v } });
+                      this.setState({ current: { ...this.state.current, mouldNo: v } ,cNomainMold:v});
+                      this.parseProductNo();
                     }}
                     onSelect={(v) => {
+
                       // if (v && v.mainMold)
                       //   this.state.cNomainMold = v.mainMold;
                       this.state.cNomainMold = v;
@@ -1538,7 +1541,6 @@ class ProductDetail extends Component {
         fileList[i].name = `crop${Date.parse(new Date())}${fileList[i].name}`;
         fileList[i].url = cropImage;
         fileList[i].thumbUrl = cropImage;
-        // console.log("set file url ",cropImage)
       }
     });
 
@@ -1567,6 +1569,7 @@ class ProductDetail extends Component {
   };
 
   parseProductNo = () => {
+    console.log(11111)
     const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold;
@@ -1587,7 +1590,6 @@ class ProductDetail extends Component {
       enName,
     });
 
-    // setFieldsValue('productNo', productNo);
 
   };
 
