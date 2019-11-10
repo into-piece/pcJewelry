@@ -34,6 +34,7 @@ import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
+import moment from 'moment';
 
 const { Description } = DescriptionList;
 
@@ -228,8 +229,8 @@ class SpecimenDetaill extends Component {
 
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading,isAdd } = this.state;
-    const { isProductUpdate ,productUpdateloading,productSaveloading} = this.props;
+    const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
+    const { isProductUpdate, productUpdateloading, productSaveloading } = this.props;
 
     const modalFooter = isAdd ? [
       <Button
@@ -330,7 +331,7 @@ class SpecimenDetaill extends Component {
                       <Description term="工价" />
                     </DescriptionList>
                     <div className={business.title_info}>
-                          参数详情
+                      参数详情
                     </div>
                     <Divider className={business.divder} />
                     <DescriptionList size="small" col="2">
@@ -349,7 +350,7 @@ class SpecimenDetaill extends Component {
                       <Description term="品牌">{showItem.brandNo}</Description>
                     </DescriptionList>
                     <div className={business.title_info}>
-                          备注
+                      备注
                     </div>
                     <Divider className={business.divder} />
                     <DescriptionList size="small" col="1">
@@ -357,19 +358,19 @@ class SpecimenDetaill extends Component {
                     </DescriptionList>
                   </Spin>
                 </div>
-                  ) : (
-                    <div />
-                  )}
+              ) : (
+                <div />
+              )}
             </Card>
           </div>
           <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
             <div
               style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-            }}
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+                flexDirection: 'column',
+              }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Button
@@ -379,7 +380,7 @@ class SpecimenDetaill extends Component {
                   size="small"
                   onClick={this.handleNewProduct}
                 >
-                新增
+                  新增
                 </Button>
                 <Button
                   type="danger"
@@ -387,15 +388,15 @@ class SpecimenDetaill extends Component {
                   className={business.buttomControl}
                   size="small"
                   onClick={() => {
-                  ModalConfirm({
-                    content: '确定删除吗？', onOk: () => {
-                      this.handleDeleteProduct();
-                    },
-                  });
-                }}
+                    ModalConfirm({
+                      content: '确定删除吗？', onOk: () => {
+                        this.handleDeleteProduct();
+                      },
+                    });
+                  }}
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                 >
-                删除
+                  删除
                 </Button>
                 <Button
                   type="primary"
@@ -405,52 +406,52 @@ class SpecimenDetaill extends Component {
                   disabled={!showItem || showItem === '' || !isProductUpdate || showItem.status === '2'}
                   onClick={this.handleEditProduct}
                 >
-                编辑
+                  编辑
                 </Button>
                 {
-                showItem && showItem.status === '2' ? <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="danger"
-                  icon="unlock"
-                  onClick={() => {
-                      ModalConfirm({
-                        content: '确定取消审批吗？', onOk: () => {
-                          this.handleUnFreezeProduct();
-                        },
-                      });
-                    }}
-                  disabled={!showItem || showItem === '' || !isProductUpdate}
-                >
-                    取消审批
-                </Button>
-                  : <Button
+                  showItem && showItem.status === '2' ? <Button
                     className={business.buttomControl}
                     size="small"
-                    type="primary"
-                    icon="lock"
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    type="danger"
+                    icon="unlock"
                     onClick={() => {
-                      ModalConfirm({
-                        content: '确定审批吗？', onOk: () => {
-                          this.handleFreezeProduct();
-                        },
-                      });
-                    }}
+                        ModalConfirm({
+                          content: '确定取消审批吗？', onOk: () => {
+                            this.handleUnFreezeProduct();
+                          },
+                        });
+                      }}
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
                   >
-                    审批
+                      取消审批
                   </Button>
-              }
+                    : <Button
+                      className={business.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      disabled={!showItem || showItem === '' || !isProductUpdate}
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？', onOk: () => {
+                            this.handleFreezeProduct();
+                          },
+                        });
+                      }}
+                    >
+                      审批
+                    </Button>
+                }
 
               </div>
 
               <div
                 style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                paddingTop: 10,
-              }}
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  paddingTop: 10,
+                }}
               >
                 <Button
                   className={business.buttomControl}
@@ -459,7 +460,7 @@ class SpecimenDetaill extends Component {
                   icon="copy"
                   disabled
                 >
-                复制
+                  复制
                 </Button>
                 <Button
                   className={business.buttomControl}
@@ -468,7 +469,7 @@ class SpecimenDetaill extends Component {
                   icon="rollback"
                   disabled
                 >
-                撤销
+                  撤销
                 </Button>
                 <Button
                   className={business.buttomControl}
@@ -477,14 +478,14 @@ class SpecimenDetaill extends Component {
                   icon="retweet"
                   disabled={!showItem || showItem === '' || !isProductUpdate}
                   onClick={() => {
-                  ModalConfirm({
-                    content: '确定转产品吗？', onOk: () => {
-                      this.handleTransferProduct();
-                    },
-                  });
-                }}
+                    ModalConfirm({
+                      content: '确定转产品吗？', onOk: () => {
+                        this.handleTransferProduct();
+                      },
+                    });
+                  }}
                 >
-                转产品
+                  转产品
                 </Button>
               </div>
             </div>
@@ -507,7 +508,7 @@ class SpecimenDetaill extends Component {
       </div>
 
     </div>)
-    ;
+      ;
 
 
   };
@@ -599,22 +600,50 @@ class SpecimenDetaill extends Component {
           onSubmit={this.handleContactsSubmit}
         >
           <Row gutter={4}>
-            {/* <Col lg={4} md={4} sm={4} xs={4}> */}
-            {/* <FormItem */}
-            {/* label="流水号" */}
-            {/* className={business.from_content_col} */}
-            {/* {...this.centerFormLayout} */}
-            {/* > */}
-            {/* {getFieldDecorator('productNo', { */}
-            {/* rules: [{ required: true, message: '请输入姓名' }], */}
-            {/* initialValue: current.productNo, */}
-            {/* // })(<text>系统自动生成</text>)} */}
-            {/* })(<Input */}
-            {/* placeholder="自动生成流水号" */}
-            {/* readOnly */}
-            {/* />)} */}
-            {/* </FormItem> */}
-            {/* </Col> */}
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="流水号"
+                className={business.from_content_col}
+                {...this.centerFormLayout}
+              >
+                {getFieldDecorator('productNo', {
+                  rules: [{ required: true, message: '请输入流水号' }],
+                  initialValue: current.productNo,
+                })(<Input
+                  placeholder="自动生成流水号"
+                  readOnly
+                />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="中文名称"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('zhName', {
+                  rules: [{ required: true, message: '请输入中文名称' }],
+                  initialValue: current.zhName,
+                })(<Input placeholder="自动生成" readOnly />,
+                )}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label='英文名称'
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('enName', {
+                  rules: [{ required: true, message: '请输入英文名称' }],
+                  initialValue: current.enName,
+                })(<Input
+                  placeholder="自动生成"
+                  readOnly
+                />)}
+              </FormItem>
+            </Col>
+
 
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
@@ -689,6 +718,11 @@ class SpecimenDetaill extends Component {
                 />)}
               </FormItem>
             </Col>
+
+          </Row>
+
+          <Row>
+
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="电镀颜色"
@@ -710,55 +744,7 @@ class SpecimenDetaill extends Component {
                 />)}
               </FormItem>
             </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label="中文名称"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('zhName', {
-                  rules: [{ required: true, message: '请输入中文名称' }],
-                  initialValue: current.zhName,
-                })(<Input placeholder="自动生成" readOnly />,
-                )}
-              </FormItem>
-            </Col>
-            <Col lg={4} md={4} sm={4} xs={4}>
 
-              <FormItem
-                label="重量单位"
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('unitOfWeight', {
-                  rules: [{ message: '请输入' }],
-                  initialValue: current.unitOfWeight,
-                })(<BasicMeasureListSelect
-                  content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
-                  placeholder="请输入"
-                />)}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-
-
-            <Col lg={4} md={4} sm={4} xs={4}>
-              <FormItem
-                label='英文名称'
-                {...this.centerFormLayout}
-                className={business.from_content_col}
-              >
-                {getFieldDecorator('enName', {
-                  rules: [{ required: true, message: '请输入英文名称' }],
-                  initialValue: current.enName,
-                })(<Input
-                  placeholder="自动生成"
-                  readOnly
-                />)}
-              </FormItem>
-            </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label='产品来源'
@@ -853,11 +839,27 @@ class SpecimenDetaill extends Component {
                 />)}
               </FormItem>
             </Col>
+
           </Row>
 
           <Row>
+            <Col lg={4} md={4} sm={4} xs={4}>
 
-            <Col lg={5} md={5} sm={5} xs={5}>
+              <FormItem
+                label="重量单位"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('unitOfWeight', {
+                  rules: [{ message: '请输入' }],
+                  initialValue: current.unitOfWeight,
+                })(<BasicMeasureListSelect
+                  content={current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'}
+                  placeholder="请输入"
+                />)}
+              </FormItem>
+            </Col>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="成品重量"
                 {...this.centerFormLayout}
@@ -868,7 +870,7 @@ class SpecimenDetaill extends Component {
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
-            <Col lg={5} md={5} sm={5} xs={5}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="产品描述"
                 {...this.centerFormLayout}
@@ -880,7 +882,7 @@ class SpecimenDetaill extends Component {
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </Col>
-            <Col lg={5} md={5} sm={5} xs={5}>
+            <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="备注"
                 {...this.centerFormLayout}
@@ -956,7 +958,7 @@ class SpecimenDetaill extends Component {
                       // });
 
                       this.state.cNoCustomerCombine = customerCombine,
-                        this.parseProductNo();
+                        this.parseProductNo2();
                     }
                   }}
                 />)}
@@ -1450,7 +1452,6 @@ class SpecimenDetaill extends Component {
   };
 
   handleCropDone = () => {
-    console.log('handleCropDone');
     this.setState({
       cropperVisible: false,
       cropImage: '',
@@ -1459,27 +1460,33 @@ class SpecimenDetaill extends Component {
   };
 
   parseProductNo = () => {
-    // const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
-    // const { form: { setFieldsValue } } = this.props;
-    // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
-    // // console.log(" showMold ",cNomainMold,showMold)
+    const { cNoColorCode = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { form: { setFieldsValue } } = this.props;
+    const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
-    // const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
-    // const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
-    // // 成色+宝石颜色+类别
-    // this.setState({
-    //   productNo,
-    //   zhName,
-    //   enName,
-    // });
-    // setFieldsValue({
-    //   productNo,
-    //   zhName,
-    //   enName,
-    // });
+    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
+    const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
+    // 成色+宝石颜色+类别
+    this.setState({
+      zhName,
+      enName,
+    });
+    setFieldsValue({
+      zhName,
+      enName,
+    });
+  };
 
-    // // setFieldsValue('productNo', productNo);
-
+  parseProductNo2 = () => {
+    const { cNoCustomerCombine = '' } = this.state;
+    const { form: { setFieldsValue } } = this.props;
+    const productNo = `${cNoCustomerCombine}${moment().format('YYYYMMDDHHmmssSS')}`;
+    this.setState({
+      productNo,
+    });
+    setFieldsValue({
+      productNo,
+    });
   };
 
 
