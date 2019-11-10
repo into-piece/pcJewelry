@@ -25,7 +25,7 @@ class SearchFromTab0 extends Component {
       form: { getFieldDecorator },
       returnElement,
       selectType,
-      modalContent,
+      searchConfig,
       dev,
     } = this.props;
     return (
@@ -39,14 +39,14 @@ class SearchFromTab0 extends Component {
       >
         <Row gutter={2} style={{ width: '100%' }}>
           {
-            modalContent && modalContent[selectType] && modalContent[selectType].map(({ key, value, type, list, search }) => {
-              if(search){
-                return <Col lg={8} key={value}>
-                  <FormItem label={key}>
-                    {getFieldDecorator(value)(returnElement({ type, dev, list }))}
-                  </FormItem>
-                </Col>;
-              }
+            searchConfig && searchConfig[selectType] && searchConfig[selectType].map(({ key, value, type, list,dfv }) => {
+              return <Col lg={8} key={value}>
+                <FormItem label={key}>
+                  {getFieldDecorator(value, {
+                    initialValue:   dfv ,
+                  })(returnElement({ type, dev, list }))}
+                </FormItem>
+              </Col>;
             })
           }
         </Row>
@@ -72,8 +72,8 @@ class SearchFromTab0 extends Component {
 
   renderCustomerForm() {
     const { expandForm } = this.state;
-    const { modalContent, selectType } = this.props;
-    if (modalContent && modalContent[selectType]) {
+    const { searchConfig, selectType } = this.props;
+    if (searchConfig && searchConfig[selectType]) {
       return expandForm ? this.renderCustomerAdvancedForm() : this.renderCustomerSimpleForm();
     }
     return null;
@@ -104,24 +104,27 @@ class SearchFromTab0 extends Component {
       dev,
       returnElement,
       selectType,
-      modalContent,
+      searchConfig,
     } = this.props;
 
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row>
+          {
+            searchConfig && searchConfig[selectType] && searchConfig[selectType].map(({ key, value, type, list, span,dfv }, index) => {
+              if ((index === 0 || index === 1)) {
+                return <Col lg={8}>
+                  <FormItem label={key} key={value} labelCol={{ span: 7 }} wrapperCol={{ span: 13 }}>
+                    {getFieldDecorator(value, {
+                      initialValue:   dfv ,
+                    })(returnElement({ type, dev, list }))}
+                  </FormItem>
+                </Col>
+                  ;
+              }
+            })
+          }
           <Col lg={8}>
-            {
-              modalContent && modalContent[selectType] && modalContent[selectType].map(({ key, value, type, list, span ,search}, index) => {
-                if (index === 0&&search) {
-                  return <FormItem label={key} key={value} labelCol={{ span: 7 }} wrapperCol={{ span: 13 }}>
-                    {getFieldDecorator(value)(returnElement({ type, dev, list }))}
-                  </FormItem>;
-                }
-              })
-            }
-          </Col>
-          <Col lg={8} push={1}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询

@@ -69,20 +69,19 @@ class MyTable extends Component {
 
   render() {
     const { props, onSelectRowClass, onRow, onChange } = this;
-    const { body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
-    const { size,current } = pagination;
+    const {checkType, body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
     const paginationProps = {
       showQuickJumper: true,
-      pageSize: size,
+      pageSize: pagination?pagination.size:10,
       total: body ? body.total : 0,
-      current
+      current: pagination?pagination.current:1
       // total: 100, //做测试
     };
 
     const rowSelection =
     {
       selectedRowKeys,
-      type: 'checkbox',
+      type: checkType || 'checkbox',
       onChange: onSelectChange,
     };
 
@@ -92,7 +91,7 @@ class MyTable extends Component {
         columns={columns}
         dataSource={body.records}
         rowSelection={rowSelection}
-        pagination={paginationProps}
+        pagination={pagination?paginationProps:false}
         onChange={onChange}
         rowKey={record => record.id}
         rowClassName={onSelectRowClass}

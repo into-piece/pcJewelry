@@ -8,6 +8,7 @@
 import servicesConfig from '@/services/dev';
 
 const initData = { records: [] };
+const initList =  [] ;
 
 const {
   addBasicMeasureUnit,
@@ -28,7 +29,9 @@ export default {
 
   state: {
     searchparamsTypes:{},
-    searchparams:{},
+    searchparams:{
+      status:0
+    },
 
 
     dropDownList: [],
@@ -50,7 +53,7 @@ export default {
     listQualityDrop:[],
 
 
-    statusList: [{key:"输入",value:0},{key:"已审批",value:2}],
+    statusList: [{key:"不限",value:undefined},{key:"输入",value:0},{key:"已审批",value:2}],
     shapeSettingList: [],
     specificationSettingList: [],
     pagination: {
@@ -66,7 +69,7 @@ export default {
     choosenTypesRowData: { id: '', zhName: '', enName: '' }, // select to show
     paginationTypes: {
       current: 1,
-      size: 4,
+      size: 10,
     },
 
 
@@ -291,7 +294,7 @@ export default {
       let listMstWordbookDrop =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map((item) => {
           return {...item, key: item.wordbookContentZh, value: item.wordbookCode };
@@ -306,7 +309,7 @@ export default {
       let listMstWordbookDrop =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map((item) => {
           return { ...item,key: item.wordbookContentZh, value: item.wordbookCode };
@@ -327,7 +330,7 @@ export default {
       let list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (list.length > 0) {
         list = list.map((item) => {
           return { ...item,key:item.zhName , value:item.id  };
@@ -342,7 +345,7 @@ export default {
       let list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (list.length > 0) {
         list = list.map((item) => {
           return { ...item,key:item.zhName , value:item.id  };
@@ -357,7 +360,7 @@ export default {
       let list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (list.length > 0) {
         list = list.map((item) => {
           return { ...item,key:item.zhName , value:item.id  };
@@ -374,7 +377,7 @@ export default {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body
-          : initData;
+          : initList;
       return {
         ...state,
         listBasicMeasureUnitDropDown: list,
@@ -446,7 +449,7 @@ export default {
       let gemSetProcessDropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (gemSetProcessDropDown.length > 0) {
         gemSetProcessDropDown = gemSetProcessDropDown.map((item) => {
           return {...item , key: item.zhName, value: item.id };
@@ -462,7 +465,7 @@ export default {
       let list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (list.length > 0) {
         list = list.map((item) => {
           return {...item , key: item.zhName, value: item.id };
@@ -479,7 +482,7 @@ export default {
       let shapeSettingList =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (shapeSettingList.length > 0) {
         shapeSettingList = shapeSettingList.map((item) => {
           return { ...item ,key: item.zhName, value: item.id };
@@ -496,7 +499,7 @@ export default {
       let list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (list.length > 0) {
         list = list.map((item) => {
           return { ...item,key: item.zhName, value: item.id };
@@ -512,7 +515,7 @@ export default {
       let getBUMropDown =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (getBUMropDown.length > 0) {
         getBUMropDown = getBUMropDown.map(({ zhName, id }) => {
           return { key: zhName, value: id };
@@ -545,7 +548,7 @@ export default {
       let listMstWordbookDrop =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
           ? action.payload.body.records
-          : initData;
+          : initList;
       if (listMstWordbookDrop.length > 0) {
         listMstWordbookDrop = listMstWordbookDrop.map((item) => {
           return { ...item ,key:item.wordbookContentZh, value: item.wordbookCode};

@@ -31,7 +31,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag';
-import { modalContent } from './config/index';
+import { modalContent, searchConfig } from './config/index';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 // import SearchFrom from './components/SearchFrom';
@@ -64,22 +64,29 @@ const btnGroup = [
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 let typeTable = [
   {
-    title: '类别',
-    dataIndex: 'bType',
-    key: 'bType',
-    render:(d,i)=>(i.bTypeName)
-
+    title: '序号',
+    dataIndex: 'id',
+    key: 'id',
   },
   {
-    title: '小类',
-    dataIndex: 'sType',
-    key: 'sType',
-    render:(d,i)=>(i.sTypeName)
-  },
-  {
-    title: '名称',
+    title: '中文名称',
     dataIndex: 'zhName',
     key: 'zhName',
+  },
+  {
+    title: '英文名称',
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: '英文简称',
+    dataIndex: 'enShortName',
+    key: 'enShortName',
+  },
+  {
+    title: '统计',
+    dataIndex: 'count',
+    key: 'count',
   },
 
 ];
@@ -94,16 +101,16 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo1',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     }, {
       title: '成色',
       dataIndex: 'assaying',
       key: 'assayingName1',
-      render:(d,i)=>(i.assayingName)
+      render: (d, i) => (i.assayingName),
 
     },
     {
@@ -120,7 +127,7 @@ const columnsArr = {
       title: '重量单位',
       dataIndex: 'weightUnit',
       key: 'weightUnitName1',
-      render:(d,i)=>(i.weightUnitName)
+      render: (d, i) => (i.weightUnitName),
 
     },
     {
@@ -132,7 +139,7 @@ const columnsArr = {
       title: '计价类别',
       dataIndex: 'valuationClass',
       key: 'valuationClassName1',
-      render:(d,i)=>(i.valuationClassName)
+      render: (d, i) => (i.valuationClassName),
 
     },
     {
@@ -159,31 +166,31 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo2',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
       title: '成色',
       dataIndex: 'assaying',
       key: 'assayingName2',
-      render:(d,i)=>(i.assayingName)
+      render: (d, i) => (i.assayingName),
 
     },
     {
       title: '形状',
       dataIndex: 'shape',
       key: 'shapeNam2e',
-      render:(d,i)=>(i.shapeName)
+      render: (d, i) => (i.shapeName),
 
     },
     {
       title: '规格',
       dataIndex: 'specification',
       key: 'specificationNa2me',
-      render:(d,i)=>(i.specificationName)
+      render: (d, i) => (i.specificationName),
 
     },
     {
@@ -210,14 +217,14 @@ const columnsArr = {
       title: '计量单位',
       dataIndex: 'measureUnit',
       key: 'measureU2nitName',
-      render:(d,i)=>(i.measureUnitName)
+      render: (d, i) => (i.measureUnitName),
 
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnit',
       key: 'weightUn2itName',
-      render:(d,i)=>(i.weightUnitName)
+      render: (d, i) => (i.weightUnitName),
 
     },
     {
@@ -229,7 +236,7 @@ const columnsArr = {
       title: '计价类别',
       dataIndex: 'valuationClass',
       key: 'valuationC2lassName',
-      render:(d,i)=>(i.valuationClassName)
+      render: (d, i) => (i.valuationClassName),
 
     },
     {
@@ -251,10 +258,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater3ialNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
@@ -271,21 +278,21 @@ const columnsArr = {
       title: '计量单位',
       dataIndex: 'measureUnit',
       key: 'meas3ureUnit',
-      render:(d,i)=>(i.measureUnitName)
+      render: (d, i) => (i.measureUnitName),
 
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnit',
       key: 'weigh3tUnit',
-      render:(d,i)=>(i.weightUnitName)
+      render: (d, i) => (i.weightUnitName),
 
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClass',
       key: 'valua3tionClass',
-      render:(d,i)=>(i.valuationClassName)
+      render: (d, i) => (i.valuationClassName),
 
     },
     {
@@ -301,17 +308,17 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater4ialNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
       title: '颜色',
       dataIndex: 'color',
       key: 'colour4',
-      render:(d,i)=>(i.colorName)
+      render: (d, i) => (i.colorName),
 
     },
     {
@@ -328,14 +335,14 @@ const columnsArr = {
       title: '形状',
       dataIndex: 'shape',
       key: 'shape4',
-      render:(d,i)=>(i.shapeName)
+      render: (d, i) => (i.shapeName),
 
     },
     {
       title: '规格',
       dataIndex: 'specification',
       key: 'specification4',
-      render:(d,i)=>(i.specificationName)
+      render: (d, i) => (i.specificationName),
 
     },
     {
@@ -372,21 +379,21 @@ const columnsArr = {
       title: '计量单位',
       dataIndex: 'measureUnit',
       key: 'measureUnit4',
-      render:(d,i)=>(i.measureUnitName)
+      render: (d, i) => (i.measureUnitName),
 
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnit',
       key: 'weightUnit4',
-      render:(d,i)=>(i.weightUnitName)
+      render: (d, i) => (i.weightUnitName),
 
     },
     {
       title: '计价类别',
       dataIndex: 'valuationClass',
       key: 'valuationClassName4',
-      render:(d,i)=>(i.valuationClassName)
+      render: (d, i) => (i.valuationClassName),
 
     },
     {
@@ -407,31 +414,31 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'material5No',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
       title: '颜色',
       dataIndex: 'color',
       key: 'color5',
-      render:(d,i)=>(i.colorName)
+      render: (d, i) => (i.colorName),
 
     },
     {
       title: '形状',
       dataIndex: 'shape',
       key: 'shape5',
-      render:(d,i)=>(i.shapeName)
+      render: (d, i) => (i.shapeName),
 
     },
     {
       title: '规格',
       dataIndex: 'specification',
       key: 'specific5ation',
-      render:(d,i)=>(i.specificationName)
+      render: (d, i) => (i.specificationName),
 
     },
     {
@@ -458,14 +465,14 @@ const columnsArr = {
       title: '计量单位',
       dataIndex: 'measureUnit',
       key: 'measu5reUnit',
-      render:(d,i)=>(i.measureUnitName)
+      render: (d, i) => (i.measureUnitName),
 
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnit',
       key: 'weigh5tUnit',
-      render:(d,i)=>(i.weightUnitName)
+      render: (d, i) => (i.weightUnitName),
 
     },
     {
@@ -477,7 +484,7 @@ const columnsArr = {
       title: '计价类别',
       dataIndex: 'valuationClass',
       key: 'valuat5ionClass',
-      render:(d,i)=>(i.valuationClassName)
+      render: (d, i) => (i.valuationClassName),
 
     },
     {
@@ -498,45 +505,45 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materi6alNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
       title: '规格',
       dataIndex: 'specification',
       key: 'speci6ficationName',
-      render:(d,i)=>(i.specificationName)
+      render: (d, i) => (i.specificationName),
 
     },
     {
       title: '形状',
       dataIndex: 'shape',
       key: 'shap6eName',
-      render:(d,i)=>(i.shapeName)
+      render: (d, i) => (i.shapeName),
 
     },
     {
       title: '切工',
       dataIndex: 'cut',
       key: 'cutN6ame',
-      render:(d,i)=>(i.cutName)
+      render: (d, i) => (i.cutName),
 
     },
     {
       title: '颜色',
       dataIndex: 'color',
       key: 'color6Name',
-      render:(d,i)=>(i.colorName)
+      render: (d, i) => (i.colorName),
 
     },
     {
       title: '等级',
       dataIndex: 'quality',
       key: 'qualit6yName',
-      render:(d,i)=>(i.qualityName)
+      render: (d, i) => (i.qualityName),
 
     },
     {
@@ -553,21 +560,21 @@ const columnsArr = {
       title: '是否配料',
       dataIndex: 'isIngredient',
       key: 'isIngredientName6',
-      render:(d,i)=>(i.isIngredientName)
+      render: (d, i) => (i.isIngredientName),
 
     },
     {
       title: '计量单位',
       dataIndex: 'measureUnit',
       key: 'measureUnitName6',
-      render:(d,i)=>(i.measureUnitName)
+      render: (d, i) => (i.measureUnitName),
 
     },
     {
       title: '重量单位',
       dataIndex: 'weightUnit',
       key: 'weightUnitNam6e',
-      render:(d,i)=>(i.weightUnitName)
+      render: (d, i) => (i.weightUnitName),
 
     },
     {
@@ -579,7 +586,7 @@ const columnsArr = {
       title: '计价类别',
       dataIndex: 'valuationClass',
       key: 'valuationCl6assName',
-      render:(d,i)=>(i.valuationClassName)
+      render: (d, i) => (i.valuationClassName),
 
     },
     {
@@ -621,7 +628,7 @@ columnsArr.stone = columnsArr.stone.map(item => ({ ...item, sorter: true }));
     list: devRaw.list,
     paginationTypes: devRaw.paginationTypes,
     pagination: devRaw.pagination,
-    searchParams: devRaw.searchParams,
+    searchparams: devRaw.searchparams,
     selectKey: devRaw.selectKey,
     choosenRowData: devRaw.choosenRowData,
     choosenTypesRowData: devRaw.choosenTypesRowData,
@@ -736,27 +743,30 @@ class Info extends Component {
     // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...(params&&params.current?{}:(paginationTypes)), ...params }, type: 'types' },
+      payload: { params: { ...params }, type: 'types' },
+      // payload: { params: { ...(params&&params.current?{}:(paginationTypes)), ...params }, type: 'types' },
     });
-    dispatch({
-      type: 'devRaw/setsearchparams',
-      payload: {},
-    });
+    // dispatch({
+    //   type: 'devRaw/setsearchparams',
+    //   payload: {status:0},
+    // });
   };
 
   // 获取对应key=》页面进行数据请求
-  getList = ({ key, params, sId }) => {
-    const { dispatch, pagination, selectKey, choosenTypesRowData } = this.props;
+  getList = ({ key, params }) => {
+    const { dispatch, pagination, selectKey, choosenTypesRowData, searchparams } = this.props;
 
     // 没有选择类型就没有查询下面
-    if (!sId && (!choosenTypesRowData || choosenTypesRowData.id === '')) {
+    if (!choosenTypesRowData || choosenTypesRowData.id === '') {
       return;
     }
-
-    // getDevList
     dispatch({
       type: `devRaw/getList`,
-      payload: { params: { ...(params&&params.current?{}:(pagination)), ...params, sId: sId || choosenTypesRowData.id }, type: key || selectKey },
+      // payload: { params: { ...(params&&params.current?{}:(pagination)), ...params, sId: sId || choosenTypesRowData.id }, type: key || selectKey },
+      payload: {
+        params: { ...searchparams, ...(params && params.current ? {} : (pagination)), ...params },
+        type: key || selectKey,
+      },
       callback: () => {
         const { dev } = this.props;
         dev[`${dev.selectKey}List`].records.map((item) => {
@@ -800,7 +810,7 @@ class Info extends Component {
         });
         break;
       default:
-        this.setState({ modalType,filelist: [] });
+        this.setState({ modalType, filelist: [] });
         break;
     }
   };
@@ -856,9 +866,9 @@ class Info extends Component {
         </Select>);
 
       case 9:
-        return (<TextArea disabled={disable || false} />);
+        return (<TextArea disabled={disable || false}/>);
       default:
-        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'} />;
+        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'}/>;
     }
   };
 
@@ -876,10 +886,11 @@ class Info extends Component {
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
 
-    if(modalType==='batchAdd'){
-      return <BatchModalForm  wrappedComponentRef={e => this.BatchModalForm = e}   dev={dev} arr={dataArr} fileListFun={(list) => {
-        this.setState({ filelist: list });
-      }} returnElement={this.returnElement}/>
+    if (modalType === 'batchAdd') {
+      return <BatchModalForm wrappedComponentRef={e => this.BatchModalForm = e} dev={dev} arr={dataArr}
+                             fileListFun={(list) => {
+                               this.setState({ filelist: list });
+                             }} returnElement={this.returnElement}/>;
     }
 
 
@@ -895,13 +906,13 @@ class Info extends Component {
             const colorId = `${getFieldValue('color')}`;
             const cutId = `${getFieldValue('cut')}`;
             const qualityId = `${getFieldValue('quality')}`;
-            let assaying = []
-            let shape = []
-            let specification = []
-            let color = []
-            let cut = []
-            let quality = []
-            let s = []
+            let assaying = [];
+            let shape = [];
+            let specification = [];
+            let color = [];
+            let cut = [];
+            let quality = [];
+            let s = [];
             if (assayingId) assaying = dev.listBasicColourSetDropDown.filter(e => e.id === assayingId);
             if (shapeId) shape = dev.shapeSettingList.filter(e => e.id === shapeId);
             if (specificationId) specification = dev.specificationSettingList.filter(e => e.id === specificationId);
@@ -961,7 +972,7 @@ class Info extends Component {
             if (value === 'zhName') {
               let va = '';
               if (selectKey === 'material' && assaying.length > 0) {
-                va = assaying[0].zhName
+                va = assaying[0].zhName;
               }
               if (selectKey === 'stone') {
                 s = dev.H016002.filter(e => e.id === sId);
@@ -1004,7 +1015,7 @@ class Info extends Component {
             if (value === 'enName') {
               let va = '';
               if (selectKey === 'material' && assaying.length > 0) {
-                va = assaying[0].enName
+                va = assaying[0].enName;
               }
               if (selectKey === 'stone') {
                 s = dev.H016002.filter(e => e.id === sId);
@@ -1095,11 +1106,11 @@ class Info extends Component {
   returnTitle = () => {
     const { selectKey } = this.props;
 
-    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings"/>;
     return menuText;
   };
-  handleBatchAdd=(close)=>{
-    const { selectKey,dev } = this.props;
+  handleBatchAdd = (close) => {
+    const { selectKey, dev } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
     this.BatchModalForm.props.form.validateFields((err, values) => {
       if (!err) {
@@ -1111,25 +1122,36 @@ class Info extends Component {
         }
 
 
-        const shape = dev.shapeSettingList.filter(e => values.shape.indexOf(e.id)>=0);
-        const color = dev.listColorDrop.filter(e => values.color.indexOf(e.id)>=0);
-        const cut = dev.listCutDrop.filter(e => values.cut.indexOf(e.id)>=0);
-        const quality = dev.listQualityDrop.filter(e => values.quality.indexOf(e.id)>=0);
-        const specification = dev.specificationSettingList.filter(e => values.specification===e.id);
-        const sId = dev.H016002.filter(e => values.sId===e.id);
+        const shape = dev.shapeSettingList.filter(e => values.shape.indexOf(e.id) >= 0);
+        const color = dev.listColorDrop.filter(e => values.color.indexOf(e.id) >= 0);
+        const cut = dev.listCutDrop.filter(e => values.cut.indexOf(e.id) >= 0);
+        const quality = dev.listQualityDrop.filter(e => values.quality.indexOf(e.id) >= 0);
+        const specification = dev.specificationSettingList.filter(e => values.specification === e.id);
+        const sId = dev.H016002.filter(e => values.sId === e.id);
 
-        values.shape = shape.map(e=>{return {id:e.id,value:e.shapeCode,zhName:e.zhName,enName:e.enName}})
-        values.color = color.map(e=>{return {id:e.id,value:e.unitCode,zhName:e.zhName,enName:e.enName}})
-        values.cut = cut.map(e=>{return {id:e.id,value:e.cuttingCode,zhName:e.zhName,enName:e.enName}})
-        values.quality = quality.map(e=>{return {id:e.id,value:e.gradeCode,zhName:e.zhName,enName:e.enName}})
-        values.specification = specification.map(e=>{return {id:e.id,value:e.specificationCode,zhName:e.zhName,enName:e.enName}})[0]
-        values.sId = sId.map(e=>{return {id:e.id,value:e.unitCode,zhName:e.zhName,enName:e.enName}})[0]
-
+        values.shape = shape.map(e => {
+          return { id: e.id, value: e.shapeCode, zhName: e.zhName, enName: e.enName };
+        });
+        values.color = color.map(e => {
+          return { id: e.id, value: e.unitCode, zhName: e.zhName, enName: e.enName };
+        });
+        values.cut = cut.map(e => {
+          return { id: e.id, value: e.cuttingCode, zhName: e.zhName, enName: e.enName };
+        });
+        values.quality = quality.map(e => {
+          return { id: e.id, value: e.gradeCode, zhName: e.zhName, enName: e.enName };
+        });
+        values.specification = specification.map(e => {
+          return { id: e.id, value: e.specificationCode, zhName: e.zhName, enName: e.enName };
+        })[0];
+        values.sId = sId.map(e => {
+          return { id: e.id, value: e.unitCode, zhName: e.zhName, enName: e.enName };
+        })[0];
 
 
         serviceObj[`batchAddBasic${selectKey}`](values).then(res => {
           this.setState({ addloading: false });
-          if (!res||!res.head) {
+          if (!res || !res.head) {
             return;
           }
           const { rtnCode, rtnMsg } = res.head;
@@ -1138,24 +1160,24 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ key: selectKey });
-            if(close) this.btnFn('');
+            if (close) this.btnFn('');
 
           }
         });
       }
     });
-  }
+  };
   // 新增按钮事件回调
   handleAdd = (close) => {
     const { selectKey, form, choosenTypesRowData } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
-    const {resetFields} = form
+    const { resetFields } = form;
 
     const dataArr = modalContent[selectKey];
 
-    const fieldslist = dataArr.map(e=>e.value)
+    const fieldslist = dataArr.map(e => e.value);
 
-    form.validateFields(fieldslist,(err, values) => {
+    form.validateFields(fieldslist, (err, values) => {
       if (!err) {
         this.setState({ addloading: true });
 
@@ -1181,7 +1203,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ key: selectKey });
-            if(close) this.btnFn('');
+            if (close) this.btnFn('');
 
           }
         });
@@ -1197,10 +1219,10 @@ class Info extends Component {
   handleEdit = (close) => {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
-    const {resetFields} = form
+    const { resetFields } = form;
     const dataArr = modalContent[selectKey];
 
-    const fieldslist = dataArr.map(e=>e.value)
+    const fieldslist = dataArr.map(e => e.value);
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -1208,7 +1230,7 @@ class Info extends Component {
       payload: [],
     });
 
-    form.validateFields(fieldslist,(err, values) => {
+    form.validateFields(fieldslist, (err, values) => {
       this.setState({ addloading: true });
 
       if (!err) {
@@ -1238,7 +1260,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ key: selectKey });
-            if(close) this.btnFn('');
+            if (close) this.btnFn('');
 
           }
         });
@@ -1334,7 +1356,7 @@ class Info extends Component {
   // 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
     const { selectedRowKeys, choosenTypesRowData, choosenRowData } = this.props;
-    if (['plus','batchAdd'].indexOf(tag)>=0) return (!choosenTypesRowData || choosenTypesRowData.id === '');
+    if (['plus', 'batchAdd'].indexOf(tag) >= 0) return (!choosenTypesRowData || choosenTypesRowData.id === '');
     if (tag === 'lock') {
       return selectedRowKeys.length === 0 || this.returnLockType().disabled;
     }
@@ -1353,14 +1375,14 @@ class Info extends Component {
   // 第一部分table 排序 页面切换 触发
   onSearchType = (v) => {
     const { dispatch, dev } = this.props;
-    console.log(v)
+    console.log(v);
     dispatch({
       type: 'devRaw/getTypesPagination',
       payload: v,
-      callback:()=>{
+      callback: () => {
         this.getTypeList({ ...v, ...dev.searchparamsTypes });
 
-      }
+      },
     });
   };
 
@@ -1370,15 +1392,15 @@ class Info extends Component {
     dispatch({
       type: 'devRaw/getPagination',
       payload: v,
-      callback:()=>{
+      callback: () => {
         this.getList({ key: selectKey, params: { ...v, ...dev.searchparams } });
-      }
-      });
+      },
+    });
   };
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch, onSearchType } = this;
-    const { mode, modalType ,addloading} = state;
+    const { mode, modalType, addloading } = state;
     const { list, selectKey, choosenRowData } = props;
 
     const modalFooter = modalType === 'plus' ? [
@@ -1462,7 +1484,7 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()} />}
+          title={<BuildTitle title={returnTitle()}/>}
           key={`Modal-${selectKey}`}
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
@@ -1514,11 +1536,11 @@ const RightContent =
                     color: '#35B0F4',
                   }}
                 >
-                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
+                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage=""/>
                 </div>
-                <Divider className={styles.divder} />
+                <Divider className={styles.divder}/>
               </div>
-              <GetRenderitem data={choosenRowData} type={type} />
+              <GetRenderitem data={choosenRowData} type={type}/>
             </div>
             {/* </Card> */}
             <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
@@ -1539,10 +1561,10 @@ const RightContent =
                   </Button>
                 ))}
               </div>
-              {(type==='stone')&&<Button
+              {(type === 'stone') && <Button
                 key={'batchAdd'}
                 className={styles.buttomControl}
-                type={ 'primary'}
+                type={'primary'}
                 icon={'plus'}
                 size="small"
                 disabled={returnSisabled('batchAdd')}
@@ -1586,7 +1608,8 @@ class CenterInfo extends Component {
       type: 'devRaw/clearSixList',
       payload: {},
       callback: () => {
-        getList({ sId: rowData.id });
+        this.turnTab(rowData.type);
+        // getList();
       },
     });
   };
@@ -1608,12 +1631,22 @@ class CenterInfo extends Component {
     });
   };
 
-  turnTab= (e)=> {
-    const key = e.target ? e.target.value : e;
+  turnTab = (e) => {
+    let key = e.target ? e.target.value : e;
+    const keys = {
+      principal: 'material',
+      accessories: 'accessories',
+      stone: 'stone',
+      wrapper: 'wrapper',
+      other: 'otherMaterial',
+      auxiliary: 'auxiliaryMaterial',
+    };
+    key = keys[key] || key;
+
     const { dispatch, getList } = this.props;
     dispatch({
       type: 'devRaw/setsearchparams',
-      payload: {},
+      payload: { status: 0 },
     });
     dispatch({
       type: 'devRaw/getSelectKey',
@@ -1621,7 +1654,7 @@ class CenterInfo extends Component {
       callback: () => {
         dispatch({
           type: 'devRaw/getPagination',
-          payload: { current: 1 ,size:10},
+          payload: { current: 1, size: 10 },
           callback: () => {
             getList({ key });
           },
@@ -1639,22 +1672,17 @@ class CenterInfo extends Component {
       type: 'devRaw/getChoosenRowData',
       payload: { id: '', zhName: '', enName: '', unitCode: '' },
     });
-    dispatch({
-      type: 'devRaw/setSearchParams',
-      payload: {},
-    });
-
     this.SearchFromTab0.handleReset();
-  }
+  };
 
 
   // 第二个表格搜索
   search(params) {
     const { dispatch, getList, pagination } = this.props;
-    getList({ params: { ...pagination, ...params, current: 1,size:10 } });
+    getList({ params: { ...pagination, ...params, current: 1, size: 10 } });
     dispatch({
       type: 'devRaw/getPagination',
-      payload: { current: 1 ,size:10},
+      payload: { current: 1, size: 10 },
     });
     dispatch({
       type: 'devRaw/setSearchParams',
@@ -1667,11 +1695,11 @@ class CenterInfo extends Component {
   // 类型搜索
   searchType(params) {
     const { dispatch, getTypeList, paginationTypes } = this.props;
-    getTypeList({ ...paginationTypes, ...params, current: 1 ,size:4});
+    getTypeList({ ...paginationTypes, ...params, current: 1, size: 10 });
 
     dispatch({
       type: 'devRaw/getTypesPagination',
-      payload: { current: 1,size: 4 },
+      payload: { current: 1, size: 10 },
     });
 
   }
@@ -1685,85 +1713,88 @@ class CenterInfo extends Component {
     return (
       <div className={styles.view_left_content}>
         {/*<div className={styles.contentTitle}>*/}
-          {/*<SearchFrom*/}
-            {/*devRaw={dev}*/}
-            {/*onSearch={(p) => {*/}
-              {/*this.searchType(p);*/}
-            {/*}}*/}
+        {/*<SearchFrom*/}
+        {/*devRaw={dev}*/}
+        {/*onSearch={(p) => {*/}
+        {/*this.searchType(p);*/}
+        {/*}}*/}
 
-            {/*onReset={() => {*/}
-              {/*const { dispatch } = this.props;*/}
-              {/*dispatch({*/}
-                {/*type: 'devRaw/setsearchparamsTypes',*/}
-                {/*payload: {},*/}
-              {/*});*/}
-            {/*}}*/}
-            {/*onChange={(e) => {*/}
-              {/*const { dispatch } = this.props;*/}
-              {/*dispatch({*/}
-                {/*type: 'devRaw/setsearchparamsTypes',*/}
-                {/*payload: e,*/}
-              {/*});*/}
-            {/*}}*/}
-          {/*/>*/}
+        {/*onReset={() => {*/}
+        {/*const { dispatch } = this.props;*/}
+        {/*dispatch({*/}
+        {/*type: 'devRaw/setsearchparamsTypes',*/}
+        {/*payload: {},*/}
+        {/*});*/}
+        {/*}}*/}
+        {/*onChange={(e) => {*/}
+        {/*const { dispatch } = this.props;*/}
+        {/*dispatch({*/}
+        {/*type: 'devRaw/setsearchparamsTypes',*/}
+        {/*payload: e,*/}
+        {/*});*/}
+        {/*}}*/}
+        {/*/>*/}
         {/*</div>*/}
         <div className={styles.tableBox}>
           <Table
             columns={typeTable}
+            scroll={800}
+            checkType={'radio'}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}
             selectKey={choosenTypesRowData.id}
-            pagination={paginationTypes}
+            // pagination={paginationTypes}
             selectedRowKeys={[choosenTypesRowData.id]}
             listLoading={listLoading}
             handleTableChange={onSearchType}
           />
         </div>
-        <div className={styles.contentTitle}>
-          <Radio.Group defaultValue="material" value={type} buttonStyle="solid">
-            <Radio.Button
-              value="material"
-              onChange={this.turnTab}
-            >
-              主材
-            </Radio.Button>
-            <Radio.Button
-              value="stone"
-              onChange={this.turnTab}
-            >
-              石材
-            </Radio.Button>
-            <Radio.Button
-              value="accessories"
-              onChange={this.turnTab}
-            >
-              配件
-            </Radio.Button>
-            <Radio.Button
-              value="wrapper"
-              onChange={this.turnTab}
-            >
-              包装
-            </Radio.Button>
-            <Radio.Button
-              value="auxiliaryMaterial"
-              onChange={this.turnTab}
-            >
-              辅材
-            </Radio.Button>
-            <Radio.Button
-              value="otherMaterial"
-              onChange={this.turnTab}
-            >
-              其他
-            </Radio.Button>
-          </Radio.Group>
-        </div>
+        <Divider/>
+        {/*<div className={styles.contentTitle}>*/}
+        {/*<Radio.Group defaultValue="material" value={type} buttonStyle="solid">*/}
+        {/*<Radio.Button*/}
+        {/*value="material"*/}
+        {/*onChange={this.turnTab}*/}
+        {/*>*/}
+        {/*主材*/}
+        {/*</Radio.Button>*/}
+        {/*<Radio.Button*/}
+        {/*value="stone"*/}
+        {/*onChange={this.turnTab}*/}
+        {/*>*/}
+        {/*石材*/}
+        {/*</Radio.Button>*/}
+        {/*<Radio.Button*/}
+        {/*value="accessories"*/}
+        {/*onChange={this.turnTab}*/}
+        {/*>*/}
+        {/*配件*/}
+        {/*</Radio.Button>*/}
+        {/*<Radio.Button*/}
+        {/*value="wrapper"*/}
+        {/*onChange={this.turnTab}*/}
+        {/*>*/}
+        {/*包装*/}
+        {/*</Radio.Button>*/}
+        {/*<Radio.Button*/}
+        {/*value="auxiliaryMaterial"*/}
+        {/*onChange={this.turnTab}*/}
+        {/*>*/}
+        {/*辅材*/}
+        {/*</Radio.Button>*/}
+        {/*<Radio.Button*/}
+        {/*value="otherMaterial"*/}
+        {/*onChange={this.turnTab}*/}
+        {/*>*/}
+        {/*其他*/}
+        {/*</Radio.Button>*/}
+        {/*</Radio.Group>*/}
+        {/*</div>*/}
 
         <div className={styles.tableBox}>
           <SearchFromTab0
             dev={dev}
-            modalContent={modalContent}
+            searchConfig={searchConfig}
             returnElement={returnElement}
             selectType={type}
             onSearch={(p) => {
@@ -1773,7 +1804,7 @@ class CenterInfo extends Component {
               const { dispatch } = this.props;
               dispatch({
                 type: 'devRaw/setsearchparams',
-                payload: {},
+                payload: { status: 0 },
               });
             }}
 
@@ -1839,19 +1870,19 @@ const GetRenderitem = ({ data, type }) => {
     <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-        <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
-          {getImages(images)}
-        </Carousel>}
-      {images && images.length > 0 && <Divider />}
+      <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
+        {getImages(images)}
+      </Carousel>}
+      {images && images.length > 0 && <Divider/>}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name }) => {
             return (name ? <Description key={`c${key}`} term={key}>{data[`${value}Name`]}</Description>
-              : <Description
-                key={`c${key}`}
-                term={key}
-              >{value === 'status' ? statusConvert[data[value]] : data[value]}
-              </Description>
+                : <Description
+                  key={`c${key}`}
+                  term={key}
+                >{value === 'status' ? statusConvert[data[value]] : data[value]}
+                </Description>
             );
           })
         }

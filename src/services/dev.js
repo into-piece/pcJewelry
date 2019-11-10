@@ -133,7 +133,8 @@ const resultArr = [
   },
 
 
-  { key: 'listBasictypes', path: '/develop/category/develop-basic-category-set/list', prefix1: `${env  }/business` },
+  { key: 'listBasictypes', path: '/develop/basic/develop-material-set/list', prefix1: `${env  }/business` },
+  // { key: 'listBasictypes', path: '/develop/category/develop-basic-category-set/list', prefix1: `${env  }/business` },
 
   {
     key: 'getTypeByWordbookCode',
