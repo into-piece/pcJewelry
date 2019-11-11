@@ -1,3 +1,10 @@
+import {statusConvert} from '@/utils/convert';
+
+
+const numberFixed4= (a)=>{
+  return parseFloat(a||0).toFixed(4);
+}
+
 
 
 // modalContent => 每个menu不同的增加弹窗填写信息
@@ -17,12 +24,13 @@ export const modalContent = {
       'dfv': '8ee1cc72791578cfe122f6839487bbbe',
       search: true
     },
-    { 'key': '单价', 'value': 'price', number: true },
+    { 'key': '单价', 'value': 'price', number: true,'convert':numberFixed4 },
     { 'key': '计价类别', 'value': 'valuationClass', 'noNeed': true, 'name': true, 'type': 3, 'dfv': '0', search: true },
     { 'key': '库存重量', 'value': 'repertoryWeight', 'noNeed': true, 'dfv': '0', search: true },
     { 'key': '最低采购量', 'value': 'minimumPurchaseQuantity', 'noNeed': true, search: true },
-    { 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true },
+    { 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true ,'convert':statusConvert,},
     { 'key': '备注', 'value': 'remarks', 'noNeed': true, type: 9 },
+
 
   ],
   accessories: [
@@ -46,10 +54,10 @@ export const modalContent = {
     },
     { span: 8, 'key': '客户编号', 'value': 'customerNo', 'noNeed': true, },
     { span: 8, 'key': '供应商编号', 'value': 'supplierNo', 'noNeed': true, },
-    { span: 8, 'key': '单价', 'value': 'price', number: true },
+    { span: 8, 'key': '单价', 'value': 'price', number: true ,'convert':numberFixed4},
     { span: 8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1', search: true },
-    { span: 8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true, search: true },
-    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true },
+    { span: 8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true, search: true ,'convert':numberFixed4},
+    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true,'convert':statusConvert, },
     { span: 8, 'key': '备注', 'value': 'remarks', 'noNeed': true, type: 9 },
 
 
@@ -79,10 +87,10 @@ export const modalContent = {
     },
     { span: 8, 'key': '客户编号', 'value': 'customerNo', 'noNeed': true, },
     { span: 8, 'key': '供应商编号', 'value': 'supplierNo', 'noNeed': true, },
-    { span: 8, 'key': '单价', 'value': 'price', number: true },
+    { span: 8, 'key': '单价', 'value': 'price', number: true ,'convert':numberFixed4},
     { span: 8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
-    { span: 8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true },
-    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true },
+    { span: 8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true,'convert':numberFixed4 },
+    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true ,'convert':statusConvert,},
     { span: 8, 'key': '备注', 'value': 'remarks', 'noNeed': true, type: 9 },
 
   ],
@@ -99,8 +107,8 @@ export const modalContent = {
     { span: 8, 'key': '条码', 'value': 'barCode', 'noNeed': true },
     { span: 8, 'key': '客户编号', 'value': 'customerNo', 'noNeed': true, },
     { span: 8, 'key': '供应商编号', 'value': 'supplierNo', 'noNeed': true, },
-    { span: 8, 'key': '单价', 'value': 'price', 'noNeed': true, number: true },
-    { span: 8, 'key': '成本价', 'value': 'costPirce', 'noNeed': true },
+    { span: 8, 'key': '单价', 'value': 'price', 'noNeed': true, number: true,'convert':numberFixed4 },
+    { span: 8, 'key': '成本价', 'value': 'costPirce', 'noNeed': true,'convert':numberFixed4 },
     { span: 8, 'key': '计量单位', 'value': 'measureUnit', 'name': true, 'list': 'getBUMropDown', 'type': 2 },
     {
       span: 8,
@@ -111,8 +119,8 @@ export const modalContent = {
       'type': 2,
     },
     { span: 8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
-    { span: 8, 'key': '单重', 'value': 'singleWeight', 'noNeed': true },
-    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true },
+    { span: 8, 'key': '单重', 'value': 'singleWeight', 'noNeed': true,'convert':numberFixed4 },
+    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true ,'convert':statusConvert,},
     { span: 8, 'key': '备注', 'value': 'remarks', 'noNeed': true, search: true, type: 9 },
 
   ],
@@ -131,7 +139,7 @@ export const modalContent = {
       'type': 2,
     },
     { span: 8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
-    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true },
+    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true,'convert':statusConvert, },
     { span: 8, 'key': '备注', 'value': 'remarks', 'noNeed': true, type: 9 },
 
   ],
@@ -154,10 +162,10 @@ export const modalContent = {
     },
     { span: 8, 'key': '客户编号', 'value': 'customerNo', 'noNeed': true, },
     { span: 8, 'key': '供应商编号', 'value': 'supplierNo', 'noNeed': true, },
-    { span: 8, 'key': '单价', 'value': 'price', number: true },
+    { span: 8, 'key': '单价', 'value': 'price', number: true ,'convert':numberFixed4},
     { span: 8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1' },
-    { span: 8, 'key': '单重', 'value': 'singleWeight', 'noNeed': true },
-    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true },
+    { span: 8, 'key': '单重', 'value': 'singleWeight', 'noNeed': true ,'convert':numberFixed4},
+    { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true ,'convert':statusConvert,},
     { span: 8, 'key': '备注', 'value': 'remarks', 'noNeed': true, type: 9 },
 
   ]

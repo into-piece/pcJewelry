@@ -134,6 +134,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
+      render:d=>parseFloat(d||0).toFixed(4)
     },
     {
       title: '计价类别',
@@ -231,6 +232,8 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
+      render:d=>parseFloat(d||0).toFixed(4)
+
     },
     {
       title: '计价类别',
@@ -243,6 +246,8 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventor2yWeight',
+      render:d=>parseFloat(d||0).toFixed(4)
+
     },
     {
       title: '状态',
@@ -369,11 +374,15 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price4',
+      render:d=>parseFloat(d||0).toFixed(4)
+
     },
     {
       title: '成本价',
       dataIndex: 'costPirce',
       key: 'costPirce4',
+      render:d=>parseFloat(d||0).toFixed(4)
+
     },
     {
       title: '计量单位',
@@ -400,6 +409,8 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'singleWeight4',
+      render:d=>parseFloat(d||0).toFixed(4)
+
     },
     {
       title: '状态',
@@ -479,6 +490,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
+      render:d=>parseFloat(d||0).toFixed(4)
     },
     {
       title: '计价类别',
@@ -491,6 +503,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'single5Weight',
+      render:d=>parseFloat(d||0).toFixed(4)
     },
     {
       title: '状态',
@@ -581,6 +594,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
+      render:d=>parseFloat(d||0).toFixed(4)
     },
     {
       title: '计价类别',
@@ -593,6 +607,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventory6Weight',
+      render:d=>parseFloat(d||0).toFixed(4)
     },
     {
       title: '客户编号',
@@ -1878,12 +1893,12 @@ const GetRenderitem = ({ data, type }) => {
       {images && images.length > 0 && <Divider/>}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, name }) => {
-            return (name ? <Description key={`c${key}`} term={key}>{data[`${value}Name`]}</Description>
-                : <Description
+          arr.map(({ key, value, name,convert ,date}) => {
+            return (  <Description
                   key={`c${key}`}
                   term={key}
-                >{value === 'status' ? statusConvert[data[value]] : data[value]}
+                >
+                {(date&&data[value])?moment(data[value]).format(date):(convert ? ((convert instanceof  Function)?convert(data[value]):convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
                 </Description>
             );
           })
