@@ -290,7 +290,7 @@ class IndexDetail extends Component {
             {(showItem && showItem !== '') ? (
               <div>
                 <Spin spinning={isLoading}>
-                  <Carousel {...this.carouselsettings}   key={showItem.id} className={business.carousel_content} initialSlide={0} autoplay>
+                  <Carousel {...this.carouselsettings} key={showItem.id} className={business.carousel_content} initialSlide={0} autoplay>
                     {this.getImages(paths)}
                   </Carousel>
                   <DescriptionList size="small" col="1">
@@ -612,8 +612,8 @@ class IndexDetail extends Component {
   handleEditProduct = () => {
     const { item } = this.props;
     this.resetParse();
-    const { imageObject } = this.state;
-    this.parseImages(imageObject);
+    // const { imageObject } = this.state;
+    // this.parseImages(imageObject);
 
     this.setState({
       current: item,
@@ -681,7 +681,7 @@ class IndexDetail extends Component {
   handleSubmit = (close) => {
 
     const { dispatch, form } = this.props;
-    const { isAdd, fileList, showItem } = this.state;
+    const { isAdd, showItem } = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
@@ -689,8 +689,6 @@ class IndexDetail extends Component {
 
       const params = { ...fieldsValue };
 
-      const urls = fileList.map(v => v.url);
-      const names = fileList.map(v => v.name);
       if (isAdd) {
         dispatch({
           type: 'dept/addDept',
@@ -703,7 +701,6 @@ class IndexDetail extends Component {
             })
           }
         });
-        // todo
 
         this.setState({
           isEdit: true,
