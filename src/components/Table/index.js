@@ -68,15 +68,8 @@ class MyTable extends Component {
     handleTableChange({ current, size: pageSize, [`orderBy${orderKey}`]: field });
   }
 
-  returnFooter = () => {
-    const { body } = this.props
-    return body.total ? (
-      <p>
-        <FormattedMessage id="app.table.total" defaultMessage="" />{body.total}
-        <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
-      </p>
-    ) : null
-  }
+  returnTotal = total => <p><FormattedMessage id="app.table.total" defaultMessage="" />{total}<FormattedMessage id="app.table.totalEnd" defaultMessage="" /></p>
+
 
   render() {
     const { props, onSelectRowClass, onRow, onChange, returnFooter } = this;
@@ -85,7 +78,8 @@ class MyTable extends Component {
       showQuickJumper: true,
       pageSize: pagination ? pagination.size : 10,
       total: body ? body.total : 0,
-      current: pagination ? pagination.current : 1
+      current: pagination ? pagination.current : 1,
+      showTotal: this.returnTotal
       // total: 100, //做测试
     };
 
@@ -108,7 +102,7 @@ class MyTable extends Component {
         rowClassName={onSelectRowClass}
         loading={listLoading}
         onRow={onRow}
-        footer={returnFooter}
+      // footer={returnFooter}
       />
     );
   }

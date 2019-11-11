@@ -7,7 +7,7 @@ import HttpFetch from '@/utils/HttpFetch';
 const { Option } = Select;
 
 
-class MoldListSelect  extends Component{
+class MoldListSelect extends Component {
   state = {
     dicts: [],
     value: undefined,
@@ -36,7 +36,7 @@ class MoldListSelect  extends Component{
     ));
   };
 
-  getUrl =()=>{
+  getUrl = () => {
     return HttpFetch.queryMoldList
   }
 
@@ -52,12 +52,12 @@ class MoldListSelect  extends Component{
   };
 
   render() {
-    const { content } = this.props;
+    const { content, style } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
     if (isFirst) {
-      showValue = content||'';
+      showValue = content || '';
 
     } else {
       showValue = value;
@@ -71,7 +71,7 @@ class MoldListSelect  extends Component{
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
         defaultActiveFirstOption={false}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', ...style }}
         showArrow={false}
         value={showValue}
         mode="combobox"
@@ -132,9 +132,9 @@ class MoldListSelect  extends Component{
             }
           }
           this.state.firstSelected = false;
-        }).catch(function(ex) {
-        // message.error('加载图片失败！');
-      });
+        }).catch(function (ex) {
+          // message.error('加载图片失败！');
+        });
     }
   };
 }

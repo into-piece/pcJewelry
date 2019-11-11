@@ -119,7 +119,7 @@ class Dict extends PureComponent {
   };
 
   render() {
-    const { content, defaultValue, style } = this.props;
+    const { content, defaultValue, style, placeholder } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
@@ -132,8 +132,8 @@ class Dict extends PureComponent {
 
     return (
       <Select
-        placeholder={this.props.placeholder}
-        style={{ width: '100%' }}
+        placeholder={placeholder}
+        style={{ width: '100%', ...style }}
         defaultActiveFirstOption={false}
         showArrow={false}
         value={showValue}

@@ -8,21 +8,21 @@
   {
     "key": "成色",
     "value": "productColorName",
-    "type": 5
+    "type": 2
   },
   {
     "key": "宝石颜色",
     "value": "gemColor",
-    "type": 5
+    "type": 2
   },
   {
     "key": "电镀颜色",
     "value": "platingColor",
-    "type": 5
+    "type": 2
   },
   {
     "key": "客户编号",
-    "type": 5,
+    "type": 2,
     "value": "customerId"
   },
   { "key": "中文名", "value": "zhName", "type": 1 },

@@ -39,7 +39,7 @@ class JewelrySelect extends PureComponent {
   }
 
   render() {
-    const { content } = this.props;
+    const { content, style } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
@@ -58,7 +58,7 @@ class JewelrySelect extends PureComponent {
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
         defaultActiveFirstOption={false}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', ...style }}
         showArrow={false}
         value={showValue}
         onChange={this.handleChange}
@@ -118,9 +118,9 @@ class JewelrySelect extends PureComponent {
             }
           }
           this.state.firstSelected = false;
-        }).catch(function(ex) {
-        // message.error('加载图片失败！');
-      });
+        }).catch(function (ex) {
+          // message.error('加载图片失败！');
+        });
     }
   };
 }
