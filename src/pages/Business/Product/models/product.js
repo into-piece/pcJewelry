@@ -27,6 +27,17 @@ export default {
     gemColorKeys: [],
     platingColorKeys: [],
     customerIdKeys: [],
+
+    brandNo:[],
+    productTypeName:[],
+    productColorName:[],
+    gemColor:[],
+    platingColor:[],
+    customerId:[],
+    sourceOfProductName:[],
+    unitOfMeasurement:[],
+    unitOfWeight:[],
+    finishedWeight:[],
   },
 
   effects: {

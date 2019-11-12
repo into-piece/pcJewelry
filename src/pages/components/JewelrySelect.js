@@ -2,9 +2,6 @@ import React, { PureComponent } from 'react';
 import { Select } from 'antd';
 import { getCurrentUser } from '../../utils/authority';
 
-const { Option } = Select;
-
-
 class JewelrySelect extends PureComponent {
   state = {
     dicts: [],
@@ -13,6 +10,60 @@ class JewelrySelect extends PureComponent {
     firstSelected: true,
   };
 
+  componentDidMount() {
+    this.loadSelect();
+  }
+
+  getData() {
+    const { dicts } = this.state;
+    return this.getOption(dicts);
+  }
+
+  getOption = list => {
+    return this.getOptionList(list);
+  };
+
+  loadSelect = () => {
+    const { content, onSelect } = this.props;
+    const { firstSelected } = this.state;
+    const params = this.getParams ? this.getParams() : {};
+    const url = this.getUrl();
+    if (url) {
+      fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': getCurrentUser() ? getCurrentUser().token : '',
+        },
+        body: JSON.stringify(params),
+      })
+        .then(response => response.json())
+        .then(d => {
+          const { body } = d;
+          if (body.records) {
+            this.setState({
+              loading: false,
+              dicts: body.records,
+            });
+            if (firstSelected && content) {
+              if (onSelect) {
+                const selectItem = body.records.filter((v) => {
+                  if (v.id === content)
+                    return v;
+                });
+                if (selectItem.length > 0) {
+                  onSelect(selectItem[0]);
+                }
+              }
+            }
+          }
+          this.state.firstSelected = false;
+        }).catch(function (ex) {
+          // message.error('加载图片失败！');
+        });
+    }
+  };
 
   handleChange = value => {
     const { onChange, onSelect } = this.props;
@@ -34,12 +85,8 @@ class JewelrySelect extends PureComponent {
     }
   };
 
-  componentDidMount() {
-    this.loadSelect();
-  }
-
   render() {
-    const { content, style } = this.props;
+    const { content, style, showSearch, placeholder } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
@@ -51,9 +98,9 @@ class JewelrySelect extends PureComponent {
     }
     return (
       <Select
-        showSearch={this.props.showSearch}
+        showSearch={showSearch}
         optionFilterProp="children"
-        placeholder={this.props.placeholder}
+        placeholder={placeholder}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
@@ -69,60 +116,7 @@ class JewelrySelect extends PureComponent {
     );
   }
 
-  getData() {
-    const { dicts } = this.state;
-    return this.getOption(dicts);
-  }
 
-  getOption = list => {
-    return this.getOptionList(list);
-
-  };
-
-  loadSelect = () => {
-    const { content, onSelect } = this.props;
-    const { firstSelected } = this.state;
-    const params = this.getParams ? this.getParams() : {};
-    const _this = this;
-    const url = this.getUrl();
-    if (url) {
-      fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': getCurrentUser() ? getCurrentUser().token : '',
-        },
-        body: JSON.stringify(params),
-      })
-        .then(response => response.json())
-        .then(d => {
-          const { body } = d;
-          if (body.records) {
-            _this.setState({
-              loading: false,
-              dicts: body.records,
-            });
-            if (firstSelected && content) {
-              if (onSelect) {
-                const selectItem = body.records.filter((v) => {
-                  if (v.id === content)
-                    return v;
-                });
-                if (selectItem.length > 0) {
-                  onSelect(selectItem[0]);
-                }
-
-              }
-
-            }
-          }
-          this.state.firstSelected = false;
-        }).catch(function (ex) {
-          // message.error('加载图片失败！');
-        });
-    }
-  };
 }
 
 export default JewelrySelect;
