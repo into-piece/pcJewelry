@@ -260,13 +260,13 @@ class SpecimenDetaill extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
+        <Button
           key="back"
           onClick={this.handleCancel}
         >
           取消
         </Button>,
-      <Button
+        <Button
           key="submit"
           type="primary"
           loading={productUpdateloading}
@@ -359,7 +359,7 @@ class SpecimenDetaill extends Component {
                   </Spin>
                 </div>
               ) : (
-                <div />
+                  <div />
                 )}
             </Card>
           </div>
@@ -507,7 +507,7 @@ class SpecimenDetaill extends Component {
 
       </div>
 
-            </div>)
+    </div>)
       ;
 
 
@@ -517,7 +517,7 @@ class SpecimenDetaill extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-      <div className={business.carousel_image_ground}>
+        <div className={business.carousel_image_ground}>
           <Zmage
             alt="图片"
             align="center"
@@ -602,7 +602,6 @@ class SpecimenDetaill extends Component {
           <div className="adddevModal">
             <FormItem
               label="流水号"
-
               {...this.centerFormLayout}
             >
               {getFieldDecorator('productNo', {
@@ -990,18 +989,14 @@ class SpecimenDetaill extends Component {
                   style={{ width: 180 }}
                   content={current.customerId}
                   onSelectEndName={(file, customerCombine) => {
-
                     if (file && customerCombine) {
                       // console.log('end name ', file);
                       this.setState({
                         customerShotName: customerCombine,
-
                       });
-
                       // setFieldsValue({
                       //   customerShotName: customerCombine,
                       // });
-
                       this.state.cNoCustomerCombine = customerCombine,
                         this.parseProductNo2();
                     }
@@ -1025,7 +1020,7 @@ class SpecimenDetaill extends Component {
                     readOnly
                     value={customerShotName || current.endShotName}
                   />
-                   </div>)}
+                </div>)}
               </FormItem>
             </div>
 
@@ -1085,7 +1080,7 @@ class SpecimenDetaill extends Component {
                 </FormItem>
               </div>
             </Row>
-                                          </Form> : ''
+          </Form> : ''
 
 
         }
@@ -1504,8 +1499,8 @@ class SpecimenDetaill extends Component {
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
-    const zhName = cNoPercentageZhName +' '+ cNozhNameUniCode +' '+ cNofCodezhName;
-    const enName = cNoPercentageEnName+' ' + cNoenNameUniCode+' ' + cNofCode;
+    const zhName = cNoPercentageZhName + ' ' + cNozhNameUniCode + ' ' + cNofCodezhName;
+    const enName = cNoPercentageEnName + ' ' + cNoenNameUniCode + ' ' + cNofCode;
     // 成色+宝石颜色+类别
     this.setState({
       zhName,

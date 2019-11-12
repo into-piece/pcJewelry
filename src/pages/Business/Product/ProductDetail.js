@@ -266,6 +266,7 @@ class ProductDetail extends Component {
     return {}
   }
 
+  // 批量更新
   getBatchUpdat = () => {
     const {
       selectKey,
@@ -278,7 +279,7 @@ class ProductDetail extends Component {
       <Form size="small">
         {
           batchUpdateArr.map(({ key, value, noNeed, type, list }) => {
-            const arr = list ? product[list] : [
+            const arr = list && product[list] && product[list].length > 0 ? product[list] : [
               { key: 1, value: 1 }
             ]
             // console.log(arr, list, '==================list', product, product[list])

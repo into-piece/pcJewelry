@@ -38,11 +38,11 @@ import ModalConfirm from '@/utils/modal';
 import SearchFromTab0 from './components/SearchFromTab0';
 import BuildTitle from '@/components/BuildTitle';
 import BatchModalForm from './components/BatchModalForm';
+import HttpFetch from '@/utils/HttpFetch';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
-
 const { TextArea } = Input;
 // 弹窗form表单样式
 const formLayout = {
@@ -101,10 +101,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo1',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
-        )
+        <LockTag>
+          {data}
+        </LockTag>
+      )
         : (data),
     }, {
       title: '成色',
@@ -134,7 +134,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
     },
     {
       title: '计价类别',
@@ -167,10 +167,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo2',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
-        )
+        <LockTag>
+          {data}
+        </LockTag>
+      )
         : (data),
     },
     {
@@ -232,7 +232,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
 
     },
     {
@@ -246,7 +246,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventor2yWeight',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
 
     },
     {
@@ -263,10 +263,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater3ialNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
-        )
+        <LockTag>
+          {data}
+        </LockTag>
+      )
         : (data),
     },
     {
@@ -313,10 +313,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater4ialNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
-        )
+        <LockTag>
+          {data}
+        </LockTag>
+      )
         : (data),
     },
     {
@@ -374,14 +374,14 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price4',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
 
     },
     {
       title: '成本价',
       dataIndex: 'costPirce',
       key: 'costPirce4',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
 
     },
     {
@@ -409,7 +409,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'singleWeight4',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
 
     },
     {
@@ -425,10 +425,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'material5No',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
-        )
+        <LockTag>
+          {data}
+        </LockTag>
+      )
         : (data),
     },
     {
@@ -490,7 +490,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
     },
     {
       title: '计价类别',
@@ -503,7 +503,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'single5Weight',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
     },
     {
       title: '状态',
@@ -518,10 +518,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materi6alNo',
       render: data => isLockList ? (
-          <LockTag>
-            {data}
-          </LockTag>
-        )
+        <LockTag>
+          {data}
+        </LockTag>
+      )
         : (data),
     },
     {
@@ -594,7 +594,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
     },
     {
       title: '计价类别',
@@ -607,7 +607,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventory6Weight',
-      render: d => parseFloat(d || 0).toFixed(4),
+      render: d => parseFloat(d || 0).toFixed(4)
     },
     {
       title: '客户编号',
@@ -835,7 +835,7 @@ class Info extends Component {
     switch (type) {
       case 2:
         return (<Select placeholder="请选择" disabled={disable || false}>
-          {dev&&dev[list] && dev[list].map(({ value, key }) =>
+          {dev && dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
@@ -859,7 +859,7 @@ class Info extends Component {
             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
-          {dev&&dev[list] && dev[list].map(({ value, key }) =>
+          {dev && dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
@@ -874,16 +874,16 @@ class Info extends Component {
           }
           disabled={disable || false}
         >
-          {dev&&dev[list] && dev[list].map(({ value, key }) =>
+          {dev && dev[list] && dev[list].map(({ value, key }) =>
 
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
 
       case 9:
-        return (<TextArea disabled={disable || false}/>);
+        return (<TextArea disabled={disable || false} />);
       default:
-        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'}/>;
+        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'} />;
     }
   };
 
@@ -897,10 +897,10 @@ class Info extends Component {
     const { modalType } = this.state;
     const dataArr = modalContent[selectKey];
     return <BatchModalForm key={'BatchModalForm' + selectKey} wrappedComponentRef={e => this.BatchModalForm = e}
-                           dev={dev} arr={dataArr}
-                           fileListFun={(list) => {
-                             this.setState({ filelist: list });
-                           }} returnElement={this.returnElement}/>;
+      dev={dev} arr={dataArr}
+      fileListFun={(list) => {
+        this.setState({ filelist: list });
+      }} returnElement={this.returnElement} />;
 
   };
   // 根据btn点击 返回对应弹窗内容
@@ -915,6 +915,13 @@ class Info extends Component {
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
+
+    if (modalType === 'batchAdd') {
+      return <BatchModalForm wrappedComponentRef={e => this.BatchModalForm = e} dev={dev} arr={dataArr}
+        fileListFun={(list) => {
+          this.setState({ filelist: list });
+        }} returnElement={this.returnElement} />;
+    }
 
 
     return (
@@ -1129,7 +1136,7 @@ class Info extends Component {
   returnTitle = () => {
     const { selectKey } = this.props;
 
-    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings"/>;
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -1423,7 +1430,7 @@ class Info extends Component {
   };
 
   render() {
-    const { state, props, btnFn, getModalContent, getBatchModalContent,returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch, onSearchType } = this;
+    const { state, props, btnFn, getModalContent, getBatchModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch, onSearchType } = this;
     const { mode, modalType, addloading } = state;
     const { list, selectKey, choosenRowData } = props;
 
@@ -1458,26 +1465,26 @@ class Info extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
-        key="back"
-        onClick={() => {
-          this.setState({ filelist: [] });
-          btnFn('');
-        }}
-      >
-        取消
+        <Button
+          key="back"
+          onClick={() => {
+            this.setState({ filelist: [] });
+            btnFn('');
+          }}
+        >
+          取消
       </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(false);
-        }}
-      >
-        保存
+        <Button
+          key="submit"
+          type="primary"
+          loading={addloading}
+          onClick={() => {
+            handleModalOk(false);
+          }}
+        >
+          保存
       </Button>,
-    ];
+      ];
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1508,8 +1515,8 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()}/>}
-          key={`Modal-${selectKey}-${modalType}`}
+          title={<BuildTitle title={returnTitle()} />}
+          key={`Modal-${selectKey}`}
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
@@ -1521,7 +1528,7 @@ class Info extends Component {
             btnFn('');
           }}
         >
-          {(modalType==='batchAdd'&&selectKey==='stone')?getBatchModalContent():getModalContent()}
+          {(modalType === 'batchAdd' && selectKey === 'stone') ? getBatchModalContent() : getModalContent()}
         </Modal>
       </div>
     );
@@ -1560,11 +1567,11 @@ const RightContent =
                     color: '#35B0F4',
                   }}
                 >
-                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage=""/>
+                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
                 </div>
-                <Divider className={styles.divder}/>
+                <Divider className={styles.divder} />
               </div>
-              <GetRenderitem data={choosenRowData} type={type}/>
+              <GetRenderitem data={choosenRowData} type={type} />
             </div>
             {/* </Card> */}
             <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
@@ -1592,7 +1599,6 @@ const RightContent =
                 icon={'plus'}
                 size="small"
                 disabled={returnSisabled('batchAdd')}
-
                 onClick={() => {
                   btnFn('batchAdd');
                 }}
@@ -1632,9 +1638,7 @@ class CenterInfo extends Component {
           type: 'devRaw/clearSixList',
           payload: {},
           callback: () => {
-            setTimeout(() => {
-              this.turnTab(rowData.type);
-            }, 200);
+            setTimeout(() => { this.turnTab(rowData.type) }, 200)
           },
         });
       },
@@ -1684,9 +1688,7 @@ class CenterInfo extends Component {
           type: 'devRaw/getPagination',
           payload: { current: 1, size: 10 },
           callback: () => {
-            setTimeout(() => {
-              getList({ key });
-            }, 200);
+            setTimeout(() => { getList({ key }); }, 200)
           },
         });
       },
@@ -1780,7 +1782,7 @@ class CenterInfo extends Component {
             handleTableChange={onSearchType}
           />
         </div>
-        <Divider/>
+        <Divider />
         {/*<div className={styles.contentTitle}>*/}
         {/*<Radio.Group defaultValue="material" value={type} buttonStyle="solid">*/}
         {/*<Radio.Button*/}
@@ -1901,19 +1903,19 @@ const GetRenderitem = ({ data, type }) => {
     <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-      <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
-        {getImages(images)}
-      </Carousel>}
-      {images && images.length > 0 && <Divider/>}
+        <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
+          {getImages(images)}
+        </Carousel>}
+      {images && images.length > 0 && <Divider />}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name, convert, date }) => {
             return (<Description
-                key={`c${key}`}
-                term={key}
-              >
-                {(date && data[value]) ? moment(data[value]).format(date) : (convert ? ((convert instanceof Function) ? convert(data[value]) : convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
-              </Description>
+              key={`c${key}`}
+              term={key}
+            >
+              {(date && data[value]) ? moment(data[value]).format(date) : (convert ? ((convert instanceof Function) ? convert(data[value]) : convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
+            </Description>
             );
           })
         }

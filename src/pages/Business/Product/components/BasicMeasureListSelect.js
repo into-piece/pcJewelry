@@ -11,7 +11,7 @@ const { Option } = Select;
 class BasicMeasureListSelect extends JewelrySelect {
 
 
-  getUrl=()=>{
+  getUrl = () => {
     return HttpFetch.queryMeasureUniList;
   }
 
