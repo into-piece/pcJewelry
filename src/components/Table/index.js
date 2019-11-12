@@ -72,10 +72,10 @@ class MyTable extends Component {
 
 
   render() {
-    const { props, onSelectRowClass, onRow, onChange, returnFooter } = this;
+    const { props, onSelectRowClass, onRow, onChange } = this;
     const { checkType, body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
     const paginationProps = {
-      showQuickJumper,
+      showQuickJumper:true,
       pageSize: pagination ? pagination.size : 10,
       total: body ? body.total : 0,
       current: pagination ? pagination.current : 1,
@@ -104,7 +104,6 @@ class MyTable extends Component {
         rowClassName={onSelectRowClass}
         loading={listLoading}
         onRow={onRow}
-      // footer={returnFooter}
       />
     );
   }
