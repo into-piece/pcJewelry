@@ -70,7 +70,7 @@ const firstTabFlag = 'Department';
     searchParams: model.searchParams,
   };
 })
-class Index2 extends Component {
+class Index extends Component {
   state = {
     modalType: '',
     rightActive: firstTabFlag,
@@ -566,4 +566,4 @@ class Index2 extends Component {
 
 }
 
-export default Index2;
+export default Index;
