@@ -19,14 +19,16 @@ class ModalForm extends Component {
   render() {
     const { dev, returnElement, fileListFun } = this.props;
     let { arr } = this.props;
+    let arrtemp = []
     arr = arr.filter(e => ['materialNo', 'zhName', 'enName'].indexOf(e.value) < 0);
 
-    arr = arr.map(e => {
+    arrtemp = arr.map(e => {
+      const  aa = {...e}
       if (['shape', 'cut', 'color', 'quality'].indexOf(e.value) >= 0) {
-        e.type = 6;
-        e.dfv = [];
+        aa.type = 6;
+        aa.dfv = [];
       }
-      return e;
+      return aa;
     });
 
 
@@ -37,9 +39,9 @@ class ModalForm extends Component {
 
     return (
       <Form size="small" key="batchform">
-        {arr.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit, number }) => {
-          const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
-            <FormItem label={key} {...formLayout} key={`${key}=${dfv}`}>
+        {arrtemp.map(({ key, value, noNeed, type, list, dfv, span, disable, noedit, number }) => {
+          const col = !noedit ? <Col span={span || 12} key={`batch-${key}=${dfv}`}>
+            <FormItem label={key} {...formLayout}>
               {
                 getFieldDecorator(value, {
                   rules: [{
