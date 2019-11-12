@@ -62,7 +62,7 @@ export default {
     },
 
     selectKey: 'material',
-    colorSettingList: initData,
+    colorSettingList: [],
     selectedRowKeys: [], // table select
     choosenRowData: { id: '', zhName: '', enName: '', unitCode: '' }, // select to show
 

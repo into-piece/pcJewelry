@@ -134,7 +134,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '计价类别',
@@ -232,7 +232,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -246,7 +246,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventor2yWeight',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -374,14 +374,14 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price4',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
       title: '成本价',
       dataIndex: 'costPirce',
       key: 'costPirce4',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -409,7 +409,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'singleWeight4',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -490,7 +490,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '计价类别',
@@ -503,7 +503,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'single5Weight',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '状态',
@@ -594,7 +594,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '计价类别',
@@ -607,7 +607,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventory6Weight',
-      render:d=>parseFloat(d||0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '客户编号',
@@ -835,7 +835,7 @@ class Info extends Component {
     switch (type) {
       case 2:
         return (<Select placeholder="请选择" disabled={disable || false}>
-          {dev[list] && dev[list].map(({ value, key }) =>
+          {dev&&dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
@@ -859,7 +859,7 @@ class Info extends Component {
             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
-          {dev[list] && dev[list].map(({ value, key }) =>
+          {dev&&dev[list] && dev[list].map(({ value, key }) =>
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
@@ -874,7 +874,7 @@ class Info extends Component {
           }
           disabled={disable || false}
         >
-          {dev[list] && dev[list].map(({ value, key }) =>
+          {dev&&dev[list] && dev[list].map(({ value, key }) =>
 
             <Option value={value} key={value}>{key}</Option>,
           )}
@@ -887,7 +887,22 @@ class Info extends Component {
     }
   };
 
+  getBatchModalContent = () => {
+    const {
+      selectKey,
+      dev,
+      choosenRowData,
+      form: { getFieldDecorator, getFieldValue, setFieldsValue },
+    } = this.props;
+    const { modalType } = this.state;
+    const dataArr = modalContent[selectKey];
+    return <BatchModalForm key={'BatchModalForm' + selectKey} wrappedComponentRef={e => this.BatchModalForm = e}
+                           dev={dev} arr={dataArr}
+                           fileListFun={(list) => {
+                             this.setState({ filelist: list });
+                           }} returnElement={this.returnElement}/>;
 
+  };
   // 根据btn点击 返回对应弹窗内容
   getModalContent = () => {
     const {
@@ -900,13 +915,6 @@ class Info extends Component {
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
-
-    if (modalType === 'batchAdd') {
-      return <BatchModalForm wrappedComponentRef={e => this.BatchModalForm = e} dev={dev} arr={dataArr}
-                             fileListFun={(list) => {
-                               this.setState({ filelist: list });
-                             }} returnElement={this.returnElement}/>;
-    }
 
 
     return (
@@ -1072,8 +1080,8 @@ class Info extends Component {
             }
 
 
-            const col = !noedit ? <Col span={span || 12} key={`k${value}`}>
-              <FormItem label={key} {...formLayout} key={`${key}=${dfv}`}>
+            const col = !noedit ? <Col span={span || 12} key={`${key}=${dfv}`}>
+              <FormItem label={key} {...formLayout} >
                 {
                   getFieldDecorator(value, {
                     rules: [{
@@ -1124,6 +1132,7 @@ class Info extends Component {
     const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings"/>;
     return menuText;
   };
+
   handleBatchAdd = (close) => {
     const { selectKey, dev } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
@@ -1414,7 +1423,7 @@ class Info extends Component {
   };
 
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch, onSearchType } = this;
+    const { state, props, btnFn, getModalContent, getBatchModalContent,returnTitle, handleModalOk, returnLockType, returnSisabled, onSearch, onSearchType } = this;
     const { mode, modalType, addloading } = state;
     const { list, selectKey, choosenRowData } = props;
 
@@ -1500,11 +1509,11 @@ class Info extends Component {
         <Modal
           maskClosable={false}
           title={<BuildTitle title={returnTitle()}/>}
-          key={`Modal-${selectKey}`}
+          key={`Modal-${selectKey}-${modalType}`}
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
+          destroyOnClose={true}
           footer={modalFooter}
           visible={modalType !== ''}
           onCancel={() => {
@@ -1512,7 +1521,7 @@ class Info extends Component {
             btnFn('');
           }}
         >
-          {getModalContent()}
+          {(modalType==='batchAdd'&&selectKey==='stone')?getBatchModalContent():getModalContent()}
         </Modal>
       </div>
     );
@@ -1617,16 +1626,18 @@ class CenterInfo extends Component {
     dispatch({
       type: 'devRaw/getChoosenTypeRowData',
       payload: rowData,
-      callback:()=>{
+      callback: () => {
         // 清空右边 下边
         dispatch({
           type: 'devRaw/clearSixList',
           payload: {},
           callback: () => {
-            setTimeout(()=>{this.turnTab(rowData.type)},200)
+            setTimeout(() => {
+              this.turnTab(rowData.type);
+            }, 200);
           },
         });
-      }
+      },
     });
 
   };
@@ -1673,7 +1684,9 @@ class CenterInfo extends Component {
           type: 'devRaw/getPagination',
           payload: { current: 1, size: 10 },
           callback: () => {
-           setTimeout(()=>{ getList({ key });},200)
+            setTimeout(() => {
+              getList({ key });
+            }, 200);
           },
         });
       },
@@ -1755,9 +1768,9 @@ class CenterInfo extends Component {
         <div className={styles.tableBox}>
           <Table
             columns={typeTable}
-            scroll={{x:800}}
+            scroll={{ x: 800 }}
             checkType={'radio'}
-            pagination={true}
+            pagination={false}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}
             selectKey={choosenTypesRowData.id}
@@ -1894,13 +1907,13 @@ const GetRenderitem = ({ data, type }) => {
       {images && images.length > 0 && <Divider/>}
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, name,convert ,date}) => {
-            return (  <Description
-                  key={`c${key}`}
-                  term={key}
-                >
-                {(date&&data[value])?moment(data[value]).format(date):(convert ? ((convert instanceof  Function)?convert(data[value]):convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
-                </Description>
+          arr.map(({ key, value, name, convert, date }) => {
+            return (<Description
+                key={`c${key}`}
+                term={key}
+              >
+                {(date && data[value]) ? moment(data[value]).format(date) : (convert ? ((convert instanceof Function) ? convert(data[value]) : convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
+              </Description>
             );
           })
         }
