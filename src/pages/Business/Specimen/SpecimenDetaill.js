@@ -786,34 +786,6 @@ class SpecimenDetaill extends Component {
           </div>
           <div className="adddevModal">
             <FormItem
-              label='模具号'
-              {...this.centerFormLayout}
-
-            >
-              {getFieldDecorator('mouldNo', {
-                rules: [{ required: true, message: '请输入' }],
-                initialValue: current.mouldNo,
-              })(<MoldListSelect
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                style={{ width: 180 }}
-                content={current.mouldNo}
-                placeholder="请输入"
-                onSelect={(v) => {
-
-                  // console.log(" select mold ",v)
-                  if (v && v.mainMold)
-                    this.state.cNomainMold = v.mainMold;
-                  this.parseProductNo();
-                }}
-              />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem
               label="成色"
               {...this.centerFormLayout}
 
@@ -1331,15 +1303,10 @@ class SpecimenDetaill extends Component {
 
   handleDeleteProduct = () => {
     const { selectProductData } = this.props;
-
-
     const ids = selectProductData.map(v => {
       return v.id;
     });
-
     const { dispatch } = this.props;
-
-
     dispatch({
       type: 'specimen/deleteSpecimen',
       payload: { list: ids },
@@ -1510,8 +1477,8 @@ class SpecimenDetaill extends Component {
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
-    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
-    const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
+    const zhName = cNoPercentageZhName +' '+ cNozhNameUniCode +' '+ cNofCodezhName;
+    const enName = cNoPercentageEnName+' ' + cNoenNameUniCode+' ' + cNofCode;
     // 成色+宝石颜色+类别
     this.setState({
       zhName,

@@ -1757,6 +1757,7 @@ class CenterInfo extends Component {
             columns={typeTable}
             scroll={{x:800}}
             checkType={'radio'}
+            pagination={true}
             body={typeslist}
             changeChoosenRow={this.changeChoosenTypeRow}
             selectKey={choosenTypesRowData.id}

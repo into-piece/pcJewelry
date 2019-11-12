@@ -75,11 +75,12 @@ class MyTable extends Component {
     const { props, onSelectRowClass, onRow, onChange, returnFooter } = this;
     const { checkType, body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
     const paginationProps = {
-      showQuickJumper: true,
+      showQuickJumper,
       pageSize: pagination ? pagination.size : 10,
       total: body ? body.total : 0,
       current: pagination ? pagination.current : 1,
-      showTotal: this.returnTotal
+      showTotal: this.returnTotal,
+      size:"small"
       // total: 100, //做测试
     };
 
