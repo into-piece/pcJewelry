@@ -1799,9 +1799,9 @@ const routes = [
                   ? _dvaDynamic({
                       app: require('@tmp/dva').getApp(),
                       models: () => [
-                        import(/* webpackChunkName: 'p__system__Department__models__index.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/system/Department/models/index.js').then(
+                        import(/* webpackChunkName: 'p__system__Department__models__model.js' */ '/Users/frank-zeng/WebstormProjects/jewelry/src/pages/system/Department/models/model.js').then(
                           m => {
-                            return { namespace: 'index', ...m.default };
+                            return { namespace: 'model', ...m.default };
                           },
                         ),
                       ],
@@ -1810,7 +1810,7 @@ const routes = [
                       LoadingComponent: require('/Users/frank-zeng/WebstormProjects/jewelry/src/components/PageLoading/index')
                         .default,
                     })
-                  : require('../system/Department').default,
+                  : require('../system/Department').Index2,
                 routes: [
                   {
                     component: () =>
