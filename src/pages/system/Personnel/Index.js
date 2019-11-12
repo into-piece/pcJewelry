@@ -188,7 +188,6 @@ class Index extends Component {
       isLoad: false,
       productSorts: [],
       searchProductParams: {},
-
     };
   }
 
@@ -213,7 +212,7 @@ class Index extends Component {
   }
 
   render() {
-    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
+    const { leftlg, rightlg, drawVisible,showItem, visible, update, isLoad } = this.state;
 
     const {
       body = {},
@@ -227,21 +226,24 @@ class Index extends Component {
         v.marriageVar = YoNConvert[v.marriage];
         v.isSleepOutVar = YoNConvert[v.isSleepOut];
         v.isDineInVar = YoNConvert[v.isDineIn];
-
-
         return v;
       });
     }
     if (isLoad) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
-
       this.refs.personTable.updateSelectDatas(body);
+      if(showItem){
+        let  select =    body.records.filter(e=>e.id===showItem.id);
+        select = select.length>0 ?select[0]:undefined;
+
+        this.state.showItem = select;
+      }
+
       this.state.isLoadList = false;
     }
 
 
-    // console.log("bod ",body.data)
 
     return (
       <div className={business.page}>
@@ -313,7 +315,6 @@ class Index extends Component {
       item={showItem}
       isProductUpdate={isProductUpdate}
       selectProductData={selectProductData}
-      key="556"
       isloading={(isLoad) => {
         this.setState({
           isLoad,
