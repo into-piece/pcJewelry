@@ -308,9 +308,22 @@ class ProductDetail extends Component {
                         )}
                       </Select> :
                       type && type === 3 ?
-                        <TextArea rows={2} placeholder="请输入" />
-                        :
-                        <Input placeholder="请输入" />,
+                        <TextArea rows={2} placeholder="请输入" /> :
+                        type && type === 4 ?
+                          <Select placeholder="请选择" style={{ width: 180 }}
+                            showSearch
+                            optionFilterProp="children"
+                            mode="multiple"
+
+                            filterOption={(input, option) =>
+                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }>
+                            {arr.map(({ value, key }) =>
+                              <Option value={value}>{key}</Option>,
+                            )}
+                          </Select>
+                          :
+                          <Input placeholder="请输入" />,
                     )
                   }
                 </FormItem>
@@ -592,7 +605,7 @@ class ProductDetail extends Component {
                 icon="rollback"
                 onClick={this.batchUpdate}
               >
-                批量更新
+                批量新增
               </Button>
             </div>
           </div>

@@ -14,24 +14,24 @@
   {
     "key": "成色",
     "value": "productColorName",
-    "type": 2,
+    "type": 4,
     "list": "productColorName"
   },
   {
     "key": "宝石颜色",
     "value": "gemColor",
-    "type": 2,
+    "type": 4,
     "list": "gemColor"
   },
   {
     "key": "电镀颜色",
     "value": "platingColor",
-    "type": 2,
+    "type": 4,
     "list": "platingColor"
   },
   {
     "key": "客户编号",
-    "type": 2,
+    "type": 4,
     "value": "customerId",
     "list": "customerId"
   },
