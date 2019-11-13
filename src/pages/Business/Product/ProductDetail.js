@@ -395,20 +395,20 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
+        <Button
+          key="back"
+          onClick={this.handleCancel}
+        >
           取消
       </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={productUpdateloading}
-        onClick={() => {
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
             this.handleSubmit(false);
           }}
-      >
+        >
           保存
       </Button>,
       ];
@@ -488,7 +488,7 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-              <div />
+                <div />
               )}
           </Card>
         </div>
@@ -628,19 +628,21 @@ class ProductDetail extends Component {
           </Modal>
         </Card>
 
-        <Modal
-          maskClosable={false}
-          title={<BuildTitle title="批量新增" />}
-          width={1200}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          visible={batchUpdateShow}
-          footer={modalFooter}
-          onCancel={this.closeModal}
-        >
-          {this.getBatchUpdat()}
-        </Modal>
+        {batchUpdateShow &&
+          <Modal
+            maskClosable={false}
+            title={<BuildTitle title="批量新增" />}
+            width={1200}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            visible={batchUpdateShow}
+            footer={modalFooter}
+            onCancel={this.closeModal}
+          >
+            {this.getBatchUpdat()}
+          </Modal>
+        }
       </div>
     )
   }
@@ -649,15 +651,15 @@ class ProductDetail extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-      <div className={business.carousel_image_ground}>
-        <Zmage
-          alt="图片"
-          align="center"
-          className={styles.carousel_image}
-          src={v}
-          set={paths.map(image => ({ src: image }))}
-        />
-      </div>
+        <div className={business.carousel_image_ground}>
+          <Zmage
+            alt="图片"
+            align="center"
+            className={styles.carousel_image}
+            src={v}
+            set={paths.map(image => ({ src: image }))}
+          />
+        </div>
       ));
   };
 
@@ -910,6 +912,37 @@ class ProductDetail extends Component {
           </div>
           <div className="adddevModal">
             <FormItem
+              label='模具号'
+              {...this.centerFormLayout}
+
+            >
+              {getFieldDecorator('mouldNo', {
+                rules: [{ required: true, message: '请输入' }],
+                initialValue: current.mouldNo,
+              })(<MoldListSelect
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                style={{ width: 180 }}
+                content={current.mouldNo}
+                placeholder="请输入"
+                onSelect={(v) => {
+                  // if (v && v.mainMold)
+                  //   this.state.cNomainMold = v.mainMold;
+                  this.state.cNomainMold = v;
+                  this.parseProductNo();
+                }}
+                onChange={(v) => {
+                  this.setState({ current: { ...this.state.current, mouldNo: v }, cNomainMold: v });
+                  this.parseProductNo();
+                }}
+              />)}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem
               label="成色"
               {...this.centerFormLayout}
             >
@@ -1065,15 +1098,13 @@ class ProductDetail extends Component {
                     // console.log('end name ', file);
                     this.setState({
                       customerShotName: customerCombine,
-
+                      customerNo: file
                     });
 
                     // setFieldsValue({
                     //   customerShotName: customerCombine,
                     // });
-
-                    this.state.cNoCustomerCombine = customerCombine,
-                      this.parseProductNo();
+                    this.parseProductNo({ customerNo: file });
                   }
                 }}
               />)}
@@ -1574,16 +1605,16 @@ class ProductDetail extends Component {
     });
   };
 
-  parseProductNo = () => {
+  parseProductNo = ({ customerNo = '' } = {}) => {
     console.log(11111)
-    const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold;
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${cNoCustomerCombine}`;
-    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
-    const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
+    const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
+    const zhName = cNoPercentageZhName + ' ' + cNozhNameUniCode + ' ' + cNofCodezhName;
+    const enName = cNoPercentageEnName + ' ' + cNoenNameUniCode + ' ' + cNofCode;
     // 成色+宝石颜色+类别
     this.setState({
       productNo,
