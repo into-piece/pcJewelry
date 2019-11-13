@@ -3,7 +3,9 @@ import history from './history';
 import '../../global.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import findRoute from '/Users/frank-zeng/WebstormProjects/jewelry/node_modules/umi-build-dev/lib/findRoute.js';
+import findRoute, {
+  getUrlQuery,
+} from '/Users/chensongbin/Documents/GitHub/jewelry/node_modules/umi-build-dev/lib/findRoute.js';
 
 // runtime plugins
 const plugins = require('umi/_runtimePlugin');
@@ -52,6 +54,7 @@ let clientRender = async () => {
         ? await activeRoute.component.getInitialProps({
             route: activeRoute,
             isServer: false,
+            location,
             ...initialProps,
           })
         : {};
@@ -88,7 +91,8 @@ if (!__IS_BROWSER) {
   serverRender = async (ctx = {}) => {
     // ctx.req.url may be `/bar?locale=en-US`
     const [pathname] = (ctx.req.url || '').split('?');
-    require('@tmp/history').default.push(ctx.req.url);
+    const history = require('@tmp/history').default;
+    history.push(ctx.req.url);
     let props = {};
     const activeRoute =
       findRoute(require('./router').routes, pathname) || false;
@@ -100,9 +104,14 @@ if (!__IS_BROWSER) {
       const initialProps = plugins.apply('modifyInitialProps', {
         initialValue: {},
       });
+      // patch query object
+      const location = history.location
+        ? { ...history.location, query: getUrlQuery(history.location.search) }
+        : {};
       props = await activeRoute.component.getInitialProps({
         route: activeRoute,
         isServer: true,
+        location,
         // only exist in server
         req: ctx.req || {},
         res: ctx.res || {},
@@ -140,6 +149,82 @@ if (!__IS_BROWSER) {
 
 export { ReactDOMServer };
 export default (__IS_BROWSER ? null : serverRender);
+
+(() => {
+  try {
+    const ua = window.navigator.userAgent;
+    const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1;
+    if (isIE) return;
+
+    // Umi UI Bubble
+    require('../../../node_modules/umi-plugin-ui/lib/bubble').default({
+      port: 3001,
+      path: '/Users/chensongbin/Documents/GitHub/jewelry',
+      currentProject: '',
+      isBigfish: undefined,
+    });
+  } catch (e) {
+    console.warn('Umi UI render error:', e);
+  }
+})();
+
+(() => {
+  // Runtime block add component
+  window.GUmiUIFlag = require('../../../node_modules/umi-build-dev/lib/plugins/commands/block/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
+
+  // Enable/Disable block add edit mode
+  const el = document.createElement('style');
+  el.innerHTML = '.g_umiuiBlockAddEditMode { display: none; } ';
+  const hoverEl = document.createElement('style');
+  hoverEl.innerHTML =
+    '.g_umiuiBlockAddEditMode:hover {background: rgba(24, 144, 255, 0.25) !important;}';
+  document.querySelector('head').appendChild(hoverEl);
+  document.querySelector('head').appendChild(el);
+
+  window.addEventListener(
+    'message',
+    event => {
+      try {
+        const { action, data } = JSON.parse(event.data);
+        switch (action) {
+          case 'umi.ui.enableBlockEditMode':
+            el.innerHTML = '';
+            break;
+          case 'umi.ui.disableBlockEditMode':
+            el.innerHTML = '.g_umiuiBlockAddEditMode { display: none; }';
+            break;
+          case 'umi.ui.checkValidEditSection':
+            const haveValid = !!document.querySelectorAll(
+              'div.g_umiuiBlockAddEditMode',
+            ).length;
+            const frame = document.getElementById('umi-ui-bubble');
+            if (frame && frame.contentWindow) {
+              frame.contentWindow.postMessage(
+                JSON.stringify({
+                  action: 'umi.ui.checkValidEditSection.success',
+                  payload: {
+                    haveValid,
+                  },
+                }),
+                '*',
+              );
+            }
+          default:
+            break;
+        }
+      } catch (e) {}
+    },
+    false,
+  );
+
+  // TODO: remove this before publish
+  window.g_enableUmiUIBlockAddEditMode = function() {
+    el.innerHTML = '';
+  };
+  window.g_disableUmiUIBlockAddEditMode = function() {
+    el.innerHTML = '.g_umiuiBlockAddEditMode { display: none; }';
+  };
+})();
 
 require('../../global.less');
 

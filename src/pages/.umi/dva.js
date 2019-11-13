@@ -20,15 +20,15 @@ export function _onCreate() {
     app.use(plugin);
   });
   
-  app.model({ namespace: 'dev', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/dev.js').default) });
-app.model({ namespace: 'global', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/global.js').default) });
-app.model({ namespace: 'list', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/list.js').default) });
-app.model({ namespace: 'login', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/login.js').default) });
-app.model({ namespace: 'menu', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/menu.js').default) });
-app.model({ namespace: 'project', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/project.js').default) });
-app.model({ namespace: 'quote', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/quote.js').default) });
-app.model({ namespace: 'setting', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/setting.js').default) });
-app.model({ namespace: 'user', ...(require('/Users/frank-zeng/WebstormProjects/jewelry/src/models/user.js').default) });
+  app.model({ namespace: 'dev', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/dev.js').default) });
+app.model({ namespace: 'global', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/global.js').default) });
+app.model({ namespace: 'list', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/list.js').default) });
+app.model({ namespace: 'login', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/login.js').default) });
+app.model({ namespace: 'menu', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/menu.js').default) });
+app.model({ namespace: 'project', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/project.js').default) });
+app.model({ namespace: 'quote', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/quote.js').default) });
+app.model({ namespace: 'setting', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/setting.js').default) });
+app.model({ namespace: 'user', ...(require('/Users/chensongbin/Documents/GitHub/jewelry/src/models/user.js').default) });
   return app;
 }
 

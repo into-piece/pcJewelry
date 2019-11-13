@@ -6,7 +6,7 @@ import {
   intlShape,
   LangContext,
   _setLocaleContext
-} from 'umi-plugin-locale';
+} from 'umi-plugin-locale/lib/locale';
 
 const InjectedWrapper = (() => {
   let sfc = (props, context) => {
@@ -36,7 +36,7 @@ defaultAntd = defaultAntd.default || defaultAntd;
 const localeInfo = {
   'en-US': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/en-US.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/chensongbin/Documents/GitHub/jewelry/src/locales/en-US.js')),
     },
     locale: 'en-US',
     antd: require('antd/lib/locale-provider/en_US'),
@@ -45,7 +45,7 @@ const localeInfo = {
   },
   'pt-BR': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/pt-BR.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/chensongbin/Documents/GitHub/jewelry/src/locales/pt-BR.js')),
     },
     locale: 'pt-BR',
     antd: require('antd/lib/locale-provider/pt_BR'),
@@ -54,7 +54,7 @@ const localeInfo = {
   },
   'zh-CN': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/zh-CN.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/chensongbin/Documents/GitHub/jewelry/src/locales/zh-CN.js')),
     },
     locale: 'zh-CN',
     antd: require('antd/lib/locale-provider/zh_CN'),
@@ -63,7 +63,7 @@ const localeInfo = {
   },
   'zh-TW': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/frank-zeng/WebstormProjects/jewelry/src/locales/zh-TW.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/chensongbin/Documents/GitHub/jewelry/src/locales/zh-TW.js')),
     },
     locale: 'zh-TW',
     antd: require('antd/lib/locale-provider/zh_TW'),
@@ -107,6 +107,17 @@ class LocaleWrapper extends React.Component{
     window.g_lang = appLocale.locale;
     window.g_langSeparator = baseSeparator || '-';
     appLocale.data && addLocaleData(appLocale.data);
+
+    // support dynamic add messages for umi ui
+    // { 'zh-CN': { key: value }, 'en-US': { key: value } }
+    const runtimeLocaleMessagesType = typeof runtimeLocale.messages;
+    if (runtimeLocaleMessagesType === 'object' || runtimeLocaleMessagesType === 'function') {
+      const runtimeMessage = runtimeLocaleMessagesType === 'object'
+        ? runtimeLocale.messages[appLocale.locale]
+        : runtimeLocale.messages()[appLocale.locale];
+      Object.assign(appLocale.messages, runtimeMessage || {});
+    }
+
     return appLocale;
   }
   reloadAppLocale = () => {

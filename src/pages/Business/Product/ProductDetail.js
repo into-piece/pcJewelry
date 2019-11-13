@@ -927,10 +927,13 @@ class ProductDetail extends Component {
                 content={current.mouldNo}
                 placeholder="请输入"
                 onSelect={(v) => {
-
-                  // console.log(" select mold ",v)
-                  if (v && v.mainMold)
-                    this.state.cNomainMold = v.mainMold;
+                  // if (v && v.mainMold)
+                  //   this.state.cNomainMold = v.mainMold;
+                  this.state.cNomainMold = v;
+                  this.parseProductNo();
+                }}
+                onChange={(v) => {
+                  this.setState({ current: { ...this.state.current, mouldNo: v } ,cNomainMold:v});
                   this.parseProductNo();
                 }}
               />)}
@@ -1093,15 +1096,13 @@ class ProductDetail extends Component {
                     // console.log('end name ', file);
                     this.setState({
                       customerShotName: customerCombine,
-
+                      customerNo: file
                     });
 
                     // setFieldsValue({
                     //   customerShotName: customerCombine,
                     // });
-
-                    this.state.cNoCustomerCombine = customerCombine,
-                      this.parseProductNo();
+                    this.parseProductNo({customerNo:file});
                   }
                 }}
               />)}
@@ -1602,16 +1603,16 @@ class ProductDetail extends Component {
     });
   };
 
-  parseProductNo = () => {
+  parseProductNo = ({customerNo}) => {
     console.log(11111)
-    const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNoCustomerCombine = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold;
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${cNoCustomerCombine}`;
-    const zhName = cNoPercentageZhName + cNozhNameUniCode + cNofCodezhName;
-    const enName = cNoPercentageEnName + cNoenNameUniCode + cNofCode;
+    const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
+    const zhName = cNoPercentageZhName +' '+ cNozhNameUniCode +' '+ cNofCodezhName;
+    const enName = cNoPercentageEnName +' '+ cNoenNameUniCode +' '+ cNofCode;
     // 成色+宝石颜色+类别
     this.setState({
       productNo,

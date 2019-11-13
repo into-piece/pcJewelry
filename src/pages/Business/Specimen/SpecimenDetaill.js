@@ -1485,9 +1485,9 @@ class SpecimenDetaill extends Component {
   };
 
   parseProductNo2 = () => {
-    const { cNoCustomerCombine = '' } = this.state;
+    const { customerNo = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
-    const productNo = `${cNoCustomerCombine}${moment().format('YYYYMMDDHHmmssSS')}`;
+    const productNo = `${customerNo}${moment().format('YYYYMMDDHHmmssSS')}`;
     this.setState({
       productNo,
     });
