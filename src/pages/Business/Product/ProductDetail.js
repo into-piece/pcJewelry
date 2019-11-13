@@ -363,6 +363,11 @@ class ProductDetail extends Component {
     });
   }
 
+  // 批量新增 保存确认 提交回调
+  handleBatchSubmit = () => {
+
+  }
+
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
     const { isProductUpdate, productSaveloading, productUpdateloading } = this.props;
@@ -412,6 +417,25 @@ class ProductDetail extends Component {
           保存
       </Button>,
       ];
+
+    const batchFooter = [
+      <Button
+        key="back"
+        onClick={this.closeModal}
+      >
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productSaveloading}
+        onClick={() => {
+          this.handleBatchSubmit(true);
+        }}
+      >
+        保存
+      </Button>
+    ]
 
 
     let paths = [];
@@ -627,22 +651,19 @@ class ProductDetail extends Component {
             {this.getProductModalContent()}
           </Modal>
         </Card>
-
-        {batchUpdateShow &&
-          <Modal
-            maskClosable={false}
-            title={<BuildTitle title="批量新增" />}
-            width={1200}
-            className={styles.standardListForm}
-            bodyStyle={{ padding: '28px 0 0' }}
-            destroyOnClose
-            visible={batchUpdateShow}
-            footer={modalFooter}
-            onCancel={this.closeModal}
-          >
-            {this.getBatchUpdat()}
-          </Modal>
-        }
+        <Modal
+          maskClosable={false}
+          title={<BuildTitle title="批量新增" />}
+          width={1200}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          visible={batchUpdateShow}
+          footer={batchFooter}
+          onCancel={this.closeModal}
+        >
+          {this.getBatchUpdat()}
+        </Modal>
       </div>
     )
   }
@@ -978,7 +999,7 @@ class ProductDetail extends Component {
             >
               {getFieldDecorator('specification', {
                 rules: [{
-                  required: (this.state.cNofCodezhName === '耳环' || this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链'),
+                  required: this.state.cNofCodezhName === '耳环' || this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链',
                   message: '请输入规格',
                 }],
                 initialValue: current.specification || '0.00',
@@ -1213,10 +1234,25 @@ class ProductDetail extends Component {
   };
 
   handleSubmit = (close) => {
-
     const { dispatch, form } = this.props;
     const { isAdd, fileList, showItem } = this.state;
-    form.validateFields((err, fieldsValue) => {
+    const arr = ['productNo',
+      'brand',
+      'productType',
+      'gemColor',
+      'platingColor',
+      'zhName',
+      'enName',
+      'sourceOfProduct',
+      'mouldNo',
+      'productColor',
+      'specification',
+      'customerId',
+    ]
+
+    // specification
+
+    form.validateFields(arr, (err, fieldsValue) => {
       if (err) {
         return;
       }
