@@ -784,34 +784,6 @@ class SpecimenDetaill extends Component {
           </div>
           <div className="adddevModal">
             <FormItem
-              label='模具号'
-              {...this.centerFormLayout}
-
-            >
-              {getFieldDecorator('mouldNo', {
-                rules: [{ required: true, message: '请输入' }],
-                initialValue: current.mouldNo,
-              })(<MoldListSelect
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                style={{ width: 180 }}
-                content={current.mouldNo}
-                placeholder="请输入"
-                onSelect={(v) => {
-
-                  // console.log(" select mold ",v)
-                  if (v && v.mainMold)
-                    this.state.cNomainMold = v.mainMold;
-                  this.parseProductNo();
-                }}
-              />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem
               label="成色"
               {...this.centerFormLayout}
 
