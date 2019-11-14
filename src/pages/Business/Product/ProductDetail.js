@@ -10,7 +10,8 @@ import {
   Divider,
   Select,
   Carousel, Modal, message, Upload, Spin,
-  Table
+  Table,
+  notification
 } from 'antd';
 import { formatMessage } from 'umi/locale';
 import ModalConfirm from '@/utils/modal';
@@ -37,7 +38,45 @@ import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
 import batchUpdateArr from './config.json'
 import UploadImg from '@/components/UploadImg';
+import { queryListWordbook } from '@/services/api'; // 产品来源
+import servicesConfig from '@/services/business';
 
+const { productBatchUpdate } = servicesConfig
+const {
+  queryBrands,
+  queryproductDropDown2,
+  queryProductMaterial,
+  queryunitColor,
+  queryPlatingColor,
+  queryTerminalNoList,
+  queryMstWordList,
+  queryMoldList,// 模具号
+  queryMeasureUniList, // 数量单位
+} = HttpFetch
+const componentArr = {
+  brand: BrandListSelect,
+  productType: ProductTypeSelect,
+  productColor: PercentageSelect,
+  gemColor: UnitColorListSelect,
+  platingColor: PlatingColorListSelect,
+  customerId: TerminalListSelected,
+  sourceOfProduct: Dict,
+  mouldNo: MoldListSelect,
+  unitOfMeasurement: BasicMeasureListSelect,
+  unitOfWeight: BasicMeasureListSelect,
+}
+const fetchArr = {
+  brand: queryBrands,
+  productType: queryproductDropDown2,
+  productColor: PercentageSelect,
+  gemColor: queryunitColor,
+  platingColor: queryPlatingColor,
+  customerId: queryTerminalNoList,
+  sourceOfProduct: Dict,
+  mouldNo: queryMoldList,
+  unitOfMeasurement: queryMeasureUniList,
+  unitOfWeight: queryMeasureUniList,
+}
 const { Option } = Select
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -219,7 +258,38 @@ class ProductDetail extends Component {
     return true;
   }
 
+  getData = ({ url, params, key }) => {
+    fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { body } = d;
+        if (body && body.records) {
+          // const selectItem = body.records.filter(v =>(v.id === content);
+          if (body.records && body.records.length > 0) {
+            this.props.dispatch({
+              type: 'product/changeState',
+              payload: { key, value: body.records },
+            })
+          }
+        }
+      });
+  }
+
   batchUpdate = () => {
+    const arr = ['brand', 'customerId', 'productType']
+    arr.forEach(v => {
+      this.getData({ url: fetchArr[v], params: {}, key: v })
+    })
+
+
     this.setState({
       batchUpdateShow: true
     })
@@ -266,8 +336,60 @@ class ProductDetail extends Component {
     return {}
   }
 
+  handleImageChange = info => {
+    let fileImgList = [...info.fileList];
+    const { file } = info;
+
+    if (file.type) {
+      const isJPG = file.type.indexOf('image') != -1;
+      if (!isJPG) {
+        message.error('只能上传图片格式的文件');
+        return;
+      }
+    }
+
+    fileImgList = fileImgList.slice(-10).map(file => {
+      // console.log('image is the ', file);
+      if (file.response) {
+        file.url = file.response.url;
+      }
+      if (!file.url) {
+        this.getBase64(file.originFileObj, imageUrl => {
+          fileImgList.forEach((v, i) => {
+            if (v.uid === info.file.uid) {
+              fileImgList[i].url = imageUrl;
+              // console.log("change file name =  ", v.name, info.file)
+              this.setState({
+                fileImgList,
+                cropperVisible: true,
+                uploadFile: imageUrl,
+                uploadFileUid: v.uid,
+              });
+            }
+          });
+        });
+      }
+
+      return file;
+    });
+
+    this.setState({ fileImgList });
+  };
+
+  getList = ({ key, value }) => {
+    // console.log(value, '=========', key)
+    // const arr = ['customerId', 'brand', 'productType']
+    // if (value.length > 0 && arr.includes(key)) {
+    //   this.props.dispatch({
+    //     type: 'product/changeState',
+    //     payload: { key, value },
+    //   })
+    // }
+  }
+
   // 批量新增
   getBatchUpdat = () => {
+    const { getList } = this
     const {
       selectKey,
       product,
@@ -282,6 +404,8 @@ class ProductDetail extends Component {
             const arr = list && product[list] && product[list].length > 0 ? product[list] : [
               { key: 1, value: 1 }
             ]
+
+            const ComponentSelect = componentArr[value]
             // console.log(arr, list, '==================list', product, product[list])
             return (
               <div className="adddevModal" key={key} style={this.returnStyle(value)}>
@@ -297,34 +421,72 @@ class ProductDetail extends Component {
                       }],
                       initialValue: undefined,
                     })(type && type === 2 ?
-                      <Select
+                      // <Select
+                      //   placeholder="请选择"
+                      //   style={{ width: 180 }}
+                      //   showSearch
+                      //   optionFilterProp="children"
+                      //   filterOption={(input, option) =>
+                      //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      //   }
+                      // >
+                      //   {arr.map(({ value, key }) =>
+                      //     <Option value={value}>{key}</Option>,
+                      //   )}
+                      // </Select> 
+                      <ComponentSelect
                         placeholder="请选择"
-                        style={{ width: 180 }}
                         showSearch
                         optionFilterProp="children"
                         filterOption={(input, option) =>
                           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
-                      >
-                        {arr.map(({ value, key }) =>
-                          <Option value={value}>{key}</Option>,
-                        )}
-                      </Select> :
+                        style={{ width: 180 }}
+                        getOptionList={l => { getList({ key: value, value: l }) }}
+                        onSelect={v => {
+                          // if (v && v.brandNo) {
+                          //   this.state.cNoBrandNo = v.brandNo;
+                          //   this.parseProductNo();
+                          // }
+                        }}
+                      />
+                      :
                       type && type === 3 ?
                         <TextArea rows={2} placeholder="请输入" /> :
                         type && type === 4 ?
-                          <Select placeholder="请选择" style={{ width: 180 }}
+                          <ComponentSelect
+                            mode="multiple"
+                            placeholder="请选择"
                             showSearch
                             optionFilterProp="children"
-                            mode="multiple"
-
                             filterOption={(input, option) =>
                               option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }>
-                            {arr.map(({ value, key }) =>
-                              <Option value={value}>{key}</Option>,
-                            )}
-                          </Select>
+                            }
+                            muti
+                            style={{ width: 180 }}
+                            onSelect={v => {
+                              // if (v && v.brandNo) {
+                              //   this.state.cNoBrandNo = v.brandNo;
+                              //   this.parseProductNo();
+                              // }
+                            }}
+                          />
+
+                          // <Select
+                          //   placeholder="请选择"
+                          //   style={{ width: 180 }}
+                          //   showSearch
+                          //   optionFilterProp="children"
+                          //   mode="multiple"
+
+                          //   filterOption={(input, option) =>
+                          //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          //   }
+                          // >
+                          //   {arr.map(({ value, key }) =>
+                          //     <Option value={value}>{key}</Option>,
+                          //   )}
+                          // </Select>
                           :
                           <Input placeholder="请输入" />,
                     )
@@ -336,19 +498,24 @@ class ProductDetail extends Component {
         }
         {
           selectKey !== 'measureUnit' &&
-          <div className="adddevModal">
+          <div className="adddevModal" style={{ width: 1200 }}>
             <FormItem
               label="上传图片"
               key="uploadPic"
             >
-              <UploadImg
-                key="uimg"
-                maxcount={10}
-                // defaultFileList={choosenRowData.pictures}
-                fileListFun={imglist => {
-                  // this.setState({ filelist: imglist });
-                }}
-              />
+              <Upload
+                accept='image/*'
+                name='avatar'
+                beforeUpload={() => false}
+                listType='picture-card'
+                fileList={this.state.fileImgList ? this.state.fileImgList : []}
+                onChange={this.handleImageChange}
+              >
+                <div>
+                  <Icon type={this.state.loading ? 'loading' : 'plus'} />
+                  <div className="ant-upload-text">上传图片</div>
+                </div>
+              </Upload>
             </FormItem>
           </div>
         }
@@ -365,7 +532,77 @@ class ProductDetail extends Component {
 
   // 批量新增 保存确认 提交回调
   handleBatchSubmit = () => {
+    const { dispatch, form, product } = this.props;
+    const { fileImgList } = this.state;
+    const arr = [
+      'brand',
+      'productType',
+      'gemColor',
+      'platingColor',
+      'zhName',
+      'enName',
+      'sourceOfProduct',
+      'mouldNo',
+      'productColor',
+      'specification',
+      'customerId',
+    ]
 
+    // specification
+
+    form.validateFields(arr, (err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      console.log(fieldsValue, '===============')
+      debugger
+
+      const customer = product.customerId.filter(item => item.id === fieldsValue.customerId)
+      const brand = product.brand.filter(item => item.id === fieldsValue.brand)
+      const productType = product.productType.filter(item => item.id === fieldsValue.productType)
+
+      let params = { ...fieldsValue };
+
+      const urls = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.url);
+      const names = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.name);
+      params.imgStr = urls;
+      // params.imgStr = this.state.urls;
+      params.fileName = names;
+      // params.productId = item.productNo;
+      // params.product = item;
+      // dispatch({
+      //   type: 'product/batchAddProduct',
+      //   payload: {
+      //     ...params,
+      //   },
+      //   callback: () => {
+      //     this.setState({
+      //       visible: false,
+      //     });
+      //   },
+      // });
+
+      productBatchUpdate({ ...params, customer, brand, productType }).then(res => {
+        this.setState({
+          visible: false
+        })
+        if (!res) return;
+        const { rtnCode, rtnMsg } = res.head;
+        if (rtnCode === '000000') {
+          notification.success({
+            message: rtnMsg,
+          });
+          this.closeModal()
+        }
+      });
+
+      // todo
+
+      this.setState({
+        isEdit: true,
+        update: true,
+      });
+    });
   }
 
   getDetailInfo = () => {
@@ -405,7 +642,7 @@ class ProductDetail extends Component {
           onClick={this.handleCancel}
         >
           取消
-      </Button>,
+        </Button>,
         <Button
           key="submit"
           type="primary"
@@ -415,7 +652,7 @@ class ProductDetail extends Component {
           }}
         >
           保存
-      </Button>,
+        </Button>,
       ];
 
     const batchFooter = [
@@ -429,9 +666,7 @@ class ProductDetail extends Component {
         key="submit"
         type="primary"
         loading={productSaveloading}
-        onClick={() => {
-          this.handleBatchSubmit(true);
-        }}
+        onClick={this.handleBatchSubmit}
       >
         保存
       </Button>
@@ -1649,8 +1884,8 @@ class ProductDetail extends Component {
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
     const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
-    const zhName = cNoPercentageZhName + ' ' + cNozhNameUniCode + ' ' + cNofCodezhName;
-    const enName = cNoPercentageEnName + ' ' + cNoenNameUniCode + ' ' + cNofCode;
+    const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
+    const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别
     this.setState({
       productNo,

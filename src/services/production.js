@@ -26,7 +26,7 @@ const resultBasic = devBasicUrls.map(({ name, arr, path }) => (
     {
       key: rType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix1 : `${env}/business/production/basic`
+      prefix1: `${env}/business/production/basic`
     }
   ))
 ));
@@ -37,7 +37,7 @@ const resultOrderApprove = productionApproveUrls.map(({ name, arr, path }) => (
     {
       key: rType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix1 : `${env}/business/production/order/approve`
+      prefix1: `${env}/business/production/order/approve`
 
     }
   ))
@@ -51,6 +51,7 @@ const resultArr = [
   ...resultOrderApprove.flat(),
 
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
+
 ];
 
 // console.log(resultArr, '============')

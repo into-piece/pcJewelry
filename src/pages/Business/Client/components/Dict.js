@@ -39,7 +39,7 @@ class Dict extends PureComponent {
     this.loadDict();
     const { content, onChange } = this.props;
     console.log(this.props)
-    onChange(content);
+    content&&onChange(content);
     // const { dict } = this.props;
     // console.log('dict ', dict);
   }
