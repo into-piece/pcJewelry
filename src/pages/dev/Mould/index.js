@@ -157,7 +157,7 @@ class Index extends Component {
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode: choosenRowData.mainMoldCode }, ...args,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode: param.mainMoldCode||choosenRowData.mainMoldCode }, ...args,
       },
     });
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Form, Divider, Radio } from 'antd';
+import { Form, Divider, Radio ,Button} from 'antd';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
@@ -48,7 +48,7 @@ class MiddleTable extends Component {
     });
     if (type === 1) {
       this.searchSecond.handleReset();
-      if (onSearch) onSearch({ flowCode: rowData.flowCode }, 2);
+      if (onSearch) onSearch({ piHeadId: rowData.id }, 2);
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -192,6 +192,49 @@ class MiddleTable extends Component {
           returnElement={returnElement}
           onchange={changeSearchParams}
         />
+        <div className={styles.buttomdiv}>
+          <Button
+            key="shrink"
+            className={styles.buttomControl}
+            type="primary"
+            icon="shrink"
+            size="small"
+            disabled={selectedRowKeys.length<=1}
+            onClick={() => {
+
+            }}
+          >
+            合并
+          </Button>
+          <Button
+            key="arrows-alt-auto"
+            className={styles.buttomControl}
+            type="primary"
+            icon="arrows-alt"
+            size="small"
+            disabled={(!choosenRowData||choosenRowData.id==='')}
+            onClick={() => {
+
+            }}
+          >
+            自动拆分
+          </Button>
+          <Button
+            key="arrows-alt"
+            className={styles.buttomControl}
+            type="primary"
+            icon="arrows-alt"
+            size="small"
+            disabled={!choosenRowData||choosenRowData.id===''}
+            onClick={() => {
+
+            }}
+          >
+            手动拆分
+          </Button>
+
+        </div>
+
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 1400 }}

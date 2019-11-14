@@ -48,7 +48,7 @@ class MiddleTable extends Component {
     });
     if (type === 1) {
       this.searchSecond.handleReset();
-      if (onSearch) onSearch({ flowCode: rowData.flowCode }, 2);
+      if (onSearch) onSearch({ approveNo: rowData.approveNo }, 2);
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
