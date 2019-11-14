@@ -313,14 +313,17 @@ class ProductDetail extends Component {
                       type && type === 3 ?
                         <TextArea rows={2} placeholder="请输入" /> :
                         type && type === 4 ?
-                          <Select placeholder="请选择" style={{ width: 180 }}
+                          <Select
+                            placeholder="请选择"
+                            style={{ width: 180 }}
                             showSearch
                             optionFilterProp="children"
                             mode="multiple"
 
                             filterOption={(input, option) =>
                               option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }>
+                            }
+                          >
                             {arr.map(({ value, key }) =>
                               <Option value={value}>{key}</Option>,
                             )}
@@ -400,20 +403,20 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-        <Button
-          key="back"
-          onClick={this.handleCancel}
-        >
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
           取消
       </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={productUpdateloading}
-          onClick={() => {
+      <Button
+        key="submit"
+        type="primary"
+        loading={productUpdateloading}
+        onClick={() => {
             this.handleSubmit(false);
           }}
-        >
+      >
           保存
       </Button>,
       ];
@@ -512,7 +515,7 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-                <div />
+              <div />
               )}
           </Card>
         </div>
@@ -672,15 +675,15 @@ class ProductDetail extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-        <div className={business.carousel_image_ground}>
-          <Zmage
-            alt="图片"
-            align="center"
-            className={styles.carousel_image}
-            src={v}
-            set={paths.map(image => ({ src: image }))}
-          />
-        </div>
+      <div className={business.carousel_image_ground}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image }))}
+        />
+      </div>
       ));
   };
 
@@ -1649,8 +1652,8 @@ class ProductDetail extends Component {
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
     const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
-    const zhName = cNoPercentageZhName + ' ' + cNozhNameUniCode + ' ' + cNofCodezhName;
-    const enName = cNoPercentageEnName + ' ' + cNoenNameUniCode + ' ' + cNofCode;
+    const zhName = `${cNoPercentageZhName  } ${  cNozhNameUniCode  } ${  cNofCodezhName}`;
+    const enName = `${cNoPercentageEnName  } ${  cNoenNameUniCode  } ${  cNofCode}`;
     // 成色+宝石颜色+类别
     this.setState({
       productNo,
