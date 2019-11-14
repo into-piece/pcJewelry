@@ -557,12 +557,33 @@ class ProductDetail extends Component {
       }
       console.log(fieldsValue, '===============')
       debugger
-
-      const customer = product.customerId.filter(item => item.id === fieldsValue.customerId)
-      const brand = product.brand.filter(item => item.id === fieldsValue.brand)
-      const productType = product.productType.filter(item => item.id === fieldsValue.productType)
-
-      let params = { ...fieldsValue };
+      let customerObj = product.customerId.filter(({ id }) => id === fieldsValue.customerId)
+      let brandObj = product.brand.filter(({ id }) => id === fieldsValue.brand)
+      let productTypeObj = product.productType.filter(({ id }) => id === fieldsValue.productType)
+      customerObj = customerObj[0]
+      brandObj = brandObj[0]
+      productTypeObj = productTypeObj[0]
+      const { id, customerNo, zhName, enName } = customerObj
+      let customer = {
+        id,
+        value: customerNo,
+        zhName,
+        enName
+      }
+      let brand = {
+        id: brandObj.id,
+        value: brandObj.brandNo,
+        zhName: brandObj.zhName,
+        enName: brandObj.enName
+      }
+      let productType = {
+        id: productTypeObj.id,
+        value: productTypeObj.unitCode,
+        zhName: productTypeObj.zhName,
+        enName: productTypeObj.enName
+      }
+      debugger
+      let params = { ...fieldsValue, customer, brand, productType };
 
       const urls = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.url);
       const names = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.name);
@@ -583,7 +604,7 @@ class ProductDetail extends Component {
       //   },
       // });
 
-      productBatchUpdate({ ...params, customer, brand, productType }).then(res => {
+      productBatchUpdate(params).then(res => {
         this.setState({
           visible: false
         })
