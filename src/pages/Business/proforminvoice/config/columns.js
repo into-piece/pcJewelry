@@ -73,13 +73,13 @@ let piHead = [
     key: 'poNo',
     width: 100,
   },
-  {
-    title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'status',
-    key: 'status',
-    width: 100,
-    render: data => statusConvert[data],
-  },
+  // {
+  //   title: <div className={styles.row_normal2}>状态</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  //   width: 100,
+  //   render: data => statusConvert[data],
+  // },
 ];
 
 

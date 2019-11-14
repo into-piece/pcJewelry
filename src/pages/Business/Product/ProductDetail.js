@@ -487,6 +487,7 @@ class ProductDetail extends Component {
                           //     <Option value={value}>{key}</Option>,
                           //   )}
                           // </Select>
+
                           :
                           <Input placeholder="请输入" />,
                     )

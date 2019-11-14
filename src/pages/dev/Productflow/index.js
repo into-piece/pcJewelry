@@ -156,7 +156,7 @@ class Index extends Component {
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, flowCode: choosenRowData.flowCode }, ...args,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, flowCode: param.flowCode||choosenRowData.flowCode }, ...args,
       },
     });
 

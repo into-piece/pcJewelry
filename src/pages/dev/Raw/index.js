@@ -1195,6 +1195,8 @@ class Info extends Component {
 
           }
         });
+        if (close) this.setState({ filelist: [] });
+
       }
     });
   };
@@ -1238,6 +1240,8 @@ class Info extends Component {
 
           }
         });
+        if (close) this.setState({ filelist: [] });
+
         resetFields(['materialNo']);
         resetFields(['zhName']);
         resetFields(['enName']);
@@ -1295,7 +1299,7 @@ class Info extends Component {
 
           }
         });
-        this.setState({ filelist: [] });
+        if (close) this.setState({ filelist: [] });
         resetFields(['materialNo']);
         resetFields(['zhName']);
         resetFields(['enName']);
@@ -1843,6 +1847,7 @@ class CenterInfo extends Component {
 
             onChange={(e) => {
               const { dispatch } = this.props;
+              console.log(e)
               dispatch({
                 type: 'devRaw/setsearchparams',
                 payload: e,

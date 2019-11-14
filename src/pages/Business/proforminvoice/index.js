@@ -125,7 +125,7 @@ class Index extends Component {
         type: `${defaultModelName}/getListSecond`,
         payload: {
           type: v.target.value,
-          params: { ...paginationSecond, approveNo: choosenRowData.approveNo },
+          params: { ...paginationSecond, piHeadId: choosenRowData.piHeadId },
         },
       });
     }
@@ -167,7 +167,7 @@ class Index extends Component {
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, approveNo: choosenRowData.approveNo },
+        params: { ...paginationSecond, ...searchParamsSecond, ...param,  piHeadId: param.piHeadId||choosenRowData.id },
         ...args,
       },
     });
