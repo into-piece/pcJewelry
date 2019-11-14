@@ -5,8 +5,8 @@ import styles from '../../../Account/Center/Center.less';
 const FormItem = Form.Item;
 
 @Form.create({
-  onValuesChange(props, changeFields) {
-    props.onChange && props.onChange(changeFields);
+  onValuesChange(props, changeFields,allf) {
+    props.onChange && props.onChange(allf);
 
   },
 })
