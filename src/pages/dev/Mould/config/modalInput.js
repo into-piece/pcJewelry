@@ -2,7 +2,7 @@ export const dieSet = [
   { 'key': '主模具号', 'value': 'mainMoldCode',},
   { 'key': '胶膜代码', 'value': 'filmCode', 'type': 2, 'list': 'listFilmSettingsDropDown',  },
   { 'key': '存放地点', 'value': 'position', 'type': 2, 'list': 'listMoldPositioningSettingsDropDown',},
-  { 'key': '产品类别', 'value': 'productType', 'type': 2, 'list': 'H016003',},
+  { 'key': '产品类别', 'value': 'productType', 'type': 2, 'list': 'H016009',},
 
 ];
 

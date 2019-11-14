@@ -1847,6 +1847,7 @@ class CenterInfo extends Component {
 
             onChange={(e) => {
               const { dispatch } = this.props;
+              console.log(e)
               dispatch({
                 type: 'devRaw/setsearchparams',
                 payload: e,

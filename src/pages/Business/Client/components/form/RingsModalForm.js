@@ -119,15 +119,17 @@ class RingsModalForm extends Component {
               data01: body.records,
               listLoading01: false,
             });
+          }else{
+            _this.setState({
+              dataBody: [],
+              data: [],
+              listLoading: false,
+              dataBody01: body,
+              data01: [],
+              listLoading01: false,
+            });
           }
-          _this.setState({
-            dataBody: [],
-            data: [],
-            listLoading: false,
-            dataBody01: body,
-            data01: [],
-            listLoading01: false,
-          });
+
         }
       }).catch(() => {
       message.error('加载失败！');
@@ -205,7 +207,7 @@ class RingsModalForm extends Component {
 
     return (
       <div>
-        <span className={clientStyle.sun_title_info}>圈戒资料</span>
+        <span className={clientStyle.sun_title_info}>戒围资料</span>
         <Divider className={clientStyle.divder} />
         <Row>
           <Table

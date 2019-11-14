@@ -6,8 +6,8 @@ const FormItem = Form.Item;
 const { Option } = Select;
 
 @Form.create({
-  onValuesChange(props, changeFields) {
-    props.onChange && props.onChange(changeFields);
+  onValuesChange(props, changeFields,f) {
+    props.onChange && props.onChange(f);
 
   },
 })

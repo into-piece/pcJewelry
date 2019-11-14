@@ -558,12 +558,15 @@ class RingNum extends PureComponent {
       showQuickJumper: true,
       pageSize: 5,
       total: body.total,
+      current: body.current,
+
     };
 
     const paginationProps2 = {
       showQuickJumper: true,
       pageSize: 5,
       total: body2.total,
+      current: body2.current,
     };
     return (
       <GridContent>
