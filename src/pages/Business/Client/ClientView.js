@@ -667,6 +667,13 @@ class ClientView extends PureComponent {
     if (body) {
       typeTableContent = body.data;
     }
+    if(customerBody&&selectCustomerItem){
+      const ttt = customerBody.data.filter(e=>e.id===selectCustomerItem.id)
+      if(ttt.length>0&&ttt[0].status!==selectCustomerItem.status){
+        this.setState({selectCustomerItem:ttt[0]})
+      }
+    }
+
 
     if (customerListloading) {
       this.state.customerLoad = true;
