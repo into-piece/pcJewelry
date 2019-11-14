@@ -1404,7 +1404,7 @@ class SpecimenDetaill extends Component {
     });
   };
 
-  parseProductNo2 = (customerNo || '') => {
+  parseProductNo2 = customerNo => {
     const {
       form: { setFieldsValue },
     } = this.props;
