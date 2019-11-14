@@ -1408,7 +1408,7 @@ class SpecimenDetaill extends Component {
     const {
       form: { setFieldsValue },
     } = this.props;
-    const productNo = `${customerNo}${moment().format('YYYYMMDDHHmmssSS')}`;
+    const productNo = `${customerNo}-${moment().format('YYYYMMDDHHmmssSS')}`;
     this.setState({
       productNo,
     });
