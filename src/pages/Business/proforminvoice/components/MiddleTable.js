@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Form, Divider, Radio ,Button} from 'antd';
+import { Form, Divider, Radio, Button } from 'antd';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
@@ -32,9 +32,6 @@ class MiddleTable extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      firstRadioValue: '0',
-    };
   }
 
 
@@ -103,9 +100,9 @@ class MiddleTable extends Component {
   // 首table切换tab 条件搜索
   changeFirstTabActive = (v) => {
     const { onSearch } = this.props;
-    this.setState({ firstRadioValue: v.target.value }, () => {
-      onSearch && onSearch({ status: v.target.value }, 1);
-    });
+
+    onSearch && onSearch({ status: v.target.value }, 1);
+
   };
 
 
@@ -149,14 +146,14 @@ class MiddleTable extends Component {
 
       selectedRowKeys,
       selectedRowKeysSecond,
-
+      firstRadioValue,
       model,
       radioArr01,
       radioArr02,
       listLoading,
       listLoadingSecond,
+      btnFn,
     } = props;
-    const { firstRadioValue } = this.state;
     return (
       <div className={styles.view_left_content}>
         {radioArr01 && <Radio.Group
@@ -199,9 +196,9 @@ class MiddleTable extends Component {
             type="primary"
             icon="shrink"
             size="small"
-            disabled={selectedRowKeys.length<=1}
+            disabled={selectedRowKeys.length <= 1}
             onClick={() => {
-
+              if (btnFn) btnFn('merge');
             }}
           >
             合并
@@ -212,8 +209,9 @@ class MiddleTable extends Component {
             type="primary"
             icon="arrows-alt"
             size="small"
-            disabled={(!choosenRowData||choosenRowData.id==='')}
+            disabled={(selectedRowKeys.length !== 1)}
             onClick={() => {
+              if (btnFn) btnFn('split-auto');
 
             }}
           >
@@ -225,9 +223,9 @@ class MiddleTable extends Component {
             type="primary"
             icon="arrows-alt"
             size="small"
-            disabled={!choosenRowData||choosenRowData.id===''}
+            disabled={selectedRowKeys.length !== 1}
             onClick={() => {
-
+              if (btnFn) btnFn('split');
             }}
           >
             手动拆分
@@ -237,7 +235,6 @@ class MiddleTable extends Component {
 
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1400 }}
             columns={columnsConfig[firstType]}
             pagination={pagination}
             selectKey={choosenRowData.id}
@@ -298,7 +295,6 @@ class MiddleTable extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1600 }}
             columns={columnsConfig[secondType]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}

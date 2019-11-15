@@ -10,14 +10,14 @@ let piHead = [
     width: 100,
   }, {
     title: <div className={styles.row_normal2}>客户编号</div>,
-    dataIndex: 'customerId',
-    key: 'customerId',
+    dataIndex: 'customerNo',
+    key: 'customerNo',
     width: 100,
   },
   {
     title: <div className={styles.row_normal2}>终客编号</div>,
-    dataIndex: 'endId',
-    key: 'endId',
+    dataIndex: 'endNo',
+    key: 'endNo',
     width: 100,
   },
   {
@@ -33,7 +33,7 @@ let piHead = [
     dataIndex: 'deliveryTime',
     key: 'deliveryTime',
     width: 100,
-    render: data => moment(data).format('YYYY-MM-dd'),
+    render: data => moment(data||new Date()).format('YYYY-MM-DD'),
   }
   ,
   {

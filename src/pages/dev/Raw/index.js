@@ -1338,6 +1338,7 @@ class Info extends Component {
           message: rtnMsg,
         });
         this.getList({ key: selectKey });
+        this.getTypeList({  });
       }
     });
   };
@@ -1857,7 +1858,7 @@ class CenterInfo extends Component {
           />
 
           <Table
-            scroll={{ x: 'max-content' }} 
+            scroll={{ x: 'max-content' }}
             columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}

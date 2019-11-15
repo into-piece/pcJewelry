@@ -11,9 +11,11 @@ import {
   Select,
   Radio,
   Checkbox,
+  Table,
   DatePicker,
   notification,
 } from 'antd';
+
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
@@ -27,8 +29,9 @@ import showItem from './config/showItem';
 import btnGroup from './config/btnGroup';
 import styles from './index.less';
 
-import serviceObj from '@/services/production';
+import serviceObj from '@/services/business';
 import BuildTitle from '@/components/BuildTitle';
+import columnsConfig from './config/columns';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -77,34 +80,32 @@ class Index extends Component {
     secondTableActive: 'piDetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
+    firstRadioValue: '0',
   };
 
   componentDidMount() {
+
+    this.initDropList();
+    // 获取初始表单数据
+    this.getList({ piListType: '0' }, {});
+  }
+
+  initDropList = () => {
     const { dispatch } = this.props;
+
     // // 类别下拉
     // dispatch({
     //   type: `${defaultModelName}/getwordbookdropdown`,
     //   payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
     // });
-    // // 成品类别下拉
-    // dispatch({
-    //   type: `${defaultModelName}/getTypeByWordbookCode`,
-    //   payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
-    // });
-    // // 部门下拉
-    // dispatch({
-    //   type: `${defaultModelName}/listDeptDropDown`,
-    // });
-    // // 镶石工艺下拉
-    // dispatch({
-    //   type: `${defaultModelName}/listGemSetProcessDropDown`,
-    //   payload: {},
-    // });
 
+    // 类别下拉
+    dispatch({
+      type: `${defaultModelName}/getwordbookdropdown`,
+      payload: { params: { 'wordbookTypeCode': 'H007' }, listName: 'piTypeList' },
+    });
 
-    // 获取初始表单数据
-    this.getList({piListType:'0'},{});
-  }
+  };
 
   // 右边顶部tab切换
   changeRightActive = (v, clear) => {
@@ -135,8 +136,9 @@ class Index extends Component {
   // table 搜索
   onSearch = (params, table) => {
     if (table === 1) {
-      const pp = {...params,status:undefined}
-      this.getList({piListType:params.status},pp);
+      const pp = { ...params, status: undefined };
+      this.setState({firstRadioValue:params.status})
+      this.getList({ piListType: params.status }, pp);
     }
     if (table === 2) {
       this.getListSecond({}, params);
@@ -146,7 +148,7 @@ class Index extends Component {
   // 第一table获取list
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
-    // getDevList
+
     dispatch({
       type: `${defaultModelName}/getList`,
       payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
@@ -167,7 +169,7 @@ class Index extends Component {
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param,  piHeadId: param.piHeadId||choosenRowData.id },
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, piHeadId: param.piHeadId || choosenRowData.id },
         ...args,
       },
     });
@@ -254,7 +256,17 @@ class Index extends Component {
       case 'lock':
         text = '审批';
         break;
+      case 'merge':
+        text = '合并';
+        break;
+      case 'split-auto':
+        text = '自动拆分';
+        break;
+      case 'split':
+        text = '手动拆分';
+        break;
       default:
+        text = '操作面板';
         break;
     }
     return `${text}`;
@@ -271,6 +283,9 @@ class Index extends Component {
         //   },
         // });
         break;
+      case 'merge':
+        this.handleMerge();
+        break;
       default:
         break;
     }
@@ -278,28 +293,45 @@ class Index extends Component {
   };
 
 
-  // 审批 按钮回调
-  handleLock = () => {
-    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
-    const { rightActive, secondTableActive } = this.state;
-    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke';
-
-    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+  // 合并PI
+  handleMerge = () => {
+    const { selectedRowKeys } = this.props;
+    const { firstRadioValue } = this.state;
+    serviceObj[`merge${firstTabFlag}`](selectedRowKeys).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        if (rightActive === firstTabFlag) {
-          this.getList({ type: rightActive });
-        } else {
-          this.getListSecond({ type: secondTableActive });
-        }
+        this.btnFn('')
+        this.getList({ piListType: firstRadioValue });
       }
-    });
-  };
+    })
+
+    };
+
+  // 审批 按钮回调
+  // handleLock = () => {
+  //   const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+  //   const { rightActive, secondTableActive } = this.state;
+  //   const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+  //   const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+  //   const serviceType = isLock ? 'approve' : 'revoke';
+  //
+  //   serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+  //     const { rtnCode, rtnMsg } = res.head;
+  //     if (rtnCode === '000000') {
+  //       notification.success({
+  //         message: rtnMsg,
+  //       });
+  //       if (rightActive === firstTabFlag) {
+  //         this.getList({ type: rightActive });
+  //       } else {
+  //         this.getListSecond({ type: secondTableActive });
+  //       }
+  //     }
+  //   });
+  // };
 
 
   // 获取审批弹窗内容
@@ -357,20 +389,67 @@ class Index extends Component {
     );
   };
 
+
+  getModalContentSpecial = () => {
+    const {
+      list,
+      selectedRowKeys,
+    } = this.props;
+    const {
+      modalType,
+    } = this.state;
+
+    if (modalType === 'merge' && selectedRowKeys.length >= 2) {
+      const nlist = list.records.filter(e => selectedRowKeys.indexOf(e.id) >= 0);
+      return <div className={styles.mergediv}>
+        <div className={styles.mergedivtitle}>共<span>{nlist.length}</span>条合并数据</div>
+        <Table
+          columns={[
+            {
+              title: '序号',
+              dataIndex: 'piNo',
+              key: 'index',
+              render: (d, item, i) => i + 1,
+            }, {
+              title: '订单号码',
+              dataIndex: 'piNo',
+              key: 'piNo',
+            }, {
+              title: '客户编号',
+              dataIndex: 'customerNo',
+              key: 'customerNo222',
+            }]}
+          dataSource={nlist}
+          pagination={false}
+        />
+      </div>;
+    }
+
+    if (modalType === 'split-auto' && selectedRowKeys.length === 1) {
+      const nlist = list.records.filter(e => selectedRowKeys.indexOf(e.id) >= 0);
+      console.log(nlist);
+    }
+
+
+    return null;
+  };
+
   // 列表对应操作button回调
   btnFn = async (modalType) => {
     switch (modalType) {
       case 'lock':
-        this.setState({ modalType });
+        // this.setState({ modalType });
         // ModalConfirm({
         //   content: '确定审批吗？', onOk: () => {
         //     this.handleLock();
         //   },
         // });
         break;
+      default:
+        this.setState({ modalType });
+        break;
     }
   };
-
 
   // 取消弹窗回调
   onCancel = () => {
@@ -385,11 +464,11 @@ class Index extends Component {
    * params: type 1为审批 2为取消审批
    */
   returnLockType = () => {
-    const { selectedRowKeys,selectedRowKeysSecond,list,listSecond } = this.props;
+    const { selectedRowKeys, selectedRowKeysSecond, list, listSecond } = this.props;
     const { rightActive } = this.state;
 
-    const selectkeys =  rightActive ===firstTabFlag?selectedRowKeys:selectedRowKeysSecond
-    const listtt  = rightActive ===firstTabFlag?list:listSecond
+    const selectkeys = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const listtt = rightActive === firstTabFlag ? list : listSecond;
 
     if (listtt.records.length === 0) return {
       name: '审批',
@@ -415,6 +494,7 @@ class Index extends Component {
       btnFn,
       changeRightActive,
       getModalContent,
+      getModalContentSpecial,
       handleModalOk,
       onCancel,
       returnElement,
@@ -422,7 +502,7 @@ class Index extends Component {
       returnTitle,
       returnLockType,
     } = this;
-    const { modalType, rightActive, secondTableActive } = state;
+    const { modalType, rightActive, secondTableActive,firstRadioValue } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
 
@@ -441,7 +521,8 @@ class Index extends Component {
                       wrappedComponentRef={ref => {
                         this.middleTab = ref;
                       }}
-
+                      firstRadioValue={firstRadioValue}
+                      btnFn={btnFn}
                       firstType={firstTabFlag}
                       secondType={secondTableActive}
                       returnElement={returnElement}
@@ -497,9 +578,9 @@ class Index extends Component {
                         />
                       </div>
                       {/*  */}
-                      <Card bodyStyle={{display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
+                      <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
                         <div>
-                          {btnGroup[rightActive].map(({ name, tag ,icon}) => (
+                          {btnGroup[rightActive].map(({ name, tag, icon }) => (
                             <Button
                               key={tag}
                               className={styles.buttomControl}
@@ -529,14 +610,13 @@ class Index extends Component {
             maskClosable={false}
             title={<BuildTitle title={returnTitle()} />}
             width={1000}
-            className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
             onOk={handleModalOk}
             visible={modalType !== ''}
             onCancel={onCancel}
           >
-            {getModalContent()}
+            {['merge', 'spilt', 'spilt-auto'].indexOf(modalType) === -1 ? getModalContent() : getModalContentSpecial()}
           </Modal>
         }
       </div>
