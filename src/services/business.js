@@ -6,7 +6,7 @@
  * @LastEditors: Please set LastEditors
  */
 import request from '@/utils/request';
-import {piUrls,piDetailUrls} from './business/piUrls';
+import { piUrls, piDetailUrls } from './business/piUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
@@ -31,7 +31,7 @@ const piUrlsList = piUrls.map(({ name, arr, path }) => (
     {
       key: rType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix:`${env}/business/business/order`
+      prefix: `${env}/business/business/order`
     }
   ))
 ));
@@ -41,7 +41,7 @@ const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
     {
       key: pidType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix:`${env}/business/business/order`
+      prefix: `${env}/business/business/order`
     }
   ))
 ));
@@ -49,7 +49,7 @@ const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
 const resultArr = [
   ...piUrlsList.flat(),
   ...piDetailUrlsList.flat(),
-
+  { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
 ];
 
 // console.log(resultArr, '============')

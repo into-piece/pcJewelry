@@ -14,6 +14,7 @@ import {
   updateTheProductUnLock,
 } from '@/services/api';
 
+
 export default {
   namespace: 'product',
 
@@ -22,22 +23,20 @@ export default {
     city: [],
     head: [],
     isLoading: false,
-    productType: [{ key: 2, value: 2 }], // 类别
-    productColorNameKeys: [],
     gemColorKeys: [],
     platingColorKeys: [],
     customerIdKeys: [],
 
-    brandNo:[],
-    productTypeName:[],
-    productColorName:[],
-    gemColor:[],
-    platingColor:[],
-    customerId:[],
-    sourceOfProductName:[],
-    unitOfMeasurement:[],
-    unitOfWeight:[],
-    finishedWeight:[],
+    brand: [],
+    productType: [], // 类别
+    productColor: [],
+    gemColor: [],
+    platingColor: [],
+    customerId: [],
+    sourceOfProduct: [],
+    unitOfMeasurement: [],
+    unitOfWeight: [],
+    finishedWeight: [],
   },
 
   effects: {
@@ -204,6 +203,5 @@ export default {
         [key]: value
       };
     },
-
   },
 };

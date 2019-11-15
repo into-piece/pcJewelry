@@ -20,6 +20,7 @@ class JewelrySelect extends PureComponent {
   }
 
   getOption = list => {
+    this.props.getOptionList && this.props.getOptionList(list)
     return this.getOptionList(list);
   };
 
@@ -86,7 +87,7 @@ class JewelrySelect extends PureComponent {
   };
 
   render() {
-    const { content, style, showSearch, placeholder } = this.props;
+    const { content, style, showSearch, placeholder, mode } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
@@ -108,6 +109,7 @@ class JewelrySelect extends PureComponent {
         style={{ width: '100%', height: '100%', ...style }}
         showArrow={false}
         value={showValue}
+        mode={mode}
         onChange={this.handleChange}
         notFoundContent={null}
       >
