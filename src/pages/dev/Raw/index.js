@@ -1857,6 +1857,7 @@ class CenterInfo extends Component {
           />
 
           <Table
+            scroll={{ x: 'max-content' }} 
             columns={columns}
             body={list}
             changeChoosenRow={this.changeChoosenRow}
