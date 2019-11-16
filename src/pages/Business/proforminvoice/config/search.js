@@ -1,6 +1,6 @@
 export const piHead = [
-  { 'key': '审批单号', 'value': 'approveNo' },
-  { 'key': '订单编号', 'value': 'orderNo',},
+  { 'key': '类别', 'value': 'piType','type':2,'list':'piTypeList'},
+  { 'key': '订单编号', 'value': 'piNo',},
   { 'key': '客户编号', 'value': 'customerNo',},
 ];
 

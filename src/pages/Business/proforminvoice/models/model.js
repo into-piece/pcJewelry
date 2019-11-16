@@ -10,7 +10,7 @@ import servicesConfig from '@/services/business';
 const initData = { records: [] };
 
 const {
-  listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,
+  listMstWordbook,  getTypeByWordbookCode,
 } = servicesConfig;
 const defaultModelName = 'businessPI';
 
@@ -40,10 +40,7 @@ export default {
     searchParamsSecond: {},
 
 
-    listGemSetProcessDropDown: [{ key: '', value: '' }],
-    listDeptDrop: [{ key: '', value: '' }],
-    listH017: [{ key: '', value: '' }],
-    listH016009: [{ key: '', value: '' }],
+    piTypeList: [{ key: '', value: '' }],
 
   },
 
@@ -185,32 +182,6 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: payload.listName },
-      });
-
-    },
-
-    * listDeptDropDown(_, { call, put }) {
-      const response = yield call(listDeptDropDown);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listDeptDrop' },
-      });
-
-    },
-
-    * listGemSetProcessDropDown({ payload }, { call, put }) {
-      const response = yield call(listGemSetProcessDropDown, payload);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listGemSetProcessDropDown' },
       });
 
     },
