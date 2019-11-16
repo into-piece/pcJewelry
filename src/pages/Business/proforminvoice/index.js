@@ -18,10 +18,9 @@ import {
 
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-// 详情内容
 import GetRenderitem from './components/GetRenderitem';
-// 中间Table
 import MiddleTable from './components/MiddleTable';
+import SplitTable from './components/SplitTable';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -31,7 +30,6 @@ import styles from './index.less';
 
 import serviceObj from '@/services/business';
 import BuildTitle from '@/components/BuildTitle';
-import columnsConfig from './config/columns';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -81,6 +79,8 @@ class Index extends Component {
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
     firstRadioValue: '0',
+    SplitTableLoading: false,
+    SplitTableList: [],
   };
 
   componentDidMount() {
@@ -137,7 +137,7 @@ class Index extends Component {
   onSearch = (params, table) => {
     if (table === 1) {
       const pp = { ...params, status: undefined };
-      this.setState({firstRadioValue:params.status})
+      this.setState({ firstRadioValue: params.status });
       this.getList({ piListType: params.status }, pp);
     }
     if (table === 2) {
@@ -303,12 +303,12 @@ class Index extends Component {
         notification.success({
           message: rtnMsg,
         });
-        this.btnFn('')
+        this.btnFn('');
         this.getList({ piListType: firstRadioValue });
       }
-    })
+    });
 
-    };
+  };
 
   // 审批 按钮回调
   // handleLock = () => {
@@ -397,6 +397,8 @@ class Index extends Component {
     } = this.props;
     const {
       modalType,
+      SplitTableList,
+      SplitTableLoading,
     } = this.state;
 
     if (modalType === 'merge' && selectedRowKeys.length >= 2) {
@@ -425,9 +427,14 @@ class Index extends Component {
       </div>;
     }
 
-    if (modalType === 'split-auto' && selectedRowKeys.length === 1) {
+    if ((modalType === 'split') && selectedRowKeys.length === 1) {
       const nlist = list.records.filter(e => selectedRowKeys.indexOf(e.id) >= 0);
-      console.log(nlist);
+
+      return <SplitTable
+        piData={nlist[0]}
+        data={SplitTableList}
+        loading={SplitTableLoading}
+      />;
     }
 
 
@@ -436,14 +443,30 @@ class Index extends Component {
 
   // 列表对应操作button回调
   btnFn = async (modalType) => {
+    const {
+      list,
+      selectedRowKeys,
+    } = this.props;
     switch (modalType) {
       case 'lock':
-        // this.setState({ modalType });
-        // ModalConfirm({
-        //   content: '确定审批吗？', onOk: () => {
-        //     this.handleLock();
-        //   },
-        // });
+        ModalConfirm({
+          content: '确定审批吗？', onOk: () => {
+            this.handleLock();
+          },
+        });
+        break;
+      case 'split':
+        const nlist = list.records.filter(e => selectedRowKeys.indexOf(e.id) >= 0);
+        this.setState({ SplitTableLoading: true });
+        serviceObj.listAllPiDetail({ piHeadId: nlist[0].id }).then((res) => {
+          this.setState({ SplitTableLoading: false });
+          if (!res && !res.head) return;
+          const { rtnCode } = res.head;
+          if (rtnCode === '000000') {
+            this.setState({ SplitTableList: res.body.records });
+          }
+        });
+        this.setState({ modalType });
         break;
       default:
         this.setState({ modalType });
@@ -502,7 +525,7 @@ class Index extends Component {
       returnTitle,
       returnLockType,
     } = this;
-    const { modalType, rightActive, secondTableActive,firstRadioValue } = state;
+    const { modalType, rightActive, secondTableActive, firstRadioValue } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
 

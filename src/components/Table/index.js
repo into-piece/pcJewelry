@@ -95,6 +95,8 @@ class MyTable extends Component {
     return (
       <Table
         scroll={scroll || { x: 900 }}
+        // scroll="max-content"
+
         columns={columns}
         dataSource={body.records}
         rowSelection={rowSelection}
