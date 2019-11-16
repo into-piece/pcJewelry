@@ -616,7 +616,7 @@ class Index extends Component {
             visible={modalType !== ''}
             onCancel={onCancel}
           >
-            {['merge', 'spilt', 'spilt-auto'].indexOf(modalType) === -1 ? getModalContent() : getModalContentSpecial()}
+            {['merge', 'split', 'split-auto'].indexOf(modalType) === -1 ? getModalContent() : getModalContentSpecial()}
           </Modal>
         }
       </div>

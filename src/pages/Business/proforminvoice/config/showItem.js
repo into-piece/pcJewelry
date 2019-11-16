@@ -3,7 +3,7 @@ import {statusConvert,YoNConvert} from '@/utils/convert';
 export const piHead = [
   { 'key': '订单号码', 'value': 'piNo' },
   { 'key': '原始订单号码', 'value': 'originalPiNo' },
-  { 'key': '订单日期', 'value': 'piDate' ,'data':'YYYY-MM-dd'},
+  { 'key': '订单日期', 'value': 'piDate' ,'date':'YYYY-MM-DD'},
   { 'key': '客户编号', 'value': 'customerNo' },
   { 'key': '客户简称', 'value': 'customerShotName' },
   { 'key': '终客编号', 'value': 'endNo' },
@@ -18,7 +18,7 @@ export const piHead = [
   { 'key': '总重', 'value': 'totalWeightQuotation'},
   { 'key': '订单金额', 'value': 'totalQuotation'},
   { 'key': '要求预付款', 'value': 'advancePayment'},
-  { 'key': '要求交货期', 'value': 'deliveryTime','data':'YYYY-MM-dd'},
+  { 'key': '要求交货期', 'value': 'deliveryTime','date':'YYYY-MM-DD'},
   { 'key': '产品说明', 'value': 'productDescription'},
   { 'key': '包装说明', 'value': 'packExplains' },
   { 'key': '客户要求', 'value': 'requirement' },
