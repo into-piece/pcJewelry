@@ -18,11 +18,13 @@ const rType = {
   4: 'revoke',
   5: 'merge',
   6: 'split',
+  7: 'update',
 };
 
 const pidType = {
   1: 'list',
   2: 'update',
+  3: 'delete',
 };
 
 // 业务-PI 订单主页
@@ -54,6 +56,8 @@ const resultArr = [
   { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
   { key: 'getTypeByWordbookCode', path: '/business/develop/category/develop-basic-category-set/getTypeByWordbookCode', prefix: `${env}` },// 类别下拉
   { key: 'listMstWordbook', path: '/business/sys/mst-wordbook/listMstWordbook', prefix: `${env}` },// 类别下拉
+  { key: 'listMarkingDropDown', path: '/business/business/marking/listMarkingDropDown', prefix: `${env}` },// 字印编码下拉
+  { key: 'dropDownRAT', path: '/business/basic/ring-around-the-standard/dropDownRAT', prefix: `${env}` },// 戒围标准下拉
 ];
 
 

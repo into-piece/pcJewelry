@@ -10,7 +10,7 @@ import servicesConfig from '@/services/business';
 const initData = { records: [] };
 
 const {
-  listMstWordbook,  getTypeByWordbookCode,
+  listMstWordbook,  getTypeByWordbookCode,dropDownRAT,listMarkingDropDown,
 } = servicesConfig;
 const defaultModelName = 'businessPI';
 
@@ -41,6 +41,7 @@ export default {
 
 
     piTypeList: [{ key: '', value: '' }],
+    currencydropdown: [{ key: '', value: '' }],
 
   },
 
@@ -60,6 +61,11 @@ export default {
       });
 
       const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
+
+      yield put({
+        type: 'changeState',
+        payload: { data: {current:response.body.current,size:response.body.size}, typeName: 'pagination' },
+      });
 
       const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
       if (selectRow && selectRow.length > 0) {
@@ -87,6 +93,10 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: {current:response.body.current,size:response.body.size}, typeName: 'paginationSecond' },
       });
       if (callback) callback();
 
@@ -173,6 +183,17 @@ export default {
 
     },
 
+    * getcurrencydropdown(data, { call, put }) {
+      const response = yield call(listMstWordbook, { "wordbookTypeCode": "H006" });
+      let currencydropdown = response.body.records
+      currencydropdown = currencydropdown.map(({ wordbookContentCode }) => {
+        return { value: wordbookContentCode, key: wordbookContentCode }
+      })
+      yield put({
+        type: 'changeState',
+        payload: { data: currencydropdown, typeName: 'currencydropdown' },
+      });
+    },
     * getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload.params);
       const wordbookData = response.body.records;
@@ -182,6 +203,30 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
+    },
+    * getDropDownRAT({ payload }, { call, put }) {
+      const response = yield call(dropDownRAT, payload.params);
+      const list = response.body.records;
+      const listdrop = list.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: listdrop, typeName: "dropDownRAT" },
+      });
+
+    },
+    * getListMarkingDropDown({ payload }, { call, put }) {
+      const response = yield call(listMarkingDropDown, payload.params);
+      const list = response.body.records;
+      const listdrop = list.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: listdrop, typeName: "listMarkingDropDown" },
       });
 
     },

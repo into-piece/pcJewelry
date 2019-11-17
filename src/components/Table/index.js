@@ -40,7 +40,7 @@ class MyTable extends Component {
     // selectedRowKeys = [... this.state.selectedRowKeys, record.id]
     selectedRow = [record.id];
     onSelectChange && onSelectChange(selectedRow)
-    changeChoosenRow(record);
+    changeChoosenRow&&changeChoosenRow(record);
   };
 
   // 行样式

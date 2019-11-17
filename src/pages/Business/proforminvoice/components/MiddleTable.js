@@ -101,7 +101,7 @@ class MiddleTable extends Component {
   changeFirstTabActive = (v) => {
     const { onSearch } = this.props;
 
-    onSearch && onSearch({ status: v.target.value }, 1);
+    onSearch && onSearch({ status: v.target.value,current:1 }, 1);
 
   };
 
@@ -184,7 +184,7 @@ class MiddleTable extends Component {
           data={searchParamsArrConfig[firstType]}
           source={model}
           onSearch={(p) => {
-            onSearch({ ...p, status: firstRadioValue }, 1);
+            onSearch({ ...p,current:1, status: firstRadioValue }, 1);
           }}
           returnElement={returnElement}
           onchange={changeSearchParams}
@@ -276,7 +276,7 @@ class MiddleTable extends Component {
           data={searchParamsArrConfig[secondType]}
           source={model}
           onSearch={(p) => {
-            onSearch(p, 2);
+            onSearch({...p,current:1}, 2);
           }}
           returnElement={returnElement}
           onchange={changeSearchDetailParams}

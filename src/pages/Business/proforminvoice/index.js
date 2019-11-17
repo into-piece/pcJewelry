@@ -21,6 +21,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import GetRenderitem from './components/GetRenderitem';
 import MiddleTable from './components/MiddleTable';
 import SplitTable from './components/SplitTable';
+import moment from 'moment';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -81,6 +82,7 @@ class Index extends Component {
     firstRadioValue: '0',
     SplitTableLoading: false,
     SplitTableList: [],
+    addloading:false,
   };
 
   componentDidMount() {
@@ -92,12 +94,24 @@ class Index extends Component {
 
   initDropList = () => {
     const { dispatch } = this.props;
+    const { rightActive, modalType} = this.state;
 
-    // // 类别下拉
-    // dispatch({
-    //   type: `${defaultModelName}/getwordbookdropdown`,
-    //   payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
-    // });
+    if(rightActive===firstTabFlag&&modalType==='edit'){
+      // 戒围标准下拉
+      dispatch({
+        type: `${defaultModelName}/getDropDownRAT`,
+      });
+      //  字印编码下拉
+      dispatch({
+        type: `${defaultModelName}/getListMarkingDropDown`,
+      });
+    }
+    if(rightActive===firstTabFlag&&modalType==='edit'){
+      // 币种下拉
+      dispatch({
+        type: `${defaultModelName}/getcurrencydropdown`,
+      });
+    }
 
     // 类别下拉
     dispatch({
@@ -126,7 +140,7 @@ class Index extends Component {
         type: `${defaultModelName}/getListSecond`,
         payload: {
           type: v.target.value,
-          params: { ...paginationSecond, piHeadId: choosenRowData.piHeadId },
+          params: { ...paginationSecond, piHeadId: choosenRowData.id },
         },
       });
     }
@@ -241,6 +255,10 @@ class Index extends Component {
             this.handleDatePicker(date, dateString, value);
           }}
         />;
+      case 10:
+        return <DatePicker
+          style={{ marginRight: 10 }}
+        />;
       default:
         return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
     }
@@ -273,15 +291,14 @@ class Index extends Component {
   handleModalOk = () => {
     const { modalType } = this.state;
     switch (modalType) {
-      case 'lock':
-        // ModalConfirm({
-        //   content: '确定审批吗？', onOk: () => {
-        this.handleLock();
-        //   },
-        // });
-        break;
       case 'merge':
         this.handleMerge();
+        break;
+      case 'split':
+        this.handleSplit();
+        break;
+      case 'edit':
+        this.handleEdit();
         break;
       default:
         break;
@@ -289,60 +306,158 @@ class Index extends Component {
 
   };
 
+  // 编辑
+  handleEdit = () => {
+    const { form, choosenRowData, choosenRowDataSecond } = this.props;
+    const { secondTableActive, rightActive, modalType } = this.state;
+    let params = {};
+     params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
+    this.setState({ addloading: true });
+
+    const dataArr = modalInput[rightActive];
+    const fieldslist = dataArr.map(e=>e.value)
+    form.validateFields(fieldslist,(err, values) => {
+      if (!err) {
+        params = {
+          ...params,
+          ...values,
+        };
+        if(params.deliveryTime){
+          params.deliveryTime = new Date(params.deliveryTime).getTime();
+        }
+
+        serviceObj[`update${rightActive}`](params).then(res => {
+          if (!res.head) {
+            return;
+          }
+          const { rtnCode, rtnMsg } = res.head;
+          if (rtnCode === '000000') {
+            notification.success({
+              message: rtnMsg,
+            });
+            if (rightActive === firstTabFlag) {
+              this.getList({ piListType: this.state.firstRadioValue },{});
+
+            } else {
+              this.getListSecond({ type: secondTableActive },{});
+            }
+           this.btnFn('');
+          }
+        });
+      }
+      this.setState({ addloading: false });
+
+    });
+
+  };
 
   // 合并PI
   handleMerge = () => {
     const { selectedRowKeys } = this.props;
     const { firstRadioValue } = this.state;
+    this.setState({ addloading: true });
+
     serviceObj[`merge${firstTabFlag}`](selectedRowKeys).then(res => {
+      this.setState({ addloading: false });
+
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: `合并成功:PI编码${res.body.records[0]}`,
+        });
+        this.btnFn('');
+        this.getList({ piListType: firstRadioValue },{});
+      }
+    });
+
+  };
+
+  handleSplit = () => {
+    const { selectedRowKeys } = this.props;
+    const { firstRadioValue } = this.state;
+    const splitList = this.SplitTableref.state.bottomList.map(e => e.sondata.map(b=>b.id).toString());
+    this.setState({ addloading: true });
+
+
+    const params = {
+      'piHeadId': selectedRowKeys[0],
+      'splitList': splitList,
+    };
+    serviceObj[`split${firstTabFlag}`](params).then(res => {
+      this.setState({ addloading: false });
+
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
         this.btnFn('');
-        this.getList({ piListType: firstRadioValue });
+        this.getList({ piListType: firstRadioValue },{});
       }
     });
 
   };
 
   // 审批 按钮回调
-  // handleLock = () => {
-  //   const { selectedRowKeys, selectedRowKeysSecond } = this.props;
-  //   const { rightActive, secondTableActive } = this.state;
-  //   const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-  //   const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
-  //   const serviceType = isLock ? 'approve' : 'revoke';
-  //
-  //   serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-  //     const { rtnCode, rtnMsg } = res.head;
-  //     if (rtnCode === '000000') {
-  //       notification.success({
-  //         message: rtnMsg,
-  //       });
-  //       if (rightActive === firstTabFlag) {
-  //         this.getList({ type: rightActive });
-  //       } else {
-  //         this.getListSecond({ type: secondTableActive });
-  //       }
-  //     }
-  //   });
-  // };
+  handleLock = () => {
+    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const serviceType = isLock ? 'approve' : 'revoke';
+
+    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ piListType: this.state.firstRadioValue },{});
+
+        } else {
+          this.getListSecond({ type: secondTableActive },{});
+        }
+      }
+    });
+  };
+
+  // 删除 按钮回调
+  handleDelete = () => {
+    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    const { rightActive, secondTableActive } = this.state;
+    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    serviceObj[`delete${rightActive}`](data).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        if (rightActive === firstTabFlag) {
+          this.getList({ piListType: this.state.firstRadioValue },{});
+        } else {
+          this.getListSecond({ type: secondTableActive },{});
+        }
+      }
+    });
+  };
 
 
-  // 获取审批弹窗内容
   getModalContent = () => {
     const {
-      choosenRowData,
       choosenRowDataSecond,
       form,
+    } = this.props;
+    const {
+      choosenRowData,
     } = this.props;
     const {
       modalType,
       rightActive,
     } = this.state;
     const { getFieldDecorator } = form;
+
+    if(choosenRowData.deliveryTime){choosenRowData.deliveryTime=moment(choosenRowData.deliveryTime)}
 
     const content = '';
     const isEdit = modalType === 'edit';
@@ -352,6 +467,11 @@ class Index extends Component {
       <Form size="small" key="1">
         {
           addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+            if(choosenRowData.productTypeName==='戒指'&&value==='sizeCodeId'){
+              noNeed=false
+            }
+
+
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -428,6 +548,10 @@ class Index extends Component {
       const nlist = list.records.filter(e => selectedRowKeys.indexOf(e.id) >= 0);
 
       return <SplitTable
+        ref={ref => {
+          this.SplitTableref = ref;
+        }}
+        key={selectedRowKeys[0]}
         piData={nlist[0]}
         data={SplitTableList}
         loading={SplitTableLoading}
@@ -452,6 +576,13 @@ class Index extends Component {
           },
         });
         break;
+      case 'delete':
+        ModalConfirm({
+          content: '确定删除吗？', onOk: () => {
+            this.handleDelete();
+          },
+        });
+        break;
       case 'split':
         const nlist = list.records.filter(e => selectedRowKeys.indexOf(e.id) >= 0);
         this.setState({ SplitTableLoading: true });
@@ -465,6 +596,11 @@ class Index extends Component {
         });
         this.setState({ modalType });
         break;
+      case 'edit':
+        this.setState({ modalType },()=>{
+          this.initDropList();
+        });
+        break;
       default:
         this.setState({ modalType });
         break;
@@ -474,6 +610,7 @@ class Index extends Component {
   // 取消弹窗回调
   onCancel = () => {
     this.btnFn('');
+    this.SplitTableref&&this.SplitTableref.clearState();
   };
 
   /**
@@ -522,7 +659,7 @@ class Index extends Component {
       returnTitle,
       returnLockType,
     } = this;
-    const { modalType, rightActive, secondTableActive, firstRadioValue } = state;
+    const { modalType, rightActive, secondTableActive, firstRadioValue ,addloading} = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
 
@@ -633,6 +770,7 @@ class Index extends Component {
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
             onOk={handleModalOk}
+            okButtonProps={{loading:addloading}}
             visible={modalType !== ''}
             onCancel={onCancel}
           >

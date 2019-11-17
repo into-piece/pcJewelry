@@ -84,10 +84,16 @@ class SplitTable extends Component {
     },
     {
       title: <div>操作</div>,
-      dataIndex: 'poNo',
-      key: 'operater',
-      render: (v, i) => {
-        return <div onClick={this.cancelGroup(i.id)} style={{ color: '#2eabff' }}>取消</div>;
+      dataIndex: '',
+      key: 'operatecr',
+      render: (v, i, index) => {
+        return <div
+          onClick={() => {
+          this.cancelGroup(v, i, index);
+        }}
+          style={{ cursor: 'pointer', color: '#2eabff' }}
+        >取消
+        </div>;
       },
     }];
 
@@ -179,23 +185,66 @@ class SplitTable extends Component {
     };
   }
 
-  expandedRowRender = (record, data) => {
+  componentWillReceiveProps(nextprops) {
+    this.setState({ topList: nextprops.data, bottomList: [], selectedRowKeys: [] });
+  }
+
+  expandedRowRender = (record) => {
     return <Table
       scroll={{ x: 1000 }}
       columns={this.columnsson}
-      dataSource={data.sondata || []}
+      dataSource={record.sondata}
       pagination={false}
     />;
   };
 
-  cancelGroup = (id) => {
+  clearState = () => {
+    this.setState({
+      topList: [],
+      bottomList: [],
+      selectedRowKeys: [],
+    });
+  };
 
+  cancelGroup = (v, i, index) => {
+    const { topList, bottomList } = this.state;
+    const tembottom = bottomList.filter(e => e.id !== i.id);
+    const temtop = [...topList, ...i.sondata];
+    this.setState({ topList: temtop, bottomList: tembottom });
   };
 
   manualSplit = () => {
+    const { topList, bottomList, selectedRowKeys } = this.state;
+    const { piData } = this.props;
+
+    const sondata = topList.filter(e => selectedRowKeys.some(s => s === e.id));
+    const temTopList = topList.filter(e => selectedRowKeys.every(s => s !== e.id));
+
+    const tembottomItem = { ...piData, sondata };
+
+    const temBottomList = [...bottomList, tembottomItem];
+
+    this.setState({ topList: temTopList, bottomList: temBottomList });
+
   };
 
   autoSplit = () => {
+    const { topList } = this.state;
+    const { piData } = this.props;
+    const tempBottomList = [];
+    const tempsonlist = {};
+    topList.map(e => {
+      if (tempsonlist[e.productTypeName]) {
+        tempsonlist[e.productTypeName].push(e);
+      } else {
+        tempsonlist[e.productTypeName] = [e];
+      }
+    });
+    for (const key in tempsonlist) {
+      tempBottomList.push({ ...piData, sondata: tempsonlist[key] });
+    }
+    this.setState({ topList: [], bottomList: tempBottomList });
+
   };
 
   onSelectChange = (keys) => {
@@ -205,7 +254,7 @@ class SplitTable extends Component {
   render() {
     const { onSelectChange, autoSplit, manualSplit } = this;
     const { topList, bottomList, selectedRowKeys } = this.state;
-    const { loading } = this.props;
+    const { loading, piData } = this.props;
 
 
     return (<div className={styles.SplitTable}>
@@ -253,12 +302,12 @@ class SplitTable extends Component {
         scroll={{ x: 1000 }}
         dataSource={bottomList}
         loading={loading}
-        expandedRowRender={(record, index) => {
-            this.expandedRowRender(record, bottomList[index]);
+        expandedRowRender={(record) => {
+            return this.expandedRowRender(record);
           }}
         pagination={false}
       />
-    </div>
+            </div>
     );
   }
 };
