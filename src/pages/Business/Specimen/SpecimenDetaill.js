@@ -39,6 +39,7 @@ import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
 import moment from 'moment';
+import classNames from 'classnames';
 
 const { Description } = DescriptionList;
 
@@ -226,44 +227,44 @@ class SpecimenDetaill extends Component {
 
     const modalFooter = isAdd
       ? [
-          <Button key="back" onClick={this.handleCancel}>
+        <Button key="back" onClick={this.handleCancel}>
             取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={productSaveloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={productSaveloading}
+          onClick={() => {
               this.handleSubmit(true);
             }}
-          >
+        >
             保存
-          </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={productSaveloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="continue"
+          type="primary"
+          loading={productSaveloading}
+          onClick={() => {
               this.handleSubmit(false);
             }}
-          >
+        >
             继续添加
-          </Button>,
+        </Button>,
         ]
       : [
-          <Button key="back" onClick={this.handleCancel}>
+        <Button key="back" onClick={this.handleCancel}>
             取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={productUpdateloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
               this.handleSubmit(false);
             }}
-          >
+        >
             保存
-          </Button>,
+        </Button>,
         ];
 
     let paths = [];
@@ -593,10 +594,13 @@ class SpecimenDetaill extends Component {
           size="small"
           labelAlign="left"
           layout="inline"
-          className={clientStyle.from_content}
+          className={styles.standardListForm}
+
           onSubmit={this.handleContactsSubmit}
         >
-          <div className="adddevModal">
+
+          <div className={classNames('adddevModal',styles.maxline)}>
+
             <FormItem label="流水号" {...this.centerFormLayout}>
               {getFieldDecorator('productNo', {
                 rules: [{ required: true, message: '请输入流水号' }],
@@ -1391,8 +1395,8 @@ class SpecimenDetaill extends Component {
     } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
-    const zhName = cNoPercentageZhName + ' ' + cNozhNameUniCode + ' ' + cNofCodezhName;
-    const enName = cNoPercentageEnName + ' ' + cNoenNameUniCode + ' ' + cNofCode;
+    const zhName = `${cNoPercentageZhName  } ${  cNozhNameUniCode  } ${  cNofCodezhName}`;
+    const enName = `${cNoPercentageEnName  } ${  cNoenNameUniCode  } ${  cNofCode}`;
     // 成色+宝石颜色+类别
     this.setState({
       zhName,

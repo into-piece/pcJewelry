@@ -93,6 +93,11 @@ class SplitTable extends Component {
 
   columnsson = [
     {
+      title: <div>产品类型</div>,
+      dataIndex: 'productTypeName',
+      key: 'productTypeName',
+
+    }, {
       title: <div>产品编号</div>,
       dataIndex: 'productNo',
       key: 'productNo',

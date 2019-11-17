@@ -11,7 +11,7 @@ import {
   Select,
   Carousel, Modal, message, Upload, Spin,
   Table,
-  notification
+  notification,
 } from 'antd';
 import { formatMessage } from 'umi/locale';
 import ModalConfirm from '@/utils/modal';
@@ -20,6 +20,7 @@ import business from '../business.less';
 import baseStyles from '../Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
 import styles from './product.less';
+import classNames from 'classNames';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '../Client/Client.less';
 import BrandListSelect from './components/BrandListSelect';
@@ -36,12 +37,12 @@ import HttpFetch from '../../../utils/HttpFetch';
 import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
-import batchUpdateArr from './config.json'
+import batchUpdateArr from './config.json';
 import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
 
-const { productBatchUpdate } = servicesConfig
+const { productBatchUpdate } = servicesConfig;
 const {
   queryBrands,
   queryproductDropDown2,
@@ -52,7 +53,7 @@ const {
   queryMstWordList,
   queryMoldList,// 模具号
   queryMeasureUniList, // 数量单位
-} = HttpFetch
+} = HttpFetch;
 const componentArr = {
   brand: BrandListSelect,
   productType: ProductTypeSelect,
@@ -64,7 +65,7 @@ const componentArr = {
   mouldNo: MoldListSelect,
   unitOfMeasurement: BasicMeasureListSelect,
   unitOfWeight: BasicMeasureListSelect,
-}
+};
 const fetchArr = {
   brand: queryBrands,
   productType: queryproductDropDown2,
@@ -76,8 +77,8 @@ const fetchArr = {
   mouldNo: queryMoldList,
   unitOfMeasurement: queryMeasureUniList,
   unitOfWeight: queryMeasureUniList,
-}
-const { Option } = Select
+};
+const { Option } = Select;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { TextArea, Search } = Input;
@@ -88,13 +89,13 @@ const columnsArr = {
       title: '编号',
       dataIndex: 'productNo',
       key: 'productNo',
-      render: data => (data)
+      render: data => (data),
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
-      render: data => (data)
+      render: data => (data),
     },
   ],
   gemColor: [
@@ -102,13 +103,13 @@ const columnsArr = {
       title: '编号',
       dataIndex: 'productNo',
       key: 'productNo',
-      render: data => (data)
+      render: data => (data),
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
-      render: data => (data)
+      render: data => (data),
     },
   ],
   platingColor: [
@@ -116,13 +117,13 @@ const columnsArr = {
       title: '编号',
       dataIndex: 'productNo',
       key: 'productNo',
-      render: data => (data)
+      render: data => (data),
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
-      render: data => (data)
+      render: data => (data),
     },
   ],
   customerId: [
@@ -130,16 +131,16 @@ const columnsArr = {
       title: '编号',
       dataIndex: 'productNo',
       key: 'productNo',
-      render: data => (data)
+      render: data => (data),
     },
     {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName',
-      render: data => (data)
+      render: data => (data),
     },
   ],
-}
+};
 
 @Form.create()
 @connect(({ product, loading }) => {
@@ -183,7 +184,7 @@ class ProductDetail extends Component {
     isLoadImage: true,
     productParams: {},
     isEditItem: false,
-    batchUpdateShow: false
+    batchUpdateShow: false,
   };
 
   centerFormLayout = {
@@ -198,8 +199,6 @@ class ProductDetail extends Component {
     speed: 150,
     initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
   };
-
-
 
 
   componentDidMount() {
@@ -277,27 +276,27 @@ class ProductDetail extends Component {
             this.props.dispatch({
               type: 'product/changeState',
               payload: { key, value: body.records },
-            })
+            });
           }
         }
       });
-  }
+  };
 
   batchUpdate = () => {
-    const arr = ['brand', 'customerId', 'productType']
+    const arr = ['brand', 'customerId', 'productType'];
     arr.forEach(v => {
-      this.getData({ url: fetchArr[v], params: {}, key: v })
-    })
+      this.getData({ url: fetchArr[v], params: {}, key: v });
+    });
 
 
     this.setState({
-      batchUpdateShow: true
-    })
-  }
+      batchUpdateShow: true,
+    });
+  };
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, value) => {
-    console.log(selectedRowKeys, '==========selectedRowKeys')
+    console.log(selectedRowKeys, '==========selectedRowKeys');
     this.props.dispatch({
       type: 'product/changeState',
       payload: { key: `${value}Keys`, value: selectedRowKeys },
@@ -306,20 +305,27 @@ class ProductDetail extends Component {
 
   onSearch = (v, type) => {
 
-  }
+  };
 
   returnComplexSelect = (value) => {
-    const { product } = this.props
+    const { product } = this.props;
     // productColorName,gemColor,platingColor,customerId
     const rowSelection =
-    {
-      selectedRowKeys: product[`${value}Keys`],
-      type: 'checkbox',
-      onChange: selectedRowKeys => { this.onSelectChange(selectedRowKeys, value) },
-    };
+      {
+        selectedRowKeys: product[`${value}Keys`],
+        type: 'checkbox',
+        onChange: selectedRowKeys => {
+          this.onSelectChange(selectedRowKeys, value);
+        },
+      };
     return (
       <div>
-        <Search onSearch={v => { this.onSearch(v, value) }} placeholder="" />
+        <Search
+          onSearch={v => {
+          this.onSearch(v, value);
+        }}
+          placeholder=""
+        />
         <Table
           rowKey={record => record.productNo}
           rowSelection={rowSelection}
@@ -328,13 +334,13 @@ class ProductDetail extends Component {
         />
       </div>
 
-    )
-  }
+    );
+  };
 
   returnStyle = (v) => {
-    if (v === 'marks') return { width: 1200 }
-    return {}
-  }
+    if (v === 'marks') return { width: 1200 };
+    return {};
+  };
 
   handleImageChange = info => {
     let fileImgList = [...info.fileList];
@@ -385,11 +391,11 @@ class ProductDetail extends Component {
     //     payload: { key, value },
     //   })
     // }
-  }
+  };
 
   // 批量新增
   getBatchUpdat = () => {
-    const { getList } = this
+    const { getList } = this;
     const {
       selectKey,
       product,
@@ -402,10 +408,10 @@ class ProductDetail extends Component {
         {
           batchUpdateArr.map(({ key, value, noNeed, type, list }) => {
             const arr = list && product[list] && product[list].length > 0 ? product[list] : [
-              { key: 1, value: 1 }
-            ]
+              { key: 1, value: 1 },
+            ];
 
-            const ComponentSelect = componentArr[value]
+            const ComponentSelect = componentArr[value];
             // console.log(arr, list, '==================list', product, product[list])
             return (
               <div className="adddevModal" key={key} style={this.returnStyle(value)}>
@@ -442,7 +448,9 @@ class ProductDetail extends Component {
                           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
                         style={{ width: 180 }}
-                        getOptionList={l => { getList({ key: value, value: l }) }}
+                        getOptionList={l => {
+                          getList({ key: value, value: l });
+                        }}
                         onSelect={v => {
                           // if (v && v.brandNo) {
                           //   this.state.cNoBrandNo = v.brandNo;
@@ -527,9 +535,9 @@ class ProductDetail extends Component {
 
   closeModal = () => {
     this.setState({
-      batchUpdateShow: false
+      batchUpdateShow: false,
     });
-  }
+  };
 
   // 批量新增 保存确认 提交回调
   handleBatchSubmit = () => {
@@ -547,7 +555,7 @@ class ProductDetail extends Component {
       'productColor',
       'specification',
       'customerId',
-    ]
+    ];
 
     // specification
 
@@ -555,34 +563,34 @@ class ProductDetail extends Component {
       if (err) {
         return;
       }
-      console.log(fieldsValue, '===============')
-      debugger
-      let customerObj = product.customerId.filter(({ id }) => id === fieldsValue.customerId)
-      let brandObj = product.brand.filter(({ id }) => id === fieldsValue.brand)
-      let productTypeObj = product.productType.filter(({ id }) => id === fieldsValue.productType)
-      customerObj = customerObj[0]
-      brandObj = brandObj[0]
-      productTypeObj = productTypeObj[0]
-      const { id, customerNo, zhName, enName } = customerObj
+      console.log(fieldsValue, '===============');
+      debugger;
+      let customerObj = product.customerId.filter(({ id }) => id === fieldsValue.customerId);
+      let brandObj = product.brand.filter(({ id }) => id === fieldsValue.brand);
+      let productTypeObj = product.productType.filter(({ id }) => id === fieldsValue.productType);
+      customerObj = customerObj[0];
+      brandObj = brandObj[0];
+      productTypeObj = productTypeObj[0];
+      const { id, customerNo, zhName, enName } = customerObj;
       const customer = {
         id,
         value: customerNo,
         zhName,
-        enName
-      }
+        enName,
+      };
       const brand = {
         id: brandObj.id,
         value: brandObj.brandNo,
         zhName: brandObj.zhName,
-        enName: brandObj.enName
-      }
+        enName: brandObj.enName,
+      };
       const productType = {
         id: productTypeObj.id,
         value: productTypeObj.unitCode,
         zhName: productTypeObj.zhName,
-        enName: productTypeObj.enName
-      }
-      debugger
+        enName: productTypeObj.enName,
+      };
+      debugger;
       const params = { ...fieldsValue, customer, brand, productType };
 
       const urls = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.url);
@@ -606,15 +614,15 @@ class ProductDetail extends Component {
 
       productBatchUpdate(params).then(res => {
         this.setState({
-          visible: false
-        })
+          visible: false,
+        });
         if (!res) return;
         const { rtnCode, rtnMsg } = res.head;
         if (rtnCode === '000000') {
           notification.success({
             message: rtnMsg,
           });
-          this.closeModal()
+          this.closeModal();
         }
       });
 
@@ -625,7 +633,7 @@ class ProductDetail extends Component {
         update: true,
       });
     });
-  }
+  };
 
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
@@ -663,19 +671,19 @@ class ProductDetail extends Component {
         key="back"
         onClick={this.handleCancel}
       >
-          取消
+        取消
       </Button>,
       <Button
         key="submit"
         type="primary"
         loading={productUpdateloading}
         onClick={() => {
-            this.handleSubmit(false);
-          }}
+          this.handleSubmit(false);
+        }}
       >
-          保存
+        保存
       </Button>,
-      ];
+    ];
 
     const batchFooter = [
       <Button
@@ -691,8 +699,8 @@ class ProductDetail extends Component {
         onClick={this.handleBatchSubmit}
       >
         保存
-      </Button>
-    ]
+      </Button>,
+    ];
 
 
     let paths = [];
@@ -706,7 +714,7 @@ class ProductDetail extends Component {
 
     if (!paths) paths = [];
 
-    const { batchUpdateShow } = this.state
+    const { batchUpdateShow } = this.state;
     return (
       <div className={business.right_info}>
         <div
@@ -770,7 +778,7 @@ class ProductDetail extends Component {
               </div>
             ) : (
               <div />
-              )}
+            )}
           </Card>
         </div>
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -897,7 +905,6 @@ class ProductDetail extends Component {
             title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'menu.erp.business.product' })} />}
             maskClosable={false}
             width={1200}
-            className={styles.standardListForm}
             destroyOnClose
             visible={visible}
             footer={modalFooter}
@@ -922,8 +929,8 @@ class ProductDetail extends Component {
           {this.getBatchUpdat()}
         </Modal>
       </div>
-    )
-  }
+    );
+  };
 
   getImages = paths => {
     return paths.map((
@@ -938,7 +945,7 @@ class ProductDetail extends Component {
           set={paths.map(image => ({ src: image }))}
         />
       </div>
-      ));
+    ));
   };
 
   getProductModalContent = () => {
@@ -1008,12 +1015,14 @@ class ProductDetail extends Component {
           size="small"
           labelAlign="left"
           layout="inline"
+          className={styles.standardListForm}
           onSubmit={this.handleContactsSubmit}
         >
-          <div className="adddevModal">
+          <div className={classNames('adddevModal',styles.maxline)}>
             <FormItem
               label="产品编号"
-              {...this.centerFormLayout}
+              // labelCol={{ span: 12 }}
+              // wrapperCol={{ span: 20 }}
             >
               {getFieldDecorator('productNo', {
                 rules: [{ required: true, message: '请输入姓名' }],
@@ -1033,23 +1042,23 @@ class ProductDetail extends Component {
                 rules: [{ required: true, message: '请输入品牌' }],
                 initialValue: current.brand,
               })
-                (<BrandListSelect
-                  placeholder="请输入"
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              (<BrandListSelect
+                placeholder="请输入"
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                style={{ width: 180 }}
+                onSelect={(v) => {
+                  if (v && v.brandNo) {
+                    this.state.cNoBrandNo = v.brandNo;
+                    this.parseProductNo();
                   }
-                  style={{ width: 180 }}
-                  onSelect={(v) => {
-                    if (v && v.brandNo) {
-                      this.state.cNoBrandNo = v.brandNo;
-                      this.parseProductNo();
-                    }
-                  }
-                  }
-                  content={current.brand}
-                />)
+                }
+                }
+                content={current.brand}
+              />)
               }
             </FormItem>
           </div>
@@ -1074,6 +1083,7 @@ class ProductDetail extends Component {
                   // console.log(" select  ",v)
                   if (v.zhName) {
                     this.state.cNofCodezhName = v.zhName;
+                    this.state.cNofCodeehName = v.enName;
                     this.state.cNofCode = v.unitCode;
                     this.parseProductNo();
                   }
@@ -1332,8 +1342,8 @@ class ProductDetail extends Component {
                 accept='image/*'
                 name='avatar'
                 beforeUpload={() => {
-               return false;
-               }}
+                  return false;
+                }}
                 listType='picture-card'
                 fileList={this.state.fileList ? this.state.fileList : []}
                 onChange={handleChange}
@@ -1384,7 +1394,7 @@ class ProductDetail extends Component {
                     // console.log('end name ', file);
                     this.setState({
                       customerShotName: customerCombine,
-                      customerNo: file
+                      customerNo: file,
                     });
 
                     // setFieldsValue({
@@ -1513,7 +1523,7 @@ class ProductDetail extends Component {
       'productColor',
       'specification',
       'customerId',
-    ]
+    ];
 
     // specification
 
@@ -1609,7 +1619,7 @@ class ProductDetail extends Component {
         }
 
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         _this.setState({
           loading: false,
         });
@@ -1671,7 +1681,7 @@ class ProductDetail extends Component {
 
 
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         _this.setState({
           isLoading: false,
         });
@@ -1819,7 +1829,7 @@ class ProductDetail extends Component {
           guides
           background
           aspectRatio={1 / 1}
-        // crop={this.crop}
+          // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
           <div className="img-preview" style={{ width: '100%', height: '100%' }} />
@@ -1860,7 +1870,7 @@ class ProductDetail extends Component {
           imageObject: [],
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log('parsing failed', ex);
         _this.setState({
           loading: false,
@@ -1907,15 +1917,15 @@ class ProductDetail extends Component {
   };
 
   parseProductNo = ({ customerNo = '' } = {}) => {
-    console.log(11111)
-    const { cNoColorCode = '', cNoProductMaterial = '', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    console.log(11111);
+    const { cNoColorCode = '', cNoProductMaterial = '',cNofCodeehName='', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold;
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
     const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
-    const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
+    const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCodeehName}`;
     // 成色+宝石颜色+类别
     this.setState({
       productNo,
