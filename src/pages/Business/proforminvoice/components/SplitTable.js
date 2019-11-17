@@ -2,6 +2,7 @@
 *
 * 右边详情内容部分
 * */
+import React, { Component } from 'react';
 
 import {
   Table, Divider, Radio, Button,
@@ -9,6 +10,7 @@ import {
 import SbTable from '@/components/Table';
 
 import moment from 'moment';
+import styles from './SplitTable.less';
 
 
 class SplitTable extends Component {
@@ -18,7 +20,7 @@ class SplitTable extends Component {
       title: <div>序号</div>,
       dataIndex: 'piType',
       key: 'indexx',
-      render: (d, i,no) => (no+1),
+      render: (d, i, no) => (no + 1),
 
     },
     {
@@ -165,11 +167,11 @@ class SplitTable extends Component {
 
   constructor(props) {
     super(props);
-    this.state={
-      topList:props.data,
-      bottomList:[],
-      selectedRowKeys:[]
-    }
+    this.state = {
+      topList: props.data,
+      bottomList: [],
+      selectedRowKeys: [],
+    };
   }
 
   expandedRowRender = (record, data) => {
@@ -185,39 +187,62 @@ class SplitTable extends Component {
 
   };
 
+  manualSplit = () => {
+  };
 
+  autoSplit = () => {
+  };
 
-  onSelectChange=(keys)=>{
-    this.setState({selectedRowKeys:keys});
-  }
+  onSelectChange = (keys) => {
+    this.setState({ selectedRowKeys: keys });
+  };
 
   render() {
-    const {onSelectChange} =this
-    const {topList,bottomList,selectedRowKeys} =this.state
-    const {loading} =this.props
+    const { onSelectChange, autoSplit, manualSplit } = this;
+    const { topList, bottomList, selectedRowKeys } = this.state;
+    const { loading } = this.props;
 
 
-
-    return (<div>
-        待拆数据
-      <Divider />
+    return (<div className={styles.SplitTable}>
+      <span className={styles.tabletitle}>待拆数据</span>
+      <div className={styles.mergedivtitle}>共<span>{topList.length}</span>条待拆数据</div>
+      <Divider className={styles.divider} />
       <SbTable
         columns={this.columnsson}
         scroll={{ x: 1000 }}
-        body={{records:topList}}
+        body={{ records: topList }}
         selectedRowKeys={selectedRowKeys}
         onSelectChange={onSelectChange}
         listLoading={loading}
         pagination={false}
       />
-
-      <div>
-          自动成组
-          成组
+      <div className={styles.buttomdiv}>
+        <Button
+          key="shrink"
+          className={styles.buttomControl}
+          type="primary"
+          icon="fork"
+          size="small"
+          onClick={autoSplit}
+        >
+            自动成组
+        </Button>
+        <Button
+          key="arrows-alt"
+          className={styles.buttomControl}
+          type="primary"
+          icon="fork"
+          size="small"
+          disabled={(selectedRowKeys.length <= 1)}
+          onClick={manualSplit}
+        >
+            成组
+        </Button>
       </div>
 
-        成组预览
-      <Divider />
+      <span className={styles.tabletitle}>成组预览</span>
+      <Divider className={styles.divider} />
+
       <Table
         columns={this.columns}
         scroll={{ x: 1000 }}

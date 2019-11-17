@@ -35,6 +35,7 @@ const piUrlsList = piUrls.map(({ name, arr, path }) => (
     }
   ))
 ));
+
 // 业务-PI 产品详细
 const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
   arr.map((item, index) => (
@@ -69,6 +70,5 @@ resultArr.forEach(({ key, path, prefix }) => {
     });
   };
 });
-// console.log(outPutObject)
 
 export default outPutObject;

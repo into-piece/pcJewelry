@@ -433,7 +433,7 @@ class ProductDetail extends Component {
                       //   {arr.map(({ value, key }) =>
                       //     <Option value={value}>{key}</Option>,
                       //   )}
-                      // </Select> 
+                      // </Select>
                       <ComponentSelect
                         placeholder="请选择"
                         showSearch
@@ -564,26 +564,26 @@ class ProductDetail extends Component {
       brandObj = brandObj[0]
       productTypeObj = productTypeObj[0]
       const { id, customerNo, zhName, enName } = customerObj
-      let customer = {
+      const customer = {
         id,
         value: customerNo,
         zhName,
         enName
       }
-      let brand = {
+      const brand = {
         id: brandObj.id,
         value: brandObj.brandNo,
         zhName: brandObj.zhName,
         enName: brandObj.enName
       }
-      let productType = {
+      const productType = {
         id: productTypeObj.id,
         value: productTypeObj.unitCode,
         zhName: productTypeObj.zhName,
         enName: productTypeObj.enName
       }
       debugger
-      let params = { ...fieldsValue, customer, brand, productType };
+      const params = { ...fieldsValue, customer, brand, productType };
 
       const urls = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.url);
       const names = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.name);
@@ -659,22 +659,22 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-        <Button
-          key="back"
-          onClick={this.handleCancel}
-        >
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
           取消
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={productUpdateloading}
-          onClick={() => {
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productUpdateloading}
+        onClick={() => {
             this.handleSubmit(false);
           }}
-        >
+      >
           保存
-        </Button>,
+      </Button>,
       ];
 
     const batchFooter = [
@@ -769,7 +769,7 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-                <div />
+              <div />
               )}
           </Card>
         </div>
@@ -929,15 +929,15 @@ class ProductDetail extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-        <div className={business.carousel_image_ground}>
-          <Zmage
-            alt="图片"
-            align="center"
-            className={styles.carousel_image}
-            src={v}
-            set={paths.map(image => ({ src: image }))}
-          />
-        </div>
+      <div className={business.carousel_image_ground}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={paths.map(image => ({ src: image }))}
+        />
+      </div>
       ));
   };
 
@@ -1332,8 +1332,8 @@ class ProductDetail extends Component {
                 accept='image/*'
                 name='avatar'
                 beforeUpload={() => {
-                  return false;
-                }}
+               return false;
+               }}
                 listType='picture-card'
                 fileList={this.state.fileList ? this.state.fileList : []}
                 onChange={handleChange}
@@ -1343,6 +1343,14 @@ class ProductDetail extends Component {
                   <div className="ant-upload-text">上传图片</div>
                 </div>
               </Upload>
+              {/* <UploadImg */}
+              {/* key="uimg" */}
+              {/* maxcount={10} */}
+              {/* defaultFileList={current.pictures} */}
+              {/* fileListFun={(imglist) => { */}
+              {/* this.setState({ filelist: imglist }); */}
+              {/* }} */}
+              {/* /> */}
             </FormItem>
           </div>
         </Form>
@@ -1430,15 +1438,15 @@ class ProductDetail extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
-          <Modal
-            maskClosable={false}
-            {...modalCropperFooter}
-            width={768}
-            destroyOnClose
-            visible={cropperVisible}
-          >
-            {this.openCutImageModal()}
-          </Modal>
+          {/* <Modal */}
+          {/* maskClosable={false} */}
+          {/* {...modalCropperFooter} */}
+          {/* width={768} */}
+          {/* destroyOnClose */}
+          {/* visible={cropperVisible} */}
+          {/* > */}
+          {/* {this.openCutImageModal()} */}
+          {/* </Modal> */}
         </Form>
 
         {

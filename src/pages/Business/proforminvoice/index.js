@@ -253,17 +253,14 @@ class Index extends Component {
     const { modalType } = this.state;
     let text = '';
     switch (modalType) {
-      case 'lock':
-        text = '审批';
+      case 'edit':
+        text = '编辑';
         break;
       case 'merge':
-        text = '合并';
-        break;
-      case 'split-auto':
-        text = '自动拆分';
+        text = 'PI合并';
         break;
       case 'split':
-        text = '手动拆分';
+        text = 'PI拆分';
         break;
       default:
         text = '操作面板';
