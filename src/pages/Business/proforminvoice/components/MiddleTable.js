@@ -204,32 +204,20 @@ class MiddleTable extends Component {
             合并
           </Button>
           <Button
-            key="arrows-alt-auto"
+            key="arrows-alt"
             className={styles.buttomControl}
             type="primary"
             icon="arrows-alt"
             size="small"
             disabled={(selectedRowKeys.length !== 1)}
             onClick={() => {
-              if (btnFn) btnFn('split-auto');
+              if (btnFn) btnFn('split');
 
             }}
           >
-            自动拆分
+            拆分
           </Button>
-          <Button
-            key="arrows-alt"
-            className={styles.buttomControl}
-            type="primary"
-            icon="arrows-alt"
-            size="small"
-            disabled={selectedRowKeys.length !== 1}
-            onClick={() => {
-              if (btnFn) btnFn('split');
-            }}
-          >
-            手动拆分
-          </Button>
+
 
         </div>
 

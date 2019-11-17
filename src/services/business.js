@@ -35,6 +35,7 @@ const piUrlsList = piUrls.map(({ name, arr, path }) => (
     }
   ))
 ));
+
 // 业务-PI 产品详细
 const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
   arr.map((item, index) => (
@@ -49,6 +50,7 @@ const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
 const resultArr = [
   ...piUrlsList.flat(),
   ...piDetailUrlsList.flat(),
+  { key: 'listAllPiDetail', path: '/business/business/order/proforma-invoice-detail/listAll', prefix: `${env}` },// PI详情 获取所有
   { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
   { key: 'getTypeByWordbookCode', path: '/business/develop/category/develop-basic-category-set/getTypeByWordbookCode', prefix: `${env}` },// 类别下拉
   { key: 'listMstWordbook', path: '/business/sys/mst-wordbook/listMstWordbook', prefix: `${env}` },// 类别下拉
@@ -68,6 +70,5 @@ resultArr.forEach(({ key, path, prefix }) => {
     });
   };
 });
-// console.log(outPutObject)
 
 export default outPutObject;
