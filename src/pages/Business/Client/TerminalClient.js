@@ -625,10 +625,10 @@ class TerminalClient extends PureComponent {
       type: 'terminal/fetchListTerminal',
       payload: { customerId: this.state.customerId },
     });
-    this.setState({
-      selectedItem: '',
-      // fristLoad: true,
-    });
+    // this.setState({
+    //   selectedItem: '',
+    //   // fristLoad: true,
+    // });
   };
 
   handleSubmit = (close) => {
@@ -644,7 +644,6 @@ class TerminalClient extends PureComponent {
       //   params.country = fieldsValue.country.name;
       params.customerId = this.state.customerId;
       if (isAdd) {
-        // if (isAdd) {
         dispatch({
           type: 'terminal/addTerminal',
           payload: {
@@ -658,8 +657,6 @@ class TerminalClient extends PureComponent {
         });
       } else {
         params.id = selectedItem.id;
-
-        // this.state.current = { ...data };
         dispatch({
           type: 'terminal/updateTerminal',
           payload: {

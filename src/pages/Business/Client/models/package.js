@@ -5,6 +5,7 @@ import {
   updateThePackage,
   freezeThePackage,
   unfreezeThePackage,
+  listEndCustomerDropDown
 } from '@/services/api';
 
 export default {
@@ -18,6 +19,19 @@ export default {
   },
 
   effects: {
+
+    * querylistEndCustomerDropDown({ payload, callback }, { call, put }) {
+      const response = yield call(listEndCustomerDropDown, payload);
+      const list = response.body.records;
+      const listdrop = list.map((item) => {
+        return { value: item.id, key: item.endNo,...item };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: listdrop, typeName: "listEndCustomerDropDown" },
+      });
+      if (callback) callback();
+    },
     *fetchListPackage({ payload, callback }, { call, put }) {
       const response = yield call(querylistPackage, payload);
       yield put({
@@ -74,6 +88,14 @@ export default {
   },
 
   reducers: {
+
+    changeState(state, action) {
+      const { typeName, data } = action.payload;
+      return {
+        ...state,
+        [typeName]: data,
+      };
+    },
     list(state, action) {
       return {
         ...state,

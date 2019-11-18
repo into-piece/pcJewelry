@@ -8,7 +8,7 @@ import { connect } from 'dva';
 import querystring from 'querystring';
 import jsonp from 'fetch-jsonp';
 import styles from '../base.less';
-import HttpFetch from '../../../../utils/HttpFetch';
+import HttpFetch, { querylistEndCustomerDropDown } from '../../../../utils/HttpFetch';
 import clientStyle from '../Client.less';
 import { getCurrentUser } from '../../../../utils/authority';
 
@@ -86,14 +86,14 @@ headers: {
     const { item } = this.props;
     if (item) {
       this.fetch2(item);
-      this.feathMarkToId(item.endNo);
+      // this.feathMarkToId(item.endNo);
     }
   }
 
   render() {
     const { item, isSelected, callbackUrl } = this.props;
 
-    const { loading, imageObject, isFirst, endNo, endShotName, isFristLoadValue } = this.state;
+    const { loading, imageObject, isFirst, isFristLoadValue } = this.state;
 
     let paths = [];
 
@@ -115,7 +115,7 @@ headers: {
       <Card
         hoverable
         loading={loading}
-        className={isSelected ? styles.list_selected_content : ''}
+        className={isSelected ? styles.list_selected_content : styles.listdiv}
         cover={
           <Carousel {...this.carouselsettings} key={item.id} className={styles.carousel_content} autoplay>
             {this.getImages(paths)}
@@ -123,12 +123,12 @@ headers: {
         }
       >
         <div>
-          <DescriptionList size="small" col="2">
+          <DescriptionList size="small" col="1">
             <Description size="small" term="终客编号" className={clientStyle.small_description}>
-              {endNo}
+              {item.endNo}
             </Description>
             <Description size="small" term="终客简称" className={clientStyle.small_description}>
-              {endShotName}
+              {item.endShotName}
             </Description>
             <Description size="small" term="字印编号" className={clientStyle.small_description}>
               {item.markingNo}
@@ -161,68 +161,6 @@ headers: {
     ));
   };
 
-  feathMarkToId = (id) => {
-
-
-    this.setState({
-      loading: true,
-    });
-    const params = {};
-    params.id = id;
-
-    const mythis = this;
-    fetch(HttpFetch.queryTerminalList, {
-      method: 'POST',
-      credentials: 'include',
-headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {body} = d;
-        if (body && body.records) {
-          const {records} = body;
-
-
-          // console.log("terminal records ",records)
-          if (records && records.length > 0) {
-            const item = records[0];
-            const {endNo} = item;
-            const {endShotName} = item;
-            // console.log(" end item ",item)
-
-            // console.log('list update ', records);
-            mythis.setState({
-              endNo,
-              endShotName,
-              loading: false,
-              isFristLoadValue: false,
-            });
-            // console.log('image  data ', imageObject);
-            // return;
-          } else {
-            // }
-            mythis.setState({
-              loading: false,
-              records: [],
-              isFristLoadValue: false,
-            });
-          }
-        }
-      })
-      .catch(function(ex) {
-        console.log('parsing failed', ex);
-        // message.error('加载图片失败！');
-        mythis.setState({
-          loading: false,
-          records: [],
-          isFristLoadValue: false,
-        });
-      });
-  };
 }
 
 export default MarkListItem;
