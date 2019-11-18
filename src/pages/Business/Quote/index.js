@@ -95,7 +95,7 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>客户编号</div>,
     dataIndex: 'customerNo',
     key: 'customerNo',
-    width: 100,
+
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
@@ -104,7 +104,7 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>简称</div>,
     dataIndex: 'customerShotName',
     key: 'customerShotName',
-    width: 100,
+
     render:(d,i)=>(i.customerShotName)
 
   },
@@ -112,13 +112,13 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>报价单号</div>,
     dataIndex: 'quoteNumber',
     key: 'quoteNumber',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>类别</div>, // ?
     dataIndex: 'type',
     key: 'typeName',
-    width: 100,
+
     render:(d,i)=>(i.typeName)
 
   },
@@ -127,7 +127,7 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>报价日期</div>,
     dataIndex: 'quoteDate',
     key: 'quoteDate',
-    width: 100,
+
     render: (data) => (data),
   },
 
@@ -135,38 +135,38 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>数量</div>,
     dataIndex: 'quoteTotalCount',
     key: 'quoteTotalCount',
-    width: 100,
+
   },
 
   {
     title: <div className={styles.row_normal2}>重量</div>,
     dataIndex: 'quoteTotalWeight',
     key: 'quoteTotalWeight',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>总额</div>,
     dataIndex: 'quoteTotalAmount',
     key: 'quoteTotalAmount',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>终客号</div>,
     dataIndex: 'endNo',
     key: 'endNo',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>终客简称</div>,
     dataIndex: 'endShotName',
     key: 'endShotName',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>产品说明</div>,// ?
     dataIndex: 'explains',
     key: 'explains',
-    width: 100,
+
   },
 ];
 
@@ -184,30 +184,30 @@ let customerColumns = [
     title: <div className={styles.row_normal2}>客户货号</div>,
     dataIndex: 'custoerProductNo',
     key: 'custoerProductNo',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>前次工费/克</div>,
     dataIndex: 'lastCount',
     key: 'lastCount',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>实际工费/克</div>,
     dataIndex: 'actualCount',
     key: 'actualCount',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>最高工费/克</div>,
     dataIndex: 'topCount',
     key: 'topCount',
-    width: 100,
+
   },
   {
     title: <div className={styles.row_normal2}>此次工费/克</div>,
     dataIndex: 'nowCount',
-    width: 100,
+
     key: 'nowCount',
   },
 
@@ -215,21 +215,21 @@ let customerColumns = [
     title: <div className={styles.row_normal2}>字印价/件</div>,
     dataIndex: 'markingPrice',
     key: 'markingPrice',
-    width: 100,
+
   },
 
   {
     title: <div className={styles.row_normal2}>包装价/件</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
-    width: 100,
+
   },
 
   {
     title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
-    width: 100,
+
   },
 ];
 customerColumns = customerColumns.map(item => ({ ...item, sorter: true }));
