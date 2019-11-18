@@ -917,8 +917,32 @@ export async function unfreezeTheCustomer(params) {
   });
 }
 
+export async function querylistTerminalDrop(parmas) {
+  return request(`${priefx  }/business/business/end-customer/listEndCustomerDropDown`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...parmas,
+    },
+  });
+}
 export async function querylistTerminal(parmas) {
   return request(`${priefx  }/business/business/end-customer/listEndCustomer`, {
+    // return request('/basic/ring-around/listRingAroundByStandardId', {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: {
+      ...parmas,
+    },
+  });
+}
+
+export async function listEndCustomerDropDown(parmas) {
+  return request(`${priefx  }/business/business/end-customer/listEndCustomerDropDown`, {
     // return request('/basic/ring-around/listRingAroundByStandardId', {
     method: 'POST',
     headers: {

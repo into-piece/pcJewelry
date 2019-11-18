@@ -27,8 +27,7 @@ import clientStyle from './Client.less';
 import styles from './base.less';
 import PackageListItem from './components/PackageListItem';
 
-
-import TerminalSelected from './components/TerminalSelected';
+const { Option } = Select;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -36,6 +35,7 @@ const { Description } = DescriptionList;
 @connect(({ loading, packageinfo }) => {
   return {
     body: packageinfo.body,
+    listEndCustomerDropDown: packageinfo.listEndCustomerDropDown,
     packageListloading: loading.effects['packageinfo/fetchListPackage'],
     packageSaveloading: loading.effects['packageinfo/addPackage'],
     packageUpdateloading: loading.effects['packageinfo/updatePackage'],
@@ -68,6 +68,15 @@ class PackageInfo extends PureComponent {
       terminalShotName: '',
     };
   }
+
+  initDrop = () => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'mark/querylistEndCustomerDropDown',
+      payload: { key: '74ec9b5cc01d8d5946cb283c1abe79bc' },
+    });
+  };
 
   render() {
     const {
@@ -397,6 +406,7 @@ class PackageInfo extends PureComponent {
 
     const {
       form: { getFieldDecorator },
+      listEndCustomerDropDown
     } = this.props;
     const { cropperVisible, terminalShotName, current = {} } = this.state;
 
@@ -444,30 +454,35 @@ class PackageInfo extends PureComponent {
                 {getFieldDecorator('endNo', {
                   initialValue: current.endNo,
                 })(
-                  <TerminalSelected
-                    content={current.endNo}
-                    onSelectEndName={file => {
-                      // console.log("onselect name ",file)
-                      this.setState({
-                        terminalShotName: file,
-                      });
+                  <Select
+                    placeholder="请选择"
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    onChange={(v, o) => {
+                      const ff = listEndCustomerDropDown.filter(e=>e.id === v)
+                      const { form } = this.props;
+                      form.setFieldsValue({ endShotName: ff[0].endShotName });
                     }}
-                  />
+                  >
+                    {listEndCustomerDropDown&&listEndCustomerDropDown.map(({ value, key }) =>
+                      <Option value={value} key={value}>{key}</Option>,
+                    )}
+                  </Select>,
                 )}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
-                  initialValue: terminalShotName || current.endShotName,
+                  initialValue:  current.endShotName,
                 })(
-                  <div>
-                    <Input
-                      placeholder="请输入"
-                      readOnly="true"
-                      value={terminalShotName || current.endShotName}
-                    />
-                  </div>
+                  <Input
+                    placeholder="请输入"
+                    readOnly="true"
+                  />
                 )}
               </FormItem>
             </Col>
@@ -630,6 +645,7 @@ class PackageInfo extends PureComponent {
   };
 
   clickNewFrom = () => {
+    this.initDrop();
     this.setState({
       visible: true,
       isAdd: true,
@@ -639,6 +655,7 @@ class PackageInfo extends PureComponent {
   };
 
   clickEditFrom = () => {
+    this.initDrop();
     this.state.isAdd = false;
     this.setState({
       current: this.state.selectedItem,
@@ -708,10 +725,10 @@ class PackageInfo extends PureComponent {
       type: 'packageinfo/fetchListPackage',
       payload: { customerId: this.state.customerId },
     });
-    this.setState({
-      selectedItem: '',
-      // fristLoad: true,
-    });
+    // this.setState({
+    //   selectedItem: '',
+    //   // fristLoad: true,
+    // });
   };
 
   handleSubmit = (close) => {

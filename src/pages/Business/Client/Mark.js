@@ -4,14 +4,9 @@ import {
   Card,
   Row,
   Col,
-  Table,
   Icon,
   Form,
   Select,
-  InputNumber,
-  DatePicker,
-  Tabs,
-  Radio,
   Button,
   Input,
   Modal,
@@ -30,7 +25,8 @@ import MarkListItem from './components/MarkListItem';
 // import   '../../../../node_modules/cropperjs/dist/cropper.css'; //需要找到相对的 node_modules 路径，必须引入该css文件！
 import 'cropperjs/dist/cropper.css';
 
-import TerminalSelected from './components/TerminalSelected';
+
+const { Option } = Select;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -56,6 +52,7 @@ const listdata = [
 @connect(({ loading, mark }) => {
   return {
     body: mark.body,
+    listEndCustomerDropDown: mark.listEndCustomerDropDown,
     // province: city.province,
     // areas: city.areas,
     // citys: city.citys,
@@ -104,11 +101,11 @@ class Mark extends PureComponent {
       markunFreezeloading,
       markListloading,
       params,
-      customLock
+      customLock,
     } = this.props;
 
 
-    const { selectedItem, visible, current = {}, update, fileList ,isAdd} = this.state;
+    const { selectedItem, visible, current = {}, update, fileList, isAdd } = this.state;
 
     const modalFooter = isAdd ? [
       <Button
@@ -163,25 +160,25 @@ class Mark extends PureComponent {
         this.state.isUpdateFrom = true;
       }
     } else if (update) {
-        this.setState({
-          terminalShotName: false,
-        });
-        // console.log('code '+body.rtnCode)
-        if (body.rtnCode === '000000') {
-          this.state.requestState = 'success';
-          message.success(body.rtnMsg);
-        } else {
-          message.error(body.rtnMsg);
-          this.state.requestState = 'error';
-        }
-        this.handleDone();
-
-        this.state.update = false;
-        if (this.state.isUpdateFrom) {
-          this.state.isUpdateFrom = false;
-          this.state.showItem = { ...current };
-        }
+      this.setState({
+        terminalShotName: false,
+      });
+      // console.log('code '+body.rtnCode)
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
       }
+      this.handleDone();
+
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        this.state.showItem = { ...current };
+      }
+    }
 
     if (params) {
       const data = { ...params };
@@ -204,8 +201,6 @@ class Mark extends PureComponent {
       this.state.isEdit = true;
     }
 
-    // console.log(' isAddEdit ', this.state.isAddEdit, '-', this.state.isEdit);
-
 
     const isFreeze = (selectedItem && selectedItem.status === '2');
 
@@ -217,7 +212,7 @@ class Mark extends PureComponent {
             dataSource={isUpdate || markListloading ? [] : !this.state.isAddEdit ? body.data : []}
             renderItem={this.getContantItem2}
             size="small"
-            rowKey={v=>{
+            rowKey={v => {
               return v.id;
             }}
             style={{ paddingLeft: 10, paddingRight: 10 }}
@@ -244,7 +239,7 @@ class Mark extends PureComponent {
                 icon="plus"
                 size="small"
                 onClick={this.clickNewFrom}
-                disabled={this.state.isAddEdit||customLock}
+                disabled={this.state.isAddEdit || customLock}
               >
                 新增
               </Button>
@@ -254,7 +249,7 @@ class Mark extends PureComponent {
                 icon="delete"
                 size="small"
                 onClick={this.clickDeleteFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze||customLock}
+                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze || customLock}
               >
                 删除
               </Button>
@@ -264,7 +259,7 @@ class Mark extends PureComponent {
                 size="small"
                 icon="edit"
                 onClick={this.clickEditFrom}
-                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze||customLock}
+                disabled={this.state.isEdit || this.state.isAddEdit || isFreeze || customLock}
               >
                 编辑
               </Button>
@@ -275,7 +270,7 @@ class Mark extends PureComponent {
                   type="danger"
                   icon="unlock"
                   onClick={this.clickUnFreezeFrom}
-                  disabled={this.state.isEdit || this.state.isAddEdit||customLock}
+                  disabled={this.state.isEdit || this.state.isAddEdit || customLock}
                 >
                   取消审批
                 </Button> : <Button
@@ -284,10 +279,10 @@ class Mark extends PureComponent {
                              type="primary"
                              icon="lock"
                              onClick={this.clickFreezeFrom}
-                             disabled={this.state.isEdit || this.state.isAddEdit||customLock}
+                             disabled={this.state.isEdit || this.state.isAddEdit || customLock}
                            >
                   审批
-                           </Button>
+                                       </Button>
               }
 
             </div>
@@ -380,6 +375,7 @@ class Mark extends PureComponent {
 
     return (
       <div
+        style={{ marginBottom: '10px' }}
         onClick={() => {
           this.changeSelectItem(item);
         }}
@@ -440,6 +436,16 @@ class Mark extends PureComponent {
     // });
   };
 
+  initDrop = () => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'mark/querylistEndCustomerDropDown',
+      payload: { key: '74ec9b5cc01d8d5946cb283c1abe79bc' },
+    });
+  };
+
+
   clickNewFrom = () => {
     this.setState({
       visible: true,
@@ -448,20 +454,23 @@ class Mark extends PureComponent {
       current: {},
       fileList: [],
     });
+    this.initDrop();
   };
 
   clickEditFrom = () => {
-    this.state.isAdd = false;
     this.setState({
       current: this.state.selectedItem,
       visible: true,
+      isAdd: false,
     });
+    this.initDrop();
+
   };
 
   clickDeleteFrom = () => {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
-    const {id} = selectedItem;
+    const { id } = selectedItem;
     if (id) {
       const keys = [];
       keys.push(id);
@@ -483,7 +492,7 @@ class Mark extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const {id} = selectedItem;
+    const { id } = selectedItem;
     if (id) {
       const keys = [];
       keys.push(id);
@@ -498,7 +507,7 @@ class Mark extends PureComponent {
     const { selectedItem } = this.state;
     const { dispatch } = this.props;
 
-    const {id} = selectedItem;
+    const { id } = selectedItem;
     if (id) {
       const keys = [];
       keys.push(id);
@@ -521,10 +530,10 @@ class Mark extends PureComponent {
       type: 'mark/fetchListMark',
       payload: { customerId: this.state.customerId },
     });
-    this.setState({
-      selectedItem: '',
-      // fristLoad: true,
-    });
+    // this.setState({
+    //   selectedItem: '',
+    //   // fristLoad: true,
+    // });
   };
 
   handleSubmit = (close) => {
@@ -557,11 +566,11 @@ class Mark extends PureComponent {
         payload: {
           ...params,
         },
-        callback:()=>{
+        callback: () => {
           this.setState({
             visible: !close,
           });
-        }
+        },
       });
     });
   };
@@ -588,7 +597,7 @@ class Mark extends PureComponent {
 
       // const imageUrl = this.state.imageUrl;
 
-      const {file} = info;
+      const { file } = info;
 
 
       if (file.type) {
@@ -655,6 +664,7 @@ class Mark extends PureComponent {
     };
     const {
       form: { getFieldDecorator },
+      listEndCustomerDropDown,
     } = this.props;
 
     const { cropperVisible, current = {}, terminalShotName } = this.state;
@@ -700,30 +710,37 @@ class Mark extends PureComponent {
                 {getFieldDecorator('endNo', {
                   initialValue: current.endNo,
                 })(
-                  <TerminalSelected
-                    content={current.endNo}
-                    onSelectEndName={file => {
-                      // console.log('end name ', file);
-                      this.setState({
-                        terminalShotName: file,
-                      });
+                  <Select
+                    placeholder="请选择"
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    onChange={(v, o) => {
+                      const ff = listEndCustomerDropDown.filter(e => e.id === v);
+                      const { form } = this.props;
+
+                      form.setFieldsValue({ endShotName: ff[0].endShotName });
+
                     }}
-                  />,
+                  >
+                    {listEndCustomerDropDown && listEndCustomerDropDown.map(({ value, key }) =>
+                      <Option value={value} key={value}>{key}</Option>,
+                    )}
+                  </Select>,
                 )}
               </FormItem>
             </Col>
             <Col lg={12} md={12} sm={12} xs={12}>
               <FormItem label="终客简称" {...this.formLayout} className={styles.from_content_col}>
                 {getFieldDecorator('endShotName', {
-                  initialValue: terminalShotName || current.endShotName,
+                  initialValue: current.endShotName,
                 })(
-                  <div>
-                    <Input
-                      placeholder="请输入"
-                      readOnly="true"
-                      value={terminalShotName || current.endShotName}
-                    />
-                  </div>,
+                  <Input
+                    placeholder="请输入"
+                    readOnly="true"
+                  /> ,
                 )}
               </FormItem>
             </Col>

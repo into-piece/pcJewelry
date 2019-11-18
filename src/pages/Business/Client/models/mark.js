@@ -5,6 +5,7 @@ import {
   updateTheMark,
   freezeTheMark,
   unfreezeTheMark,
+  listEndCustomerDropDown
 } from '@/services/api';
 
 export default {
@@ -14,6 +15,7 @@ export default {
     province: [],
     city: [],
     head: [],
+    listEndCustomerDropDown: [],
     isLoading: false,
   },
 
@@ -71,9 +73,30 @@ export default {
       });
       if (callback) callback();
     },
+    * querylistEndCustomerDropDown({ payload, callback }, { call, put }) {
+      const response = yield call(listEndCustomerDropDown, payload);
+      const list = response.body.records;
+      const listdrop = list.map((item) => {
+        return { value: item.id, key: item.endNo,...item };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: listdrop, typeName: "listEndCustomerDropDown" },
+      });
+      if (callback) callback();
+    },
   },
 
   reducers: {
+    changeState(state, action) {
+      const { typeName, data } = action.payload;
+      return {
+        ...state,
+        [typeName]: data,
+      };
+    },
+
+
     list(state, action) {
       return {
         ...state,

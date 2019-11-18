@@ -80,6 +80,13 @@ export const queryQuality = `${priefx}/business/basic/quality-requirements/listQ
  */
 export const queryTerminalList = `${priefx}/business/business/end-customer/listEndCustomer`
 
+
+/**
+ * 加载终客下拉
+ * @type {string}
+ */
+export const querylistEndCustomerDropDown = `${priefx}/business/business/end-customer/listEndCustomerDropDown`
+
 /**
  * 加载客户列表
  * @type {string}
@@ -295,6 +302,7 @@ export default {
   queryQuality,
   queryQuality2,
   queryTerminalList,
+  querylistEndCustomerDropDown,
   loadCustomerList,
   queryMstWordList,
   queryBrands,
