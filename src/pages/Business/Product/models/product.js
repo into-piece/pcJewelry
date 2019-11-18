@@ -94,8 +94,6 @@ export default {
       if (callback) callback();
     },
 
-
-
     *queryProductLock({ payload, callback }, { call, put }) {
       const response = yield call(queryTheProductLock, payload);
       yield put({
@@ -140,7 +138,6 @@ export default {
       });
       if (callback) callback();
     },
-
     *deleteProductSeries({ payload, callback }, { call, put }) {
       const response = yield call(deleteTheProductSeries, payload);
       yield put({
@@ -165,7 +162,65 @@ export default {
         payload,
       });
     },
+
+    *changebrand({ payload }, { put }) {
+      const value = payload.map(item => ({
+        key: item.brandNo,
+        value: item.brandZhName
+      }))
+      yield put({
+        type: 'changeStateAction',
+        payload: { key: 'brand', value },
+      });
+    },
+
+    *changebrand({ payload }, { put }) {
+      const value = payload.map(item => ({
+        key: item.brandNo,
+        value: item.brandZhName
+      }))
+      yield put({
+        type: 'changeStateAction',
+        payload: { key: 'brand', value },
+      });
+    },
+
+    *changeproductType({ payload }, { put }) {
+      const value = payload.map(item => ({
+        key: item.id,
+        value: item.zhName
+      }))
+      yield put({
+        type: 'changeStateAction',
+        payload: { key: 'productType', value },
+      });
+    },
+
+    *changeproductColor({ payload }, { put }) {
+      const value = payload.map(item => ({
+        key: item.id,
+        value: item.zhName
+      }))
+      yield put({
+        type: 'changeStateAction',
+        payload: { key: 'brproductColorand', value },
+      });
+    },
+
+
+
   },
+
+  // brand: [],
+  // productType: [], // 类别
+  // productColor: [],
+  // gemColor: [],
+  // platingColor: [],
+  // customerId: [],
+  // sourceOfProduct: [],
+  // unitOfMeasurement: [],
+  // unitOfWeight: [],
+  // finishedWeight: [],
 
   reducers: {
     list(state, action) {

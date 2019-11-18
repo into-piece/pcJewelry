@@ -197,8 +197,8 @@ export default {
       const response = yield call(listMarkingDropDown, {});
       console.log(response)
       let markinglist = response.body.records
-      markinglist = markinglist.map(({ markingNo, id, enName }) => {
-        return { value: id, key: markingNo, enName }
+      markinglist = markinglist.map(({ zhName, id, enName }) => {
+        return { value: id, key: zhName, enName }
       })
       yield put({
         type: 'changeState',

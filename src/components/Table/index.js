@@ -40,7 +40,7 @@ class MyTable extends Component {
     // selectedRowKeys = [... this.state.selectedRowKeys, record.id]
     selectedRow = [record.id];
     onSelectChange && onSelectChange(selectedRow)
-    changeChoosenRow&&changeChoosenRow(record);
+    changeChoosenRow && changeChoosenRow(record);
   };
 
   // 行样式
@@ -75,12 +75,12 @@ class MyTable extends Component {
     const { props, onSelectRowClass, onRow, onChange } = this;
     const { checkType, body, columns, pagination, selectedRowKeys, onSelectChange, listLoading, scroll } = props;
     const paginationProps = {
-      showQuickJumper:true,
+      showQuickJumper: true,
       pageSize: pagination ? pagination.size : 10,
       total: body ? body.total : 0,
       current: pagination ? pagination.current : 1,
       showTotal: this.returnTotal,
-      size:"small"
+      size: "small"
       // total: 100, //做测试
     };
 
@@ -95,8 +95,6 @@ class MyTable extends Component {
     return (
       <Table
         scroll={scroll || { x: "max-content" }}
-        // scroll="max-content"
-
         columns={columns}
         dataSource={body.records}
         rowSelection={rowSelection}

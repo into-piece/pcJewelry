@@ -40,6 +40,8 @@ import { connect } from 'dva';
 import { getCurrentUser } from '../../../utils/authority';
 import moment from 'moment';
 import classNames from 'classnames';
+import UploadImg from '@/components/UploadImg';
+
 
 const { Description } = DescriptionList;
 
@@ -228,44 +230,44 @@ class SpecimenDetaill extends Component {
     const modalFooter = isAdd
       ? [
         <Button key="back" onClick={this.handleCancel}>
-            取消
+          取消
         </Button>,
         <Button
           key="submit"
           type="primary"
           loading={productSaveloading}
           onClick={() => {
-              this.handleSubmit(true);
-            }}
+            this.handleSubmit(true);
+          }}
         >
-            保存
+          保存
         </Button>,
         <Button
           key="continue"
           type="primary"
           loading={productSaveloading}
           onClick={() => {
-              this.handleSubmit(false);
-            }}
+            this.handleSubmit(false);
+          }}
         >
-            继续添加
+          继续添加
         </Button>,
-        ]
+      ]
       : [
         <Button key="back" onClick={this.handleCancel}>
-            取消
+          取消
         </Button>,
         <Button
           key="submit"
           type="primary"
           loading={productUpdateloading}
           onClick={() => {
-              this.handleSubmit(false);
-            }}
+            this.handleSubmit(false);
+          }}
         >
-            保存
+          保存
         </Button>,
-        ];
+      ];
 
     let paths = [];
 
@@ -350,8 +352,8 @@ class SpecimenDetaill extends Component {
                     </Spin>
                   </div>
                 ) : (
-                  <div />
-                )}
+                    <div />
+                  )}
               </Card>
             </div>
             <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -423,24 +425,24 @@ class SpecimenDetaill extends Component {
                       取消审批
                     </Button>
                   ) : (
-                    <Button
-                      className={business.buttomControl}
-                      size="small"
-                      type="primary"
-                      icon="lock"
-                      disabled={!showItem || showItem === '' || !isProductUpdate}
-                      onClick={() => {
-                        ModalConfirm({
-                          content: '确定审批吗？',
-                          onOk: () => {
-                            this.handleFreezeProduct();
-                          },
-                        });
-                      }}
-                    >
-                      审批
+                      <Button
+                        className={business.buttomControl}
+                        size="small"
+                        type="primary"
+                        icon="lock"
+                        disabled={!showItem || showItem === '' || !isProductUpdate}
+                        onClick={() => {
+                          ModalConfirm({
+                            content: '确定审批吗？',
+                            onOk: () => {
+                              this.handleFreezeProduct();
+                            },
+                          });
+                        }}
+                      >
+                        审批
                     </Button>
-                  )}
+                    )}
                 </div>
 
                 <div
@@ -518,16 +520,16 @@ class SpecimenDetaill extends Component {
     return paths.map((
       v // src={v}
     ) => (
-      <div className={business.carousel_image_ground}>
-        <Zmage
-          alt="图片"
-          align="center"
-          className={styles.carousel_image}
-          src={v}
-          set={paths.map(image => ({ src: image }))}
-        />
-      </div>
-    ));
+        <div className={business.carousel_image_ground}>
+          <Zmage
+            alt="图片"
+            align="center"
+            className={styles.carousel_image}
+            src={v}
+            set={paths.map(image => ({ src: image }))}
+          />
+        </div>
+      ));
   };
 
   getProductModalContent = () => {
@@ -599,7 +601,7 @@ class SpecimenDetaill extends Component {
           onSubmit={this.handleContactsSubmit}
         >
 
-          <div className={classNames('adddevModal',styles.maxline)}>
+          <div className={classNames('adddevModal', styles.maxline)}>
 
             <FormItem label="流水号" {...this.centerFormLayout}>
               {getFieldDecorator('productNo', {
@@ -860,21 +862,13 @@ class SpecimenDetaill extends Component {
           <Row>
             <div className="adddevModal">
               <FormItem label="上传图片" {...this.centerFormLayout}>
-                <Upload
-                  accept="image/*"
-                  name="avatar"
-                  beforeUpload={() => {
-                    return false;
+                <UploadImg
+                  key="uimg"
+                  defaultFileList={this.state.fileList ? this.state.fileList : []}
+                  fileListFun={imglist => {
+                    this.setState({ fileList: imglist });
                   }}
-                  listType="picture-card"
-                  fileList={this.state.fileList ? this.state.fileList : []}
-                  onChange={handleChange}
-                >
-                  <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                    <div className="ant-upload-text">上传图片</div>
-                  </div>
-                </Upload>
+                />
               </FormItem>
             </div>
           </Row>
@@ -983,8 +977,8 @@ class SpecimenDetaill extends Component {
             </Row>
           </Form>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
     );
   };
@@ -1006,13 +1000,16 @@ class SpecimenDetaill extends Component {
       const params = {};
       params.sample = { ...fieldsValue };
 
-      const urls = fileList.map(v => v.url);
-      const names = fileList.map(v => v.name);
-      params.imgStr = urls;
-      // params.imgStr = this.state.urls;
-      params.fileName = names;
+      // const urls = fileList.map(v => v.url);
+      // const names = fileList.map(v => v.name);
+      const filelistArr = fileList.flatMap(e => e.url);
+      // params.imgStr = urls;
+      // // params.imgStr = this.state.urls;
+      // params.fileName = names;
       // params.productId = item.productNo;
       // params.product = item;
+
+      params.picPath = filelistArr
       if (isAdd) {
         dispatch({
           type: 'specimen/addSpecimen',
@@ -1060,12 +1057,9 @@ class SpecimenDetaill extends Component {
 
     const _this = this;
     const params = {};
-    const urls = fileList.map(v => v.url);
-    const names = fileList.map(v => v.name);
-    params.imgStr = urls;
-    // params.imgStr = this.state.urls;
-    params.fileName = names;
-    // params.productId = item.productNo;
+    const filelistArr = fileList.flatMap(e => e.url);
+    params.picPath = filelistArr
+
     params.sample = item;
 
     fetch(HttpFetch.saveProductImage, {
@@ -1085,7 +1079,7 @@ class SpecimenDetaill extends Component {
           message.error(head.rtnMsg);
         }
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           loading: false,
         });
@@ -1140,7 +1134,7 @@ class SpecimenDetaill extends Component {
           isLoading: false,
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           isLoading: false,
         });
@@ -1290,7 +1284,7 @@ class SpecimenDetaill extends Component {
           guides
           background
           aspectRatio={800 / 800}
-          // crop={this.crop}
+        // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
           <div className="img-preview" style={{ width: '100%', height: '100%' }} />
@@ -1331,7 +1325,7 @@ class SpecimenDetaill extends Component {
           imageObject: [],
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log('parsing failed', ex);
         _this.setState({
           loading: false,
@@ -1395,8 +1389,8 @@ class SpecimenDetaill extends Component {
     } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
-    const zhName = `${cNoPercentageZhName  } ${  cNozhNameUniCode  } ${  cNofCodezhName}`;
-    const enName = `${cNoPercentageEnName  } ${  cNoenNameUniCode  } ${  cNofCode}`;
+    const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
+    const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别
     this.setState({
       zhName,

@@ -1,7 +1,7 @@
 {
   "headList": [
-    { "key": "报价单号", "value": "系统自动生成", "type": 4, "noNeed": true },
-    { "key": "报价日期", "value": "系统自动生成", "type": 4, "noNeed": true },
+    { "key": "报价单号", "value": "quoteNumber", "type": 7, "noNeed": true },
+    { "key": "报价日期", "value": "quoteDate", "type": 10 },
     { "key": "类别", "value": "type", "type": 2, "list": "wordbookdropdown", "noNeed": true },
     {
       "key": "紧急程度",

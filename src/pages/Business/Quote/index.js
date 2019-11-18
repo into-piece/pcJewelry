@@ -95,17 +95,13 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>客户编号</div>,
     dataIndex: 'customerNo',
     key: 'customerNo',
-
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-    ),
   },
   {
     title: <div className={styles.row_normal2}>简称</div>,
     dataIndex: 'customerShotName',
     key: 'customerShotName',
 
-    render:(d,i)=>(i.customerShotName)
+    render: (d, i) => (i.customerShotName)
 
   },
   {
@@ -119,7 +115,7 @@ let clientContentColumns = [
     dataIndex: 'type',
     key: 'typeName',
 
-    render:(d,i)=>(i.typeName)
+    render: (d, i) => (i.typeName)
 
   },
 
@@ -294,6 +290,7 @@ class Info extends Component {
     modalType: '',
     quoteDateFrom: null,
     quoteDateTo: null,
+    quoteDate: null,
   };
 
   componentDidMount() {
@@ -465,8 +462,10 @@ class Info extends Component {
       const { quote, form } = this.props;
       const obj = quote.customerDropDownList.find(item => item.value === value);
       const { shotName, currencyCode } = obj;
+      const date = form.getFieldValue('quoteDate') || ''
       form.setFieldsValue({
         customerShotName: shotName,
+        quoteNumber: moment(date).format('YYYYMMDD') + '_Quote_' + shotName,
         currency: currencyCode,
       });
     }
@@ -510,6 +509,18 @@ class Info extends Component {
     });
   };
 
+  handleDatePicker1 = (date, dateString, v) => {
+    const { form } = this.props;
+    console.log(form.getFieldValue('customerShotName'));
+    const customerShotName = form.getFieldValue('customerShotName') || ''
+
+    const quoteDate = moment(date[0]).valueOf();
+    form.setFieldsValue({
+      quoteDate,
+      quoteNumber: moment(quoteDate).format('YYYYMMDD') + '_Quote_' + customerShotName,
+    });
+  }
+
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
   // type 3 点击事件
@@ -518,6 +529,7 @@ class Info extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
+  // type 9 RangePicker
   returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form }) => {
     switch (type) {
       case 2:
@@ -541,7 +553,7 @@ class Info extends Component {
               this[clickFn](1);
             }}
           > {text}
-                                                                          </span>
+          </span>
           </p>
         );
       case 4:
@@ -570,9 +582,18 @@ class Info extends Component {
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
         return <RangePicker
+          allowClear={false}
           style={{ marginRight: 10 }}
           onChange={(date, dateString) => {
             this.handleDatePicker(date, dateString, value);
+          }}
+        />;
+      case 10:
+        return <DatePicker
+          allowClear={false}
+          style={{ marginRight: 10 }}
+          onChange={(date, dateString) => {
+            this.handleDatePicker1(date, dateString, value);
           }}
         />;
       default:
@@ -665,7 +686,7 @@ class Info extends Component {
     form.validateFields((err, values) => {
       if (!err) {
 
-        this.setState({addLoading:true});
+        this.setState({ addLoading: true });
         params = {
           ...params,
           ...values,
@@ -680,9 +701,9 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
-            if(close) this.btnFn('');
+            if (close) this.btnFn('');
           }
-          this.setState({addLoading:false});
+          this.setState({ addLoading: false });
 
         });
       }
@@ -712,7 +733,7 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        this.setState({addLoading:true});
+        this.setState({ addLoading: true });
 
         params = {
           ...params,
@@ -728,10 +749,10 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
-            if(close) this.btnFn('');
+            if (close) this.btnFn('');
 
           }
-          this.setState({addLoading:false});
+          this.setState({ addLoading: false });
 
         });
       }
@@ -886,9 +907,9 @@ class Info extends Component {
       productType,
       productLineId,
       productLineName,
-      finishedWeight,
       unitOfMeasurementName,
       unitOfWeightName,
+      finishedWeight
     } = this.props.productChoosenRowData;
     let lastCount = 0;
     let topCount = 0;
@@ -986,7 +1007,7 @@ class Info extends Component {
 
   render() {
     const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct, onSearch, returnListName } = this;
-    const { modalType ,addloading} = state;
+    const { modalType, addloading } = state;
     const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData, productListLoading } = props;
 
 
@@ -1018,23 +1039,23 @@ class Info extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
-        key="back"
-        onClick={onCancel}
-      >
-        取消
+        <Button
+          key="back"
+          onClick={onCancel}
+        >
+          取消
       </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(false);
-        }}
-      >
-        保存
+        <Button
+          key="submit"
+          type="primary"
+          loading={addloading}
+          onClick={() => {
+            handleModalOk(false);
+          }}
+        >
+          保存
       </Button>,
-    ];
+      ];
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1061,20 +1082,21 @@ class Info extends Component {
           </div>
         </div>
         {handleModalOk &&
-        <Modal
-          maskClosable={false}
-          title={returnTitle()}
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          visible={modalType !== ''}
-          footer={modalFooter}
-          onCancel={onCancel}
+          <Modal
+            zIndex={1}
+            maskClosable={false}
+            title={returnTitle()}
+            width={1000}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            visible={modalType !== ''}
+            footer={modalFooter}
+            onCancel={onCancel}
 
-        >
-          {getModalContent()}
-        </Modal>
+          >
+            {getModalContent()}
+          </Modal>
         }
 
         <Modal
@@ -1087,6 +1109,7 @@ class Info extends Component {
           onOk={handleProductModalOk}
           visible={showProductModal}
           onCancel={handleProductModalCancel}
+          zIndex={2}
         >
           <SelectProductModal
             list={productList}
@@ -1195,9 +1218,9 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                   if (info.file.status === 'done') {
                     // 获取初始表单数据
                     btnFn('freshList');
-                    const {response} = info.file;
+                    const { response } = info.file;
 
-                    if (response.head&&response.head.btnCode !== '000000') {
+                    if (response.head && response.head.btnCode !== '000000') {
                       message.error(response.head.rtnMsg);
                     }
 
@@ -1236,7 +1259,7 @@ const rowArr = [
   { key: '税率', value: 'taxRate' },
   { key: '紧急程度', value: 'emergency', belong: 2 },
   { key: '计石重', value: 'isWeighStones', belong: 2 },
-  { key: '字印编码', value: 'markingId' },
+  { key: '字印编码', value: 'markingId', belong: 3, 'list': 'markinglist' },
   { key: '字印英文名', value: 'markingEnName' },
   { key: '包装单价', value: 'packPriceType', belong: 2 },
   { key: '客户备料', value: 'customerPreparation', belong: 2 },
@@ -1255,24 +1278,28 @@ const GetRenderitem = ({ data, type, returnListName }) => {
     // console.log('select the item');
   };
 
-  const arr = type === 1 ? rowArr : detailList;
+  const returnRowName = ({ value, list, belong }) => {
+    return belong === 2 ?
+      returnName(value, data[value])
+      :
+      belong === 3 ?
+        returnListName(list, data[value]) :
+        data[value]
+  }
 
+  const arr = type === 1 ? rowArr : detailList;
   return (
     <div style={{ marginLeft: 10, marginTop: 10 }} className={styles.getRenderitem} onClick={selectRowItem}>
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, belong, list }) =>
-            <Description key={value} term={key}>
+          arr.map(({ key, value, belong, list }) => {
+            const name = returnRowName({ belong, value, list })
+            return name ? <Description key={value} term={key}>
               {
-                belong === 2 ?
-                  returnName(value, data[value])
-                  :
-                  belong === 3 ?
-                    returnListName(list, data[value]) :
-                    data[value]
+                name
               }
-            </Description>,
-          )
+            </Description> : ''
+          })
         }
       </DescriptionList>
     </div>
@@ -1396,7 +1423,6 @@ class CenterInfo extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x:'max-content' }}
             columns={clientContentColumns}
             body={quotelist}
             changeChoosenRow={record => {
@@ -1438,8 +1464,6 @@ class CenterInfo extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x:'max-content' }}
-
             columns={customerColumns}
             body={quoteDatialList}
             type={2}

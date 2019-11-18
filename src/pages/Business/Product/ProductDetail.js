@@ -14,13 +14,13 @@ import {
   notification,
 } from 'antd';
 import { formatMessage } from 'umi/locale';
+import classNames from 'classNames';
 import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
 import business from '../business.less';
 import baseStyles from '../Client/base.less';
 import DescriptionList from '@/components/DescriptionList';
 import styles from './product.less';
-import classNames from 'classNames';
 import 'cropperjs/dist/cropper.css';
 import clientStyle from '../Client/Client.less';
 import BrandListSelect from './components/BrandListSelect';
@@ -66,18 +66,48 @@ const componentArr = {
   unitOfMeasurement: BasicMeasureListSelect,
   unitOfWeight: BasicMeasureListSelect,
 };
-const fetchArr = {
-  brand: queryBrands,
-  productType: queryproductDropDown2,
-  productColor: PercentageSelect,
-  gemColor: queryunitColor,
-  platingColor: queryPlatingColor,
-  customerId: queryTerminalNoList,
-  sourceOfProduct: Dict,
-  mouldNo: queryMoldList,
-  unitOfMeasurement: queryMeasureUniList,
-  unitOfWeight: queryMeasureUniList,
-};
+const fetchArr = [
+  {
+    key: 'brand',
+    value: queryBrands
+  },
+  {
+    key: 'productType',
+    value: queryproductDropDown2
+  },
+  {
+    key: 'productColor',
+    value: queryProductMaterial
+  },
+  {
+    key: 'gemColor',
+    value: queryunitColor
+  },
+  {
+    key: 'platingColor',
+    value: queryPlatingColor
+  },
+  {
+    key: 'customerId',
+    value: queryTerminalNoList
+  },
+  {
+    key: 'sourceOfProduct',
+    value: queryMstWordList
+  },
+  {
+    key: 'mouldNo',
+    value: queryMoldList
+  },
+  {
+    key: 'unitOfMeasurement',
+    value: queryMeasureUniList
+  },
+  {
+    key: 'unitOfWeight',
+    value: queryMeasureUniList
+  },
+];
 const { Option } = Select;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -274,8 +304,8 @@ class ProductDetail extends Component {
           // const selectItem = body.records.filter(v =>(v.id === content);
           if (body.records && body.records.length > 0) {
             this.props.dispatch({
-              type: 'product/changeState',
-              payload: { key, value: body.records },
+              type: `product/change${key}`,
+              payload: { key, value: body.records, akey: '', avalue: '' },
             });
           }
         }
@@ -283,10 +313,13 @@ class ProductDetail extends Component {
   };
 
   batchUpdate = () => {
-    const arr = ['brand', 'customerId', 'productType'];
-    arr.forEach(v => {
-      this.getData({ url: fetchArr[v], params: {}, key: v });
-    });
+    debugger
+    for (const i in fetchArr) {
+      this.getData({ url: fetchArr[i], params: {}, key: i });
+    }
+    // fetchArr.forEach(v => {
+    //   this.getData({ url: fetchArr[v], params: {}, key: v });
+    // });
 
 
     this.setState({
@@ -311,19 +344,19 @@ class ProductDetail extends Component {
     const { product } = this.props;
     // productColorName,gemColor,platingColor,customerId
     const rowSelection =
-      {
-        selectedRowKeys: product[`${value}Keys`],
-        type: 'checkbox',
-        onChange: selectedRowKeys => {
-          this.onSelectChange(selectedRowKeys, value);
-        },
-      };
+    {
+      selectedRowKeys: product[`${value}Keys`],
+      type: 'checkbox',
+      onChange: selectedRowKeys => {
+        this.onSelectChange(selectedRowKeys, value);
+      },
+    };
     return (
       <div>
         <Search
           onSearch={v => {
-          this.onSearch(v, value);
-        }}
+            this.onSearch(v, value);
+          }}
           placeholder=""
         />
         <Table
@@ -411,7 +444,7 @@ class ProductDetail extends Component {
               { key: 1, value: 1 },
             ];
 
-            const ComponentSelect = componentArr[value];
+            // const ComponentSelect = componentArr[value];
             // console.log(arr, list, '==================list', product, product[list])
             return (
               <div className="adddevModal" key={key} style={this.returnStyle(value)}>
@@ -426,78 +459,81 @@ class ProductDetail extends Component {
                         message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
                       }],
                       initialValue: undefined,
-                    })(type && type === 2 ?
-                      // <Select
-                      //   placeholder="请选择"
-                      //   style={{ width: 180 }}
-                      //   showSearch
-                      //   optionFilterProp="children"
-                      //   filterOption={(input, option) =>
-                      //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      //   }
-                      // >
-                      //   {arr.map(({ value, key }) =>
-                      //     <Option value={value}>{key}</Option>,
-                      //   )}
-                      // </Select>
-                      <ComponentSelect
-                        placeholder="请选择"
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        style={{ width: 180 }}
-                        getOptionList={l => {
-                          getList({ key: value, value: l });
-                        }}
-                        onSelect={v => {
-                          // if (v && v.brandNo) {
-                          //   this.state.cNoBrandNo = v.brandNo;
-                          //   this.parseProductNo();
-                          // }
-                        }}
-                      />
-                      :
-                      type && type === 3 ?
-                        <TextArea rows={2} placeholder="请输入" /> :
-                        type && type === 4 ?
-                          <ComponentSelect
-                            mode="multiple"
-                            placeholder="请选择"
-                            showSearch
-                            optionFilterProp="children"
-                            filterOption={(input, option) =>
-                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            muti
-                            style={{ width: 180 }}
-                            onSelect={v => {
-                              // if (v && v.brandNo) {
-                              //   this.state.cNoBrandNo = v.brandNo;
-                              //   this.parseProductNo();
-                              // }
-                            }}
-                          />
+                    })(
+                      // 
+                      type && type === 2 ?
+                        <Select
+                          placeholder="请选择"
+                          style={{ width: 180 }}
+                          showSearch
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {arr.map(({ value, key }) =>
+                            <Option value={value}>{key}</Option>,
+                          )}
+                        </Select>
 
-                          // <Select
-                          //   placeholder="请选择"
-                          //   style={{ width: 180 }}
-                          //   showSearch
-                          //   optionFilterProp="children"
-                          //   mode="multiple"
+                        // <ComponentSelect
+                        //   placeholder="请选择"
+                        //   showSearch
+                        //   optionFilterProp="children"
+                        //   filterOption={(input, option) =>
+                        //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        //   }
+                        //   style={{ width: 180 }}
+                        //   // getOptionList={l => {
+                        //   //   getList({ key: value, value: l });
+                        //   // }}
+                        //   onSelect={v => {
+                        //     // if (v && v.brandNo) {
+                        //     //   this.state.cNoBrandNo = v.brandNo;
+                        //     //   this.parseProductNo();
+                        //     // }
+                        //   }}
+                        // />
+                        :
+                        type && type === 3 ?
+                          <TextArea rows={2} placeholder="请输入" /> :
+                          type && type === 4 ?
+                            // <ComponentSelect
+                            //   mode="multiple"
+                            //   placeholder="请选择"
+                            //   showSearch
+                            //   optionFilterProp="children"
+                            //   filterOption={(input, option) =>
+                            //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            //   }
+                            //   muti
+                            //   style={{ width: 180 }}
+                            //   onSelect={v => {
+                            //     // if (v && v.brandNo) {
+                            //     //   this.state.cNoBrandNo = v.brandNo;
+                            //     //   this.parseProductNo();
+                            //     // }
+                            //   }}
+                            // />
 
-                          //   filterOption={(input, option) =>
-                          //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          //   }
-                          // >
-                          //   {arr.map(({ value, key }) =>
-                          //     <Option value={value}>{key}</Option>,
-                          //   )}
-                          // </Select>
+                            <Select
+                              placeholder="请选择"
+                              style={{ width: 180 }}
+                              showSearch
+                              optionFilterProp="children"
+                              mode="multiple"
 
-                          :
-                          <Input placeholder="请输入" />,
+                              filterOption={(input, option) =>
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              }
+                            >
+                              {arr.map(({ value, key }) =>
+                                <Option value={value}>{key}</Option>,
+                              )}
+                            </Select>
+
+                            :
+                            <Input placeholder="请输入" />,
                     )
                   }
                 </FormItem>
@@ -623,6 +659,10 @@ class ProductDetail extends Component {
             message: rtnMsg,
           });
           this.closeModal();
+        } else {
+          notification.success({
+            message: res.rtnMsg,
+          });
         }
       });
 
@@ -667,23 +707,23 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={productUpdateloading}
-        onClick={() => {
-          this.handleSubmit(false);
-        }}
-      >
-        保存
-      </Button>,
-    ];
+        <Button
+          key="back"
+          onClick={this.handleCancel}
+        >
+          取消
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          保存
+        </Button>,
+      ];
 
     const batchFooter = [
       <Button
@@ -777,8 +817,8 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-              <div />
-            )}
+                <div />
+              )}
           </Card>
         </div>
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -936,16 +976,16 @@ class ProductDetail extends Component {
     return paths.map((
       v, // src={v}
     ) => (
-      <div className={business.carousel_image_ground}>
-        <Zmage
-          alt="图片"
-          align="center"
-          className={styles.carousel_image}
-          src={v}
-          set={paths.map(image => ({ src: image }))}
-        />
-      </div>
-    ));
+        <div className={business.carousel_image_ground}>
+          <Zmage
+            alt="图片"
+            align="center"
+            className={styles.carousel_image}
+            src={v}
+            set={paths.map(image => ({ src: image }))}
+          />
+        </div>
+      ));
   };
 
   getProductModalContent = () => {
@@ -1018,11 +1058,11 @@ class ProductDetail extends Component {
           className={styles.standardListForm}
           onSubmit={this.handleContactsSubmit}
         >
-          <div className={classNames('adddevModal',styles.maxline)}>
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem
               label="产品编号"
-              // labelCol={{ span: 12 }}
-              // wrapperCol={{ span: 20 }}
+            // labelCol={{ span: 12 }}
+            // wrapperCol={{ span: 20 }}
             >
               {getFieldDecorator('productNo', {
                 rules: [{ required: true, message: '请输入姓名' }],
@@ -1042,23 +1082,24 @@ class ProductDetail extends Component {
                 rules: [{ required: true, message: '请输入品牌' }],
                 initialValue: current.brand,
               })
-              (<BrandListSelect
-                placeholder="请输入"
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                style={{ width: 180 }}
-                onSelect={(v) => {
-                  if (v && v.brandNo) {
-                    this.state.cNoBrandNo = v.brandNo;
-                    this.parseProductNo();
+                (<BrandListSelect
+                  placeholder="请输入"
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                }
-                }
-                content={current.brand}
-              />)
+                  style={{ width: 180 }}
+                  onSelect={(v) => {
+                    if (v && v.brandNo) {
+                      this.parseProductNo({
+                        brand: v.brandNo
+                      });
+                    }
+                  }
+                  }
+                  content={current.brand}
+                />)
               }
             </FormItem>
           </div>
@@ -1086,6 +1127,15 @@ class ProductDetail extends Component {
                     this.state.cNofCodeehName = v.enName;
                     this.state.cNofCode = v.unitCode;
                     this.parseProductNo();
+                  }
+                  if (v.zhName === '套装') {
+                    this.props.form.setFieldsValue({
+                      brand: 'SET'
+                    });
+                    this.parseProductNo({
+                      brand: 'SET'
+                    });
+                    debugger
                   }
                 }
                 }
@@ -1338,7 +1388,16 @@ class ProductDetail extends Component {
               label='上传图片'
               {...this.centerFormLayout}
             >
-              <Upload
+              <UploadImg
+                key="uimg"
+                defaultFileList={this.state.fileList ? this.state.fileList : []}
+                fileListFun={imglist => {
+                  this.setState({ fileList: imglist });
+                }}
+              />
+
+
+              {/* <Upload
                 accept='image/*'
                 name='avatar'
                 beforeUpload={() => {
@@ -1352,7 +1411,7 @@ class ProductDetail extends Component {
                   <Icon type={this.state.loading ? 'loading' : 'plus'} />
                   <div className="ant-upload-text">上传图片</div>
                 </div>
-              </Upload>
+              </Upload> */}
               {/* <UploadImg */}
               {/* key="uimg" */}
               {/* maxcount={10} */}
@@ -1511,7 +1570,8 @@ class ProductDetail extends Component {
   handleSubmit = (close) => {
     const { dispatch, form } = this.props;
     const { isAdd, fileList, showItem } = this.state;
-    const arr = ['productNo',
+    const arr = [
+      'productNo',
       'brand',
       'productType',
       'gemColor',
@@ -1525,23 +1585,17 @@ class ProductDetail extends Component {
       'customerId',
     ];
 
-    // specification
-
-    form.validateFields(arr, (err, fieldsValue) => {
+    form.validateFields(arr, err => {
       if (err) {
         return;
       }
 
       const params = {};
-      params.product = { ...fieldsValue };
+      params.product = form.getFieldsValue();
 
-      const urls = fileList.map(v => v.url);
-      const names = fileList.map(v => v.name);
-      params.imgStr = urls;
-      // params.imgStr = this.state.urls;
-      params.fileName = names;
-      // params.productId = item.productNo;
-      // params.product = item;
+      const filelistArr = fileList.flatMap(e => e.url);
+      params.picPath = filelistArr
+
       if (isAdd) {
         dispatch({
           type: 'product/addProduct',
@@ -1592,12 +1646,8 @@ class ProductDetail extends Component {
 
     const _this = this;
     const params = {};
-    const urls = fileList.map(v => v.url);
-    const names = fileList.map(v => v.name);
-    params.imgStr = urls;
-    // params.imgStr = this.state.urls;
-    params.fileName = names;
-    // params.productId = item.productNo;
+    const filelistArr = fileList.flatMap(e => e.url);
+    params.picPath = filelistArr
     params.product = item;
 
 
@@ -1619,7 +1669,7 @@ class ProductDetail extends Component {
         }
 
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           loading: false,
         });
@@ -1681,7 +1731,7 @@ class ProductDetail extends Component {
 
 
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           isLoading: false,
         });
@@ -1829,7 +1879,7 @@ class ProductDetail extends Component {
           guides
           background
           aspectRatio={1 / 1}
-          // crop={this.crop}
+        // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
           <div className="img-preview" style={{ width: '100%', height: '100%' }} />
@@ -1870,7 +1920,7 @@ class ProductDetail extends Component {
           imageObject: [],
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log('parsing failed', ex);
         _this.setState({
           loading: false,
@@ -1916,14 +1966,14 @@ class ProductDetail extends Component {
     });
   };
 
-  parseProductNo = ({ customerNo = '' } = {}) => {
+  parseProductNo = ({ customerNo = '', brand = '' } = {}) => {
     console.log(11111);
-    const { cNoColorCode = '', cNoProductMaterial = '',cNofCodeehName='', cNoBrandNo = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '', cNoProductMaterial = '', cNofCodeehName = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold;
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${cNoBrandNo + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
+    const productNo = `${brand + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCodeehName}`;
     // 成色+宝石颜色+类别
