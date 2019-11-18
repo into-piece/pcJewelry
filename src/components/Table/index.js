@@ -94,7 +94,7 @@ class MyTable extends Component {
 
     return (
       <Table
-        scroll={scroll || { x: 900 }}
+        scroll={scroll || { x: "max-content" }}
         // scroll="max-content"
 
         columns={columns}
