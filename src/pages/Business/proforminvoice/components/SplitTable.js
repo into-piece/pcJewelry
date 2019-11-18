@@ -263,7 +263,8 @@ class SplitTable extends Component {
       <Divider className={styles.divider} />
       <SbTable
         columns={this.columnsson}
-        scroll={{ x: 1000 }}
+        scroll={{ x: 'max-content' }}
+
         body={{ records: topList }}
         selectedRowKeys={selectedRowKeys}
         onSelectChange={onSelectChange}
@@ -299,7 +300,7 @@ class SplitTable extends Component {
 
       <Table
         columns={this.columns}
-        scroll={{ x: 1000 }}
+        scroll={{ x: 'max-content' }}
         dataSource={bottomList}
         loading={loading}
         expandedRowRender={(record) => {
