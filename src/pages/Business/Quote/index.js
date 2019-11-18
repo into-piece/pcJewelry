@@ -1395,8 +1395,8 @@ class CenterInfo extends Component {
           onchange={changeSearchParams}
         />
         <div className={styles.tableBox}>
-          <Table 
-            scroll={{ x: 1400 }}
+          <Table
+            scroll={{ x:'max-content' }}
             columns={clientContentColumns}
             body={quotelist}
             changeChoosenRow={record => {
@@ -1438,7 +1438,8 @@ class CenterInfo extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1600 }}
+            scroll={{ x:'max-content' }}
+
             columns={customerColumns}
             body={quoteDatialList}
             type={2}
