@@ -9,6 +9,7 @@ const piUrls = [
       'cancelApproval',
       'merge',
       'split',
+      'saveOrUpdate',
     ],
   },
 
@@ -19,7 +20,8 @@ const piDetailUrls = [
     'path': 'proforma-invoice-detail',
     'arr': [
       'list',
-      'update',
+      'saveOrUpdate',
+      'delete',
     ],
   },
 
