@@ -490,7 +490,7 @@ class ProductDetail extends Component {
                         //   onSelect={v => {
                         //     // if (v && v.brandNo) {
                         //     //   this.state.cNoBrandNo = v.brandNo;
-                        //     //   this.parseProductNo();
+                        //     //   this.);
                         //     // }
                         //   }}
                         // />
@@ -511,7 +511,7 @@ class ProductDetail extends Component {
                             //   onSelect={v => {
                             //     // if (v && v.brandNo) {
                             //     //   this.state.cNoBrandNo = v.brandNo;
-                            //     //   this.parseProductNo();
+                            //     //   this.);
                             //     // }
                             //   }}
                             // />
@@ -1048,6 +1048,7 @@ class ProductDetail extends Component {
     const sourceOfProduct = getFieldValue('sourceOfProduct');
     // const supplierId = getFieldValue("supplierId");
     const productType = getFieldValue('productType');
+    const brand = getFieldValue('brand');
 
     return (
       <div className={clientStyle.list_info}>
@@ -1083,6 +1084,7 @@ class ProductDetail extends Component {
                 initialValue: current.brand,
               })
                 (<BrandListSelect
+                  disabled={brand === 'SET'}
                   placeholder="请输入"
                   showSearch
                   optionFilterProp="children"
@@ -1092,9 +1094,11 @@ class ProductDetail extends Component {
                   style={{ width: 180 }}
                   onSelect={(v) => {
                     if (v && v.brandNo) {
-                      this.parseProductNo({
+                      this.setState({
                         brand: v.brandNo
-                      });
+                      }, () => {
+                        this.parseProductNo()
+                      })
                     }
                   }
                   }
@@ -1123,22 +1127,29 @@ class ProductDetail extends Component {
                 onSelect={(v) => {
                   // console.log(" select  ",v)
                   if (v.zhName) {
-                    this.state.cNofCodezhName = v.zhName;
-                    this.state.cNofCodeehName = v.enName;
-                    this.state.cNofCode = v.unitCode;
-                    this.parseProductNo();
+                    if (v.zhName === '套装') {
+                      this.props.form.setFieldsValue({
+                        brand: 'SET',
+                      });
+                      this.setState({
+                        cNofCodezhName: v.zhName,
+                        cNofCodeehName: v.enName,
+                        cNofCode: v.unitCode,
+                        brand: 'SET'
+                      }, () => {
+                        this.parseProductNo()
+                      })
+                    } else {
+                      this.setState({
+                        cNofCodezhName: v.zhName,
+                        cNofCodeehName: v.enName,
+                        cNofCode: v.unitCode
+                      }, () => {
+                        this.parseProductNo()
+                      });
+                    }
                   }
-                  if (v.zhName === '套装') {
-                    this.props.form.setFieldsValue({
-                      brand: 'SET'
-                    });
-                    this.parseProductNo({
-                      brand: 'SET'
-                    });
-                    debugger
-                  }
-                }
-                }
+                }}
               />)}
             </FormItem>
           </div>
@@ -1453,13 +1464,13 @@ class ProductDetail extends Component {
                     // console.log('end name ', file);
                     this.setState({
                       customerShotName: customerCombine,
-                      customerNo: file,
+                      customerNo: customerCombine,
+                    }, () => {
+                      this.parseProductNo();
                     });
-
                     // setFieldsValue({
                     //   customerShotName: customerCombine,
                     // });
-                    this.parseProductNo({ customerNo: customerCombine });
                   }
                 }}
               />)}
@@ -1966,9 +1977,10 @@ class ProductDetail extends Component {
     });
   };
 
-  parseProductNo = ({ customerNo = '', brand = '' } = {}) => {
+
+  parseProductNo = () => {
     console.log(11111);
-    const { cNoColorCode = '', cNoProductMaterial = '', cNofCodeehName = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '' } = this.state;
+    const { cNoColorCode = '', cNoProductMaterial = '', cNofCodeehName = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '', customerNo = '', brand = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
     const showMold = cNomainMold;
     // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';

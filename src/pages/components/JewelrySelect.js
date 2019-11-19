@@ -87,7 +87,7 @@ class JewelrySelect extends PureComponent {
   };
 
   render() {
-    const { content, style, showSearch, placeholder, mode } = this.props;
+    const { content, style, showSearch, placeholder, mode, disabled } = this.props;
     const { value, isFirst } = this.state;
 
     let showValue;
@@ -99,6 +99,7 @@ class JewelrySelect extends PureComponent {
     }
     return (
       <Select
+        disabled={disabled}
         showSearch={showSearch}
         optionFilterProp="children"
         placeholder={placeholder}
