@@ -281,7 +281,7 @@ class Index extends Component {
             type: `${defaultModelName}/clearListScond`,
           });
         } else {
-          this.getListSecond({ type: secondTableActive });
+          this.getListSecond({ type: secondTableActive },{});
           // 清除第二table 选中 详情
           dispatch({
             type: `${defaultModelName}/clearDetailSecond`,
@@ -308,7 +308,7 @@ class Index extends Component {
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
         } else {
-          this.getListSecond({ type: secondTableActive });
+          this.getListSecond({ type: secondTableActive },{});
         }
       }
     });
@@ -330,7 +330,7 @@ class Index extends Component {
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
         } else {
-          this.getListSecond({ type: secondTableActive });
+          this.getListSecond({ type: secondTableActive },{});
         }
       }
     });
@@ -372,9 +372,9 @@ class Index extends Component {
               message: rtnMsg,
             });
             if (rightActive === firstTabFlag) {
-              this.getList({ type: rightActive });
+              this.getList({ type: rightActive },{});
             } else {
-              this.getListSecond({ type: secondTableActive });
+              this.getListSecond({ type: secondTableActive },{});
             }
 
             if(close)this.btnFn('');
