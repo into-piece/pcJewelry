@@ -186,7 +186,7 @@ class UploadImg extends Component {
           <div className="ant-upload-text">上传图片</div>
         </div>
       </Upload>,
-      <Modal maskClosable={false} {...modalCropperFooter} width={668} destroyOnClose visible={cropperVisible}>
+      <Modal key="uploadimgcut" maskClosable={false} {...modalCropperFooter} width={668} destroyOnClose visible={cropperVisible}>
         {openCutImageModal()}
       </Modal>,
     ];

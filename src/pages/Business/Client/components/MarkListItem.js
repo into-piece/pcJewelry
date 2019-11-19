@@ -23,50 +23,50 @@ class MarkListItem extends PureComponent {
     initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
   }
 
-  fetch2 = item => {
-    // console.log("test load image")
-    const _this = this;
-    const params = {};
-    params.dataNo = item.markingNo;
-    fetch(HttpFetch.queryMarkImage, {
-      method: 'POST',
-      credentials: 'include',
-headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const {body} = d;
-        if (body && body.records) {
-          if (body.records.length > 0) {
-            const imageObject = body.records;
-            this.state.imageObject = imageObject;
-            _this.setState({
-              imageObject,
-              loading: false,
-            });
-            // console.log("test load finish")
-            // console.log('image  data ', imageObject);
-            return;
-          }
-        }
-        _this.setState({
-          loading: false,
-        });
-        // console.log('result ', d);
-      })
-      .catch(function(ex) {
-        console.log('parsing failed', ex);
-        // message.error('加载图片失败！');
-        _this.setState({
-          loading: false,
-        });
-      });
-    // }
-  };
+//   fetch2 = item => {
+//     // console.log("test load image")
+//     const _this = this;
+//     const params = {};
+//     params.dataNo = item.markingNo;
+//     fetch(HttpFetch.queryMarkImage, {
+//       method: 'POST',
+//       credentials: 'include',
+// headers: {
+//         'Content-Type': 'application/json',
+//         'token': getCurrentUser()?getCurrentUser().token:'',
+//       },
+//       body: JSON.stringify(params),
+//     })
+//       .then(response => response.json())
+//       .then(d => {
+//         const {body} = d;
+//         if (body && body.records) {
+//           if (body.records.length > 0) {
+//             const imageObject = body.records;
+//             this.state.imageObject = imageObject;
+//             _this.setState({
+//               imageObject,
+//               loading: false,
+//             });
+//             // console.log("test load finish")
+//             // console.log('image  data ', imageObject);
+//             return;
+//           }
+//         }
+//         _this.setState({
+//           loading: false,
+//         });
+//         // console.log('result ', d);
+//       })
+//       .catch(function(ex) {
+//         console.log('parsing failed', ex);
+//         // message.error('加载图片失败！');
+//         _this.setState({
+//           loading: false,
+//         });
+//       });
+//     // }
+//   };
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     return true;
@@ -75,7 +75,7 @@ headers: {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
+      loading: false,
       imageObject: [],
       isFirst: true,
       isFristLoadValue: true,
@@ -83,11 +83,11 @@ headers: {
   }
 
   componentDidMount() {
-    const { item } = this.props;
-    if (item) {
-      this.fetch2(item);
-      // this.feathMarkToId(item.endNo);
-    }
+    // const { item } = this.props;
+    // if (item) {
+    //   this.fetch2(item);
+    //   // this.feathMarkToId(item.endNo);
+    // }
   }
 
   render() {
@@ -95,20 +95,7 @@ headers: {
 
     const { loading, imageObject, isFirst, isFristLoadValue } = this.state;
 
-    let paths = [];
-
-    if (isSelected && callbackUrl) {
-      callbackUrl(imageObject);
-    }
-
-    if (imageObject.length > 0) {
-      paths = imageObject.map(v => {
-        return v.path;
-      });
-      // paths = imageObject.path;
-    }
-
-    if (!paths) paths = [];
+    const images = item.pictures && item.pictures.flatMap(e => e.picPath);
 
 
     return (
@@ -118,7 +105,7 @@ headers: {
         className={isSelected ? styles.list_selected_content : styles.listdiv}
         cover={
           <Carousel {...this.carouselsettings} key={item.id} className={styles.carousel_content} autoplay>
-            {this.getImages(paths)}
+            {this.getImages(images)}
           </Carousel>
         }
       >

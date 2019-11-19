@@ -8,7 +8,7 @@ import {
   Button,
   Input,
   Divider,
-  Modal,
+  Modal,notification,
   message,
   Spin,
 } from 'antd';
@@ -153,9 +153,13 @@ class ClientInfo extends PureComponent {
       this.loadCustomeForId();
       if (body.rtnCode === '000000') {
         this.state.requestState = 'success';
-        message.success(body.rtnMsg);
+        notification.success({
+          message: body.rtnMsg,
+        });
       } else {
-        message.error(body.rtnMsg);
+        notification.error({
+          message: body.rtnMsg,
+        });
         this.state.requestState = 'error';
       }
 
