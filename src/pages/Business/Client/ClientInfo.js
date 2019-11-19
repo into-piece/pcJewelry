@@ -24,7 +24,6 @@ import QualityRequirements from './components/QualityRequirements';
 import DeliveryMethods from './components/DeliveryMethods';
 import HttpFetch, { loadCustomerList } from '../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../utils/authority';
-import { notification } from 'antd/lib/index';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;

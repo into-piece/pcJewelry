@@ -9,7 +9,7 @@ import {
   Form,
   Select,
   InputNumber,
-  DatePicker,notification,
+  DatePicker,
   Tabs,
   Radio,
   Button,
@@ -18,6 +18,7 @@ import {
   Divider,
   List,
   message,
+  notification,
 } from 'antd';
 import { connect } from 'dva';
 import styles from './base.less';
@@ -27,7 +28,6 @@ import clientStyle from './Client.less';
 import AllCity from './components/AllCity';
 import City from './components/City';
 import GeographicView from './GeographicView';
-import { notification } from 'antd/lib/index';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;

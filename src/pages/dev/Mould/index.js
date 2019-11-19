@@ -22,6 +22,7 @@ import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import UploadImg from '@/components/UploadImg';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -78,6 +79,7 @@ class Index extends Component {
     secondTableActive: 'dieSetChild',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
+    filelist: [],
   };
 
   componentDidMount() {
@@ -338,12 +340,17 @@ class Index extends Component {
   handleAdd = (close) => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
     const { secondTableActive, rightActive, modalType } = this.state;
+    const filelist = this.state.filelist.flatMap(e => e.url);
+
     let params = {};
     if (rightActive !== firstTabFlag) {
       params = { mainMoldCode: choosenRowData.mainMoldCode };
     }
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
+    }
+    if(rightActive==='dieSet'){
+      params = {...params,picPath: filelist,}
     }
 
     this.setState({ addloading: true });
@@ -373,6 +380,8 @@ class Index extends Component {
             }
 
             if(close)this.btnFn('');
+            if (close) this.setState({ filelist: [] });
+
           }
 
         });
@@ -433,6 +442,26 @@ class Index extends Component {
             );
           })
         }
+        {(rightActive === 'dieSet' ) && <Col span={18}>
+          <FormItem
+            label="上传图片"
+            key="uploadPic"
+            labelCol={{ span: 3 }}
+            wrapperCol={{
+              span: 20,
+            }
+            }
+          >
+            <UploadImg
+              key="uimg"
+              maxcount={10}
+              defaultFileList={isEdit ? choosenRowData.pictures : []}
+              fileListFun={(list) => {
+                this.setState({ filelist: list });
+              }}
+            />
+          </FormItem>
+        </Col>}
         {content}
       </Form>
     );
