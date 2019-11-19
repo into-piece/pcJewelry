@@ -453,7 +453,7 @@ class Index extends Component {
             <UploadImg
               key="uimg"
               maxcount={10}
-              defaultFileList={isEdit ? choosenRowData.pictures : []}
+              defaultFileList={isEdit ?(rightActive === firstTabFlag ? choosenRowData.pictures : choosenRowDataSecond.pictures)  : []}
               fileListFun={(list) => {
                 this.setState({ filelist: list });
               }}
@@ -573,6 +573,7 @@ class Index extends Component {
         key="back"
         onClick={() => {
           btnFn('');
+          this.setState({filelist:[]})
         }}
       >
         取消
@@ -602,6 +603,8 @@ class Index extends Component {
         key="back"
         onClick={() => {
           btnFn('');
+          this.setState({filelist:[]})
+
         }}
       >
         取消
