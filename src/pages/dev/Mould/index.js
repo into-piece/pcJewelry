@@ -349,9 +349,7 @@ class Index extends Component {
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
-    if(rightActive==='dieSet'){
       params = {...params,picPath: filelist,}
-    }
 
     this.setState({ addloading: true });
 
@@ -442,7 +440,7 @@ class Index extends Component {
             );
           })
         }
-        {(rightActive === 'dieSet' ) && <Col span={18}>
+        { <Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
