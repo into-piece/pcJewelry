@@ -1459,7 +1459,7 @@ class ProductDetail extends Component {
                     // setFieldsValue({
                     //   customerShotName: customerCombine,
                     // });
-                    this.parseProductNo({ customerNo: file });
+                    this.parseProductNo({ customerNo: customerCombine });
                   }
                 }}
               />)}
