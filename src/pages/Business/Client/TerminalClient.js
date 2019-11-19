@@ -18,6 +18,7 @@ import {
   Divider,
   List,
   message,
+  notification,
 } from 'antd';
 import { connect } from 'dva';
 import styles from './base.less';
@@ -122,9 +123,13 @@ class TerminalClient extends PureComponent {
       // console.log('code '+body.rtnCode)
       if (body.rtnCode === '000000') {
         this.state.requestState = 'success';
-        message.success(body.rtnMsg);
+        notification.success({
+          message: body.rtnMsg,
+        });
       } else {
-        message.error(body.rtnMsg);
+        notification.error({
+          message: body.rtnMsg,
+        });
         this.state.requestState = 'error';
       }
       this.handleDone();
