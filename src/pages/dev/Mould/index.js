@@ -737,6 +737,7 @@ class Index extends Component {
           footer={modalFooter}
           onCancel={() => {
             btnFn('');
+            this.setState({filelist:[]})
           }}
         >
           {getModalContent()}

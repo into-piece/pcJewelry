@@ -26,6 +26,7 @@ import Cropper from 'react-cropper';
 import clientStyle from './Client.less';
 import styles from './base.less';
 import PackageListItem from './components/PackageListItem';
+import UploadImg from '@/components/UploadImg';
 
 const { Option } = Select;
 
@@ -63,7 +64,7 @@ class PackageInfo extends PureComponent {
       update: false,
       customerId: '',
       selectedItem: '',
-      fileList: [],
+      filelist: [],
       cropperVisible: false,
       terminalShotName: '',
     };
@@ -73,7 +74,7 @@ class PackageInfo extends PureComponent {
     const { dispatch } = this.props;
 
     dispatch({
-      type: 'mark/querylistEndCustomerDropDown',
+      type: 'packageinfo/querylistEndCustomerDropDown',
       payload: { key: '74ec9b5cc01d8d5946cb283c1abe79bc' },
     });
   };
@@ -92,7 +93,7 @@ class PackageInfo extends PureComponent {
       customLock
     } = this.props;
 
-    const { selectedItem, visible, current = {}, update, fileList ,isAdd} = this.state;
+    const { selectedItem, visible, current = {}, update, filelist ,isAdd} = this.state;
 
     const modalFooter = isAdd ? [
       <Button
@@ -274,7 +275,7 @@ class PackageInfo extends PureComponent {
                             disabled={this.state.isEdit || this.state.isAddEdit||customLock}
                           >
                   审批
-                          </Button>
+                                     </Button>
               }
             </div>
 
@@ -323,92 +324,7 @@ class PackageInfo extends PureComponent {
     );
   }
 
-  getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
   getModalContent = () => {
-    const modalCropperFooter = this.state.done
-      ? { footer: null, onCancel: this.handleCropDone }
-      : { okText: '保存', onOk: this.handleCropSubmit, onCancel: this.handleCropCancle };
-
-    const openCutImageModal = () => {
-      const crop = () => {
-        // image in dataUrl
-        const cropi = this.refs.cropper.getCroppedCanvas().toDataURL();
-        // console.log("crop image "+cropi);
-        this.setState({
-          cropImage: cropi,
-        });
-      };
-
-      const { uploadFile } = this.state;
-
-      return (
-        <div className={styles.cropper_view}>
-          <Cropper
-            ref="cropper"
-            src={uploadFile}
-            className={styles.cropper}
-            style={{ height: 400 }}
-            preview=".img-preview"
-            aspectRatio={800 / 800}
-            cropBoxResizable={false}
-            viewMode={0} // 定义cropper的视图模式
-            zoomable // 是否允许放大图像
-            guides
-            background
-            // crop={this.crop}
-          />
-          <div className={styles.cropper_preview}>
-            <div className="img-preview" style={{ width: '100%', height: '100%' }} />
-          </div>
-        </div>
-      );
-    };
-    const handleChange = info => {
-      let fileList = [...info.fileList];
-
-      const {file} = info;
-
-      if (file.type) {
-        const isJPG = file.type.indexOf('image') != -1;
-        if (!isJPG) {
-          message.error('只能上传图片格式的文件');
-          return;
-        }
-      }
-
-      fileList = fileList.slice(-10);
-      fileList = fileList.map(file => {
-        // console.log('image is the ', file);
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        if (!file.url) {
-          this.getBase64(file.originFileObj, imageUrl => {
-            fileList.forEach((v, i) => {
-              if (v.uid === info.file.uid) {
-                fileList[i].url = imageUrl;
-                // console.log("change file name =  ", v.name, info.file)
-                this.setState({
-                  fileList,
-                  cropperVisible: true,
-                  uploadFile: imageUrl,
-                  uploadFileUid: v.uid,
-                });
-              }
-            });
-            return file;
-          });
-        }
-        return file;
-      });
-      this.setState({ fileList });
-    };
-
     const {
       form: { getFieldDecorator },
       listEndCustomerDropDown
@@ -434,21 +350,14 @@ class PackageInfo extends PureComponent {
                 {...this.formLayout}
                 className={styles.from_content_col}
               >
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  beforeUpload={() => {
-                    return false;
+                <UploadImg
+                  key="uimg22"
+                  maxcount={10}
+                  defaultFileList={current.pictures || []}
+                  fileListFun={(list) => {
+                    this.setState({ filelist: list });
                   }}
-                  fileList={this.state.fileList ? this.state.fileList : []}
-                  onChange={handleChange}
-                >
-                  <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                    <div className="ant-upload-text">上传图片</div>
-                  </div>
-                </Upload>
+                />
               </FormItem>
             </Col>
           </Row>
@@ -504,52 +413,11 @@ class PackageInfo extends PureComponent {
             </Col>
           </Row>
         </Form>
-        <Modal maskClosable={false} {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
-          {openCutImageModal()}
-        </Modal>
+
       </div>
     );
   };
 
-  handleCropSubmit = () => {
-    // console.log('handleCropSubmit');
-    const { uploadFileUid, fileList } = this.state;
-
-    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
-
-    fileList.forEach((v, i) => {
-      if (v.uid === uploadFileUid) {
-        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
-        fileList[i].url = cropImage;
-        fileList[i].thumbUrl = cropImage;
-        // console.log("set file url ",cropImage)
-      }
-    });
-
-    this.setState({
-      cropperVisible: false,
-      fileList,
-      cropImage,
-    });
-  };
-
-  handleCropCancle = () => {
-    console.log('handleCropCancle');
-    this.setState({
-      cropperVisible: false,
-      cropImage: '',
-      uploadFileUid: '',
-    });
-  };
-
-  handleCropDone = () => {
-    console.log('handleCropDone');
-    this.setState({
-      cropperVisible: false,
-      cropImage: '',
-      uploadFileUid: '',
-    });
-  };
 
   getContantItem = item => {
     return (
@@ -592,43 +460,19 @@ class PackageInfo extends PureComponent {
 
     return (
       <div
+        style={{marginBottom:'10px'}}
+        key={item.id}
         onClick={() => {
           this.changeSelectItem(item);
         }}
       >
         <PackageListItem
+
           item={item}
-          callbackUrl={this.callbackUrl}
           isSelected={selectedItem === item}
         />
       </div>
     );
-  };
-
-  callbackUrl = item => {
-    let fileList = [];
-    if (item) {
-      fileList = item.map(v => ({
-        uid: v.id,
-        name: v.fileName,
-        status: 'done',
-        url: v.path,
-      }));
-      this.state.imageUrl = item.map(v => {
-        return v.path;
-      });
-      this.state.fileName = item.map(v => {
-        return v.fileName;
-      });
-    } else {
-      this.state.imageUrl = [];
-      this.state.fileName = [];
-    }
-    // console.log('upload edit list ', fileList);
-    this.state.fileList = fileList;
-    // this.setState({
-    //   fileList,
-    // });
   };
 
   changeSelectItem = item => {
@@ -655,7 +499,7 @@ class PackageInfo extends PureComponent {
       visible: true,
       isAdd: true,
       current: {},
-      fileList: [],
+      filelist: [],
     });
   };
 
@@ -721,6 +565,7 @@ class PackageInfo extends PureComponent {
   handleCancel = () => {
     this.setState({
       visible: false,
+      filelist:[]
     });
   };
 
@@ -738,31 +583,22 @@ class PackageInfo extends PureComponent {
 
   handleSubmit = (close) => {
     const { dispatch, form } = this.props;
-    const { isAdd, selectedItem, fileList, imageUrl, imageName } = this.state;
+    const { isAdd, selectedItem, filelist,  } = this.state;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
-      const params = {};
-      let urls; let names;
+      let params = {};
       const fiedls = { ...fieldsValue };
 
-      if (fileList.length > 0) {
-        urls = fileList.map(v => v.url);
-
-        names = fileList.map(v => v.name);
-      }
       let pack = {};
       pack = fiedls;
       pack.customerId = this.state.customerId;
-      params.imgStr = urls;
-      params.fileName = names;
-      params.pack = pack;
       if (!isAdd) {
-        params.pack.id = selectedItem.id;
-        params.pack.packNo = selectedItem.packNo;
+        pack.id = selectedItem.id;
+        pack.packNo = selectedItem.packNo;
       }
-
+      params ={...pack,picPath:filelist.map(e=>e.url)}
       dispatch({
         type: 'packageinfo/addPackage',
         payload: {
@@ -770,7 +606,8 @@ class PackageInfo extends PureComponent {
         },
         callback:()=>{
           this.setState({
-            visible:!close
+            visible:!close,
+            filelist:close?[] :filelist,
           })
         }
       });

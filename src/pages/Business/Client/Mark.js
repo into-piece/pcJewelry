@@ -24,6 +24,7 @@ import Deliver from '../Deliver/Deliver';
 import MarkListItem from './components/MarkListItem';
 // import   '../../../../node_modules/cropperjs/dist/cropper.css'; //需要找到相对的 node_modules 路径，必须引入该css文件！
 import 'cropperjs/dist/cropper.css';
+import UploadImg from '@/components/UploadImg';
 
 
 const { Option } = Select;
@@ -85,7 +86,7 @@ class Mark extends PureComponent {
       update: false,
       customerId: '',
       selectedItem: '',
-      fileList: [],
+      filelist: [],
       cropperVisible: false,
     };
   }
@@ -288,7 +289,7 @@ class Mark extends PureComponent {
                              disabled={this.state.isEdit || this.state.isAddEdit || customLock}
                            >
                   审批
-                                       </Button>
+                           </Button>
               }
 
             </div>
@@ -337,43 +338,6 @@ class Mark extends PureComponent {
     );
   }
 
-  handleCropSubmit = () => {
-    const { uploadFileUid, fileList } = this.state;
-
-    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
-
-    fileList.forEach((v, i) => {
-      if (v.uid === uploadFileUid) {
-        fileList[i].name = `crop${  Date.parse(new Date())  }${fileList[i].name}`;
-        fileList[i].url = cropImage;
-        fileList[i].thumbUrl = cropImage;
-        // console.log("set file url ",cropImage)
-      }
-    });
-
-    this.setState({
-      cropperVisible: false,
-      fileList,
-      cropImage,
-    });
-  };
-
-  handleCropCancle = () => {
-    this.setState({
-      cropperVisible: false,
-      cropImage: '',
-      uploadFileUid: '',
-    });
-  };
-
-  handleCropDone = () => {
-    console.log('handleCropDone');
-    this.setState({
-      cropperVisible: false,
-      cropImage: '',
-      uploadFileUid: '',
-    });
-  };
 
 
   getContantItem2 = item => {
@@ -388,7 +352,6 @@ class Mark extends PureComponent {
       >
         <MarkListItem
           item={item}
-          callbackUrl={this.callbackUrl}
           isSelected={selectedItem === item}
         />
       </div>
@@ -415,32 +378,7 @@ class Mark extends PureComponent {
     });
   };
 
-  callbackUrl = item => {
-    // console.log('callbackUrl');
-    let fileList = [];
-    if (item) {
-      fileList = item.map(v => ({
-        uid: v.id,
-        name: v.fileName,
-        status: 'done',
-        url: v.path,
-      }));
-      this.state.imageUrl = item.map(v => {
-        return v.path;
-      });
-      this.state.fileName = item.map(v => {
-        return v.fileName;
-      });
-    } else {
-      this.state.imageUrl = [];
-      this.state.fileName = [];
-    }
-    // console.log('upload edit list ',fileList)
-    this.state.fileList = fileList;
-    // this.setState({
-    //   fileList,
-    // });
-  };
+
 
   initDrop = () => {
     const { dispatch } = this.props;
@@ -527,6 +465,7 @@ class Mark extends PureComponent {
   handleCancel = () => {
     this.setState({
       visible: false,
+      filelist:[]
     });
   };
 
@@ -544,29 +483,23 @@ class Mark extends PureComponent {
 
   handleSubmit = (close) => {
     const { dispatch, form } = this.props;
-    const { isAdd, customerId, selectedItem, imageUrl, imageName, fileList } = this.state;
+    const { isAdd, customerId, selectedItem, imageUrl, imageName, filelist } = this.state;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const params = {};
+      let params = {};
       const fiedls = { ...fieldsValue };
-
-      const urls = fileList.map(v => v.url);
-
-      const names = fileList.map(v => v.name);
-
       let marking = {};
       marking = fiedls;
       marking.customerId = this.state.customerId;
-      params.imgStr = urls;
       // params.imgStr = this.state.urls;
-      params.fileName = names;
-      params.marking = marking;
-      // console.log('file List ', urls, names,fileList);
       if (!isAdd) {
-        params.marking.id = selectedItem.id;
-        params.marking.markingNo = selectedItem.markingNo;
+        marking.id = selectedItem.id;
+        marking.markingNo = selectedItem.markingNo;
       }
+
+      params = {...marking,picPath: filelist.map(e=>e.url)};
+
       dispatch({
         type: 'mark/updateMark',
         payload: {
@@ -575,99 +508,16 @@ class Mark extends PureComponent {
         callback: () => {
           this.setState({
             visible: !close,
+            filelist: close?[]:filelist,
           });
         },
       });
     });
   };
 
-  getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
 
   getModalContent = () => {
 
-    const modalCropperFooter = {
-      okText: '保存',
-      onOk: this.handleCropSubmit,
-      onCancel: this.handleCropCancle,
-    };
-    const handleChange = info => {
-      // console.log("handleChange")
-      const { current } = this.state;
-
-      let fileList = [...info.fileList];
-
-      // const imageUrl = this.state.imageUrl;
-
-      const { file } = info;
-
-
-      if (file.type) {
-        const isJPG = file.type.indexOf('image') != -1;
-        if (!isJPG) {
-          message.error('只能上传图片格式的文件');
-          return;
-        }
-      }
-
-      fileList = fileList.slice(-10);
-      fileList = fileList.map(file => {
-        // console.log('image is the ', file);
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        if (!file.url) {
-          this.getBase64(file.originFileObj, imageUrl => {
-            fileList.forEach((v, i) => {
-              if (v.uid === info.file.uid) {
-                fileList[i].url = imageUrl;
-                // console.log("change file name =  ", v.name, info.file)
-                this.setState({
-                  fileList,
-                  cropperVisible: true,
-                  uploadFile: imageUrl,
-                  uploadFileUid: v.uid,
-                });
-              }
-            });
-          });
-        }
-
-        return file;
-      });
-
-      this.setState({ fileList });
-    };
-    const openCutImageModal = () => {
-
-      const { uploadFile } = this.state;
-
-      return (
-        <div className={styles.cropper_view}>
-          <Cropper
-            ref="cropper"
-            src={uploadFile}
-            className={styles.cropper}
-            style={{ height: 400 }}
-            preview=".img-preview"
-            cropBoxResizable={false}
-            viewMode={0} // 定义cropper的视图模式
-            zoomable // 是否允许放大图像
-            guides
-            background
-            aspectRatio={800 / 800}
-            // crop={this.crop}
-          />
-          <div className={styles.cropper_preview}>
-            <div className="img-preview" style={{ width: '100%', height: '100%' }} />
-          </div>
-        </div>
-      );
-    };
     const {
       form: { getFieldDecorator },
       listEndCustomerDropDown,
@@ -689,23 +539,14 @@ class Mark extends PureComponent {
           <Row gutter={2}>
             <Col lg={24} md={24} sm={24} xs={24}>
               <FormItem label="字印图片" {...this.formLayout} className={styles.from_content_col}>
-                <Upload
-                  accept="image/*"
-                  name="avatar"
-                  beforeUpload={file => {
-                    return false;
-                  }}
-                  // customRequest={this.customRequest}
-                  listType="picture-card"
-                  fileList={this.state.fileList ? this.state.fileList : []}
-                  onChange={handleChange}
-                >
-                  {/* {imageUrl?'':uploadButton} */}
-                  <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                    <div className="ant-upload-text">上传图片</div>
-                  </div>
-                </Upload>
+                <UploadImg
+                  key="uimg"
+                  maxcount={10}
+                  defaultFileList={current.pictures || []}
+                  fileListFun={(list) => {
+                        this.setState({ filelist: list });
+                      }}
+                />
               </FormItem>
             </Col>
           </Row>
@@ -789,9 +630,7 @@ class Mark extends PureComponent {
             </Col>
           </Row>
         </Form>
-        <Modal maskClosable={false} {...modalCropperFooter} width={740} destroyOnClose visible={cropperVisible}>
-          {openCutImageModal()}
-        </Modal>
+
       </div>
     );
   };

@@ -18,57 +18,12 @@ class PackageListItem extends PureComponent {
     initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
   }
 
-  fetch = item => {
-    const _this = this;
-    const params = {};
-    params.dataNo = item.packNo;
-    fetch(HttpFetch.queryMarkImage, {
-      method: 'POST',
-      credentials: 'include',
-headers: {
-        'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => {
-        // console.log("response package ",response)
-        return response.json();
-      })
-      .then(d => {
-        const {body} = d;
-        if (body && body.records) {
-          if (body.records.length > 0) {
-            const imageObject = body.records;
-            this.state.imageObject = imageObject;
-            this.setState({
-              imageObject,
-              loading: false,
-            });
-            // console.log("image object ",imageObject)
-            return;
-          }
 
-        }
-        _this.setState({
-          loading: false,
-        });
-        // console.log('result ', d);
-      })
-      .catch(function(ex) {
-        // console.log('parsing failed', ex);
-        message.error('加载图片失败！');
-        _this.setState({
-          loading: false,
-        });
-      });
-    // }
-  };
 
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
+      loading: false,
       imageObject: [],
       isFirst: true,
       isFristLoadValue: true,
@@ -77,7 +32,7 @@ headers: {
 
   componentDidMount() {
     const { item } = this.props;
-    this.fetch(item);
+    // this.fetch(item);
     this.feathPackageToId(item.endNo);
   }
 
@@ -86,35 +41,7 @@ headers: {
     const { item, isSelected, callbackUrl } = this.props;
 
     const { loading, imageObject, endNo, endShotName, isFristLoadValue } = this.state;
-
-    // console.log('render package list');
-
-    // if (this.state.isFirst && item) {
-    //   // if (item) {
-    //   console.log("isFirest ")
-    //   this.fetch(item);
-    //   this.state.isFirst = false;
-    // }
-    let paths = [];
-
-    if (isSelected && callbackUrl) {
-      callbackUrl(imageObject);
-      // console.log("callbackUrl")
-    }
-
-    if (imageObject.length > 0) {
-      paths = imageObject.map(v => {
-        return v.path;
-      });
-    }
-
-    // if (!paths) paths = [];
-
-    // if (isFristLoadValue){
-    //   this.feathPackageToId(item.endNo);
-    //   // console.log("isFristLoadValue")
-    // }
-
+    const paths = item.pictures && item.pictures.flatMap(e => e.picPath);
 
     return (
       <Card
