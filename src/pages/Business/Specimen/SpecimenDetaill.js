@@ -1083,14 +1083,11 @@ class SpecimenDetaill extends Component {
   handleEditProduct = () => {
     const { item } = this.props;
     this.resetParse();
-    const { imageObject } = this.state;
-    this.parseImages(imageObject);
-
     this.setState({
       current: item,
       visible: true,
       isAdd: false,
-      fileList: this.state.fileList, // 测试真实数据重接口获取
+      fileList: this.state.showItem.pictures, // 测试真实数据重接口获取
       isEditItem: true,
     });
 
