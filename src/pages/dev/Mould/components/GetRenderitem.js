@@ -45,7 +45,7 @@ const GetRenderitem = ({ data, type, items }) => {
 
   return (
     <Card bordered={false} style={{overflow:"auto"}} className={styles.carddiv} onClick={selectRowItem}>
-      {(type === 'dieSet' ) &&
+      {
       <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
         {getImages(images)}
       </Carousel>}
