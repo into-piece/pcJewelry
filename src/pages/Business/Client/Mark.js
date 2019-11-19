@@ -11,7 +11,7 @@ import {
   Input,
   Modal,
   Divider,
-  List,
+  List,notification,
   Upload,
   message,
 } from 'antd';
@@ -166,9 +166,15 @@ class Mark extends PureComponent {
       // console.log('code '+body.rtnCode)
       if (body.rtnCode === '000000') {
         this.state.requestState = 'success';
-        message.success(body.rtnMsg);
+
+        notification.success({
+          message: body.rtnMsg,
+        });
       } else {
-        message.error(body.rtnMsg);
+
+        notification.error({
+          message: body.rtnMsg,
+        });
         this.state.requestState = 'error';
       }
       this.handleDone();

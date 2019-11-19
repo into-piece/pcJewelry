@@ -8,7 +8,7 @@ import {
   Button,
   Input,
   Divider,
-  Modal,
+  Modal,notification,
   message,
   Spin,
 } from 'antd';
@@ -24,6 +24,7 @@ import QualityRequirements from './components/QualityRequirements';
 import DeliveryMethods from './components/DeliveryMethods';
 import HttpFetch, { loadCustomerList } from '../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../utils/authority';
+import { notification } from 'antd/lib/index';
 
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
@@ -153,9 +154,13 @@ class ClientInfo extends PureComponent {
       this.loadCustomeForId();
       if (body.rtnCode === '000000') {
         this.state.requestState = 'success';
-        message.success(body.rtnMsg);
+        notification.success({
+          message: body.rtnMsg,
+        });
       } else {
-        message.error(body.rtnMsg);
+        notification.error({
+          message: body.rtnMsg,
+        });
         this.state.requestState = 'error';
       }
 

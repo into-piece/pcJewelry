@@ -9,7 +9,7 @@ import {
   Form,
   Select,
   InputNumber,
-  DatePicker,
+  DatePicker,notification,
   Tabs,
   Radio,
   Button,
@@ -27,6 +27,7 @@ import clientStyle from './Client.less';
 import AllCity from './components/AllCity';
 import City from './components/City';
 import GeographicView from './GeographicView';
+import { notification } from 'antd/lib/index';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -122,9 +123,13 @@ class TerminalClient extends PureComponent {
       // console.log('code '+body.rtnCode)
       if (body.rtnCode === '000000') {
         this.state.requestState = 'success';
-        message.success(body.rtnMsg);
+        notification.success({
+          message: body.rtnMsg,
+        });
       } else {
-        message.error(body.rtnMsg);
+        notification.error({
+          message: body.rtnMsg,
+        });
         this.state.requestState = 'error';
       }
       this.handleDone();
