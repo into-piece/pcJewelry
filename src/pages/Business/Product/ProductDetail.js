@@ -881,7 +881,7 @@ class ProductDetail extends Component {
             {this.getProductModalContent()}
           </Modal>
         </Card>
-        <Modal
+        {/* <Modal
           maskClosable={false}
           title={<BuildTitle title="批量新增" />}
           width={1200}
@@ -893,7 +893,7 @@ class ProductDetail extends Component {
           onCancel={this.closeModal}
         >
           {this.getBatchUpdat()}
-        </Modal>
+        </Modal> */}
       </div>
     );
   };
@@ -1522,7 +1522,7 @@ class ProductDetail extends Component {
       'customerId',
     ];
 
-    form.validateFields(arr, err => {
+    form.validateFields(err => {
       if (err) {
         return;
       }
@@ -1627,11 +1627,8 @@ class ProductDetail extends Component {
       isLoading: true,
     });
 
-
     const params = {};
     params.id = item.id;
-
-
     fetch(HttpFetch.queryProductList, {
       method: 'POST',
       credentials: 'include',
@@ -1648,12 +1645,8 @@ class ProductDetail extends Component {
         let showItem = false;
         if (body.records.length > 0) {
           showItem = body.records[0];
-
-
-          const current = isEditItem ? { ...showItem } : this.state.current;
-
+          const current = isEditItem ? showItem : this.state.current;
           // console.log(" cur is ",current,isEditItem)
-
           this.setState({
             showItem,
             current,
@@ -1661,12 +1654,9 @@ class ProductDetail extends Component {
           // console.log(" update data ",showItem)
         }
         this.fetchImages(showItem);
-
         _this.setState({
           isLoading: false,
         });
-
-
       })
       .catch(function (ex) {
         _this.setState({
