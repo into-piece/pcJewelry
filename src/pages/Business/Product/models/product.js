@@ -37,6 +37,7 @@ export default {
     unitOfMeasurement: [],
     unitOfWeight: [],
     finishedWeight: [],
+    mouldNo: [],
   },
 
   effects: {
@@ -163,52 +164,26 @@ export default {
       });
     },
 
-    *changebrand({ payload }, { put }) {
-      const value = payload.map(item => ({
-        key: item.brandNo,
-        value: item.brandZhName
+    *changeList({ payload }, { put }) {
+      const { key, value, key1, value1 } = payload
+      let listKey = ''
+      let listValue = ''
+      if (key1) {
+        listKey = key1
+        listValue = value1
+      } else {
+        listKey = 'zhName'
+        listValue = 'id'
+      }
+      const arrList = value.map(item => ({
+        key: item[listKey],
+        value: item[listValue]
       }))
       yield put({
         type: 'changeStateAction',
-        payload: { key: 'brand', value },
+        payload: { key, value: arrList },
       });
     },
-
-    *changebrand({ payload }, { put }) {
-      const value = payload.map(item => ({
-        key: item.brandNo,
-        value: item.brandZhName
-      }))
-      yield put({
-        type: 'changeStateAction',
-        payload: { key: 'brand', value },
-      });
-    },
-
-    *changeproductType({ payload }, { put }) {
-      const value = payload.map(item => ({
-        key: item.id,
-        value: item.zhName
-      }))
-      yield put({
-        type: 'changeStateAction',
-        payload: { key: 'productType', value },
-      });
-    },
-
-    *changeproductColor({ payload }, { put }) {
-      const value = payload.map(item => ({
-        key: item.id,
-        value: item.zhName
-      }))
-      yield put({
-        type: 'changeStateAction',
-        payload: { key: 'brproductColorand', value },
-      });
-    },
-
-
-
   },
 
   // brand: [],

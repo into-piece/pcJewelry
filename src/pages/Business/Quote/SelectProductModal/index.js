@@ -31,7 +31,7 @@ const columns = [
     key: 'productColorName',
   },
   {
-    title: <div className={styles.row_normal2}>产品重量</div>,
+    title: <div className={styles.row_normal2}>成品重量</div>,
     dataIndex: 'finishedWeight',
     key: 'finishedWeight',
   },

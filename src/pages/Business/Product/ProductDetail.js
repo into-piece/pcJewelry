@@ -41,7 +41,7 @@ import batchUpdateArr from './config.json';
 import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
-
+// 客户编号 产品来源 模具号
 const { productBatchUpdate } = servicesConfig;
 const {
   queryBrands,
@@ -69,7 +69,10 @@ const componentArr = {
 const fetchArr = [
   {
     key: 'brand',
-    value: queryBrands
+    value: queryBrands,
+    type: 1,
+    key1: 'brandZhName',
+    value1: 'brandNo'
   },
   {
     key: 'productType',
@@ -89,15 +92,21 @@ const fetchArr = [
   },
   {
     key: 'customerId',
-    value: queryTerminalNoList
+    value: queryTerminalNoList,
+    key1: 'customerNo',
+    value1: 'id'
   },
   {
     key: 'sourceOfProduct',
-    value: queryMstWordList
+    value: queryMstWordList,
+    key1: 'wordbookContentZh',
+    value1: 'wordbookCode'
   },
   {
     key: 'mouldNo',
-    value: queryMoldList
+    value: queryMoldList,
+    key1: 'mainMoldCode',
+    value1: 'id'
   },
   {
     key: 'unitOfMeasurement',
@@ -230,13 +239,6 @@ class ProductDetail extends Component {
     initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
   };
 
-
-  componentDidMount() {
-    // const { item } = this.props;
-    // if (item)
-    //   this.fetchImages(item);
-  }
-
   resetParse = () => {
     this.setState({
       cNoBrandNo: '',
@@ -282,13 +284,9 @@ class ProductDetail extends Component {
     // console.log(" component Props ",item)
   }
 
-
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return true;
-  }
-
-  getData = ({ url, params, key }) => {
-    fetch(url, {
+  getData = ({ value, key, key1, value1 }) => {
+    const params = {}
+    fetch(value, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -304,8 +302,8 @@ class ProductDetail extends Component {
           // const selectItem = body.records.filter(v =>(v.id === content);
           if (body.records && body.records.length > 0) {
             this.props.dispatch({
-              type: `product/change${key}`,
-              payload: { key, value: body.records, akey: '', avalue: '' },
+              type: `product/changeList`,
+              payload: { key, value: body.records, key1, value1 },
             });
           }
         }
@@ -313,14 +311,9 @@ class ProductDetail extends Component {
   };
 
   batchUpdate = () => {
-    debugger
-    for (const i in fetchArr) {
-      this.getData({ url: fetchArr[i], params: {}, key: i });
-    }
-    // fetchArr.forEach(v => {
-    //   this.getData({ url: fetchArr[v], params: {}, key: v });
-    // });
-
+    fetchArr.forEach(item => {
+      this.getData(item);
+    });
 
     this.setState({
       batchUpdateShow: true,
@@ -415,17 +408,6 @@ class ProductDetail extends Component {
     this.setState({ fileImgList });
   };
 
-  getList = ({ key, value }) => {
-    // console.log(value, '=========', key)
-    // const arr = ['customerId', 'brand', 'productType']
-    // if (value.length > 0 && arr.includes(key)) {
-    //   this.props.dispatch({
-    //     type: 'product/changeState',
-    //     payload: { key, value },
-    //   })
-    // }
-  };
-
   // 批量新增
   getBatchUpdat = () => {
     const { getList } = this;
@@ -440,12 +422,7 @@ class ProductDetail extends Component {
       <Form size="small">
         {
           batchUpdateArr.map(({ key, value, noNeed, type, list }) => {
-            const arr = list && product[list] && product[list].length > 0 ? product[list] : [
-              { key: 1, value: 1 },
-            ];
-
-            // const ComponentSelect = componentArr[value];
-            // console.log(arr, list, '==================list', product, product[list])
+            const arr = list && product[list] && product[list].length > 0 ? product[list] : [];
             return (
               <div className="adddevModal" key={key} style={this.returnStyle(value)}>
                 <FormItem
@@ -460,7 +437,6 @@ class ProductDetail extends Component {
                       }],
                       initialValue: undefined,
                     })(
-                      // 
                       type && type === 2 ?
                         <Select
                           placeholder="请选择"
@@ -474,48 +450,11 @@ class ProductDetail extends Component {
                           {arr.map(({ value, key }) =>
                             <Option value={value}>{key}</Option>,
                           )}
-                        </Select>
+                        </Select> :
 
-                        // <ComponentSelect
-                        //   placeholder="请选择"
-                        //   showSearch
-                        //   optionFilterProp="children"
-                        //   filterOption={(input, option) =>
-                        //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        //   }
-                        //   style={{ width: 180 }}
-                        //   // getOptionList={l => {
-                        //   //   getList({ key: value, value: l });
-                        //   // }}
-                        //   onSelect={v => {
-                        //     // if (v && v.brandNo) {
-                        //     //   this.state.cNoBrandNo = v.brandNo;
-                        //     //   this.);
-                        //     // }
-                        //   }}
-                        // />
-                        :
                         type && type === 3 ?
                           <TextArea rows={2} placeholder="请输入" /> :
                           type && type === 4 ?
-                            // <ComponentSelect
-                            //   mode="multiple"
-                            //   placeholder="请选择"
-                            //   showSearch
-                            //   optionFilterProp="children"
-                            //   filterOption={(input, option) =>
-                            //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            //   }
-                            //   muti
-                            //   style={{ width: 180 }}
-                            //   onSelect={v => {
-                            //     // if (v && v.brandNo) {
-                            //     //   this.state.cNoBrandNo = v.brandNo;
-                            //     //   this.);
-                            //     // }
-                            //   }}
-                            // />
-
                             <Select
                               placeholder="请选择"
                               style={{ width: 180 }}
@@ -531,7 +470,6 @@ class ProductDetail extends Component {
                                 <Option value={value}>{key}</Option>,
                               )}
                             </Select>
-
                             :
                             <Input placeholder="请输入" />,
                     )
@@ -600,7 +538,6 @@ class ProductDetail extends Component {
         return;
       }
       console.log(fieldsValue, '===============');
-      debugger;
       let customerObj = product.customerId.filter(({ id }) => id === fieldsValue.customerId);
       let brandObj = product.brand.filter(({ id }) => id === fieldsValue.brand);
       let productTypeObj = product.productType.filter(({ id }) => id === fieldsValue.productType);
@@ -742,18 +679,6 @@ class ProductDetail extends Component {
       </Button>,
     ];
 
-
-    let paths = [];
-
-    if (imageObject.length > 0) {
-      paths = imageObject.map(v => {
-        return v.path;
-      });
-    }
-
-
-    if (!paths) paths = [];
-
     const { batchUpdateShow } = this.state;
     return (
       <div className={business.right_info}>
@@ -779,8 +704,9 @@ class ProductDetail extends Component {
               <div>
                 <Spin spinning={isLoading}>
                   <Carousel {...this.carouselsettings} className={business.carousel_content} autoplay>
-                    {this.getImages(paths)}
+                    {this.getImages(showItem.pictures)}
                   </Carousel>
+                  {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                   <DescriptionList size="small" col="1">
                     <Description term="名称">{showItem.zhName}</Description>
                     <Description term="编号">{showItem.productNo}</Description>
@@ -972,20 +898,20 @@ class ProductDetail extends Component {
     );
   };
 
-  getImages = paths => {
-    return paths.map((
-      v, // src={v}
-    ) => (
-        <div className={business.carousel_image_ground}>
-          <Zmage
-            alt="图片"
-            align="center"
-            className={styles.carousel_image}
-            src={v}
-            set={paths.map(image => ({ src: image }))}
-          />
-        </div>
-      ));
+  getImages = pictures => {
+    const images = pictures && pictures.flatMap(e => e.picPath);
+    if (!images) return;
+    return images.map(v => (
+      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={images.map(image => ({ src: image }))}
+        />
+      </div>
+    ));
   };
 
   getProductModalContent = () => {
@@ -2050,8 +1976,6 @@ class ProductDetail extends Component {
 
       if (refarshList)
         refarshList();
-
-
     }
 
 

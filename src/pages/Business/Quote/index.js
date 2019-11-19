@@ -628,7 +628,7 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightMenu === 1 ? choosenRowData[value] : choosenDetailRowData[value]) : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (rightMenu === 1 ? choosenRowData[value] : choosenDetailRowData[value]) : value === 'quoteDate' ? moment() : initValue || (number ? 0 : undefined),
                     })(this.returnElement({
                       key,
                       value,

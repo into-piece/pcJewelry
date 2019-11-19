@@ -111,72 +111,6 @@ class SpecimenDetaill extends Component {
     //   this.fetchImages(item);
   }
 
-  render() {
-    const {
-      productListloading,
-      productUpdateloading,
-      productSaveloading,
-      productFreezeloading,
-      productUnFreezeloading,
-      productDeleteloading,
-      queryProductLocking,
-      transferProductLoading,
-      body = {},
-      isloading,
-      refarshList,
-      isLoad,
-      item,
-    } = this.props;
-
-    const { update, isLoadImage, productParams } = this.state;
-
-    // (item)
-
-    const isUpdate =
-      productUpdateloading ||
-      productSaveloading ||
-      productFreezeloading ||
-      transferProductLoading ||
-      productDeleteloading ||
-      productUnFreezeloading;
-
-    if (isUpdate) {
-      this.state.update = true;
-      if (productUpdateloading || productSaveloading) {
-        this.state.isUpdateFrom = true;
-      }
-    } else if (update) {
-      if (body.rtnCode === '000000') {
-        this.state.requestState = 'success';
-        message.success(body.rtnMsg);
-      } else {
-        message.error(body.rtnMsg);
-        this.state.requestState = 'error';
-      }
-
-      this.productRefresh();
-      // this.handleUpdateImage(productParams)
-      this.state.update = false;
-      if (this.state.isUpdateFrom) {
-        this.state.isUpdateFrom = false;
-      }
-
-      if (refarshList) refarshList();
-    }
-
-    const updat = isUpdate || productListloading;
-    if (updat !== this.state.isLoad) {
-      if (isloading) isloading(updat);
-      this.state.isLoad = updat;
-    }
-
-    // if(this.state.isLoadImage&&item) {
-    //   this.fetchImages(item);
-    //   this.state.isLoadImage = false;
-    // }
-
-    return this.getDetailInfo();
-  }
 
   resetParse = () => {
     this.setState({
@@ -269,19 +203,6 @@ class SpecimenDetaill extends Component {
         </Button>,
       ];
 
-    let paths = [];
-
-    if (imageObject.length > 0) {
-      paths = imageObject.map(v => {
-        return v.path;
-      });
-    }
-
-    // console.log(" fetch isload ",showItem)
-    // console.log(" data status ",showItem?showItem.status:'nudefine')
-
-    if (!paths) paths = [];
-
     return (
       <div className={business.right_info}>
         <div className={business.list_info}>
@@ -318,8 +239,9 @@ class SpecimenDetaill extends Component {
                         initialSlide={0}
                         autoplay
                       >
-                        {this.getImages(paths)}
+                        {this.getImages(showItem.pictures)}
                       </Carousel>
+                      {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                       <DescriptionList size="small" col="1">
                         <Description term="名称">{showItem.zhName}</Description>
                         <Description term="编号">{showItem.productNo}</Description>
@@ -516,20 +438,20 @@ class SpecimenDetaill extends Component {
     );
   };
 
-  getImages = paths => {
-    return paths.map((
-      v // src={v}
-    ) => (
-        <div className={business.carousel_image_ground}>
-          <Zmage
-            alt="图片"
-            align="center"
-            className={styles.carousel_image}
-            src={v}
-            set={paths.map(image => ({ src: image }))}
-          />
-        </div>
-      ));
+  getImages = (pictures) => {
+    const images = pictures && pictures.flatMap(e => e.picPath);
+    if (!images) return;
+    return images.map(v => (
+      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          set={images.map(image => ({ src: image }))}
+        />
+      </div>
+    ));
   };
 
   getProductModalContent = () => {
@@ -1414,6 +1336,74 @@ class SpecimenDetaill extends Component {
       productNo,
     });
   };
+
+
+  render() {
+    const {
+      productListloading,
+      productUpdateloading,
+      productSaveloading,
+      productFreezeloading,
+      productUnFreezeloading,
+      productDeleteloading,
+      queryProductLocking,
+      transferProductLoading,
+      body = {},
+      isloading,
+      refarshList,
+      isLoad,
+      item,
+    } = this.props;
+
+    const { update, isLoadImage, productParams } = this.state;
+
+    // (item)
+
+    const isUpdate =
+      productUpdateloading ||
+      productSaveloading ||
+      productFreezeloading ||
+      transferProductLoading ||
+      productDeleteloading ||
+      productUnFreezeloading;
+
+    if (isUpdate) {
+      this.state.update = true;
+      if (productUpdateloading || productSaveloading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+        message.success(body.rtnMsg);
+      } else {
+        message.error(body.rtnMsg);
+        this.state.requestState = 'error';
+      }
+
+      this.productRefresh();
+      // this.handleUpdateImage(productParams)
+      this.state.update = false;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+      }
+
+      if (refarshList) refarshList();
+    }
+
+    const updat = isUpdate || productListloading;
+    if (updat !== this.state.isLoad) {
+      if (isloading) isloading(updat);
+      this.state.isLoad = updat;
+    }
+
+    // if(this.state.isLoadImage&&item) {
+    //   this.fetchImages(item);
+    //   this.state.isLoadImage = false;
+    // }
+
+    return this.getDetailInfo();
+  }
 }
 
 export default SpecimenDetaill;
