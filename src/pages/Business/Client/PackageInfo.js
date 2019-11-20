@@ -469,7 +469,7 @@ class PackageInfo extends PureComponent {
         <PackageListItem
 
           item={item}
-          isSelected={selectedItem === item}
+          isSelected={selectedItem.id === item.id}
         />
       </div>
     );

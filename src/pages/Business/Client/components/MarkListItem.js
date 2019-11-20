@@ -102,7 +102,7 @@ class MarkListItem extends PureComponent {
       <Card
         hoverable
         loading={loading}
-        className={isSelected ? styles.list_selected_content : styles.listdiv}
+        className={isSelected ? styles.list_selected_content : ''}
         cover={
           <Carousel {...this.carouselsettings} key={item.id} className={styles.carousel_content} autoplay>
             {this.getImages(images)}
