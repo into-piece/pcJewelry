@@ -31,7 +31,15 @@
 }
 
 .list_selected_content {
-  background-color: rgba(0, 111, 217, 0.38);
+  background-color: rgba(0, 111, 217, 0.38)!important;
+  :global{
+    .ant-card-body{
+      background-color: rgba(0, 111, 217, 0.38)!important;
+    }
+    .slick-slide{
+      background-color: rgba(0, 111, 217, 0.38)!important;
+    }
+  }
 }
 
 .cardconrtll {
