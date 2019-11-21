@@ -57,11 +57,12 @@ class SearchFrom extends Component {
               <Button style={{ marginLeft: 5 }} onClick={this.handleReset}>
                 重置
               </Button>
-              <a style={{ marginLeft: 8, whiteSpace: 'nowrap' }} onClick={this.toggleForm}>
+
+              {data&&data.length>1&& <a style={{ marginLeft: 8, whiteSpace: 'nowrap' }} onClick={this.toggleForm}>
                 {
                   type ? <>收起 <Icon type="up" /></> : <>展开<Icon type="down" /></>
                 }
-              </a>
+              </a>}
             </span>
           </p>
         </Form>

@@ -29,6 +29,7 @@ const { Item } = Menu;
 const FormItem = Form.Item;
 const { Option } = Select;
 
+const { TextArea } = Input;
 
 // 左边menu遍历配置
 const menuMap = manuArr.map(item => ({
@@ -299,6 +300,11 @@ const columnsArr = {
   // 镶石工艺
   insertStoneTechnology: [
     {
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
       title: '成色',
       dataIndex: 'cuttingCode',
       key: 'cuttingCode',
@@ -343,6 +349,11 @@ const columnsArr = {
   // 胶膜设定
   rubberMouldSetting: [
     {
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
       title: '中文名称',
       dataIndex: 'zhName',
       key: 'zhName',
@@ -377,6 +388,11 @@ const columnsArr = {
 
   // 模具仓位设定
   mouldPosition: [
+    {
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+    },
     {
       title: '仓位编号',
       dataIndex: 'positionCode',
@@ -658,7 +674,9 @@ class Info extends Component {
                           <Radio value={1}>是</Radio>
                           <Radio value={2}>否</Radio>
                         </Radio.Group>
-                        :  <Input placeholder="请输入" />,
+                        :  type && type === 4 ?
+                          <TextArea placeholder="请输入" style={{height:"100px"}} />
+                        : <Input placeholder="请输入" />,
                     )
                   }
                 </FormItem>

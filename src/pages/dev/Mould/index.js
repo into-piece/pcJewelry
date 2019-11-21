@@ -356,11 +356,88 @@ class Index extends Component {
     const dataArr = modalInput[rightActive];
     const fieldslist = dataArr.map(e=>e.value)
     form.validateFields(fieldslist,(err, values) => {
+
       if (!err) {
         params = {
           ...params,
           ...values,
         };
+
+        if(rightActive==='dieSetChild'){
+          const valt = ['noteWaxImmediately','intoFilmPressure','squeezeFilmPressure','vacuumTime','waxInjectionPressure','waxInjectionTime','stoneWeight']
+          let valid = true;
+
+          valt.forEach(e=>{
+            if(parseFloat(values[e])<0){
+              form.setFields({
+                [e]: {
+                  value: values[e],
+                  errors: [new Error('不能为负数')],
+                },
+              });
+              this.setState({ addloading: false });
+              valid = false
+            }
+          })
+          if(!valid ){return }
+          // if(parseFloat(values.intoFilmPressure)<0){
+          //   form.setFields({
+          //     intoFilmPressure: {
+          //       value: values.intoFilmPressure,
+          //       errors: [new Error('不能为负数')],
+          //     },
+          //   });
+          //   return;
+          // }
+          // if(parseFloat(values.squeezeFilmPressure)<0){
+          //   form.setFields({
+          //     squeezeFilmPressure: {
+          //       value: values.squeezeFilmPressure,
+          //       errors: [new Error('不能为负数')],
+          //     },
+          //   });
+          //   return;
+          // }
+          // if(parseFloat(values.vacuumTime)<0){
+          //   form.setFields({
+          //     vacuumTime: {
+          //       value: values.vacuumTime,
+          //       errors: [new Error('不能为负数')],
+          //     },
+          //   });
+          //   return;
+          // }
+          // if(parseFloat(values.waxInjectionPressure)<0){
+          //   form.setFields({
+          //     waxInjectionPressure: {
+          //       value: values.waxInjectionPressure,
+          //       errors: [new Error('不能为负数')],
+          //     },
+          //   });
+          //   return;
+          // }
+          // if(parseFloat(values.waxInjectionTime)<0){
+          //   form.setFields({
+          //     waxInjectionTime: {
+          //       value: values.waxInjectionTime,
+          //       errors: [new Error('不能为负数')],
+          //     },
+          //   });
+          //   return;
+          // }
+          // if(parseFloat(values.stoneWeight)<0){
+          //   form.setFields({
+          //     stoneWeight: {
+          //       value: values.stoneWeight,
+          //       errors: [new Error('不能为负数')],
+          //     },
+          //   });
+          //   return;
+          // }
+
+        }
+
+
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res||!res.head) {

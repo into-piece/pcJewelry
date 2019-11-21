@@ -342,6 +342,7 @@ class Mark extends PureComponent {
 
   getContantItem2 = item => {
     const { selectedItem } = this.state;
+    console.log(selectedItem,item)
 
     return (
       <div
