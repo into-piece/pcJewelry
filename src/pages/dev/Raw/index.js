@@ -1040,6 +1040,8 @@ class Info extends Component {
                 va = `${s.length > 0 ? (`${s[0].zhName} `) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
               }
               dfv = va;
+              selectData[value]=va
+
             }
 
             if (value === 'enName') {
@@ -1084,6 +1086,7 @@ class Info extends Component {
               }
 
               dfv = va;
+              selectData[value]=va
             }
 
 
