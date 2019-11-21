@@ -299,6 +299,11 @@ const columnsArr = {
   // 镶石工艺
   insertStoneTechnology: [
     {
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
       title: '成色',
       dataIndex: 'cuttingCode',
       key: 'cuttingCode',
@@ -343,6 +348,11 @@ const columnsArr = {
   // 胶膜设定
   rubberMouldSetting: [
     {
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
       title: '中文名称',
       dataIndex: 'zhName',
       key: 'zhName',
@@ -377,6 +387,11 @@ const columnsArr = {
 
   // 模具仓位设定
   mouldPosition: [
+    {
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+    },
     {
       title: '仓位编号',
       dataIndex: 'positionCode',

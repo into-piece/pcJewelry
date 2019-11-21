@@ -67,6 +67,7 @@
       { "key": "英文名", "noNeed": true,"value": "enName" }
     ],
     "insertStoneTechnology": [
+      { "key": "编号", "value": "code" },
       { "key": "成色", "value": "cuttingCode", "type": 2, "list": "listBasicColourSetDropDown","name":true },
       { "key": "类别", "value": "category", "type": 2, "list": "listMstWordbookDroph013" ,"name":true},
       { "key": "中文名", "value": "zhName" },
@@ -75,6 +76,7 @@
       { "key": "备注","noNeed": true, "value": "remarks" }
     ],
     "rubberMouldSetting": [
+      { "key": "编号", "value": "code" },
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名", "noNeed": true, "value": "enName" },
       { "key": "胶膜尺寸", "value": "filmSize" },
@@ -83,6 +85,7 @@
       { "key": "备注","noNeed": true, "value": "remarks" }
     ],
     "mouldPosition": [
+      { "key": "编号", "value": "code" },
       { "key": "仓位编号", "value": "positionCode" },
       { "key": "房间号", "value": "roomNum" },
       { "key": "橱柜号", "value": "cabinetNum" },
