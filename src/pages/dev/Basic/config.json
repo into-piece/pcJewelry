@@ -73,7 +73,7 @@
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名","noNeed": true, "value": "enName" },
       { "key": "工费","noNeed": true, "value": "costs" },
-      { "key": "备注","noNeed": true, "value": "remarks" }
+      { "key": "备注","noNeed": true, "value": "remarks","type":4 }
     ],
     "rubberMouldSetting": [
       { "key": "编号", "value": "code" },
@@ -82,7 +82,7 @@
       { "key": "胶膜尺寸", "value": "filmSize" },
       { "key": "胶膜片数", "value": "filmNumber" },
       { "key": "工费", "value": "costs" },
-      { "key": "备注","noNeed": true, "value": "remarks" }
+      { "key": "备注","noNeed": true, "value": "remarks" ,"type":4}
     ],
     "mouldPosition": [
       { "key": "编号", "value": "code" },
@@ -90,7 +90,7 @@
       { "key": "房间号", "value": "roomNum" },
       { "key": "橱柜号", "value": "cabinetNum" },
       { "key": "抽屉号", "value": "drawerNum" },
-      { "key": "备注","noNeed": true, "value": "remarks" }
+      { "key": "备注","noNeed": true, "value": "remarks" ,"type":4}
     ],
     "categorySet": [
       { "key": "类别代码", "value": "unitCode" },
