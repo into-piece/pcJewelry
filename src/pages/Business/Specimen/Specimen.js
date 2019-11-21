@@ -175,7 +175,7 @@ class Specimen extends Component {
       productPage: 1,
       isLoad: false,
       productSorts: [],
-      searchProductParams:{},
+      searchProductParams: {},
 
 
     };
@@ -213,98 +213,6 @@ class Specimen extends Component {
     }
   }
 
-  render() {
-    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-
-    const {
-      queryProductLocking,
-      body = {},
-    } = this.props;
-
-
-    if (isLoad) {
-      this.state.isLoadList = true;
-    } else if (this.state.isLoadList) {
-
-        this.refs.productTable.updateSelectDatas(body);
-        this.state.isLoadList = false;
-      }
-
-
-    // console.log("bod ",body.data)
-
-    return (
-      <div className={business.page}>
-        <div className={business.nav}>
-          <Breadcrumb style={{ display: 'none' }}>
-            <Breadcrumb.Item>主页</Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">业务</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="#/business/product">产品信息</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-        </div>
-        <div className={business.center_content}>
-          <Row gutter={24}>
-            <Col lg={rightlg} md={24}>
-              <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }} />
-                <ProductSearchFrom
-                  onSearch={this.handleSpecimenSearch}
-                  onCustomerReset={this.handleSpecimenFormReset}
-                />
-                <JewelryTable
-                  scroll={{x:1200}}
-                  onSelectItem={(item, rows) => {
-                    const { showItem } = this.state;
-                    if (showItem && showItem.id !== item.id) {
-                      // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
-                      // console.log('执行解锁 ： ',showItem.id);
-                    }
-
-                    if (item) {
-                      if (!showItem || showItem.id !== item.id)
-                      // this.fetchImages(item);
-                        this.loadProductLock(item);
-                    }
-                    this.state.showItem = item ? { ...item } : false
-                    this.setState({
-                      showItem: this.state.showItem,
-                      selectProductData: [...rows],
-                    });
-                  }}
-                  ref="productTable"
-                  loading={isLoad}// productListloading || isUpdate
-                  columns={this.productColumns}
-                  className={business.small_table}
-                  rowClassName={this.onSelectRowClass}
-                  // scroll={{ y: 300 }}
-                  body={body}
-                  pageChange={this.pageProductChange}
-                />
-
-
-              </Card>
-            </Col>
-            <Col lg={leftlg} md={24}>
-              {this.getDetailInfow()}
-            </Col>
-          </Row>
-        </div>
-        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
-          {this.getDetailInfow()}
-        </Drawer>
-
-
-      </div>
-
-    );
-  }
 
 
   getDetailInfow = () => {
@@ -318,13 +226,13 @@ class Specimen extends Component {
       selectProductData={selectProductData}
       key="556"
       isloading={(isLoad) => {
-                            this.setState({
-                              isLoad,
-                            });
-                          }}
+        this.setState({
+          isLoad,
+        });
+      }}
       refarshList={() => {
-                            this.loadProduct();
-                          }}
+        this.loadProduct();
+      }}
     />
       ;
   };
@@ -361,49 +269,46 @@ class Specimen extends Component {
       }
 
     } else if (sort !== 'normal') {
-        newContacts.push({
-          field,
-          sort,
-        });
-      }
+      newContacts.push({
+        field,
+        sort,
+      });
+    }
     this.state.productSorts = newContacts;
     this.loadProduct();
   };
 
   loadProduct = () => {
 
-    const { productPage , searchProductParams} = this.state;
+    const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
 
-    const params = {...searchProductParams};
+    const params = { ...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
 
-    if(this.state.productSorts.length>0) {
+    if (this.state.productSorts.length > 0) {
       let orderByAsc;
       let orderByDesc;
-      this.state.productSorts.forEach(v=>{
-        if(v.sort==='ascend'){
-          if(orderByAsc)
-          {
-            orderByAsc+=`,${v.field}`;
-          }else
-          {
+      this.state.productSorts.forEach(v => {
+        if (v.sort === 'ascend') {
+          if (orderByAsc) {
+            orderByAsc += `,${v.field}`;
+          } else {
             orderByAsc = v.field;
           }
-        }else if(v.sort==='descend')
-        {
-          if(orderByDesc)
-            orderByDesc+=`,${v.field}`;
+        } else if (v.sort === 'descend') {
+          if (orderByDesc)
+            orderByDesc += `,${v.field}`;
           else
             orderByDesc = v.field;
         }
       })
-      if(orderByAsc)
-        params.orderByAsc= orderByAsc;
+      if (orderByAsc)
+        params.orderByAsc = orderByAsc;
 
-      if(orderByDesc)
-        params.orderByDesc= orderByDesc;
+      if (orderByDesc)
+        params.orderByDesc = orderByDesc;
     }
 
 
@@ -416,14 +321,14 @@ class Specimen extends Component {
   };
 
 
-  handleSpecimenSearch = (productParams) =>{
+  handleSpecimenSearch = (productParams) => {
 
-      // data.typeId = showItem.id;
-      this.state.searchProductParams = { ...productParams };
+    // data.typeId = showItem.id;
+    this.state.searchProductParams = { ...productParams };
 
-      this.state.current = 1;
+    this.state.current = 1;
 
-      this.loadProduct()
+    this.loadProduct()
 
 
 
@@ -432,7 +337,7 @@ class Specimen extends Component {
   handleSpecimenFormReset = () => {
     this.state.searchProductParams = {};
     this.setState({
-      searchProductParams:{}
+      searchProductParams: {}
     })
 
   }
@@ -450,15 +355,15 @@ class Specimen extends Component {
     fetch(HttpFetch.querySpecimenList, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        'token': getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const {head} = d;
+        const { head } = d;
 
         const isProductUpdate = head.rtnCode === '000000';
 
@@ -470,7 +375,7 @@ headers: {
           isProductUpdate,
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         // message.error('加载图片失败！');
         _this.setState({
           loading: false,
@@ -523,6 +428,98 @@ headers: {
     });
   };
 
+  render() {
+    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
+    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+
+    const {
+      queryProductLocking,
+      body = {},
+    } = this.props;
+
+
+    if (isLoad) {
+      this.state.isLoadList = true;
+    } else if (this.state.isLoadList) {
+
+      this.refs.productTable.updateSelectDatas(body);
+      this.state.isLoadList = false;
+    }
+
+
+    // console.log("bod ",body.data)
+
+    return (
+      <div className={business.page}>
+        <div className={business.nav}>
+          <Breadcrumb style={{ display: 'none' }}>
+            <Breadcrumb.Item>主页</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">业务</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="#/business/product">产品信息</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </div>
+        <div className={business.center_content}>
+          <Row gutter={24}>
+            <Col lg={rightlg} md={24}>
+              <Card bordered={false} className={business.left_content} loading={false}>
+                <div style={{ marginBottom: 16 }} />
+                <ProductSearchFrom
+                  onSearch={this.handleSpecimenSearch}
+                  onCustomerReset={this.handleSpecimenFormReset}
+                />
+                <JewelryTable
+                  scroll={{ x: 1200 }}
+                  onSelectItem={(item, rows) => {
+                    const { showItem } = this.state;
+                    if (showItem && showItem.id !== item.id) {
+                      // console.log("两个选中的对象 :",item.id,showItem.id)
+                      this.updateProductLock(showItem);
+                      // console.log('执行解锁 ： ',showItem.id);
+                    }
+
+                    if (item) {
+                      if (!showItem || showItem.id !== item.id)
+                        // this.fetchImages(item);
+                        this.loadProductLock(item);
+                    }
+                    this.state.showItem = item ? { ...item } : false
+                    this.setState({
+                      showItem: this.state.showItem,
+                      selectProductData: [...rows],
+                    });
+                  }}
+                  ref="productTable"
+                  loading={isLoad}// productListloading || isUpdate
+                  columns={this.productColumns}
+                  className={business.small_table}
+                  rowClassName={this.onSelectRowClass}
+                  // scroll={{ y: 300 }}
+                  body={body}
+                  pageChange={this.pageProductChange}
+                />
+
+
+              </Card>
+            </Col>
+            <Col lg={leftlg} md={24}>
+              {this.getDetailInfow()}
+            </Col>
+          </Row>
+        </div>
+        <Drawer width={720} onClose={this.onClose} visible={drawVisible}>
+          {this.getDetailInfow()}
+        </Drawer>
+
+
+      </div>
+
+    );
+  }
 
 }
 

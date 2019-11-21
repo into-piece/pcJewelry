@@ -183,6 +183,10 @@ export default {
         type: 'changeStateAction',
         payload: { key, value: arrList },
       });
+      yield put({
+        type: 'changeStateAction',
+        payload: { key: `${key}Arr`, value },
+      });
     },
   },
 

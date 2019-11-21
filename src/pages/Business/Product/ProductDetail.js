@@ -414,10 +414,10 @@ class ProductDetail extends Component {
     const {
       selectKey,
       product,
-      form: { getFieldDecorator },
+      form: { getFieldDecorator, getFieldValue },
     } = this.props;
-    const content = '';
 
+    const sourceOfProduct = getFieldValue('sourceOfProduct');
     return (
       <Form size="small">
         {
@@ -461,7 +461,6 @@ class ProductDetail extends Component {
                               showSearch
                               optionFilterProp="children"
                               mode="multiple"
-
                               filterOption={(input, option) =>
                                 option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                               }
@@ -502,7 +501,45 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
         }
-        {content}
+        {
+          sourceOfProduct === 'H005005' &&
+          <React.Fragment>
+            <div className="adddevModal">
+              <FormItem
+                label="供应商编号"
+              >
+                {
+                  getFieldDecorator('supplierId', {
+                    rules: [{
+                      required: true,
+                      message: `请选择供应商编号`,
+                    }],
+                    initialValue: undefined,
+                  })(
+                    <Input placeholder="请输入" />,
+                  )
+                }
+              </FormItem>
+            </div>
+            <div className="adddevModal">
+              <FormItem
+                label="供应商货号"
+              >
+                {
+                  getFieldDecorator('supplierProductNo', {
+                    rules: [{
+                      required: false,
+                      message: `请选择供应商货号`,
+                    }],
+                    initialValue: undefined,
+                  })(
+                    <Input placeholder="请输入" />,
+                  )
+                }
+              </FormItem>
+            </div>
+          </React.Fragment>
+        }
       </Form>
     );
   };
@@ -534,13 +571,13 @@ class ProductDetail extends Component {
     // specification
 
     form.validateFields(arr, (err, fieldsValue) => {
-      if (err) {
-        return;
-      }
+      // if (err) {
+      //   return;
+      // }
       console.log(fieldsValue, '===============');
-      let customerObj = product.customerId.filter(({ id }) => id === fieldsValue.customerId);
-      let brandObj = product.brand.filter(({ id }) => id === fieldsValue.brand);
-      let productTypeObj = product.productType.filter(({ id }) => id === fieldsValue.productType);
+      let customerObj = product.customerId.filter(({ value }) => value === fieldsValue.customerId);
+      let brandObj = product.brand.filter(({ value }) => value === fieldsValue.brand);
+      let productTypeObj = product.productType.filter(({ value }) => value === fieldsValue.productType);
       customerObj = customerObj[0];
       brandObj = brandObj[0];
       productTypeObj = productTypeObj[0];
@@ -881,7 +918,7 @@ class ProductDetail extends Component {
             {this.getProductModalContent()}
           </Modal>
         </Card>
-        {/* <Modal
+        <Modal
           maskClosable={false}
           title={<BuildTitle title="批量新增" />}
           width={1200}
@@ -893,7 +930,7 @@ class ProductDetail extends Component {
           onCancel={this.closeModal}
         >
           {this.getBatchUpdat()}
-        </Modal> */}
+        </Modal>
       </div>
     );
   };
@@ -968,13 +1005,12 @@ class ProductDetail extends Component {
     };
 
     const { form: { getFieldDecorator, getFieldValue } } = this.props;
-    const { current = {}, productNo, customerShotName = '', cropperVisible } = this.state;
+    const { current = {}, productNo, customerShotName = '', cropperVisible, cNofCodezhName } = this.state;
 
 
     const sourceOfProduct = getFieldValue('sourceOfProduct');
     // const supplierId = getFieldValue("supplierId");
     const productType = getFieldValue('productType');
-    const brand = getFieldValue('brand');
 
     return (
       <div className={clientStyle.list_info}>
@@ -1010,7 +1046,7 @@ class ProductDetail extends Component {
                 initialValue: current.brand,
               })
                 (<BrandListSelect
-                  disabled={brand === 'SET'}
+                  disabled={cNofCodezhName === '套装'}
                   placeholder="请输入"
                   showSearch
                   optionFilterProp="children"
@@ -1060,7 +1096,7 @@ class ProductDetail extends Component {
                       this.setState({
                         cNofCodezhName: v.zhName,
                         cNofCodeehName: v.enName,
-                        cNofCode: v.unitCode,
+                        cNofCode: '',
                         brand: 'SET'
                       }, () => {
                         this.parseProductNo()
@@ -1332,31 +1368,6 @@ class ProductDetail extends Component {
                   this.setState({ fileList: imglist });
                 }}
               />
-
-
-              {/* <Upload
-                accept='image/*'
-                name='avatar'
-                beforeUpload={() => {
-                  return false;
-                }}
-                listType='picture-card'
-                fileList={this.state.fileList ? this.state.fileList : []}
-                onChange={handleChange}
-              >
-                <div>
-                  <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                  <div className="ant-upload-text">上传图片</div>
-                </div>
-              </Upload> */}
-              {/* <UploadImg */}
-              {/* key="uimg" */}
-              {/* maxcount={10} */}
-              {/* defaultFileList={current.pictures} */}
-              {/* fileListFun={(imglist) => { */}
-              {/* this.setState({ filelist: imglist }); */}
-              {/* }} */}
-              {/* /> */}
             </FormItem>
           </div>
         </Form>
