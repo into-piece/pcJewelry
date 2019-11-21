@@ -67,8 +67,8 @@
       { "key": "英文名", "noNeed": true,"value": "enName" }
     ],
     "insertStoneTechnology": [
-      { "key": "成色", "value": "cuttingCode", "type": 2, "list": "listBasicColourSetDropDown" },
-      { "key": "类别", "value": "category", "type": 2, "list": "listMstWordbookDroph013" },
+      { "key": "成色", "value": "cuttingCode", "type": 2, "list": "listBasicColourSetDropDown","name":true },
+      { "key": "类别", "value": "category", "type": 2, "list": "listMstWordbookDroph013" ,"name":true},
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名","noNeed": true, "value": "enName" },
       { "key": "工费","noNeed": true, "value": "costs" },
