@@ -554,23 +554,8 @@ class ProductDetail extends Component {
   handleBatchSubmit = () => {
     const { dispatch, form, product } = this.props;
     const { fileImgList } = this.state;
-    const arr = [
-      'brand',
-      'productType',
-      'gemColor',
-      'platingColor',
-      'zhName',
-      'enName',
-      'sourceOfProduct',
-      'mouldNo',
-      'productColor',
-      'specification',
-      'customerId',
-    ];
 
-    // specification
-
-    form.validateFields(arr, (err, fieldsValue) => {
+    form.validateFields((err, fieldsValue) => {
       // if (err) {
       //   return;
       // }
@@ -905,6 +890,20 @@ class ProductDetail extends Component {
             </div>
           </div>
           <Modal
+            maskClosable={false}
+            title={<BuildTitle title="批量新增" />}
+            width={1200}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            visible={batchUpdateShow}
+            footer={batchFooter}
+            onCancel={this.closeModal}
+          >
+            {this.getBatchUpdat()}
+          </Modal>
+
+          <Modal
             title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'menu.erp.business.product' })} />}
             maskClosable={false}
             width={1200}
@@ -918,19 +917,6 @@ class ProductDetail extends Component {
             {this.getProductModalContent()}
           </Modal>
         </Card>
-        <Modal
-          maskClosable={false}
-          title={<BuildTitle title="批量新增" />}
-          width={1200}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          visible={batchUpdateShow}
-          footer={batchFooter}
-          onCancel={this.closeModal}
-        >
-          {this.getBatchUpdat()}
-        </Modal>
       </div>
     );
   };
@@ -1517,7 +1503,7 @@ class ProductDetail extends Component {
 
   handleSubmit = (close) => {
     const { dispatch, form } = this.props;
-    const { isAdd, fileList, showItem } = this.state;
+    const { isAdd, fileList, showItem, current } = this.state;
     const arr = [
       'productNo',
       'brand',
@@ -1533,6 +1519,7 @@ class ProductDetail extends Component {
       'customerId',
     ];
 
+    console.log(this.props.form.getFieldsValue(), current)
     form.validateFields(err => {
       if (err) {
         return;
