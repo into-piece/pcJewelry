@@ -1101,7 +1101,7 @@ class ProductDetail extends Component {
               />)}
             </FormItem>
           </div>
-          <div className="adddevModal">
+          <div className="adddevModal" style={{ marginRight: 120 }}>
             <FormItem
               label='宝石颜色'
               {...this.centerFormLayout}
@@ -1132,7 +1132,7 @@ class ProductDetail extends Component {
               />)}
             </FormItem>
           </div>
-          <div className="adddevModal">
+          <div className="adddevModal" style={{ width: 1200 }}>
             <FormItem
               label="电镀颜色"
               {...this.centerFormLayout}
@@ -1142,7 +1142,7 @@ class ProductDetail extends Component {
                 initialValue: current.platingColor,
               })(<PlatingColorListSelect
                 placeholder="请输入"
-                style={{ width: 180 }}
+                style={{ width: 1040 }}
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
