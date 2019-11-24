@@ -448,7 +448,8 @@ class SpecimenDetaill extends Component {
           align="center"
           className={styles.carousel_image}
           src={v}
-          set={images.map(image => ({ src: image }))}
+          edge={20}
+          set={images.map(image => ({ src: image ,style: { minWidth: 800,minHeight: 800 },}))}
         />
       </div>
     ));

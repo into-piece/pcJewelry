@@ -681,22 +681,22 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-        <Button
-          key="back"
-          onClick={this.handleCancel}
-        >
+      <Button
+        key="back"
+        onClick={this.handleCancel}
+      >
           取消
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={productUpdateloading}
-          onClick={() => {
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productUpdateloading}
+        onClick={() => {
             this.handleSubmit(false);
           }}
-        >
+      >
           保存
-        </Button>,
+      </Button>,
       ];
 
     const batchFooter = [
@@ -780,7 +780,7 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-                <div />
+              <div />
               )}
           </Card>
         </div>
@@ -945,7 +945,8 @@ class ProductDetail extends Component {
           align="center"
           className={styles.carousel_image}
           src={v}
-          set={images.map(image => ({ src: image }))}
+          edge={20}
+          set={images.map(image => ({ src: image ,style: { minWidth: 800,minHeight: 800 },}))}
         />
       </div>
     ));
