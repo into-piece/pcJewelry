@@ -72,49 +72,51 @@ const fetchArr = [
     value: queryBrands,
     type: 1,
     key1: 'brandZhName',
-    value1: 'brandNo'
+    value1: 'brandNo',
+    zhName:'brandZhName',
+    enName:'brandEnName'
   },
   {
     key: 'productType',
-    value: queryproductDropDown2
+    value: queryproductDropDown2,
+    value1: 'unitCode',
   },
   {
     key: 'productColor',
-    value: queryProductMaterial
+    value: queryProductMaterial,
+    value1: 'productMaterial',
   },
   {
     key: 'gemColor',
-    value: queryunitColor
+    value: queryunitColor,
+    value1: 'unitCode',
   },
   {
     key: 'platingColor',
-    value: queryPlatingColor
+    value: queryPlatingColor,
+    value1: 'colorCode',
   },
   {
     key: 'customerId',
     value: queryTerminalNoList,
     key1: 'customerNo',
-    value1: 'id'
+    value1: 'customerCombine'
   },
   {
     key: 'sourceOfProduct',
     value: queryMstWordList,
     key1: 'wordbookContentZh',
-    value1: 'wordbookCode'
-  },
-  {
-    key: 'mouldNo',
-    value: queryMoldList,
-    key1: 'mainMoldCode',
-    value1: 'id'
+    value1: 'wordbookCode',
+    zhName:'wordbookContentZh',
+    enName:'wordbookContentEn'
   },
   {
     key: 'unitOfMeasurement',
-    value: queryMeasureUniList
+    value: queryMeasureUniList,
   },
   {
     key: 'unitOfWeight',
-    value: queryMeasureUniList
+    value: queryMeasureUniList,
   },
 ];
 const { Option } = Select;
@@ -207,16 +209,16 @@ class ProductDetail extends Component {
     isEdit: true,
     imageObject: [],
     cNoBrandNo: '',
-    cNofCode: '',
+    productType: '',
     cNofCodezhName: '',
-    cNoUnitCode: '',
-    cNoColorCode: '',
+    gemColor: '',
+    platingColor: '',
     productNo: '',
     cNoCustomerCombine: '',
     customerShotName: '',
     cNoenNameUniCode: '',
     cNozhNameUniCode: '',
-    cNomainMold: '',
+    mouldNo: '',
     cNoPercentageEnName: '',
     cNoPercentageZhName: '',
     isLoad: false,
@@ -224,6 +226,19 @@ class ProductDetail extends Component {
     productParams: {},
     isEditItem: false,
     batchUpdateShow: false,
+    nowData : {
+      brand: [],
+      productType: [], 
+      productColor: [],
+      gemColor: [],
+      platingColor: [],
+      customerId: [],
+      sourceOfProduct: [],
+      unitOfMeasurement: [],
+      unitOfWeight: [],
+      finishedWeight: [],
+      mouldNo: [],
+    }
   };
 
   centerFormLayout = {
@@ -242,17 +257,17 @@ class ProductDetail extends Component {
   resetParse = () => {
     this.setState({
       cNoBrandNo: '',
-      cNofCode: '',
+      productType: '',
       cNofCodezhName: '',
-      cNoUnitCode: '',
-      cNoColorCode: '',
+      gemColor: '',
+      platingColor: '',
       productNo: '',
       cNoCustomerCombine: '',
       customerShotName: '',
       cNoenNameUniCode: '',
       cNozhNameUniCode: '',
-      cNomainMold: '',
-      cNoProductMaterial: '',
+      mouldNo: '',
+      productColor: '',
       cNoPercentageEnName: '',
       cNoPercentageZhName: '',
     });
@@ -284,7 +299,8 @@ class ProductDetail extends Component {
     // console.log(" component Props ",item)
   }
 
-  getData = ({ value, key, key1, value1 }) => {
+  getData = (paramsProps) => {
+    const { value } = paramsProps
     const params = {}
     fetch(value, {
       method: 'POST',
@@ -303,7 +319,7 @@ class ProductDetail extends Component {
           if (body.records && body.records.length > 0) {
             this.props.dispatch({
               type: `product/changeList`,
-              payload: { key, value: body.records, key1, value1 },
+              payload: { ...paramsProps, value: body.records },
             });
           }
         }
@@ -331,36 +347,6 @@ class ProductDetail extends Component {
 
   onSearch = (v, type) => {
 
-  };
-
-  returnComplexSelect = (value) => {
-    const { product } = this.props;
-    // productColorName,gemColor,platingColor,customerId
-    const rowSelection =
-    {
-      selectedRowKeys: product[`${value}Keys`],
-      type: 'checkbox',
-      onChange: selectedRowKeys => {
-        this.onSelectChange(selectedRowKeys, value);
-      },
-    };
-    return (
-      <div>
-        <Search
-          onSearch={v => {
-            this.onSearch(v, value);
-          }}
-          placeholder=""
-        />
-        <Table
-          rowKey={record => record.productNo}
-          rowSelection={rowSelection}
-          dataSource={[{ zhName: '123', productNo: 123 }]}
-          columns={columnsArr[value]}
-        />
-      </div>
-
-    );
   };
 
   returnStyle = (v) => {
@@ -421,7 +407,7 @@ class ProductDetail extends Component {
     return (
       <Form size="small">
         {
-          batchUpdateArr.map(({ key, value, noNeed, type, list }) => {
+          batchUpdateArr.map(({ key, value, noNeed, type, list, readOnly, placeholder, initialValue }) => {
             const arr = list && product[list] && product[list].length > 0 ? product[list] : [];
             return (
               <div className="adddevModal" key={key} style={this.returnStyle(value)}>
@@ -435,8 +421,9 @@ class ProductDetail extends Component {
                         required: !noNeed,
                         message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
                       }],
-                      initialValue: undefined,
+                      initialValue: initialValue || undefined,
                     })(
+                      /* eslint-disable */
                       type && type === 2 ?
                         <Select
                           placeholder="请选择"
@@ -451,9 +438,8 @@ class ProductDetail extends Component {
                             <Option value={value}>{key}</Option>,
                           )}
                         </Select> :
-
                         type && type === 3 ?
-                          <TextArea rows={2} placeholder="请输入" /> :
+                          <TextArea rows={2} placeholder="请输入" style={{ width: 470 }} /> :
                           type && type === 4 ?
                             <Select
                               placeholder="请选择"
@@ -470,7 +456,7 @@ class ProductDetail extends Component {
                               )}
                             </Select>
                             :
-                            <Input placeholder="请输入" />,
+                            <Input placeholder="请输入" readOnly={readOnly || false} placeholder={placeholder || undefined} />,
                     )
                   }
                 </FormItem>
@@ -485,19 +471,13 @@ class ProductDetail extends Component {
               label="上传图片"
               key="uploadPic"
             >
-              <Upload
-                accept='image/*'
-                name='avatar'
-                beforeUpload={() => false}
-                listType='picture-card'
-                fileList={this.state.fileImgList ? this.state.fileImgList : []}
-                onChange={this.handleImageChange}
-              >
-                <div>
-                  <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                  <div className="ant-upload-text">上传图片</div>
-                </div>
-              </Upload>
+              <UploadImg
+                key="uimg"
+                defaultFileList={this.state.fileList ? this.state.fileList : []}
+                fileListFun={imglist => {
+                  this.setState({ fileList: imglist });
+                }}
+              />
             </FormItem>
           </div>
         }
@@ -553,59 +533,32 @@ class ProductDetail extends Component {
   // 批量新增 保存确认 提交回调
   handleBatchSubmit = () => {
     const { dispatch, form, product } = this.props;
-    const { fileImgList } = this.state;
+    const { fileList } = this.state;
 
-    form.validateFields((err, fieldsValue) => {
-      // if (err) {
-      //   return;
-      // }
+    const arr = ['customerId','productColor','gemColor','platingColor','brand','productType','sourceOfProduct','unitOfMeasurement','unitOfWeight','finishedWeight']
+    form.validateFields(arr,(err, fieldsValue) => {
+      if (err) {
+        return;
+      }
       console.log(fieldsValue, '===============');
-      let customerObj = product.customerId.filter(({ value }) => value === fieldsValue.customerId);
-      let brandObj = product.brand.filter(({ value }) => value === fieldsValue.brand);
-      let productTypeObj = product.productType.filter(({ value }) => value === fieldsValue.productType);
-      customerObj = customerObj[0];
-      brandObj = brandObj[0];
-      productTypeObj = productTypeObj[0];
-      const { id, customerNo, zhName, enName } = customerObj;
-      const customer = {
-        id,
-        value: customerNo,
-        zhName,
-        enName,
-      };
-      const brand = {
-        id: brandObj.id,
-        value: brandObj.brandNo,
-        zhName: brandObj.zhName,
-        enName: brandObj.enName,
-      };
-      const productType = {
-        id: productTypeObj.id,
-        value: productTypeObj.unitCode,
-        zhName: productTypeObj.zhName,
-        enName: productTypeObj.enName,
-      };
-      debugger;
-      const params = { ...fieldsValue, customer, brand, productType };
+      const {customerId,productColor,gemColor,platingColor} = product
 
-      const urls = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.url);
-      const names = fileImgList && fileImgList.length > 0 && fileImgList.map(v => v.name);
-      params.imgStr = urls;
-      // params.imgStr = this.state.urls;
-      params.fileName = names;
-      // params.productId = item.productNo;
-      // params.product = item;
-      // dispatch({
-      //   type: 'product/batchAddProduct',
-      //   payload: {
-      //     ...params,
-      //   },
-      //   callback: () => {
-      //     this.setState({
-      //       visible: false,
-      //     });
-      //   },
-      // });
+    let customerV  = fieldsValue.customerId.map(item=> (customerId.filter(({ value }) => value === item)[0]))
+    let productColorV  = fieldsValue.productColor.map(item=> (productColor.filter(({ value }) => value === item)[0]))
+    let gemColorV  = fieldsValue.gemColor.map(item=> (gemColor.filter(({ value }) => value === item)[0]))
+    let platingColorV  = fieldsValue.platingColor.map(item=> (platingColor.filter(({ value }) => value === item)[0]))
+
+    const params = { ...fieldsValue, customer:customerV, productColor:productColorV, gemColor:gemColorV, platingColor:platingColorV};
+
+      const key = ['brand','productType']
+      key.map(item=>{
+        params[item] = product[item].filter(({ value }) => value === fieldsValue[item]);
+      })
+      params.brand = params.brand[0]
+      params.productType = params.productType[0]
+      const filelistArr = fileList.flatMap(e => e.url);
+      params.picPath = filelistArr
+ 
 
       productBatchUpdate(params).then(res => {
         this.setState({
@@ -619,7 +572,7 @@ class ProductDetail extends Component {
           });
           this.closeModal();
         } else {
-          notification.success({
+          notification.error({
             message: res.rtnMsg,
           });
         }
@@ -1082,7 +1035,7 @@ class ProductDetail extends Component {
                       this.setState({
                         cNofCodezhName: v.zhName,
                         cNofCodeehName: v.enName,
-                        cNofCode: '',
+                        productType: '',
                         brand: 'SET'
                       }, () => {
                         this.parseProductNo()
@@ -1091,7 +1044,7 @@ class ProductDetail extends Component {
                       this.setState({
                         cNofCodezhName: v.zhName,
                         cNofCodeehName: v.enName,
-                        cNofCode: v.unitCode
+                        productType: v.unitCode
                       }, () => {
                         this.parseProductNo()
                       });
@@ -1120,12 +1073,13 @@ class ProductDetail extends Component {
                 content={current.gemColor}
                 onSelect={(v) => {
                   if (v.unitCode) {
-                    this.state.cNoUnitCode = v.unitCode;
-                    this.state.cNozhNameUniCode = v.zhName;
-                    this.state.cNoenNameUniCode = v.enName;
-                    // console.log(' cNozhNameUniCode ', v.zhName,v.enName);
-                    this.parseProductNo();
-
+                    this.setState({
+                      gemColor: v.unitCode,
+                      cNozhNameUniCode: v.zhName,
+                      cNoenNameUniCode: v.enName
+                    }, () => {
+                      this.parseProductNo();
+                    })
                   }
                 }
                 }
@@ -1150,11 +1104,14 @@ class ProductDetail extends Component {
                 }
                 onSelect={(v) => {
                   if (this.state.current.mouldNo) {
-                    this.state.cNomainMold = this.state.current.mouldNo;
+                    this.state.mouldNo = this.state.current.mouldNo;
                   }
                   if (v.colorCode) {
-                    this.state.cNoColorCode = v.colorCode;
-                    this.parseProductNo();
+                    this.setState({
+                      platingColor: v.colorCode
+                    }, () => {
+                      this.parseProductNo();
+                    })
                   }
                 }}
                 content={current.platingColor}
@@ -1226,14 +1183,14 @@ class ProductDetail extends Component {
                 content={current.mouldNo}
                 placeholder="请输入"
                 onSelect={(v) => {
-                  // if (v && v.mainMold)
-                  //   this.state.cNomainMold = v.mainMold;
-                  this.state.cNomainMold = v;
-                  this.parseProductNo();
+                  this.setState({ mouldNo: v }, () => {
+                    this.parseProductNo();
+                  });
                 }}
                 onChange={(v) => {
-                  this.setState({ current: { ...this.state.current, mouldNo: v }, cNomainMold: v });
-                  this.parseProductNo();
+                  this.setState({ current: { ...this.state.current, mouldNo: v }, mouldNo: v }, () => {
+                    this.parseProductNo();
+                  });
                 }}
               />)}
             </FormItem>
@@ -1262,7 +1219,7 @@ class ProductDetail extends Component {
                   if (v.enName)
                     this.state.cNoPercentageEnName = v.enName;
                   if (v.productMaterial)
-                    this.state.cNoProductMaterial = v.productMaterial;
+                    this.state.productColor = v.productMaterial;
                   this.parseProductNo();
                 }}
               />)}
@@ -1566,7 +1523,7 @@ class ProductDetail extends Component {
       }
 
       this.setState({
-        productParams: params,
+        productParams: params,pi
       });
     });
 
@@ -1893,13 +1850,12 @@ class ProductDetail extends Component {
 
 
   parseProductNo = () => {
-    console.log(11111);
-    const { cNoColorCode = '', cNoProductMaterial = '', cNofCodeehName = '', cNofCode = '', cNofCodezhName = '', cNoUnitCode = '', cNomainMold = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '', customerNo = '', brand = '' } = this.state;
+    const { platingColor = '', productColor = '', cNofCodeehName = '', productType = '', cNofCodezhName = '', gemColor = '', mouldNo = '', cNozhNameUniCode, cNoenNameUniCode, cNoPercentageZhName = '', cNoPercentageEnName = '', customerNo = '', brand = '' } = this.state;
     const { form: { setFieldsValue } } = this.props;
-    const showMold = cNomainMold;
-    // const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
-    // console.log(" showMold ",cNomainMold,showMold)
-    const productNo = `${brand + cNofCode}-${showMold}${cNoProductMaterial}${cNoUnitCode}${cNoColorCode}${customerNo}`;
+    const showMold = mouldNo;
+    // const showMold = mouldNo !== '' ? mouldNo.substr(2, mouldNo.length) : '';
+    // console.log(" showMold ",mouldNo,showMold)
+    const productNo = `${brand + productType}-${showMold}${productColor}${gemColor}${platingColor}${customerNo}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCodeehName}`;
     // 成色+宝石颜色+类别
