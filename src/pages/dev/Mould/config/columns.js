@@ -1,6 +1,6 @@
 import moment from 'moment'
 import styles from './columns.less';
-import {statusConvert} from '@/utils/convert';
+import {statusConvert,numberConvert} from '@/utils/convert';
 
 let dieSet = [
   {
@@ -68,7 +68,6 @@ let dieSetChild = [
     title: <div className={styles.row_normal2}>子模具号</div>,
     dataIndex: 'childMoldCode',
     key: 'childMoldCode',
-    width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
     ),
@@ -77,55 +76,58 @@ let dieSetChild = [
     title: <div className={styles.row_normal2}>石头重量</div>,
     dataIndex: 'stoneWeight',
     key: 'stoneWeight',
-    width: 100,
+    render:d=>  numberConvert(d,2)
+
   },
   {
     title: <div className={styles.row_normal2}>配膜比例</div>,
     dataIndex: 'membraneProportion',
     key: 'membraneProportion',
-    width: 60,
   },
   {
     title: <div className={styles.row_normal2}>注蜡气压</div>,
     dataIndex: 'waxInjectionPressure',
     key: 'waxInjectionPressure',
-    width: 50,
+    render:d=>  numberConvert(d,1)
+
   },
   {
     title: <div className={styles.row_normal2}>进模压力</div>,
     dataIndex: 'intoFilmPressure',
     key: 'intoFilmPressure',
-    width: 40,
+    render:d=>  numberConvert(d,1)
+
   },
   {
     title: <div className={styles.row_normal2}>压膜压力</div>,
     dataIndex: 'squeezeFilmPressure',
     key: 'squeezeFilmPressure',
-    width: 60,
+    render:d=>  numberConvert(d,1)
+
   },
   {
     title: <div className={styles.row_normal2}>注蜡时间</div>,
     dataIndex: 'waxInjectionTime',
     key: 'waxInjectionTime',
-    width: 80,
+    render:d=>  numberConvert(d,1)
+
   },
   {
     title: <div className={styles.row_normal2}>真空时间</div>,
     dataIndex: 'noteWaxImmediately',
     key: 'noteWaxImmediately',
-    width: 40,
+    render:d=>  numberConvert(d,1)
+
   },
   {
     title: <div className={styles.row_normal2}>注蜡机号</div>,
     dataIndex: 'vacuumTime',
     key: 'vacuumTime',
-    width: 40,
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,
     dataIndex: 'status',
     key: 'status',
-    width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
     ),

@@ -8,6 +8,7 @@ import {
   Modal,
   Form,
   Input,
+  InputNumber,
   Divider,
   Select,
   Radio,
@@ -173,7 +174,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number,step,min,max }) => {
     switch (type) {
       case 2:
         return (
@@ -231,7 +232,7 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+        return number ?<InputNumber placeholder="请输入" style={{width:"100%"}} step={step} min={min} max={max} />:<Input placeholder="请输入"  />;
     }
     //  type === 7 ?
   };
@@ -355,6 +356,7 @@ class Index extends Component {
 
     const dataArr = modalInput[rightActive];
     const fieldslist = dataArr.map(e=>e.value)
+
     form.validateFields(fieldslist,(err, values) => {
 
       if (!err) {
@@ -363,79 +365,7 @@ class Index extends Component {
           ...values,
         };
 
-        if(rightActive==='dieSetChild'){
-          const valt = ['noteWaxImmediately','intoFilmPressure','squeezeFilmPressure','vacuumTime','waxInjectionPressure','waxInjectionTime','stoneWeight']
-          let valid = true;
 
-          valt.forEach(e=>{
-            if(parseFloat(values[e])<0){
-              form.setFields({
-                [e]: {
-                  value: values[e],
-                  errors: [new Error('不能为负数')],
-                },
-              });
-              this.setState({ addloading: false });
-              valid = false
-            }
-          })
-          if(!valid ){return }
-          // if(parseFloat(values.intoFilmPressure)<0){
-          //   form.setFields({
-          //     intoFilmPressure: {
-          //       value: values.intoFilmPressure,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.squeezeFilmPressure)<0){
-          //   form.setFields({
-          //     squeezeFilmPressure: {
-          //       value: values.squeezeFilmPressure,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.vacuumTime)<0){
-          //   form.setFields({
-          //     vacuumTime: {
-          //       value: values.vacuumTime,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.waxInjectionPressure)<0){
-          //   form.setFields({
-          //     waxInjectionPressure: {
-          //       value: values.waxInjectionPressure,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.waxInjectionTime)<0){
-          //   form.setFields({
-          //     waxInjectionTime: {
-          //       value: values.waxInjectionTime,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.stoneWeight)<0){
-          //   form.setFields({
-          //     stoneWeight: {
-          //       value: values.stoneWeight,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-
-        }
 
 
 
@@ -487,7 +417,7 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number ,step,min,max}) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -510,6 +440,9 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
+                      step,
+                      min,
+                      max,
                     }))
                   }
                 </FormItem>
