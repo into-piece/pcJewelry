@@ -52,7 +52,7 @@ const defaultModelName = 'productflow';
 const firstTabFlag = 'productflow';
 
 const radioArr = [{ key: '生产流程', value: 'productflow' },
-  { key: '员工工序', value: 'productProcess' }];
+  { key: '生产工序', value: 'productProcess' }];
 
 @Form.create()
 @connect(({ loading, productflow: model }) => {

@@ -20,7 +20,7 @@ export const productflow = [
   },
 ];
 
-// 员工工序的筛选参数
+// 生产工序的筛选参数
 export const productProcess = [
   { key: '工序编号', value: 'processCode' },
   { key: '工序名称', value: 'processName' },

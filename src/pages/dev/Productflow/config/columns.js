@@ -85,7 +85,7 @@ let productflow = [
 
 let productProcess = [
   {
-    title: <div className={styles.row_normal2}>员工工序编号</div>,
+    title: <div className={styles.row_normal2}>生产工序编号</div>,
     dataIndex: 'processCode',
     key: 'processCode',
     width: 100,
@@ -119,7 +119,7 @@ let productProcess = [
     width: 40,
   },
   {
-    title: <div className={styles.row_normal2}>员工工序产能(件/小时)</div>,
+    title: <div className={styles.row_normal2}>生产工序产能(件/小时)</div>,
     dataIndex: 'processCapacity',
     key: 'processCapacity',
     width: 60,
