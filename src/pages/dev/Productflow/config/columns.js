@@ -18,6 +18,12 @@ let productflow = [
     width: 100,
   },
   {
+    title: <div className={styles.row_normal2}>英文名称</div>,
+    dataIndex: 'engName',
+    key: 'engName',
+    width: 100,
+  },
+  {
     title: <div className={styles.row_normal2}>所属部门</div>,
     dataIndex: 'department',
     key: 'departmentName',
@@ -26,13 +32,11 @@ let productflow = [
 
   },
   {
-    title: <div className={styles.row_normal2}>成品类别</div>, // ?
-    dataIndex: 'productType',
-    key: 'productType',
+    title: <div className={styles.row_normal2}>工作效率</div>,
+    dataIndex: 'efficiency',
+    key: 'efficiency',
     width: 100,
-    render: (data,record) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{record.productTypeName}</div>
-    ),
+    render: (data) => (data),
   },
 
   {
@@ -57,15 +61,6 @@ let productflow = [
     width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>是否外发</div>,
-    dataIndex: 'isOutbound',
-    key: 'isOutbound',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{YoNConvert[data]}</div>
-    ),
-  },
-  {
     title: <div className={styles.row_normal2}>状态</div>,
     dataIndex: 'status',
     key: 'status',
@@ -75,9 +70,9 @@ let productflow = [
     ),
   },
   {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
+    title: <div className={styles.row_normal2}>负责人</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
     width: 100,
   },
 ];
