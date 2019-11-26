@@ -72,7 +72,7 @@
       { "key": "类别", "value": "category", "type": 2, "list": "listMstWordbookDroph013" ,"name":true},
       { "key": "中文名", "value": "zhName" },
       { "key": "英文名","noNeed": true, "value": "enName" },
-      { "key": "工费","noNeed": true, "value": "costs" },
+      { "key": "工费","noNeed": true, "value": "costs" ,"dfv":"0.00"},
       { "key": "备注","noNeed": true, "value": "remarks","type":4 }
     ],
     "rubberMouldSetting": [
