@@ -35,7 +35,8 @@ const GetRenderitem = ({ data, type, items }) => {
           align="center"
           className={styles.carousel_image}
           src={v}
-          set={paths.map(image => ({ src: image }))}
+          edge={20}
+          set={paths.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
         />
       </div>
     ));
@@ -44,24 +45,24 @@ const GetRenderitem = ({ data, type, items }) => {
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
 
   return (
-    <Card bordered={false} style={{overflow:"auto"}} className={styles.carddiv} onClick={selectRowItem}>
+    <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
       {
         <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
           {getImages(images)}
         </Carousel>}
       {images && images.length > 0 && <Divider />}
-      <DescriptionList className={styles.headerList} size="small" col="1">
+      {data.id&&<DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, cName, convert ,date}) =>
+          arr.map(({ key, value, cName, convert, date ,fixed}) =>
             <Description key={key} term={key}>
               {
-                (date&&data[value])?moment(data[value]).format(date):(convert ? convert[data[value]] : (cName ? data[`${value}Name`] : data[value]))
-
+                (date && data[value]) ? moment(data[value]).format(date)
+                  : (convert ? (convert instanceof Function ? convert(data[value],fixed): convert[data[value]] ) : (cName ? data[`${value}Name`] : (`${data[value]}`)))
               }
             </Description>,
           )
         }
-      </DescriptionList>
+      </DescriptionList>}
     </Card>
   );
 };

@@ -1,4 +1,4 @@
-import {statusConvert} from '@/utils/convert';
+import {statusConvert,numberConvert} from '@/utils/convert';
 
 export const dieSet = [
   { key: '主模具号', value: 'mainMoldCode' },
@@ -15,13 +15,13 @@ export const dieSet = [
 
 export const dieSetChild = [
   { 'key': '子模具号', 'value': 'childMoldCode' },
-  { 'key': '石头重量', 'value': 'stoneWeight' },
+  { 'key': '石头重量', 'value': 'stoneWeight','convert':numberConvert,'fixed':2 },
   { 'key': '配膜比例', 'value': 'membraneProportion' },
-  { 'key': '注蜡气压', 'value': 'waxInjectionPressure' },
-  { 'key': '进模压力', 'value': 'intoFilmPressure' },
-  { 'key': '压膜压力', 'value': 'squeezeFilmPressure' },
-  { 'key': '注蜡时间', 'value': 'waxInjectionTime' },
-  { 'key': '真空时间', 'value': 'vacuumTime' },
+  { 'key': '注蜡气压', 'value': 'waxInjectionPressure','convert':numberConvert,'fixed':1  },
+  { 'key': '进模压力', 'value': 'intoFilmPressure' ,'convert':numberConvert,'fixed':1 },
+  { 'key': '压膜压力', 'value': 'squeezeFilmPressure','convert':numberConvert,'fixed':1  },
+  { 'key': '注蜡时间', 'value': 'waxInjectionTime' ,'convert':numberConvert,'fixed':1 },
+  { 'key': '真空时间', 'value': 'vacuumTime','convert':numberConvert,'fixed':1  },
   { 'key': '注蜡机号', 'value': 'noteWaxImmediately' },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
 ];

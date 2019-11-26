@@ -24,3 +24,8 @@ export const ableConvert = {
   0:'禁用',
   2:'启用',
 };
+
+
+export const numberConvert = (i,n=2)=>{
+  return  i.toFixed(n);
+}

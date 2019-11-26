@@ -8,15 +8,15 @@ export const dieSet = [
 
 export const dieSetChild = [
   { 'key': '子模具号', 'value': 'childMoldCode',  },
-  { 'key': '进模压力', 'value': 'intoFilmPressure','number': true,'initValue':0.0},
+  { 'key': '进模压力', 'value': 'intoFilmPressure','number': true,'initValue':0.0,'step':0.1,'min':0},
   { 'key': '配膜比例', 'value': 'membraneProportion',},
-  { 'key': '注蜡机号', 'value': 'noteWaxImmediately','number': true,'initValue':1},
-  { 'key': '压膜压力', 'value': 'squeezeFilmPressure','number': true,'initValue':0.0},
-  { 'key': '石头重量', 'value': 'stoneWeight','number': true,'initValue':0.0},
-  { 'key': '真空时间', 'value': 'vacuumTime','number': true,'initValue':3.0},
+  { 'key': '注蜡机号', 'value': 'noteWaxImmediately','number': true,'initValue':1,'min':0},
+  { 'key': '压膜压力', 'value': 'squeezeFilmPressure','number': true,'initValue':0.0,'step':0.1,'min':0},
+  { 'key': '石头重量', 'value': 'stoneWeight','number': true,'initValue':0.00,'step':0.01,'min':0},
+  { 'key': '真空时间', 'value': 'vacuumTime','number': true,'initValue':3.0,'step':0.1,'min':0},
 
-  { 'key': '注蜡气压', 'value': 'waxInjectionPressure','number': true,'initValue':0.0},
-  { 'key': '注蜡时间', 'value': 'waxInjectionTime','number': true,'initValue':3.0},
+  { 'key': '注蜡气压', 'value': 'waxInjectionPressure','number': true,'initValue':0.0,'step':0.1,'min':0},
+  { 'key': '注蜡时间', 'value': 'waxInjectionTime','number': true,'initValue':3.0,'step':0.1,'min':0},
 ];
 
 
