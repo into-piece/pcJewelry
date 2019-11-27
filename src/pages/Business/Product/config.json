@@ -35,16 +35,13 @@
     "value": "customerId",
     "list": "customerId"
   },
-  { "key": "中文名", "value": "zhName", "type": 1 },
-  { "key": "英文名", "value": "enName", "type": 1 },
-  { "key": "规格", "value": "specification", "noNeed": true, "type": 1 },
+  { "key": "规格", "value": "specification", "noNeed": true, "type": 1, "initialValue": "0.00" },
   {
     "key": "产品来源",
     "value": "sourceOfProduct",
     "type": 2,
     "list": "sourceOfProduct"
   },
-  { "key": "模具号", "value": "mouldNo", "type": 2, "list": "mouldNo" },
   {
     "key": "数量单位",
     "value": "unitOfMeasurement",

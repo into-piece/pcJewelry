@@ -52,7 +52,7 @@ const defaultModelName = 'productflow';
 const firstTabFlag = 'productflow';
 
 const radioArr = [{ key: '生产流程', value: 'productflow' },
-  { key: '员工工序', value: 'productProcess' }];
+  { key: '生产工序', value: 'productProcess' }];
 
 @Form.create()
 @connect(({ loading, productflow: model }) => {
@@ -378,7 +378,7 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv }) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -387,7 +387,7 @@ class Index extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : dfv||undefined),
                     })(this.returnElement({
                       key,
                       value,

@@ -11,7 +11,7 @@ const serviceArr = [
       'revoke',
     ],
   },
-  // 员工工序
+  // 生产工序
   {
     'name': 'productProcess',
     'path': 'production-process-relation',

@@ -8,6 +8,7 @@ import {
   Modal,
   Form,
   Input,
+  InputNumber,
   Divider,
   Select,
   Radio,
@@ -154,12 +155,14 @@ class Index extends Component {
   getListSecond = (args, param) => {
     const { dispatch, paginationSecond, searchParamsSecond, choosenRowData } = this.props;
     const { secondTableActive } = this.state;
+    const mainMoldCode = param.mainMoldCode || choosenRowData.mainMoldCode;
+    if (!mainMoldCode) return;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode: param.mainMoldCode||choosenRowData.mainMoldCode }, ...args,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode }, ...args,
       },
     });
 
@@ -173,7 +176,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, step, min, max }) => {
     switch (type) {
       case 2:
         return (
@@ -231,7 +234,8 @@ class Index extends Component {
           }}
         />;
       default:
-        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+        return number ? <InputNumber placeholder="请输入" style={{ width: '100%' }} step={step} min={min} max={max} /> :
+        <Input placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -265,7 +269,7 @@ class Index extends Component {
     const { rightActive, secondTableActive } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     serviceObj[`delete${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } =res?res.head:{};
+      const { rtnCode, rtnMsg } = res ? res.head : {};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -281,7 +285,7 @@ class Index extends Component {
             type: `${defaultModelName}/clearListScond`,
           });
         } else {
-          this.getListSecond({ type: secondTableActive },{});
+          this.getListSecond({ type: secondTableActive }, {});
           // 清除第二table 选中 详情
           dispatch({
             type: `${defaultModelName}/clearDetailSecond`,
@@ -300,7 +304,7 @@ class Index extends Component {
     const serviceType = isLock ? 'approve' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res?res.head:{};
+      const { rtnCode, rtnMsg } = res ? res.head : {};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -308,7 +312,7 @@ class Index extends Component {
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
         } else {
-          this.getListSecond({ type: secondTableActive },{});
+          this.getListSecond({ type: secondTableActive }, {});
         }
       }
     });
@@ -322,7 +326,7 @@ class Index extends Component {
     const serviceType = 'copy';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res?res.head:{};
+      const { rtnCode, rtnMsg } = res ? res.head : {};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
@@ -330,7 +334,7 @@ class Index extends Component {
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
         } else {
-          this.getListSecond({ type: secondTableActive },{});
+          this.getListSecond({ type: secondTableActive }, {});
         }
       }
     });
@@ -349,13 +353,14 @@ class Index extends Component {
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
-      params = {...params,picPath: filelist,}
+    params = { ...params, picPath: filelist };
 
     this.setState({ addloading: true });
 
     const dataArr = modalInput[rightActive];
-    const fieldslist = dataArr.map(e=>e.value)
-    form.validateFields(fieldslist,(err, values) => {
+    const fieldslist = dataArr.map(e => e.value);
+
+    form.validateFields(fieldslist, (err, values) => {
 
       if (!err) {
         params = {
@@ -363,84 +368,9 @@ class Index extends Component {
           ...values,
         };
 
-        if(rightActive==='dieSetChild'){
-          const valt = ['noteWaxImmediately','intoFilmPressure','squeezeFilmPressure','vacuumTime','waxInjectionPressure','waxInjectionTime','stoneWeight']
-          let valid = true;
-
-          valt.forEach(e=>{
-            if(parseFloat(values[e])<0){
-              form.setFields({
-                [e]: {
-                  value: values[e],
-                  errors: [new Error('不能为负数')],
-                },
-              });
-              this.setState({ addloading: false });
-              valid = false
-            }
-          })
-          if(!valid ){return }
-          // if(parseFloat(values.intoFilmPressure)<0){
-          //   form.setFields({
-          //     intoFilmPressure: {
-          //       value: values.intoFilmPressure,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.squeezeFilmPressure)<0){
-          //   form.setFields({
-          //     squeezeFilmPressure: {
-          //       value: values.squeezeFilmPressure,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.vacuumTime)<0){
-          //   form.setFields({
-          //     vacuumTime: {
-          //       value: values.vacuumTime,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.waxInjectionPressure)<0){
-          //   form.setFields({
-          //     waxInjectionPressure: {
-          //       value: values.waxInjectionPressure,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.waxInjectionTime)<0){
-          //   form.setFields({
-          //     waxInjectionTime: {
-          //       value: values.waxInjectionTime,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-          // if(parseFloat(values.stoneWeight)<0){
-          //   form.setFields({
-          //     stoneWeight: {
-          //       value: values.stoneWeight,
-          //       errors: [new Error('不能为负数')],
-          //     },
-          //   });
-          //   return;
-          // }
-
-        }
-
-
 
         serviceObj[`add${rightActive}`](params).then(res => {
-          if (!res||!res.head) {
+          if (!res || !res.head) {
             return;
           }
           const { rtnCode, rtnMsg } = res.head;
@@ -449,12 +379,12 @@ class Index extends Component {
               message: rtnMsg,
             });
             if (rightActive === firstTabFlag) {
-              this.getList({ type: rightActive },{});
+              this.getList({ type: rightActive }, {});
             } else {
-              this.getListSecond({ type: secondTableActive },{});
+              this.getListSecond({ type: secondTableActive }, {});
             }
 
-            if(close)this.btnFn('');
+            if (close) this.btnFn('');
             if (close) this.setState({ filelist: [] });
 
           }
@@ -487,7 +417,7 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, step, min, max }) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -510,6 +440,9 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
+                      step,
+                      min,
+                      max,
                     }))
                   }
                 </FormItem>
@@ -517,7 +450,7 @@ class Index extends Component {
             );
           })
         }
-        { <Col span={18}>
+        {<Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -530,7 +463,7 @@ class Index extends Component {
             <UploadImg
               key="uimg"
               maxcount={10}
-              defaultFileList={isEdit ?(rightActive === firstTabFlag ? choosenRowData.pictures : choosenRowDataSecond.pictures)  : []}
+              defaultFileList={isEdit ? (rightActive === firstTabFlag ? choosenRowData.pictures : choosenRowDataSecond.pictures) : []}
               fileListFun={(list) => {
                 this.setState({ filelist: list });
               }}
@@ -641,7 +574,7 @@ class Index extends Component {
       onSearch,
       returnTitle,
     } = this;
-    const { modalType, rightActive, secondTableActive,addloading } = state;
+    const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
 
 
@@ -650,7 +583,7 @@ class Index extends Component {
         key="back"
         onClick={() => {
           btnFn('');
-          this.setState({filelist:[]})
+          this.setState({ filelist: [] });
         }}
       >
         取消
@@ -680,7 +613,7 @@ class Index extends Component {
         key="back"
         onClick={() => {
           btnFn('');
-          this.setState({filelist:[]})
+          this.setState({ filelist: [] });
 
         }}
       >
@@ -762,7 +695,13 @@ class Index extends Component {
                       </div>
                       {/*  */}
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start',flexWrap: 'wrap' }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'flex-start',
+                          flexWrap: 'wrap',
+                        }}
+                        >
                           {btnGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
@@ -779,20 +718,20 @@ class Index extends Component {
                             </Button>
                           ))}
 
-                          {rightActive===firstTabFlag&&
-                            <Button
-                              key="copy"
-                              className={styles.buttomControl}
-                              icon="copy"
-                              type="primary"
-                              size="small"
-                              onClick={() => {
-                                btnFn('copy');
-                              }}
-                            >
-                              复制
-                            </Button>
-                        }
+                          {rightActive === firstTabFlag &&
+                          <Button
+                            key="copy"
+                            className={styles.buttomControl}
+                            icon="copy"
+                            type="primary"
+                            size="small"
+                            onClick={() => {
+                              btnFn('copy');
+                            }}
+                          >
+                            复制
+                          </Button>
+                          }
 
 
                         </div>
@@ -817,7 +756,7 @@ class Index extends Component {
           footer={modalFooter}
           onCancel={() => {
             btnFn('');
-            this.setState({filelist:[]})
+            this.setState({ filelist: [] });
           }}
         >
           {getModalContent()}
