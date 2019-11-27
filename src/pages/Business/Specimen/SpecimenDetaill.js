@@ -182,6 +182,7 @@ class SpecimenDetaill extends Component {
           loading={productSaveloading}
           onClick={() => {
             this.handleSubmit(false);
+            this.parseProductNo2()
           }}
         >
           继续添加
@@ -274,7 +275,7 @@ class SpecimenDetaill extends Component {
                     </Spin>
                   </div>
                 ) : (
-                    <div />
+                  <div />
                   )}
               </Card>
             </div>
@@ -347,7 +348,7 @@ class SpecimenDetaill extends Component {
                       取消审批
                     </Button>
                   ) : (
-                      <Button
+                    <Button
                         className={business.buttomControl}
                         size="small"
                         type="primary"
@@ -363,7 +364,7 @@ class SpecimenDetaill extends Component {
                         }}
                       >
                         审批
-                    </Button>
+                      </Button>
                     )}
                 </div>
 
@@ -820,11 +821,13 @@ class SpecimenDetaill extends Component {
                         // console.log('end name ', file);
                         this.setState({
                           customerShotName: customerCombine,
+                          customerNo:file
+                        },()=>{
+                          this.parseProductNo2();
                         });
                         // setFieldsValue({
                         //   customerShotName: customerCombine,
                         // });
-                        this.parseProductNo2(file);
                       }
                     }}
                   />
@@ -1322,7 +1325,8 @@ class SpecimenDetaill extends Component {
     });
   };
 
-  parseProductNo2 = customerNo => {
+  parseProductNo2 = () => {
+    const {customerNo} =  this.state
     const {
       form: { setFieldsValue },
     } = this.props;

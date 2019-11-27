@@ -165,27 +165,22 @@ export default {
     },
 
     *changeList({ payload }, { put }) {
-      const { key, value, key1, value1 } = payload
-      let listKey = ''
-      let listValue = ''
-      if (key1) {
-        listKey = key1
-        listValue = value1
-      } else {
-        listKey = 'zhName'
-        listValue = 'id'
-      }
+      const { key, value, key1, value1,zhName,enName } = payload
+      let listKey = 'zhName'
+      let listValue = 'id'
+      key1 && (listKey = key1)
+      value1 && (listValue = value1)
       const arrList = value.map(item => ({
+        // ...item,
+        id:item.id,
+        zhName:zhName?item[zhName]:item.zhName,
+        enName:enName?item[enName]:item.enName,
         key: item[listKey],
         value: item[listValue]
       }))
       yield put({
         type: 'changeStateAction',
         payload: { key, value: arrList },
-      });
-      yield put({
-        type: 'changeStateAction',
-        payload: { key: `${key}Arr`, value },
       });
     },
   },
