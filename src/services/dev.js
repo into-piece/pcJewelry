@@ -157,6 +157,7 @@ const resultArr = [
     prefix1: `${env  }/business`,
   },
 
+  { key: 'listUsers', path: '/listUsers', prefix1: `${env}` },//用户下拉
   { key: 'listMstWordbook', path: '/mst-wordbook/listMstWordbook', prefix1: `${env}/business/sys` },// 获取为报价的产品参数
   { key: 'listDeptDropDown', path: '/sys.user/sys-role/listDeptDropDown', prefix1: `${env}` },// 部门下拉
   { key: 'listBasicColourSetDropDown', path: '/colour-set/listBasicColourSetDropDown' },// 成色下拉

@@ -3,7 +3,7 @@ export const productflow = [
   { 'key': '流程编号', 'value': 'flowCode' },
   { 'key': '所属部门', 'value': 'department' , 'type': 2, 'list': 'listDeptDrop',},
   { 'key': '英文名称', 'value': 'engName' , 'noNeed': true},
-  { 'key': '负责人', 'value': 'chargeUser' },
+  { 'key': '负责人', 'value': 'chargeUser','type': 2,'list':'userlist' },
   { 'key': '工作效率', 'value': 'efficiency',  'number': true },
   { 'key': '计价类别', 'value': 'valuationClass' ,  'type': 6, 'arr': [{ 'key': '计重', 'value': 0 }, { 'key': '计件', 'value': 1 }], 'dfv': 0 },
   { 'key': '允许损耗(%)', 'value': 'isWastage' ,  'number': true,},

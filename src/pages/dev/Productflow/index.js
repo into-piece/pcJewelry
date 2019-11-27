@@ -101,6 +101,11 @@ class Index extends Component {
 
   initDrop = () => {
     const { dispatch } = this.props;
+    //
+    dispatch({
+      type: `${defaultModelName}/getUsersList`,
+      payload:{current:0,size:5000}
+    });
     // 类别下拉
     dispatch({
       type: `${defaultModelName}/getwordbookdropdown`,
