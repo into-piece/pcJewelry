@@ -24,7 +24,7 @@ export const productflow = [
   { 'key': '流程编号', 'value': 'flowCode' },
   { 'key': '所属部门', 'value': 'department'  ,cName:true},
   { 'key': '英文名称', 'value': 'engName' },
-  { 'key': '负责人', 'value': 'chargeUser' },
+  { 'key': '负责人', 'value': 'chargeUser',cName:true },
   { 'key': '工作效率', 'value': 'efficiency' },
   { 'key': '计价类别', 'value': 'valuationClass'  ,cName:true},
   { 'key': '允许损耗(%)', 'value': 'isWastage' },

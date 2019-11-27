@@ -186,7 +186,7 @@ class Index extends Component {
               this.handleSelectChange && this.handleSelectChange(v, value);
             }}
           >
-            {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
+            {data[list] && data[list].map((i) => <Option value={i.value} key={i.value}>{i.key}</Option>,
             )}
           </Select>
         );
@@ -222,7 +222,20 @@ class Index extends Component {
           }
         </Radio.Group>;
       case 7:
-        return <span>{form.getFieldValue(value) || ''}</span>;
+        return (<Select
+          placeholder="请选择"
+          mode="multiple"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {data && data[list] && data[list].map(({ value, key }) =>
+
+            <Option value={value} key={value}>{key}</Option>,
+          )}
+        </Select>);
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
@@ -232,6 +245,7 @@ class Index extends Component {
             this.handleDatePicker(date, dateString, value);
           }}
         />;
+
       default:
         return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
     }

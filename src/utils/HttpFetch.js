@@ -263,6 +263,12 @@ export const deleteRings = `${priefx}/business/business.customer/ring/delete`
 export const uploadImg = `${priefx}/zuul/business/business/file/uploadFile`
 
 /**
+ *   上传视频的接口
+ * @type {string}
+ */
+export const uploadVideo = `${priefx}/zuul/business/business/file/uploadVideo`
+
+/**
  *   产品报价 导入excel
  * @type {string}
  */
@@ -283,6 +289,7 @@ export default {
   listRingStandAround,
   listRingAround,
   uploadImg,
+  uploadVideo,
   deleteRings,
   saveRings,
   queryPermissionUserList,
