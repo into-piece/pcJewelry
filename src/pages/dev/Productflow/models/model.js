@@ -10,7 +10,7 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-  listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,
+  listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,listUsers
 } = servicesConfig;
 const defaultModelName = 'productflow';
 
@@ -40,6 +40,7 @@ export default {
     searchParamsSecond: {},
 
 
+    userlist: [{ key: '', value: '' }],
     listGemSetProcessDropDown: [{ key: '', value: '' }],
     listDeptDrop: [{ key: '', value: '' }],
     listH017: [{ key: '', value: '' }],
@@ -180,6 +181,18 @@ export default {
 
     // 下拉获取
 
+    * getUsersList( {payload}, { call, put }) {
+      const response = yield call(listUsers,payload);
+      const listtemp = response.body.records;
+      const list = listtemp.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: "userlist" },
+      });
+
+    },
     * getwordbookdropdown({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload.params);
       const wordbookData = response.body.records;
