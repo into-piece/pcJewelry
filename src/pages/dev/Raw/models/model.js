@@ -190,7 +190,16 @@ export default {
       });
       if (callback) callback();
     },
-    * changeSelectedRowKeys({ payload }, { put }) {
+    * changeSelectedRowKeys({ payload }, { put,select }) {
+      // debugger
+      const choosenRowData = yield select(state => state.devRaw.choosenRowData);
+
+      const selectRow = payload.filter(e => (e=== choosenRowData.id));
+
+      yield put({
+        type: 'getChoosenRowData2',
+        payload:  selectRow[0]||{},
+      });
       yield put({
         type: 'changeSelectedRowKeys2',
         payload,
@@ -206,13 +215,31 @@ export default {
         payload: response,
       });
     },
-    * getList({ payload, callback }, { call, put }) {
+    * getList({ payload, callback }, { call, put,select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`listBasic${type}`], params);
       yield put({
         type: 'getDevList2',
         payload: { response, type },
       });
+
+      const choosenRowData = yield select(state => state.devRaw.choosenRowData);
+      const selectedRowKeys = yield select(state => state.devRaw.selectedRowKeys);
+      const selectRow = response.body.records.filter(e => (e.id=== choosenRowData.id));
+      const selectkeys = response.body.records.filter(e => (selectedRowKeys.indexOf(e.id)>-1)).map(e=>e.id);
+
+      yield put({
+        type: 'getChoosenRowData2',
+        payload:  selectRow[0]||{},
+      });
+
+      yield put({
+        type: 'changeSelectedRowKeys2',
+        payload:  selectkeys,
+      });
+
+
+
       if (callback) callback();
     },
     * clearSixList({callback}, { put }) {

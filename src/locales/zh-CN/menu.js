@@ -20,7 +20,7 @@ export default {
   'menu.erp.dev.flowCostType': '流程工费',
   'menu.erp.dev.Raw':'原料档案',
   'menu.erp.dev.basic': '基础数据',
-  'menu.erp.dev.mould':'模具设定',
+  'menu.erp.dev.mould':'胶膜管理',
   'menu.erp.dev.dieSet':'胶膜管理',
   'menu.erp.dev.dieSetChild':'子模明细',
 
