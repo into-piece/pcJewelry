@@ -84,6 +84,9 @@ const fetchArr = [
     key: 'productType',
     value: queryproductDropDown2,
     value1: 'unitCode',
+    params: {
+      bType: 'H015002',
+    },
   },
   {
     key: 'productColor',
@@ -113,6 +116,9 @@ const fetchArr = [
     value1: 'wordbookCode',
     zhName: 'wordbookContentZh',
     enName: 'wordbookContentEn',
+    params: {
+      wordbookTypeCode: 'H005',
+    },
   },
   {
     key: 'unitOfMeasurement',
@@ -307,8 +313,7 @@ class ProductDetail extends Component {
   }
 
   getData = paramsProps => {
-    const { value } = paramsProps;
-    const params = {};
+    const { value, params } = paramsProps;
     fetch(value, {
       method: 'POST',
       credentials: 'include',
