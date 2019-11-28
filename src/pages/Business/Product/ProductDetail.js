@@ -590,6 +590,7 @@ class ProductDetail extends Component {
             message: rtnMsg,
           });
           this.closeModal();
+          this.productRefresh();
         } else {
           notification.error({
             message: res.rtnMsg,
