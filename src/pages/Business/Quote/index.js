@@ -44,7 +44,11 @@ const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
 const {
-  deleteProductQuoteHeader, deleteProformaInvoiceDetail, getLastQuoteDetailByProductId, getTopQuoteDetailByProductId, getlistProductLine,
+  deleteProductQuoteHeader,
+  deleteProformaInvoiceDetail,
+  getLastQuoteDetailByProductId,
+  getTopQuoteDetailByProductId,
+  getlistProductLine,
   geInitializeCountByProductId,
   getMainMaterialPrice,
 } = serviceObj;
@@ -101,22 +105,19 @@ let clientContentColumns = [
     dataIndex: 'customerShotName',
     key: 'customerShotName',
 
-    render: (d, i) => (i.customerShotName)
-
+    render: (d, i) => i.customerShotName,
   },
   {
     title: <div className={styles.row_normal2}>报价单号</div>,
     dataIndex: 'quoteNumber',
     key: 'quoteNumber',
-
   },
   {
     title: <div className={styles.row_normal2}>类别</div>, // ?
     dataIndex: 'type',
     key: 'typeName',
 
-    render: (d, i) => (i.typeName)
-
+    render: (d, i) => i.typeName,
   },
 
   {
@@ -124,50 +125,43 @@ let clientContentColumns = [
     dataIndex: 'quoteDate',
     key: 'quoteDate',
 
-    render: (data) => (data),
+    render: data => data,
   },
 
   {
     title: <div className={styles.row_normal2}>数量</div>,
     dataIndex: 'quoteTotalCount',
     key: 'quoteTotalCount',
-
   },
 
   {
     title: <div className={styles.row_normal2}>重量</div>,
     dataIndex: 'quoteTotalWeight',
     key: 'quoteTotalWeight',
-
   },
   {
     title: <div className={styles.row_normal2}>总额</div>,
     dataIndex: 'quoteTotalAmount',
     key: 'quoteTotalAmount',
-
   },
   {
     title: <div className={styles.row_normal2}>终客号</div>,
     dataIndex: 'endNo',
     key: 'endNo',
-
   },
   {
     title: <div className={styles.row_normal2}>终客简称</div>,
     dataIndex: 'endShotName',
     key: 'endShotName',
-
   },
   {
-    title: <div className={styles.row_normal2}>产品说明</div>,// ?
+    title: <div className={styles.row_normal2}>产品说明</div>, // ?
     dataIndex: 'explains',
     key: 'explains',
-
   },
 ];
 
 clientContentColumns = clientContentColumns.map(item => ({ ...item, sorter: true }));
-
 
 // 报价详情表头
 let customerColumns = [
@@ -180,25 +174,21 @@ let customerColumns = [
     title: <div className={styles.row_normal2}>客户货号</div>,
     dataIndex: 'custoerProductNo',
     key: 'custoerProductNo',
-
   },
   {
     title: <div className={styles.row_normal2}>前次工费/克</div>,
     dataIndex: 'lastCount',
     key: 'lastCount',
-
   },
   {
     title: <div className={styles.row_normal2}>实际工费/克</div>,
     dataIndex: 'actualCount',
     key: 'actualCount',
-
   },
   {
     title: <div className={styles.row_normal2}>最高工费/克</div>,
     dataIndex: 'topCount',
     key: 'topCount',
-
   },
   {
     title: <div className={styles.row_normal2}>此次工费/克</div>,
@@ -211,31 +201,27 @@ let customerColumns = [
     title: <div className={styles.row_normal2}>字印价/件</div>,
     dataIndex: 'markingPrice',
     key: 'markingPrice',
-
   },
 
   {
     title: <div className={styles.row_normal2}>包装价/件</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
-
   },
 
   {
     title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
-
   },
 ];
 customerColumns = customerColumns.map(item => ({ ...item, sorter: true }));
-
 
 // 报价主页的筛选参数
 const searchParamsArr = [
   { key: '客户编号', value: 'customerId' },
   { key: '报价单号', value: 'quoteNumber' },
-  { key: '类别', value: 'type', 'type': 2, 'list': 'wordbookdropdown', noNeed: true },
+  { key: '类别', value: 'type', type: 2, list: 'wordbookdropdown', noNeed: true },
   { key: '报价日期', value: 'quoteDate', type: 9 },
   { key: '终客编号', value: 'endId' },
 ];
@@ -253,7 +239,6 @@ const productSearchParams = [
   { key: '产品编号', value: 'productNo' },
   { key: '客户编号', value: 'customerNo' },
 ];
-
 
 @Form.create()
 @connect(({ loading, quote }) => {
@@ -333,17 +318,17 @@ class Info extends Component {
     });
   };
 
-  getProduct = (args) => {
+  getProduct = args => {
     const { dispatch, productPagination } = this.props;
     dispatch({
       type: 'quote/getProductList',
       payload: { params: { ...productPagination, ...args } },
-      callback: (res) => {
+      callback: res => {
         if (res && res.records.length === 1 && args.search) {
-          this.changeChoosenRow(res.records[0])
-          console.log(res);// 请求完成后返回的结果
+          this.changeChoosenRow(res.records[0]);
+          console.log(res); // 请求完成后返回的结果
         }
-      }
+      },
     });
   };
 
@@ -383,7 +368,7 @@ class Info extends Component {
   };
 
   // 列表对应操作button回调
-  btnFn = async (modalType) => {
+  btnFn = async modalType => {
     const { selectKey, dispatch, choosenRowData, form, rightMenu } = this.props;
     switch (modalType) {
       case 'plus':
@@ -408,14 +393,16 @@ class Info extends Component {
         break;
       case 'delete':
         ModalConfirm({
-          content: '确定删除吗？', onOk: () => {
+          content: '确定删除吗？',
+          onOk: () => {
             this.handleDelect();
           },
         });
         break;
       case 'lock':
         ModalConfirm({
-          content: '确定审批吗？', onOk: () => {
+          content: '确定审批吗？',
+          onOk: () => {
             this.handleLock();
           },
         });
@@ -468,7 +455,7 @@ class Info extends Component {
       const { quote, form } = this.props;
       const obj = quote.customerDropDownList.find(item => item.value === value);
       const { shotName, currencyCode } = obj;
-      const date = form.getFieldValue('quoteDate') || ''
+      const date = form.getFieldValue('quoteDate') || '';
       form.setFieldsValue({
         customerShotName: shotName,
         quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
@@ -499,10 +486,10 @@ class Info extends Component {
     }
   };
 
-
   disabledCondition = (v, form) => {
     const isstonePrice = v === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001';
-    const ismainMaterialWeight = v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001';
+    const ismainMaterialWeight =
+      v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001';
     return isstonePrice || ismainMaterialWeight;
   };
 
@@ -518,14 +505,14 @@ class Info extends Component {
   handleDatePicker1 = (date, dateString, v) => {
     const { form } = this.props;
     console.log(form.getFieldValue('customerShotName'));
-    const customerShotName = form.getFieldValue('customerShotName') || ''
+    const customerShotName = form.getFieldValue('customerShotName') || '';
 
     const quoteDate = moment(date[0]).valueOf();
     form.setFieldsValue({
       quoteDate,
       quoteNumber: `${moment(quoteDate).format('YYYYMMDD')}_Quote_${customerShotName}`,
     });
-  }
+  };
 
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
@@ -543,150 +530,167 @@ class Info extends Component {
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
-            onChange={(v) => {
+            onChange={v => {
               this.handleSelectChange(v, value);
             }}
           >
-            {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
-            )}
+            {data[list] &&
+              data[list].map(({ value, key }) => (
+                <Option value={value} key={value}>
+                  {key}
+                </Option>
+              ))}
           </Select>
         );
       case 3:
         return (
-          <p style={{ maxWidth: 180 }}> {form.getFieldValue(value) || ''} <span
-            style={{ color: '#40a9ff', cursor: 'pointer' }}
-            onClick={() => {
-              this[clickFn](1);
-            }}
-          > {text}
-          </span>
+          <p style={{ maxWidth: 180 }}>
+            {' '}
+            {form.getFieldValue(value) || ''}{' '}
+            <span
+              style={{ color: '#40a9ff', cursor: 'pointer' }}
+              onClick={() => {
+                this[clickFn](1);
+              }}
+            >
+              {' '}
+              {text}
+            </span>
           </p>
         );
       case 4:
-        return (
-          <span>{value || ''}</span>
-        );
+        return <span>{value || ''}</span>;
       case 5:
-        return <Checkbox
-          checked={form.getFieldValue(value)}
-          onChange={e => {
-            this.handleCheckChange(e, value);
-          }}
-        >{text}
-        </Checkbox>;
+        return (
+          <Checkbox
+            checked={form.getFieldValue(value)}
+            onChange={e => {
+              this.handleCheckChange(e, value);
+            }}
+          >
+            {text}
+          </Checkbox>
+        );
       case 6:
-        return <Radio.Group>
-          {
-            arr.map(({ key, value }) => {
-              return <Radio value={value} key={value}>{key}</Radio>;
-            })
-          }
-        </Radio.Group>;
+        return (
+          <Radio.Group>
+            {arr.map(({ key, value }) => {
+              return (
+                <Radio value={value} key={value}>
+                  {key}
+                </Radio>
+              );
+            })}
+          </Radio.Group>
+        );
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
-        return <RangePicker
-          allowClear={false}
-          style={{ marginRight: 10 }}
-          onChange={(date, dateString) => {
-            this.handleDatePicker(date, dateString, value);
-          }}
-        />;
+        return (
+          <RangePicker
+            allowClear={false}
+            style={{ marginRight: 10 }}
+            onChange={(date, dateString) => {
+              this.handleDatePicker(date, dateString, value);
+            }}
+          />
+        );
       case 10:
-        return <DatePicker
-          allowClear={false}
-          style={{ marginRight: 10 }}
-          onChange={(date, dateString) => {
-            this.handleDatePicker1(date, dateString, value);
-          }}
-        />;
+        return (
+          <DatePicker
+            allowClear={false}
+            style={{ marginRight: 10 }}
+            onChange={(date, dateString) => {
+              this.handleDatePicker1(date, dateString, value);
+            }}
+          />
+        );
       default:
-        return <Input disabled={this.disabledCondition(value, form)} style={{ width: '100' }} placeholder="请输入" />;
+        return (
+          <Input
+            disabled={this.disabledCondition(value, form)}
+            style={{ width: '100' }}
+            placeholder="请输入"
+          />
+        );
     }
     //  type === 7 ?
   };
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const {
-      rightMenu,
-      choosenRowData,
-      form,
-      choosenDetailRowData,
-    } = this.props;
+    const { rightMenu, choosenRowData, form, choosenDetailRowData } = this.props;
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
     const isEdit = modalType === 'edit';
     const { quote } = this.props;
     const addArr = rightMenu === 1 ? headList : detailList;
-    const productTypeName = getFieldValue('productTypeName')
+    const productTypeName = getFieldValue('productTypeName');
     return (
       <Form size="small">
-        {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
-            return (
-              <div className="addModal" key={key}>
-                <FormItem
-                  label={key}
-                >
-                  {
-                    getFieldDecorator(value, {
-                      rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightMenu === 1 ? choosenRowData[value] : choosenDetailRowData[value]) : value === 'quoteDate' ? moment() : initValue || (number ? '0.00' : undefined),
-                    })(this.returnElement({
-                      key,
-                      value,
-                      noNeed,
-                      type,
-                      list,
-                      clickFn,
-                      text,
-                      arr,
-                      initValue,
-                      data: quote,
-                      form,
-                    }))
-                  }
-                </FormItem>
-              </div>
-            );
-          })
-        }
+        {addArr &&
+          addArr.map(
+            ({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+              return (
+                <div className="addModal" key={key}>
+                  <FormItem label={key}>
+                    {getFieldDecorator(value, {
+                      rules: [
+                        {
+                          required: !noNeed,
+                          message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
+                        },
+                      ],
+                      initialValue: isEdit
+                        ? (rightMenu === 1
+                          ? value === 'quoteDate'? moment(choosenRowData[value]):choosenRowData[value]
+                          : choosenDetailRowData[value])
+                        : value === 'quoteDate'
+                        ? undefined
+                        : initValue || (number ? '0.00' : undefined),
+                    })(
+                      this.returnElement({
+                        key,
+                        value,
+                        noNeed,
+                        type,
+                        list,
+                        clickFn,
+                        text,
+                        arr,
+                        initValue,
+                        data: quote,
+                        form,
+                      })
+                    )}
+                  </FormItem>
+                </div>
+              );
+            }
+          )}
 
-        {rightMenu === 2 && productTypeName === '戒围' &&
+        {rightMenu === 2 && productTypeName === '戒围' && (
           <React.Fragment>
             <div className="addModal">
-              <FormItem
-                label={'戒围标准'}
-              >
-                {
-                  getFieldDecorator('ringAroundStId', {
-                    rules: [{ required: false, message: '请输入戒围标准' }],
-                    initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
-                  })(
-                    <Input style={{ width: '100' }} placeholder="请输入戒围标准" />
-                  )
-                }
+              <FormItem label={'戒围标准'}>
+                {getFieldDecorator('ringAroundStId', {
+                  rules: [{ required: false, message: '请输入戒围标准' }],
+                  initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
+                })(<Input style={{ width: '100' }} placeholder="请输入戒围标准" />)}
               </FormItem>
             </div>
             <div className="addModal">
-              <FormItem
-                label={'戒围号'}
-              >
-                {
-                  getFieldDecorator('ringAroundStId', {
-                    rules: [{ required: true, message: '请输入戒围标准' }],
-                    initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
-                  })(
-                    <Input style={{ width: '100' }} placeholder="请输入戒围标准" />
-                  )
-                }
+              <FormItem label={'戒围号'}>
+                {getFieldDecorator('ringAroundStId', {
+                  rules: [{ required: true, message: '请输入戒围标准' }],
+                  initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
+                })(<Input style={{ width: '100' }} placeholder="请输入戒围标准" />)}
               </FormItem>
             </div>
           </React.Fragment>
-        }
+        )}
       </Form>
     );
   };
@@ -711,7 +715,7 @@ class Info extends Component {
   };
 
   // 新增按钮事件回调
-  handleAdd = (close) => {
+  handleAdd = close => {
     const { rightMenu, form, choosenRowData } = this.props;
     const { productLineId } = this.state;
     const isHead = rightMenu === 1;
@@ -723,7 +727,6 @@ class Info extends Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-
         this.setState({ addLoading: true });
         params = {
           ...params,
@@ -742,14 +745,13 @@ class Info extends Component {
             if (close) this.btnFn('');
           }
           this.setState({ addLoading: false });
-
         });
       }
     });
   };
 
   // 编辑按钮回调
-  handleEdit = (close) => {
+  handleEdit = close => {
     const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData } = this.props;
     const { productLineId } = choosenDetailRowData;
     const isHead = rightMenu === 1;
@@ -788,10 +790,8 @@ class Info extends Component {
             });
             this.getList({ sendReq: 'currentQuote' });
             if (close) this.btnFn('');
-
           }
           this.setState({ addLoading: false });
-
         });
       }
     });
@@ -814,7 +814,6 @@ class Info extends Component {
     });
   };
 
-
   freshList = () => {
     this.getList({ sendReq: 'currentQuote' });
   };
@@ -822,7 +821,7 @@ class Info extends Component {
   // 审批/撤销 按钮回调
   handleLock = () => {
     const { selectedRowKeys, dispatch } = this.props;
-    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const isLock = this.returnLockType().type === 1; // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approval' : 'cancelApproval';
     console.log(serviceObj, serviceObj[serviceType], selectedRowKeys);
     serviceObj[serviceType](selectedRowKeys).then(res => {
@@ -850,7 +849,14 @@ class Info extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const { selectedRowKeys, selectedDetailRowKeys, quote, rightMenu, quotelist, quoteDatialList } = this.props;
+    const {
+      selectedRowKeys,
+      selectedDetailRowKeys,
+      quote,
+      rightMenu,
+      quotelist,
+      quoteDatialList,
+    } = this.props;
     const list = rightMenu === 1 ? quotelist : quoteDatialList;
     const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
     // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
@@ -860,15 +866,15 @@ class Info extends Component {
       if (singleObjcect) res.push(singleObjcect.status);
       return res;
     }, []);
-    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
-    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
+    const isShenPi = isLock1.every(item => Number(item) === 0); // 是否全是0
+    const isChexiao = isLock1.every(item => Number(item) === 2); // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
     if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
     return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
   // 弹窗确定提交回调
-  handleModalOk = (close) => {
+  handleModalOk = close => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
@@ -880,19 +886,26 @@ class Info extends Component {
       default:
         break;
     }
-
   };
 
   // 判断按钮是否禁止 返回boolean
-  returnSisabled = (tag) => {
+  returnSisabled = tag => {
     const { selectedRowKeys, rightMenu, selectedDetailRowKeys } = this.props;
     if (tag === 'plus') return false;
-    if (tag === 'lock') return rightMenu === 1 && selectedRowKeys.length === 0 || rightMenu === 2 && selectedDetailRowKeys.length === 0 || this.returnLockType().disabled;
-    return rightMenu === 1 && selectedRowKeys.length === 0 || rightMenu === 2 && selectedDetailRowKeys.length === 0;
+    if (tag === 'lock')
+      return (
+        (rightMenu === 1 && selectedRowKeys.length === 0) ||
+        (rightMenu === 2 && selectedDetailRowKeys.length === 0) ||
+        this.returnLockType().disabled
+      );
+    return (
+      (rightMenu === 1 && selectedRowKeys.length === 0) ||
+      (rightMenu === 2 && selectedDetailRowKeys.length === 0)
+    );
   };
 
   // 弹窗单选框 回调
-  handleRadio = (e) => {
+  handleRadio = e => {
     const v = e.target.value;
     this.props.dispatch({
       type: `quote/getTimeline`,
@@ -911,10 +924,9 @@ class Info extends Component {
   };
 
   //
-  unLockEdit = (id) => {
+  unLockEdit = id => {
     const { choosenRowData } = this.props;
-    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {
-    });
+    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {});
   };
 
   // 取消弹窗回调
@@ -924,7 +936,7 @@ class Info extends Component {
   };
 
   // 选中某行表头
-  changeChoosenRow = (rowData) => {
+  changeChoosenRow = rowData => {
     const { dispatch } = this.props;
     dispatch({
       type: `quote/getProductChoosenRowData`,
@@ -947,7 +959,7 @@ class Info extends Component {
       productLineName,
       unitOfMeasurementName,
       unitOfWeightName,
-      finishedWeight
+      finishedWeight,
     } = this.props.productChoosenRowData;
     let lastCount = 0;
     let topCount = 0;
@@ -966,12 +978,25 @@ class Info extends Component {
     //   }
     // })
     await getlistProductLine({ productId: id }).then(res => {
-      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+      if (
+        res.head &&
+        res.head.rtnCode === '000000' &&
+        res.body.records &&
+        res.body.records.length > 0
+      ) {
         productLineCoefficientQuotation = res.body.records[0].productLineCoefficientQuotation;
       }
     });
-    await geInitializeCountByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {
-      if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+    await geInitializeCountByProductId({
+      productId: id,
+      customerId: choosenRowData.customerId,
+    }).then(res => {
+      if (
+        res.head &&
+        res.head.rtnCode === '000000' &&
+        res.body.records &&
+        res.body.records.length > 0
+      ) {
         const data = res.body.records[0];
         actualCount = data.actualCount;
         packPrice = data.lastPackPrice;
@@ -1023,14 +1048,14 @@ class Info extends Component {
     this.showProductModalFunc(2);
   };
 
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = selectedRowKeys => {
     this.props.dispatch({
       type: `quote/changeProductselectedKeys`,
       payload: selectedRowKeys,
     });
   };
 
-  onSearch = (v) => {
+  onSearch = v => {
     const { timeline } = this.props;
     const { quoteDateFrom, quoteDateTo } = this.state;
     if (v.quoteDate) {
@@ -1041,63 +1066,97 @@ class Info extends Component {
     this.getList({ sendReq: timeline }, v);
   };
 
-  returnListName = (list, v) => v && this.props.quote[list].length > 0 && this.props.quote[list].find(item => item.value === v).key;
+  returnListName = (list, v) =>
+    v &&
+    this.props.quote[list].length > 0 &&
+    this.props.quote[list].find(item => item.value === v).key;
 
-  getProductSearch = (args) => {
-    this.getProduct({ ...args, search: true })
-  }
+  getProductSearch = args => {
+    this.getProduct({ ...args, search: true });
+  };
 
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct, onSearch, returnListName, getProductSearch } = this;
+    const {
+      state,
+      props,
+      btnFn,
+      getModalContent,
+      returnTitle,
+      handleModalOk,
+      returnLockType,
+      returnSisabled,
+      handleRadio,
+      changeRightMenu,
+      showProductModalFunc,
+      onCancel,
+      returnElement,
+      changeChoosenRow,
+      handleProductModalOk,
+      handleProductModalCancel,
+      onSelectChange,
+      getProduct,
+      onSearch,
+      returnListName,
+      getProductSearch,
+    } = this;
     const { modalType, addloading } = state;
-    const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData, productListLoading } = props;
+    const {
+      quote,
+      list,
+      selectKey,
+      choosenRowData,
+      rightMenu,
+      choosenDetailRowData,
+      showProductModal,
+      productPagination,
+      productList,
+      productselectedKeys,
+      productChoosenRowData,
+      productListLoading,
+    } = props;
 
-
-    const modalFooter = modalType === 'plus' ? [
-      <Button
-        key="back"
-        onClick={onCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(true);
-        }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(false);
-        }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-        <Button
-          key="back"
-          onClick={onCancel}
-        >
-          取消
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={addloading}
-          onClick={() => {
-            handleModalOk(false);
-          }}
-        >
-          保存
-        </Button>,
-      ];
+    const modalFooter =
+      modalType === 'plus'
+        ? [
+            <Button key="back" onClick={onCancel}>
+              取消
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
+                handleModalOk(true);
+              }}
+            >
+              保存
+            </Button>,
+            <Button
+              key="continue"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
+                handleModalOk(false);
+              }}
+            >
+              继续添加
+            </Button>,
+          ]
+        : [
+            <Button key="back" onClick={onCancel}>
+              取消
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
+                handleModalOk(false);
+              }}
+            >
+              保存
+            </Button>,
+          ];
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1123,7 +1182,7 @@ class Info extends Component {
             </div>
           </div>
         </div>
-        {handleModalOk &&
+        {handleModalOk && (
           <Modal
             zIndex={1}
             maskClosable={false}
@@ -1135,15 +1194,14 @@ class Info extends Component {
             visible={modalType !== ''}
             footer={modalFooter}
             onCancel={onCancel}
-
           >
             {getModalContent()}
           </Modal>
-        }
+        )}
 
         <Modal
           maskClosable={false}
-          title='选择产品'
+          title="选择产品"
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
@@ -1173,16 +1231,33 @@ class Info extends Component {
   }
 }
 
-
 const radioArr = ['报价主页', '报价明细'];
 
 // 右手边正文内容
-const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisabled, handleRadio, changeRightMenu, rightMenu, choosenDetailRowData, returnElement, onSearch, returnListName }) => (
+const RightContent = ({
+  type,
+  choosenRowData,
+  btnFn,
+  returnLockType,
+  returnSisabled,
+  handleRadio,
+  changeRightMenu,
+  rightMenu,
+  choosenDetailRowData,
+  returnElement,
+  onSearch,
+  returnListName,
+}) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
       <Col lg={16} md={24}>
-        <CenterInfo type={type} handleRadio={handleRadio} returnElement={returnElement} onSearch={onSearch} />
+        <CenterInfo
+          type={type}
+          handleRadio={handleRadio}
+          returnElement={returnElement}
+          onSearch={onSearch}
+        />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
       <Col lg={8} md={24}>
@@ -1195,20 +1270,20 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
             value={rightMenu}
             style={{ textAlign: 'center' }}
           >
-            {
-              radioArr.map((item, index) =>
-                <Radio.Button
-                  key={item}
-                  style={{
-                    height: 40,
-                    width: 130,
-                    textalign: 'center',
-                    lineHeight: '40px',
-                  }}
-                  value={index + 1}
-                >{item}
-                </Radio.Button>)
-            }
+            {radioArr.map((item, index) => (
+              <Radio.Button
+                key={item}
+                style={{
+                  height: 40,
+                  width: 130,
+                  textalign: 'center',
+                  lineHeight: '40px',
+                }}
+                value={index + 1}
+              >
+                {item}
+              </Radio.Button>
+            ))}
           </Radio.Group>
           <Card bordered={false} style={{ overflow: 'auto' }}>
             <GetRenderitem
@@ -1219,20 +1294,25 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
           </Card>
 
           {/*  */}
-          <Card bodyStyle={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            paddingLeft: 5,
-            paddingRight: 5,
-          }}
+          <Card
+            bodyStyle={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              paddingLeft: 5,
+              paddingRight: 5,
+            }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {btnGroup.map(({ name, tag, type: t }) => (
                 <Button
                   key={tag}
                   className={styles.buttomControl}
-                  type={(t === 'danger' || (returnLockType().type === 2 && tag === 'lock')) ? 'danger' : 'primary'}
+                  type={
+                    t === 'danger' || (returnLockType().type === 2 && tag === 'lock')
+                      ? 'danger'
+                      : 'primary'
+                  }
                   icon={tag}
                   size="small"
                   disabled={returnSisabled(tag)}
@@ -1244,38 +1324,43 @@ const RightContent = ({ type, choosenRowData, btnFn, returnLockType, returnSisab
                 </Button>
               ))}
             </div>
-            {<div style={{ paddingTop: '10px' }}>
-
-              <Upload
-                name='file'
-                action={HttpFetch.productExcelImport}
-                showUploadList={false}
-                headers={{
-                  token: getCurrentUser() ? getCurrentUser().token : '',
-                }}
-                onChange={(info) => {
-                  if (info.file.status !== 'uploading') {
-                    // console.log(info.file, info.fileList);
-                  }
-                  if (info.file.status === 'done') {
-                    // 获取初始表单数据
-                    btnFn('freshList');
-                    const { response } = info.file;
-
-                    if (response.head && response.head.btnCode !== '000000') {
-                      message.error(response.head.rtnMsg);
+            {
+              <div style={{ paddingTop: '10px' }}>
+                <Upload
+                  name="file"
+                  action={HttpFetch.productExcelImport}
+                  showUploadList={false}
+                  headers={{
+                    token: getCurrentUser() ? getCurrentUser().token : '',
+                  }}
+                  onChange={info => {
+                    if (info.file.status !== 'uploading') {
+                      // console.log(info.file, info.fileList);
                     }
+                    if (info.file.status === 'done') {
+                      // 获取初始表单数据
+                      btnFn('freshList');
+                      const { response } = info.file;
 
-                    // console.log(JSON.stringify(info.file.response))
-                    // message.success(info.file.response);
-                  } else if (info.file.status === 'error') {
-                    message.error(`import fail`);
-                  }
-                }}
-              > <Button type="primary" size="small" className={styles.buttomControl}><Icon type="upload" />导入</Button>
-              </Upload>
-            </div>}
+                      if (response.head && response.head.btnCode !== '000000') {
+                        message.error(response.head.rtnMsg);
+                      }
 
+                      // console.log(JSON.stringify(info.file.response))
+                      // message.success(info.file.response);
+                    } else if (info.file.status === 'error') {
+                      message.error(`import fail`);
+                    }
+                  }}
+                >
+                  {' '}
+                  <Button type="primary" size="small" className={styles.buttomControl}>
+                    <Icon type="upload" />
+                    导入
+                  </Button>
+                </Upload>
+              </div>
+            }
           </Card>
         </div>
       </Col>
@@ -1288,7 +1373,7 @@ const rowArr = [
   { key: '报价单号', value: 'quoteNumber' },
   { key: '报价日期', value: 'quoteDate' },
   { key: '客户', value: 'customerNo' },
-  { key: '类别', value: 'type', belong: 3, 'list': 'wordbookdropdown' },
+  { key: '类别', value: 'type', belong: 3, list: 'wordbookdropdown' },
   { key: '终客', value: 'endNo' },
   { key: '中文名', value: 'zhName' },
   { key: '英文名', value: 'enName' },
@@ -1296,12 +1381,12 @@ const rowArr = [
   { key: '手机', value: 'customerPhone' },
   { key: 'Email', value: 'customerEmail' },
   { key: '报价方式', value: 'quoteMethod', belong: 2 },
-  { key: '主材价', value: 'quotePrice', belong: 3, 'list': 'materialPriceList' },
+  { key: '主材价', value: 'quotePrice', belong: 3, list: 'materialPriceList' },
   { key: '结算币种', value: 'currency' },
   { key: '税率', value: 'taxRate' },
   { key: '紧急程度', value: 'emergency', belong: 2 },
   { key: '计石重', value: 'isWeighStones', belong: 2 },
-  { key: '字印编码', value: 'markingId', belong: 3, 'list': 'markinglist' },
+  { key: '字印编码', value: 'markingId', belong: 3, list: 'markinglist' },
   { key: '字印英文名', value: 'markingEnName' },
   { key: '包装单价', value: 'packPriceType', belong: 2 },
   { key: '客户备料', value: 'customerPreparation', belong: 2 },
@@ -1321,33 +1406,35 @@ const GetRenderitem = ({ data, type, returnListName }) => {
   };
 
   const returnRowName = ({ value, list, belong }) => {
-    return belong === 2 ?
-      returnName(value, data[value])
-      :
-      belong === 3 ?
-        returnListName(list, data[value]) :
-        data[value]
-  }
+    return belong === 2
+      ? returnName(value, data[value])
+      : belong === 3
+      ? returnListName(list, data[value])
+      : data[value];
+  };
 
   const arr = type === 1 ? rowArr : detailList;
   return (
-    <div style={{ marginLeft: 10, marginTop: 10 }} className={styles.getRenderitem} onClick={selectRowItem}>
+    <div
+      style={{ marginLeft: 10, marginTop: 10 }}
+      className={styles.getRenderitem}
+      onClick={selectRowItem}
+    >
       <DescriptionList className={styles.headerList} size="small" col="1">
-        {
-          arr.map(({ key, value, belong, list }) => {
-            const name = returnRowName({ belong, value, list })
-            return name ? <Description key={value} term={key}>
-              {
-                name
-              }
-            </Description> : ''
-          })
-        }
+        {arr.map(({ key, value, belong, list }) => {
+          const name = returnRowName({ belong, value, list });
+          return name ? (
+            <Description key={value} term={key}>
+              {name}
+            </Description>
+          ) : (
+            ''
+          );
+        })}
       </DescriptionList>
     </div>
   );
 };
-
 
 // Table 中间列表内容
 @Form.create()
@@ -1371,8 +1458,7 @@ const GetRenderitem = ({ data, type, returnListName }) => {
   };
 })
 class CenterInfo extends Component {
-
-  getDetailList = (params) => {
+  getDetailList = params => {
     const { dispatch, pagination, choosenRowData } = this.props;
     dispatch({
       type: `quote/getDetailList`,
@@ -1410,7 +1496,7 @@ class CenterInfo extends Component {
   };
 
   // 当表头重复点击选中 清空选中 清空表体
-  clearFn = (type) => {
+  clearFn = type => {
     const { dispatch } = this.props;
     if (type === 1) {
       dispatch({
@@ -1423,7 +1509,7 @@ class CenterInfo extends Component {
     }
   };
 
-  changeSearchParams = (v) => {
+  changeSearchParams = v => {
     const { dispatch } = this.props;
     dispatch({
       type: `quote/changeSearchParams`,
@@ -1431,7 +1517,7 @@ class CenterInfo extends Component {
     });
   };
 
-  changeSearchDetailParams = (v) => {
+  changeSearchDetailParams = v => {
     const { dispatch } = this.props;
     dispatch({
       type: `quote/changeSearchParams`,
@@ -1440,8 +1526,32 @@ class CenterInfo extends Component {
   };
 
   render() {
-    const { onSelectChange, props, clearFn, getDetailList, changeSearchParams, changeSearchDetailParams } = this;
-    const { choosenRowData, pagination, selectedRowKeys, selectedDetailRowKeys, listLoading, quoteDatialList, timeline, handleRadio, quotelist, choosenDetailRowData, detailChoosenType, detailPagination, quote, returnElement, listDetailLoading, onSearch } = props;
+    const {
+      onSelectChange,
+      props,
+      clearFn,
+      getDetailList,
+      changeSearchParams,
+      changeSearchDetailParams,
+    } = this;
+    const {
+      choosenRowData,
+      pagination,
+      selectedRowKeys,
+      selectedDetailRowKeys,
+      listLoading,
+      quoteDatialList,
+      timeline,
+      handleRadio,
+      quotelist,
+      choosenDetailRowData,
+      detailChoosenType,
+      detailPagination,
+      quote,
+      returnElement,
+      listDetailLoading,
+      onSearch,
+    } = props;
     return (
       <div className={styles.view_left_content}>
         <div style={{ marginBottom: 20 }}>
@@ -1474,7 +1584,7 @@ class CenterInfo extends Component {
             pagination={pagination}
             handleTableChange={onSearch}
             selectedRowKeys={selectedRowKeys}
-            onSelectChange={(data) => {
+            onSelectChange={data => {
               onSelectChange(data, 1);
             }}
             listLoading={listLoading}
@@ -1485,16 +1595,14 @@ class CenterInfo extends Component {
 
         <div style={{ marginBottom: 20 }}>
           <Radio.Group value={detailChoosenType} buttonStyle="solid" onChange={handleRadio}>
-            {
-              menuRadio2.map((item, index) => {
-                return (
-                  <Radio.Button value={index + 1} key={item}>
-                    {item}
-                    {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-                  </Radio.Button>
-                );
-              })
-            }
+            {menuRadio2.map((item, index) => {
+              return (
+                <Radio.Button value={index + 1} key={item}>
+                  {item}
+                  {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+                </Radio.Button>
+              );
+            })}
           </Radio.Group>
         </div>
         <SearchForm
@@ -1531,4 +1639,3 @@ class CenterInfo extends Component {
 const menuRadio2 = ['产品清单'];
 
 export default Info;
-
