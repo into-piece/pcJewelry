@@ -6,7 +6,7 @@
 import {
   Carousel,
   Card,
-  Divider,
+  Divider,List, Icon
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import Zmage from 'react-zmage';
@@ -43,7 +43,7 @@ const GetRenderitem = ({ data, type, items }) => {
   };
   const arr = items[type];
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
-  const videos = data.videos && data.videos.flatMap(e => e.videoPath);
+  const {videos} = data;
 
   return (
     <Card bordered={false} style={{overflow:"auto"}} onClick={selectRowItem}>
@@ -62,6 +62,21 @@ const GetRenderitem = ({ data, type, items }) => {
           )
         }
       </DescriptionList>}
+      {videos&&videos.length>0&& <List
+        header={<div className={styles.videotitle}>视频附件:</div>}
+        itemLayout="horizontal"
+        dataSource={videos}
+        renderItem={item => (
+          <List.Item>
+            {/* <List.Item.Meta */}
+            {/* avatar={<Avatar icon="video-camera" style={{ backgroundColor: '#1890ff' }} />} */}
+            {/* title={<a href={item.videoPath} target="_blank"></a>} */}
+            {/* /> */}
+            <Icon type="video-camera" style={{ color: '#1890ff',fontSize:'24px' ,marginRight:'20px',verticalAlign:'middle'}} />
+            {item.fileName ||item.videoPath.substring(item.videoPath.lastIndexOf('\\')+1,item.videoPath.length)}
+          </List.Item>
+        )}
+      />}
     </Card>
   );
 };

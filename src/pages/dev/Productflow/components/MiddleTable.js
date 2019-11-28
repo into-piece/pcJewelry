@@ -35,6 +35,7 @@ class MiddleTable extends Component {
   changeChoosenRow = (rowData, type) => {
     const { dispatch, pagination, onSearch } = this.props;
     const str = type === 1 ? '' : 'Second';
+
     dispatch({
       type: `${defaultModelName}/setChoosenRowData${str}`,
       payload: rowData,
@@ -55,6 +56,7 @@ class MiddleTable extends Component {
     const { dispatch } = this.props;
 
     const str = type === 2 ? 'Second' : '';
+
     dispatch({
       type: `${defaultModelName}/changeSelectedRowKeys${str}`,
       payload: selectedRowKeys,

@@ -42,6 +42,7 @@ function formatter(data, parentAuthority, parentName) {
       } else {
         locale = `menu.erp.${item.name}`;
       }
+
       // if enableMenuLocale use item.name,
       // close menu international
       const name = menu.disableLocal
@@ -142,6 +143,7 @@ const convertMenuComponents = (a, b) => {
       convertMenuComponents(a, e.children);
     } else {
       e.component = findComponent(a, e.path);
+       e.name =formatMessage({ id: e.locale, defaultMessage: e.name });
     }
   });
 
