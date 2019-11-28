@@ -83,7 +83,7 @@ class Index extends Component {
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
     filelist: [],
-    videoslist: [],
+    videolist: [],
   };
 
   componentDidMount() {
@@ -454,7 +454,7 @@ class Index extends Component {
         {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
           <FormItem
             label="上传视频"
-            key="uploadVideo"
+            key="uploadPic"
             labelCol={{ span: 3 }}
             wrapperCol={{
               span: 20,
@@ -464,9 +464,9 @@ class Index extends Component {
             <UploadVideo
               key="upvideo"
               maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.videos  : choosenRowDataSecond.videos): []}
+              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
               fileListFun={(list) => {
-                this.setState({ videoslist: list });
+                this.setState({ videolist: list });
               }}
             />
           </FormItem>
