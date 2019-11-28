@@ -464,7 +464,7 @@ class Index extends Component {
             <UploadVideo
               key="upvideo"
               maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
+              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.videos  : choosenRowDataSecond.videos): []}
               fileListFun={(list) => {
                 this.setState({ videolist: list });
               }}
