@@ -350,6 +350,14 @@ class Index extends Component {
 
     const dataArr = modalInput[rightActive];
     const fieldslist = dataArr.map(e=>e.value)
+
+    const filelist = this.state.filelist.flatMap(e => e.url);
+    const videolist = this.state.videolist.flatMap(e => e.url);
+
+    if(['productProcess'].indexOf(rightActive)>-1){
+      params={...params,picPath:filelist,videoPath:videolist}
+    }
+
     form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         params = {
@@ -446,6 +454,7 @@ class Index extends Component {
               maxcount={10}
               defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
               fileListFun={(list) => {
+                console.log('filelist',list)
                 this.setState({ filelist: list });
               }}
             />

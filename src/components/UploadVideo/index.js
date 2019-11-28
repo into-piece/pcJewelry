@@ -32,23 +32,14 @@ class UploadVideo extends Component {
   // Upload变动
   handleChange = info => {
     let fileList = [...info.fileList];
+
     const { file } = info;
     const {  fileListFun } = this.props;
 
-    // if (file.type) {
-    //   const isJPG = file.type.indexOf('image') !== -1;
-    //   if (!isJPG) {
-    //     message.error('只能上传视频格式的文件');
-    //     return;
-    //   }
-    // }
-
-    fileList = fileList.slice(0, fileList.length - 1);
-
-
+    fileList = fileList.filter(e=>e.status==='done').map(e=>{
+        return {name:e.name,url:e.response.body.records[0].savePath, thumbUrl: e.response.body.records[0].savePath, uid:e.uid, status: 'done'}
+    })
     if (fileListFun) fileListFun(fileList);
-
-    this.setState({ fileList });
   };
 
 
@@ -58,10 +49,10 @@ class UploadVideo extends Component {
 
     return [
       <Upload
-        // accept='image/*'
-        beforeUpload={() => {
-          return false;
-        }}
+        accept='video/*'
+        // beforeUpload={() => {
+        //   return false;
+        // }}
 
         name="file"
         action={HttpFetch.uploadVideo}
@@ -74,7 +65,7 @@ class UploadVideo extends Component {
         }}
         key="antdUploadvideo"
         listType='picture-card'
-        fileList={fileList}
+        defaultFileList={fileList}
         onChange={handleChange}
       >
         <div>
