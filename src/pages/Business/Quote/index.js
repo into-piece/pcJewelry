@@ -644,9 +644,11 @@ class Info extends Component {
                         },
                       ],
                       initialValue: isEdit
-                        ? (rightMenu === 1
-                          ? value === 'quoteDate'? moment(choosenRowData[value]):choosenRowData[value]
-                          : choosenDetailRowData[value])
+                        ? rightMenu === 1
+                          ? value === 'quoteDate'
+                            ? moment(choosenRowData[value])
+                            : choosenRowData[value]
+                          : choosenDetailRowData[value]
                         : value === 'quoteDate'
                         ? undefined
                         : initValue || (number ? '0.00' : undefined),
@@ -1066,10 +1068,13 @@ class Info extends Component {
     this.getList({ sendReq: timeline }, v);
   };
 
-  returnListName = (list, v) =>
-    v &&
-    this.props.quote[list].length > 0 &&
-    this.props.quote[list].find(item => item.value === v).key;
+  returnListName = (list, v) => {
+    const { quote } = this.props;
+    if (v && quote[list].length > 0) {
+      const value = quote[list].find(item => item.value === v);
+      return (value && value.key) || '';
+    }
+  };
 
   getProductSearch = args => {
     this.getProduct({ ...args, search: true });
