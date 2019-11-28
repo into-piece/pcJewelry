@@ -17,13 +17,13 @@ import {
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import UploadImg from '@/components/UploadImg';
-import UploadVideo from '@/components/UploadVideo';
 // 详情内容
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
+import UploadImg from '@/components/UploadImg';
+import UploadVideo from '@/components/UploadVideo';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -32,6 +32,7 @@ import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
 import serviceObj from '@/services/dev';
+import { modalContent } from '../Raw/config';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -81,8 +82,6 @@ class Index extends Component {
     secondTableActive: 'productProcess',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
-    filelist: [],
-    videoslist: [],
   };
 
   componentDidMount() {
@@ -346,12 +345,6 @@ class Index extends Component {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
     this.setState({ addloading: true });
-    const filelist = this.state.filelist.flatMap(e => e.url);
-    const videoslist = this.state.filelist.flatMap(e => e.url);
-
-
-    params = { ...params, picPath: filelist,videoPath:videoslist };
-
 
     const dataArr = modalInput[rightActive];
     const fieldslist = dataArr.map(e=>e.value)
@@ -436,7 +429,7 @@ class Index extends Component {
             );
           })
         }
-        {['productProcess'].indexOf(rightActive)>-1&&<Col span={18}>
+        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -449,29 +442,9 @@ class Index extends Component {
             <UploadImg
               key="uimg"
               maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ? choosenRowData.pictures : choosenRowDataSecond.pictures) : []}
+              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
               fileListFun={(list) => {
                 this.setState({ filelist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
-        {['productProcess'].indexOf(rightActive)>-1&&<Col span={18}>
-          <FormItem
-            label="上传视频"
-            key="uploadVideo"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadVideo
-              key="upvideos"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ? choosenRowData.videos : choosenRowDataSecond.videos) : []}
-              fileListFun={(list) => {
-                this.setState({ videoslist: list });
               }}
             />
           </FormItem>
