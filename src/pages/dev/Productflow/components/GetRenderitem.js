@@ -73,7 +73,7 @@ const GetRenderitem = ({ data, type, items }) => {
             {/* title={<a href={item.videoPath} target="_blank"></a>} */}
             {/* /> */}
             <Icon type="video-camera" style={{ color: '#1890ff',fontSize:'24px' ,marginRight:'20px',verticalAlign:'middle'}} />
-            {item.fileName ||item.videoPath.substring(item.videoPath.lastIndexOf('\\')+1,item.videoPath.length)}
+            <a href={item.videoPath} target="_blank">{item.fileName ||item.videoPath.substring(item.videoPath.lastIndexOf('\\')+1,item.videoPath.length)}</a>
           </List.Item>
         )}
       />}
