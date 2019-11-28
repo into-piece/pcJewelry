@@ -73,8 +73,8 @@ const fetchArr = [
     type: 1,
     key1: 'brandZhName',
     value1: 'brandNo',
-    zhName:'brandZhName',
-    enName:'brandEnName'
+    zhName: 'brandZhName',
+    enName: 'brandEnName'
   },
   {
     key: 'productType',
@@ -107,8 +107,8 @@ const fetchArr = [
     value: queryMstWordList,
     key1: 'wordbookContentZh',
     value1: 'wordbookCode',
-    zhName:'wordbookContentZh',
-    enName:'wordbookContentEn'
+    zhName: 'wordbookContentZh',
+    enName: 'wordbookContentEn'
   },
   {
     key: 'unitOfMeasurement',
@@ -117,6 +117,13 @@ const fetchArr = [
   {
     key: 'unitOfWeight',
     value: queryMeasureUniList,
+  },
+
+  {
+    key: 'mouldNo',
+    value: queryMoldList,
+    key1: 'mainMoldCode',
+    value1: 'mainMoldCode',
   },
 ];
 const { Option } = Select;
@@ -226,9 +233,9 @@ class ProductDetail extends Component {
     productParams: {},
     isEditItem: false,
     batchUpdateShow: false,
-    nowData : {
+    nowData: {
       brand: [],
-      productType: [], 
+      productType: [],
       productColor: [],
       gemColor: [],
       platingColor: [],
@@ -535,30 +542,30 @@ class ProductDetail extends Component {
     const { dispatch, form, product } = this.props;
     const { fileList } = this.state;
 
-    const arr = ['customerId','productColor','gemColor','platingColor','brand','productType','sourceOfProduct','unitOfMeasurement','unitOfWeight','finishedWeight']
-    form.validateFields(arr,(err, fieldsValue) => {
+    const arr = ['customerId', 'productColor', 'gemColor', 'platingColor', 'brand', 'productType', 'sourceOfProduct', 'unitOfMeasurement', 'unitOfWeight', 'finishedWeight', 'mouldNo']
+    form.validateFields(arr, (err, fieldsValue) => {
       if (err) {
         return;
       }
       console.log(fieldsValue, '===============');
-      const {customerId,productColor,gemColor,platingColor} = product
+      const { customerId, productColor, gemColor, platingColor } = product
 
-    let customerV  = fieldsValue.customerId.map(item=> (customerId.filter(({ value }) => value === item)[0]))
-    let productColorV  = fieldsValue.productColor.map(item=> (productColor.filter(({ value }) => value === item)[0]))
-    let gemColorV  = fieldsValue.gemColor.map(item=> (gemColor.filter(({ value }) => value === item)[0]))
-    let platingColorV  = fieldsValue.platingColor.map(item=> (platingColor.filter(({ value }) => value === item)[0]))
+      let customerV = fieldsValue.customerId.map(item => (customerId.filter(({ value }) => value === item)[0]))
+      let productColorV = fieldsValue.productColor.map(item => (productColor.filter(({ value }) => value === item)[0]))
+      let gemColorV = fieldsValue.gemColor.map(item => (gemColor.filter(({ value }) => value === item)[0]))
+      let platingColorV = fieldsValue.platingColor.map(item => (platingColor.filter(({ value }) => value === item)[0]))
 
-    const params = { ...fieldsValue, customer:customerV, productColor:productColorV, gemColor:gemColorV, platingColor:platingColorV};
+      const params = { ...fieldsValue, customer: customerV, productColor: productColorV, gemColor: gemColorV, platingColor: platingColorV };
 
-      const key = ['brand','productType']
-      key.map(item=>{
+      const key = ['brand', 'productType']
+      key.map(item => {
         params[item] = product[item].filter(({ value }) => value === fieldsValue[item]);
       })
       params.brand = params.brand[0]
       params.productType = params.productType[0]
       const filelistArr = fileList.flatMap(e => e.url);
       params.picPath = filelistArr
- 
+
 
       productBatchUpdate(params).then(res => {
         this.setState({
@@ -619,20 +626,20 @@ class ProductDetail extends Component {
         继续添加
       </Button>,
     ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
+        <Button
+          key="back"
+          onClick={this.handleCancel}
+        >
           取消
       </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={productUpdateloading}
-        onClick={() => {
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
             this.handleSubmit(false);
           }}
-      >
+        >
           保存
       </Button>,
       ];
@@ -718,7 +725,7 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-              <div />
+                <div />
               )}
           </Card>
         </div>
@@ -885,7 +892,7 @@ class ProductDetail extends Component {
           className={styles.carousel_image}
           src={v}
           edge={20}
-          set={images.map(image => ({ src: image ,style: { minWidth: 800,minHeight: 800 },}))}
+          set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 }, }))}
         />
       </div>
     ));
@@ -1524,7 +1531,7 @@ class ProductDetail extends Component {
       }
 
       this.setState({
-        productParams: params,pi
+        productParams: params, pi
       });
     });
 

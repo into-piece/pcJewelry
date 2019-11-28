@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Col, Form, Icon, Input, InputNumber, Row, Select } from 'antd';
 import business from "../../business.less";
 import styles from '../../../Account/Center/Center.less';
+
 const { Option } = Select
 const FormItem = Form.Item;
 
@@ -194,6 +195,20 @@ class ProductSearchFrom extends Component {
               {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
+          <Col lg={8} md={8} sm={8} xs={8}>
+            <FormItem label="状态" className={business.from_content_col}>
+              {getFieldDecorator('status', { initialValue: 0 })(
+                <Select
+                  style={{ width: 174 }}
+                  placeholder="请选择"
+                >
+                  <Option value={0}>输入</Option>
+                  <Option value={1}>使用中</Option>
+                  <Option value={2}>审批</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
           <Col lg={8}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -207,6 +222,7 @@ class ProductSearchFrom extends Component {
               </a>
             </span>
           </Col>
+
         </Row>
       </Form>
     );

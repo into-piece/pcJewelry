@@ -43,6 +43,12 @@
     "list": "sourceOfProduct"
   },
   {
+    "key": "模具号",
+    "value": "mouldNo",
+    "type": 2,
+    "list": "mouldNo"
+  },
+  {
     "key": "数量单位",
     "value": "unitOfMeasurement",
     "noNeed": true,

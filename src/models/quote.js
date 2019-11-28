@@ -217,10 +217,12 @@ export default {
       });
     },
 
-    * getProductList({ payload }, { call, put }) {
+    * getProductList({ payload, callback }, { call, put }) {
       const response = yield call(listProductNotCreateQoute, payload.params);
-      console.log(response)
       const productList = response.body
+      if (callback && typeof callback === 'function') {
+        callback(productList);
+      }
       yield put({
         type: 'changeState',
         payload: { data: productList, typeName: 'productList' },

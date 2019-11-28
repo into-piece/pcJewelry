@@ -73,7 +73,8 @@ let productflow = [
     title: <div className={styles.row_normal2}>负责人</div>,
     dataIndex: 'chargeUser',
     key: 'chargeUser',
-    width: 100,
+    render: (data,item) =>item.chargeUserName
+
   },
 ];
 
@@ -100,12 +101,6 @@ let productProcess = [
     dataIndex: 'engName',
     key: 'engName',
     width: 60,
-  },
-  {
-    title: <div className={styles.row_normal2}>排序号码</div>,
-    dataIndex: 'sortNum',
-    key: 'sortNum',
-    width: 50,
   },
   {
     title: <div className={styles.row_normal2}>耗损(%)</div>,

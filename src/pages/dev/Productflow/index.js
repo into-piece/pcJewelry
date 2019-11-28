@@ -22,6 +22,8 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
+import UploadImg from '@/components/UploadImg';
+import UploadVideo from '@/components/UploadVideo';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -80,6 +82,8 @@ class Index extends Component {
     secondTableActive: 'productProcess',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
+    filelist: [],
+    videolist: [],
   };
 
   componentDidMount() {
@@ -101,6 +105,11 @@ class Index extends Component {
 
   initDrop = () => {
     const { dispatch } = this.props;
+    //
+    dispatch({
+      type: `${defaultModelName}/getUsersList`,
+      payload:{current:0,size:5000}
+    });
     // 类别下拉
     dispatch({
       type: `${defaultModelName}/getwordbookdropdown`,
@@ -181,7 +190,7 @@ class Index extends Component {
               this.handleSelectChange && this.handleSelectChange(v, value);
             }}
           >
-            {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
+            {data[list] && data[list].map((i) => <Option value={i.value} key={i.value}>{i.key}</Option>,
             )}
           </Select>
         );
@@ -217,7 +226,20 @@ class Index extends Component {
           }
         </Radio.Group>;
       case 7:
-        return <span>{form.getFieldValue(value) || ''}</span>;
+        return (<Select
+          placeholder="请选择"
+          mode="multiple"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {data && data[list] && data[list].map(({ value, key }) =>
+
+            <Option value={value} key={value}>{key}</Option>,
+          )}
+        </Select>);
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
@@ -227,6 +249,7 @@ class Index extends Component {
             this.handleDatePicker(date, dateString, value);
           }}
         />;
+
       default:
         return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
     }
@@ -408,6 +431,46 @@ class Index extends Component {
             );
           })
         }
+        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
+          <FormItem
+            label="上传图片"
+            key="uploadPic"
+            labelCol={{ span: 3 }}
+            wrapperCol={{
+              span: 20,
+            }
+            }
+          >
+            <UploadImg
+              key="uimg"
+              maxcount={10}
+              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
+              fileListFun={(list) => {
+                this.setState({ filelist: list });
+              }}
+            />
+          </FormItem>
+        </Col>}
+        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
+          <FormItem
+            label="上传视频"
+            key="uploadPic"
+            labelCol={{ span: 3 }}
+            wrapperCol={{
+              span: 20,
+            }
+            }
+          >
+            <UploadVideo
+              key="upvideo"
+              maxcount={10}
+              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.videos  : choosenRowDataSecond.videos): []}
+              fileListFun={(list) => {
+                this.setState({ videolist: list });
+              }}
+            />
+          </FormItem>
+        </Col>}
         {content}
       </Form>
     );

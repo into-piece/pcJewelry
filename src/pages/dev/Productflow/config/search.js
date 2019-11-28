@@ -15,7 +15,6 @@ export const productProcess = [
   { key: '工序产能', value: 'processCapacity' },
   { key: '允许损耗(%)', value: 'isWastage' ,number:true},
   { key: '英文名称', value: 'engName' },
-  { key: '排序号', value: 'sortNum',number:true },
 ];
 
 

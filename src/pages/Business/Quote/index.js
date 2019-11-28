@@ -338,6 +338,12 @@ class Info extends Component {
     dispatch({
       type: 'quote/getProductList',
       payload: { params: { ...productPagination, ...args } },
+      callback: (res) => {
+        if (res && res.records.length === 1 && args.search) {
+          this.changeChoosenRow(res.records[0])
+          console.log(res);// 请求完成后返回的结果
+        }
+      }
     });
   };
 
@@ -465,7 +471,7 @@ class Info extends Component {
       const date = form.getFieldValue('quoteDate') || ''
       form.setFieldsValue({
         customerShotName: shotName,
-        quoteNumber: moment(date).format('YYYYMMDD') + '_Quote_' + shotName,
+        quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
         currency: currencyCode,
       });
     }
@@ -517,7 +523,7 @@ class Info extends Component {
     const quoteDate = moment(date[0]).valueOf();
     form.setFieldsValue({
       quoteDate,
-      quoteNumber: moment(quoteDate).format('YYYYMMDD') + '_Quote_' + customerShotName,
+      quoteNumber: `${moment(quoteDate).format('YYYYMMDD')}_Quote_${customerShotName}`,
     });
   }
 
@@ -610,12 +616,12 @@ class Info extends Component {
       form,
       choosenDetailRowData,
     } = this.props;
-    const { getFieldDecorator } = form;
+    const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
-    const content = '';
     const isEdit = modalType === 'edit';
     const { quote } = this.props;
     const addArr = rightMenu === 1 ? headList : detailList;
+    const productTypeName = getFieldValue('productTypeName')
     return (
       <Form size="small">
         {
@@ -628,7 +634,7 @@ class Info extends Component {
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightMenu === 1 ? choosenRowData[value] : choosenDetailRowData[value]) : value === 'quoteDate' ? moment() : initValue || (number ? 0 : undefined),
+                      initialValue: isEdit ? (rightMenu === 1 ? choosenRowData[value] : choosenDetailRowData[value]) : value === 'quoteDate' ? moment() : initValue || (number ? '0.00' : undefined),
                     })(this.returnElement({
                       key,
                       value,
@@ -648,7 +654,39 @@ class Info extends Component {
             );
           })
         }
-        {content}
+
+        {rightMenu === 2 && productTypeName === '戒围' &&
+          <React.Fragment>
+            <div className="addModal">
+              <FormItem
+                label={'戒围标准'}
+              >
+                {
+                  getFieldDecorator('ringAroundStId', {
+                    rules: [{ required: false, message: '请输入戒围标准' }],
+                    initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
+                  })(
+                    <Input style={{ width: '100' }} placeholder="请输入戒围标准" />
+                  )
+                }
+              </FormItem>
+            </div>
+            <div className="addModal">
+              <FormItem
+                label={'戒围号'}
+              >
+                {
+                  getFieldDecorator('ringAroundStId', {
+                    rules: [{ required: true, message: '请输入戒围标准' }],
+                    initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
+                  })(
+                    <Input style={{ width: '100' }} placeholder="请输入戒围标准" />
+                  )
+                }
+              </FormItem>
+            </div>
+          </React.Fragment>
+        }
       </Form>
     );
   };
@@ -1005,8 +1043,12 @@ class Info extends Component {
 
   returnListName = (list, v) => v && this.props.quote[list].length > 0 && this.props.quote[list].find(item => item.value === v).key;
 
+  getProductSearch = (args) => {
+    this.getProduct({ ...args, search: true })
+  }
+
   render() {
-    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct, onSearch, returnListName } = this;
+    const { state, props, btnFn, getModalContent, returnTitle, handleModalOk, returnLockType, returnSisabled, handleRadio, changeRightMenu, showProductModalFunc, onCancel, returnElement, changeChoosenRow, handleProductModalOk, handleProductModalCancel, onSelectChange, getProduct, onSearch, returnListName, getProductSearch } = this;
     const { modalType, addloading } = state;
     const { quote, list, selectKey, choosenRowData, rightMenu, choosenDetailRowData, showProductModal, productPagination, productList, productselectedKeys, productChoosenRowData, productListLoading } = props;
 
@@ -1044,7 +1086,7 @@ class Info extends Component {
           onClick={onCancel}
         >
           取消
-      </Button>,
+        </Button>,
         <Button
           key="submit"
           type="primary"
@@ -1054,7 +1096,7 @@ class Info extends Component {
           }}
         >
           保存
-      </Button>,
+        </Button>,
       ];
     return (
       <div className={styles.page}>
@@ -1122,7 +1164,7 @@ class Info extends Component {
             choosenRowData={productChoosenRowData}
             onSelectChange={onSelectChange}
             listLoading={productListLoading}
-            onSearch={getProduct}
+            onSearch={getProductSearch}
             changeProductSearch={getProduct}
           />
         </Modal>
