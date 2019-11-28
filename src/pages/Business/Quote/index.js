@@ -1290,7 +1290,7 @@ const RightContent = ({
               </Radio.Button>
             ))}
           </Radio.Group>
-          <Card bordered={false} style={{ overflow: 'auto' }}>
+          <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
             <GetRenderitem
               data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
               type={rightMenu}
@@ -1329,43 +1329,41 @@ const RightContent = ({
                 </Button>
               ))}
             </div>
-            {
-              <div style={{ paddingTop: '10px' }}>
-                <Upload
-                  name="file"
-                  action={HttpFetch.productExcelImport}
-                  showUploadList={false}
-                  headers={{
-                    token: getCurrentUser() ? getCurrentUser().token : '',
-                  }}
-                  onChange={info => {
-                    if (info.file.status !== 'uploading') {
-                      // console.log(info.file, info.fileList);
-                    }
-                    if (info.file.status === 'done') {
-                      // 获取初始表单数据
-                      btnFn('freshList');
-                      const { response } = info.file;
+            <div style={{ paddingTop: '10px' }}>
+              <Upload
+                name="file"
+                action={HttpFetch.productExcelImport}
+                showUploadList={false}
+                headers={{
+                  token: getCurrentUser() ? getCurrentUser().token : '',
+                }}
+                onChange={info => {
+                  if (info.file.status !== 'uploading') {
+                    // console.log(info.file, info.fileList);
+                  }
+                  if (info.file.status === 'done') {
+                    // 获取初始表单数据
+                    btnFn('freshList');
+                    const { response } = info.file;
 
-                      if (response.head && response.head.btnCode !== '000000') {
-                        message.error(response.head.rtnMsg);
-                      }
-
-                      // console.log(JSON.stringify(info.file.response))
-                      // message.success(info.file.response);
-                    } else if (info.file.status === 'error') {
-                      message.error(`import fail`);
+                    if (response.head && response.head.btnCode !== '000000') {
+                      message.error(response.head.rtnMsg);
                     }
-                  }}
-                >
-                  {' '}
-                  <Button type="primary" size="small" className={styles.buttomControl}>
-                    <Icon type="upload" />
-                    导入
-                  </Button>
-                </Upload>
-              </div>
-            }
+
+                    // console.log(JSON.stringify(info.file.response))
+                    // message.success(info.file.response);
+                  } else if (info.file.status === 'error') {
+                    message.error(`import fail`);
+                  }
+                }}
+              >
+                {' '}
+                <Button type="primary" size="small" className={styles.buttomControl}>
+                  <Icon type="upload" />
+                  导入
+                </Button>
+              </Upload>
+            </div>
           </Card>
         </div>
       </Col>
