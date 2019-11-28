@@ -139,66 +139,7 @@ const fetchArr = [
 const { Option } = Select;
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
-const { TextArea, Search } = Input;
-// productColorName,gemColor,platingColor,customerId
-const columnsArr = {
-  productColorName: [
-    {
-      title: '编号',
-      dataIndex: 'productNo',
-      key: 'productNo',
-      render: data => data,
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-      render: data => data,
-    },
-  ],
-  gemColor: [
-    {
-      title: '编号',
-      dataIndex: 'productNo',
-      key: 'productNo',
-      render: data => data,
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-      render: data => data,
-    },
-  ],
-  platingColor: [
-    {
-      title: '编号',
-      dataIndex: 'productNo',
-      key: 'productNo',
-      render: data => data,
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-      render: data => data,
-    },
-  ],
-  customerId: [
-    {
-      title: '编号',
-      dataIndex: 'productNo',
-      key: 'productNo',
-      render: data => data,
-    },
-    {
-      title: '中文名',
-      dataIndex: 'zhName',
-      key: 'zhName',
-      render: data => data,
-    },
-  ],
-};
+const { TextArea } = Input;
 
 @Form.create()
 @connect(({ product, loading }) => {
@@ -321,7 +262,7 @@ class ProductDetail extends Component {
         'Content-Type': 'application/json',
         token: getCurrentUser() ? getCurrentUser().token : '',
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify(params || {}),
     })
       .then(response => response.json())
       .then(d => {
@@ -567,8 +508,16 @@ class ProductDetail extends Component {
         item => platingColor.filter(({ value }) => value === item)[0]
       );
 
+      let paramsobj = {};
+      if (fieldsValue.sourceOfProduct === 'H005005') {
+        paramsobj = {
+          supplierId: this.props.form.getFieldValue('supplierId'),
+          supplierProductNo: this.props.form.getFieldValue('supplierProductNo'),
+        };
+      }
       const params = {
         ...fieldsValue,
+        ...paramsobj,
         customer: customerV,
         productColor: productColorV,
         gemColor: gemColorV,
@@ -971,7 +920,7 @@ class ProductDetail extends Component {
     };
 
     const {
-      form: { getFieldDecorator, getFieldValue },
+      form: { getFieldDecorator, getFieldValue, getFieldsValue },
     } = this.props;
     const {
       current = {},
@@ -984,6 +933,8 @@ class ProductDetail extends Component {
     const sourceOfProduct = getFieldValue('sourceOfProduct');
     // const supplierId = getFieldValue("supplierId");
     const productType = getFieldValue('productType');
+
+    console.log(current, getFieldValue('productNo'), getFieldsValue());
 
     return (
       <div className={clientStyle.list_info}>
@@ -1207,7 +1158,7 @@ class ProductDetail extends Component {
                   content={current.mouldNo}
                   placeholder="请输入"
                   onSelect={v => {
-                    this.setState({ mouldNo: v }, () => {
+                    this.setState({ mouldNo: v.mainMoldCode }, () => {
                       this.parseProductNo();
                     });
                   }}
@@ -1631,6 +1582,7 @@ class ProductDetail extends Component {
     });
   };
 
+  // 点击编辑按钮弹出编辑弹窗
   handleEditProduct = () => {
     const { item } = this.props;
     this.resetParse();
@@ -1854,6 +1806,7 @@ class ProductDetail extends Component {
     const {
       form: { setFieldsValue },
     } = this.props;
+    console.log(mouldNo);
     const showMold = mouldNo;
     // const showMold = mouldNo !== '' ? mouldNo.substr(2, mouldNo.length) : '';
     // console.log(" showMold ",mouldNo,showMold)
@@ -1888,9 +1841,23 @@ class ProductDetail extends Component {
       refarshList,
       isLoad,
       item,
+      isProductUpdate,
+      form,
     } = this.props;
-
-    const { update, isLoadImage, productParams } = this.state;
+    const { getFieldValue } = form;
+    const {
+      update,
+      isLoadImage,
+      productParams,
+      imageObject,
+      drawVisible,
+      visible,
+      showItem,
+      isLoading,
+      isAdd,
+      batchUpdateShow,
+      current,
+    } = this.state;
 
     // (item)
 
@@ -1936,7 +1903,291 @@ class ProductDetail extends Component {
     //   this.state.isLoadImage = false;
     // }
 
-    return this.getDetailInfo();
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={productSaveloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={productSaveloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={productUpdateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
+
+    const batchFooter = [
+      <Button key="back" onClick={this.closeModal}>
+        取消
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        loading={productSaveloading}
+        onClick={this.handleBatchSubmit}
+      >
+        保存
+      </Button>,
+    ];
+
+    return (
+      <div className={business.right_info}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
+          <div>
+            <div
+              style={{
+                padding: '20px 20px 10px',
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: '#35B0F4',
+              }}
+            >
+              {formatMessage({ id: 'menu.erp.business.product' })}
+            </div>
+            <Divider className={styles.divder} />
+          </div>
+          <Card bordered={false} style={{ overflow: 'auto' }}>
+            {showItem && showItem !== '' ? (
+              <div>
+                <Spin spinning={isLoading}>
+                  <Carousel
+                    {...this.carouselsettings}
+                    className={business.carousel_content}
+                    autoplay
+                  >
+                    {this.getImages(showItem.pictures)}
+                  </Carousel>
+                  {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
+                  <DescriptionList size="small" col="1">
+                    <Description term="名称">{showItem.zhName}</Description>
+                    <Description term="编号">{showItem.productNo}</Description>
+                    <Description term="类别">{showItem.productTypeName}</Description>
+                    <Description term="重量">{showItem.finishedWeight}</Description>
+                    <Description term="工价" />
+                  </DescriptionList>
+                  <span className={business.title_info}>参数详情</span>
+                  <Divider className={business.divder} />
+                  <DescriptionList size="small" col="2">
+                    <Description term="颜色">{showItem.gemColorName}</Description>
+                    <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
+                    <Description term="报价重量">{showItem.finishedWeight}</Description>
+                    <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                    <Description term="电镀">{showItem.platingColorName}</Description>
+                    <Description term="成色">{showItem.productColorName}</Description>
+                    <Description term="产品来源">{showItem.sourceOfProductName}</Description>
+                    <Description term="模具">{showItem.mouldNo}</Description>
+                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                    <Description term="客户">{showItem.customerNo}</Description>
+                    <Description term="供应商货号">{showItem.supplierId}</Description>
+                    <Description term="供应商">{showItem.supplierProductNo}</Description>
+                    <Description term="品牌">{showItem.brandNo}</Description>
+                  </DescriptionList>
+                  <span className={business.title_info}>备注</span>
+                  <Divider className={business.divder} />
+                  <DescriptionList size="small" col="1">
+                    <Description>{showItem.marks}</Description>
+                  </DescriptionList>
+                </Spin>
+              </div>
+            ) : (
+              <div />
+            )}
+          </Card>
+        </div>
+        <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Button
+                type="primary"
+                icon="plus"
+                className={business.buttomControl}
+                size="small"
+                onClick={this.handleNewProduct}
+              >
+                新增
+              </Button>
+              <Button
+                type="danger"
+                icon="delete"
+                className={business.buttomControl}
+                size="small"
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定删除吗？',
+                    onOk: () => {
+                      this.handleDeleteProduct();
+                    },
+                  });
+                }}
+                disabled={
+                  !showItem || showItem === '' || !isProductUpdate || showItem.status === '2'
+                }
+              >
+                删除
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className={business.buttomControl}
+                icon="edit"
+                disabled={
+                  !showItem || showItem === '' || !isProductUpdate || showItem.status === '2'
+                }
+                onClick={this.handleEditProduct}
+              >
+                编辑
+              </Button>
+              {showItem && showItem.status === '2' ? (
+                <Button
+                  className={business.buttomControl}
+                  size="small"
+                  type="danger"
+                  icon="unlock"
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定取消审批吗？',
+                      onOk: () => {
+                        this.handleUnFreezeProduct();
+                      },
+                    });
+                  }}
+                  disabled={!showItem || showItem === '' || !isProductUpdate}
+                >
+                  取消审批
+                </Button>
+              ) : (
+                <Button
+                  className={business.buttomControl}
+                  size="small"
+                  type="primary"
+                  icon="lock"
+                  disabled={!showItem || showItem === '' || !isProductUpdate}
+                  onClick={() => {
+                    ModalConfirm({
+                      content: '确定审批吗？',
+                      onOk: () => {
+                        this.handleFreezeProduct();
+                      },
+                    });
+                  }}
+                >
+                  审批
+                </Button>
+              )}
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingTop: 10,
+              }}
+            >
+              <Button
+                className={business.buttomControl}
+                type="primary"
+                size="small"
+                icon="copy"
+                disabled
+              >
+                复制
+              </Button>
+              <Button
+                className={business.buttomControl}
+                size="small"
+                type="primary"
+                icon="rollback"
+                disabled
+              >
+                撤销
+              </Button>
+              <Button
+                className={business.buttomControl}
+                size="small"
+                type="primary"
+                icon="rollback"
+                onClick={this.batchUpdate}
+              >
+                批量新增
+              </Button>
+            </div>
+          </div>
+          <Modal
+            maskClosable={false}
+            title={<BuildTitle title="批量新增" />}
+            width={1200}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            visible={batchUpdateShow}
+            footer={batchFooter}
+            onCancel={this.closeModal}
+          >
+            {this.getBatchUpdat()}
+          </Modal>
+
+          <Modal
+            title={
+              <BuildTitle
+                title={this.state.done ? null : formatMessage({ id: 'menu.erp.business.product' })}
+              />
+            }
+            maskClosable={false}
+            width={1200}
+            destroyOnClose
+            visible={visible}
+            footer={modalFooter}
+            onCancel={this.handleCancel}
+            bodyStyle={{ padding: '28px 0 0' }}
+          >
+            {this.getProductModalContent()}
+          </Modal>
+        </Card>
+      </div>
+    );
   }
 }
 
