@@ -227,6 +227,7 @@ class Index extends Component {
         </Radio.Group>;
       case 7:
         return (<Select
+          style={{ width: 180 }}
           placeholder="请选择"
           showSearch
           optionFilterProp="children"
