@@ -380,6 +380,8 @@ class Index extends Component {
               this.getListSecond({ type: secondTableActive });
             }
             if (close) this.btnFn('');
+            if (close)  this.setState({ filelist:[],videolist: [] });
+
           }
         });
       }
@@ -454,7 +456,6 @@ class Index extends Component {
               maxcount={10}
               defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
               fileListFun={(list) => {
-                console.log('filelist',list)
                 this.setState({ filelist: list });
               }}
             />
@@ -491,7 +492,7 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
-        this.setState({ modalType });
+        this.setState({ modalType ,filelist:[],videolist: [] });
         break;
       case 'delete':
         ModalConfirm({
@@ -578,7 +579,6 @@ class Index extends Component {
     } = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
-
     const modalFooter = modalType === 'plus' ? [
       <Button
         key="back"

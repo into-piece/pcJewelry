@@ -101,10 +101,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo1',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     }, {
       title: '成色',
@@ -134,7 +134,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '计价类别',
@@ -167,10 +167,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materialNo2',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
@@ -232,7 +232,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -246,7 +246,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventor2yWeight',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -263,10 +263,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater3ialNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
@@ -313,10 +313,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'mater4ialNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
@@ -374,14 +374,14 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price4',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
       title: '成本价',
       dataIndex: 'costPirce',
       key: 'costPirce4',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -409,7 +409,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'singleWeight4',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
 
     },
     {
@@ -425,10 +425,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'material5No',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
@@ -490,7 +490,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '计价类别',
@@ -503,7 +503,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'singleWeight',
       key: 'single5Weight',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '状态',
@@ -518,10 +518,10 @@ const columnsArr = {
       dataIndex: 'materialNo',
       key: 'materi6alNo',
       render: data => isLockList ? (
-        <LockTag>
-          {data}
-        </LockTag>
-      )
+          <LockTag>
+            {data}
+          </LockTag>
+        )
         : (data),
     },
     {
@@ -594,7 +594,7 @@ const columnsArr = {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '计价类别',
@@ -607,7 +607,7 @@ const columnsArr = {
       title: '单重',
       dataIndex: 'inventoryWeight',
       key: 'inventory6Weight',
-      render: d => parseFloat(d || 0).toFixed(4)
+      render: d => parseFloat(d || 0).toFixed(4),
     },
     {
       title: '客户编号',
@@ -782,17 +782,7 @@ class Info extends Component {
         params: { ...searchparams, ...(params && params.current ? {} : (pagination)), ...params },
         type: key || selectKey,
       },
-      callback: () => {
-        const { dev } = this.props;
-        dev[`${dev.selectKey}List`].records.map((item) => {
-          if (item.id === dev.choosenRowData.id) {
-            dispatch({
-              type: 'devRaw/getChoosenRowData',
-              payload: item,
-            });
-          }
-        });
-      },
+
     });
 
 
@@ -881,9 +871,9 @@ class Info extends Component {
         </Select>);
 
       case 9:
-        return (<TextArea disabled={disable || false} />);
+        return (<TextArea disabled={disable || false}/>);
       default:
-        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'} />;
+        return <Input placeholder="请输入" disabled={disable || false} type={number ? 'number' : 'text'}/>;
     }
   };
 
@@ -897,10 +887,10 @@ class Info extends Component {
     const { modalType } = this.state;
     const dataArr = modalContent[selectKey];
     return <BatchModalForm key={'BatchModalForm' + selectKey} wrappedComponentRef={e => this.BatchModalForm = e}
-      dev={dev} arr={dataArr}
-      fileListFun={(list) => {
-        this.setState({ filelist: list });
-      }} returnElement={this.returnElement} />;
+                           dev={dev} arr={dataArr}
+                           fileListFun={(list) => {
+                             this.setState({ filelist: list });
+                           }} returnElement={this.returnElement}/>;
 
   };
   // 根据btn点击 返回对应弹窗内容
@@ -918,9 +908,9 @@ class Info extends Component {
 
     if (modalType === 'batchAdd') {
       return <BatchModalForm wrappedComponentRef={e => this.BatchModalForm = e} dev={dev} arr={dataArr}
-        fileListFun={(list) => {
-          this.setState({ filelist: list });
-        }} returnElement={this.returnElement} />;
+                             fileListFun={(list) => {
+                               this.setState({ filelist: list });
+                             }} returnElement={this.returnElement}/>;
     }
 
 
@@ -1040,7 +1030,7 @@ class Info extends Component {
                 va = `${s.length > 0 ? (`${s[0].zhName} `) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
               }
               dfv = va;
-              selectData[value]=va
+              selectData[value] = va;
 
             }
 
@@ -1086,7 +1076,7 @@ class Info extends Component {
               }
 
               dfv = va;
-              selectData[value]=va
+              selectData[value] = va;
             }
 
 
@@ -1139,7 +1129,7 @@ class Info extends Component {
   returnTitle = () => {
     const { selectKey } = this.props;
 
-    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`app.dev.menuMap.${selectKey}`} defaultMessage="Settings"/>;
     return menuText;
   };
 
@@ -1262,11 +1252,7 @@ class Info extends Component {
 
     const fieldslist = dataArr.map(e => e.value);
 
-    // 还要清空所选中项
-    this.props.dispatch({
-      type: 'devRaw/changeSelectedRowKeys',
-      payload: [],
-    });
+
 
     form.validateFields(fieldslist, (err, values) => {
       this.setState({ addloading: true });
@@ -1331,7 +1317,7 @@ class Info extends Component {
 
   // 审批/取消审批 按钮回调
   handleLock = () => {
-    const { selectKey, selectedRowKeys } = this.props;
+    const { selectKey, selectedRowKeys,dispath } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
     serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
@@ -1341,7 +1327,8 @@ class Info extends Component {
           message: rtnMsg,
         });
         this.getList({ key: selectKey });
-        this.getTypeList({  });
+        this.getTypeList({});
+        // clearSixList
       }
     });
   };
@@ -1473,26 +1460,26 @@ class Info extends Component {
         继续添加
       </Button>,
     ] : [
-        <Button
-          key="back"
-          onClick={() => {
-            this.setState({ filelist: [] });
-            btnFn('');
-          }}
-        >
-          取消
+      <Button
+        key="back"
+        onClick={() => {
+          this.setState({ filelist: [] });
+          btnFn('');
+        }}
+      >
+        取消
       </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={addloading}
-          onClick={() => {
-            handleModalOk(false);
-          }}
-        >
-          保存
+      <Button
+        key="submit"
+        type="primary"
+        loading={addloading}
+        onClick={() => {
+          handleModalOk(false);
+        }}
+      >
+        保存
       </Button>,
-      ];
+    ];
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1523,7 +1510,7 @@ class Info extends Component {
         </div>
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()} />}
+          title={<BuildTitle title={returnTitle()}/>}
           key={`Modal-${selectKey}`}
           width={selectKey === 'material' ? 640 : 960}
           className={styles.standardListForm}
@@ -1575,31 +1562,30 @@ const RightContent =
                     color: '#35B0F4',
                   }}
                 >
-                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage="" />
+                  <FormattedMessage id={`app.dev.menuMap.${type}`} defaultMessage=""/>
                 </div>
-                <Divider className={styles.divder} />
+                <Divider className={styles.divder}/>
               </div>
-              <GetRenderitem data={choosenRowData} type={type} />
+              <GetRenderitem key={choosenRowData.id} data={choosenRowData} type={type}/>
             </div>
             {/* </Card> */}
-            <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
-              <div>
-                {btnGroup.map(({ name, tag }) => (
-                  <Button
-                    key={tag}
-                    className={styles.buttomControl}
-                    type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
-                    icon={tag}
-                    size="small"
-                    disabled={returnSisabled(tag)}
-                    onClick={() => {
-                      btnFn(tag);
-                    }}
-                  >
-                    {tag === 'lock' ? returnLockType().name : name}
-                  </Button>
-                ))}
-              </div>
+            <Card bodyStyle={{ display: 'flex', flexWrap: ' wrap', paddingLeft: 5, paddingRight: 5 }}>
+              {btnGroup.map(({ name, tag }) => (
+                <Button
+                  key={tag}
+                  className={styles.buttomControl}
+                  type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
+                  icon={tag}
+                  size="small"
+                  disabled={returnSisabled(tag)}
+                  onClick={() => {
+                    btnFn(tag);
+                  }}
+                >
+                  {tag === 'lock' ? returnLockType().name : name}
+                </Button>
+              ))}
+
               {(type === 'stone') && <Button
                 key={'batchAdd'}
                 className={styles.buttomControl}
@@ -1613,6 +1599,7 @@ const RightContent =
               >
                 批量新增
               </Button>}
+
             </Card>
           </div>
         </Col>
@@ -1646,7 +1633,9 @@ class CenterInfo extends Component {
           type: 'devRaw/clearSixList',
           payload: {},
           callback: () => {
-            setTimeout(() => { this.turnTab(rowData.type) }, 200)
+            setTimeout(() => {
+              this.turnTab(rowData.type);
+            }, 200);
           },
         });
       },
@@ -1696,7 +1685,9 @@ class CenterInfo extends Component {
           type: 'devRaw/getPagination',
           payload: { current: 1, size: 10 },
           callback: () => {
-            setTimeout(() => { getList({ key }); }, 200)
+            setTimeout(() => {
+              getList({ key });
+            }, 200);
           },
         });
       },
@@ -1790,7 +1781,7 @@ class CenterInfo extends Component {
             handleTableChange={onSearchType}
           />
         </div>
-        <Divider />
+        <Divider/>
         {/*<div className={styles.contentTitle}>*/}
         {/*<Radio.Group defaultValue="material" value={type} buttonStyle="solid">*/}
         {/*<Radio.Button*/}
@@ -1851,7 +1842,7 @@ class CenterInfo extends Component {
 
             onChange={(e) => {
               const { dispatch } = this.props;
-              console.log(e)
+              console.log(e);
               dispatch({
                 type: 'devRaw/setsearchparams',
                 payload: e,
@@ -1903,34 +1894,35 @@ const GetRenderitem = ({ data, type }) => {
           className={styles.carousel_image}
           src={v}
           edge={20}
-          set={paths.map(image => ({ src: image ,style: { minWidth: 800,minHeight: 800 },}))}
+          set={paths.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
         />
       </div>
     ));
   };
 
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
+  console.log('data',data)
   return (
-    <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
+    <Card key={data.id} bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
 
       {(type !== 'material' && type !== 'otherMaterial') &&
-        <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
-          {getImages(images)}
-        </Carousel>}
-      {images && images.length > 0 && <Divider />}
-      <DescriptionList className={styles.headerList} size="small" col="1">
+      <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
+        {getImages(images)}
+      </Carousel>}
+      {images && images.length > 0 && <Divider/>}
+      {data&&data.id&&<DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name, convert, date }) => {
             return (<Description
-              key={`c${key}`}
-              term={key}
-            >
-              {(date && data[value]) ? moment(data[value]).format(date) : (convert ? ((convert instanceof Function) ? convert(data[value]) : convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
-            </Description>
+                key={`c${key}-${data.id}`}
+                term={key}
+              >
+                {(date && data[value]) ? moment(data[value]).format(date) : (convert ? ((convert instanceof Function) ? convert(data[value]) : convert[data[value]]) : (name ? data[`${value}Name`] : data[value]))}
+              </Description>
             );
           })
         }
-      </DescriptionList>
+      </DescriptionList>}
     </Card>
   );
 };
