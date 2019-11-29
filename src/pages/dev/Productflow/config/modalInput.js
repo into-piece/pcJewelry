@@ -1,6 +1,6 @@
 export const productflow = [
-  { 'key': '流程名称', 'value': 'flowName' },
   { 'key': '流程编号', 'value': 'flowCode' },
+  { 'key': '流程名称', 'value': 'flowName' },
   { 'key': '所属部门', 'value': 'department' , 'type': 7, 'list': 'listDeptDrop',},
   { 'key': '英文名称', 'value': 'engName' , 'noNeed': true},
   { 'key': '负责人', 'value': 'chargeUser','type': 7,'list':'userlist' },

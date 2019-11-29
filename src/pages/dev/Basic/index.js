@@ -17,12 +17,11 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/dev';
 import LockTag from '@/components/LockTag';
-import { manuArr, modalContent } from './config.json';
+import { manuArr, modalContent } from './config.js';
 import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
 import UploadImg from '@/components/UploadImg';
-import modalInput from '../FlowCostType/config/modalInput';
 
 const { Description } = DescriptionList;
 const { Item } = Menu;
@@ -389,19 +388,27 @@ const columnsArr = {
   // 模具仓位设定
   mouldPosition: [
     {
-      title: '编号',
-      dataIndex: 'code',
-      key: 'code',
-    },
-    {
       title: '仓位编号',
       dataIndex: 'positionCode',
       key: 'positionCode',
     },
     {
-      title: '房间号',
-      dataIndex: 'roomNum',
-      key: 'roomNum',
+      title: '类别',
+      dataIndex: 'productType',
+      key: 'productType',
+      render:(k,i)=>i.productTypeName
+    },
+    {
+      title: '品牌',
+      dataIndex: 'brand',
+      key: 'brand',
+      render:(k,i)=>i.brandName
+
+    },
+    {
+      title: '卡位号',
+      dataIndex: 'boxNum',
+      key: 'boxNum',
     },
     {
       title: '橱柜号',
@@ -612,6 +619,21 @@ class Info extends Component {
             payload: { wordbookTypeCode: 'H016' },
           });
         }
+        // 模具仓位
+        if (selectKey === 'mouldPosition') {
+          // 成品类别下拉
+          dispatch({
+            type: `dev/getTypeByWordbookCode`,
+            payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
+          });
+          // 品牌下拉
+          dispatch({
+            type: `dev/getlistbrand`,
+            payload: { params: {}, listName: 'listbrand' },
+          });
+        }
+
+
         this.setState({ modalType });
         break;
       case 'delete':
@@ -638,17 +660,39 @@ class Info extends Component {
     const {
       selectKey,
       choosenRowData,
-      form: { getFieldDecorator },
+      form: { getFieldDecorator,getFieldValue },
     } = this.props;
     const { modalType } = this.state;
     const content = '';
     const dataArr = modalContent[selectKey];
     const isEdit = modalType === 'edit';
     const { dev } = this.props;
+
     return (
       <Form size="small">
         {
-          dataArr && dataArr.map(({ key, value, noNeed, type, list ,dfv}) => {
+          dataArr && dataArr.map(({ key, value, noNeed, type, list ,dfv,disable}) => {
+
+            const selectData = { ...choosenRowData };
+
+            // 模具仓位  编号生成逻辑：品牌 + 产品类别+柜号+抽屉号+卡位号
+            if(selectKey ==='mouldPosition'&&value === 'positionCode'){
+              let va = '';
+              let productType = `${getFieldValue('productType')}`;
+              let brand = `${getFieldValue('brand')}`;
+              const cabinetNum = getFieldValue('cabinetNum');
+              const drawerNum = getFieldValue('drawerNum');
+              const boxNum = getFieldValue('boxNum');
+              if (productType) productType = dev.listH016009.filter(e => e.id === productType);
+              if (brand) brand = dev.listbrand.filter(e => e.id === brand);
+
+              va = `${brand.length>0?brand[0].brandNo:''}${productType.length>0?productType[0].unitCode:''}${cabinetNum||''}${drawerNum||''}${boxNum||''}`;
+              dfv = va;
+              selectData[value] = va || choosenRowData[value];
+            }
+
+
+
             // console.log(list)
             return (
               <div className="adddevModal" key={key}>
@@ -662,7 +706,7 @@ class Info extends Component {
                         required: !noNeed,
                         message: `请${type && (type === 2 || type === 3) ? '选择' : '输入'}${key}`,
                       }],
-                      initialValue: isEdit ? choosenRowData[value] :( dfv||undefined),
+                      initialValue: isEdit ? selectData[value] :( dfv||undefined),
                     })(type && type === 2 ?
                       <Select placeholder="请选择" style={{ width: 180 }}>
                         {dev[list] && dev[list].map(({ value, key }) =>
@@ -676,7 +720,7 @@ class Info extends Component {
                         </Radio.Group>
                         :  type && type === 4 ?
                           <TextArea placeholder="请输入" style={{height:"100px"}} />
-                        : <Input placeholder="请输入" />,
+                        : <Input placeholder="请输入" disabled={disable || false} />,
                     )
                   }
                 </FormItem>
@@ -720,6 +764,7 @@ class Info extends Component {
   handleAdd = (close) => {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
+    const { resetFields } = form;
 
     const dataArr = modalContent[selectKey];
     const fieldslist = dataArr.map(e=>e.value);
@@ -753,7 +798,7 @@ class Info extends Component {
 
         });
         this.setState({ filelist: [] });
-
+        resetFields(['positionCode']);
       }
     });
   };
@@ -762,6 +807,7 @@ class Info extends Component {
   handleEdit = (close) => {
     const { selectKey, form } = this.props;
     const filelist = this.state.filelist.flatMap(e => e.url);
+    const { resetFields } = form;
 
     // 还要清空所选中项
     this.props.dispatch({
@@ -802,6 +848,7 @@ class Info extends Component {
           }
         });
         if(close)this.setState({ filelist: [] });
+        resetFields(['positionCode']);
 
       }
     });
