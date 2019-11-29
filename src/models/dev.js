@@ -9,7 +9,7 @@ import servicesConfig from '@/services/dev';
 
 const initData = { records: [] };
 
-const { getDevDropDown, addBasicMeasureUnit, listBasicColourSetDropDown, listGemSetProcessDropDown, listMstWordbook } = servicesConfig;
+const { getDevDropDown, addBasicMeasureUnit, listBasicColourSetDropDown,getlistBrands, listGemSetProcessDropDown, listMstWordbook,getTypeByWordbookCode } = servicesConfig;
 export default {
   namespace: 'dev',
 
@@ -45,6 +45,11 @@ export default {
     gemSetProcessDropDownh015: [],
     gemSetProcessDropDownh016: [],
     listBasicColourSetDropDown: [],
+    listbrand: [],
+    listH016009: [],
+
+
+
   },
 
   effects: {
@@ -83,6 +88,31 @@ export default {
         type: 'getData',
         payload: response,
       });
+    },
+
+    * getTypeByWordbookCode({ payload }, { call, put }) {
+      const response = yield call(getTypeByWordbookCode, payload.params);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map((item) => {
+        return {...item, value: item.id, key: item.zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
+    },
+    * getlistbrand({ payload }, { call, put }) {
+      const response = yield call(getlistBrands, payload.params);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map((item) => {
+        return {...item, value: item.id, key: item.brandEnName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
     },
     * getList({ payload, callback }, { call, put }) {
       const { type, params } = payload;
@@ -151,6 +181,14 @@ export default {
   },
 
   reducers: {
+    changeState(state, action) {
+      const { typeName, data } = action.payload;
+      return {
+        ...state,
+        [typeName]: data,
+      };
+    },
+
     getData(state, action) {
       const list =
         action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
