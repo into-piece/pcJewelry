@@ -1099,7 +1099,7 @@ class Info extends Component {
             return (col);
           })
         }
-        {(selectKey !== 'material' && selectKey !== 'otherMaterial') && <Col span={18}>
+        {<Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -1212,11 +1212,9 @@ class Info extends Component {
           // sId: choosenTypesRowData.id
         };
 
-        if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
-          values = {
-            ...values, picPath: filelist,
-          };
-        }
+        values = {
+          ...values, picPath: filelist,
+        };
         serviceObj[`addBasic${selectKey}`](values).then(res => {
           this.setState({ addloading: false });
 
@@ -1253,7 +1251,6 @@ class Info extends Component {
     const fieldslist = dataArr.map(e => e.value);
 
 
-
     form.validateFields(fieldslist, (err, values) => {
       this.setState({ addloading: true });
 
@@ -1266,11 +1263,9 @@ class Info extends Component {
           // sId: choosenTypesRowData.id,
         };
 
-        if (selectKey !== 'material' && selectKey !== 'otherMaterial') {
-          params = {
-            ...params, picPath: filelist,
-          };
-        }
+        params = {
+          ...params, picPath: filelist,
+        };
 
         serviceObj[`addBasic${selectKey}`](params).then(res => {
           this.setState({ addloading: false });
@@ -1317,7 +1312,7 @@ class Info extends Component {
 
   // 审批/取消审批 按钮回调
   handleLock = () => {
-    const { selectKey, selectedRowKeys,dispath } = this.props;
+    const { selectKey, selectedRowKeys, dispath } = this.props;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
     serviceObj[serviceType + selectKey](selectedRowKeys).then(res => {
@@ -1901,16 +1896,16 @@ const GetRenderitem = ({ data, type }) => {
   };
 
   const images = data.pictures && data.pictures.flatMap(e => e.picPath);
-  console.log('data',data)
+  console.log('data', data);
   return (
-    <Card key={data.id} bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
+    <Card key={data.id} bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv}
+          onClick={selectRowItem}>
 
-      {(type !== 'material' && type !== 'otherMaterial') &&
-      <Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
+      {<Carousel speed={150} key={data.id} initialSlide={0} className={styles.carousel_content} autoplay>
         {getImages(images)}
       </Carousel>}
       {images && images.length > 0 && <Divider/>}
-      {data&&data.id&&<DescriptionList className={styles.headerList} size="small" col="1">
+      {data && data.id && <DescriptionList className={styles.headerList} size="small" col="1">
         {
           arr.map(({ key, value, name, convert, date }) => {
             return (<Description

@@ -228,6 +228,7 @@ class Index extends Component {
       case 7:
         return (<Select
           style={{ width: 180 }}
+
           placeholder="请选择"
           showSearch
           optionFilterProp="children"
@@ -350,14 +351,6 @@ class Index extends Component {
 
     const dataArr = modalInput[rightActive];
     const fieldslist = dataArr.map(e=>e.value)
-
-    const filelist = this.state.filelist.flatMap(e => e.url);
-    const videolist = this.state.videolist.flatMap(e => e.url);
-
-    if(['productProcess'].indexOf(rightActive)>-1){
-      params={...params,picPath:filelist,videoPath:videolist}
-    }
-
     form.validateFields(fieldslist,(err, values) => {
       if (!err) {
         params = {
@@ -380,8 +373,6 @@ class Index extends Component {
               this.getListSecond({ type: secondTableActive });
             }
             if (close) this.btnFn('');
-            if (close)  this.setState({ filelist:[],videolist: [] });
-
           }
         });
       }
@@ -492,7 +483,7 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
-        this.setState({ modalType ,filelist:[],videolist: [] });
+        this.setState({ modalType });
         break;
       case 'delete':
         ModalConfirm({
@@ -579,6 +570,7 @@ class Index extends Component {
     } = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
+
     const modalFooter = modalType === 'plus' ? [
       <Button
         key="back"
