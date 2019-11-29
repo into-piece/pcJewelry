@@ -326,6 +326,7 @@ class Info extends Component {
       callback: res => {
         if (res && res.records.length === 1 && args.search) {
           this.changeChoosenRow(res.records[0]);
+          this.onSelectChange([res.records[0].id]);
           console.log(res); // 请求完成后返回的结果
         }
       },
@@ -1162,6 +1163,8 @@ class Info extends Component {
               保存
             </Button>,
           ];
+
+    console.log(choosenRowData, choosenRowData.id);
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1227,8 +1230,8 @@ class Info extends Component {
             choosenRowData={productChoosenRowData}
             onSelectChange={onSelectChange}
             listLoading={productListLoading}
-            onSearch={getProductSearch}
-            changeProductSearch={getProduct}
+            onSearch={getProduct}
+            changeProductSearch={getProductSearch}
           />
         </Modal>
       </div>
