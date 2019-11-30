@@ -142,6 +142,11 @@ const resultArr = [
     prefix1: `${env  }/business`,
   },
   {
+    key: 'getlistBrands',
+    path: '/basic/brand/listBrands',
+    prefix1: `${env  }/business`,
+  },
+  {
     key: 'getCutDrop',
     path: '/develop/basic/stone-cutting-setting/listBasicStoneCuttingSettingDropDown',
     prefix1: `${env  }/business`,

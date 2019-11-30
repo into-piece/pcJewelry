@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  Row,
-  Col,
-  Form,
-  Breadcrumb,
-  message,
-  Drawer,
-} from 'antd';
+import { Card, Row, Col, Form, Breadcrumb, message, Drawer } from 'antd';
 import { connect } from 'dva';
-
 
 import business from '../business.less';
 import product from './product.less';
@@ -20,7 +11,6 @@ import HttpFetch from '../../../utils/HttpFetch';
 import ProductDetail from './ProductDetail';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
-
 
 const defaultPageSize = 10;
 
@@ -40,10 +30,7 @@ const defaultPageSize = 10;
     updateProductUnLocking: loading.effects['product/updateProductUnLock'],
   };
 })
-
-
 class ProductInfo extends Component {
-
   state = {
     rightlg: 16,
     leftlg: 8,
@@ -58,21 +45,16 @@ class ProductInfo extends Component {
     productPage: 1,
     isLoad: false,
     productSorts: [],
-    searchProductParams: {},
+    searchProductParams: {
+      status: 0,
+    },
   };
 
   productColumns = [
-
     {
       // title: <div className={product.row_normal2}>客户编号</div>,
       title: () => {
-        return (
-          <TableSortView
-            column="产品编号"
-            field="product_no"
-            sortChange={this.sortFilter}
-          />
-        );
+        return <TableSortView column="产品编号" field="product_no" sortChange={this.sortFilter} />;
       },
       dataIndex: 'productNo',
       key: 'productNo',
@@ -99,11 +81,7 @@ class ProductInfo extends Component {
       // title: <div className={product.row_normal2}>成色</div>,
       title: () => {
         return (
-          <TableSortView
-            column="成色"
-            field="product_color_name"
-            sortChange={this.sortFilter}
-          />
+          <TableSortView column="成色" field="product_color_name" sortChange={this.sortFilter} />
         );
       },
       dataIndex: 'productColorName',
@@ -126,17 +104,10 @@ class ProductInfo extends Component {
       width: 150,
     },
 
-
     {
       // title: <div className={product.row_normal2}>客户编号</div>,
       title: () => {
-        return (
-          <TableSortView
-            column="客户编号"
-            field="customer_no"
-            sortChange={this.sortFilter}
-          />
-        );
+        return <TableSortView column="客户编号" field="customer_no" sortChange={this.sortFilter} />;
       },
       dataIndex: 'customerNo',
       key: 'customerNo',
@@ -147,11 +118,7 @@ class ProductInfo extends Component {
       // title: <div className={product.row_normal2}>供应商编号</div>,
       title: () => {
         return (
-          <TableSortView
-            column="供应商编号"
-            field="supplier_id"
-            sortChange={this.sortFilter}
-          />
+          <TableSortView column="供应商编号" field="supplier_id" sortChange={this.sortFilter} />
         );
       },
       dataIndex: 'supplierId',
@@ -174,8 +141,6 @@ class ProductInfo extends Component {
       key: 'supplierProductNo',
       width: 100,
     },
-
-
   ];
 
   centerFormLayout = {
@@ -196,8 +161,6 @@ class ProductInfo extends Component {
       }
     };
   }
-  ;
-
   // router.replace('/business/client/emptyView');
   componentWillUnmount() {
     const { showItem } = this.state;
@@ -207,26 +170,25 @@ class ProductInfo extends Component {
     }
   }
 
-
-
   getDetailInfow = () => {
     const { showItem, isProductUpdate, selectProductData } = this.state;
-    return <ProductDetail
-      item={showItem}
-      isProductUpdate={isProductUpdate}
-      selectProductData={selectProductData}
-      key="556"
-      isloading={(isLoad) => {
-        this.setState({
-          isLoad,
-        });
-      }}
-      refarshList={() => {
-        this.loadProduct();
-      }}
-    />;
+    return (
+      <ProductDetail
+        item={showItem}
+        isProductUpdate={isProductUpdate}
+        selectProductData={selectProductData}
+        key="556"
+        isloading={isLoad => {
+          this.setState({
+            isLoad,
+          });
+        }}
+        refarshList={() => {
+          this.loadProduct();
+        }}
+      />
+    );
   };
-
 
   onSelectRowClass = (record, index) => {
     let color = product.row_normal2;
@@ -251,7 +213,10 @@ class ProductInfo extends Component {
           return v;
         });
       } else {
-        newContacts.splice(newContacts.findIndex(v => v.field === field), 1);
+        newContacts.splice(
+          newContacts.findIndex(v => v.field === field),
+          1
+        );
       }
     } else if (sort !== 'normal') {
       newContacts.push({
@@ -280,17 +245,13 @@ class ProductInfo extends Component {
             orderByAsc = v.field;
           }
         } else if (v.sort === 'descend') {
-          if (orderByDesc)
-            orderByDesc += `,${v.field}`;
-          else
-            orderByDesc = v.field;
+          if (orderByDesc) orderByDesc += `,${v.field}`;
+          else orderByDesc = v.field;
         }
       });
-      if (orderByAsc)
-        params.orderByAsc = orderByAsc;
+      if (orderByAsc) params.orderByAsc = orderByAsc;
 
-      if (orderByDesc)
-        params.orderByDesc = orderByDesc;
+      if (orderByDesc) params.orderByDesc = orderByDesc;
     }
     const { dispatch } = this.props;
     dispatch({
@@ -299,7 +260,7 @@ class ProductInfo extends Component {
     });
   };
 
-  handleProductSearch = (productParams) => {
+  handleProductSearch = productParams => {
     // data.typeId = showItem.id;
     this.state.searchProductParams = { ...productParams };
     this.state.current = 1;
@@ -311,14 +272,13 @@ class ProductInfo extends Component {
     this.setState({
       searchProductParams: {},
     });
-
   };
 
   /**
    * 获取锁定状态
    * @param item
    */
-  loadProductLock = (item) => {
+  loadProductLock = item => {
     // console.log(' 查询锁定对象为 :', item.id);
     const _this = this;
     const params = {};
@@ -329,7 +289,7 @@ class ProductInfo extends Component {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser() ? getCurrentUser().token : '',
+        token: getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
@@ -347,20 +307,19 @@ class ProductInfo extends Component {
           isProductUpdate,
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         // message.error('加载图片失败！');
         _this.setState({
           loading: false,
         });
       });
-
   };
 
   /** *
    * 解锁
    * @param item
    */
-  updateProductLock = (item) => {
+  updateProductLock = item => {
     const { dispatch } = this.props;
     const { isProductUpdate } = this.state;
     if (isProductUpdate)
@@ -382,7 +341,6 @@ class ProductInfo extends Component {
     const { drawVisible } = this.state;
 
     if (!drawVisible) this.showDrawer();
-
   };
 
   showDrawer = () => {
@@ -391,21 +349,16 @@ class ProductInfo extends Component {
     });
   };
 
-
   onClose = () => {
     this.setState({
       drawVisible: false,
     });
   };
 
-
   render() {
     const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-    const {
-      queryProductLocking,
-      body = {},
-    } = this.props;
+    const { queryProductLocking, body = {} } = this.props;
     if (isLoad) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
@@ -445,7 +398,7 @@ class ProductInfo extends Component {
                     });
                   }}
                   ref="productTable"
-                  loading={isLoad}// productListloading || isUpdate
+                  loading={isLoad} // productListloading || isUpdate
                   columns={this.productColumns}
                   className={business.small_table}
                   rowClassName={this.onSelectRowClass}
@@ -464,10 +417,8 @@ class ProductInfo extends Component {
           {this.getDetailInfow()}
         </Drawer>
       </div>
-
     );
   }
-
 }
 
 export default ProductInfo;
