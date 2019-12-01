@@ -669,8 +669,8 @@ class ProductDetail extends Component {
                   <DescriptionList size="small" col="2">
                     <Description term="颜色">{showItem.gemColorName}</Description>
                     <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
-                    <Description term="报价重量">{showItem.finishedWeight}</Description>
-                    <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                    {/* <Description term="报价重量">{showItem.finishedWeight}</Description> */}
+                    {/* <Description term="成品重量">{showItem.unitOfWeightName}</Description> */}
                     <Description term="电镀">{showItem.platingColorName}</Description>
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
@@ -1220,7 +1220,7 @@ class ProductDetail extends Component {
             <FormItem label="数量单位" {...this.centerFormLayout}>
               {getFieldDecorator('unitOfMeasurement', {
                 rules: [{ message: '请输入数量单位' }],
-                initialValue: current.unitOfMeasurement,
+                initialValue: current.unitOfMeasurement || 'ae32e48c2df27123682943b6effa72d3',
               })(
                 <BasicMeasureListSelect
                   style={{ width: 180 }}
@@ -1243,7 +1243,7 @@ class ProductDetail extends Component {
             <FormItem label="重量单位" {...this.centerFormLayout}>
               {getFieldDecorator('unitOfWeight', {
                 rules: [{ message: '请输入' }],
-                initialValue: current.unitOfWeight,
+                initialValue: current.unitOfWeight || '8ee1cc72791578cfe122f6839487bbbe',
               })(
                 <BasicMeasureListSelect
                   style={{ width: 180 }}
@@ -1252,9 +1252,7 @@ class ProductDetail extends Component {
                   filterOption={(input, option) =>
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                  content={
-                    current.unitOfWeight ? current.unitOfWeight : '8ee1cc72791578cfe122f6839487bbbe'
-                  }
+                  content={current.unitOfWeight || '8ee1cc72791578cfe122f6839487bbbe'}
                   placeholder="请输入"
                 />
               )}

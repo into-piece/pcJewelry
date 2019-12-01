@@ -78,7 +78,7 @@
   "detailList": [
     {
       "key": "产品编号",
-      "value": "productId",
+      "value": "productNo",
       "clickFn": "showProductModalFunc",
       "text": "选择产品编号",
       "type": 3
@@ -88,9 +88,7 @@
     { "key": "成色名称", "value": "productColorName", "noNeed": true, "type": 7 },
     { "key": "宝石颜色", "value": "gemColorName", "noNeed": true, "type": 7 },
     { "key": "电镀颜色", "value": "platingColorName", "noNeed": true, "type": 7 },
-    { "key": "成品重量", "value": "finishedWeight", "number": true },
-    { "key": "报价重量", "value": "finishedWeight", "number": true },
-    { "key": "产品系列", "value": "productLineName", "noNeed": true },
+    { "key": "成品重量", "value": "finishedWeight", "number": true, "type": 7 },
     {
       "key": "报价系数",
       "value": "productLineCoefficientQuotation",
@@ -98,10 +96,31 @@
     },
     { "key": "计量单位", "value": "unitOfMeasurementName", "type": 7, "noNeed": true },
     { "key": "重量单位", "value": "unitOfWeightName", "type": 7, "noNeed": true },
-    { "key": "前次工费/克", "value": "lastCount", "number": true, "type": 7, "noNeed": true },
-    { "key": "最高工费/克", "value": "topCount", "number": true, "type": 7, "noNeed": true },
-    { "key": "实际工费/克", "value": "actualCount", "number": true, "type": 7, "noNeed": true },
-    { "key": "此次工费/克", "value": "nowCount", "number": true, "noNeed": true },
+    {
+      "key": "前次工费",
+      "value": "lastCount",
+      "number": true,
+      "type": 7,
+      "noNeed": true,
+      "priceUnit": 1
+    },
+    {
+      "key": "最高工费",
+      "value": "topCount",
+      "number": true,
+      "type": 7,
+      "noNeed": true,
+      "priceUnit": 1
+    },
+    {
+      "key": "实际工费",
+      "value": "actualCount",
+      "number": true,
+      "type": 7,
+      "noNeed": true,
+      "priceUnit": 1
+    },
+    { "key": "此次工费", "value": "nowCount", "number": true, "noNeed": true, "priceUnit": 1 },
     {
       "key": "是否计石重",
       "value": "isWeighStones",
@@ -120,14 +139,14 @@
     { "key": "字印价/件", "value": "markingPrice", "number": true },
     { "key": "包装单价/件", "value": "packPrice", "number": true, "noNeed": true },
     { "key": "单价", "value": "price", "number": true },
-    { "key": "报价数量", "value": "qty", "number": true, "noNeed": true, "type": 7 },
+    { "key": "报价数量", "value": "qty", "number": true },
     { "key": "报价金额", "value": "quotedAmount", "number": true, "noNeed": true, "type": 7 },
-    { "key": "报价重量范围", "value": "quotedWeightRange", "noNeed": true },
+    { "key": "报价重量范围", "value": "quotedWeightRange", "noNeed": true, "initValue": "5%" },
     { "key": "产品工费/件", "value": "productCost", "number": true },
     { "key": "产品长度", "value": "productLength", "noNeed": true, "number": true },
     { "key": "长度描述", "value": "lengthDescription", "noNeed": true },
-    { "key": "长度单位", "value": "lengthUnit", "noNeed": true },
-    { "key": "备注", "value": "remark", "noNeed": true },
-    { "key": "客户要求", "value": "customerRequirements", "noNeed": true }
+    { "key": "长度单位", "value": "lengthUnit", "noNeed": true, "type": 7 },
+    { "key": "备注", "value": "remark", "noNeed": true, "type": 8 },
+    { "key": "客户要求", "value": "customerRequirements", "noNeed": true, "type": 8 }
   ]
 }
