@@ -17,9 +17,9 @@ let dieSet = [
   },
   {
     title: <div className={styles.row_normal2}>成色</div>,
-    dataIndex: 'filmCode',
-    key: 'filmCode',
-    render:(d,i) => i.filmCodeName
+    dataIndex: 'purity',
+    key: 'purity',
+    render:(d,i) => i.purityName
 
   },
   {
@@ -43,8 +43,8 @@ let dieSet = [
 let dieSetChild = [
   {
     title: <div className={styles.row_normal2}>胶膜编号</div>,
-    dataIndex: 'mainMoldNo',
-    key: 'mainMoldNo',
+    dataIndex: 'productNo',
+    key: 'productNo',
   },
   {
     title: <div className={styles.row_normal2}>模具编号</div>,
@@ -55,6 +55,8 @@ let dieSetChild = [
     title: <div className={styles.row_normal2}>配膜比例</div>,
     dataIndex: 'membraneProportion',
     key: 'membraneProportion',
+    render:d=>  numberConvert(d,2)
+
   },
   {
     title: <div className={styles.row_normal2}>注蜡机号</div>,
@@ -100,7 +102,7 @@ let dieSetChild = [
     title: <div className={styles.row_normal2}>蜡件重量(克)</div>,
     dataIndex: 'waxWeight',
     key: 'waxWeight',
-    render:d=>  numberConvert(d,1)
+    render:d=>  numberConvert(d,2)
 
   },
   {

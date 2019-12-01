@@ -130,7 +130,7 @@ class MiddleTable extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1400 }}
+            scroll={{ x: 'max-content' }}
             columns={columnsConfig[firstType]}
             pagination={pagination}
             selectKey={choosenRowData.id}
@@ -166,7 +166,7 @@ class MiddleTable extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1600 }}
+            scroll={{ x: 'max-content' }}
             columns={columnsConfig[secondType]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}

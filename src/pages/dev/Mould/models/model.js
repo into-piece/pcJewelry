@@ -10,7 +10,7 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-  getTypeByWordbookCode, listBasicColourSetDropDown, listMoldPositioningSettingsDropDown,listFilmSettings
+  getTypeByWordbookCode, listBasicColourSetDropDown, listMoldPositioningSettingsDropDown,listFilmSettingsDropDown
 } = servicesConfig;
 const defaultModelName = 'devMould';
 
@@ -230,7 +230,7 @@ export default {
 
     },
     * getlistFilmSettings({ payload }, { call, put }) {
-      const response = yield call(listFilmSettings, payload);
+      const response = yield call(listFilmSettingsDropDown, payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
         return { value: id, key: zhName };

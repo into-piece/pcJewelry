@@ -1,13 +1,13 @@
 export const dieSet = [
   { 'key': '产品编号', 'value': 'productNo',},
-  { 'key': '成色', 'value': 'purity', 'type': 2, 'list': 'getlistBasicColourSetDropDown',  },
+  { 'key': '成色', 'value': 'purity', 'type': 2, 'list': 'listBasicColourSetDropDown',  },
   { 'key': '产品类别', 'value': 'productType', 'type': 2, 'list': 'H016009',},
 ];
 
 export const dieSetChild = [
-  { 'key': '胶膜编号', 'value': 'mainMoldNo',  },
+  { 'key': '胶膜编号', 'value': 'productNo', disable:true },
   { 'key': '模具编号', 'value': 'filmCode','type': 2, 'list': 'listFilmSettings',  },
-  { 'key': '配膜比例', 'value': 'membraneProportion',},
+  { 'key': '配膜比例', 'value': 'membraneProportion','number': true,'min':0,step:0.01},
   { 'key': '注蜡机号', 'value': 'noteWaxImmediately','number': true,'initValue':1,'min':0},
   { 'key': '进模压力(牛)', 'value': 'intoFilmPressure','number': true,'initValue':0.0,'step':0.1,'min':0},
   { 'key': '压膜压力(牛)', 'value': 'squeezeFilmPressure','number': true,'initValue':0.0,'step':0.1,'min':0},

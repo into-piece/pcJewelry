@@ -7,7 +7,7 @@ export const dieSet = [
 
 // 生产工序的筛选参数
 export const dieSetChild = [
-  { 'key': '胶膜编号', 'value': 'mainMoldNo' },
+  { 'key': '胶膜编号', 'value': 'productNo' },
 ];
 
 
