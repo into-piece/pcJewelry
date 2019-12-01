@@ -89,7 +89,6 @@
     { "key": "宝石颜色", "value": "gemColorName", "noNeed": true, "type": 7 },
     { "key": "电镀颜色", "value": "platingColorName", "noNeed": true, "type": 7 },
     { "key": "成品重量", "value": "finishedWeight", "number": true, "type": 7 },
-    { "key": "产品系列", "value": "productLineName", "noNeed": true, "type": 7 },
     {
       "key": "报价系数",
       "value": "productLineCoefficientQuotation",
@@ -147,7 +146,7 @@
     { "key": "产品长度", "value": "productLength", "noNeed": true, "number": true },
     { "key": "长度描述", "value": "lengthDescription", "noNeed": true },
     { "key": "长度单位", "value": "lengthUnit", "noNeed": true, "type": 7 },
-    { "key": "备注", "value": "remark", "noNeed": true },
-    { "key": "客户要求", "value": "customerRequirements", "noNeed": true }
+    { "key": "备注", "value": "remark", "noNeed": true, "type": 8 },
+    { "key": "客户要求", "value": "customerRequirements", "noNeed": true, "type": 8 }
   ]
 }
