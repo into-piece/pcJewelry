@@ -22,7 +22,7 @@ export default {
   'menu.erp.dev.basic': '基础数据',
   'menu.erp.dev.mould':'胶膜管理',
   'menu.erp.dev.dieSet':'胶膜管理',
-  'menu.erp.dev.dieSetChild':'子模明细',
+  'menu.erp.dev.dieSetChild':'胶膜明细',
 
 
   'menu.erp.dev.eliver': '出货',

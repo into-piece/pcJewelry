@@ -41,7 +41,7 @@ class MiddleTable extends Component {
     });
     if (type === 1) {
       this.searchSecond.handleReset();
-      if (onSearch) onSearch({ mainMoldCode: rowData.mainMoldCode }, 2);
+      if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -130,7 +130,7 @@ class MiddleTable extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1400 }}
+            scroll={{ x: 'max-content' }}
             columns={columnsConfig[firstType]}
             pagination={pagination}
             selectKey={choosenRowData.id}
@@ -166,7 +166,7 @@ class MiddleTable extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            scroll={{ x: 1600 }}
+            scroll={{ x: 'max-content' }}
             columns={columnsConfig[secondType]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}
