@@ -103,14 +103,19 @@ class Index extends Component {
       payload: { params: { 'key': 'H016009' }, listName: 'H016009' },
     });
 
-    // 胶膜代码下拉
+    // 成色下拉
     dispatch({
-      type: `${defaultModelName}/getlistFilmSettingsDropDown`,
+      type: `${defaultModelName}/getlistBasicColourSetDropDown`,
     });
 
-    // 模具仓位编号下拉
+    // 存放位置 模具仓位编号下拉
     dispatch({
       type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
+      payload: {},
+    });
+    // 模具编号下拉接口
+    dispatch({
+      type: `${defaultModelName}/getlistFilmSettings`,
       payload: {},
     });
   };

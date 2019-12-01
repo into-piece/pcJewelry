@@ -41,7 +41,7 @@ class MiddleTable extends Component {
     });
     if (type === 1) {
       this.searchSecond.handleReset();
-      if (onSearch) onSearch({ mainMoldCode: rowData.mainMoldCode }, 2);
+      if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
