@@ -515,6 +515,24 @@ class Info extends Component {
     });
   };
 
+  inputChange = (v, type) => {
+    const { form } = this.props;
+    const price = form.getFieldValue('price') || '';
+    const qty = form.getFieldValue('qty') || '';
+    if (type === 'price' && qty) {
+      const quotedAmount = Number(v.target.value) * Number(qty);
+      form.setFieldsValue({
+        quotedAmount,
+      });
+    }
+    if (type === 'qty' && price) {
+      const quotedAmount = Number(v.target.value) * Number(price);
+      form.setFieldsValue({
+        quotedAmount,
+      });
+    }
+  };
+
   // 根据btn点击 返回对应弹窗内容
   // type 2 下啦选择
   // type 3 点击事件
@@ -585,7 +603,7 @@ class Info extends Component {
           </Radio.Group>
         );
       case 7:
-        return <span>{form.getFieldValue(value) || ''}</span>;
+        return <Input disabled={true} style={{ width: '100' }} placeholder="自动带出" />;
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
@@ -614,6 +632,9 @@ class Info extends Component {
             disabled={this.disabledCondition(value, form)}
             style={{ width: '100' }}
             placeholder="请输入"
+            onChange={v => {
+              this.inputChange(v, value);
+            }}
           />
         );
     }
@@ -629,14 +650,28 @@ class Info extends Component {
     const { quote } = this.props;
     const addArr = rightMenu === 1 ? headList : detailList;
     const productTypeName = getFieldValue('productTypeName');
+    const { currency } = choosenRowData;
     return (
       <Form size="small">
         {addArr &&
           addArr.map(
-            ({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number }) => {
+            ({
+              key,
+              value,
+              noNeed,
+              type,
+              list,
+              clickFn,
+              text,
+              arr,
+              initValue,
+              number,
+              priceUnit,
+            }) => {
+              console.log(priceUnit);
               return (
                 <div className="addModal" key={key}>
-                  <FormItem label={key}>
+                  <FormItem label={priceUnit === 1 ? `${key + currency}/克` : key}>
                     {getFieldDecorator(value, {
                       rules: [
                         {
@@ -674,12 +709,12 @@ class Info extends Component {
             }
           )}
 
-        {rightMenu === 2 && productTypeName === '戒围' && (
+        {rightMenu === 2 && productTypeName === '戒指' && (
           <React.Fragment>
             <div className="addModal">
               <FormItem label={'戒围标准'}>
                 {getFieldDecorator('ringAroundStId', {
-                  rules: [{ required: false, message: '请输入戒围标准' }],
+                  rules: [{ required: true, message: '请输入戒围标准' }],
                   initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
                 })(<Input style={{ width: '100' }} placeholder="请输入戒围标准" />)}
               </FormItem>
@@ -949,9 +984,10 @@ class Info extends Component {
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
-    const { choosenRowData } = this.props;
+    const { choosenRowData, form } = this.props;
     const {
       id,
+      productNo,
       custoerProductNo,
       productTypeName,
       gemColorName,
@@ -964,11 +1000,11 @@ class Info extends Component {
       unitOfWeightName,
       finishedWeight,
     } = this.props.productChoosenRowData;
-    let lastCount = 0;
-    let topCount = 0;
+    let lastCount = '0.00';
+    let topCount = '0.00';
     let productLineCoefficientQuotation = '';
     let packPrice = '';
-    let actualCount = '';
+    let actualCount = '0.00';
     // await getLastQuoteDetailByProductId({ productId: id }).then(res => {
     //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
     //     lastCount = res.body.records[0].count
@@ -1005,6 +1041,11 @@ class Info extends Component {
         packPrice = data.lastPackPrice;
         lastCount = data.lastQuoteCount;
         topCount = data.topQuoteCount;
+        if (lastCount || actualCount) {
+          form.setFieldsValue({
+            nowCount: lastCount || actualCount,
+          });
+        }
       }
     });
 
@@ -1022,8 +1063,9 @@ class Info extends Component {
     //   }
     // })
     this.showProductModalFunc(2);
-    this.props.form.setFieldsValue({
+    form.setFieldsValue({
       productId: id,
+      productNo,
       productColorName,
       custoerProductNo,
       productTypeName,
