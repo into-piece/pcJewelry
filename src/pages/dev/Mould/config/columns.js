@@ -5,57 +5,34 @@ import {statusConvert,numberConvert} from '@/utils/convert';
 let dieSet = [
   {
     title: <div className={styles.row_normal2}>主模具号</div>,
-    dataIndex: 'mainMoldCode',
-    key: 'mainMoldCode',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-    ),
+    dataIndex: 'productNo',
+    key: 'productNo',
   },
   {
-    title: <div className={styles.row_normal2}>产品类别</div>,
+    title: <div className={styles.row_normal2}>类别</div>,
     dataIndex: 'productType',
     key: 'productTypeName',
-    width: 100,
     render:(d,i)=>(i.productTypeName)
 
   },
   {
-    title: <div className={styles.row_normal2}>胶膜代码</div>,
-    dataIndex: 'filmCode',
-    key: 'filmCode',
-    width: 100,
-    render:(d,i) => i.filmCodeName
+    title: <div className={styles.row_normal2}>成色</div>,
+    dataIndex: 'purity',
+    key: 'purity',
+    render:(d,i) => i.purityName
 
   },
   {
-    title: <div className={styles.row_normal2}>存放地点</div>, // ?
-    dataIndex: 'position',
-    key: 'position',
-    width: 100,
-    render:(d,i) => i.positionName
-  },
-
-  {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-    width: 100,
-    render: (data) => (data),
-  },
-
-  {
-    title: <div className={styles.row_normal2}>创建时间</div>,
+    title: <div className={styles.row_normal2}>新增日期</div>,
     dataIndex: 'createTime',
     key: 'createTime',
-    width: 100,
-    render: d=>moment(d).format("YYYY-MM-DD HH:mm:ss")
+    render:(d) => moment(d).format("YYYY-MM-DD HH:mm:ss")
+
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,
     dataIndex: 'status',
     key: 'status',
-    width: 100,
     render: (data) => (
       <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
     ),
@@ -65,64 +42,75 @@ let dieSet = [
 
 let dieSetChild = [
   {
-    title: <div className={styles.row_normal2}>子模具号</div>,
-    dataIndex: 'childMoldCode',
-    key: 'childMoldCode',
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-    ),
+    title: <div className={styles.row_normal2}>胶膜编号</div>,
+    dataIndex: 'productNo',
+    key: 'productNo',
   },
   {
-    title: <div className={styles.row_normal2}>石头重量</div>,
-    dataIndex: 'stoneWeight',
-    key: 'stoneWeight',
-    render:d=>  numberConvert(d,2)
-
+    title: <div className={styles.row_normal2}>模具编号</div>,
+    dataIndex: 'filmCode',
+    key: 'filmCode',
   },
   {
     title: <div className={styles.row_normal2}>配膜比例</div>,
     dataIndex: 'membraneProportion',
     key: 'membraneProportion',
-  },
-  {
-    title: <div className={styles.row_normal2}>注蜡气压</div>,
-    dataIndex: 'waxInjectionPressure',
-    key: 'waxInjectionPressure',
-    render:d=>  numberConvert(d,1)
-
-  },
-  {
-    title: <div className={styles.row_normal2}>进模压力</div>,
-    dataIndex: 'intoFilmPressure',
-    key: 'intoFilmPressure',
-    render:d=>  numberConvert(d,1)
-
-  },
-  {
-    title: <div className={styles.row_normal2}>压膜压力</div>,
-    dataIndex: 'squeezeFilmPressure',
-    key: 'squeezeFilmPressure',
-    render:d=>  numberConvert(d,1)
-
-  },
-  {
-    title: <div className={styles.row_normal2}>注蜡时间</div>,
-    dataIndex: 'waxInjectionTime',
-    key: 'waxInjectionTime',
-    render:d=>  numberConvert(d,1)
-
-  },
-  {
-    title: <div className={styles.row_normal2}>真空时间</div>,
-    dataIndex: 'noteWaxImmediately',
-    key: 'noteWaxImmediately',
-    render:d=>  numberConvert(d,1)
+    render:d=>  numberConvert(d,2)
 
   },
   {
     title: <div className={styles.row_normal2}>注蜡机号</div>,
     dataIndex: 'vacuumTime',
     key: 'vacuumTime',
+  },
+  {
+    title: <div className={styles.row_normal2}>进模压力(牛)</div>,
+    dataIndex: 'intoFilmPressure',
+    key: 'intoFilmPressure',
+    render:d=>  numberConvert(d,1)
+
+  },
+  {
+    title: <div className={styles.row_normal2}>压膜压力(牛)</div>,
+    dataIndex: 'squeezeFilmPressure',
+    key: 'squeezeFilmPressure',
+    render:d=>  numberConvert(d,1)
+
+  },
+  {
+    title: <div className={styles.row_normal2}>注蜡气压(帕)</div>,
+    dataIndex: 'waxInjectionPressure',
+    key: 'waxInjectionPressure',
+    render:d=>  numberConvert(d,1)
+
+  },
+  {
+    title: <div className={styles.row_normal2}>真空时间(秒)</div>,
+    dataIndex: 'noteWaxImmediately',
+    key: 'noteWaxImmediately',
+    render:d=>  numberConvert(d,1)
+
+  },
+  {
+    title: <div className={styles.row_normal2}>注蜡时间(秒)</div>,
+    dataIndex: 'waxInjectionTime',
+    key: 'waxInjectionTime',
+    render:d=>  numberConvert(d,1)
+
+  },
+  {
+    title: <div className={styles.row_normal2}>蜡件重量(克)</div>,
+    dataIndex: 'waxWeight',
+    key: 'waxWeight',
+    render:d=>  numberConvert(d,2)
+
+  },
+  {
+    title: <div className={styles.row_normal2}>存放位置</div>,
+    dataIndex: 'position',
+    key: 'position',
+    render:(e,i)=>i.positionName
+
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,

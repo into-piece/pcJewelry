@@ -103,14 +103,19 @@ class Index extends Component {
       payload: { params: { 'key': 'H016009' }, listName: 'H016009' },
     });
 
-    // 胶膜代码下拉
+    // 成色下拉
     dispatch({
-      type: `${defaultModelName}/getlistFilmSettingsDropDown`,
+      type: `${defaultModelName}/getlistBasicColourSetDropDown`,
     });
 
-    // 模具仓位编号下拉
+    // 存放位置 模具仓位编号下拉
     dispatch({
       type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
+      payload: {},
+    });
+    // 模具编号下拉接口
+    dispatch({
+      type: `${defaultModelName}/getlistFilmSettings`,
       payload: {},
     });
   };
@@ -155,7 +160,7 @@ class Index extends Component {
   getListSecond = (args, param) => {
     const { dispatch, paginationSecond, searchParamsSecond, choosenRowData } = this.props;
     const { secondTableActive } = this.state;
-    const mainMoldCode = param.mainMoldCode || choosenRowData.mainMoldCode;
+    const mainMoldCode = param.mainMoldCode || choosenRowData.id;
     if (!mainMoldCode) return;
     // getDevList
     dispatch({
@@ -345,10 +350,10 @@ class Index extends Component {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
     const { secondTableActive, rightActive, modalType } = this.state;
     const filelist = this.state.filelist.flatMap(e => e.url);
-
+    const { resetFields } = form;
     let params = {};
     if (rightActive !== firstTabFlag) {
-      params = { mainMoldCode: choosenRowData.mainMoldCode };
+      params = { mainMoldCode: choosenRowData.id };
     }
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
@@ -387,6 +392,10 @@ class Index extends Component {
             if (close) this.btnFn('');
             if (close) this.setState({ filelist: [] });
 
+            if (rightActive === 'dieSetChild') {
+              resetFields(['mainMoldNo']);
+            }
+
           }
 
         });
@@ -418,6 +427,12 @@ class Index extends Component {
       <Form size="small" key="1">
         {
           addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, step, min, max }) => {
+
+            if (rightActive === 'dieSetChild' && value === 'productNo') {
+              initValue = choosenRowData.productNo;
+              // choosenRowDataSecond[value] = choosenRowData.id
+            }
+
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -702,23 +717,27 @@ class Index extends Component {
                           flexWrap: 'wrap',
                         }}
                         >
-                          {btnGroup.map(({ name, tag }) => (
-                            <Button
-                              key={tag}
-                              className={styles.buttomControl}
-                              type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
-                              icon={tag}
-                              size="small"
-                              disabled={returnSisabled(tag)}
-                              onClick={() => {
-                                btnFn(tag);
-                              }}
-                            >
-                              {tag === 'lock' ? returnLockType().name : name}
-                            </Button>
-                          ))}
+                          {btnGroup.map(({ name, tag }) => {
+                              if (rightActive === 'dieSetChild' && tag === 'lock') {
+                                return null;
+                              }
+                              return <Button
+                                key={tag}
+                                className={styles.buttomControl}
+                                type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
+                                icon={tag}
+                                size="small"
+                                disabled={returnSisabled(tag)}
+                                onClick={() => {
+                                  btnFn(tag);
+                                }}
+                              >
+                                {tag === 'lock' ? returnLockType().name : name}
+                              </Button>;
+                            },
+                          )}
 
-                          {rightActive === firstTabFlag &&
+                          {/*   {rightActive === firstTabFlag &&
                           <Button
                             key="copy"
                             className={styles.buttomControl}
@@ -731,7 +750,7 @@ class Index extends Component {
                           >
                             复制
                           </Button>
-                          }
+                          } */}
 
 
                         </div>
