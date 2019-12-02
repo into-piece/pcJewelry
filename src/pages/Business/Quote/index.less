@@ -70,7 +70,7 @@
 }
 .right_content_tabgroud {
   width: 100%;
-  padding: 20px 0 ;
+  padding: 20px 0;
 }
 .right_content_tabs {
   padding-top: 10px;
@@ -244,6 +244,35 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.carousel_content {
+  position: absolute;
+  right: 60px;
+  top: 62px;
+  display: flex;
+  justify-content: center;
+  width: 200px;
+}
+
+:global(.ant-modal-content .ant-carousel img) {
+  width: 160px;
+  height: 160px;
+}
+
+.carousel_image_ground {
+  display: flex !important;
+  max-width: 300px;
+  max-height: 300px;
+  justify-content: center !important;
+  align-items: center;
+}
+
+.carousel_image {
+  width: 211px;
+  height: 211px;
+  border: 1px solid #f0f2f5;
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 }
 
 @media screen and (max-width: @screen-md) {

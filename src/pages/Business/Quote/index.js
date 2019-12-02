@@ -23,13 +23,13 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  Carousel,
 } from 'antd';
 import moment from 'moment';
-import styles from './index.less';
+import Zmage from 'react-zmage';
 import ModalConfirm from '@/utils/modal';
 import HttpFetch from '@/utils/HttpFetch';
 import { getCurrentUser } from '@/utils/authority';
-
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
@@ -37,6 +37,7 @@ import serviceObj from '@/services/quote';
 import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
+import styles from './index.less';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -564,17 +565,15 @@ class Info extends Component {
       case 3:
         return (
           <p style={{ maxWidth: 180 }}>
-            {' '}
-            {form.getFieldValue(value) || ''}{' '}
-            <span
+            {form.getFieldValue(value) || ''}
+            <p
               style={{ color: '#40a9ff', cursor: 'pointer' }}
               onClick={() => {
                 this[clickFn](1);
               }}
             >
-              {' '}
               {text}
-            </span>
+            </p>
           </p>
         );
       case 4:
@@ -641,18 +640,85 @@ class Info extends Component {
     //  type === 7 ?
   };
 
+  getImages = pictures => {
+    const images = pictures && pictures.flatMap(e => e.picPath);
+    if (!images) return;
+    return images.map(v => (
+      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          edge={20}
+          set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
+        />
+      </div>
+    ));
+  };
+
+  carouselsettings = {
+    speed: 150,
+    initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
+  };
+
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const { rightMenu, choosenRowData, form, choosenDetailRowData } = this.props;
+    const {
+      rightMenu,
+      choosenRowData,
+      form,
+      choosenDetailRowData,
+      quote,
+      productChoosenRowData,
+    } = this.props;
+    const { pictures } = productChoosenRowData;
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
     const isEdit = modalType === 'edit';
-    const { quote } = this.props;
     const addArr = rightMenu === 1 ? headList : detailList;
     const productTypeName = getFieldValue('productTypeName');
     const { currency } = choosenRowData;
+    const productNo = form.getFieldValue('productNo') || '';
+    const productNoStyle = productNo ? { marginLeft: 20 } : {};
     return (
       <Form size="small">
+        {rightMenu === 2 && (
+          <React.Fragment>
+            <div className="addModal" style={{ width: 800 }}>
+              <FormItem label="产品编号">
+                {getFieldDecorator('productNo', {
+                  rules: [
+                    {
+                      required: true,
+                      message: `选择产品编号`,
+                    },
+                  ],
+                  // eslint-disable-next-line
+                  initialValue: isEdit ? choosenDetailRowData.productNo : undefined,
+                })(
+                  <p>
+                    {productNo}
+                    <span
+                      style={{ color: '#40a9ff', cursor: 'pointer', ...productNoStyle }}
+                      onClick={() => {
+                        this.showProductModalFunc(1);
+                      }}
+                    >
+                      选择产品编号
+                    </span>
+                  </p>
+                )}
+              </FormItem>
+            </div>
+
+            <div className={styles.carousel_content}>
+              <Carousel {...this.carouselsettings} autoplay key={`as${Math.random(2)}`}>
+                {this.getImages(pictures)}
+              </Carousel>
+            </div>
+          </React.Fragment>
+        )}
         {addArr &&
           addArr.map(
             ({
@@ -667,46 +733,49 @@ class Info extends Component {
               initValue,
               number,
               priceUnit,
-            }) => {
-              console.log(priceUnit);
-              return (
-                <div className="addModal" key={key}>
-                  <FormItem label={priceUnit === 1 ? `${key + currency}/克` : key}>
-                    {getFieldDecorator(value, {
-                      rules: [
-                        {
-                          required: !noNeed,
-                          message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
-                        },
-                      ],
-                      initialValue: isEdit
-                        ? rightMenu === 1
-                          ? value === 'quoteDate'
-                            ? moment(choosenRowData[value])
-                            : choosenRowData[value]
-                          : choosenDetailRowData[value]
-                        : value === 'quoteDate'
-                        ? undefined
-                        : initValue || (number ? '0.00' : undefined),
-                    })(
-                      this.returnElement({
-                        key,
-                        value,
-                        noNeed,
-                        type,
-                        list,
-                        clickFn,
-                        text,
-                        arr,
-                        initValue,
-                        data: quote,
-                        form,
-                      })
-                    )}
-                  </FormItem>
-                </div>
-              );
-            }
+              unit,
+            }) => (
+              <div
+                className="addModal"
+                key={key}
+                style={value === 'productTypeName' ? { marginRight: 100 } : {}}
+              >
+                <FormItem label={priceUnit === 1 ? `${key + currency}/${unit}` : key}>
+                  {getFieldDecorator(value, {
+                    rules: [
+                      {
+                        required: !noNeed,
+                        message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
+                      },
+                    ],
+                    // eslint-disable-next-line
+                    initialValue: isEdit
+                      ? rightMenu === 1
+                        ? value === 'quoteDate'
+                          ? moment(choosenRowData[value])
+                          : choosenRowData[value]
+                        : choosenDetailRowData[value]
+                      : value === 'quoteDate'
+                      ? undefined
+                      : initValue || (number ? '0.00' : undefined),
+                  })(
+                    this.returnElement({
+                      key,
+                      value,
+                      noNeed,
+                      type,
+                      list,
+                      clickFn,
+                      text,
+                      arr,
+                      initValue,
+                      data: quote,
+                      form,
+                    })
+                  )}
+                </FormItem>
+              </div>
+            )
           )}
 
         {rightMenu === 2 && productTypeName === '戒指' && (
@@ -1234,7 +1303,7 @@ class Info extends Component {
         </div>
         {handleModalOk && (
           <Modal
-            zIndex={1}
+            zIndex={1000}
             maskClosable={false}
             title={returnTitle()}
             width={1000}
@@ -1259,7 +1328,7 @@ class Info extends Component {
           onOk={handleProductModalOk}
           visible={showProductModal}
           onCancel={handleProductModalCancel}
-          zIndex={2}
+          zIndex={1002}
         >
           <SelectProductModal
             list={productList}
