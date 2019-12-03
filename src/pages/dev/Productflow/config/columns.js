@@ -55,10 +55,12 @@ let productflow = [
   },
 
   {
-    title: <div className={styles.row_normal2}>标准工时</div>,
-    dataIndex: 'workingHour',
-    key: 'workingHour',
+    title: <div className={styles.row_normal2}>类别</div>,
+    dataIndex: 'flowClass',
+    key: 'flowClass',
     width: 100,
+    render: (data,item) =>item.flowClassName
+
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,
