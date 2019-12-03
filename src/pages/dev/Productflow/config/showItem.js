@@ -30,7 +30,7 @@ export const productflow = [
   { 'key': '允许损耗(%)', 'value': 'isWastage' },
   { 'key': '出货重量范围', 'value': 'weightRange' },
   { 'key': '说明', 'value': 'remarks' },
-  { 'key': '标准工时', 'value': 'workingHour' },
+  { 'key': '类别', 'value': 'flowClass' ,cName:true },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
 ];
 
