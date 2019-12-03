@@ -489,10 +489,11 @@ class Info extends Component {
   };
 
   disabledCondition = (v, form) => {
-    const isstonePrice = v === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001';
-    const ismainMaterialWeight =
-      v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001';
-    return isstonePrice || ismainMaterialWeight;
+    // const isstonePrice = v === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001';
+    // const ismainMaterialWeight =
+    //   v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001';
+    // return isstonePrice || ismainMaterialWeight;
+    return false;
   };
 
   handleDatePicker = (date, dateString) => {
@@ -678,9 +679,13 @@ class Info extends Component {
     const isEdit = modalType === 'edit';
     const addArr = rightMenu === 1 ? headList : detailList;
     const productTypeName = getFieldValue('productTypeName');
-    const { currency } = choosenRowData;
+    const { currency, quoteMethod } = choosenRowData;
     const productNo = form.getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
+    const quoteMethodobj = {
+      H008002: '克',
+      H008001: '件',
+    };
     return (
       <Form size="small">
         {rightMenu === 2 && (
@@ -733,14 +738,15 @@ class Info extends Component {
               initValue,
               number,
               priceUnit,
-              unit,
             }) => (
               <div
                 className="addModal"
                 key={key}
                 style={value === 'productTypeName' ? { marginRight: 100 } : {}}
               >
-                <FormItem label={priceUnit === 1 ? `${key + currency}/${unit}` : key}>
+                <FormItem
+                  label={priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}` : key}
+                >
                   {getFieldDecorator(value, {
                     rules: [
                       {
@@ -778,7 +784,7 @@ class Info extends Component {
             )
           )}
 
-        {rightMenu === 2 && productTypeName === '戒指' && (
+        {/* {rightMenu === 2 && productTypeName === '戒指' && (
           <React.Fragment>
             <div className="addModal">
               <FormItem label={'戒围标准'}>
@@ -797,7 +803,7 @@ class Info extends Component {
               </FormItem>
             </div>
           </React.Fragment>
-        )}
+        )} */}
       </Form>
     );
   };

@@ -96,28 +96,26 @@
     },
     { "key": "石材重量", "value": "stonesWeight", "noNeed": true, "number": true },
     { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
-    { "key": "成品重量", "value": "finishedWeight", "number": true, "type": 7 },
+    { "key": "成品重量", "value": "finishedWeight", "number": true },
     { "key": "产品长度", "value": "productLength", "noNeed": true, "number": true },
     { "key": "长度描述", "value": "lengthDescription", "noNeed": true },
     { "key": "长度单位", "value": "lengthUnit", "noNeed": true, "type": 7 },
     { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
-    { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 1, "unit": "件" },
+    { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 1 },
     {
       "key": "石材价",
       "value": "stonePrice",
       "noNeed": true,
       "number": true,
-      "priceUnit": 1,
-      "unit": "克"
+      "priceUnit": 1
     },
     {
       "key": "包装单价",
       "value": "packPrice",
       "number": true,
       "noNeed": true,
-      "priceUnit": 1,
-      "unit": "件"
+      "priceUnit": 1
     },
     { "key": "报价重量范围/%", "value": "quotedWeightRange", "noNeed": true, "initValue": "5" },
 
@@ -127,8 +125,7 @@
       "number": true,
       "type": 7,
       "noNeed": true,
-      "priceUnit": 1,
-      "unit": "克"
+      "priceUnit": 1
     },
     {
       "key": "最高工费",
@@ -136,8 +133,7 @@
       "number": true,
       "type": 7,
       "noNeed": true,
-      "priceUnit": 1,
-      "unit": "克"
+      "priceUnit": 1
     },
     {
       "key": "实际工费",
@@ -145,19 +141,17 @@
       "number": true,
       "type": 7,
       "noNeed": true,
-      "priceUnit": 1,
-      "unit": "克"
+      "priceUnit": 1
     },
     {
       "key": "此次工费",
       "value": "nowCount",
       "number": true,
       "noNeed": true,
-      "priceUnit": 1,
-      "unit": "克"
+      "priceUnit": 1
     },
-    { "key": "单价", "value": "price", "number": true, "priceUnit": 1, "unit": "克" },
-    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1, "unit": "件" },
+    { "key": "单价", "value": "price", "number": true, "priceUnit": 1 },
+    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1 },
     { "key": "报价数量", "value": "qty", "number": true },
     {
       "key": "报价金额",
@@ -165,8 +159,7 @@
       "number": true,
       "noNeed": true,
       "type": 7,
-      "priceUnit": 1,
-      "unit": "克"
+      "priceUnit": 1
     },
     { "key": "备注", "value": "remark", "noNeed": true, "type": 8 },
     { "key": "客户要求", "value": "customerRequirements", "noNeed": true, "type": 8 }
