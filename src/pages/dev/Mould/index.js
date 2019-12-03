@@ -97,6 +97,11 @@ class Index extends Component {
   initDrop = () => {
     const { dispatch } = this.props;
 
+    // 产品编号下拉
+    dispatch({
+      type: `${defaultModelName}/getlistDieSetSubDropDown`,
+      payload: { params: {}, listName: 'listDieSetSubDropDown' },
+    });
     // 成品类别下拉
     dispatch({
       type: `${defaultModelName}/getTypeByWordbookCode`,

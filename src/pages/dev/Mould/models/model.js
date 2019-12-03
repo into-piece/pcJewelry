@@ -10,7 +10,7 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-  getTypeByWordbookCode, listBasicColourSetDropDown, listMoldPositioningSettingsDropDown,listFilmSettingsDropDown
+  getTypeByWordbookCode, listBasicColourSetDropDown, listMoldPositioningSettingsDropDown,listFilmSettingsDropDown,listDieSetSubDropDown
 } = servicesConfig;
 const defaultModelName = 'devMould';
 
@@ -40,6 +40,7 @@ export default {
     searchParamsSecond: {},
 
 
+    listDieSetSubDropDown: [{ key: '', value: '' }],
     listFilmSettings: [{ key: '', value: '' }],
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
@@ -191,6 +192,18 @@ export default {
 
     // 下拉获取
 
+    * getlistDieSetSubDropDown({ payload }, { call, put }) {
+      const response = yield call(listDieSetSubDropDown, payload.params);
+      const wordbookData = response.body.records;
+      const wordbookdropdown = wordbookData.map(({ productNo }) => {
+        return { value: productNo, key: productNo };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: wordbookdropdown, typeName: payload.listName },
+      });
+
+    },
     * getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload.params);
       const wordbookData = response.body.records;
@@ -232,8 +245,8 @@ export default {
     * getlistFilmSettings({ payload }, { call, put }) {
       const response = yield call(listFilmSettingsDropDown, payload);
       const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
+      const wordbookdropdown = wordbookData.map(({ id, code }) => {
+        return { value: id, key: code };
       });
       yield put({
         type: 'changeState',

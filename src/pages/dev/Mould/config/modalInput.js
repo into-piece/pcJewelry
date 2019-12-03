@@ -1,5 +1,5 @@
 export const dieSet = [
-  { 'key': '产品编号', 'value': 'productNo',},
+  { 'key': '产品编号', 'value': 'productNo', 'type': 2, 'list': 'listDieSetSubDropDown',  },
   { 'key': '成色', 'value': 'purity', 'type': 2, 'list': 'listBasicColourSetDropDown',  },
   { 'key': '产品类别', 'value': 'productType', 'type': 2, 'list': 'H016009',},
 ];
@@ -16,7 +16,7 @@ export const dieSetChild = [
   { 'key': '注蜡时间(秒)', 'value': 'waxInjectionTime','number': true,'initValue':3.0,'step':0.1,'min':0},
   { 'key': '蜡件重量(克)', 'value': 'waxWeight','number': true,'initValue':0.00,'step':0.01,'min':0},
   { 'key': '存放位置', 'value': 'position', 'type': 2, 'list': 'listMoldPositioningSettingsDropDown',},
-  { 'key': '备注', 'value': 'remarks',   type:8 },
+  { 'key': '备注', 'value': 'remarks',   type:8,noNeed:true },
 ];
 
 
