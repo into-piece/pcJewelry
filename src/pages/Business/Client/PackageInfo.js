@@ -75,7 +75,7 @@ class PackageInfo extends PureComponent {
 
     dispatch({
       type: 'packageinfo/querylistEndCustomerDropDown',
-      payload: { key: '74ec9b5cc01d8d5946cb283c1abe79bc' },
+      payload: { key: this.state.customerId  },
     });
   };
 
