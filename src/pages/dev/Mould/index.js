@@ -113,7 +113,7 @@ class Index extends Component {
       type: `${defaultModelName}/getlistBasicColourSetDropDown`,
     });
 
-    // 存放位置 模具仓位编号下拉
+    // 存放位置 胶膜仓位编号下拉
     dispatch({
       type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
       payload: {},

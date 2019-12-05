@@ -385,7 +385,7 @@ const columnsArr = {
     },
   ],
 
-  // 模具仓位设定
+  // 胶膜仓位
   mouldPosition: [
     {
       title: '仓位编号',
@@ -619,7 +619,7 @@ class Info extends Component {
             payload: { wordbookTypeCode: 'H016' },
           });
         }
-        // 模具仓位
+        // 胶膜仓位
         if (selectKey === 'mouldPosition') {
           // 成品类别下拉
           dispatch({
@@ -675,7 +675,7 @@ class Info extends Component {
 
             const selectData = { ...choosenRowData };
 
-            // 模具仓位  编号生成逻辑：品牌 + 产品类别+柜号+抽屉号+卡位号
+            // 胶膜仓位  编号生成逻辑：品牌 + 产品类别+柜号+抽屉号+卡位号
             if(selectKey ==='mouldPosition'&&value === 'positionCode'){
               let va = '';
               let productType = `${getFieldValue('productType')}`;
