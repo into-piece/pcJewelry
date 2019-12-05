@@ -434,7 +434,7 @@ class Index extends Component {
           addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, step, min, max }) => {
 
             if (rightActive === 'dieSetChild' && value === 'productNo') {
-              initValue = choosenRowData.productNo;
+              initValue = `${choosenRowData.productNo}()`;
               // choosenRowDataSecond[value] = choosenRowData.id
             }
 
