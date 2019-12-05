@@ -51,8 +51,8 @@ const defaultModelName = 'devMould';
 
 const firstTabFlag = 'dieSet';
 
-const radioArr = [{ key: '模具明细', value: 'dieSet' },
-  { key: '子模明细', value: 'dieSetChild' }];
+const radioArr = [{ key: '胶膜管理', value: 'dieSet' },
+  { key: '胶膜明细', value: 'dieSetChild' }];
 
 @Form.create()
 @connect(({ loading, devMould: model }) => {

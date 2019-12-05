@@ -99,7 +99,7 @@
     { "key": "成品重量", "value": "finishedWeight", "number": true },
     { "key": "产品长度", "value": "productLength", "noNeed": true, "number": true },
     { "key": "长度描述", "value": "lengthDescription", "noNeed": true },
-    { "key": "长度单位", "value": "lengthUnit", "noNeed": true, "type": 7 },
+    { "key": "长度单位", "value": "unitOfLengthName", "noNeed": true, "type": 7 },
     { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
     { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 1 },

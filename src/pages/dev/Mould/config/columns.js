@@ -4,7 +4,7 @@ import {statusConvert,numberConvert} from '@/utils/convert';
 
 let dieSet = [
   {
-    title: <div className={styles.row_normal2}>主模具号</div>,
+    title: <div className={styles.row_normal2}>产品编号</div>,
     dataIndex: 'productNo',
     key: 'productNo',
   },
@@ -48,8 +48,8 @@ let dieSetChild = [
   },
   {
     title: <div className={styles.row_normal2}>模具编号</div>,
-    dataIndex: 'filmCode',
-    key: 'filmCode',
+    dataIndex: 'filmCodeName',
+    key: 'filmCodeName',
   },
   {
     title: <div className={styles.row_normal2}>配膜比例</div>,

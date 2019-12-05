@@ -128,7 +128,10 @@ const fetchArr = [
     key: 'unitOfWeight',
     value: queryMeasureUniList,
   },
-
+  {
+    key: 'unitOfLength',
+    value: queryMeasureUniList,
+  },
   {
     key: 'mouldNo',
     value: queryMoldList,
@@ -193,6 +196,7 @@ class ProductDetail extends Component {
       sourceOfProduct: [],
       unitOfMeasurement: [],
       unitOfWeight: [],
+      unitOfLength: [],
       finishedWeight: [],
       mouldNo: [],
     },
@@ -1259,6 +1263,32 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
+            <FormItem label="长度单位" {...this.centerFormLayout}>
+              {getFieldDecorator('unitOfLength', {
+                rules: [
+                  {
+                    required:
+                      this.state.cNofCodezhName === '项链' ||
+                      this.state.cNofCodezhName === '手链',
+                    message: '请选择长度单位',
+                  },
+                ],
+                initialValue: current.unitOfLength || 'e6561390d1eb1270b7e4625769cd50a3',
+              })(
+                <BasicMeasureListSelect
+                  style={{ width: 180 }}
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  content={current.unitOfLength || 'e6561390d1eb1270b7e4625769cd50a3'}
+                  placeholder="请输入"
+                />
+              )}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
             <FormItem label="成品重量" {...this.centerFormLayout}>
               {getFieldDecorator('finishedWeight', {
                 initialValue: current.finishedWeight,
@@ -2004,8 +2034,8 @@ class ProductDetail extends Component {
                   <DescriptionList size="small" col="2">
                     <Description term="颜色">{showItem.gemColorName}</Description>
                     <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
-                    <Description term="报价重量">{showItem.finishedWeight}</Description>
-                    <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                    {/* <Description term="报价重量">{showItem.finishedWeight}</Description> */}
+                    {/* <Description term="成品重量">{showItem.unitOfWeightName}</Description> */}
                     <Description term="电镀">{showItem.platingColorName}</Description>
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>

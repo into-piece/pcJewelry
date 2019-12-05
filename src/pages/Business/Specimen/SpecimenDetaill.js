@@ -255,8 +255,8 @@ class SpecimenDetaill extends Component {
                       <DescriptionList size="small" col="2">
                         <Description term="颜色">{showItem.gemColorName}</Description>
                         <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
-                        <Description term="报价重量">{showItem.finishedWeight}</Description>
-                        <Description term="成色重量">{showItem.unitOfWeightName}</Description>
+                        {/* <Description term="报价重量">{showItem.finishedWeight}</Description> */}
+                        {/* <Description term="成色重量">{showItem.unitOfWeightName}</Description> */}
                         <Description term="电镀">{showItem.platingColorName}</Description>
                         <Description term="成色">{showItem.productColorName}</Description>
                         <Description term="产品来源">{showItem.sourceOfProductName}</Description>
