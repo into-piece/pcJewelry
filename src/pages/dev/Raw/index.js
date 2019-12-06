@@ -941,6 +941,8 @@ class Info extends Component {
             if (qualityId) quality = dev.listQualityDrop.filter(e => e.id === qualityId);
             if (sId) s = dev.H016001.filter(e => e.id === sId);
 
+            const timestamp = moment().format('YYYYMMDDHHmmSSS');
+
             // modalContent => 每个menu不同的增加弹窗填写信息
             if (value === 'materialNo') {
               let va = '';
@@ -977,7 +979,7 @@ class Info extends Component {
               }
               if (selectKey === 'otherMaterial') {
                 s = dev.H016005.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+                va = choosenRowData[value]||`${s.length > 0 ? (`${s[0].unitCode}-`) : ''}${timestamp}`;
               }
               dfv = va;
               selectData[value] = va || choosenRowData[value];
@@ -1027,7 +1029,7 @@ class Info extends Component {
 
               if (selectKey === 'otherMaterial') {
                 s = dev.H016005.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].zhName} `) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+                va =choosenRowData[value]|| `${s.length > 0 ? (`${s[0].zhName} `) : ''}${timestamp}`;
               }
               dfv = va;
               selectData[value] = va;
@@ -1069,12 +1071,10 @@ class Info extends Component {
                   color.length > 0 ? (`${color[0].enName} `) : ''}${
                   specification.length > 0 ? specification[0].enName : ''}`;
               }
-
               if (selectKey === 'otherMaterial') {
                 s = dev.H016005.filter(e => e.id === sId);
-                va = `${s.length > 0 ? (`${s[0].enName} `) : ''}${moment().format('YYYYMMDDHHmmSSS')}`;
+                va = choosenRowData[value]||`${s.length > 0 ? (`${s[0].enName} `) : ''}${timestamp}`;
               }
-
               dfv = va;
               selectData[value] = va;
             }

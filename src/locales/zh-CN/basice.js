@@ -26,7 +26,7 @@ export default {
   'app.dev.menuMap.stoneCutter': '石头切工',
   'app.dev.menuMap.insertStoneTechnology': '镶嵌工艺',
   'app.dev.menuMap.rubberMouldSetting': '模具设定',
-  'app.dev.menuMap.mouldPosition': '模具仓位',
+  'app.dev.menuMap.mouldPosition': '胶膜仓位',
 
 
 

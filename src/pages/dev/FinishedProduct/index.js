@@ -377,7 +377,7 @@ const columnsArr = {
     },
   ],
 
-  // 模具仓位设定
+  // 胶膜仓位
   mouldPosition: [
     {
       title: '仓位编号',

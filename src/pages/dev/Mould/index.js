@@ -51,8 +51,8 @@ const defaultModelName = 'devMould';
 
 const firstTabFlag = 'dieSet';
 
-const radioArr = [{ key: '模具明细', value: 'dieSet' },
-  { key: '子模明细', value: 'dieSetChild' }];
+const radioArr = [{ key: '胶膜管理', value: 'dieSet' },
+  { key: '胶膜明细', value: 'dieSetChild' }];
 
 @Form.create()
 @connect(({ loading, devMould: model }) => {
@@ -113,7 +113,7 @@ class Index extends Component {
       type: `${defaultModelName}/getlistBasicColourSetDropDown`,
     });
 
-    // 存放位置 模具仓位编号下拉
+    // 存放位置 胶膜仓位编号下拉
     dispatch({
       type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
       payload: {},
@@ -434,7 +434,7 @@ class Index extends Component {
           addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, step, min, max }) => {
 
             if (rightActive === 'dieSetChild' && value === 'productNo') {
-              initValue = choosenRowData.productNo;
+              initValue = `${choosenRowData.productNo}()`;
               // choosenRowDataSecond[value] = choosenRowData.id
             }
 

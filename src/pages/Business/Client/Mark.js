@@ -386,7 +386,7 @@ class Mark extends PureComponent {
 
     dispatch({
       type: 'mark/querylistEndCustomerDropDown',
-      payload: { key: '74ec9b5cc01d8d5946cb283c1abe79bc' },
+      payload: { key: this.state.customerId  },
     });
   };
 

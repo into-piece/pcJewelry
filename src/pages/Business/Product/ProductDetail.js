@@ -128,6 +128,10 @@ const fetchArr = [
     key: 'unitOfWeight',
     value: queryMeasureUniList,
   },
+  {
+    key: 'unitOfLength',
+    value: queryMeasureUniList,
+  },
 
   {
     key: 'mouldNo',
@@ -193,6 +197,7 @@ class ProductDetail extends Component {
       sourceOfProduct: [],
       unitOfMeasurement: [],
       unitOfWeight: [],
+      unitOfLength: [],
       finishedWeight: [],
       mouldNo: [],
     },
@@ -1148,29 +1153,30 @@ class ProductDetail extends Component {
                 rules: [{ required: true, message: '请输入' }],
                 initialValue: current.mouldNo,
               })(
-                <MoldListSelect
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                  style={{ width: 180 }}
-                  content={current.mouldNo}
-                  placeholder="请输入"
-                  onSelect={v => {
-                    this.setState({ mouldNo: v.mainMoldCode }, () => {
-                      this.parseProductNo();
-                    });
-                  }}
-                  onChange={v => {
-                    this.setState(
-                      { current: { ...this.state.current, mouldNo: v }, mouldNo: v },
-                      () => {
-                        this.parseProductNo();
-                      }
-                    );
-                  }}
-                />
+                <Input placeholder="请输入" />
+                // <MoldListSelect
+                //   showSearch
+                //   optionFilterProp="children"
+                //   filterOption={(input, option) =>
+                //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                //   }
+                //   style={{ width: 180 }}
+                //   content={current.mouldNo}
+                //   placeholder="请输入"
+                //   onSelect={v => {
+                //     this.setState({ mouldNo: v.mainMoldCode }, () => {
+                //       this.parseProductNo();
+                //     });
+                //   }}
+                //   onChange={v => {
+                //     this.setState(
+                //       { current: { ...this.state.current, mouldNo: v }, mouldNo: v },
+                //       () => {
+                //         this.parseProductNo();
+                //       }
+                //     );
+                //   }}
+                // />
               )}
             </FormItem>
           </div>
@@ -1253,6 +1259,31 @@ class ProductDetail extends Component {
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                   content={current.unitOfWeight || '8ee1cc72791578cfe122f6839487bbbe'}
+                  placeholder="请输入"
+                />
+              )}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem label="长度单位" {...this.centerFormLayout}>
+              {getFieldDecorator('unitOfLength', {
+                rules: [
+                  {
+                    required:
+                      this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链',
+                    message: '请选择长度单位',
+                  },
+                ],
+                initialValue: current.unitOfLength || 'e6561390d1eb1270b7e4625769cd50a3',
+              })(
+                <BasicMeasureListSelect
+                  style={{ width: 180 }}
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  content={current.unitOfLength || 'e6561390d1eb1270b7e4625769cd50a3'}
                   placeholder="请输入"
                 />
               )}
