@@ -292,11 +292,6 @@ class Info extends Component {
       type: 'quote/getwordbookdropdown',
     });
 
-    // 终客编号下拉
-    dispatch({
-      type: 'quote/getEndCustomerListDropDown',
-    });
-
     // 字印编码
     dispatch({
       type: 'quote/getMarkinglistDropDown',
@@ -335,7 +330,7 @@ class Info extends Component {
   };
 
   openAddModal = () => {
-    const { rightMenu, dispatch, form } = this.props;
+    const { rightMenu, dispatch, form, choosenRowData } = this.props;
     const isHead = rightMenu === 1;
 
     if (isHead) {
@@ -440,7 +435,7 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu } = this.props;
+    const { quote, form, rightMenu, dispatch } = this.props;
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -454,6 +449,12 @@ class Info extends Component {
 
     // 自动带出
     if (type === 'customerId') {
+      // 终客编号下拉
+      dispatch({
+        type: 'quote/getEndCustomerListDropDown',
+        payload: { key: value },
+      });
+
       const { quote, form } = this.props;
       const obj = quote.customerDropDownList.find(item => item.value === value);
       const { shotName, currencyCode } = obj;
@@ -745,7 +746,11 @@ class Info extends Component {
                 style={value === 'productTypeName' ? { marginRight: 100 } : {}}
               >
                 <FormItem
-                  label={priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}` : key}
+                  label={
+                    priceUnit === 1 && rightMenu === 2
+                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
+                      : key
+                  }
                 >
                   {getFieldDecorator(value, {
                     rules: [
