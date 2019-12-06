@@ -22,6 +22,7 @@ import {
   Radio,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import {defaultImages} from '@/utils/utils';
 import Zmage from 'react-zmage';
 import moment from 'moment';
 import styles from './index.less';
@@ -1894,8 +1895,7 @@ const GetRenderitem = ({ data, type }) => {
       </div>
     ));
   };
-
-  const images = data.pictures && data.pictures.flatMap(e => e.picPath);
+  const images = data.pictures && (data.pictures.length===0?defaultImages:data.pictures.flatMap(e => e.picPath));
   console.log('data', data);
   return (
     <Card key={data.id} bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv}

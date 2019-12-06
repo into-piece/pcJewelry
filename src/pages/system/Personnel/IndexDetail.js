@@ -28,10 +28,10 @@ import Zmage from 'react-zmage';
 import { connect } from 'dva';
 import { getCurrentUser } from '@/utils/authority';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import {defaultImages} from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Description } = DescriptionList;
-
 const FormItem = Form.Item;
 
 @connect(({ person, loading }) => {
@@ -271,6 +271,8 @@ class IndexDetail extends Component {
       paths = imageObject.map(v => {
         return v.path;
       });
+    }else{
+      paths=defaultImages;
     }
 
     // console.log(" fetch isload ",showItem)

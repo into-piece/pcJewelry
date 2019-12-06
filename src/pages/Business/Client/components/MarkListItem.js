@@ -11,6 +11,7 @@ import styles from '../base.less';
 import HttpFetch, { querylistEndCustomerDropDown } from '../../../../utils/HttpFetch';
 import clientStyle from '../Client.less';
 import { getCurrentUser } from '../../../../utils/authority';
+import {defaultImages} from '@/utils/utils';
 
 const { Description } = DescriptionList;
 
@@ -95,7 +96,7 @@ class MarkListItem extends PureComponent {
 
     const { loading, imageObject, isFirst, isFristLoadValue } = this.state;
 
-    const images = item.pictures && item.pictures.flatMap(e => e.picPath);
+    const images = item.pictures && (item.pictures.length===0?defaultImages:item.pictures.flatMap(e => e.picPath));
 
 
     return (

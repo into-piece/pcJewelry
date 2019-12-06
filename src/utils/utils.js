@@ -8,12 +8,17 @@ export function getMenuPath(arr = []) {
     const menu = arr[0];
     if (!menu.children) {
       return menu.path;
-    } 
+    }
       return getMenuPath(menu.children);
-    
+
   }
   return '#';
 };
+
+
+// 默认图片
+export const defaultImages = ['http://118.89.24.204:8180/uploadImgs/default/default.png'];
+
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;

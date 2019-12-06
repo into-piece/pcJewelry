@@ -41,7 +41,7 @@ import { getCurrentUser } from '../../../utils/authority';
 import moment from 'moment';
 import classNames from 'classnames';
 import UploadImg from '@/components/UploadImg';
-
+import {defaultImages} from '@/utils/utils';
 
 const { Description } = DescriptionList;
 
@@ -240,7 +240,7 @@ class SpecimenDetaill extends Component {
                         initialSlide={0}
                         autoplay
                       >
-                        {this.getImages(showItem.pictures)}
+                        {this.getImages(showItem.pictures&&(showItem.pictures.length===0?defaultImages:showItem.pictures))}
                       </Carousel>
                       {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                       <DescriptionList size="small" col="1">
@@ -349,12 +349,12 @@ class SpecimenDetaill extends Component {
                     </Button>
                   ) : (
                     <Button
-                        className={business.buttomControl}
-                        size="small"
-                        type="primary"
-                        icon="lock"
-                        disabled={!showItem || showItem === '' || !isProductUpdate}
-                        onClick={() => {
+                      className={business.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      disabled={!showItem || showItem === '' || !isProductUpdate}
+                      onClick={() => {
                           ModalConfirm({
                             content: '确定审批吗？',
                             onOk: () => {
@@ -362,9 +362,9 @@ class SpecimenDetaill extends Component {
                             },
                           });
                         }}
-                      >
+                    >
                         审批
-                      </Button>
+                    </Button>
                     )}
                 </div>
 
@@ -440,7 +440,7 @@ class SpecimenDetaill extends Component {
   };
 
   getImages = (pictures) => {
-    const images = pictures && pictures.flatMap(e => e.picPath);
+    const images = pictures && pictures.flatMap(e => e.picPath||e);
     if (!images) return;
     return images.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>

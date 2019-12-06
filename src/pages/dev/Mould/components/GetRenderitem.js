@@ -12,7 +12,7 @@ import DescriptionList from '@/components/DescriptionList';
 import moment from 'moment';
 import Zmage from 'react-zmage';
 import styles from './GetRenderitem.less';
-
+import {defaultImages} from '@/utils/utils';
 const { Description } = DescriptionList;
 
 // 右手边显示的详情信息
@@ -42,7 +42,8 @@ const GetRenderitem = ({ data, type, items }) => {
     ));
   };
   const arr = items[type];
-  const images = data.pictures && data.pictures.flatMap(e => e.picPath);
+  const images = data.pictures && (data.pictures.length===0?defaultImages:data.pictures.flatMap(e => e.picPath));
+  // import {defaultImages} from '@/utils/utils';
 
   return (
     <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>
@@ -51,13 +52,13 @@ const GetRenderitem = ({ data, type, items }) => {
           {getImages(images)}
         </Carousel>}
       {images && images.length > 0 && <Divider />}
-      {data.id&&<DescriptionList className={styles.headerList} size="small" col="1">
+      {data.id && <DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, cName, convert, date ,fixed}) =>
+          arr.map(({ key, value, cName, convert, date, fixed }) =>
             <Description key={key} term={key}>
               {
                 (date && data[value]) ? moment(data[value]).format(date)
-                  : (convert ? (convert instanceof Function ? convert(data[value],fixed): convert[data[value]] ) : (cName ? data[`${value}Name`] : (`${data[value]}`)))
+                  : (convert ? (convert instanceof Function ? convert(data[value], fixed) : convert[data[value]]) : (cName ? data[`${value}Name`] : (`${data[value]}`)))
               }
             </Description>,
           )
