@@ -1,18 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import {
-  Table,
-  Card,
-  Row,
-  Col,
-  Icon,
-  Form,
-  Modal,
-  Input,
-  Button,
-  Divider,
-  message,
-} from 'antd';
+import { Table, Card, Row, Col, Icon, Form, Modal, Input, Button, Divider, message } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { formatMessage } from 'umi/locale';
 
@@ -172,316 +160,13 @@ class RequestedComponent extends PureComponent {
     });
   };
 
-  render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update,isAdd, showItem } = this.state;
-
-    const {
-      listLoading,
-      body = {},
-      dispatch,
-      addloading,
-      deleteloading,
-      upateloading,
-      unfreezing,
-      freezing,
-      form: { getFieldDecorator },
-    } = this.props;
-
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
-
-    if (addloading || deleteloading || upateloading || freezing || unfreezing) {
-      this.state.update = true;
-      if (upateloading) {
-        this.state.isUpdateFrom = true;
-      }
-    } else if (update) {
-      if (body.rtnCode === '000000') {
-        this.state.requestState = 'success';
-      } else {
-        this.state.requestState = 'error';
-      }
-
-      this.state.requestMes = body.rtnMsg;
-      this.state.update = false;
-      this.state.done = true;
-      // this.state.visible = true;
-      if (this.state.isUpdateFrom) {
-        this.state.isUpdateFrom = false;
-        // this.state.showItem = { ...current };
-      }
-    }
-
-    if (listLoading) {
-      this.state.isLoadList = true;
-    } else if (this.state.isLoadList) {
-      if (body && body.data && body.data.length > 0) {
-        const newdata = body.data.map(value => {
-          const s = value.status;
-          value.status = statusConvert[s];
-          return value;
-        });
-
-        this.state.data = newdata;
-      }
-      this.updateSelectDatas();
-      this.state.isLoadList = false;
-    }
-
-
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkbox',
-      onChange: this.onSelectChange,
-      onSelect: this.selectChange,
-    };
-
-
-    if (this.state.done) {
-      if (this.state.requestState == 'success') {
-        message.success(this.state.requestMes);
-      } else {
-        message.error(this.state.requestMes);
-      }
-      this.handleDone();
-    }
-
-    const getModalContent = () => {
-
-      return (
-        <Form size="small" onSubmit={this.handleSubmit}>
-          <FormItem label="品质要求英文名称" {...this.formLayout}>
-            {getFieldDecorator('qualityEnName', {
-              rules: [{ required: true, message: '请输入英文名称' }],
-              initialValue: current.qualityEnName,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem label="品质要求中文名" {...this.formLayout}>
-            {getFieldDecorator('qualityZhName', {
-              rules: [{ message: '请输入中文名称' }],
-              initialValue: current.qualityZhName,
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-        </Form>
-      );
-    };
-
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-        this.handleSubmit(true);
-      }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-        this.handleSubmit(false);
-      }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={upateloading}
-        onClick={() => {
-        this.handleSubmit(false);
-      }}
-      >
-        保存
-      </Button>,
-    ];
-
-    const onChange = (pagination, filters, sorter) => {
-      const { current: currentIndex, pageSize } = pagination;
-      dispatch({
-        type: 'requested/fetchListRequested',
-        payload: { current: currentIndex, size: pageSize },
-      });
-
-    };
-    const paginationProps = {
-      // showSizeChanger: true,
-      showQuickJumper: true,
-      pageSize: 5,
-    };
-    return (
-      <GridContent>
-        <Row gutter={24} className={styles.row_content}>
-          <Col lg={16} md={24}>
-            <div className={styles.view_left_content}>
-              <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
-                <Icon
-                  style={{
-                    width: 50,
-                    height: 50,
-                    paddingRight: 10,
-                    paddingTop: 10,
-                    paddingLeft: 10,
-                  }}
-                  component={Requested}
-                />
-                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
-              </div>
-              <Card bordered={false} loading={false}>
-                <Table
-                  loading={this.state.isLoading}
-                  pagination={paginationProps}
-                  dataSource={this.state.data}
-                  rowSelection={rowSelection}
-                  rowKey={record => record.id}
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickRowItem(record);
-                      },
-                    };
-                  }}
-                  bordered={false}
-                  rowClassName={this.onSelectRowClass}
-                  size="middle"
-                  columns={clientContentColumns}
-                  onChange={onChange}
-                />
-                <Modal
-                  maskClosable={false}
-                  title={<BuildTitle
-                    title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.requested' })}
-                  />}
-
-                  width={640}
-                  className={styles.standardListForm}
-                  bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
-                  destroyOnClose
-                  visible={this.state.visible}
-                  footer={modalFooter}
-                  onCancel={this.handleCancel}
-
-                >
-                  {getModalContent()}
-                </Modal>
-              </Card>
-            </div>
-          </Col>
-          <Col lg={8} md={24}>
-            <div className={styles.view_right_content}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: 'column',
-                overflow: 'hidden',
-              }}
-              >
-                <div>
-                  <div
-                    style={{
-                      padding: '20px 20px 10px',
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                      color: '#35B0F4',
-                    }}
-                  >
-                    {formatMessage({ id: 'app.basic.menuMap.requested' })}
-                  </div>
-                  <Divider className={styles.divder} />
-                </div>
-                {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
-              </div>
-              <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Button
-                    className={styles.buttomControl}
-                    type="primary"
-                    icon="plus"
-                    size="small"
-                    onClick={this.clickNewFrom}
-                  >
-                    新增
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    type="danger"
-                    icon="delete"
-                    size="small"
-                    onClick={() => {
-                      ModalConfirm({
-                        content: '确定删除吗？', onOk: () => {
-                          this.clickDeleteFrom();
-                        },
-                      });
-                    }}
-                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
-                  >
-                    删除
-                  </Button>
-                  <Button
-                    className={styles.buttomControl}
-                    type="primary"
-                    size="small"
-                    onClick={this.clickEditFrom}
-                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
-                    icon="edit"
-                  >
-                    编辑
-                  </Button>
-                  {this.state.showItem.status === '审批' ? (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="danger"
-                    icon="unlock"
-                    onClick={() => {
-                      ModalConfirm({
-                        content: '确定取消审批吗？', onOk: () => {
-                          this.clickUnFreezeFrom();
-                        },
-                      });
-                    }}
-                    disabled={isEdit}
-                  >
-                    取消审批
-                  </Button>) : (<Button
-                                                            className={styles.buttomControl}
-                                                            size="small"
-                                                            type="primary"
-                                                            icon="lock"
-                                                            onClick={() => {
-                      ModalConfirm({
-                        content: '确定审批吗？', onOk: () => {
-                          this.clickFreezeFrom();
-                        },
-                      });
-                    }}
-                                                            disabled={isEdit}
-                                                          >
-                    审批
-                                                                        </Button>)}
-                </div>
-              </Card>
-            </div>
-          </Col>
-        </Row>
-      </GridContent>
-    );
-  }
+  returnTotal = total => (
+    <p>
+      <FormattedMessage id="app.table.total" defaultMessage="" />
+      {total}
+      <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
+    </p>
+  );
 
   onSelectRowClass = (record, index) => {
     let color = '';
@@ -500,14 +185,12 @@ class RequestedComponent extends PureComponent {
    * 通过最新列表更新选择的值
    * */
   updateSelectDatas = () => {
-
     const { rowSelectedData, showItem } = this.state;
     // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
     if (rowSelectedData && rowSelectedData.length > 0) {
       const newRowSelected = this.state.data.filter(v => {
         const rs = rowSelectedData.filter(v1 => {
-          if (v1.id === v.id)
-            return v;
+          if (v1.id === v.id) return v;
         });
         if (rs.length > 0) return rs[0];
       });
@@ -519,8 +202,7 @@ class RequestedComponent extends PureComponent {
 
     if (showItem && this.state.rowSelectedData) {
       const newShowItem = this.state.rowSelectedData.filter(v => {
-        if (showItem.id === v.id)
-          return v;
+        if (showItem.id === v.id) return v;
       });
       // console.log(" updateSelectDatas  rowSelecteData ",newShowItem)
       if (newShowItem && newShowItem[0]) {
@@ -549,7 +231,7 @@ class RequestedComponent extends PureComponent {
     dispatch({
       type: 'requested/deleteRequested',
       payload:
-      // ...requestedNo,
+        // ...requestedNo,
         { list: selectedRowKeys },
     });
 
@@ -581,15 +263,24 @@ class RequestedComponent extends PureComponent {
     const { id } = record;
 
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index => index === id), 1);
+      selects.splice(
+        selects.findIndex(index => index === id),
+        1
+      );
       if (rowData.includes(record)) rowData = [];
       if (rowSelectedData.includes(record)) {
         // console.log('includes ' + record.id);
-        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
+        rowSelectedData.splice(
+          rowSelectedData.findIndex(item => item.id === id),
+          1
+        );
       }
     } else {
       if (rowData.length > 0) {
-        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+        selects.splice(
+          selects.findIndex(index => index === rowData[0].id),
+          1
+        );
       }
       rowData = [];
       rowData.push({ ...record });
@@ -689,6 +380,329 @@ class RequestedComponent extends PureComponent {
       </Card>
     );
   };
+
+  render() {
+    const { selectedRowKeys = [], current = {}, isEdit, update, isAdd, showItem } = this.state;
+
+    const {
+      listLoading,
+      body = {},
+      dispatch,
+      addloading,
+      deleteloading,
+      upateloading,
+      unfreezing,
+      freezing,
+      form: { getFieldDecorator },
+    } = this.props;
+
+    this.state.isLoading =
+      addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
+
+    if (addloading || deleteloading || upateloading || freezing || unfreezing) {
+      this.state.update = true;
+      if (upateloading) {
+        this.state.isUpdateFrom = true;
+      }
+    } else if (update) {
+      if (body.rtnCode === '000000') {
+        this.state.requestState = 'success';
+      } else {
+        this.state.requestState = 'error';
+      }
+
+      this.state.requestMes = body.rtnMsg;
+      this.state.update = false;
+      this.state.done = true;
+      // this.state.visible = true;
+      if (this.state.isUpdateFrom) {
+        this.state.isUpdateFrom = false;
+        // this.state.showItem = { ...current };
+      }
+    }
+
+    if (listLoading) {
+      this.state.isLoadList = true;
+    } else if (this.state.isLoadList) {
+      if (body && body.data && body.data.length > 0) {
+        const newdata = body.data.map(value => {
+          const s = value.status;
+          value.status = statusConvert[s];
+          return value;
+        });
+
+        this.state.data = newdata;
+      }
+      this.updateSelectDatas();
+      this.state.isLoadList = false;
+    }
+
+    const rowSelection = {
+      selectedRowKeys,
+      type: 'checkbox',
+      onChange: this.onSelectChange,
+      onSelect: this.selectChange,
+    };
+
+    if (this.state.done) {
+      if (this.state.requestState == 'success') {
+        message.success(this.state.requestMes);
+      } else {
+        message.error(this.state.requestMes);
+      }
+      this.handleDone();
+    }
+
+    const getModalContent = () => {
+      return (
+        <Form size="small" onSubmit={this.handleSubmit}>
+          <FormItem label="品质要求英文名称" {...this.formLayout}>
+            {getFieldDecorator('qualityEnName', {
+              rules: [{ required: true, message: '请输入英文名称' }],
+              initialValue: current.qualityEnName,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="品质要求中文名" {...this.formLayout}>
+            {getFieldDecorator('qualityZhName', {
+              rules: [{ message: '请输入中文名称' }],
+              initialValue: current.qualityZhName,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+        </Form>
+      );
+    };
+
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={upateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
+
+    const onChange = (pagination, filters, sorter) => {
+      const { current: currentIndex, pageSize } = pagination;
+      dispatch({
+        type: 'requested/fetchListRequested',
+        payload: { current: currentIndex, size: pageSize },
+      });
+    };
+
+    const paginationProps = {
+      // showSizeChanger: true,
+      showQuickJumper: true,
+      pageSize: 5,
+      showTotal: this.returnTotal,
+    };
+
+    return (
+      <GridContent>
+        <Row gutter={24} className={styles.row_content}>
+          <Col lg={16} md={24}>
+            <div className={styles.view_left_content}>
+              <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
+                <Icon
+                  style={{
+                    width: 50,
+                    height: 50,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingLeft: 10,
+                  }}
+                  component={Requested}
+                />
+                <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="品质要求" />
+              </div>
+              <Card bordered={false} loading={false}>
+                <Table
+                  loading={this.state.isLoading}
+                  pagination={paginationProps}
+                  dataSource={this.state.data}
+                  rowSelection={rowSelection}
+                  rowKey={record => record.id}
+                  onRow={record => {
+                    return {
+                      onClick: event => {
+                        this.clickRowItem(record);
+                      },
+                    };
+                  }}
+                  bordered={false}
+                  rowClassName={this.onSelectRowClass}
+                  size="middle"
+                  columns={clientContentColumns}
+                  onChange={onChange}
+                />
+                <Modal
+                  maskClosable={false}
+                  title={
+                    <BuildTitle
+                      title={
+                        this.state.done
+                          ? null
+                          : formatMessage({ id: 'app.basic.menuMap.requested' })
+                      }
+                    />
+                  }
+                  width={640}
+                  className={styles.standardListForm}
+                  bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
+                  destroyOnClose
+                  visible={this.state.visible}
+                  footer={modalFooter}
+                  onCancel={this.handleCancel}
+                >
+                  {getModalContent()}
+                </Modal>
+              </Card>
+            </div>
+          </Col>
+          <Col lg={8} md={24}>
+            <div className={styles.view_right_content}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      padding: '20px 20px 10px',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: '#35B0F4',
+                    }}
+                  >
+                    {formatMessage({ id: 'app.basic.menuMap.requested' })}
+                  </div>
+                  <Divider className={styles.divder} />
+                </div>
+                {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
+              </div>
+              <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    icon="plus"
+                    size="small"
+                    onClick={this.clickNewFrom}
+                  >
+                    新增
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="danger"
+                    icon="delete"
+                    size="small"
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定删除吗？',
+                        onOk: () => {
+                          this.clickDeleteFrom();
+                        },
+                      });
+                    }}
+                    disabled={
+                      isEdit || (this.state.showItem && this.state.showItem.status === '审批')
+                    }
+                  >
+                    删除
+                  </Button>
+                  <Button
+                    className={styles.buttomControl}
+                    type="primary"
+                    size="small"
+                    onClick={this.clickEditFrom}
+                    disabled={
+                      isEdit || (this.state.showItem && this.state.showItem.status === '审批')
+                    }
+                    icon="edit"
+                  >
+                    编辑
+                  </Button>
+                  {this.state.showItem.status === '审批' ? (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="danger"
+                      icon="unlock"
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定取消审批吗？',
+                          onOk: () => {
+                            this.clickUnFreezeFrom();
+                          },
+                        });
+                      }}
+                      disabled={isEdit}
+                    >
+                      取消审批
+                    </Button>
+                  ) : (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？',
+                          onOk: () => {
+                            this.clickFreezeFrom();
+                          },
+                        });
+                      }}
+                      disabled={isEdit}
+                    >
+                      审批
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </Col>
+        </Row>
+      </GridContent>
+    );
+  }
 }
 
 export default RequestedComponent;

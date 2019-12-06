@@ -1,17 +1,5 @@
 import React, { PureComponent } from 'react';
-import {
-  Table,
-  Card,
-  Row,
-  Col,
-  Icon,
-  Form,
-  Modal,
-  Input,
-  Button,
-  Divider,
-  message,
-} from 'antd';
+import { Table, Card, Row, Col, Icon, Form, Modal, Input, Button, Divider, message } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { formatMessage } from 'umi/locale';
 
@@ -109,7 +97,6 @@ class Royalty extends PureComponent {
     dispatch({
       type: 'royalty/fetchListRoyalty',
       payload: { current: 1, size: 10 },
-
     });
   }
 
@@ -177,7 +164,6 @@ class Royalty extends PureComponent {
     dispatch({
       type: 'royalty/fetchListRoyalty',
       payload: { current: body.current, size: body.size },
-
     });
 
     this.setState({
@@ -191,8 +177,16 @@ class Royalty extends PureComponent {
     });
   };
 
+  returnTotal = total => (
+    <p>
+      <FormattedMessage id="app.table.total" defaultMessage="" />
+      {total}
+      <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
+    </p>
+  );
+
   render() {
-    const { selectedRowKeys = [], current = {}, isEdit, update,isAdd, showItem } = this.state;
+    const { selectedRowKeys = [], current = {}, isEdit, update, isAdd, showItem } = this.state;
 
     const {
       listLoading,
@@ -206,7 +200,8 @@ class Royalty extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
+    this.state.isLoading =
+      addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
     if (addloading || deleteloading || upateloading || freezing || unfreezing) {
       this.state.update = true;
       if (upateloading) {
@@ -299,51 +294,47 @@ class Royalty extends PureComponent {
       );
     };
 
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-        this.handleSubmit(true);
-      }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-        this.handleSubmit(false);
-      }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={upateloading}
-        onClick={() => {
-        this.handleSubmit(false);
-      }}
-      >
-        保存
-      </Button>,
-    ];
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={upateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
     const onChange = (pagination, filters, sorter) => {
       const { current: currentIndex, pageSize } = pagination;
@@ -351,13 +342,13 @@ class Royalty extends PureComponent {
         type: 'royalty/fetchListRoyalty',
         payload: { current: currentIndex, size: pageSize },
       });
-
     };
 
     const paginationProps = {
       showQuickJumper: true,
       pageSize: 10,
       total: body.total,
+      showTotal: this.returnTotal,
     };
     return (
       <GridContent>
@@ -399,7 +390,13 @@ class Royalty extends PureComponent {
                 />
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.royalty' })} />}
+                  title={
+                    <BuildTitle
+                      title={
+                        this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.royalty' })
+                      }
+                    />
+                  }
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -407,7 +404,6 @@ class Royalty extends PureComponent {
                   visible={this.state.visible}
                   footer={modalFooter}
                   onCancel={this.handleCancel}
-
                 >
                   {getModalContent()}
                 </Modal>
@@ -416,12 +412,13 @@ class Royalty extends PureComponent {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: 'column',
-                overflow: 'hidden',
-              }}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                }}
               >
                 <div>
                   <div
@@ -457,12 +454,15 @@ class Royalty extends PureComponent {
                     size="small"
                     onClick={() => {
                       ModalConfirm({
-                        content: '确定删除吗？', onOk: () => {
+                        content: '确定删除吗？',
+                        onOk: () => {
                           this.clickDeleteFrom();
                         },
                       });
                     }}
-                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
+                    disabled={
+                      isEdit || (this.state.showItem && this.state.showItem.status === '审批')
+                    }
                   >
                     删除
                   </Button>
@@ -471,42 +471,50 @@ class Royalty extends PureComponent {
                     type="primary"
                     size="small"
                     onClick={this.clickEditFrom}
-                    disabled={isEdit || (this.state.showItem && this.state.showItem.status === '审批')}
+                    disabled={
+                      isEdit || (this.state.showItem && this.state.showItem.status === '审批')
+                    }
                     icon="edit"
                   >
                     编辑
                   </Button>
-                  {this.state.showItem.status === '审批' ? (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="danger"
-                    icon="unlock"
-                    onClick={() => {
-                      ModalConfirm({
-                        content: '确定取消审批吗？', onOk: () => {
-                          this.clickUnFreezeFrom();
-                        },
-                      });
-                    }}
-                    disabled={isEdit}
-                  >
-                    取消审批
-                  </Button>) : (<Button
-                                                            className={styles.buttomControl}
-                                                            size="small"
-                                                            type="primary"
-                                                            icon="lock"
-                                                            onClick={() => {
-                      ModalConfirm({
-                        content: '确定审批吗？', onOk: () => {
-                          this.clickFreezeFrom();
-                        },
-                      });
-                    }}
-                                                            disabled={isEdit}
-                                                          >
-                    审批
-                                                          </Button>)}
+                  {this.state.showItem.status === '审批' ? (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="danger"
+                      icon="unlock"
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定取消审批吗？',
+                          onOk: () => {
+                            this.clickUnFreezeFrom();
+                          },
+                        });
+                      }}
+                      disabled={isEdit}
+                    >
+                      取消审批
+                    </Button>
+                  ) : (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？',
+                          onOk: () => {
+                            this.clickFreezeFrom();
+                          },
+                        });
+                      }}
+                      disabled={isEdit}
+                    >
+                      审批
+                    </Button>
+                  )}
                 </div>
               </Card>
             </div>
@@ -532,14 +540,12 @@ class Royalty extends PureComponent {
    * 通过最新列表更新选择的值
    * */
   updateSelectDatas = () => {
-
     const { rowSelectedData, showItem } = this.state;
     // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
     if (rowSelectedData && rowSelectedData.length > 0) {
       const newRowSelected = this.state.data.filter(v => {
         const rs = rowSelectedData.filter(v1 => {
-          if (v1.id === v.id)
-            return v;
+          if (v1.id === v.id) return v;
         });
         if (rs.length > 0) return rs[0];
       });
@@ -551,8 +557,7 @@ class Royalty extends PureComponent {
 
     if (showItem && this.state.rowSelectedData) {
       const newShowItem = this.state.rowSelectedData.filter(v => {
-        if (showItem.id === v.id)
-          return v;
+        if (showItem.id === v.id) return v;
       });
       // console.log(" updateSelectDatas  rowSelecteData ",newShowItem)
       if (newShowItem && newShowItem[0]) {
@@ -576,15 +581,24 @@ class Royalty extends PureComponent {
     const { id } = record;
 
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index => index === id), 1);
+      selects.splice(
+        selects.findIndex(index => index === id),
+        1
+      );
       if (rowData.includes(record)) rowData = [];
       if (rowSelectedData.includes(record)) {
         // console.log('includes ' + record.id);
-        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
+        rowSelectedData.splice(
+          rowSelectedData.findIndex(item => item.id === id),
+          1
+        );
       }
     } else {
       if (rowData.length > 0) {
-        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+        selects.splice(
+          selects.findIndex(index => index === rowData[0].id),
+          1
+        );
       }
       rowData = [];
       rowData.push({ ...record });
@@ -611,8 +625,7 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record, index) => {
-  };
+  selectChange = (record, index) => {};
 
   clickDeleteFrom = () => {
     const { selectedRowKeys } = this.state;
@@ -661,8 +674,7 @@ class Royalty extends PureComponent {
     });
   };
 
-  selectChange = (record, index) => {
-  };
+  selectChange = (record, index) => {};
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {

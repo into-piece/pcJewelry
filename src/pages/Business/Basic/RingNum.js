@@ -68,11 +68,8 @@ const subringNumContentColumns = [
     dataIndex: 'status',
     key: 'status2',
     render: s => statusConvert[s],
-
   },
-
 ];
-
 
 const { Description } = DescriptionList;
 
@@ -290,6 +287,14 @@ class RingNum extends PureComponent {
     });
   };
 
+  returnTotal = total => (
+    <p>
+      <FormattedMessage id="app.table.total" defaultMessage="" />
+      {total}
+      <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
+    </p>
+  );
+
   render() {
     const {
       standardSelectedRowKeys = [],
@@ -325,7 +330,8 @@ class RingNum extends PureComponent {
       dispatch,
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
+    this.state.isLoading =
+      addloading || deleteloading || upateloading || freezing || listLoading || unfreezing;
 
     if (addloading || deleteloading || upateloading || freezing || unfreezing) {
       this.state.update = true;
@@ -352,7 +358,12 @@ class RingNum extends PureComponent {
     }
 
     this.state.isSonLoading =
-      addsonloading || deletesonloading || upatesonloading || sonfreezing || istLoading2 || sonunfreezing;
+      addsonloading ||
+      deletesonloading ||
+      upatesonloading ||
+      sonfreezing ||
+      istLoading2 ||
+      sonunfreezing;
 
     if (addsonloading || deletesonloading || upatesonloading || sonfreezing || sonunfreezing) {
       this.state.updateNumber = true;
@@ -360,7 +371,6 @@ class RingNum extends PureComponent {
         this.state.isUpdateNumberFrom = true;
       }
     } else if (updateNumber) {
-
       // console.log(" save body ",body2)
 
       if (body2.rtnCode2 === '000000') {
@@ -418,7 +428,6 @@ class RingNum extends PureComponent {
       this.updateSelectRingNumDatas();
       this.state.isRingNumLoadList = false;
       // console.log(" new data  updateSelectRingNumDatas",this.state.data2)
-
     }
 
     if (this.state.done) {
@@ -486,54 +495,53 @@ class RingNum extends PureComponent {
       }
     };
 
-
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={this.state.modalType === 'standard' ?addloading:addsonloading}
-        onClick={() => {
-        this.state.modalType === 'standard' ? this.handleSubmit(true) : this.handleNumberSubmit(true);
-      }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={this.state.modalType === 'standard' ?addloading:addsonloading}
-        onClick={() => {
-        this.state.modalType === 'standard' ? this.handleSubmit(false) : this.handleNumberSubmit(false);
-
-      }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={this.state.modalType === 'standard' ?upateloading:upatesonloading}
-        onClick={() => {
-        this.state.modalType === 'standard' ? this.handleSubmit(false) : this.handleNumberSubmit(false);
-      }}
-      >
-        保存
-      </Button>,
-    ];
-
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={this.state.modalType === 'standard' ? addloading : addsonloading}
+            onClick={() => {
+              this.state.modalType === 'standard'
+                ? this.handleSubmit(true)
+                : this.handleNumberSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={this.state.modalType === 'standard' ? addloading : addsonloading}
+            onClick={() => {
+              this.state.modalType === 'standard'
+                ? this.handleSubmit(false)
+                : this.handleNumberSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={this.state.modalType === 'standard' ? upateloading : upatesonloading}
+            onClick={() => {
+              this.state.modalType === 'standard'
+                ? this.handleSubmit(false)
+                : this.handleNumberSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
     // console.log('modalType ' + modalType);
 
@@ -543,7 +551,6 @@ class RingNum extends PureComponent {
         type: 'ringnum/fetchListRingNum',
         payload: { current: currentIndex, size: pageSize },
       });
-
     };
     const onChange2 = (pagination, filters, sorter) => {
       const { current: currentIndex, pageSize } = pagination;
@@ -551,7 +558,6 @@ class RingNum extends PureComponent {
         type: 'ringnum2/fetchListSonRingNum',
         payload: { ring_around_st_id: showItem.id, current: currentIndex, size: pageSize },
       });
-
     };
 
     const paginationProps = {
@@ -559,7 +565,7 @@ class RingNum extends PureComponent {
       pageSize: 5,
       total: body.total,
       current: body.current,
-
+      showTotal: this.returnTotal,
     };
 
     const paginationProps2 = {
@@ -567,6 +573,7 @@ class RingNum extends PureComponent {
       pageSize: 5,
       total: body2.total,
       current: body2.current,
+      showTotal: this.returnTotal,
     };
     return (
       <GridContent>
@@ -615,7 +622,6 @@ class RingNum extends PureComponent {
                   rowSelection={rowNumberSelection}
                   rowKey={record => record.id}
                   onChange={onChange2}
-
                   onRow={record => {
                     return {
                       onClick: event => {
@@ -629,9 +635,19 @@ class RingNum extends PureComponent {
 
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle
-                    title={this.state.done ? null : formatMessage({ id: `app.basic.menuMap.${this.state.modalType === 'number' ? 'numson' : 'num'}` })}
-                  />}
+                  title={
+                    <BuildTitle
+                      title={
+                        this.state.done
+                          ? null
+                          : formatMessage({
+                              id: `app.basic.menuMap.${
+                                this.state.modalType === 'number' ? 'numson' : 'num'
+                              }`,
+                            })
+                      }
+                    />
+                  }
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -639,7 +655,6 @@ class RingNum extends PureComponent {
                   visible={this.state.visible}
                   footer={modalFooter}
                   onCancel={this.handleCancel}
-
                 >
                   {getModalContent()}
                 </Modal>
@@ -690,15 +705,24 @@ class RingNum extends PureComponent {
     const { id } = record;
 
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index => index === id), 1);
+      selects.splice(
+        selects.findIndex(index => index === id),
+        1
+      );
       if (rowData.includes(record)) rowData = [];
 
       if (standardRowData.includes(record)) {
-        standardRowData.splice(standardRowData.findIndex(item => item.id === id), 1);
+        standardRowData.splice(
+          standardRowData.findIndex(item => item.id === id),
+          1
+        );
       }
     } else {
       if (rowData.length > 0) {
-        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+        selects.splice(
+          selects.findIndex(index => index === rowData[0].id),
+          1
+        );
       }
       rowData = [];
       rowData.push({ ...record });
@@ -737,17 +761,26 @@ class RingNum extends PureComponent {
     const { id } = record;
 
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index => index === id), 1);
+      selects.splice(
+        selects.findIndex(index => index === id),
+        1
+      );
 
       if (rowNumberData.includes(record)) rowNumberData = [];
 
       if (numberRowData.includes(record)) {
-        numberRowData.splice(numberRowData.findIndex(item => item.id === id), 1);
+        numberRowData.splice(
+          numberRowData.findIndex(item => item.id === id),
+          1
+        );
       }
     } else {
       // console.log("record is ",rowData)
       if (numberRowData.length > 0) {
-        selects.splice(selects.findIndex(index => index === numberRowData[0].id), 1);
+        selects.splice(
+          selects.findIndex(index => index === numberRowData[0].id),
+          1
+        );
       }
       rowNumberData = [];
       rowNumberData.push({ ...record });
@@ -793,12 +826,13 @@ class RingNum extends PureComponent {
     return (
       <div className={styles.view_dwon}>
         {/* {this.getRingStandrad()} */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
         >
           <div>
             <div
@@ -834,7 +868,8 @@ class RingNum extends PureComponent {
               size="small"
               onClick={() => {
                 ModalConfirm({
-                  content: '确定删除吗？', onOk: () => {
+                  content: '确定删除吗？',
+                  onOk: () => {
                     this.clickDeleteFrom();
                   },
                 });
@@ -853,37 +888,43 @@ class RingNum extends PureComponent {
             >
               编辑
             </Button>
-            {this.state.showItem.status === '2' ? (<Button
-              className={styles.buttomControl}
-              size="small"
-              type="danger"
-              icon="unlock"
-              onClick={() => {
-                ModalConfirm({
-                  content: '确定取消审批吗？', onOk: () => {
-                    this.clickUnFreezeFrom();
-                  },
-                });
-              }}
-              disabled={isEdit}
-            >
-              取消审批
-            </Button>) : (<Button
-                                                     className={styles.buttomControl}
-                                                     size="small"
-                                                     type="primary"
-                                                     icon="lock"
-                                                     onClick={() => {
-                ModalConfirm({
-                  content: '确定审批吗？', onOk: () => {
-                    this.clickFreezeFrom();
-                  },
-                });
-              }}
-                                                     disabled={isEdit}
-                                                   >
-              审批
-                                                                 </Button>)}
+            {this.state.showItem.status === '2' ? (
+              <Button
+                className={styles.buttomControl}
+                size="small"
+                type="danger"
+                icon="unlock"
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定取消审批吗？',
+                    onOk: () => {
+                      this.clickUnFreezeFrom();
+                    },
+                  });
+                }}
+                disabled={isEdit}
+              >
+                取消审批
+              </Button>
+            ) : (
+              <Button
+                className={styles.buttomControl}
+                size="small"
+                type="primary"
+                icon="lock"
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定审批吗？',
+                    onOk: () => {
+                      this.clickFreezeFrom();
+                    },
+                  });
+                }}
+                disabled={isEdit}
+              >
+                审批
+              </Button>
+            )}
           </div>
         </Card>
       </div>
@@ -894,12 +935,13 @@ class RingNum extends PureComponent {
     const { isEditNumber, isEdit } = this.state;
     return (
       <div className={styles.view_dwon}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
         >
           <div>
             <div
@@ -916,7 +958,6 @@ class RingNum extends PureComponent {
           </div>
           {this.state.showItem ? this.getRenderSonitem(this.state.showNumberItem) : ''}
         </div>
-
 
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -937,12 +978,16 @@ class RingNum extends PureComponent {
               size="small"
               onClick={() => {
                 ModalConfirm({
-                  content: '确定删除吗？', onOk: () => {
+                  content: '确定删除吗？',
+                  onOk: () => {
                     this.clickNumberDeleteFrom();
                   },
                 });
               }}
-              disabled={isEditNumber || (this.state.showNumberItem && this.state.showNumberItem.status === '2')}
+              disabled={
+                isEditNumber ||
+                (this.state.showNumberItem && this.state.showNumberItem.status === '2')
+              }
             >
               删除
             </Button>
@@ -951,42 +996,51 @@ class RingNum extends PureComponent {
               type="primary"
               size="small"
               onClick={this.clickNumberEditFrom}
-              disabled={isEditNumber || (this.state.showNumberItem && this.state.showNumberItem.status === '2')}
+              disabled={
+                isEditNumber ||
+                (this.state.showNumberItem && this.state.showNumberItem.status === '2')
+              }
               icon="edit"
             >
               编辑
             </Button>
-            {this.state.showNumberItem.status === '2' ? (<Button
-              className={styles.buttomControl}
-              size="small"
-              type="danger"
-              icon="unlock"
-              onClick={() => {
-                ModalConfirm({
-                  content: '确定取消审批吗？', onOk: () => {
-                    this.clickUnNumberFreezeFrom();
-                  },
-                });
-              }}
-              disabled={isEditNumber}
-            >
-              取消审批
-            </Button>) : (<Button
-                                                           className={styles.buttomControl}
-                                                           size="small"
-                                                           type="primary"
-                                                           icon="lock"
-                                                           onClick={() => {
-                ModalConfirm({
-                  content: '确定审批吗？', onOk: () => {
-                    this.clickNumberFreezeFrom();
-                  },
-                });
-              }}
-                                                           disabled={isEditNumber}
-                                                         >
-              审批
-                                                                       </Button>)}
+            {this.state.showNumberItem.status === '2' ? (
+              <Button
+                className={styles.buttomControl}
+                size="small"
+                type="danger"
+                icon="unlock"
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定取消审批吗？',
+                    onOk: () => {
+                      this.clickUnNumberFreezeFrom();
+                    },
+                  });
+                }}
+                disabled={isEditNumber}
+              >
+                取消审批
+              </Button>
+            ) : (
+              <Button
+                className={styles.buttomControl}
+                size="small"
+                type="primary"
+                icon="lock"
+                onClick={() => {
+                  ModalConfirm({
+                    content: '确定审批吗？',
+                    onOk: () => {
+                      this.clickNumberFreezeFrom();
+                    },
+                  });
+                }}
+                disabled={isEditNumber}
+              >
+                审批
+              </Button>
+            )}
           </div>
         </Card>
       </div>
@@ -1009,19 +1063,16 @@ class RingNum extends PureComponent {
     return color;
   };
 
-
   /** *
    * 通过最新列表更新选择的值
    * */
   updateSelectStandardDatas = () => {
-
     const { standardRowData, showItem } = this.state;
     // console.log(" updateSelectDatas ..",rowSelectedData,showItem,this.state.data)
     if (standardRowData && standardRowData.length > 0) {
       const newRowSelected = this.state.data.filter(v => {
         const rs = standardRowData.filter(v1 => {
-          if (v1.id === v.id)
-            return v;
+          if (v1.id === v.id) return v;
         });
         if (rs.length > 0) return rs[0];
       });
@@ -1036,8 +1087,7 @@ class RingNum extends PureComponent {
 
     if (showItem && this.state.standardRowData) {
       const newShowItem = this.state.standardRowData.filter(v => {
-        if (showItem.id === v.id)
-          return v;
+        if (showItem.id === v.id) return v;
       });
       // console.log(" updateSelectDatas  showItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
@@ -1053,13 +1103,11 @@ class RingNum extends PureComponent {
    * 通过最新列表更新选择的值
    * */
   updateSelectRingNumDatas = () => {
-
     const { numberRowData, showNumberItem } = this.state;
     if (numberRowData && numberRowData.length > 0) {
       const newRowSelected = this.state.data2.filter(v => {
         const rs = numberRowData.filter(v1 => {
-          if (v1.id === v.id)
-            return v;
+          if (v1.id === v.id) return v;
         });
         if (rs.length > 0) return rs[0];
       });
@@ -1074,8 +1122,7 @@ class RingNum extends PureComponent {
 
     if (showNumberItem && this.state.numberRowData) {
       const newShowItem = this.state.numberRowData.filter(v => {
-        if (showNumberItem.id === v.id)
-          return v;
+        if (showNumberItem.id === v.id) return v;
       });
       // console.log(" updateSelectDatas  newShowItem ",newShowItem)
       if (newShowItem && newShowItem[0]) {
@@ -1188,7 +1235,6 @@ class RingNum extends PureComponent {
     });
   };
 
-
   clickNumberFreezeFrom = () => {
     const { numberSelectedRowKeys } = this.state;
 
@@ -1202,7 +1248,6 @@ class RingNum extends PureComponent {
           type: 'ringnum2/fetchListSonRingNum',
           payload: { ring_around_st_id: showItem.id, current: currentIndex, size: pageSize },
         });
-
       },
     });
   };
@@ -1220,14 +1265,11 @@ class RingNum extends PureComponent {
           type: 'ringnum2/fetchListSonRingNum',
           payload: { ring_around_st_id: showItem.id, current: currentIndex, size: pageSize },
         });
-
       },
     });
   };
 
-
-  selectChange = (record, index) => {
-  };
+  selectChange = (record, index) => {};
 
   loadNumList = record => {
     const params = {
@@ -1241,7 +1283,6 @@ class RingNum extends PureComponent {
         ...params,
         current: 1,
         size: 5,
-
       },
     });
   };

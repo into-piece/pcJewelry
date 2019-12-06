@@ -9,7 +9,7 @@ import { currency } from '@/utils/SvgUtil';
 import formstyles from './BasicForm.less';
 import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
-import {statusConvert} from '@/utils/convert';
+import { statusConvert } from '@/utils/convert';
 import BuildTitle from '@/components/BuildTitle';
 
 const FormItem = Form.Item;
@@ -46,8 +46,6 @@ const currencyContentColumns = [
     key: 'createTime',
   },
 ];
-
-
 
 const { Description } = DescriptionList;
 
@@ -89,10 +87,10 @@ class Currency extends PureComponent {
       requestMes: '保存成功！',
       isLoading: false,
       selectIndexAt: -1,
-      pagination:{
-        current:1,
-        size:10
-      }
+      pagination: {
+        current: 1,
+        size: 10,
+      },
     };
   }
 
@@ -101,7 +99,7 @@ class Currency extends PureComponent {
     const { pagination } = this.state;
     dispatch({
       type: 'currency/fetchListCurrency',
-      payload:pagination
+      payload: pagination,
     });
   }
 
@@ -156,7 +154,7 @@ class Currency extends PureComponent {
           },
           callback: () => {
             this.setState({
-              visible: !close
+              visible: !close,
             });
           },
         });
@@ -170,7 +168,7 @@ class Currency extends PureComponent {
 
     dispatch({
       type: 'currency/fetchListCurrency',
-      payload:pagination,
+      payload: pagination,
     });
 
     this.setState({
@@ -184,8 +182,16 @@ class Currency extends PureComponent {
     });
   };
 
+  returnTotal = total => (
+    <p>
+      <FormattedMessage id="app.table.total" defaultMessage="" />
+      {total}
+      <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
+    </p>
+  );
+
   render() {
-    const { selectedRowKeys = [], current = {}, isAdd,isEdit, update } = this.state;
+    const { selectedRowKeys = [], current = {}, isAdd, isEdit, update } = this.state;
 
     const {
       listLoading,
@@ -227,7 +233,7 @@ class Currency extends PureComponent {
       const newdata = body.data.map(value => {
         const s = value.status;
         value.status = statusConvert[s];
-        return  value;
+        return value;
       });
 
       this.state.data = newdata;
@@ -241,7 +247,6 @@ class Currency extends PureComponent {
       onChange: this.onSelectChange,
       onSelect: this.selectChange,
     };
-
 
     const getModalContent = () => {
       if (this.state.done) {
@@ -259,7 +264,6 @@ class Currency extends PureComponent {
           />
         );
       }
-
 
       return (
         <Form size="small" onSubmit={this.handleSubmit}>
@@ -297,64 +301,60 @@ class Currency extends PureComponent {
       );
     };
 
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-        this.handleSubmit(true);
-      }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-        this.handleSubmit(false);
-      }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={upateloading}
-        onClick={() => {
-        this.handleSubmit(false);
-      }}
-      >
-        保存
-      </Button>,
-    ];
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={upateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
     const onChange = (pagination, filters, sorter) => {
-      const { current:currentIndex, pageSize } = pagination;
+      const { current: currentIndex, pageSize } = pagination;
       dispatch({
         type: 'currency/fetchListCurrency',
-        payload:{ current:currentIndex, size: pageSize }
+        payload: { current: currentIndex, size: pageSize },
       });
-
     };
-    const  paginationProps = {
+    const paginationProps = {
       showQuickJumper: true,
       pageSize: 10,
-      total:body.total
+      showTotal: this.returnTotal,
+      total: body.total,
     };
     return (
       <GridContent>
@@ -393,12 +393,16 @@ class Currency extends PureComponent {
                   size="middle"
                   columns={currencyContentColumns}
                   onChange={onChange}
-
                 />
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.currency' })} />}
-
+                  title={
+                    <BuildTitle
+                      title={
+                        this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.currency' })
+                      }
+                    />
+                  }
                   width={640}
                   className={styles.standardListForm}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -406,7 +410,6 @@ class Currency extends PureComponent {
                   visible={this.state.visible}
                   footer={modalFooter}
                   onCancel={this.handleCancel}
-
                 >
                   {getModalContent()}
                 </Modal>
@@ -415,12 +418,13 @@ class Currency extends PureComponent {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: 'column',
-                overflow: 'hidden',
-              }}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                }}
               >
                 <div>
                   <div

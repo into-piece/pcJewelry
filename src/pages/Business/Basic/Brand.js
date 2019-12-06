@@ -1,17 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Table,
-  Card,
-  Row,
-  Col,
-  Icon,
-  Form,
-  Modal,
-  Input,
-  Button,
-  Divider,
-  message,
-} from 'antd';
+import { Card, Row, Col, Icon, Form, Modal, Input, Button, Divider, message } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { formatMessage } from 'umi/locale';
@@ -22,6 +10,7 @@ import DescriptionList from '@/components/DescriptionList';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { statusConvert } from '@/utils/convert';
 import BuildTitle from '@/components/BuildTitle';
+import Table from '@/components/Table';
 
 const FormItem = Form.Item;
 
@@ -32,7 +21,8 @@ const clientContentColumns = [
     title: '品牌编码',
     dataIndex: 'brandNo',
     key: 'brandNo',
-  }, {
+  },
+  {
     title: '中文名称',
     dataIndex: 'brandZhName',
     key: 'brandZhName',
@@ -48,7 +38,6 @@ const clientContentColumns = [
     key: 'status',
   },
 ];
-
 
 @connect(({ loading, basic }) => {
   const { rtnCode, head, rtnMsg } = basic;
@@ -72,30 +61,29 @@ class BrandCompoenet extends Component {
     wrapperCol: { span: 13 },
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      mode: 'inline',
-      visible: false,
-      done: false,
-      list: [],
-      selectedRowKeys: [],
-      showItem: false,
-      rowHeight: 0,
-      isEdit: true,
-      update: false,
-      // addSuccessData: false,
-      isUpdateFrom: false,
-      // isAddFrom: false,
-      isAdd: true,
-      requestState: 'success',
-      requestMes: '保存成功！',
-      isLoading: false,
-      rowData: [],
-      rowSelectedData: [],
-      selectIndexAt: -1,
-    };
-  }
+  state = {
+    mode: 'inline',
+    visible: false,
+    done: false,
+    list: [],
+    selectedRowKeys: [],
+    showItem: false,
+    rowHeight: 0,
+    isEdit: true,
+    update: false,
+    // addSuccessData: false,
+    isUpdateFrom: false,
+    // isAddFrom: false,
+    isAdd: true,
+    requestState: 'success',
+    rowData: [],
+    rowSelectedData: [],
+    selectIndexAt: -1,
+    pagination: {
+      current: 1,
+      size: 10,
+    },
+  };
 
   showEditModal = item => {
     this.setState({
@@ -119,10 +107,10 @@ class BrandCompoenet extends Component {
             ...fieldsValue,
           },
           callback: () => {
-          this.setState({
-            visible: !close,
-          });
-        },
+            this.setState({
+              visible: !close,
+            });
+          },
         });
 
         this.setState({
@@ -150,26 +138,13 @@ class BrandCompoenet extends Component {
           payload: {
             ...data,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
-              visible: !close
+              visible: !close,
             });
-          }
+          },
         });
       }
-
-    });
-  };
-
-  handleDone = () => {
-    const { dispatch, body } = this.props;
-    dispatch({
-      type: 'basic/fetchListBrands',
-      payload: { current: body.current, size: body.size },
-    });
-
-    this.setState({
-      done: false,
     });
   };
 
@@ -180,17 +155,21 @@ class BrandCompoenet extends Component {
   };
 
   componentDidMount() {
-    //
+    this.getlist();
+  }
+
+  getlist = v => {
+    const params = {
+      current: 1,
+      size: 10,
+      ...v,
+    };
     const { dispatch } = this.props;
     dispatch({
       type: 'basic/fetchListBrands',
-      payload: { current: 1, size: 10 },
+      payload: params,
     });
-  }
-
-  componentWillUnmount() {
-  }
-
+  };
 
   /** *
    *
@@ -250,17 +229,26 @@ class BrandCompoenet extends Component {
     const { id } = record;
 
     if (selects.includes(id)) {
-      selects.splice(selects.findIndex(index => index === id), 1);
+      selects.splice(
+        selects.findIndex(index => index === id),
+        1
+      );
       if (rowData.includes(record)) rowData = [];
       if (rowSelectedData.includes(record)) {
         // console.log('includes ' + record.id);
-        rowSelectedData.splice(rowSelectedData.findIndex(item => item.id === id), 1);
+        rowSelectedData.splice(
+          rowSelectedData.findIndex(item => item.id === id),
+          1
+        );
         // rowData.splice(rowData.findIndex(item => item.id === id), 1);
       }
     } else {
       // console.log("record is ",rowData)
       if (rowData.length > 0) {
-        selects.splice(selects.findIndex(index => index === rowData[0].id), 1);
+        selects.splice(
+          selects.findIndex(index => index === rowData[0].id),
+          1
+        );
       }
       rowData = [];
       rowData.push({ ...record });
@@ -293,7 +281,6 @@ class BrandCompoenet extends Component {
   };
 
   clickDeleteFrom = () => {
-
     const { selectedRowKeys } = this.state;
 
     const { dispatch } = this.props;
@@ -326,6 +313,11 @@ class BrandCompoenet extends Component {
     dispatch({
       type: 'basic/freeBrand',
       payload: { list: selectedRowKeys },
+      callback: res => {
+        this.getlist();
+        this.changeChoosenRow({});
+        this.onSelectChange([]);
+      },
     });
   };
 
@@ -336,6 +328,11 @@ class BrandCompoenet extends Component {
     dispatch({
       type: 'basic/unfreeBrand',
       payload: { list: selectedRowKeys },
+      callback: res => {
+        this.getlist();
+        this.changeChoosenRow({});
+        this.onSelectChange([]);
+      },
     });
   };
 
@@ -397,8 +394,73 @@ class BrandCompoenet extends Component {
     );
   };
 
+  // 选中某行表头
+  changeChoosenRow = rowData => {
+    this.clickRowItem(rowData);
+    // this.loadProductLock(rowData);
+    this.setState({
+      showItem: rowData,
+    });
+  };
+
+  onSelectChange = v => {
+    console.log(v);
+    this.setState({
+      selectedRowKeys: v,
+    });
+  };
+
+  pageProductChange = (current, pageSize) => {
+    this.getlist({ current, size: pageSize });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'basic/fetchListBrands',
+    //   payload:
+    // });
+  };
+
+  getModalContent = () => {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+    const { current = {} } = this.state;
+    return (
+      <Form size="small" onSubmit={this.handleSubmit}>
+        <FormItem label="品牌编码" {...this.formLayout}>
+          {getFieldDecorator('brandNo', {
+            rules: [{ required: true, message: '请输入品牌编码' }],
+            initialValue: current.brandEnName,
+          })(<Input placeholder="请输入" />)}
+        </FormItem>{' '}
+        <FormItem label="英文名称" {...this.formLayout}>
+          {getFieldDecorator('brandEnName', {
+            rules: [{ required: true, message: '请输入品牌编号' }],
+            initialValue: current.brandEnName,
+          })(<Input placeholder="请输入" />)}
+        </FormItem>
+        <FormItem label="中文名称" {...this.formLayout}>
+          {getFieldDecorator('brandZhName', {
+            rules: [{ message: '请输入中文名称' }],
+            initialValue: current.brandZhName,
+          })(<Input placeholder="请输入" />)}
+        </FormItem>
+      </Form>
+    );
+  };
+
   render() {
-    const { addSuccessData, selectedRowKeys, current = {}, isEdit,isAdd, update, showItem } = this.state;
+    const { changeChoosenRow, onSelectChange, pageProductChange, getModalContent } = this;
+    const {
+      addSuccessData,
+      current = {},
+      isEdit,
+      isAdd,
+      update,
+      showItem,
+      selectedRowKeys,
+      pagination,
+      status,
+    } = this.state;
 
     const {
       listLoading,
@@ -411,33 +473,30 @@ class BrandCompoenet extends Component {
       unfreeze,
     } = this.props;
 
-    this.state.isLoading = addloading || deleteloading || upateloading || freezing || listLoading || unfreeze;
+    // this.state.isLoading =
+    //   addloading || deleteloading || upateloading || freezing || listLoading || unfreeze;
 
+    // if (listLoading) {
+    //   this.state.isLoadList = true;
+    // } else if (this.state.isLoadList) {
+    //   // if (body && body.data && body.data.length > 0) {
+    //   //   const newdata = body.data.map(value => {
+    //   //     const s = value.status;
+    //   //     value.status = statusConvert[s];
+    //   //     return value;
+    //   //   });
 
-    if (listLoading) {
-      this.state.isLoadList = true;
-    } else if (this.state.isLoadList) {
-      if (body && body.data && body.data.length > 0) {
-        const newdata = body.data.map(value => {
-          const s = value.status;
-          value.status = statusConvert[s];
-          return value;
-        });
-
-        this.state.data = newdata;
-      }
-      this.updateSelectDatas();
-      this.state.isLoadList = false;
-    }
-
+    //   //   this.state.data = newdata;
+    //   // }
+    //   this.updateSelectDatas();
+    //   this.state.isLoadList = false;
+    // }
 
     if (addloading || deleteloading || upateloading || freezing || unfreeze) {
       this.state.update = true;
       if (upateloading) {
         this.state.isUpdateFrom = true;
       }
-
-
     } else if (update) {
       // console.log('rntCode=' + body.rtnCode);
       if (body.rtnCode === '000000') {
@@ -446,8 +505,6 @@ class BrandCompoenet extends Component {
         this.state.requestState = 'error';
       }
 
-      this.state.requestMes = body.rtnMsg;
-      // console.log('result = ' + this.state.requestMes);
       this.state.update = false;
       this.state.done = true;
       if (this.state.isUpdateFrom) {
@@ -455,96 +512,49 @@ class BrandCompoenet extends Component {
         // this.state.showItem = { ...current };
       }
     }
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button key="submit" type="primary" loading={addloading} onClick={() => {
-        this.handleSubmit(true);
-      }}>
-        保存
-      </Button>,
-      <Button key="continue" type="primary" loading={addloading} onClick={() => {
-        this.handleSubmit(false);
-      }}>
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button key="submit" type="primary" loading={upateloading} onClick={() => {
-        this.handleSubmit(false);
-      }}>
-        保存
-      </Button>,
-    ];
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={upateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
-    if (this.state.done) {
-      if (this.state.requestState == 'success') {
-        message.success(this.state.requestMes);
-      } else {
-        message.error(this.state.requestMes);
-      }
-      this.handleDone();
-    }
-
-    const getModalContent = () => {
-      return (
-        <Form size="small" onSubmit={this.handleSubmit}>
-          <FormItem label="品牌编码" {...this.formLayout}>
-            {getFieldDecorator('brandNo', {
-              rules: [{ required: true, message: '请输入品牌编码' }],
-              initialValue: current.brandEnName,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem> <FormItem label="英文名称" {...this.formLayout}>
-          {getFieldDecorator('brandEnName', {
-            rules: [{ required: true, message: '请输入品牌编号' }],
-            initialValue: current.brandEnName,
-          })(<Input placeholder="请输入"/>)}
-        </FormItem>
-          <FormItem label="中文名称" {...this.formLayout}>
-            {getFieldDecorator('brandZhName', {
-              rules: [{ message: '请输入中文名称' }],
-              initialValue: current.brandZhName,
-            })(<Input placeholder="请输入"/>)}
-          </FormItem>
-        </Form>
-      );
-    };
-
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkbox',
-      onChange: this.onSelectChange,
-      onSelect: this.selectChange,
-    };
-
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-
-
-    const onChange = (pagination, filters, sorter) => {
-      const { current: currentIndex, pageSize } = pagination;
-      dispatch({
-        type: 'basic/fetchListBrands',
-        payload: { current: currentIndex, size: pageSize },
-      });
-
-    };
-
-    const paginationProps = {
-      showQuickJumper: true,
-      pageSize: 10,
-      total: body.total,
-    };
+    console.log(body, current.status);
 
     return (
       <GridContent>
@@ -562,34 +572,30 @@ class BrandCompoenet extends Component {
                   }}
                   component={Brand}
                 />
-                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌"/>
+                <FormattedMessage id="app.basic.menuMap.brand" defaultMessage="品牌" />
               </div>
               <Card bordered={false} loading={false}>
                 <Table
-                  loading={this.state.isLoading}
-                  pagination={paginationProps}
-                  dataSource={this.state.data}
-                  rowSelection={rowSelection}
-                  rowKey={record => record.id}
-                  bordered={false}
-                  onRow={record => {
-                    return {
-                      onClick: event => {
-                        this.clickRowItem(record);
-                      },
-                    };
-                  }}
-                  onChange={onChange}
-
-                  rowClassName={this.onSelectRowClass}
-                  size="middle"
                   columns={clientContentColumns}
+                  body={body}
+                  changeChoosenRow={changeChoosenRow}
+                  selectKey={showItem.id}
+                  pagination={pagination}
+                  handleTableChange={pageProductChange}
+                  selectedRowKeys={selectedRowKeys}
+                  onSelectChange={onSelectChange}
+                  listLoading={listLoading}
                 />
 
                 <Modal
                   maskClosable={false}
-                  title={<BuildTitle
-                    title={this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.brand' })}/>}
+                  title={
+                    <BuildTitle
+                      title={
+                        this.state.done ? null : formatMessage({ id: 'app.basic.menuMap.brand' })
+                      }
+                    />
+                  }
                   className={styles.standardListForm}
                   width={640}
                   bodyStyle={this.state.done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
@@ -597,7 +603,6 @@ class BrandCompoenet extends Component {
                   visible={this.state.visible}
                   footer={modalFooter}
                   onCancel={this.handleCancel}
-
                 >
                   {getModalContent()}
                 </Modal>
@@ -606,12 +611,13 @@ class BrandCompoenet extends Component {
           </Col>
           <Col lg={8} md={24}>
             <div className={styles.view_right_content}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: 'column',
-                overflow: 'hidden',
-              }}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                }}
               >
                 <div>
                   <div
@@ -624,7 +630,7 @@ class BrandCompoenet extends Component {
                   >
                     {formatMessage({ id: 'app.basic.menuMap.brand' })}
                   </div>
-                  <Divider className={styles.divder}/>
+                  <Divider className={styles.divder} />
                 </div>
                 {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
               </div>
@@ -648,7 +654,8 @@ class BrandCompoenet extends Component {
                     size="small"
                     onClick={() => {
                       ModalConfirm({
-                        content: '确定删除吗？', onOk: () => {
+                        content: '确定删除吗？',
+                        onOk: () => {
                           this.clickDeleteFrom();
                         },
                       });
@@ -667,38 +674,43 @@ class BrandCompoenet extends Component {
                   >
                     编辑
                   </Button>
-                  {showItem.status === '审批' ? (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="danger"
-                    icon="unlock"
-                    onClick={() => {
-                      ModalConfirm({
-                        content: '确定取消审批吗？', onOk: () => {
-                          this.clickUnFreezeFrom();
-                        },
-                      });
-                    }}
-                    disabled={isEdit}
-                  >
-                    取消审批
-                  </Button>) : (<Button
-                    className={styles.buttomControl}
-                    size="small"
-                    type="primary"
-                    icon="lock"
-                    onClick={() => {
-                      ModalConfirm({
-                        content: '确定审批吗？', onOk: () => {
-                          this.clickFreezeFrom();
-                        },
-                      });
-                    }}
-                    disabled={isEdit}
-                  >
-                    审批
-                  </Button>)}
-
+                  {showItem.status === '2' ? (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="danger"
+                      icon="unlock"
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定取消审批吗？',
+                          onOk: () => {
+                            this.clickUnFreezeFrom();
+                          },
+                        });
+                      }}
+                      disabled={isEdit}
+                    >
+                      取消审批
+                    </Button>
+                  ) : (
+                    <Button
+                      className={styles.buttomControl}
+                      size="small"
+                      type="primary"
+                      icon="lock"
+                      onClick={() => {
+                        ModalConfirm({
+                          content: '确定审批吗？',
+                          onOk: () => {
+                            this.clickFreezeFrom();
+                          },
+                        });
+                      }}
+                      disabled={isEdit}
+                    >
+                      审批
+                    </Button>
+                  )}
                 </div>
               </Card>
             </div>
@@ -707,8 +719,6 @@ class BrandCompoenet extends Component {
       </GridContent>
     );
   }
-
-
 }
 
 export default BrandCompoenet;

@@ -12,6 +12,7 @@ import {
   freezeTheRoyalty,
 } from '@/services/api';
 
+const initData = { records: [] };
 export default {
   namespace: 'basic',
 
@@ -20,15 +21,16 @@ export default {
     city: [],
     head: [],
     isLoading: false,
-    body:{}
+    body: {},
   },
 
   effects: {
-    *fetchListBrands({payload}, { call, put }) {
-      const response = yield call(querylistBrands,payload);
+    *fetchListBrands({ payload }, { call, put }) {
+      const response = yield call(querylistBrands, payload);
+      const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'listBrand',
-        payload: response,
+        payload: list,
       });
     },
 
@@ -38,7 +40,7 @@ export default {
         type: 'saveBrand',
         payload: response,
       });
-      if (callback&&response.head.rtnCode==='000000') callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
     *updateBrand({ payload, callback }, { call, put }) {
@@ -48,7 +50,7 @@ export default {
         type: 'saveBrand',
         payload: response,
       });
-      if (callback&&response.head.rtnCode==='000000') callback();
+      if (callback && response.head.rtnCode === '000000') callback();
     },
 
     *deleteBrand({ payload, callback }, { call, put }) {
@@ -137,17 +139,7 @@ export default {
     listBrand(state, action) {
       return {
         ...state,
-        head: action.payload,
-        // rtnCode:action.payload.head.rtnCode,
-        body: {
-          ...state.body,
-          total: action.payload.body.total,
-          current: action.payload.body.current,
-          size: action.payload.body.pageSize,
-          data: action.payload.body.records,
-          rtnCode: action.payload.head.rtnCode,
-          rtnMsg: action.payload.head.rtnMsg,
-        },
+        body: action.payload,
       };
     },
 
