@@ -11,6 +11,7 @@ import {
 import DescriptionList from '@/components/DescriptionList';
 import Zmage from 'react-zmage';
 import styles from './GetRenderitem.less';
+import {defaultImages} from '@/utils/utils';
 
 const { Description } = DescriptionList;
 
@@ -42,8 +43,8 @@ const GetRenderitem = ({ data, type, items }) => {
     ));
   };
   const arr = items[type];
-  const images = data.pictures && data.pictures.flatMap(e => e.picPath);
   const {videos} = data;
+  const images = data.pictures && (data.pictures.length===0?defaultImages:data.pictures.flatMap(e => e.picPath));
 
   return (
     <Card bordered={false} style={{overflow:"auto"}} onClick={selectRowItem}>

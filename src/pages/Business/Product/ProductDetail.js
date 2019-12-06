@@ -45,6 +45,7 @@ import batchUpdateArr from './config.json';
 import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
+import {defaultImages} from '@/utils/utils';
 // 客户编号 产品来源 模具号
 const { productBatchUpdate } = servicesConfig;
 const {
@@ -658,7 +659,7 @@ class ProductDetail extends Component {
                     className={business.carousel_content}
                     autoplay
                   >
-                    {this.getImages(showItem.pictures)}
+                    {this.getImages(showItem.pictures.length===0?defaultImages:showItem.pictures)}
                   </Carousel>
                   {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                   <DescriptionList size="small" col="1">
@@ -858,7 +859,7 @@ class ProductDetail extends Component {
   };
 
   getImages = pictures => {
-    const images = pictures && pictures.flatMap(e => e.picPath);
+    const images = pictures && pictures.flatMap(e => e.picPath||e);
     if (!images) return;
     return images.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
@@ -2019,7 +2020,7 @@ class ProductDetail extends Component {
                     className={business.carousel_content}
                     autoplay
                   >
-                    {this.getImages(showItem.pictures)}
+                    {this.getImages(showItem.pictures.length===0?defaultImages:showItem.pictures)}
                   </Carousel>
                   {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                   <DescriptionList size="small" col="1">

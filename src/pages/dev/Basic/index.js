@@ -22,7 +22,7 @@ import { statusConvert } from '@/utils/convert';
 import ModalConfirm from '@/utils/modal';
 import BuildTitle from '@/components/BuildTitle';
 import UploadImg from '@/components/UploadImg';
-
+import {defaultImages} from '@/utils/utils';
 const { Description } = DescriptionList;
 const { Item } = Menu;
 const FormItem = Form.Item;
@@ -1188,7 +1188,7 @@ const GetRenderitem = ({ data, type }) => {
       </div>
     ));
   };
-  const images = data.pictures && data.pictures.flatMap(e => e.picPath);
+  const images = data.pictures && (data.pictures.length===0?defaultImages:data.pictures.flatMap(e => e.picPath));
 
   return (
     <Card bordered={false} style={{ overflow: 'auto' }} className={styles.carddiv} onClick={selectRowItem}>

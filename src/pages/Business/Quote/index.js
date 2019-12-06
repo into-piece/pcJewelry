@@ -38,6 +38,7 @@ import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
 import styles from './index.less';
+import {defaultImages} from '@/utils/utils';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -603,7 +604,7 @@ class Info extends Component {
           </Radio.Group>
         );
       case 7:
-        return <Input disabled={true} style={{ width: '100' }} placeholder="自动带出" />;
+        return <Input disabled style={{ width: '100' }} placeholder="自动带出" />;
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
@@ -642,7 +643,7 @@ class Info extends Component {
   };
 
   getImages = pictures => {
-    const images = pictures && pictures.flatMap(e => e.picPath);
+    const images = pictures && pictures.flatMap(e => e.picPath||e);
     if (!images) return;
     return images.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
@@ -719,7 +720,7 @@ class Info extends Component {
 
             <div className={styles.carousel_content}>
               <Carousel {...this.carouselsettings} autoplay key={`as${Math.random(2)}`}>
-                {this.getImages(pictures)}
+                {this.getImages(pictures&&(pictures.length===0?defaultImages:pictures))}
               </Carousel>
             </div>
           </React.Fragment>
@@ -1241,44 +1242,44 @@ class Info extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               继续添加
-            </Button>,
+          </Button>,
           ]
         : [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);

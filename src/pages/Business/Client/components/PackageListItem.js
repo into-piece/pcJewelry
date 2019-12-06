@@ -7,6 +7,7 @@ import Zmage from 'react-zmage';
 import styles from '../base.less';
 import HttpFetch from '../../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../../utils/authority';
+import {defaultImages} from '@/utils/utils';
 
 const { Description } = DescriptionList;
 
@@ -41,7 +42,7 @@ class PackageListItem extends PureComponent {
     const { item, isSelected, callbackUrl } = this.props;
 
     const { loading, imageObject, endNo, endShotName, isFristLoadValue } = this.state;
-    const paths = item.pictures && item.pictures.flatMap(e => e.picPath);
+    const images = item.pictures && (item.pictures.length===0?defaultImages:item.pictures.flatMap(e => e.picPath));
 
     return (
       <Card
@@ -50,7 +51,7 @@ class PackageListItem extends PureComponent {
         className={isSelected ? styles.list_selected_content : ''}
         cover={
           <Carousel {...this.carouselsettings} key={item.id} className={styles.carousel_content} autoplay>
-            {this.getImages(paths)}
+            {this.getImages(images)}
           </Carousel>
         }
       >
