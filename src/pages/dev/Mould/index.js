@@ -321,6 +321,7 @@ class Index extends Component {
         });
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
+          this.getListSecond({ type: secondTableActive }, {});
         } else {
           this.getListSecond({ type: secondTableActive }, {});
         }
@@ -343,6 +344,7 @@ class Index extends Component {
         });
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
+          this.getListSecond({ type: secondTableActive }, {});
         } else {
           this.getListSecond({ type: secondTableActive }, {});
         }
