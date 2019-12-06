@@ -45,6 +45,7 @@ import batchUpdateArr from './config.json';
 import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
+
 // 客户编号 产品来源 模具号
 const { productBatchUpdate } = servicesConfig;
 const {
@@ -57,6 +58,7 @@ const {
   queryMstWordList,
   queryMoldList, // 模具号
   queryMeasureUniList, // 数量单位
+  queryProductLock,
 } = HttpFetch;
 const componentArr = {
   brand: BrandListSelect,
@@ -933,6 +935,7 @@ class ProductDetail extends Component {
       customerShotName = '',
       cropperVisible,
       cNofCodezhName,
+      isEditItem,
     } = this.state;
 
     const sourceOfProduct = getFieldValue('sourceOfProduct');
@@ -1153,7 +1156,19 @@ class ProductDetail extends Component {
                 rules: [{ required: true, message: '请输入' }],
                 initialValue: current.mouldNo,
               })(
-                <Input placeholder="请输入" />
+                <Input
+                  placeholder="请输入"
+                  disabled={isEditItem}
+                  onChange={e => {
+                    const v = e.target.value;
+                    this.setState(
+                      { current: { ...this.state.current, mouldNo: v }, mouldNo: v },
+                      () => {
+                        this.parseProductNo();
+                      }
+                    );
+                  }}
+                />
                 // <MoldListSelect
                 //   showSearch
                 //   optionFilterProp="children"
@@ -1595,6 +1610,8 @@ class ProductDetail extends Component {
   };
 
   handleCancel = () => {
+    const { item } = this.props;
+    this.updateProductLock(item);
     this.setState({
       visible: false,
     });
@@ -1611,9 +1628,60 @@ class ProductDetail extends Component {
     });
   };
 
+  /**
+   * 获取锁定状态
+   * @param item
+   */
+  loadProductLock = async item => {
+    // console.log(' 查询锁定对象为 :', item.id);
+    const params = {};
+    params.id = item.id;
+    params.dataNo = item.markingNo;
+    return fetch(queryProductLock, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { head } = d;
+        const isProductUpdate = head.rtnCode === '000000';
+        if (!isProductUpdate) {
+          message.error(head.rtnMsg);
+        }
+        this.setState({
+          isProductUpdate,
+        });
+        return isProductUpdate;
+      });
+  };
+
+  /** *
+   * 解锁
+   * @param item
+   */
+  updateProductLock = item => {
+    const { dispatch } = this.props;
+    const { isProductUpdate } = this.state;
+    if (isProductUpdate)
+      dispatch({
+        type: 'product/updateProductUnLock',
+        payload: { id: item.id },
+      });
+  };
+
   // 点击编辑按钮弹出编辑弹窗
-  handleEditProduct = () => {
+  handleEditProduct = async () => {
     const { item } = this.props;
+
+    // 是否可编辑
+    const isEdit = await this.loadProductLock(item);
+    // 不可编辑
+    if (!isEdit) return;
     this.resetParse();
     const { imageObject } = this.state;
     this.parseImages(imageObject);

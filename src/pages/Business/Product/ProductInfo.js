@@ -11,6 +11,7 @@ import HttpFetch from '../../../utils/HttpFetch';
 import ProductDetail from './ProductDetail';
 import TableSortView from '../../components/TableSortView';
 import { getCurrentUser } from '../../../utils/authority';
+import Table from '@/components/Table';
 
 const defaultPageSize = 10;
 
@@ -48,6 +49,12 @@ class ProductInfo extends Component {
     searchProductParams: {
       status: 0,
     },
+    pagination: {
+      current: 1,
+      size: 10,
+    },
+    selectedRowKeys: [],
+    choosenRowData: {},
   };
 
   productColumns = [
@@ -152,22 +159,12 @@ class ProductInfo extends Component {
 
   componentDidMount() {
     this.loadProduct();
-    window.onbeforeunload = () => {
-      console.log('onbeforeunload ');
-      const { showItem } = this.state;
-      if (showItem) {
-        // console.log('执行解锁3');
-        this.updateProductLock(showItem);
-      }
-    };
-  }
-  // router.replace('/business/client/emptyView');
-  componentWillUnmount() {
-    const { showItem } = this.state;
-    if (showItem) {
-      this.updateProductLock(showItem);
-      // console.log('执行解锁2');
-    }
+    // window.onbeforeunload = () => {
+    //   console.log('onbeforeunload ');
+    //   const { showItem } = this.state;
+    //   if (showItem) {
+    //   }
+    // };
   }
 
   getDetailInfow = () => {
@@ -274,67 +271,15 @@ class ProductInfo extends Component {
     });
   };
 
-  /**
-   * 获取锁定状态
-   * @param item
-   */
-  loadProductLock = item => {
-    // console.log(' 查询锁定对象为 :', item.id);
-    const _this = this;
-    const params = {};
-    params.id = item.id;
-    params.dataNo = item.markingNo;
-    fetch(HttpFetch.queryProductLock, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        token: getCurrentUser() ? getCurrentUser().token : '',
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const { head } = d;
-
-        const isProductUpdate = head.rtnCode === '000000';
-
-        if (!isProductUpdate) {
-          message.error(head.rtnMsg);
-        }
-
-        _this.setState({
-          isProductUpdate,
-        });
-      })
-      .catch(function(ex) {
-        // message.error('加载图片失败！');
-        _this.setState({
-          loading: false,
-        });
-      });
-  };
-
-  /** *
-   * 解锁
-   * @param item
-   */
-  updateProductLock = item => {
-    const { dispatch } = this.props;
-    const { isProductUpdate } = this.state;
-    if (isProductUpdate)
-      dispatch({
-        type: 'product/updateProductUnLock',
-        payload: { id: item.id },
-      });
-  };
-
   pageProductChange = (page, pageSize) => {
-    this.setState({
-      productPage: page,
-    });
-    this.state.productPage = page;
-    this.loadProduct();
+    this.setState(
+      {
+        productPage: page,
+      },
+      () => {
+        this.loadProduct();
+      }
+    );
   };
 
   clickToggleDrawer = () => {
@@ -355,28 +300,69 @@ class ProductInfo extends Component {
     });
   };
 
+  onSelectChange = v => {
+    console.log(v);
+    this.setState({
+      selectedRowKeys: v,
+    });
+  };
+
+  // 选中某行表头
+  changeChoosenRow = rowData => {
+    // this.loadProductLock(rowData);
+    this.setState({
+      choosenRowData: rowData,
+      showItem: rowData,
+    });
+  };
+
   render() {
-    const { leftlg, rightlg, drawVisible, visible, update, isLoad } = this.state;
+    const { onSelectChange, state, props, changeChoosenRow } = this;
+    const {
+      leftlg,
+      rightlg,
+      drawVisible,
+      visible,
+      update,
+      isLoad,
+      pagination,
+      selectedRowKeys,
+      choosenRowData,
+    } = state;
+
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-    const { queryProductLocking, body = {} } = this.props;
+    const { queryProductLocking, body = {} } = props;
     if (isLoad) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
-      this.refs.productTable.updateSelectDatas(body);
+      // this.refs.productTable.updateSelectDatas(body);
       this.state.isLoadList = false;
     }
+
     return (
       <div className={business.page}>
         <div className={business.center_content}>
           <Row gutter={24}>
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
-                <div style={{ marginBottom: 16 }} />
                 <ProductSearchFrom
                   onSearch={this.handleProductSearch}
                   onCustomerReset={this.handleProductFormReset}
                 />
-                <JewelryTable
+
+                <Table
+                  columns={this.productColumns}
+                  body={body}
+                  changeChoosenRow={changeChoosenRow}
+                  selectKey={choosenRowData.id}
+                  pagination={pagination}
+                  handleTableChange={this.pageProductChange}
+                  selectedRowKeys={selectedRowKeys}
+                  onSelectChange={onSelectChange}
+                  listLoading={isLoad}
+                />
+
+                {/* <JewelryTable
                   scroll={{ x: 1200 }}
                   onSelectItem={(item, rows) => {
                     const { showItem } = this.state;
@@ -405,7 +391,7 @@ class ProductInfo extends Component {
                   // scroll={{ y: 300 }}
                   body={body}
                   pageChange={this.pageProductChange}
-                />
+                /> */}
               </Card>
             </Col>
             <Col lg={leftlg} md={24}>

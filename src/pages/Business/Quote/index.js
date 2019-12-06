@@ -38,6 +38,7 @@ import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
 import styles from './index.less';
+import BuildTitle from '@/components/BuildTitle';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -1314,9 +1315,9 @@ class Info extends Component {
         </div>
         {handleModalOk && (
           <Modal
+            title={<BuildTitle title={returnTitle()} />}
             zIndex={1000}
             maskClosable={false}
-            title={returnTitle()}
             width={1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
@@ -1330,8 +1331,8 @@ class Info extends Component {
         )}
 
         <Modal
+          title={<BuildTitle title={'选择产品'} />}
           maskClosable={false}
-          title="选择产品"
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

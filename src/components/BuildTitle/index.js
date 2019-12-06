@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import DragM from 'dragm';
 import 'antd/dist/antd.css';
 
-class BuildTitle extends React.Component {
-
+class BuildTitle extends PureComponent {
   updateTransform = transformStr => {
     // this.modalDom && this.modalDom.forEach(e => {
     //   e.style.transform = transformStr;
@@ -14,9 +13,7 @@ class BuildTitle extends React.Component {
   };
 
   componentDidMount() {
-    this.modalDom = document.getElementsByClassName(
-      'ant-modal-wrap',
-    );
+    this.modalDom = document.getElementsByClassName('ant-modal-wrap');
   }
 
   render() {
@@ -28,6 +25,5 @@ class BuildTitle extends React.Component {
     );
   }
 }
-
 
 export default BuildTitle;
