@@ -39,6 +39,7 @@ import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
 import styles from './index.less';
 import {defaultImages} from '@/utils/utils';
+import BuildTitle from '@/components/BuildTitle';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -293,11 +294,6 @@ class Info extends Component {
       type: 'quote/getwordbookdropdown',
     });
 
-    // 终客编号下拉
-    dispatch({
-      type: 'quote/getEndCustomerListDropDown',
-    });
-
     // 字印编码
     dispatch({
       type: 'quote/getMarkinglistDropDown',
@@ -336,7 +332,7 @@ class Info extends Component {
   };
 
   openAddModal = () => {
-    const { rightMenu, dispatch, form } = this.props;
+    const { rightMenu, dispatch, form, choosenRowData } = this.props;
     const isHead = rightMenu === 1;
 
     if (isHead) {
@@ -441,7 +437,7 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu } = this.props;
+    const { quote, form, rightMenu, dispatch } = this.props;
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -455,6 +451,12 @@ class Info extends Component {
 
     // 自动带出
     if (type === 'customerId') {
+      // 终客编号下拉
+      dispatch({
+        type: 'quote/getEndCustomerListDropDown',
+        payload: { key: value },
+      });
+
       const { quote, form } = this.props;
       const obj = quote.customerDropDownList.find(item => item.value === value);
       const { shotName, currencyCode } = obj;
@@ -746,7 +748,11 @@ class Info extends Component {
                 style={value === 'productTypeName' ? { marginRight: 100 } : {}}
               >
                 <FormItem
-                  label={priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}` : key}
+                  label={
+                    priceUnit === 1 && rightMenu === 2
+                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
+                      : key
+                  }
                 >
                   {getFieldDecorator(value, {
                     rules: [
@@ -1242,44 +1248,44 @@ class Info extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-          <Button key="back" onClick={onCancel}>
+            <Button key="back" onClick={onCancel}>
               取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(true);
               }}
-          >
+            >
               保存
-          </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            </Button>,
+            <Button
+              key="continue"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(false);
               }}
-          >
+            >
               继续添加
-          </Button>,
+            </Button>,
           ]
         : [
-          <Button key="back" onClick={onCancel}>
+            <Button key="back" onClick={onCancel}>
               取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(false);
               }}
-          >
+            >
               保存
-          </Button>,
+            </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);
@@ -1310,9 +1316,9 @@ class Info extends Component {
         </div>
         {handleModalOk && (
           <Modal
+            title={<BuildTitle title={returnTitle()} />}
             zIndex={1000}
             maskClosable={false}
-            title={returnTitle()}
             width={1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
@@ -1326,8 +1332,8 @@ class Info extends Component {
         )}
 
         <Modal
+          title={<BuildTitle title={'选择产品'} />}
           maskClosable={false}
-          title="选择产品"
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}

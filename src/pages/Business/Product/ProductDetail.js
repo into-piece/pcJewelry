@@ -46,6 +46,7 @@ import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
 import {defaultImages} from '@/utils/utils';
+
 // 客户编号 产品来源 模具号
 const { productBatchUpdate } = servicesConfig;
 const {
@@ -58,6 +59,7 @@ const {
   queryMstWordList,
   queryMoldList, // 模具号
   queryMeasureUniList, // 数量单位
+  queryProductLock,
 } = HttpFetch;
 const componentArr = {
   brand: BrandListSelect,
@@ -133,6 +135,7 @@ const fetchArr = [
     key: 'unitOfLength',
     value: queryMeasureUniList,
   },
+
   {
     key: 'mouldNo',
     value: queryMoldList,
@@ -933,6 +936,8 @@ class ProductDetail extends Component {
       customerShotName = '',
       cropperVisible,
       cNofCodezhName,
+      isEditItem,
+      productTypeId,
     } = this.state;
 
     const sourceOfProduct = getFieldValue('sourceOfProduct');
@@ -1021,6 +1026,7 @@ class ProductDetail extends Component {
                             cNofCodezhName: v.zhName,
                             cNofCodeehName: v.enName,
                             productType: '',
+                            productTypeId: v.id,
                             brand: 'SET',
                           },
                           () => {
@@ -1033,6 +1039,7 @@ class ProductDetail extends Component {
                             cNofCodezhName: v.zhName,
                             cNofCodeehName: v.enName,
                             productType: v.unitCode,
+                            productTypeId: v.id,
                           },
                           () => {
                             this.parseProductNo();
@@ -1153,21 +1160,11 @@ class ProductDetail extends Component {
                 rules: [{ required: true, message: '请输入' }],
                 initialValue: current.mouldNo,
               })(
-                <MoldListSelect
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                  style={{ width: 180 }}
-                  content={current.mouldNo}
+                <Input
                   placeholder="请输入"
-                  onSelect={v => {
-                    this.setState({ mouldNo: v.mainMoldCode }, () => {
-                      this.parseProductNo();
-                    });
-                  }}
-                  onChange={v => {
+                  disabled={isEditItem}
+                  onChange={e => {
+                    const v = e.target.value;
                     this.setState(
                       { current: { ...this.state.current, mouldNo: v }, mouldNo: v },
                       () => {
@@ -1211,9 +1208,9 @@ class ProductDetail extends Component {
                 rules: [
                   {
                     required:
-                      this.state.cNofCodezhName === '耳环' ||
-                      this.state.cNofCodezhName === '项链' ||
-                      this.state.cNofCodezhName === '手链',
+                      productTypeId === 'baae75766c3512ab603abf38c3893e81' ||
+                      productTypeId === '0e214dd1d7d777d23989f84d9d083729' ||
+                      productTypeId === '8fec28ce0a8f43d9bed07002de2a05dc',
                     message: '请输入规格',
                   },
                 ],
@@ -1269,8 +1266,8 @@ class ProductDetail extends Component {
                 rules: [
                   {
                     required:
-                      this.state.cNofCodezhName === '项链' ||
-                      this.state.cNofCodezhName === '手链',
+                      productTypeId === '0e214dd1d7d777d23989f84d9d083729' ||
+                      productTypeId === '8fec28ce0a8f43d9bed07002de2a05dc',
                     message: '请选择长度单位',
                   },
                 ],
@@ -1440,7 +1437,14 @@ class ProductDetail extends Component {
 
   handleSubmit = close => {
     const { dispatch, form } = this.props;
-    const { isAdd, fileList, showItem, current } = this.state;
+    const { isAdd, fileList, showItem, current, productTypeId } = this.state;
+    let arr2 = [];
+    if (
+      productTypeId === '0e214dd1d7d777d23989f84d9d083729' ||
+      productTypeId === '8fec28ce0a8f43d9bed07002de2a05dc'
+    ) {
+      arr2 = ['unitOfLength'];
+    }
     const arr = [
       'productNo',
       'brand',
@@ -1454,6 +1458,7 @@ class ProductDetail extends Component {
       'productColor',
       'specification',
       'customerId',
+      ...arr2,
     ];
 
     console.log(this.props.form.getFieldsValue(), current);
@@ -1595,6 +1600,8 @@ class ProductDetail extends Component {
   };
 
   handleCancel = () => {
+    const { item } = this.props;
+    this.updateProductLock(item);
     this.setState({
       visible: false,
     });
@@ -1611,9 +1618,60 @@ class ProductDetail extends Component {
     });
   };
 
+  /**
+   * 获取锁定状态
+   * @param item
+   */
+  loadProductLock = async item => {
+    // console.log(' 查询锁定对象为 :', item.id);
+    const params = {};
+    params.id = item.id;
+    params.dataNo = item.markingNo;
+    return fetch(queryProductLock, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        token: getCurrentUser() ? getCurrentUser().token : '',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(d => {
+        const { head } = d;
+        const isProductUpdate = head.rtnCode === '000000';
+        if (!isProductUpdate) {
+          message.error(head.rtnMsg);
+        }
+        this.setState({
+          isProductUpdate,
+        });
+        return isProductUpdate;
+      });
+  };
+
+  /** *
+   * 解锁
+   * @param item
+   */
+  updateProductLock = item => {
+    const { dispatch } = this.props;
+    const { isProductUpdate } = this.state;
+    if (isProductUpdate)
+      dispatch({
+        type: 'product/updateProductUnLock',
+        payload: { id: item.id },
+      });
+  };
+
   // 点击编辑按钮弹出编辑弹窗
-  handleEditProduct = () => {
+  handleEditProduct = async () => {
     const { item } = this.props;
+
+    // 是否可编辑
+    const isEdit = await this.loadProductLock(item);
+    // 不可编辑
+    if (!isEdit) return;
     this.resetParse();
     const { imageObject } = this.state;
     this.parseImages(imageObject);
@@ -2035,8 +2093,13 @@ class ProductDetail extends Component {
                   <DescriptionList size="small" col="2">
                     <Description term="颜色">{showItem.gemColorName}</Description>
                     <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
-                    {/* <Description term="报价重量">{showItem.finishedWeight}</Description> */}
-                    {/* <Description term="成品重量">{showItem.unitOfWeightName}</Description> */}
+                    <Description term="重量单位">{showItem.unitOfWeightName}</Description>
+                    {!showItem.finishedWeight && (
+                      <>
+                        <Description term="报价重量">{showItem.finishedWeight}</Description>
+                        <Description term="成品重量">{showItem.unitOfWeightName}</Description>
+                      </>
+                    )}
                     <Description term="电镀">{showItem.platingColorName}</Description>
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
