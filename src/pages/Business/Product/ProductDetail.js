@@ -936,6 +936,7 @@ class ProductDetail extends Component {
       cropperVisible,
       cNofCodezhName,
       isEditItem,
+      productTypeId,
     } = this.state;
 
     const sourceOfProduct = getFieldValue('sourceOfProduct');
@@ -1024,6 +1025,7 @@ class ProductDetail extends Component {
                             cNofCodezhName: v.zhName,
                             cNofCodeehName: v.enName,
                             productType: '',
+                            productTypeId: v.id,
                             brand: 'SET',
                           },
                           () => {
@@ -1036,6 +1038,7 @@ class ProductDetail extends Component {
                             cNofCodezhName: v.zhName,
                             cNofCodeehName: v.enName,
                             productType: v.unitCode,
+                            productTypeId: v.id,
                           },
                           () => {
                             this.parseProductNo();
@@ -1169,29 +1172,6 @@ class ProductDetail extends Component {
                     );
                   }}
                 />
-                // <MoldListSelect
-                //   showSearch
-                //   optionFilterProp="children"
-                //   filterOption={(input, option) =>
-                //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                //   }
-                //   style={{ width: 180 }}
-                //   content={current.mouldNo}
-                //   placeholder="请输入"
-                //   onSelect={v => {
-                //     this.setState({ mouldNo: v.mainMoldCode }, () => {
-                //       this.parseProductNo();
-                //     });
-                //   }}
-                //   onChange={v => {
-                //     this.setState(
-                //       { current: { ...this.state.current, mouldNo: v }, mouldNo: v },
-                //       () => {
-                //         this.parseProductNo();
-                //       }
-                //     );
-                //   }}
-                // />
               )}
             </FormItem>
           </div>
@@ -1227,9 +1207,9 @@ class ProductDetail extends Component {
                 rules: [
                   {
                     required:
-                      this.state.cNofCodezhName === '耳环' ||
-                      this.state.cNofCodezhName === '项链' ||
-                      this.state.cNofCodezhName === '手链',
+                      productTypeId === 'baae75766c3512ab603abf38c3893e81' ||
+                      productTypeId === '0e214dd1d7d777d23989f84d9d083729' ||
+                      productTypeId === '8fec28ce0a8f43d9bed07002de2a05dc',
                     message: '请输入规格',
                   },
                 ],
@@ -1285,7 +1265,8 @@ class ProductDetail extends Component {
                 rules: [
                   {
                     required:
-                      this.state.cNofCodezhName === '项链' || this.state.cNofCodezhName === '手链',
+                      productTypeId === '0e214dd1d7d777d23989f84d9d083729' ||
+                      productTypeId === '8fec28ce0a8f43d9bed07002de2a05dc',
                     message: '请选择长度单位',
                   },
                 ],
@@ -1455,7 +1436,14 @@ class ProductDetail extends Component {
 
   handleSubmit = close => {
     const { dispatch, form } = this.props;
-    const { isAdd, fileList, showItem, current } = this.state;
+    const { isAdd, fileList, showItem, current, productTypeId } = this.state;
+    let arr2 = [];
+    if (
+      productTypeId === '0e214dd1d7d777d23989f84d9d083729' ||
+      productTypeId === '8fec28ce0a8f43d9bed07002de2a05dc'
+    ) {
+      arr2 = ['unitOfLength'];
+    }
     const arr = [
       'productNo',
       'brand',
@@ -1469,6 +1457,7 @@ class ProductDetail extends Component {
       'productColor',
       'specification',
       'customerId',
+      ...arr2,
     ];
 
     console.log(this.props.form.getFieldsValue(), current);
