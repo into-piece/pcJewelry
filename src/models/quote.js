@@ -206,7 +206,7 @@ export default {
       });
     },
     *getMarkinglistDropDown(data, { call, put }) {
-      const response = yield call(listMarkingDropDown, {});
+      const response = yield call(listMarkingDropDown, data.payload);
       console.log(response);
       let markinglist = response.body.records;
       markinglist = markinglist.map(({ zhName, id, enName }) => {

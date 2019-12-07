@@ -294,11 +294,6 @@ class Info extends Component {
       type: 'quote/getwordbookdropdown',
     });
 
-    // 字印编码
-    dispatch({
-      type: 'quote/getMarkinglistDropDown',
-    });
-
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
   }
@@ -452,6 +447,12 @@ class Info extends Component {
       // 终客编号下拉
       dispatch({
         type: 'quote/getEndCustomerListDropDown',
+        payload: { key: value },
+      });
+
+      // 字印编码
+      dispatch({
+        type: 'quote/getMarkinglistDropDown',
         payload: { key: value },
       });
 
