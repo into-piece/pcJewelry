@@ -36,6 +36,7 @@ const clientContentColumns = [
     title: '状态',
     dataIndex: 'status',
     key: 'status',
+    render: data => statusConvert[Number(data)],
   },
 ];
 
