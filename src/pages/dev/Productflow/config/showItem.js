@@ -43,6 +43,8 @@ export const productProcess = [
   { 'key': '损耗(%)', 'value': 'isWastage' },
   { 'key': '产能(件/小时)', 'value': 'processCapacity' },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
+  { 'key': '备注', 'value': 'remarks' },
+
 ];
 
 
