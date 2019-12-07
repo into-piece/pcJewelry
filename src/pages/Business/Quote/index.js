@@ -38,7 +38,7 @@ import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
 import styles from './index.less';
-import {defaultImages} from '@/utils/utils';
+import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
 
 const { RangePicker } = DatePicker;
@@ -325,7 +325,6 @@ class Info extends Component {
         if (res && res.records.length === 1 && args.search) {
           this.changeChoosenRow(res.records[0]);
           this.onSelectChange([res.records[0].id]);
-          console.log(res); // 请求完成后返回的结果
         }
       },
     });
@@ -420,7 +419,6 @@ class Info extends Component {
     const { dispatch } = this.props;
     if (type === 1) {
       this.getProduct();
-
       // 获取筛选参数下拉
       dispatch({
         type: 'quote/getBrandsList',
@@ -645,7 +643,7 @@ class Info extends Component {
   };
 
   getImages = pictures => {
-    const images = pictures && pictures.flatMap(e => e.picPath||e);
+    const images = pictures && pictures.flatMap(e => e.picPath || e);
     if (!images) return;
     return images.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
@@ -722,7 +720,7 @@ class Info extends Component {
 
             <div className={styles.carousel_content}>
               <Carousel {...this.carouselsettings} autoplay key={`as${Math.random(2)}`}>
-                {this.getImages(pictures&&(pictures.length===0?defaultImages:pictures))}
+                {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
               </Carousel>
             </div>
           </React.Fragment>
@@ -1289,6 +1287,8 @@ class Info extends Component {
           ];
 
     console.log(choosenRowData, choosenRowData.id);
+    console.log(productList, '=======');
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}

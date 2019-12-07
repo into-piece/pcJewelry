@@ -45,7 +45,7 @@ import batchUpdateArr from './config.json';
 import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
-import {defaultImages} from '@/utils/utils';
+import { defaultImages } from '@/utils/utils';
 
 // 客户编号 产品来源 模具号
 const { productBatchUpdate } = servicesConfig;
@@ -662,7 +662,9 @@ class ProductDetail extends Component {
                     className={business.carousel_content}
                     autoplay
                   >
-                    {this.getImages(showItem.pictures.length===0?defaultImages:showItem.pictures)}
+                    {this.getImages(
+                      showItem.pictures.length === 0 ? defaultImages : showItem.pictures
+                    )}
                   </Carousel>
                   {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                   <DescriptionList size="small" col="1">
@@ -862,7 +864,7 @@ class ProductDetail extends Component {
   };
 
   getImages = pictures => {
-    const images = pictures && pictures.flatMap(e => e.picPath||e);
+    const images = pictures && pictures.flatMap(e => e.picPath || e);
     if (!images) return;
     return images.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
@@ -1716,17 +1718,10 @@ class ProductDetail extends Component {
   };
 
   handleDeleteProduct = () => {
-    const { selectProductData } = this.props;
-
-    const ids = selectProductData.map(v => {
-      return v.id;
-    });
-
-    const { dispatch } = this.props;
-
+    const { selectProductData, dispatch } = this.props;
     dispatch({
       type: 'product/deleteProduct',
-      payload: { list: ids },
+      payload: { list: selectProductData },
     });
 
     this.setState({
@@ -1736,37 +1731,18 @@ class ProductDetail extends Component {
   };
 
   handleUnFreezeProduct = () => {
-    const { selectProductData = [] } = this.props;
-    const ids = selectProductData.map(v => {
-      return v.id;
-    });
-
-    // console.log(" freeze ",ids)
-
-    const { dispatch } = this.props;
-    const data = [];
-    // data.push(selectedRowKeys);
-
+    const { selectProductData = [], dispatch } = this.props;
     dispatch({
       type: 'product/unfreezeProduct',
-      payload: { list: ids },
+      payload: { list: selectProductData },
     });
   };
 
   handleFreezeProduct = () => {
-    const { selectProductData = [] } = this.props;
-    const ids = selectProductData.map(v => {
-      return v.id;
-    });
-
-    // console.log(" freeze ",ids)
-
-    const { dispatch } = this.props;
-    // data.push(selectedRowKeys);
-
+    const { selectProductData = [], dispatch } = this.props;
     dispatch({
       type: 'product/freezeProduct',
-      payload: { list: ids },
+      payload: { list: selectProductData },
     });
   };
 
@@ -2078,7 +2054,9 @@ class ProductDetail extends Component {
                     className={business.carousel_content}
                     autoplay
                   >
-                    {this.getImages(showItem.pictures.length===0?defaultImages:showItem.pictures)}
+                    {this.getImages(
+                      showItem.pictures.length === 0 ? defaultImages : showItem.pictures
+                    )}
                   </Carousel>
                   {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                   <DescriptionList size="small" col="1">
@@ -2094,12 +2072,6 @@ class ProductDetail extends Component {
                     <Description term="颜色">{showItem.gemColorName}</Description>
                     <Description term="数量单位">{showItem.unitOfMeasurementName}</Description>
                     <Description term="重量单位">{showItem.unitOfWeightName}</Description>
-                    {!showItem.finishedWeight && (
-                      <>
-                        <Description term="报价重量">{showItem.finishedWeight}</Description>
-                        <Description term="成品重量">{showItem.unitOfWeightName}</Description>
-                      </>
-                    )}
                     <Description term="电镀">{showItem.platingColorName}</Description>
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>

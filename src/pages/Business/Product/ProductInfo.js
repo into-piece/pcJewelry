@@ -53,7 +53,6 @@ class ProductInfo extends Component {
       current: 1,
       size: 10,
     },
-    selectedRowKeys: [],
     choosenRowData: {},
   };
 
@@ -303,7 +302,7 @@ class ProductInfo extends Component {
   onSelectChange = v => {
     console.log(v);
     this.setState({
-      selectedRowKeys: v,
+      selectProductData: v,
     });
   };
 
@@ -326,7 +325,7 @@ class ProductInfo extends Component {
       update,
       isLoad,
       pagination,
-      selectedRowKeys,
+      selectProductData,
       choosenRowData,
     } = state;
 
@@ -357,7 +356,7 @@ class ProductInfo extends Component {
                   selectKey={choosenRowData.id}
                   pagination={pagination}
                   handleTableChange={this.pageProductChange}
-                  selectedRowKeys={selectedRowKeys}
+                  selectedRowKeys={selectProductData}
                   onSelectChange={onSelectChange}
                   listLoading={isLoad}
                 />
