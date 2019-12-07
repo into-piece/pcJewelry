@@ -1247,44 +1247,44 @@ class Info extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               继续添加
-            </Button>,
+          </Button>,
           ]
         : [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);
@@ -1333,7 +1333,7 @@ class Info extends Component {
         )}
 
         <Modal
-          title={<BuildTitle title={'选择产品'} />}
+          title={<BuildTitle title="选择产品" />}
           maskClosable={false}
           width={1000}
           className={styles.standardListForm}
