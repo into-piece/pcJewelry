@@ -842,6 +842,7 @@ class Info extends Component {
     let params = {};
     if (!isHead) {
       params = { quoteHeadId: choosenRowData.id, productLineId };
+      debugger;
     }
 
     form.validateFields((err, values) => {
@@ -1247,44 +1248,44 @@ class Info extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-          <Button key="back" onClick={onCancel}>
+            <Button key="back" onClick={onCancel}>
               取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(true);
               }}
-          >
+            >
               保存
-          </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            </Button>,
+            <Button
+              key="continue"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(false);
               }}
-          >
+            >
               继续添加
-          </Button>,
+            </Button>,
           ]
         : [
-          <Button key="back" onClick={onCancel}>
+            <Button key="back" onClick={onCancel}>
               取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(false);
               }}
-          >
+            >
               保存
-          </Button>,
+            </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);
@@ -1528,6 +1529,10 @@ const rowArr = [
   { key: '报价总额', value: 'quoteTotalAmount' },
   { key: '说明', value: 'explains' },
   { key: '备注', value: 'remark' },
+  { key: '新增人', value: 'createUser' },
+  { key: '新增时间', value: 'createTime' },
+  { key: '修改人', value: 'modifier' },
+  { key: '修改时间', value: 'mtime' },
 ];
 
 // 右手边显示的详情信息
@@ -1544,7 +1549,16 @@ const GetRenderitem = ({ data, type, returnListName }) => {
       : data[value];
   };
 
-  const arr = type === 1 ? rowArr : detailList;
+  const arr =
+    type === 1
+      ? rowArr
+      : [
+          ...detailList,
+          { key: '新增人', value: 'createUser' },
+          { key: '新增时间', value: 'createTime' },
+          { key: '修改人', value: 'modifier' },
+          { key: '修改时间', value: 'mtime' },
+        ];
   return (
     <div
       style={{ marginLeft: 10, marginTop: 10 }}

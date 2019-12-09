@@ -106,7 +106,7 @@ class TerminalClient extends PureComponent {
       params,
     } = this.props;
 
-    const { selectedItem, visible, current = {}, update ,isAdd} = this.state;
+    const { selectedItem, visible, current = {}, update, isAdd } = this.state;
 
     const isUpdate =
       terminalUpdateloading ||
@@ -159,53 +159,47 @@ class TerminalClient extends PureComponent {
       this.state.isEdit = true;
     }
 
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={terminalSaveloading}
-        onClick={() => {
-          this.handleSubmit(true);
-        }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={terminalSaveloading}
-        onClick={() => {
-          this.handleSubmit(false);
-        }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={terminalUpdateloading}
-        onClick={() => {
-          this.handleSubmit(false);
-        }}
-      >
-        保存
-      </Button>,
-    ];
-
-
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={terminalSaveloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={terminalSaveloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={terminalUpdateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
     const getModalContent = () => {
       const {
@@ -368,7 +362,7 @@ class TerminalClient extends PureComponent {
       );
     };
 
-    const isFreeze = (selectedItem && selectedItem.status === '2');
+    const isFreeze = selectedItem && selectedItem.status === '2';
 
     return (
       <div className={styles.content}>
@@ -401,7 +395,7 @@ class TerminalClient extends PureComponent {
                 type="primary"
                 icon="plus"
                 size="small"
-                disabled={this.state.isAddEdit|| customLock}
+                disabled={this.state.isAddEdit || customLock}
                 onClick={this.clickNewFrom}
               >
                 新增
@@ -411,7 +405,7 @@ class TerminalClient extends PureComponent {
                 type="danger"
                 icon="delete"
                 size="small"
-                disabled={this.state.isEdit || isFreeze|| customLock}
+                disabled={this.state.isEdit || isFreeze || customLock}
                 onClick={this.clickDeleteFrom}
               >
                 删除
@@ -421,33 +415,34 @@ class TerminalClient extends PureComponent {
                 type="primary"
                 size="small"
                 icon="edit"
-                disabled={this.state.isEdit || isFreeze|| customLock}
+                disabled={this.state.isEdit || isFreeze || customLock}
                 onClick={this.clickEditFrom}
               >
                 编辑
               </Button>
-              {
-                isFreeze ? <Button
+              {isFreeze ? (
+                <Button
                   className={clientStyle.buttomControl}
                   size="small"
                   type="danger"
                   icon="unlock"
-                  disabled={this.state.isEdit|| customLock}
+                  disabled={this.state.isEdit || customLock}
                   onClick={this.clickUnFreezeFrom}
                 >
                   取消审批
-                </Button> : <Button
-                             className={clientStyle.buttomControl}
-                             size="small"
-                             type="primary"
-                             icon="lock"
-                             disabled={this.state.isEdit || customLock}
-                             onClick={this.clickFreezeFrom}
-                           >
+                </Button>
+              ) : (
+                <Button
+                  className={clientStyle.buttomControl}
+                  size="small"
+                  type="primary"
+                  icon="lock"
+                  disabled={this.state.isEdit || customLock}
+                  onClick={this.clickFreezeFrom}
+                >
                   审批
-                                       </Button>
-              }
-
+                </Button>
+              )}
             </div>
 
             <div
@@ -487,7 +482,6 @@ class TerminalClient extends PureComponent {
           visible={visible}
           footer={modalFooter}
           onCancel={this.handleCancel}
-
         >
           {getModalContent()}
         </Modal>
@@ -528,6 +522,10 @@ class TerminalClient extends PureComponent {
           <Description term="QQ">{item.qq}</Description>
           <Description term="微信">{item.wechat}</Description>
           <Description term="备注">{item.remarks}</Description>
+          <Description term="新增人">{item.createUser}</Description>
+          <Description term="新增时间">{item.createTime}</Description>
+          <Description term="修改人">{item.modifier}</Description>
+          <Description term="修改时间">{item.mtime}</Description>
         </DescriptionList>
         <Divider className={styles.divder} />
       </div>
@@ -636,7 +634,7 @@ class TerminalClient extends PureComponent {
     // });
   };
 
-  handleSubmit = (close) => {
+  handleSubmit = close => {
     const { dispatch, form } = this.props;
     const { isAdd, customerId, selectedItem } = this.state;
 
@@ -654,11 +652,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: !close,
             });
-          }
+          },
         });
       } else {
         params.id = selectedItem.id;
@@ -667,11 +665,11 @@ class TerminalClient extends PureComponent {
           payload: {
             ...params,
           },
-          callback:()=>{
+          callback: () => {
             this.setState({
               visible: !close,
             });
-          }
+          },
         });
       }
     });

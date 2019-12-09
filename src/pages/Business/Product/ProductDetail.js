@@ -2086,6 +2086,10 @@ class ProductDetail extends Component {
                   <Divider className={business.divder} />
                   <DescriptionList size="small" col="1">
                     <Description>{showItem.marks}</Description>
+                    <Description term="新增人">{showItem.createUser}</Description>
+                    <Description term="新增时间">{showItem.createTime}</Description>
+                    <Description term="修改人">{showItem.modifier}</Description>
+                    <Description term="修改时间">{showItem.mtime}</Description>
                   </DescriptionList>
                 </Spin>
               </div>
