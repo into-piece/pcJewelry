@@ -7,19 +7,15 @@ import Zmage from 'react-zmage';
 import styles from '../base.less';
 import HttpFetch from '../../../../utils/HttpFetch';
 import { getCurrentUser } from '../../../../utils/authority';
-import {defaultImages} from '@/utils/utils';
+import { defaultImages } from '@/utils/utils';
 
 const { Description } = DescriptionList;
 
 class PackageListItem extends PureComponent {
-
-
   carouselsettings = {
     speed: 150,
     initialSlide: 1, // 修改组件初始化时的initialSlide 为你想要的值
-  }
-
-
+  };
 
   constructor(props) {
     super(props);
@@ -37,12 +33,13 @@ class PackageListItem extends PureComponent {
     this.feathPackageToId(item.endNo);
   }
 
-
   render() {
     const { item, isSelected, callbackUrl } = this.props;
 
     const { loading, imageObject, endNo, endShotName, isFristLoadValue } = this.state;
-    const images = item.pictures && (item.pictures.length===0?defaultImages:item.pictures.flatMap(e => e.picPath));
+    const images =
+      item.pictures &&
+      (item.pictures.length === 0 ? defaultImages : item.pictures.flatMap(e => e.picPath));
 
     return (
       <Card
@@ -50,13 +47,16 @@ class PackageListItem extends PureComponent {
         loading={loading}
         className={isSelected ? styles.list_selected_content : ''}
         cover={
-          <Carousel {...this.carouselsettings} key={item.id} className={styles.carousel_content} autoplay>
+          <Carousel
+            {...this.carouselsettings}
+            key={item.id}
+            className={styles.carousel_content}
+            autoplay
+          >
             {this.getImages(images)}
           </Carousel>
         }
       >
-
-
         <div>
           <DescriptionList size="small" col="2">
             <Description size="small" term="终客编号">
@@ -72,6 +72,10 @@ class PackageListItem extends PureComponent {
 
           <DescriptionList size="small" col="1">
             <Description term="包装说明">{item.packExplain}</Description>
+            <Description term="新增人">{item.createUser}</Description>
+            <Description term="新增时间">{item.createTime}</Description>
+            <Description term="修改人">{item.modifier}</Description>
+            <Description term="修改时间">{item.mtime}</Description>
           </DescriptionList>
         </div>
       </Card>
@@ -80,7 +84,7 @@ class PackageListItem extends PureComponent {
 
   getImages = paths => {
     return paths.map((
-      v, // src={v}
+      v // src={v}
     ) => (
       <div className={styles.carousel_image_ground}>
         <Zmage
@@ -89,7 +93,7 @@ class PackageListItem extends PureComponent {
           className={styles.carousel_image}
           src={v}
           edge={20}
-          set={paths.map(image => ({ src: image ,style: { minWidth: 800,minHeight: 800 },}))}
+          set={paths.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
         />
       </div>
     ));
@@ -99,9 +103,7 @@ class PackageListItem extends PureComponent {
     return true;
   }
 
-  feathPackageToId = (id) => {
-
-
+  feathPackageToId = id => {
     this.setState({
       loading: true,
     });
@@ -112,24 +114,23 @@ class PackageListItem extends PureComponent {
     fetch(HttpFetch.queryTerminalList, {
       method: 'POST',
       credentials: 'include',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser()?getCurrentUser().token:'',
+        token: getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
       .then(response => response.json())
       .then(d => {
-        const {body} = d;
+        const { body } = d;
         if (body && body.records) {
-          const {records} = body;
-
+          const { records } = body;
 
           // console.log("terminal records ",records)
           if (records && records.length > 0) {
             const item = records[0];
-            const {endNo} = item;
-            const {endShotName} = item;
+            const { endNo } = item;
+            const { endShotName } = item;
             // console.log(" end item ",item)
 
             // console.log('list update ', records);

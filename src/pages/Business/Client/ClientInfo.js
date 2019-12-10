@@ -8,7 +8,8 @@ import {
   Button,
   Input,
   Divider,
-  Modal,notification,
+  Modal,
+  notification,
   message,
   Spin,
 } from 'antd';
@@ -99,7 +100,7 @@ class ClientInfo extends PureComponent {
       params,
     } = this.props;
 
-    const { visible, current = {},isAdd, update, customerDelete } = this.state;
+    const { visible, current = {}, isAdd, update, customerDelete } = this.state;
 
     // console.log("是否请求成功!",isSuccess)
 
@@ -125,7 +126,6 @@ class ClientInfo extends PureComponent {
       else this.state.isAddEdit = true;
 
       if (data.content && data.content !== '') {
-
         this.state.isEdit = false;
       } else {
         this.state.isEdit = true;
@@ -173,56 +173,50 @@ class ClientInfo extends PureComponent {
 
       this.handleDone(customerDelete);
 
-
       this.state.update = false;
     }
 
-
-    const modalFooter = isAdd ? [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={customerUpdateloading}
-        onClick={() => {
-          this.handleSubmit(true);
-        }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={customerUpdateloading}
-        onClick={() => {
-          this.handleSubmit(false);
-        }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={this.handleCancel}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={customerUpdateloading}
-        onClick={() => {
-          this.handleSubmit(false);
-        }}
-      >
-        保存
-      </Button>,
-    ];
+    const modalFooter = isAdd
+      ? [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={customerUpdateloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={customerUpdateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
+      : [
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={customerUpdateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
     const getModalContent = () => {
       const {
@@ -270,7 +264,6 @@ class ClientInfo extends PureComponent {
             </Row>
 
             <Row gutter={2} style={{ width: '100%' }} justify="start">
-
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="中文名" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('zhName', {
@@ -297,7 +290,6 @@ class ClientInfo extends PureComponent {
               </Col>
             </Row>
             <Row gutter={2} style={{ width: '100%' }} justify="start">
-
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="英文地址" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('enAddress', {
@@ -322,7 +314,6 @@ class ClientInfo extends PureComponent {
               </Col>
             </Row>
             <Row gutter={2} style={{ width: '100%' }} justify="start">
-
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="电话" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('companyPhone', {
@@ -342,15 +333,19 @@ class ClientInfo extends PureComponent {
               </Col>
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="币种" {...this.formLayout} className={styles.from_content_col}>
-                  {getFieldDecorator('settlementCurrency', {})(<Dict
-                    dict="H006"
-                    content={current.settlementCurrency ? current.settlementCurrency : 'H006003'}
-                  />)}
+                  {getFieldDecorator(
+                    'settlementCurrency',
+                    {}
+                  )(
+                    <Dict
+                      dict="H006"
+                      content={current.settlementCurrency ? current.settlementCurrency : 'H006003'}
+                    />
+                  )}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={2} style={{ width: '100%' }} justify="start">
-
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="品质" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('qualityRequirements', {
@@ -359,7 +354,7 @@ class ClientInfo extends PureComponent {
                     <QualityRequirements
                       placeholder="请输入"
                       content={current.qualityRequirements}
-                    />,
+                    />
                   )}
                 </FormItem>
               </Col>
@@ -385,7 +380,6 @@ class ClientInfo extends PureComponent {
               </Col>
             </Row>
             <Row gutter={2} style={{ width: '100%' }} justify="start">
-
               <Col lg={8} md={8} sm={8} xs={8}>
                 <FormItem label="送货方式" {...this.formLayout} className={styles.from_content_col}>
                   {getFieldDecorator('deliveryMethod', {
@@ -413,9 +407,7 @@ class ClientInfo extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.right_info}>
-          {
-            (!isload && !this.state.showItem) ? '' : this.showCustomer(isload)
-          }
+          {!isload && !this.state.showItem ? '' : this.showCustomer(isload)}
         </div>
         <Card
           bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}
@@ -445,15 +437,17 @@ class ClientInfo extends PureComponent {
                 type="danger"
                 icon="delete"
                 size="small"
-                disabled={this.state.isEdit || (this.state.showItem && this.state.showItem.status === '2')}
+                disabled={
+                  this.state.isEdit || (this.state.showItem && this.state.showItem.status === '2')
+                }
                 onClick={() => {
                   ModalConfirm({
-                    content: '确定删除吗？', onOk: () => {
+                    content: '确定删除吗？',
+                    onOk: () => {
                       this.clickDeleteFrom();
                     },
                   });
                 }}
-
               >
                 删除
               </Button>
@@ -462,13 +456,15 @@ class ClientInfo extends PureComponent {
                 type="primary"
                 size="small"
                 icon="edit"
-                disabled={this.state.isEdit || (this.state.showItem && this.state.showItem.status === '2')}
+                disabled={
+                  this.state.isEdit || (this.state.showItem && this.state.showItem.status === '2')
+                }
                 onClick={this.clickEditFrom}
               >
                 编辑
               </Button>
-              {
-                this.state.showItem.status === '2' ? <Button
+              {this.state.showItem.status === '2' ? (
+                <Button
                   className={clientStyle.buttomControl}
                   size="small"
                   type="danger"
@@ -476,31 +472,34 @@ class ClientInfo extends PureComponent {
                   disabled={this.state.isEdit}
                   onClick={() => {
                     ModalConfirm({
-                      content: '确定取消审批吗？', onOk: () => {
+                      content: '确定取消审批吗？',
+                      onOk: () => {
                         this.clickUnFreezeFrom();
                       },
                     });
                   }}
                 >
                   取消审批
-                </Button> : <Button
-                                                       className={clientStyle.buttomControl}
-                                                       size="small"
-                                                       type="primary"
-                                                       icon="lock"
-                                                       disabled={this.state.isEdit}
-                                                       onClick={() => {
+                </Button>
+              ) : (
+                <Button
+                  className={clientStyle.buttomControl}
+                  size="small"
+                  type="primary"
+                  icon="lock"
+                  disabled={this.state.isEdit}
+                  onClick={() => {
                     ModalConfirm({
-                      content: '确定审批吗？', onOk: () => {
+                      content: '确定审批吗？',
+                      onOk: () => {
                         this.clickFreezeFrom();
                       },
                     });
                   }}
-                                                     >
+                >
                   审批
-                                                     </Button>
-              }
-
+                </Button>
+              )}
             </div>
 
             <div
@@ -625,7 +624,7 @@ class ClientInfo extends PureComponent {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'token': getCurrentUser() ? getCurrentUser().token : '',
+        token: getCurrentUser() ? getCurrentUser().token : '',
       },
       body: JSON.stringify(params),
     })
@@ -672,46 +671,47 @@ class ClientInfo extends PureComponent {
     });
   };
 
-
   showCustomer = isload => {
-    const { settlementCurrency, qualityRequirements, deliveryMethod } = this.state;
+    const { settlementCurrency, qualityRequirements, deliveryMethod, showItem } = this.state;
 
     return (
       <div style={{ paddingLeft: 10, paddingRight: 10 }}>
         <Spin spinning={isload}>
           <DescriptionList size="small" col="2">
             <Description size="small" term="客户编号">
-              {this.state.showItem.customerNo}
+              {showItem.customerNo}
             </Description>
             <Description size="small" term="客户简称">
-              {this.state.showItem.shotName}
+              {showItem.shotName}
             </Description>
             <Description size="small" term="国别">
-              {this.state.showItem.country}
+              {showItem.country}
             </Description>
-            <Description term="城市">{this.state.showItem.city}</Description>
-            <Description term="英文名">{this.state.showItem.enName}</Description>
-            <Description term="中文名">{this.state.showItem.zhName}</Description>
-            <Description term="客户渠道">{this.state.showItem.customerChannels}</Description>
+            <Description term="城市">{showItem.city}</Description>
+            <Description term="英文名">{showItem.enName}</Description>
+            <Description term="中文名">{showItem.zhName}</Description>
+            <Description term="客户渠道">{showItem.customerChannels}</Description>
           </DescriptionList>
           <DescriptionList size="small" col="1">
-            <Description term="中文地址">{this.state.showItem.zhAddress}</Description>
-            <Description term="英文地址">{this.state.showItem.enAddress}</Description>
+            <Description term="中文地址">{showItem.zhAddress}</Description>
+            <Description term="英文地址">{showItem.enAddress}</Description>
           </DescriptionList>
           <DescriptionList size="small" col="2">
-            <Description term="电话">{this.state.showItem.companyPhone}</Description>
-            <Description term="网站">{this.state.showItem.companyWebsite}</Description>
+            <Description term="电话">{showItem.companyPhone}</Description>
+            <Description term="网站">{showItem.companyWebsite}</Description>
             <Description term="币种">{settlementCurrency}</Description>
             <Description term="品质">{qualityRequirements}</Description>
-            <Description term="报价系数">
-              {this.state.showItem.customerQuotationCoefficient}
-            </Description>
+            <Description term="报价系数">{showItem.customerQuotationCoefficient}</Description>
             <Description term="送货方式">{deliveryMethod}</Description>
-            <Description term="预付款比例">{this.state.showItem.prepaymentRatio}%</Description>
+            <Description term="预付款比例">{showItem.prepaymentRatio}%</Description>
           </DescriptionList>
           <span className={styles.title_info}>备注</span>
           <DescriptionList size="small" col="1">
-            <Description term="">{this.state.showItem.remarks}</Description>
+            <Description term="">{showItem.remarks}</Description>
+            <Description term="新增人">{showItem.createUser}</Description>
+            <Description term="新增时间">{showItem.createTime}</Description>
+            <Description term="修改人">{showItem.modifier}</Description>
+            <Description term="修改时间">{showItem.mtime}</Description>
           </DescriptionList>
           {/* <Divider className={styles.divder} /> */}
           {/* <span */}
@@ -749,7 +749,7 @@ class ClientInfo extends PureComponent {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'token': getCurrentUser() ? getCurrentUser().token : '',
+          token: getCurrentUser() ? getCurrentUser().token : '',
         },
         body: JSON.stringify(params),
       })
@@ -782,7 +782,7 @@ class ClientInfo extends PureComponent {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'token': getCurrentUser() ? getCurrentUser().token : '',
+          token: getCurrentUser() ? getCurrentUser().token : '',
         },
         body: JSON.stringify(params),
       })
@@ -814,7 +814,7 @@ class ClientInfo extends PureComponent {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'token': getCurrentUser() ? getCurrentUser().token : '',
+          token: getCurrentUser() ? getCurrentUser().token : '',
         },
         body: JSON.stringify(params),
       })
@@ -887,7 +887,7 @@ class ClientInfo extends PureComponent {
     });
   };
 
-  handleSubmit = (close) => {
+  handleSubmit = close => {
     const { visible } = this.state;
 
     const { dispatch, form } = this.props;
@@ -941,8 +941,6 @@ class ClientInfo extends PureComponent {
           });
         },
       });
-
-
     });
   };
 }

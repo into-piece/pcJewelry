@@ -193,7 +193,6 @@ export default {
 
     *getlistCustomerDropDown(data, { call, put }) {
       const response = yield call(listCustomerDropDown, {});
-      console.log(response);
       let customerDropDownList = response.body.records;
       customerDropDownList = customerDropDownList.map(
         ({ customerNo, id, shotName, currencyCode }) => {
@@ -207,7 +206,6 @@ export default {
     },
     *getMarkinglistDropDown(data, { call, put }) {
       const response = yield call(listMarkingDropDown, data.payload);
-      console.log(response);
       let markinglist = response.body.records;
       markinglist = markinglist.map(({ zhName, id, enName }) => {
         return { value: id, key: zhName, enName };

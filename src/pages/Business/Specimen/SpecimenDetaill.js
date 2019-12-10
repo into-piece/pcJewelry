@@ -41,7 +41,7 @@ import { getCurrentUser } from '../../../utils/authority';
 import moment from 'moment';
 import classNames from 'classnames';
 import UploadImg from '@/components/UploadImg';
-import {defaultImages} from '@/utils/utils';
+import { defaultImages } from '@/utils/utils';
 
 const { Description } = DescriptionList;
 
@@ -111,7 +111,6 @@ class SpecimenDetaill extends Component {
     //   this.fetchImages(item);
   }
 
-
   resetParse = () => {
     this.setState({
       cNoBrandNo: '',
@@ -163,46 +162,46 @@ class SpecimenDetaill extends Component {
 
     const modalFooter = isAdd
       ? [
-        <Button key="back" onClick={this.handleCancel}>
-          取消
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={productSaveloading}
-          onClick={() => {
-            this.handleSubmit(true);
-          }}
-        >
-          保存
-        </Button>,
-        <Button
-          key="continue"
-          type="primary"
-          loading={productSaveloading}
-          onClick={() => {
-            this.handleSubmit(false);
-            this.parseProductNo2()
-          }}
-        >
-          继续添加
-        </Button>,
-      ]
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={productSaveloading}
+            onClick={() => {
+              this.handleSubmit(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={productSaveloading}
+            onClick={() => {
+              this.handleSubmit(false);
+              this.parseProductNo2();
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
       : [
-        <Button key="back" onClick={this.handleCancel}>
-          取消
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={productUpdateloading}
-          onClick={() => {
-            this.handleSubmit(false);
-          }}
-        >
-          保存
-        </Button>,
-      ];
+          <Button key="back" onClick={this.handleCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={productUpdateloading}
+            onClick={() => {
+              this.handleSubmit(false);
+            }}
+          >
+            保存
+          </Button>,
+        ];
 
     return (
       <div className={business.right_info}>
@@ -240,7 +239,10 @@ class SpecimenDetaill extends Component {
                         initialSlide={0}
                         autoplay
                       >
-                        {this.getImages(showItem.pictures&&(showItem.pictures.length===0?defaultImages:showItem.pictures))}
+                        {this.getImages(
+                          showItem.pictures &&
+                            (showItem.pictures.length === 0 ? defaultImages : showItem.pictures)
+                        )}
                       </Carousel>
                       {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
                       <DescriptionList size="small" col="1">
@@ -266,6 +268,10 @@ class SpecimenDetaill extends Component {
                         <Description term="供应商货号">{showItem.supplierId}</Description>
                         <Description term="供应商">{showItem.supplierProductNo}</Description>
                         <Description term="品牌">{showItem.brandNo}</Description>
+                        <Description term="新增人">{showItem.createUser}</Description>
+                        <Description term="新增时间">{showItem.createTime}</Description>
+                        <Description term="修改人">{showItem.modifier}</Description>
+                        <Description term="修改时间">{showItem.mtime}</Description>
                       </DescriptionList>
                       <div className={business.title_info}>备注</div>
                       <Divider className={business.divder} />
@@ -276,7 +282,7 @@ class SpecimenDetaill extends Component {
                   </div>
                 ) : (
                   <div />
-                  )}
+                )}
               </Card>
             </div>
             <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -355,17 +361,17 @@ class SpecimenDetaill extends Component {
                       icon="lock"
                       disabled={!showItem || showItem === '' || !isProductUpdate}
                       onClick={() => {
-                          ModalConfirm({
-                            content: '确定审批吗？',
-                            onOk: () => {
-                              this.handleFreezeProduct();
-                            },
-                          });
-                        }}
+                        ModalConfirm({
+                          content: '确定审批吗？',
+                          onOk: () => {
+                            this.handleFreezeProduct();
+                          },
+                        });
+                      }}
                     >
-                        审批
+                      审批
                     </Button>
-                    )}
+                  )}
                 </div>
 
                 <div
@@ -439,8 +445,8 @@ class SpecimenDetaill extends Component {
     );
   };
 
-  getImages = (pictures) => {
-    const images = pictures && pictures.flatMap(e => e.picPath||e);
+  getImages = pictures => {
+    const images = pictures && pictures.flatMap(e => e.picPath || e);
     if (!images) return;
     return images.map(v => (
       <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
@@ -450,7 +456,7 @@ class SpecimenDetaill extends Component {
           className={styles.carousel_image}
           src={v}
           edge={20}
-          set={images.map(image => ({ src: image ,style: { minWidth: 800,minHeight: 800 },}))}
+          set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
         />
       </div>
     ));
@@ -521,12 +527,9 @@ class SpecimenDetaill extends Component {
           labelAlign="left"
           layout="inline"
           className={styles.standardListForm}
-
           onSubmit={this.handleContactsSubmit}
         >
-
           <div className={classNames('adddevModal', styles.maxline)}>
-
             <FormItem label="流水号" {...this.centerFormLayout}>
               {getFieldDecorator('productNo', {
                 rules: [{ required: true, message: '请输入流水号' }],
@@ -819,12 +822,15 @@ class SpecimenDetaill extends Component {
                     onSelectEndName={(file, customerCombine) => {
                       if (file && customerCombine) {
                         // console.log('end name ', file);
-                        this.setState({
-                          customerShotName: customerCombine,
-                          customerNo:file
-                        },()=>{
-                          this.parseProductNo2();
-                        });
+                        this.setState(
+                          {
+                            customerShotName: customerCombine,
+                            customerNo: file,
+                          },
+                          () => {
+                            this.parseProductNo2();
+                          }
+                        );
                         // setFieldsValue({
                         //   customerShotName: customerCombine,
                         // });
@@ -903,8 +909,8 @@ class SpecimenDetaill extends Component {
             </Row>
           </Form>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </div>
     );
   };
@@ -935,7 +941,7 @@ class SpecimenDetaill extends Component {
       // params.productId = item.productNo;
       // params.product = item;
 
-      params.picPath = filelistArr
+      params.picPath = filelistArr;
       if (isAdd) {
         dispatch({
           type: 'specimen/addSpecimen',
@@ -984,7 +990,7 @@ class SpecimenDetaill extends Component {
     const _this = this;
     const params = {};
     const filelistArr = fileList.flatMap(e => e.url);
-    params.picPath = filelistArr
+    params.picPath = filelistArr;
 
     params.sample = item;
 
@@ -1005,7 +1011,7 @@ class SpecimenDetaill extends Component {
           message.error(head.rtnMsg);
         }
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         _this.setState({
           loading: false,
         });
@@ -1060,7 +1066,7 @@ class SpecimenDetaill extends Component {
           isLoading: false,
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         _this.setState({
           isLoading: false,
         });
@@ -1207,7 +1213,7 @@ class SpecimenDetaill extends Component {
           guides
           background
           aspectRatio={800 / 800}
-        // crop={this.crop}
+          // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
           <div className="img-preview" style={{ width: '100%', height: '100%' }} />
@@ -1248,7 +1254,7 @@ class SpecimenDetaill extends Component {
           imageObject: [],
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log('parsing failed', ex);
         _this.setState({
           loading: false,
@@ -1326,7 +1332,7 @@ class SpecimenDetaill extends Component {
   };
 
   parseProductNo2 = () => {
-    const {customerNo} =  this.state
+    const { customerNo } = this.state;
     const {
       form: { setFieldsValue },
     } = this.props;
@@ -1338,7 +1344,6 @@ class SpecimenDetaill extends Component {
       productNo,
     });
   };
-
 
   render() {
     const {
