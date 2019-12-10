@@ -256,6 +256,13 @@ export default [
                 icon: 'bulb',
                 component: './dev/Basic',
               },
+              {
+                path: '/erp/dev/bom',
+                name: 'bom',
+                icon: 'snippets',
+                component: './dev/bom',
+                routes: [],
+              },
               //模具设定
               {
                 path: '/erp/dev/mould',
