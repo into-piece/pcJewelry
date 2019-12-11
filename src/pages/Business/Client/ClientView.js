@@ -896,18 +896,19 @@ class ClientView extends PureComponent {
 
   handleSearch = () => {
     const { dispatch, form } = this.props;
+    const { sort } = this.state;
     form.validateFields((err, fieldsValue) => {
       console.log(err);
 
       const data = { ...fieldsValue };
 
-      const params = {};
-      params.zhName = data.selectZhName;
-      params.enName = data.selectEnName;
-      params.size = defaultPageSize;
-      params.current = 1;
-      this.getTabOrderBy(params, this.state.clientSorts);
-      // console.log(params);
+      let params = {
+        zhName: data.selectZhName,
+        enName: data.selectEnName,
+        size: defaultPageSize,
+        current: 1,
+        ...sort,
+      };
       dispatch({
         type: 'client/fetchListClient',
         payload: {
@@ -1206,7 +1207,7 @@ class ClientView extends PureComponent {
     // console.log(page, pageSize);
     const { dispatch } = this.props;
 
-    const { selectZhName, selectEnName } = this.state;
+    const { selectZhName, selectEnName, sort } = this.state;
     const zhName = selectZhName || undefined;
     const enName = selectEnName || undefined;
     const params = {
@@ -1214,8 +1215,8 @@ class ClientView extends PureComponent {
       current: page,
       zhName,
       enName,
+      ...sort,
     };
-    this.getTabOrderBy(params, this.state.clientSorts);
     dispatch({
       type: 'client/fetchListClient',
       payload: { ...params },
@@ -1266,32 +1267,8 @@ class ClientView extends PureComponent {
   };
 
   pageCustomerChange = (page, pageSize, sorter) => {
-    // console.log(page, pageSize);
-    // const { dispatch } = this.props;
-
+    const { current } = page;
     const { showItem, searchCustomerParams = {} } = this.state;
-    // searchCustomerParams.size = defaultPageSize;
-    // searchCustomerParams.current = page;
-    // searchCustomerParams.typeId = showItem.id;
-    //
-
-    // let params = {
-    //   size: defaultPageSize,
-    //   current: page,
-    //   typeId: showItem.id,
-    // };
-    //
-    // this.getTabOrderBy(params, this.state.customerSorts);
-    //
-    // dispatch({
-    //   type: 'customer/fetchListCustomer',
-    //   payload: {
-    //     ...params,
-    //   },
-    // });
-
-    // const { form } = this.props;
-    // form.resetFields();
     let orderKey;
     let params = {};
     if (sorter) {
@@ -1302,16 +1279,17 @@ class ClientView extends PureComponent {
 
     this.setState(
       {
-        customerPageCurrent: page,
+        customerPageCurrent: current,
+        sort: params,
       },
       () => {
         this.loadCustomerList({ typeId: showItem.id, ...params });
       }
     );
-    this.state.customerPageCurrent = page;
+    this.state.customerPageCurrent = current;
 
     this.setState({
-      customerPageCurrent: page,
+      customerPageCurrent: current,
       customerSelectedRowKeys: '',
       selectCustomerItem: '',
       contactsTableBody: [],
@@ -1420,17 +1398,15 @@ class ClientView extends PureComponent {
 
   loadCustomerList = params => {
     const { dispatch } = this.props;
-    const { customerPageCurrent, searchCustomerParams, customerSorts } = this.state;
+    const { customerPageCurrent, searchCustomerParams, customerSorts, sort } = this.state;
 
     const paramsObj = {
       ...searchCustomerParams,
       size: defaultPageSize,
       current: customerPageCurrent,
+      ...sort,
       ...params,
     };
-
-    this.getTabOrderBy(paramsObj, customerSorts);
-
     // console.log(' tab custom', params, this.state.customerSorts);
 
     dispatch({
@@ -1716,47 +1692,20 @@ class ClientView extends PureComponent {
     // }
   };
 
-  getTabOrderBy = (params, sorts) => {
-    if (sorts && sorts.length > 0) {
-      let orderByAsc;
-      let orderByDesc;
-      sorts.forEach(v => {
-        if (v.sort === 'ascend') {
-          if (orderByAsc) {
-            orderByAsc += `,${v.field}`;
-          } else {
-            orderByAsc = v.field;
-          }
-          // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
-        } else if (v.sort === 'descend') {
-          if (orderByDesc) orderByDesc += `,${v.field}`;
-          else orderByDesc = v.field;
-
-          // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
-        }
-      });
-      if (orderByAsc) params.orderByAsc = orderByAsc;
-      else params.orderByAsc = undefined;
-
-      if (orderByDesc) params.orderByDesc = orderByDesc;
-      else params.orderByDesc = undefined;
-    } else {
-      params.orderByAsc = undefined;
-      params.orderByDesc = undefined;
-    }
-  };
-
   loadClientList = () => {
     const { dispatch } = this.props;
-    const { pageCurrent, selectZhName, selectEnName } = this.state;
+    const { pageCurrent, selectZhName, selectEnName, sort } = this.state;
     /*
     * selectZhName: data.selectZhName,
         selectEnName: data.selectEnName,
     * */
-    const params = { size: defaultPageSize, current: pageCurrent };
-    params.zhName = selectZhName || undefined;
-    params.enName = selectEnName || undefined;
-    this.getTabOrderBy(params, this.state.clientSorts);
+    const params = {
+      size: defaultPageSize,
+      current: pageCurrent,
+      zhName: selectZhName || undefined,
+      enName: selectEnName || undefined,
+      ...sort,
+    };
     dispatch({
       type: 'client/fetchListClient',
       payload: { ...params },
@@ -1818,7 +1767,7 @@ class ClientView extends PureComponent {
   };
 
   loadContactsList = () => {
-    const { selectCustomerItem, contactsPage } = this.state;
+    const { selectCustomerItem, contactsPage, sort } = this.state;
     const _this = this;
     if (!selectCustomerItem || selectCustomerItem === '') {
       _this.setState({
@@ -1830,30 +1779,12 @@ class ClientView extends PureComponent {
       contactsLoading: true,
     });
 
-    const params = { customerId: selectCustomerItem.id, current: contactsPage, size: 5 };
-
-    if (this.state.contactsSorts.length > 0) {
-      let orderByAsc;
-      let orderByDesc;
-      this.state.contactsSorts.forEach(v => {
-        if (v.sort === 'ascend') {
-          if (orderByAsc) {
-            orderByAsc += `,${v.field}`;
-          } else {
-            orderByAsc = v.field;
-          }
-          // orderByAsc+=(orderByAsc===undefined?'':',')+v.field;
-        } else if (v.sort === 'descend') {
-          if (orderByDesc) orderByDesc += `,${v.field}`;
-          else orderByDesc = v.field;
-
-          // orderByDesc+=(orderByDesc===undefined?'':',')+v.field;
-        }
-      });
-      if (orderByAsc) params.orderByAsc = orderByAsc;
-
-      if (orderByDesc) params.orderByDesc = orderByDesc;
-    }
+    const params = {
+      customerId: selectCustomerItem.id,
+      current: contactsPage,
+      size: 5,
+      ...sort,
+    };
 
     fetch(HttpFetch.loadContacts, {
       method: 'POST',
@@ -2290,7 +2221,6 @@ class ClientView extends PureComponent {
       pageSize: customerBody.size,
       current: customerPageCurrent,
       total: customerBody.total,
-      onChange: this.pageCustomerChange,
     };
 
     const isUpdate =
@@ -2661,6 +2591,7 @@ class ClientView extends PureComponent {
                         },
                       };
                     }}
+                    onChange={this.pageCustomerChange}
                     pagination={paginationCustomerProps}
                     rowClassName={this.onSelectCustomerRowClass}
                     className={business.small2_table}

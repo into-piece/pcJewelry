@@ -110,7 +110,7 @@ const fetchArr = [
     key: 'customerId',
     value: queryTerminalNoList,
     key1: 'customerNo',
-    value1: 'shotName',
+    value1: 'id',
   },
   {
     key: 'sourceOfProduct',
@@ -483,6 +483,7 @@ class ProductDetail extends Component {
     const { dispatch, form, product } = this.props;
     const { fileList } = this.state;
 
+    const allValue = this.props.form.getFieldsValue();
     const arr = [
       'customerId',
       'productColor',
@@ -524,6 +525,7 @@ class ProductDetail extends Component {
         };
       }
       const params = {
+        ...allValue,
         ...fieldsValue,
         ...paramsobj,
         customer: customerV,
