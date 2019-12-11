@@ -271,9 +271,12 @@ class ProductInfo extends Component {
   };
 
   pageProductChange = (page, pageSize) => {
+    const pagination = { ...this.state.pagination };
+    pagination.current = page.current;
     this.setState(
       {
-        productPage: page,
+        productPage: page.current,
+        pagination,
       },
       () => {
         this.loadProduct();
