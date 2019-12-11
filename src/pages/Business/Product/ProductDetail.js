@@ -1330,25 +1330,29 @@ class ProductDetail extends Component {
                   style={{ width: 180 }}
                   showSearch
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  filterOption={(input, option) => {
+                    debugger;
+                    option.props.children &&
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                  }}
                   content={current.customerId}
-                  onSelectEndName={(file, customerCombine) => {
-                    if (file && customerCombine) {
+                  onSelect={v => {
+                    const { customerNo, shotName } = v;
+                    const { setFieldsValue } = this.props.form;
+                    if (customerNo && shotName) {
                       // console.log('end name ', file);
                       this.setState(
                         {
-                          customerShotName: customerCombine,
-                          customerNo: customerCombine,
+                          customerShotName: shotName,
+                          customerNo: shotName,
                         },
                         () => {
                           this.parseProductNo();
                         }
                       );
-                      // setFieldsValue({
-                      //   customerShotName: customerCombine,
-                      // });
+                      setFieldsValue({
+                        customerShotName: shotName,
+                      });
                     }
                   }}
                 />

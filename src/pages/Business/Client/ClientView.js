@@ -43,6 +43,7 @@ import HttpFetch, { deleteMaintainer } from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
 import RingsModalForm from './components/form/RingsModalForm';
 import TableSortView from '../../components/TableSortView';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -2116,6 +2117,14 @@ class ClientView extends PureComponent {
     });
   };
 
+  returnTotal = total => (
+    <p>
+      <FormattedMessage id="app.table.total" defaultMessage="" />
+      {total}
+      <FormattedMessage id="app.table.totalEnd" defaultMessage="" />
+    </p>
+  );
+
   render() {
     const maintainermodalFooter = {
       okText: '保存',
@@ -2214,6 +2223,7 @@ class ClientView extends PureComponent {
       current: pageCurrent,
       total: body.total,
       onChange: this.pageChange,
+      showTotal: this.returnTotal,
     };
 
     const paginationCustomerProps = {
@@ -2221,6 +2231,7 @@ class ClientView extends PureComponent {
       pageSize: customerBody.size,
       current: customerPageCurrent,
       total: customerBody.total,
+      showTotal: this.returnTotal,
     };
 
     const isUpdate =
