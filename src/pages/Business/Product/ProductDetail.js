@@ -110,7 +110,7 @@ const fetchArr = [
     key: 'customerId',
     value: queryTerminalNoList,
     key1: 'customerNo',
-    value1: 'shotName',
+    value1: 'id',
   },
   {
     key: 'sourceOfProduct',
