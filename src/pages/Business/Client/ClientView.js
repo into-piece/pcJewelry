@@ -507,7 +507,7 @@ class ClientView extends PureComponent {
     const newCustomer = this.parseOrder(customerSorts, field, sort);
     this.state.customerSorts = newCustomer;
     console.log('change  customer ', newCustomer);
-    this.loadCustomerList({ id: showItem.id });
+    this.loadCustomerList({ typeId: showItem.id });
   };
 
   parseOrder = (oldSort, field, sort) => {
@@ -938,7 +938,7 @@ class ClientView extends PureComponent {
 
       this.state.customerPageCurrent = 1;
 
-      this.loadCustomerList({ id: showItem.id });
+      this.loadCustomerList({ typeId: showItem.id });
 
       this.setState({
         customerPageCurrent: 0,
@@ -1305,7 +1305,7 @@ class ClientView extends PureComponent {
         customerPageCurrent: page,
       },
       () => {
-        this.loadCustomerList({ id: showItem.id, ...params });
+        this.loadCustomerList({ typeId: showItem.id, ...params });
       }
     );
     this.state.customerPageCurrent = page;
@@ -1419,15 +1419,12 @@ class ClientView extends PureComponent {
   };
 
   loadCustomerList = params => {
-    const { id } = params;
     const { dispatch } = this.props;
     const { customerPageCurrent, searchCustomerParams, customerSorts } = this.state;
 
-    const typeId = id || ' ';
     const paramsObj = {
       ...searchCustomerParams,
       size: defaultPageSize,
-      typeId,
       current: customerPageCurrent,
       ...params,
     };
@@ -1450,7 +1447,7 @@ class ClientView extends PureComponent {
 
   refreshCustomerList = isdelete => {
     const { showItem } = this.state;
-    this.loadCustomerList({ id: showItem.id });
+    this.loadCustomerList({ typeId: showItem.id });
     this.state.isDelete = isdelete;
 
     // console.log('customer is  ', isdelete, ' delete');
@@ -1474,7 +1471,7 @@ class ClientView extends PureComponent {
       edit = true;
     }
 
-    this.loadCustomerList({ id: record.id });
+    this.loadCustomerList({ typeId: record.id });
 
     this.setState({
       showItem: { ...record },
