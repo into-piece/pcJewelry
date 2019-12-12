@@ -10,16 +10,18 @@ import servicesConfig from '@/services/dev';
 const initData = { records: [] };
 
 const {
-  getTypeByWordbookCode, listBasicColourSetDropDown, listMoldPositioningSettingsDropDown,listFilmSettingsDropDown,listDieSetSubDropDown
+  getTypeByWordbookCode,
+  listBasicColourSetDropDown,
+  listMoldPositioningSettingsDropDown,
+  listFilmSettingsDropDown,
+  listDieSetSubDropDown,
 } = servicesConfig;
 const defaultModelName = 'devbom';
-
 
 export default {
   namespace: defaultModelName,
 
   state: {
-
     choosenRowData: { id: '' }, // select to show table 1
     choosenRowDataSecond: { id: '' }, // select to show table 2
 
@@ -35,48 +37,42 @@ export default {
     selectedRowKeysSecond: [], // table2 select
     list: initData,
     listSecond: initData,
-
     searchParams: {},
     searchParamsSecond: {},
-
-
     listDieSetSubDropDown: [{ key: '', value: '' }],
     listFilmSettings: [{ key: '', value: '' }],
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-
   },
 
   effects: {
-
-    * changeProps({ payload, callback }, { put }) {
+    *changeProps({ payload, callback }, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: payload.data, typeName: payload.typeName },
       });
       if (callback) callback();
-
     },
 
-    * getList({ payload, callback }, { call, put, select }) {
+    *getList({ payload, callback }, { call, put, select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
-      const list =
-        response.head && response.head.rtnCode === '000000'
-          ? response.body
-          : initData;
+      const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
       });
       yield put({
         type: 'changeState',
-        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'pagination' },
+        payload: {
+          data: { size: response.body.size, current: response.body.current },
+          typeName: 'pagination',
+        },
       });
       const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
-      const selectRow = list.records && list.records.filter(e => (e.id === choosenRowData.id));
+      const selectRow = list.records && list.records.filter(e => e.id === choosenRowData.id);
       if (selectRow && selectRow.length > 0) {
         yield put({
           type: 'changeState',
@@ -89,28 +85,31 @@ export default {
         });
       }
 
-
       if (callback) callback();
     },
 
-    * getListSecond({ payload, callback }, { call, put, select }) {
+    *getListSecond({ payload, callback }, { call, put, select }) {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`list${type}`], params);
       const listSecond =
-        response.head && response.head.rtnCode === '000000'
-          ? response.body
-          : initData;
+        response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
         payload: { data: listSecond, typeName: 'listSecond' },
       });
       yield put({
         type: 'changeState',
-        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'paginationSecond' },
+        payload: {
+          data: { size: response.body.size, current: response.body.current },
+          typeName: 'paginationSecond',
+        },
       });
-      const choosenRowDataSecond = yield select(state => state[defaultModelName].choosenRowDataSecond);
+      const choosenRowDataSecond = yield select(
+        state => state[defaultModelName].choosenRowDataSecond
+      );
 
-      const selectRow = listSecond.records && listSecond.records.filter(e => (e.id === choosenRowDataSecond.id));
+      const selectRow =
+        listSecond.records && listSecond.records.filter(e => e.id === choosenRowDataSecond.id);
       if (selectRow && selectRow.length > 0) {
         yield put({
           type: 'changeState',
@@ -123,9 +122,8 @@ export default {
         });
       }
       if (callback) callback();
-
     },
-    * clearListSecond(_, { put }) {
+    *clearListSecond(_, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: initData, typeName: 'listSecond' },
@@ -139,7 +137,7 @@ export default {
         payload: { data: [], typeName: 'selectedRowKeysSecond' },
       });
     },
-    * clearDetailSecond(_, { put }) {
+    *clearDetailSecond(_, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
@@ -150,40 +148,40 @@ export default {
       });
     },
 
-    * changeSearchParams({ payload }, { put }) {
+    *changeSearchParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchParams2',
         payload,
       });
     },
 
-    * changeSearchParamsSecond({ payload }, { put }) {
+    *changeSearchParamsSecond({ payload }, { put }) {
       yield put({
         type: 'changeSearchParamsSecond2',
         payload,
       });
     },
 
-    * setChoosenRowData({ payload }, { put }) {
+    *setChoosenRowData({ payload }, { put }) {
       yield put({
         type: 'getChoosenRowData2',
         payload,
       });
     },
-    * setChoosenRowDataSecond({ payload }, { put }) {
+    *setChoosenRowDataSecond({ payload }, { put }) {
       yield put({
         type: 'getchoosenRowDataSecond2',
         payload,
       });
     },
 
-    * changeSelectedRowKeys({ payload }, { put }) {
+    *changeSelectedRowKeys({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeys2',
         payload,
       });
     },
-    * changeSelectedRowKeysSecond({ payload }, { put }) {
+    *changeSelectedRowKeysSecond({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeysSecond2',
         payload,
@@ -192,7 +190,7 @@ export default {
 
     // 下拉获取
 
-    * getlistDieSetSubDropDown({ payload }, { call, put }) {
+    *getlistDieSetSubDropDown({ payload }, { call, put }) {
       const response = yield call(listDieSetSubDropDown, payload.params);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ productNo }) => {
@@ -202,9 +200,8 @@ export default {
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: payload.listName },
       });
-
     },
-    * getTypeByWordbookCode({ payload }, { call, put }) {
+    *getTypeByWordbookCode({ payload }, { call, put }) {
       const response = yield call(getTypeByWordbookCode, payload.params);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
@@ -214,10 +211,9 @@ export default {
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: payload.listName },
       });
-
     },
 
-    * getlistMoldPositioningSettingsDropDown({ payload }, { call, put }) {
+    *getlistMoldPositioningSettingsDropDown({ payload }, { call, put }) {
       const response = yield call(listMoldPositioningSettingsDropDown, payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, positionCode }) => {
@@ -227,10 +223,9 @@ export default {
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: 'listMoldPositioningSettingsDropDown' },
       });
-
     },
 
-    * getlistBasicColourSetDropDown({ payload }, { call, put }) {
+    *getlistBasicColourSetDropDown({ payload }, { call, put }) {
       const response = yield call(listBasicColourSetDropDown, payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
@@ -240,9 +235,8 @@ export default {
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: 'listBasicColourSetDropDown' },
       });
-
     },
-    * getlistFilmSettings({ payload }, { call, put }) {
+    *getlistFilmSettings({ payload }, { call, put }) {
       const response = yield call(listFilmSettingsDropDown, payload);
       const wordbookData = response.body.records;
       const wordbookdropdown = wordbookData.map(({ id, code }) => {
@@ -252,9 +246,7 @@ export default {
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: 'listFilmSettings' },
       });
-
     },
-
   },
 
   reducers: {
@@ -266,21 +258,16 @@ export default {
       };
     },
 
-
     changeSelectedRowKeys2(state, action) {
       return {
         ...state,
-        selectedRowKeys: [
-          ...action.payload,
-        ],
+        selectedRowKeys: [...action.payload],
       };
     },
     changeSelectedRowKeysSecond2(state, action) {
       return {
         ...state,
-        selectedRowKeysSecond: [
-          ...action.payload,
-        ],
+        selectedRowKeysSecond: [...action.payload],
       };
     },
 

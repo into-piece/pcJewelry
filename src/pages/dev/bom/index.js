@@ -42,16 +42,17 @@ const btnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
-  { name: '审批', tag: 'lock' },
+  { name: '复制新增', tag: 'copy' },
 ];
 
-
 const defaultModelName = 'devbom';
-
 const firstTabFlag = 'product';
 
-const radioArr = [{ key: '产品资料', value: 'product' },
-  { key: '产品用料', value: 'bom' }];
+const radioArr = [
+  { key: '产品信息', value: 'product' },
+  { key: '原料信息', value: 'material' },
+  { key: '生产工序', value: 'productProcess' },
+];
 
 @Form.create()
 @connect(({ loading, devbom: model }) => {
@@ -75,23 +76,18 @@ class Index extends Component {
   state = {
     addloading: false,
     modalType: '',
-    // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'bom',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
     filelist: [],
+    // 第二个table选中tab标志 没有tab则冗余
+    switchMenu: 'material',
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-
-
     this.initDrop();
-
     // 获取初始表单数据
     this.getList();
   }
-
 
   initDrop = () => {
     const { dispatch } = this.props;
@@ -104,7 +100,7 @@ class Index extends Component {
     // 成品类别下拉
     dispatch({
       type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016009' }, listName: 'H016009' },
+      payload: { params: { key: 'H016009' }, listName: 'H016009' },
     });
 
     // 成色下拉
@@ -124,17 +120,6 @@ class Index extends Component {
     });
   };
 
-
-  // 右边顶部tab切换
-  changeRightActive = (v) => {
-    const { secondTableActive } = this.state;
-    this.setState({
-      rightActive: v.target.value,
-      secondTableActive: v.target.value === firstTabFlag ? secondTableActive : v.target.value,
-    });
-  };
-
-
   // table 搜索
   onSearch = (params, table) => {
     if (table === 1) {
@@ -151,7 +136,11 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getList`,
-      payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
+      payload: {
+        type: firstTabFlag,
+        params: { ...pagination, ...searchParams, ...param },
+        ...args,
+      },
     });
 
     // 清除第二table内容
@@ -163,20 +152,19 @@ class Index extends Component {
   // 第二table获取list
   getListSecond = (args, param) => {
     const { dispatch, paginationSecond, searchParamsSecond, choosenRowData } = this.props;
-    const { secondTableActive } = this.state;
+    const { switchMenu } = this.state;
     const mainMoldCode = param.mainMoldCode || choosenRowData.id;
     if (!mainMoldCode) return;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getListSecond`,
       payload: {
-        type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode }, ...args,
+        type: switchMenu,
+        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode },
+        ...args,
       },
     });
-
   };
-
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -185,81 +173,122 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, step, min, max }) => {
+  returnElement = ({
+    key,
+    value,
+    noNeed,
+    type,
+    list,
+    clickFn,
+    text,
+    arr,
+    data,
+    form,
+    number,
+    step,
+    min,
+    max,
+  }) => {
     switch (type) {
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
-            onChange={(v) => {
+            onChange={v => {
               this.handleSelectChange && this.handleSelectChange(v, value);
             }}
           >
-            {data[list] && data[list].map(({ value, key }) => <Option value={value} key={value}>{key}</Option>,
-            )}
+            {data[list] &&
+              data[list].map(({ value, key }) => (
+                <Option value={value} key={value}>
+                  {key}
+                </Option>
+              ))}
           </Select>
         );
       case 3:
         return (
-          <p style={{ maxWidth: 180 }}> {form.getFieldValue(value) || ''} <span
-            style={{ color: '#40a9ff', cursor: 'pointer' }}
-            onClick={() => {
-              this[clickFn](1);
-            }}
-          > {text}
-          </span>
+          <p style={{ maxWidth: 180 }}>
+            {' '}
+            {form.getFieldValue(value) || ''}{' '}
+            <span
+              style={{ color: '#40a9ff', cursor: 'pointer' }}
+              onClick={() => {
+                this[clickFn](1);
+              }}
+            >
+              {' '}
+              {text}
+            </span>
           </p>
         );
       case 4:
-        return (
-          <span>{value || ''}</span>
-        );
+        return <span>{value || ''}</span>;
       case 5:
-        return <Checkbox
-          checked={form.getFieldValue(value)}
-          onChange={e => {
-            this.handleCheckChange(e, value);
-          }}
-        >{text}
-        </Checkbox>;
+        return (
+          <Checkbox
+            checked={form.getFieldValue(value)}
+            onChange={e => {
+              this.handleCheckChange(e, value);
+            }}
+          >
+            {text}
+          </Checkbox>
+        );
       case 6:
-        return <Radio.Group>
-          {
-            arr.map(({ key, value }) => {
-              return <Radio value={value} key={value}>{key}</Radio>;
-            })
-          }
-        </Radio.Group>;
+        return (
+          <Radio.Group>
+            {arr.map(({ key, value }) => {
+              return (
+                <Radio value={value} key={value}>
+                  {key}
+                </Radio>
+              );
+            })}
+          </Radio.Group>
+        );
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
-        return <RangePicker
-          style={{ marginRight: 10 }}
-          onChange={(date, dateString) => {
-            this.handleDatePicker(date, dateString, value);
-          }}
-        />;
+        return (
+          <RangePicker
+            style={{ marginRight: 10 }}
+            onChange={(date, dateString) => {
+              this.handleDatePicker(date, dateString, value);
+            }}
+          />
+        );
       default:
-        return number ? <InputNumber placeholder="请输入" style={{ width: '100%' }} step={step} min={min} max={max} /> :
-        <Input placeholder="请输入" />;
+        return number ? (
+          <InputNumber
+            placeholder="请输入"
+            style={{ width: '100%' }}
+            step={step}
+            min={min}
+            max={max}
+          />
+        ) : (
+          <Input placeholder="请输入" />
+        );
     }
     //  type === 7 ?
   };
-
 
   // 获取Modal的标题
   returnTitle = () => {
     const { rightActive } = this.state;
 
-    const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
+    const menuText = (
+      <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />
+    );
     return menuText;
   };
 
   // 弹窗确定提交回调
-  handleModalOk = (close) => {
+  handleModalOk = close => {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
@@ -269,13 +298,12 @@ class Index extends Component {
       default:
         break;
     }
-
   };
 
   // 删除按钮回调
   handleDelect = () => {
     const { selectedRowKeys, selectedRowKeysSecond, dispatch } = this.props;
-    const { rightActive, secondTableActive } = this.state;
+    const { rightActive, switchMenu } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     serviceObj[`delete${rightActive}`](data).then(res => {
       const { rtnCode, rtnMsg } = res ? res.head : {};
@@ -294,7 +322,7 @@ class Index extends Component {
             type: `${defaultModelName}/clearListScond`,
           });
         } else {
-          this.getListSecond({ type: secondTableActive }, {});
+          this.getListSecond({ type: switchMenu }, {});
           // 清除第二table 选中 详情
           dispatch({
             type: `${defaultModelName}/clearDetailSecond`,
@@ -307,9 +335,9 @@ class Index extends Component {
   // 审批/撤销 按钮回调
   handleLock = () => {
     const { selectedRowKeys, selectedRowKeysSecond } = this.props;
-    const { rightActive, secondTableActive } = this.state;
+    const { rightActive, switchMenu } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-    const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
+    const isLock = this.returnLockType().type === 1; // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
@@ -320,9 +348,9 @@ class Index extends Component {
         });
         if (rightActive === firstTabFlag) {
           this.getList({ type: rightActive });
-          this.getListSecond({ type: secondTableActive }, {});
+          this.getListSecond({ type: switchMenu }, {});
         } else {
-          this.getListSecond({ type: secondTableActive }, {});
+          this.getListSecond({ type: switchMenu }, {});
         }
       }
     });
@@ -330,31 +358,30 @@ class Index extends Component {
 
   // 复制 按钮回调
   handleCopy = () => {
-    const { selectedRowKeys, selectedRowKeysSecond } = this.props;
-    const { rightActive, secondTableActive } = this.state;
-    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-    const serviceType = 'copy';
-
-    serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-      const { rtnCode, rtnMsg } = res ? res.head : {};
-      if (rtnCode === '000000') {
-        notification.success({
-          message: rtnMsg,
-        });
-        if (rightActive === firstTabFlag) {
-          this.getList({ type: rightActive });
-          this.getListSecond({ type: secondTableActive }, {});
-        } else {
-          this.getListSecond({ type: secondTableActive }, {});
-        }
-      }
-    });
+    // const { selectedRowKeys, selectedRowKeysSecond } = this.props;
+    // const { rightActive, switchMenu } = this.state;
+    // const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    // const serviceType = 'copy';
+    // serviceObj[`${serviceType}${rightActive}`](data).then(res => {
+    //   const { rtnCode, rtnMsg } = res ? res.head : {};
+    //   if (rtnCode === '000000') {
+    //     notification.success({
+    //       message: rtnMsg,
+    //     });
+    //     if (rightActive === firstTabFlag) {
+    //       this.getList({ type: rightActive });
+    //       this.getListSecond({ type: switchMenu }, {});
+    //     } else {
+    //       this.getListSecond({ type: switchMenu }, {});
+    //     }
+    //   }
+    // });
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = (close) => {
+  handleAdd = close => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
-    const { secondTableActive, rightActive, modalType } = this.state;
+    const { switchMenu, rightActive, modalType } = this.state;
     const filelist = this.state.filelist.flatMap(e => e.url);
     const { resetFields } = form;
     let params = {};
@@ -362,7 +389,10 @@ class Index extends Component {
       params = { mainMoldCode: choosenRowData.id };
     }
     if (modalType === 'edit') {
-      params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
+      params = {
+        ...params,
+        id: rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id,
+      };
     }
     params = { ...params, picPath: filelist };
 
@@ -372,13 +402,11 @@ class Index extends Component {
     const fieldslist = dataArr.map(e => e.value);
 
     form.validateFields(fieldslist, (err, values) => {
-
       if (!err) {
         params = {
           ...params,
           ...values,
         };
-
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res || !res.head) {
@@ -392,7 +420,7 @@ class Index extends Component {
             if (rightActive === firstTabFlag) {
               this.getList({ type: rightActive }, {});
             } else {
-              this.getListSecond({ type: secondTableActive }, {});
+              this.getListSecond({ type: switchMenu }, {});
             }
 
             if (close) this.btnFn('');
@@ -401,28 +429,17 @@ class Index extends Component {
             if (rightActive === 'dieSetChild') {
               resetFields(['mainMoldNo']);
             }
-
           }
-
         });
       }
       this.setState({ addloading: false });
-
     });
-
   };
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const {
-      choosenRowData,
-      choosenRowDataSecond,
-      form,
-    } = this.props;
-    const {
-      modalType,
-      rightActive,
-    } = this.state;
+    const { choosenRowData, choosenRowDataSecond, form } = this.props;
+    const { modalType, rightActive } = this.state;
     const { getFieldDecorator } = form;
 
     const content = '';
@@ -431,73 +448,101 @@ class Index extends Component {
     const addArr = modalInput[rightActive];
     return (
       <Form size="small" key="1">
+        {addArr &&
+          addArr.map(
+            ({
+              key,
+              value,
+              noNeed,
+              type,
+              list,
+              clickFn,
+              text,
+              arr,
+              initValue,
+              number,
+              step,
+              min,
+              max,
+            }) => {
+              if (rightActive === 'dieSetChild' && value === 'productNo') {
+                initValue = `${choosenRowData.productNo}()`;
+                // choosenRowDataSecond[value] = choosenRowData.id
+              }
+
+              return (
+                <div className="addModal" key={key}>
+                  <FormItem label={key}>
+                    {getFieldDecorator(value, {
+                      rules: [
+                        {
+                          required: !noNeed,
+                          message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
+                        },
+                      ],
+                      initialValue: isEdit
+                        ? rightActive === firstTabFlag
+                          ? choosenRowData[value]
+                          : choosenRowDataSecond[value]
+                        : initValue || (number ? 0 : undefined),
+                    })(
+                      this.returnElement({
+                        key,
+                        value,
+                        noNeed,
+                        number,
+                        type,
+                        list,
+                        clickFn,
+                        text,
+                        arr,
+                        initValue,
+                        data: model,
+                        form,
+                        step,
+                        min,
+                        max,
+                      })
+                    )}
+                  </FormItem>
+                </div>
+              );
+            }
+          )}
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number, step, min, max }) => {
-
-            if (rightActive === 'dieSetChild' && value === 'productNo') {
-              initValue = `${choosenRowData.productNo}()`;
-              // choosenRowDataSecond[value] = choosenRowData.id
-            }
-
-            return (
-              <div className="addModal" key={key}>
-                <FormItem
-                  label={key}
-                >
-                  {
-                    getFieldDecorator(value, {
-                      rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : undefined),
-                    })(this.returnElement({
-                      key,
-                      value,
-                      noNeed,
-                      number,
-                      type,
-                      list,
-                      clickFn,
-                      text,
-                      arr,
-                      initValue,
-                      data: model,
-                      form,
-                      step,
-                      min,
-                      max,
-                    }))
-                  }
-                </FormItem>
-              </div>
-            );
-          })
+          // <Col span={18}>
+          //   <FormItem
+          //     label="上传图片"
+          //     key="uploadPic"
+          //     labelCol={{ span: 3 }}
+          //     wrapperCol={{
+          //       span: 20,
+          //     }}
+          //   >
+          //     <UploadImg
+          //       key="uimg"
+          //       maxcount={10}
+          //       defaultFileList={
+          //         isEdit
+          //           ? rightActive === firstTabFlag
+          //             ? choosenRowData.pictures
+          //             : choosenRowDataSecond.pictures
+          //           : []
+          //       }
+          //       fileListFun={list => {
+          //         this.setState({ filelist: list });
+          //       }}
+          //     />
+          //   </FormItem>
+          // </Col>
         }
-        {<Col span={18}>
-          <FormItem
-            label="上传图片"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadImg
-              key="uimg"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ? choosenRowData.pictures : choosenRowDataSecond.pictures) : []}
-              fileListFun={(list) => {
-                this.setState({ filelist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
         {content}
       </Form>
     );
   };
 
   // 列表对应操作button回调
-  btnFn = async (modalType) => {
+  btnFn = async modalType => {
     switch (modalType) {
       case 'plus':
       case 'edit':
@@ -507,21 +552,24 @@ class Index extends Component {
         break;
       case 'delete':
         ModalConfirm({
-          content: '确定删除吗？', onOk: () => {
+          content: '确定删除吗？',
+          onOk: () => {
             this.handleDelect();
           },
         });
         break;
       case 'lock':
         ModalConfirm({
-          content: '确定审批吗？', onOk: () => {
+          content: '确定审批吗？',
+          onOk: () => {
             this.handleLock();
           },
         });
         break;
       case 'copy':
         ModalConfirm({
-          content: '确定复制吗？', onOk: () => {
+          content: '确定复制吗？',
+          onOk: () => {
             this.handleCopy();
           },
         });
@@ -547,30 +595,51 @@ class Index extends Component {
       if (singleObjcect) res.push(singleObjcect.status);
       return res;
     }, []);
-    const isShenPi = isLock1.every((item) => Number(item) === 0); // 是否全是0
-    const isChexiao = isLock1.every((item) => Number(item) === 2); // 是否全是2
+    const isShenPi = isLock1.every(item => Number(item) === 0); // 是否全是0
+    const isChexiao = isLock1.every(item => Number(item) === 2); // 是否全是2
     if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
     if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
     return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
   // 判断按钮是否禁止 返回boolean
-  returnSisabled = (tag) => {
-    const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
+  returnSisabled = tag => {
+    const {
+      selectedRowKeys,
+      selectedRowKeysSecond,
+      choosenRowData,
+      choosenRowDataSecond,
+    } = this.props;
     const { rightActive } = this.state;
 
-    if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
-    if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
+    if (tag === 'plus') return firstTabFlag === rightActive ? false : !choosenRowData.id;
+    if (tag === 'lock')
+      return (
+        (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
+        (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) ||
+        this.returnLockType().disabled
+      );
 
     if (tag === 'delete') {
-      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || !this.returnLockType().isShenPi;
+      return (
+        (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
+        (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) ||
+        !this.returnLockType().isShenPi
+      );
     }
     if (tag === 'edit') {
       const d = firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond;
-      return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
+      return (
+        (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
+        (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) ||
+        Number(d.status) === 2
+      );
     }
 
-    return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
+    return (
+      (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
+      (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0)
+    );
   };
 
   // 取消弹窗回调
@@ -578,6 +647,26 @@ class Index extends Component {
     this.btnFn('');
   };
 
+  handleSwitchMenu = ({ target: { value } }) => {
+    this.setState({ switchMenu: value });
+  };
+
+  // 第二个表格操作
+  // 取消审批
+  cancelVerify = () => {};
+
+  // 审批
+  Verify = () => {};
+
+  // 导出bom
+  exportBom = () => {};
+
+  // 打印bom
+  printBom = () => {};
+
+  changeRightActive = ({ target: { value } }) => {
+    this.setState({ rightActive: value });
+  };
 
   render() {
     const {
@@ -594,62 +683,90 @@ class Index extends Component {
       returnElement,
       onSearch,
       returnTitle,
+      handleSwitchMenu,
+      cancelVerify,
+      Verify,
+      exportBom,
+      printBom,
     } = this;
-    const { modalType, rightActive, secondTableActive, addloading } = state;
+    const { modalType, rightActive, addloading, switchMenu } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
+    const modalFooter =
+      modalType === 'plus'
+        ? [
+            <Button
+              key="back"
+              onClick={() => {
+                btnFn('');
+                this.setState({ filelist: [] });
+              }}
+            >
+              取消
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
+                handleModalOk(true);
+              }}
+            >
+              保存
+            </Button>,
+            // <Button
+            //   key="continue"
+            //   type="primary"
+            //   loading={addloading}
+            //   onClick={() => {
+            //     handleModalOk(false);
+            //   }}
+            // >
+            //   继续添加
+            // </Button>,
+          ]
+        : [
+            <Button
+              key="back"
+              onClick={() => {
+                btnFn('');
+                this.setState({ filelist: [] });
+              }}
+            >
+              取消
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
+                handleModalOk(false);
+              }}
+            >
+              保存
+            </Button>,
+          ];
 
-
-    const modalFooter = modalType === 'plus' ? [
-      <Button
-        key="back"
-        onClick={() => {
-          btnFn('');
-          this.setState({ filelist: [] });
-        }}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(true);
-        }}
-      >
-        保存
-      </Button>,
-      <Button
-        key="continue"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(false);
-        }}
-      >
-        继续添加
-      </Button>,
-    ] : [
-      <Button
-        key="back"
-        onClick={() => {
-          btnFn('');
-          this.setState({ filelist: [] });
-
-        }}
-      >
-        取消
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={addloading}
-        onClick={() => {
-          handleModalOk(false);
-        }}
-      >
-        保存
-      </Button>,
+    const secondOprationArr = [
+      {
+        key: '取消审批',
+        fn: cancelVerify,
+        disabled: !choosenRowDataSecond.id || choosenRowDataSecond.status === 1,
+      },
+      {
+        key: '审批BOM',
+        fn: Verify,
+        disabled: !choosenRowDataSecond.id || choosenRowDataSecond.status === 0,
+      },
+      {
+        key: '导出BOM',
+        fn: exportBom,
+        disabled: !choosenRowDataSecond.id,
+      },
+      {
+        key: '打印BOM',
+        fn: printBom,
+        disabled: !choosenRowDataSecond.id,
+      },
     ];
 
     return (
@@ -665,22 +782,25 @@ class Index extends Component {
                   <Col lg={16} md={24}>
                     <MiddleTable
                       firstType={firstTabFlag}
-                      secondType={secondTableActive}
                       returnElement={returnElement}
                       onSearch={onSearch}
+                      switchMenu={switchMenu}
+                      handleSwitchMenu={handleSwitchMenu}
+                      // 第二表格操作
+                      secondOprationArr={secondOprationArr}
                     />
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}
                   <Col lg={8} md={24}>
                     <div className={styles.view_right_content}>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        flexDirection: 'column',
-                        overflow: 'hidden',
-                      }}
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          flexDirection: 'column',
+                          overflow: 'hidden',
+                        }}
                       >
-
                         <div>
                           <Radio.Group
                             size="small"
@@ -690,45 +810,52 @@ class Index extends Component {
                             value={rightActive}
                             style={{ textAlign: 'center' }}
                           >
-                            {
-                              radioArr.map((item, index) =>
-                                <Radio.Button
-                                  key={item.value}
-                                  style={{
-                                    height: 40,
-                                    width: 130,
-                                    textalign: 'center',
-                                    lineHeight: '40px',
-                                  }}
-                                  value={item.value}
-                                >{item.key}
-                                </Radio.Button>)
-                            }
+                            {radioArr.map(({ value, key }) => (
+                              <Radio.Button
+                                key={value}
+                                style={{
+                                  height: 40,
+                                  width: 130,
+                                  textalign: 'center',
+                                  lineHeight: '40px',
+                                }}
+                                value={value}
+                              >
+                                {key}
+                              </Radio.Button>
+                            ))}
                           </Radio.Group>
                           <Divider className={styles.divder} />
                         </div>
                         <GetRenderitem
-                          key={firstTabFlag === rightActive ? choosenRowData.id : choosenRowDataSecond.id}
-                          data={firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond}
+                          key={
+                            firstTabFlag === rightActive
+                              ? choosenRowData.id
+                              : choosenRowDataSecond.id
+                          }
+                          data={
+                            firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond
+                          }
                           type={rightActive}
                           items={showItem}
                         />
                       </div>
                       {/*  */}
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'flex-start',
-                          flexWrap: 'wrap',
-                        }}
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            flexWrap: 'wrap',
+                          }}
                         >
                           {btnGroup.map(({ name, tag }) => {
-
-                              return <Button
+                            return (
+                              <Button
                                 key={tag}
                                 className={styles.buttomControl}
-                                type={(tag === 'delete' || (tag === 'lock' && returnLockType().type === 2)) ? 'danger' : 'primary'}
+                                type={tag === 'delete' ? 'danger' : 'primary'}
                                 icon={tag}
                                 size="small"
                                 disabled={returnSisabled(tag)}
@@ -736,13 +863,10 @@ class Index extends Component {
                                   btnFn(tag);
                                 }}
                               >
-                                {tag === 'lock' ? returnLockType().name : name}
-                              </Button>;
-                            },
-                          )}
-
-
-
+                                {name}
+                              </Button>
+                            );
+                          })}
                         </div>
                       </Card>
                     </div>
@@ -752,30 +876,27 @@ class Index extends Component {
             </div>
           </div>
         </div>
-        {handleModalOk &&
-        <Modal
-          maskClosable={false}
-          title={<BuildTitle title={returnTitle()} />}
-
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          visible={modalType !== ''}
-          footer={modalFooter}
-          onCancel={() => {
-            btnFn('');
-            this.setState({ filelist: [] });
-          }}
-        >
-          {getModalContent()}
-        </Modal>
-        }
+        {handleModalOk && (
+          <Modal
+            maskClosable={false}
+            title={<BuildTitle title={returnTitle()} />}
+            width={1000}
+            className={styles.standardListForm}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            visible={modalType !== ''}
+            footer={modalFooter}
+            onCancel={() => {
+              btnFn('');
+              this.setState({ filelist: [] });
+            }}
+          >
+            {getModalContent()}
+          </Modal>
+        )}
       </div>
     );
   }
-
-
 }
 
 export default Index;
