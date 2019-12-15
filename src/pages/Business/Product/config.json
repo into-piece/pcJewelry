@@ -59,7 +59,7 @@
     "value": "unitOfWeight",
     "noNeed": true,
     "type": 2,
-    "list": "unitOfWeight"
+    "list": "unitOfWeight" 
   },
   {
     "key": "成品重量",

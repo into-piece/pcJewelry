@@ -61,8 +61,10 @@ class MiddleTable extends Component {
       payload: rowData,
     });
     if (type === 1) {
-      this.searchSecond.handleReset();
+      // this.searchSecond.handleReset();
       if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
+      debugger;
+      this.props.getbomlist({ pid: rowData.id });
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -132,9 +134,12 @@ class MiddleTable extends Component {
       listLoadingSecond,
       switchMenu,
       handleSwitchMenu,
-      boolist,
+      boomList,
       secondOprationArr,
+      selectedBom,
     } = props;
+    console.log(list, '=======');
+
     return (
       <div className={styles.view_left_content}>
         <SearchForm
@@ -183,25 +188,25 @@ class MiddleTable extends Component {
               ))}
             </Group>
           </div>
-          <div style={{ margin: '20px 0 10px 0' }}>
+          <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: 'space-between' }}>
+            {/* bom列表 */}
             <Select
               style={{ width: 180 }}
               placeholder="请选择"
+              value={selectedBom.id || undefined}
               onChange={v => {
                 this.handleSelectChange(v);
               }}
             >
-              {boolist &&
-                boolist.map(({ value, key }) => (
+              {boomList &&
+                boomList.map(({ value, key }) => (
                   <Option value={value} key={value}>
                     {key}
                   </Option>
                 ))}
             </Select>
+            <BtnGroup arr={secondOprationArr} />
           </div>
-
-          {/* 第二个表格操作 */}
-          <BtnGroup arr={secondOprationArr} />
 
           <Table
             scroll={{ x: 'max-content' }}

@@ -70,6 +70,7 @@ const radioArr = [
     selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
+    boomList: model.boomList,
   };
 })
 class Index extends Component {
@@ -81,6 +82,7 @@ class Index extends Component {
     filelist: [],
     // 第二个table选中tab标志 没有tab则冗余
     switchMenu: 'material',
+    selectedBom: { id: '' },
   };
 
   componentDidMount() {
@@ -141,6 +143,18 @@ class Index extends Component {
         params: { ...pagination, ...searchParams, ...param },
         ...args,
       },
+      callback: rowData => {
+        const { id } = rowData;
+        dispatch({
+          type: `${defaultModelName}/setChoosenRowData`,
+          payload: rowData,
+        });
+        dispatch({
+          type: `${defaultModelName}/changeSelectedRowKeys`,
+          payload: [id],
+        });
+        this.getbomlist({ pid: id });
+      },
     });
 
     // 清除第二table内容
@@ -165,6 +179,8 @@ class Index extends Component {
       },
     });
   };
+
+  handleSelectChange = (value, type) => {};
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -382,7 +398,6 @@ class Index extends Component {
   handleAdd = close => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
     const { switchMenu, rightActive, modalType } = this.state;
-    const filelist = this.state.filelist.flatMap(e => e.url);
     const { resetFields } = form;
     let params = {};
     if (rightActive !== firstTabFlag) {
@@ -394,7 +409,7 @@ class Index extends Component {
         id: rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id,
       };
     }
-    params = { ...params, picPath: filelist };
+    params = { ...params, pId: choosenRowData.id };
 
     this.setState({ addloading: true });
 
@@ -408,7 +423,9 @@ class Index extends Component {
           ...values,
         };
 
-        serviceObj[`add${rightActive}`](params).then(res => {
+        const addService = rightActive === firstTabFlag ? 'bomadd' : '';
+
+        serviceObj[addService](params).then(res => {
           if (!res || !res.head) {
             return;
           }
@@ -418,7 +435,7 @@ class Index extends Component {
               message: rtnMsg,
             });
             if (rightActive === firstTabFlag) {
-              this.getList({ type: rightActive }, {});
+              this.getbomlist({ type: rightActive }, {});
             } else {
               this.getListSecond({ type: switchMenu }, {});
             }
@@ -653,10 +670,23 @@ class Index extends Component {
 
   // 第二个表格操作
   // 取消审批
-  cancelVerify = () => {};
+  cancelVerify = () => {
+    this.isVerifyBom(5);
+  };
 
   // 审批
-  Verify = () => {};
+  verifyBom = () => {
+    this.isVerifyBom(4);
+  };
+
+  isVerifyBom = type => {
+    const { dispatch } = this.props;
+    const { selectedBom } = this.state;
+    dispatch({
+      type: defaultModelName + '/bomOpration',
+      payload: { params: { id: selectedBom.id }, type },
+    });
+  };
 
   // 导出bom
   exportBom = () => {};
@@ -666,6 +696,35 @@ class Index extends Component {
 
   changeRightActive = ({ target: { value } }) => {
     this.setState({ rightActive: value });
+  };
+
+  getMaterialList = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/getMaterialList`,
+      payload: { params },
+      callback: arr => {
+        // const selectedBom = arr.length > 0 ? arr[0] : { id: undefined };
+        // this.setState({
+        //   selectedBom,
+        // });
+      },
+    });
+  };
+
+  getbomlist = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/bomOpration`,
+      payload: { params, type: 1 },
+      callback: arr => {
+        const selectedBom = arr.length > 0 ? arr[0] : { id: undefined };
+        this.setState({
+          selectedBom,
+        });
+        arr.length > 0 && this.getMaterialList({ BomId: arr[0].id });
+      },
+    });
   };
 
   render() {
@@ -685,12 +744,13 @@ class Index extends Component {
       returnTitle,
       handleSwitchMenu,
       cancelVerify,
-      Verify,
+      verifyBom,
       exportBom,
       printBom,
+      getbomlist,
     } = this;
-    const { modalType, rightActive, addloading, switchMenu } = state;
-    const { choosenRowData, choosenRowDataSecond } = props;
+    const { modalType, rightActive, addloading, switchMenu, selectedBom } = state;
+    const { choosenRowData, choosenRowDataSecond, boomList } = props;
     const modalFooter =
       modalType === 'plus'
         ? [
@@ -750,22 +810,22 @@ class Index extends Component {
       {
         key: '取消审批',
         fn: cancelVerify,
-        disabled: !choosenRowDataSecond.id || choosenRowDataSecond.status === 1,
+        disabled: !selectedBom.id || Number(selectedBom.status) === 0,
       },
       {
         key: '审批BOM',
-        fn: Verify,
-        disabled: !choosenRowDataSecond.id || choosenRowDataSecond.status === 0,
+        fn: verifyBom,
+        disabled: !selectedBom.id || Number(selectedBom.status) === 1,
       },
       {
         key: '导出BOM',
         fn: exportBom,
-        disabled: !choosenRowDataSecond.id,
+        disabled: !selectedBom.id,
       },
       {
         key: '打印BOM',
         fn: printBom,
-        disabled: !choosenRowDataSecond.id,
+        disabled: !selectedBom.id,
       },
     ];
 
@@ -788,6 +848,9 @@ class Index extends Component {
                       handleSwitchMenu={handleSwitchMenu}
                       // 第二表格操作
                       secondOprationArr={secondOprationArr}
+                      boomList={boomList}
+                      selectedBom={selectedBom}
+                      getbomlist={getbomlist}
                     />
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}

@@ -15,9 +15,19 @@ const {
   listMoldPositioningSettingsDropDown,
   listFilmSettingsDropDown,
   listDieSetSubDropDown,
+  bomapprove,
+  boomrevoke,
+  materialList,
 } = servicesConfig;
 const defaultModelName = 'devbom';
-
+const rType = {
+  1: 'list',
+  2: 'add',
+  3: 'delete',
+  4: 'approve',
+  5: 'revoke',
+  6: 'copy',
+};
 export default {
   namespace: defaultModelName,
 
@@ -44,6 +54,8 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
+    materialList: [],
+    boomList: [],
   },
 
   effects: {
@@ -57,18 +69,13 @@ export default {
 
     *getList({ payload, callback }, { call, put, select }) {
       const { type, params } = payload;
-      const response = yield call(servicesConfig[`list${type}`], params);
+      const response = yield call(servicesConfig[`get${type}`], params);
       const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
+      console.log(list);
+      debugger;
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
-      });
-      yield put({
-        type: 'changeState',
-        payload: {
-          data: { size: response.body.size, current: response.body.current },
-          typeName: 'pagination',
-        },
       });
       const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
 
@@ -84,8 +91,50 @@ export default {
           payload: { data: { id: '' }, typeName: 'choosenRowData' },
         });
       }
+      if (callback) callback(list.records[0]);
+    },
 
-      if (callback) callback();
+    *isVerifyBom({ payload }, { call }) {
+      const { params, type } = payload;
+      const service = type === 1 ? bomapprove : boomrevoke;
+      yield call(service, params);
+    },
+
+    *bomOpration({ payload, callback }, { call, put }) {
+      const { type, params } = payload;
+      const service = 'bom' + rType[type];
+
+      const response = yield call(servicesConfig[service], params);
+
+      if (type === 1) {
+        const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
+        const { records } = list;
+        const arr =
+          records && records.length > 0
+            ? records.map(item => ({
+                ...item,
+                key: item.bName,
+                value: item.id,
+              }))
+            : [];
+        yield put({
+          type: 'changeState',
+          payload: { data: arr, typeName: 'boomList' },
+        });
+        callback && arr && callback(arr);
+      }
+    },
+
+    // 原料列表接口
+    *getMaterialList({ payload, callback }, { call, put }) {
+      const { params } = payload;
+      const response = yield call(materialList, params);
+      const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: 'materialList' },
+      });
+      if (callback) callback(list.records[0]);
     },
 
     *getListSecond({ payload, callback }, { call, put, select }) {

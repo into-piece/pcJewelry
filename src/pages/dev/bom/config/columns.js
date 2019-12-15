@@ -9,13 +9,13 @@ let product = [
   },
   {
     title: '电镀颜色',
-    dataIndex: 'productType',
-    key: 'productTypeName',
+    dataIndex: 'platingColorName',
+    key: 'platingColorName',
   },
   {
     title: '类别',
-    dataIndex: 'purity',
-    key: 'purity',
+    dataIndex: 'productTypeName',
+    key: 'productTypeName',
   },
   {
     title: '颜色名称',
@@ -24,13 +24,13 @@ let product = [
   },
   {
     title: '成色名称',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'productColorName',
+    key: 'productColorName',
   },
   {
     title: '英文名',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'enName',
+    key: 'enName',
   },
   {
     title: '单位',
@@ -39,18 +39,18 @@ let product = [
   },
   {
     title: '客户编号',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'customerId',
+    key: 'customerId',
   },
   {
     title: '客户货号',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'custoerProductNo',
+    key: 'custoerProductNo',
   },
   {
-    title: '简称',
-    dataIndex: 'status',
-    key: 'status',
+    title: '客户简称',
+    dataIndex: 'customerShotName',
+    key: 'customerShotName',
   },
 ];
 

@@ -1,9 +1,4 @@
-export const product = [
-  // { key: '产品编号', value: 'productNo', type: 2, list: 'listDieSetSubDropDown' },
-  // { key: '成色', value: 'purity', type: 2, list: 'listBasicColourSetDropDown' },
-  // { key: '产品类别', value: 'productType', type: 2, list: 'H016009' },
-  { key: 'BOM名称', value: 'name', type: 1 },
-];
+export const product = [{ key: 'BOM名称', value: 'bName', type: 1 }];
 
 export const material = [
   { key: '胶膜编号', value: 'productNo', disable: true },
