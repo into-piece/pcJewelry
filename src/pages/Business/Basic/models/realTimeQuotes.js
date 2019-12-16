@@ -32,7 +32,7 @@ export default {
         body: {
           ...state.body,
           total: action.payload.body.total,
-          data: action.payload.body.records,
+          data:action.payload.body.records&& action.payload.body.records[0].items,
           rtnCode: action.payload.head.rtnCode,
           rtnMsg: action.payload.head.rtnMsg,
         },

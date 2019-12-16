@@ -129,7 +129,7 @@ class RealTimeQuotes extends PureComponent {
 
 
     if (listLoading && body && body.data && body.data.length > 0) {
-
+      const newdata = body.data ;
       this.state.data = newdata;
     }
 
@@ -179,7 +179,7 @@ class RealTimeQuotes extends PureComponent {
               <Card bordered={false} loading={false}>
                 <Table
                   loading={this.state.isLoading}
-                  // pagination={paginationProps}
+                  pagination={false}
                   dataSource={this.state.data}
                   filterMultiple={false}
                   bordered={false}
