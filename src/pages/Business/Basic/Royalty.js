@@ -296,44 +296,44 @@ class Royalty extends PureComponent {
 
     const modalFooter = isAdd
       ? [
-          <Button key="back" onClick={this.handleCancel}>
+        <Button key="back" onClick={this.handleCancel}>
             取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={addloading}
+          onClick={() => {
               this.handleSubmit(true);
             }}
-          >
+        >
             保存
-          </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="continue"
+          type="primary"
+          loading={addloading}
+          onClick={() => {
               this.handleSubmit(false);
             }}
-          >
+        >
             继续添加
-          </Button>,
+        </Button>,
         ]
       : [
-          <Button key="back" onClick={this.handleCancel}>
+        <Button key="back" onClick={this.handleCancel}>
             取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={upateloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={upateloading}
+          onClick={() => {
               this.handleSubmit(false);
             }}
-          >
+        >
             保存
-          </Button>,
+        </Button>,
         ];
 
     const onChange = (pagination, filters, sorter) => {

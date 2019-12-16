@@ -3,7 +3,6 @@ import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divide
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
-import moment from 'moment/moment';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { currency } from '@/utils/SvgUtil';
@@ -67,7 +66,7 @@ const { Description } = DescriptionList;
   };
 })
 @Form.create()
-class Currency extends PureComponent {
+class RealTimeQuotes extends PureComponent {
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -90,7 +89,6 @@ class Currency extends PureComponent {
       requestMes: '保存成功！',
       isLoading: false,
       selectIndexAt: -1,
-      searchParam: {create_time:moment()},
       pagination: {
         current: 1,
         size: 10,
@@ -103,12 +101,7 @@ class Currency extends PureComponent {
     const { pagination } = this.state;
     dispatch({
       type: 'currency/fetchListCurrency',
-      payload: {...pagination,create_time:moment()},
-    });
-
-    dispatch({
-      type: 'currency/listCurrencydd',
-
+      payload: pagination,
     });
   }
 
@@ -238,7 +231,7 @@ class Currency extends PureComponent {
       }
     }
 
-    if (listLoading && body && body.data && body.data.length >= 0) {
+    if (listLoading && body && body.data && body.data.length > 0) {
       const newdata = body.data.map(value => {
         const s = value.status;
         value.status = statusConvert[s];
@@ -356,7 +349,7 @@ class Currency extends PureComponent {
       const { current: currentIndex, pageSize } = pagination;
       dispatch({
         type: 'currency/fetchListCurrency',
-        payload: { current: currentIndex, size: pageSize,...this.state.searchParam },
+        payload: { current: currentIndex, size: pageSize },
       });
     };
     const paginationProps = {
@@ -368,7 +361,7 @@ class Currency extends PureComponent {
     return (
       <GridContent>
         <Row gutter={24} className={styles.row_content}>
-          <Col lg={16} md={24}>
+          <Col lg={24} md={24}>
             <div className={styles.view_left_content}>
               <div style={{ fontSize: 25, textAlign: 'vertical-center' }}>
                 <Icon
@@ -386,20 +379,6 @@ class Currency extends PureComponent {
 
 
               <Card bordered={false} loading={false}>
-                <CurrencySearchFrom
-                  onSearch={(p)=>{
-                    dispatch({
-                      type: 'currency/fetchListCurrency',
-                      payload: { ...p,current: 1, size: 10 },
-                    });
-                  }}
-                  modals={this.props.modals}
-                  onChange={(e)=>{
-                    this.setState({searchParam:e})
-                  }}
-
-                />
-
                 <Table
                   loading={this.state.isLoading}
                   pagination={paginationProps}
@@ -441,78 +420,7 @@ class Currency extends PureComponent {
               </Card>
             </div>
           </Col>
-          <Col lg={8} md={24}>
-            <div className={styles.view_right_content}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      padding: '20px 20px 10px',
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                      color: '#35B0F4',
-                    }}
-                  >
-                    {formatMessage({ id: 'app.basic.menuMap.currency' })}
-                  </div>
-                  <Divider className={styles.divder} />
-                </div>
-                {this.state.showItem ? this.getRenderitem(this.state.showItem) : ''}
-              </div>
 
-              {/* <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5 }}> */}
-              {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> */}
-              {/* <Button */}
-              {/* className={styles.buttomControl} */}
-              {/* type="primary" */}
-              {/* icon="plus" */}
-              {/* size="small" */}
-              {/* onClick={this.clickNewFrom} */}
-              {/* disabled */}
-              {/* > */}
-              {/* 新增 */}
-              {/* </Button> */}
-              {/* <Button */}
-              {/* className={styles.buttomControl} */}
-              {/* type="danger" */}
-              {/* icon="delete" */}
-              {/* size="small" */}
-              {/* onClick={()=>{ModalConfirm({content:"确定删除吗？",onOk:()=>{this.clickDeleteFrom();}});}} */}
-              {/* disabled */}
-              {/* > */}
-              {/* 删除 */}
-              {/* </Button> */}
-              {/* <Button */}
-              {/* className={styles.buttomControl} */}
-              {/* type="primary" */}
-              {/* size="small" */}
-              {/* onClick={this.clickEditFrom} */}
-              {/* disabled */}
-              {/* icon="edit" */}
-              {/* > */}
-              {/* 编辑 */}
-              {/* </Button> */}
-              {/* <Button */}
-              {/* className={styles.buttomControl} */}
-              {/* size="small" */}
-              {/* type="primary" */}
-              {/* icon="lock" */}
-              {/* onClick={()=>{ModalConfirm({content:"确定审批吗？",onOk:()=>{this.clickFreezeFrom();}});}} */}
-              {/* disabled */}
-              {/* > */}
-              {/* 审批 */}
-              {/* </Button> */}
-              {/* </div> */}
-              {/* </Card> */}
-            </div>
-          </Col>
         </Row>
       </GridContent>
     );
@@ -595,24 +503,8 @@ class Currency extends PureComponent {
     });
   };
 
-  selectRowItem = () => {
-    // console.log('select the item');
-  };
 
-  getRenderitem = item => {
-    return (
-      <Card bordered={false} style={{ overflow: 'auto' }} onClick={this.selectRowItem}>
-        <DescriptionList className={styles.headerList} size="small" col="1">
-          <Description term="币种">{item.currency}</Description>
-          <Description term="买入汇率">{item.buyingRate}</Description>
-          <Description term="现金购买价格">{item.cashPurchasePrice}</Description>
-          <Description term="现金销售价格">{item.cashSellingPrice}</Description>
-          <Description term="现货销售价格">{item.spotSellingPrice}</Description>
-        </DescriptionList>
-        {/* <Divider/> */}
-      </Card>
-    );
-  };
+
 }
 
-export default Currency;
+export default RealTimeQuotes;

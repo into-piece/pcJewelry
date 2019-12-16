@@ -13,7 +13,8 @@ import Requested from './Requested';
 import SendWay from './SendWay';
 import Royalty from './Royalty';
 import Currency from './Currency';
-import { ring, brand, requested, royalty, currency, sendWay } from '@/utils/SvgUtil';
+import RealTimeQuotes from './RealTimeQuotes';
+import { ring, brand, requested, realTimeQuotes, royalty, currency, sendWay } from '@/utils/SvgUtil';
 
 const { Item } = Menu;
 
@@ -27,11 +28,12 @@ class Info extends Component {
         <FormattedMessage id="app.basic.menuMap.requested" defaultMessage="Requirements" />
       ),
       sendWay: <FormattedMessage id="app.basic.menuMap.way" defaultMessage="Shipping Method" />,
+      ring: <FormattedMessage id="app.basic.menuMap.num" defaultMessage="Ring Around" />,
+      realTimeQuotes: <FormattedMessage id="app.basic.menuMap.realTimeQuotes" defaultMessage="Real Time Quotes" />,
+      currency: <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="Currency" />,
       royalty: (
         <FormattedMessage id="app.basic.menuMap.royalty" defaultMessage="Commission Setting" />
       ),
-      ring: <FormattedMessage id="app.basic.menuMap.num" defaultMessage="Ring Around" />,
-      currency: <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="Currency" />,
     };
     const key = location.pathname.replace(`${match.path}/`, '');
     this.state = {
@@ -86,10 +88,11 @@ class Info extends Component {
       requested,
       sendWay,
       royalty,
-      currency
-    }
+      realTimeQuotes,
+      currency,
+    };
     // console.log(key, menuObj[key], '================')
-    return menuObj[key]
+    return menuObj[key];
   };
 
   selectKey = ({ key }) => {
@@ -100,7 +103,9 @@ class Info extends Component {
     else if (key === 'requested') Component = <Requested />;
     else if (key === 'sendWay') Component = <SendWay />;
     else if (key === 'royalty') Component = <Royalty />;
-    else if (key === 'currency') {
+    else if (key === 'realTimeQuotes') {
+      Component = <RealTimeQuotes />;
+    } else if (key === 'currency') {
       Component = <Currency />;
     }
     this.setState({
