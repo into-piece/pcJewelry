@@ -378,13 +378,13 @@ const columnsArr = {
       render: d => parseFloat(d || 0).toFixed(4),
 
     },
-    {
-      title: '成本价',
-      dataIndex: 'costPirce',
-      key: 'costPirce4',
-      render: d => parseFloat(d || 0).toFixed(4),
+    // {
+    //   title: '成本价',
+    //   dataIndex: 'costPirce',
+    //   key: 'costPirce4',
+    //   render: d => parseFloat(d || 0).toFixed(4),
 
-    },
+    // },
     {
       title: '计量单位',
       dataIndex: 'measureUnit',
