@@ -683,7 +683,7 @@ class Index extends Component {
     const { dispatch } = this.props;
     const { selectedBom } = this.state;
     dispatch({
-      type: defaultModelName + '/bomOpration',
+      type: `${defaultModelName  }/bomOpration`,
       payload: { params: { id: selectedBom.id }, type },
     });
   };
@@ -754,25 +754,25 @@ class Index extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button
-              key="back"
-              onClick={() => {
+          <Button
+            key="back"
+            onClick={() => {
                 btnFn('');
                 this.setState({ filelist: [] });
               }}
-            >
+          >
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
             // <Button
             //   key="continue"
             //   type="primary"
@@ -785,25 +785,25 @@ class Index extends Component {
             // </Button>,
           ]
         : [
-            <Button
-              key="back"
-              onClick={() => {
+          <Button
+            key="back"
+            onClick={() => {
                 btnFn('');
                 this.setState({ filelist: [] });
               }}
-            >
+          >
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     const secondOprationArr = [

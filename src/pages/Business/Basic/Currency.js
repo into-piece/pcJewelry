@@ -3,6 +3,7 @@ import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divide
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import moment from 'moment/moment';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { currency } from '@/utils/SvgUtil';
@@ -89,6 +90,7 @@ class Currency extends PureComponent {
       requestMes: '保存成功！',
       isLoading: false,
       selectIndexAt: -1,
+      searchParam: {create_time:moment()},
       pagination: {
         current: 1,
         size: 10,
@@ -101,7 +103,12 @@ class Currency extends PureComponent {
     const { pagination } = this.state;
     dispatch({
       type: 'currency/fetchListCurrency',
-      payload: pagination,
+      payload: {...pagination,create_time:moment()},
+    });
+
+    dispatch({
+      type: 'currency/listCurrencydd',
+
     });
   }
 
@@ -231,7 +238,7 @@ class Currency extends PureComponent {
       }
     }
 
-    if (listLoading && body && body.data && body.data.length > 0) {
+    if (listLoading && body && body.data && body.data.length >= 0) {
       const newdata = body.data.map(value => {
         const s = value.status;
         value.status = statusConvert[s];
@@ -349,7 +356,7 @@ class Currency extends PureComponent {
       const { current: currentIndex, pageSize } = pagination;
       dispatch({
         type: 'currency/fetchListCurrency',
-        payload: { current: currentIndex, size: pageSize },
+        payload: { current: currentIndex, size: pageSize,...this.state.searchParam },
       });
     };
     const paginationProps = {
@@ -387,6 +394,9 @@ class Currency extends PureComponent {
                     });
                   }}
                   modals={this.props.modals}
+                  onChange={(e)=>{
+                    this.setState({searchParam:e})
+                  }}
 
                 />
 

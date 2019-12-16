@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Col, Select,Form, Input, Row,DatePicker } from 'antd';
-import styles from '../../../Account/Center/Center.less';
 import moment from 'moment';
+import styles from '../../../Account/Center/Center.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -41,19 +41,19 @@ class SearchFrom extends Component {
         <Row gutter={2} style={{ width: '100%' }}>
           <Col lg={8}>
             <FormItem label="币种">
-              {getFieldDecorator('bType')(<Select placeholder="请选择">
-                {modals.listMstWordbookDroph015 && modals.listMstWordbookDroph015.map(({ value, key }) =>
+              {getFieldDecorator('currency')(<Select placeholder="请选择">
+                {modals.currencyddlist && modals.currencyddlist.map(({ value, key }) =>
                   <Option value={value} key={value}>{key}</Option>,
                 )}
               </Select>)}
             </FormItem>
           </Col>
-          <Col lg={8}>
+          <Col lg={10}>
             <FormItem label="创建日期">
-              {getFieldDecorator('cTime')(<DatePicker defaultValue={moment()} />)}
+              {getFieldDecorator('create_time',{ initialValue: moment()})(<DatePicker   />)}
             </FormItem>
           </Col>
-          <Col lg={8}>
+          <Col lg={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询
