@@ -46,11 +46,12 @@ const btnGroup = [
 ];
 
 const defaultModelName = 'devbom';
-const firstTabFlag = 'product';
+const FIRST_TAG = 'product';
+const SECOND_TAG = 'material';
 
 const radioArr = [
-  { key: '产品信息', value: 'product' },
-  { key: '原料信息', value: 'material' },
+  { key: '产品信息', value: FIRST_TAG },
+  { key: '原料信息', value: SECOND_TAG },
   { key: '生产工序', value: 'productProcess' },
 ];
 
@@ -78,10 +79,10 @@ class Index extends Component {
     addloading: false,
     modalType: '',
     // 右边默认选中tab标志
-    rightActive: firstTabFlag,
+    rightActive: FIRST_TAG,
     filelist: [],
     // 第二个table选中tab标志 没有tab则冗余
-    switchMenu: 'material',
+    switchMenu: SECOND_TAG,
     selectedBom: { id: '' },
   };
 
@@ -93,33 +94,57 @@ class Index extends Component {
 
   initDrop = () => {
     const { dispatch } = this.props;
+    const { rightActive } = this.state;
+    // // 产品编号下拉
+    // dispatch({
+    //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
+    //   payload: { params: {}, listName: 'listDieSetSubDropDown' },
+    // });
+    // // 成品类别下拉
+    // dispatch({
+    //   type: `${defaultModelName}/getTypeByWordbookCode`,
+    //   payload: { params: { key: 'H016009' }, listName: 'H016009' },
+    // });
 
-    // 产品编号下拉
-    dispatch({
-      type: `${defaultModelName}/getlistDieSetSubDropDown`,
-      payload: { params: {}, listName: 'listDieSetSubDropDown' },
-    });
-    // 成品类别下拉
-    dispatch({
-      type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { key: 'H016009' }, listName: 'H016009' },
-    });
+    // // 成色下拉
+    // dispatch({
+    //   type: `${defaultModelName}/getlistBasicColourSetDropDown`,
+    // });
 
-    // 成色下拉
-    dispatch({
-      type: `${defaultModelName}/getlistBasicColourSetDropDown`,
-    });
+    // // 存放位置 胶膜仓位编号下拉
+    // dispatch({
+    //   type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
+    //   payload: {},
+    // });
+    // // 模具编号下拉接口
+    // dispatch({
+    //   type: `${defaultModelName}/getlistFilmSettings`,
+    //   payload: {},
+    // });
 
-    // 存放位置 胶膜仓位编号下拉
-    dispatch({
-      type: `${defaultModelName}/getlistMoldPositioningSettingsDropDown`,
-      payload: {},
-    });
-    // 模具编号下拉接口
-    dispatch({
-      type: `${defaultModelName}/getlistFilmSettings`,
-      payload: {},
-    });
+    if (rightActive === SECOND_TAG) {
+      const arr = [
+        // 原料类别
+        {
+          name: 'listMstWordbook',
+          params: {
+            wordbookTypeCode: 'H016',
+          },
+          key1: 'wordbookContentZh',
+          value1: 'wordbookCode',
+        },
+        {
+          name: 'listFilmSettingsDropDown',
+        },
+      ];
+
+      arr.forEach(item => {
+        dispatch({
+          type: `${defaultModelName}/getDropdownList`,
+          payload: item,
+        });
+      });
+    }
   };
 
   // table 搜索
@@ -139,7 +164,7 @@ class Index extends Component {
     dispatch({
       type: `${defaultModelName}/getList`,
       payload: {
-        type: firstTabFlag,
+        type: FIRST_TAG,
         params: { ...pagination, ...searchParams, ...param },
         ...args,
       },
@@ -216,6 +241,7 @@ class Index extends Component {
             }}
           >
             {data[list] &&
+              data[list].length > 0 &&
               data[list].map(({ value, key }) => (
                 <Option value={value} key={value}>
                   {key}
@@ -318,16 +344,17 @@ class Index extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const { selectedRowKeys, selectedRowKeysSecond, dispatch } = this.props;
+    const { selectedBom, selectedRowKeysSecond, dispatch } = this.props;
     const { rightActive, switchMenu } = this.state;
-    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
-    serviceObj[`delete${rightActive}`](data).then(res => {
+    const data = rightActive === FIRST_TAG ? [selectedBom.id] : selectedRowKeysSecond;
+    const service = rightActive === FIRST_TAG ? 'bom' : rightActive;
+    serviceObj[`${service}delete`](data).then(res => {
       const { rtnCode, rtnMsg } = res ? res.head : {};
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
-        if (rightActive === firstTabFlag) {
+        if (rightActive === FIRST_TAG) {
           this.getList({ type: rightActive });
           dispatch({
             type: `${defaultModelName}/choosenRowData`,
@@ -352,7 +379,7 @@ class Index extends Component {
   handleLock = () => {
     const { selectedRowKeys, selectedRowKeysSecond } = this.props;
     const { rightActive, switchMenu } = this.state;
-    const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const data = rightActive === FIRST_TAG ? selectedRowKeys : selectedRowKeysSecond;
     const isLock = this.returnLockType().type === 1; // 根据this.returnLockType()判断返回当前是撤回还是审批
     const serviceType = isLock ? 'approve' : 'revoke';
 
@@ -362,7 +389,7 @@ class Index extends Component {
         notification.success({
           message: rtnMsg,
         });
-        if (rightActive === firstTabFlag) {
+        if (rightActive === FIRST_TAG) {
           this.getList({ type: rightActive });
           this.getListSecond({ type: switchMenu }, {});
         } else {
@@ -376,7 +403,7 @@ class Index extends Component {
   handleCopy = () => {
     // const { selectedRowKeys, selectedRowKeysSecond } = this.props;
     // const { rightActive, switchMenu } = this.state;
-    // const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    // const data = rightActive === FIRST_TAG ? selectedRowKeys : selectedRowKeysSecond;
     // const serviceType = 'copy';
     // serviceObj[`${serviceType}${rightActive}`](data).then(res => {
     //   const { rtnCode, rtnMsg } = res ? res.head : {};
@@ -384,7 +411,7 @@ class Index extends Component {
     //     notification.success({
     //       message: rtnMsg,
     //     });
-    //     if (rightActive === firstTabFlag) {
+    //     if (rightActive === FIRST_TAG) {
     //       this.getList({ type: rightActive });
     //       this.getListSecond({ type: switchMenu }, {});
     //     } else {
@@ -400,13 +427,13 @@ class Index extends Component {
     const { switchMenu, rightActive, modalType } = this.state;
     const { resetFields } = form;
     let params = {};
-    if (rightActive !== firstTabFlag) {
+    if (rightActive !== FIRST_TAG) {
       params = { mainMoldCode: choosenRowData.id };
     }
     if (modalType === 'edit') {
       params = {
         ...params,
-        id: rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id,
+        id: rightActive !== FIRST_TAG ? choosenRowDataSecond.id : choosenRowData.id,
       };
     }
     params = { ...params, pId: choosenRowData.id };
@@ -423,7 +450,7 @@ class Index extends Component {
           ...values,
         };
 
-        const addService = rightActive === firstTabFlag ? 'bomadd' : '';
+        const addService = rightActive === FIRST_TAG ? 'bomadd' : '';
 
         serviceObj[addService](params).then(res => {
           if (!res || !res.head) {
@@ -434,7 +461,7 @@ class Index extends Component {
             notification.success({
               message: rtnMsg,
             });
-            if (rightActive === firstTabFlag) {
+            if (rightActive === FIRST_TAG) {
               this.getbomlist({ type: rightActive }, {});
             } else {
               this.getListSecond({ type: switchMenu }, {});
@@ -463,6 +490,8 @@ class Index extends Component {
     const isEdit = modalType === 'edit';
     const { model } = this.props;
     const addArr = modalInput[rightActive];
+    console.log(model, '========');
+
     return (
       <Form size="small" key="1">
         {addArr &&
@@ -498,7 +527,7 @@ class Index extends Component {
                         },
                       ],
                       initialValue: isEdit
-                        ? rightActive === firstTabFlag
+                        ? rightActive === FIRST_TAG
                           ? choosenRowData[value]
                           : choosenRowDataSecond[value]
                         : initValue || (number ? 0 : undefined),
@@ -541,7 +570,7 @@ class Index extends Component {
           //       maxcount={10}
           //       defaultFileList={
           //         isEdit
-          //           ? rightActive === firstTabFlag
+          //           ? rightActive === FIRST_TAG
           //             ? choosenRowData.pictures
           //             : choosenRowDataSecond.pictures
           //           : []
@@ -604,8 +633,8 @@ class Index extends Component {
   returnLockType = () => {
     const { selectedRowKeys, selectedRowKeysSecond, model, list, listSecond } = this.props;
     const { rightActive } = this.state;
-    const listr = rightActive === firstTabFlag ? list : listSecond;
-    const selectedKeys = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
+    const listr = rightActive === FIRST_TAG ? list : listSecond;
+    const selectedKeys = rightActive === FIRST_TAG ? selectedRowKeys : selectedRowKeysSecond;
     if (listr && listr.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = listr.records.find(subItem => subItem.id === cur);
@@ -627,35 +656,37 @@ class Index extends Component {
       choosenRowData,
       choosenRowDataSecond,
     } = this.props;
-    const { rightActive } = this.state;
+    const { rightActive, selectedBom } = this.state;
 
-    if (tag === 'plus') return firstTabFlag === rightActive ? false : !choosenRowData.id;
-    if (tag === 'lock')
-      return (
-        (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
-        (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) ||
-        this.returnLockType().disabled
-      );
+    if (tag === 'plus') return false;
+    // if (tag === 'lock')
+    // return (
+    //   (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
+    //   (FIRST_TAG !== rightActive && selectedRowKeysSecond.length === 0) ||
+    //   this.returnLockType().disabled
+    // );
 
     if (tag === 'delete') {
-      return (
-        (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
-        (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) ||
-        !this.returnLockType().isShenPi
-      );
+      return FIRST_TAG === rightActive && selectedBom.state == 1;
+      // return (
+      //   (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
+      //   (FIRST_TAG !== rightActive && selectedRowKeysSecond.length === 0) ||
+      //   !this.returnLockType().isShenPi
+      // );
     }
     if (tag === 'edit') {
-      const d = firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond;
-      return (
-        (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
-        (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) ||
-        Number(d.status) === 2
-      );
+      return FIRST_TAG === rightActive && selectedBom.state == 1;
+      // const d = FIRST_TAG === rightActive ? choosenRowData : choosenRowDataSecond;
+      // return (
+      //   (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
+      //   (FIRST_TAG !== rightActive && selectedRowKeysSecond.length === 0) ||
+      //   Number(d.status) === 2
+      // );
     }
 
     return (
-      (firstTabFlag === rightActive && selectedRowKeys.length === 0) ||
-      (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0)
+      (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
+      (FIRST_TAG !== rightActive && selectedRowKeysSecond.length === 0)
     );
   };
 
@@ -682,9 +713,17 @@ class Index extends Component {
   isVerifyBom = type => {
     const { dispatch } = this.props;
     const { selectedBom } = this.state;
+    const str = type === 4 ? '审批' : '取消审批';
     dispatch({
       type: defaultModelName + '/bomOpration',
-      payload: { params: { id: selectedBom.id }, type },
+      payload: { params: [selectedBom.id], type },
+      callback: () => {
+        debugger;
+        notification.success({
+          message: str + '成功',
+        });
+        this.getbomlist();
+      },
     });
   };
 
@@ -713,10 +752,10 @@ class Index extends Component {
   };
 
   getbomlist = params => {
-    const { dispatch } = this.props;
+    const { dispatch, choosenRowData } = this.props;
     dispatch({
       type: `${defaultModelName}/bomOpration`,
-      payload: { params, type: 1 },
+      payload: { params: { pid: choosenRowData.id, ...params }, type: 1 },
       callback: arr => {
         const selectedBom = arr.length > 0 ? arr[0] : { id: undefined };
         this.setState({
@@ -724,6 +763,16 @@ class Index extends Component {
         });
         arr.length > 0 && this.getMaterialList({ BomId: arr[0].id });
       },
+    });
+  };
+
+  // bom 列表切换
+  handleBomSelectChange = v => {
+    const { boomList } = this.props;
+    console.log(v, '======bom');
+    const arr = boomList.filter(({ id }) => id === v);
+    this.setState({
+      selectedBom: arr[0],
     });
   };
 
@@ -747,6 +796,7 @@ class Index extends Component {
       verifyBom,
       exportBom,
       printBom,
+      handleBomSelectChange,
       getbomlist,
     } = this;
     const { modalType, rightActive, addloading, switchMenu, selectedBom } = state;
@@ -815,7 +865,7 @@ class Index extends Component {
       {
         key: '审批BOM',
         fn: verifyBom,
-        disabled: !selectedBom.id || Number(selectedBom.status) === 1,
+        disabled: !selectedBom.id || Number(selectedBom.status) === 2,
       },
       {
         key: '导出BOM',
@@ -841,7 +891,7 @@ class Index extends Component {
                   {/* 中间table组件 */}
                   <Col lg={16} md={24}>
                     <MiddleTable
-                      firstType={firstTabFlag}
+                      firstType={FIRST_TAG}
                       returnElement={returnElement}
                       onSearch={onSearch}
                       switchMenu={switchMenu}
@@ -851,6 +901,7 @@ class Index extends Component {
                       boomList={boomList}
                       selectedBom={selectedBom}
                       getbomlist={getbomlist}
+                      handleBomSelectChange={handleBomSelectChange}
                     />
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}
@@ -892,13 +943,9 @@ class Index extends Component {
                         </div>
                         <GetRenderitem
                           key={
-                            firstTabFlag === rightActive
-                              ? choosenRowData.id
-                              : choosenRowDataSecond.id
+                            FIRST_TAG === rightActive ? choosenRowData.id : choosenRowDataSecond.id
                           }
-                          data={
-                            firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond
-                          }
+                          data={FIRST_TAG === rightActive ? choosenRowData : choosenRowDataSecond}
                           type={rightActive}
                           items={showItem}
                         />

@@ -14,5 +14,11 @@ const serviceArr = [
 const extraArr = [
   { key: 'getproduct', path: '/listProduct', prefix1 },
   { key: 'materialList', path: '/list', prefix1: prefix2 },
+  { key: 'listMstWordbook', path: '/listMstWordbook', prefix1: env + '/sys/mst-wordbook' },
+  {
+    key: 'listFilmSettingsDropDown',
+    path: '/listFilmSettingsDropDown',
+    prefix1: env + '/develop/basic/film-settings ',
+  },
 ];
 export default { serviceArr, extraArr };

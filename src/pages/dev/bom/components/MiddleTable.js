@@ -137,6 +137,7 @@ class MiddleTable extends Component {
       boomList,
       secondOprationArr,
       selectedBom,
+      handleBomSelectChange,
     } = props;
     console.log(list, '=======');
 
@@ -194,9 +195,7 @@ class MiddleTable extends Component {
               style={{ width: 180 }}
               placeholder="请选择"
               value={selectedBom.id || undefined}
-              onChange={v => {
-                this.handleSelectChange(v);
-              }}
+              onChange={handleBomSelectChange}
             >
               {boomList &&
                 boomList.map(({ value, key }) => (

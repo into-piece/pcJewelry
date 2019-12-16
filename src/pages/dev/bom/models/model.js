@@ -55,7 +55,10 @@ export default {
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
     materialList: [],
-    boomList: [],
+    bomList: [],
+
+    listMstWordbook: [], // 原料类别下拉
+    listFilmSettingsDropDown: [], // 模具号
   },
 
   effects: {
@@ -71,8 +74,6 @@ export default {
       const { type, params } = payload;
       const response = yield call(servicesConfig[`get${type}`], params);
       const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
-      console.log(list);
-      debugger;
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
@@ -122,7 +123,31 @@ export default {
           payload: { data: arr, typeName: 'boomList' },
         });
         callback && arr && callback(arr);
+      } else {
+        callback && callback();
       }
+    },
+
+    *getDropdownList({ payload, callback }, { call, put }) {
+      const { params, name, key1, value1 } = payload;
+      const response = yield call(servicesConfig[name], params);
+      const key = key1 ? key1 : 'zhName';
+      const value = value1 ? value1 : 'id';
+      console.log(key1, value1, '=========');
+
+      let list =
+        response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
+      list = list.map(item => ({
+        ...item,
+        key: item[key],
+        value: item[value],
+      }));
+      console.log(list, name);
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: name },
+      });
+      if (callback) callback(list.records[0]);
     },
 
     // 原料列表接口
