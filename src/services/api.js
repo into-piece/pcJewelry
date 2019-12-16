@@ -16,6 +16,34 @@ export async function logout() {
 }
 
 /*
+* 实时行情接口
+* */
+
+export async function realTimeMarket(params) {
+  return request(`${priefx  }/business/basic/currency/realTimeMarket`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: params,
+  });
+}
+
+/*
+* 币种下拉接口
+* */
+
+export async function listCurrencydd(params) {
+  return request(`${priefx  }/business/basic/currency/listCurrencydd`, {
+    method: 'POST',
+    headers: {
+      token: getCurrentUser() ? getCurrentUser().token : '',
+    },
+    data: params,
+  });
+}
+
+/*
 * 新款档案  转产品接口
 * */
 

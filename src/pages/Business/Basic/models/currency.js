@@ -4,7 +4,9 @@ import {
   deleteTheCurrency,
   updateTheCurrency,
   freezeTheCurrency,
+  listCurrencydd
 } from '@/services/api';
+import moment from 'moment'
 
 export default {
   namespace: 'currency',
@@ -12,10 +14,17 @@ export default {
   state: {
     isLoading: false,
     body: {},
+    currencyddlist: [],
   },
 
   effects: {
     * fetchListCurrency({ payload }, { call, put }) {
+
+      if(payload.create_time){
+        payload.create_time = moment(payload.create_time).valueOf()
+      }
+
+
       const response = yield call(querylistCurrency, payload);
       yield put({
         type: 'list',
@@ -23,6 +32,14 @@ export default {
       });
     },
 
+    *listCurrencydd({  callback }, { call, put }) {
+      const response = yield call(listCurrencydd);
+      yield put({
+        type: 'currencyddlist',
+        payload: response,
+      });
+      if (callback) callback();
+    },
     * addCurrency({ payload, callback }, { call, put }) {
       const response = yield call(saveTheCurrency, payload);
       yield put({
@@ -76,6 +93,21 @@ export default {
       };
     },
 
+    currencyddlist(state, action) {
+      let list =
+        action.payload && action.payload.head && action.payload.head.rtnCode === '000000'
+          ? action.payload.body.records
+          : [];
+      if (list.length > 0) {
+        list = list.map((item) => {
+          return { ...item,key: item.currency, value: item.currency };
+        });
+      }
+      return {
+        ...state,
+        currencyddlist: list,
+      };
+    },
     save(state, action) {
       return {
         ...state,

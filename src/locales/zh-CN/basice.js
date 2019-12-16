@@ -14,6 +14,7 @@ export default {
   'app.basic.menuMap.num': '戒围标准',
   'app.basic.menuMap.numson': '戒围号',
   'app.basic.menuMap.currency': '币种&银价',
+  'app.basic.menuMap.realTimeQuotes': '实时行情',
 
   'app.dev.menuMap.measureUnit': '计量单位',
   'app.dev.menuMap.categorySet': '类别管理',

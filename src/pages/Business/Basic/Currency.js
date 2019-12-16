@@ -3,6 +3,7 @@ import { Table, Card, Row, Col, Icon, Form, Select, Modal, Input, Button, Divide
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import moment from 'moment/moment';
 import styles from './Royalty.less';
 import GridContent from '../../../components/PageHeaderWrapper/GridContent';
 import { currency } from '@/utils/SvgUtil';
@@ -11,6 +12,7 @@ import Result from '@/components/Result';
 import DescriptionList from '@/components/DescriptionList';
 import { statusConvert } from '@/utils/convert';
 import BuildTitle from '@/components/BuildTitle';
+import CurrencySearchFrom from './components/CurrencySearchFrom';
 
 const FormItem = Form.Item;
 
@@ -59,6 +61,7 @@ const { Description } = DescriptionList;
     freezing: loading.effects['currency/freezeCurrency'],
     body: currency.body,
     data: currency.body.data,
+    modals:currency,
     rtnCode,
     rtnMsg,
   };
@@ -87,6 +90,7 @@ class Currency extends PureComponent {
       requestMes: '保存成功！',
       isLoading: false,
       selectIndexAt: -1,
+      searchParam: {create_time:moment()},
       pagination: {
         current: 1,
         size: 10,
@@ -99,7 +103,12 @@ class Currency extends PureComponent {
     const { pagination } = this.state;
     dispatch({
       type: 'currency/fetchListCurrency',
-      payload: pagination,
+      payload: {...pagination,create_time:moment()},
+    });
+
+    dispatch({
+      type: 'currency/listCurrencydd',
+
     });
   }
 
@@ -229,7 +238,7 @@ class Currency extends PureComponent {
       }
     }
 
-    if (listLoading && body && body.data && body.data.length > 0) {
+    if (listLoading && body && body.data && body.data.length >= 0) {
       const newdata = body.data.map(value => {
         const s = value.status;
         value.status = statusConvert[s];
@@ -303,51 +312,51 @@ class Currency extends PureComponent {
 
     const modalFooter = isAdd
       ? [
-          <Button key="back" onClick={this.handleCancel}>
-            取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
-              this.handleSubmit(true);
-            }}
-          >
-            保存
-          </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
-              this.handleSubmit(false);
-            }}
-          >
-            继续添加
-          </Button>,
-        ]
+        <Button key="back" onClick={this.handleCancel}>
+          取消
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={addloading}
+          onClick={() => {
+            this.handleSubmit(true);
+          }}
+        >
+          保存
+        </Button>,
+        <Button
+          key="continue"
+          type="primary"
+          loading={addloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          继续添加
+        </Button>,
+      ]
       : [
-          <Button key="back" onClick={this.handleCancel}>
-            取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={upateloading}
-            onClick={() => {
-              this.handleSubmit(false);
-            }}
-          >
-            保存
-          </Button>,
-        ];
+        <Button key="back" onClick={this.handleCancel}>
+          取消
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={upateloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          保存
+        </Button>,
+      ];
 
     const onChange = (pagination, filters, sorter) => {
       const { current: currentIndex, pageSize } = pagination;
       dispatch({
         type: 'currency/fetchListCurrency',
-        payload: { current: currentIndex, size: pageSize },
+        payload: { current: currentIndex, size: pageSize,...this.state.searchParam },
       });
     };
     const paginationProps = {
@@ -374,7 +383,23 @@ class Currency extends PureComponent {
                 />
                 <FormattedMessage id="app.basic.menuMap.currency" defaultMessage="业务提成设当" />
               </div>
+
+
               <Card bordered={false} loading={false}>
+                <CurrencySearchFrom
+                  onSearch={(p)=>{
+                    dispatch({
+                      type: 'currency/fetchListCurrency',
+                      payload: { ...p,current: 1, size: 10 },
+                    });
+                  }}
+                  modals={this.props.modals}
+                  onChange={(e)=>{
+                    this.setState({searchParam:e})
+                  }}
+
+                />
+
                 <Table
                   loading={this.state.isLoading}
                   pagination={paginationProps}

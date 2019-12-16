@@ -1784,3 +1784,4 @@ class CenterInfo extends Component {
 const menuRadio2 = ['产品清单'];
 
 export default Info;
+

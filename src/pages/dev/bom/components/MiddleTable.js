@@ -1,22 +1,45 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Form, Divider } from 'antd';
+import { Form, Divider, Radio, Select, Button } from 'antd';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
 import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
+const { Option } = Select;
+const { Group } = Radio;
 
-const defaultModelName = 'devMould';
+const menuRadio = [
+  {
+    title: '原料信息',
+    key: 'material',
+  },
+  {
+    title: '生产流程',
+    key: 'productProcess',
+  },
+];
+const defaultModelName = 'devbom';
 
+const BtnGroup = ({ arr }) => {
+  return (
+    <div className={styles.btnGroup}>
+      {arr.map(({ key, fn, disabled }) => (
+        <Button key={key} onClick={fn} type={'primary'} disabled={disabled}>
+          {key}
+        </Button>
+      ))}
+    </div>
+  );
+};
 
 @Form.create()
-@connect(({ loading, devMould: model }) => {
+@connect(({ loading, devbom: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
     listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
-    list: model.list,
+    list: model.list || [],
     listSecond: model.listSecond,
     pagination: model.pagination,
     paginationSecond: model.paginationSecond,
@@ -29,8 +52,6 @@ const defaultModelName = 'devMould';
   };
 })
 class MiddleTable extends Component {
-
-
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
     const { dispatch, pagination, onSearch } = this.props;
@@ -40,8 +61,10 @@ class MiddleTable extends Component {
       payload: rowData,
     });
     if (type === 1) {
-      this.searchSecond.handleReset();
+      // this.searchSecond.handleReset();
       if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
+      debugger;
+      this.props.getbomlist({ pid: rowData.id });
     } else {
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -62,7 +85,7 @@ class MiddleTable extends Component {
   };
 
   // 当表头重复点击选中 清空选中 清空表体
-  clearFn = (type) => {
+  clearFn = type => {
     const { dispatch } = this.props;
     if (type === 1) {
       // 清除第二table数据
@@ -76,7 +99,7 @@ class MiddleTable extends Component {
     }
   };
 
-  changeSearchParams = (v) => {
+  changeSearchParams = v => {
     const { dispatch } = this.props;
     dispatch({
       type: `${defaultModelName}/changeSearchParams`,
@@ -84,7 +107,7 @@ class MiddleTable extends Component {
     });
   };
 
-  changeSearchDetailParams = (v) => {
+  changeSearchDetailParams = v => {
     const { dispatch } = this.props;
     dispatch({
       type: `${defaultModelName}/changeSearchParamsSecond`,
@@ -93,55 +116,49 @@ class MiddleTable extends Component {
   };
 
   render() {
-    const { onSelectChange, props, changeSearchParams, changeSearchDetailParams,clearFn } = this;
+    const { onSelectChange, props, changeSearchParams, changeSearchDetailParams, clearFn } = this;
     const {
       firstType,
-      secondType,
       returnElement,
       onSearch,
-
       list,
       listSecond,
-
       choosenRowData,
       choosenRowDataSecond,
       pagination,
       paginationSecond,
-
       selectedRowKeys,
       selectedRowKeysSecond,
-
       model,
-
       listLoading,
       listLoadingSecond,
+      switchMenu,
+      handleSwitchMenu,
+      boomList,
+      secondOprationArr,
+      selectedBom,
+      handleBomSelectChange,
     } = props;
+    console.log(list, '=======');
+
     return (
       <div className={styles.view_left_content}>
-
         <SearchForm
           data={searchParamsArrConfig[firstType]}
           source={model}
-          onSearch={(p) => {
-            onSearch({...p,current:1}, 1);
+          onSearch={p => {
+            onSearch({ ...p, current: 1 }, 1);
           }}
           returnElement={returnElement}
           onchange={changeSearchParams}
         />
-
-
-
-
-
-
-
         <div className={styles.tableBox}>
           <Table
             scroll={{ x: 'max-content' }}
             columns={columnsConfig[firstType]}
             pagination={pagination}
             selectKey={choosenRowData.id}
-            handleTableChange={(p) => {
+            handleTableChange={p => {
               onSearch(p, 1);
             }}
             body={list}
@@ -149,10 +166,9 @@ class MiddleTable extends Component {
             changeChoosenRow={record => {
               this.changeChoosenRow(record, 1);
             }}
-            onSelectChange={(data) => {
+            onSelectChange={data => {
               onSelectChange(data, 1);
             }}
-
             listLoading={listLoading}
             clearFn={clearFn}
             type={1}
@@ -161,19 +177,42 @@ class MiddleTable extends Component {
         <Divider />
         {/*  生产流程 原料信息  */}
 
-
-
-
-
-
         {/*  操作部分  */}
         <div className={styles.tableBox}>
+          <div>
+            <Group value={switchMenu} buttonStyle="solid" onChange={handleSwitchMenu}>
+              {menuRadio.map(({ title, key }) => (
+                <Radio.Button value={key} key={key}>
+                  {title}
+                  {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+                </Radio.Button>
+              ))}
+            </Group>
+          </div>
+          <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: 'space-between' }}>
+            {/* bom列表 */}
+            <Select
+              style={{ width: 180 }}
+              placeholder="请选择"
+              value={selectedBom.id || undefined}
+              onChange={handleBomSelectChange}
+            >
+              {boomList &&
+                boomList.map(({ value, key }) => (
+                  <Option value={value} key={value}>
+                    {key}
+                  </Option>
+                ))}
+            </Select>
+            <BtnGroup arr={secondOprationArr} />
+          </div>
+
           <Table
             scroll={{ x: 'max-content' }}
-            columns={columnsConfig[secondType]}
+            columns={columnsConfig[switchMenu]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}
-            handleTableChange={(p) => {
+            handleTableChange={p => {
               onSearch(p, 2);
             }}
             selectedRowKeys={selectedRowKeysSecond}
@@ -184,7 +223,6 @@ class MiddleTable extends Component {
             onSelectChange={data => {
               onSelectChange(data, 2);
             }}
-
             listLoading={listLoadingSecond}
             clearFn={clearFn}
             type={2}

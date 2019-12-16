@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import { connect } from 'dva';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import styles from '../../Account/Center/Center.less';
 import clientStyle from './Client.less';
 import DescriptionList from '@/components/DescriptionList';
@@ -43,7 +44,6 @@ import HttpFetch, { deleteMaintainer } from '../../../utils/HttpFetch';
 import ContactsModalForm from './components/form/ContactsModalForm';
 import RingsModalForm from './components/form/RingsModalForm';
 import TableSortView from '../../components/TableSortView';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -447,6 +447,7 @@ class ClientView extends PureComponent {
   renderForm() {
     return this.renderSimpleForm();
   }
+
   getModalContent = () => {
     const {
       form: { getFieldDecorator },
@@ -903,7 +904,7 @@ class ClientView extends PureComponent {
 
       const data = { ...fieldsValue };
 
-      let params = {
+      const params = {
         zhName: data.selectZhName,
         enName: data.selectEnName,
         size: defaultPageSize,
@@ -2307,44 +2308,44 @@ class ClientView extends PureComponent {
 
     const modalFooter = isAdd
       ? [
-          <Button key="back" onClick={this.handleCancel}>
+        <Button key="back" onClick={this.handleCancel}>
             取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={clientSaveloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={clientSaveloading}
+          onClick={() => {
               this.handleSubmit(true);
             }}
-          >
+        >
             保存
-          </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={clientSaveloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="continue"
+          type="primary"
+          loading={clientSaveloading}
+          onClick={() => {
               this.handleSubmit(false);
             }}
-          >
+        >
             继续添加
-          </Button>,
+        </Button>,
         ]
       : [
-          <Button key="back" onClick={this.handleCancel}>
+        <Button key="back" onClick={this.handleCancel}>
             取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={clientUpdateloading}
-            onClick={() => {
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={clientUpdateloading}
+          onClick={() => {
               this.handleSubmit(false);
             }}
-          >
+        >
             保存
-          </Button>,
+        </Button>,
         ];
     const { contactsItem } = this.state;
 

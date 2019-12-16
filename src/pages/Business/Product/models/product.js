@@ -14,7 +14,6 @@ import {
   updateTheProductUnLock,
 } from '@/services/api';
 
-
 export default {
   namespace: 'product',
 
@@ -165,19 +164,19 @@ export default {
     },
 
     *changeList({ payload }, { put }) {
-      const { key, value, key1, value1,zhName,enName } = payload
-      let listKey = 'zhName'
-      let listValue = 'id'
-      key1 && (listKey = key1)
-      value1 && (listValue = value1)
+      const { key, value, key1, value1, zhName, enName } = payload;
+      let listKey = 'zhName';
+      let listValue = 'id';
+      key1 && (listKey = key1);
+      value1 && (listValue = value1);
       const arrList = value.map(item => ({
         // ...item,
-        id:item.id,
-        zhName:zhName?item[zhName]:item.zhName,
-        enName:enName?item[enName]:item.enName,
+        id: item.id,
+        zhName: zhName ? item[zhName] : item.zhName,
+        enName: enName ? item[enName] : item.enName,
         key: item[listKey],
-        value: item[listValue]
-      }))
+        value: item[listValue],
+      }));
       yield put({
         type: 'changeStateAction',
         payload: { key, value: arrList },
@@ -226,10 +225,10 @@ export default {
     },
 
     changeStateAction(state, action) {
-      const { key, value } = action.payload
+      const { key, value } = action.payload;
       return {
         ...state,
-        [key]: value
+        [key]: value,
       };
     },
   },

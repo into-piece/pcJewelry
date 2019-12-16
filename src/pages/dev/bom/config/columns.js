@@ -1,131 +1,116 @@
-import moment from 'moment'
-import styles from './columns.less';
-import {statusConvert,numberConvert} from '@/utils/convert';
+import moment from 'moment';
+import { statusConvert, numberConvert } from '@/utils/convert';
 
-let dieSet = [
+let product = [
   {
-    title: <div className={styles.row_normal2}>产品编号</div>,
+    title: '产品编号',
     dataIndex: 'productNo',
     key: 'productNo',
   },
   {
-    title: <div className={styles.row_normal2}>类别</div>,
-    dataIndex: 'productType',
+    title: '电镀颜色',
+    dataIndex: 'platingColorName',
+    key: 'platingColorName',
+  },
+  {
+    title: '类别',
+    dataIndex: 'productTypeName',
     key: 'productTypeName',
-    render:(d,i)=>(i.productTypeName)
-
   },
   {
-    title: <div className={styles.row_normal2}>成色</div>,
-    dataIndex: 'purity',
-    key: 'purity',
-    render:(d,i) => i.purityName
-
-  },
-  {
-    title: <div className={styles.row_normal2}>新增日期</div>,
+    title: '颜色名称',
     dataIndex: 'createTime',
     key: 'createTime',
-    render:(d) => moment(d).format("YYYY-MM-DD HH:mm:ss")
-
   },
   {
-    title: <div className={styles.row_normal2}>状态</div>,
+    title: '成色名称',
+    dataIndex: 'productColorName',
+    key: 'productColorName',
+  },
+  {
+    title: '英文名',
+    dataIndex: 'enName',
+    key: 'enName',
+  },
+  {
+    title: '单位',
     dataIndex: 'status',
     key: 'status',
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
-    ),
+  },
+  {
+    title: '客户编号',
+    dataIndex: 'customerId',
+    key: 'customerId',
+  },
+  {
+    title: '客户货号',
+    dataIndex: 'custoerProductNo',
+    key: 'custoerProductNo',
+  },
+  {
+    title: '客户简称',
+    dataIndex: 'customerShotName',
+    key: 'customerShotName',
   },
 ];
 
-
-let dieSetChild = [
+let material = [
   {
-    title: <div className={styles.row_normal2}>胶膜编号</div>,
+    title: '原料类别',
     dataIndex: 'productNo',
     key: 'productNo',
   },
   {
-    title: <div className={styles.row_normal2}>模具编号</div>,
+    title: '原料编号',
     dataIndex: 'filmCodeName',
     key: 'filmCodeName',
   },
   {
-    title: <div className={styles.row_normal2}>配膜比例</div>,
+    title: '规格',
     dataIndex: 'membraneProportion',
     key: 'membraneProportion',
-    render:d=>  numberConvert(d,2)
-
   },
   {
-    title: <div className={styles.row_normal2}>注蜡机号</div>,
+    title: '单件用量',
     dataIndex: 'vacuumTime',
     key: 'vacuumTime',
   },
   {
-    title: <div className={styles.row_normal2}>进模压力(牛)</div>,
+    title: '单件用重',
     dataIndex: 'intoFilmPressure',
     key: 'intoFilmPressure',
-    render:d=>  numberConvert(d,1)
-
   },
   {
-    title: <div className={styles.row_normal2}>压膜压力(牛)</div>,
+    title: '效率',
     dataIndex: 'squeezeFilmPressure',
     key: 'squeezeFilmPressure',
-    render:d=>  numberConvert(d,1)
-
   },
   {
-    title: <div className={styles.row_normal2}>注蜡气压(帕)</div>,
+    title: '领料部门',
     dataIndex: 'waxInjectionPressure',
     key: 'waxInjectionPressure',
-    render:d=>  numberConvert(d,1)
-
   },
   {
-    title: <div className={styles.row_normal2}>真空时间(秒)</div>,
+    title: '配膜',
     dataIndex: 'noteWaxImmediately',
     key: 'noteWaxImmediately',
-    render:d=>  numberConvert(d,1)
-
   },
   {
-    title: <div className={styles.row_normal2}>注蜡时间(秒)</div>,
+    title: '计价类别',
     dataIndex: 'waxInjectionTime',
     key: 'waxInjectionTime',
-    render:d=>  numberConvert(d,1)
-
   },
   {
-    title: <div className={styles.row_normal2}>蜡件重量(克)</div>,
+    title: '备注',
     dataIndex: 'waxWeight',
     key: 'waxWeight',
-    render:d=>  numberConvert(d,2)
-
-  },
-  {
-    title: <div className={styles.row_normal2}>存放位置</div>,
-    dataIndex: 'position',
-    key: 'position',
-    render:(e,i)=>i.positionName
-
-  },
-  {
-    title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'status',
-    key: 'status',
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
-    ),
   },
 ];
 
-dieSet = dieSet.map(item => ({ ...item, sorter: true }));
-dieSetChild = dieSetChild.map(item => ({ ...item, sorter: true }));
+product = product.map(item => ({ ...item, sorter: true }));
+material = material.map(item => ({ ...item, sorter: true }));
 
 export default {
-  dieSet,
-  dieSetChild,
+  product,
+  material,
 };
