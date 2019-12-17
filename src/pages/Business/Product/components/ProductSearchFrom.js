@@ -15,9 +15,28 @@ class ProductSearchFrom extends Component {
     };
   }
 
-  render() {
-    return this.renderCustomerForm();
+  renderCustomerForm() {
+    const { expandForm } = this.state;
+    return expandForm ? this.renderCustomerAdvancedForm() : this.renderCustomerSimpleForm();
   }
+
+  handleSearch = e => {
+    const { form, onSearch } = this.props;
+    // 禁止表单提交，采用Ajax提交
+    e.preventDefault();
+    form.validateFields((err, fieldsValue) => {
+      if (onSearch) onSearch({ ...fieldsValue });
+    });
+  };
+
+  handleReset = () => {
+    const { onCustomerReset, form } = this.props;
+    form.resetFields();
+    this.setState({
+      searchCustomerParams: {},
+    });
+    if (onCustomerReset) onCustomerReset();
+  };
 
   renderCustomerAdvancedForm() {
     const {
@@ -33,7 +52,13 @@ class ProductSearchFrom extends Component {
       >
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="客户货号" className={business.from_content_col}>
+            <FormItem label="产品编号" className={business.from_content_col}>
+              {getFieldDecorator('productNo')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+
+          <Col lg={8} md={8} sm={8} xs={8}>
+            <FormItem label="货号" className={business.from_content_col}>
               {getFieldDecorator('custoerProductNo')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
@@ -47,16 +72,6 @@ class ProductSearchFrom extends Component {
               {getFieldDecorator('color')(<Input laceholder="请输入" />)}
             </FormItem>
           </Col>
-          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
-          {/* <FormItem label="模具号" className={business.from_content_col}> */}
-          {/* {getFieldDecorator('mouldNo')(<Input placeholder="请输入" />)} */}
-          {/* </FormItem> */}
-          {/* </Col> */}
-          {/* <Col lg={8} md={8} sm={8} xs={8}> */}
-          {/* <FormItem label="产品描述" className={business.from_content_col}> */}
-          {/* {getFieldDecorator('productDesc')(<Input laceholder="请输入" />)} */}
-          {/* </FormItem> */}
-          {/* </Col> */}
         </Row>
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
@@ -100,7 +115,7 @@ class ProductSearchFrom extends Component {
         </Row>
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="客户货号" className={business.from_content_col}>
+            <FormItem label="货号" className={business.from_content_col}>
               {getFieldDecorator('goodsNo', {
                 initialValue: '',
               })(<Input placeholder="请输入" />)}
@@ -155,29 +170,6 @@ class ProductSearchFrom extends Component {
     );
   }
 
-  renderCustomerForm() {
-    const { expandForm } = this.state;
-    return expandForm ? this.renderCustomerAdvancedForm() : this.renderCustomerSimpleForm();
-  }
-
-  handleSearch = e => {
-    const { form, onSearch } = this.props;
-    // 禁止表单提交，采用Ajax提交
-    e.preventDefault();
-    form.validateFields((err, fieldsValue) => {
-      if (onSearch) onSearch({ ...fieldsValue });
-    });
-  };
-
-  handleReset = () => {
-    const { onCustomerReset, form } = this.props;
-    form.resetFields();
-    this.setState({
-      searchCustomerParams: {},
-    });
-    if (onCustomerReset) onCustomerReset();
-  };
-
   renderCustomerSimpleForm() {
     const {
       form: { getFieldDecorator },
@@ -187,8 +179,8 @@ class ProductSearchFrom extends Component {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row>
           <Col lg={8}>
-            <FormItem label="客户编号">
-              {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
+            <FormItem label="产品编号">
+              {getFieldDecorator('productNo')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
@@ -226,6 +218,10 @@ class ProductSearchFrom extends Component {
       expandForm: !expandForm,
     });
   };
+
+  render() {
+    return this.renderCustomerForm();
+  }
 }
 
 export default ProductSearchFrom;

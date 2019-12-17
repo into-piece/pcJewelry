@@ -59,7 +59,7 @@
     "value": "unitOfWeight",
     "noNeed": true,
     "type": 2,
-    "list": "unitOfWeight" 
+    "list": "unitOfWeight"
   },
   {
     "key": "成品重量",
@@ -67,6 +67,6 @@
     "noNeed": true,
     "type": 1
   },
-  { "key": "客户产品描述", "value": "productDesc", "noNeed": true, "type": 1 },
+  { "key": "客户描述", "value": "productDesc", "noNeed": true, "type": 1 },
   { "key": "备注", "value": "marks", "noNeed": true, "type": 3 }
 ]

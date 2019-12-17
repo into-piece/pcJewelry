@@ -32,6 +32,7 @@ import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
 import serviceObj from '@/services/dev';
+import component from '@/locales/en-US/component';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -55,7 +56,7 @@ const radioArr = [
   { key: '生产工序', value: 'productProcess' },
 ];
 
-@Form.create()
+@Form.create({ name: 'form1' })
 @connect(({ loading, devbom: model }) => {
   return {
     model,
@@ -84,6 +85,7 @@ class Index extends Component {
     // 第二个table选中tab标志 没有tab则冗余
     switchMenu: SECOND_TAG,
     selectedBom: { id: '' },
+    craftShow: false, // 增加工艺弹窗
   };
 
   componentDidMount() {
@@ -205,7 +207,23 @@ class Index extends Component {
     });
   };
 
-  handleSelectChange = (value, type) => {};
+  handleSelectChange = (value, type) => {
+    const { dispatch } = this.props;
+    // 当原料类别下拉选中时请求
+    if (type === 'materialType') {
+      // 原料小料
+      dispatch({
+        type: `${defaultModelName}/getDropdownList`,
+        payload: { name: 'getTypeByWordbookCode', params: { key: value } },
+      });
+    }
+  };
+
+  addCraft = () => {
+    this.setState({
+      craftShow: true,
+    });
+  };
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -303,6 +321,15 @@ class Index extends Component {
             }}
           />
         );
+      case 10:
+        return (
+          <p>
+            <span style={{ color: '#40a9ff', cursor: 'pointer' }} onClick={this.addCraft}>
+              添加工艺
+            </span>
+          </p>
+        );
+
       default:
         return number ? (
           <InputNumber
@@ -490,6 +517,7 @@ class Index extends Component {
     const isEdit = modalType === 'edit';
     const { model } = this.props;
     const addArr = modalInput[rightActive];
+    const materialType = this.props.form.getFieldValue('materialType');
     console.log(model, '========');
 
     return (
@@ -510,12 +538,16 @@ class Index extends Component {
               step,
               min,
               max,
+              mType,
             }) => {
               if (rightActive === 'dieSetChild' && value === 'productNo') {
                 initValue = `${choosenRowData.productNo}()`;
                 // choosenRowDataSecond[value] = choosenRowData.id
               }
 
+              if (mType === 1 && materialType !== 'H016002') {
+                return;
+              }
               return (
                 <div className="addModal" key={key}>
                   <FormItem label={key}>
@@ -776,6 +808,8 @@ class Index extends Component {
     });
   };
 
+  craftInput = (e, type) => {};
+
   render() {
     const {
       state,
@@ -798,9 +832,11 @@ class Index extends Component {
       printBom,
       handleBomSelectChange,
       getbomlist,
+      craftInput,
     } = this;
-    const { modalType, rightActive, addloading, switchMenu, selectedBom } = state;
-    const { choosenRowData, choosenRowDataSecond, boomList } = props;
+    const { modalType, rightActive, addloading, switchMenu, selectedBom, craftShow } = state;
+    const { choosenRowData, choosenRowDataSecond, boomList, model, form } = props;
+    const { getFieldDecorator } = form;
     const modalFooter =
       modalType === 'plus'
         ? [
@@ -823,16 +859,16 @@ class Index extends Component {
             >
               保存
             </Button>,
-            // <Button
-            //   key="continue"
-            //   type="primary"
-            //   loading={addloading}
-            //   onClick={() => {
-            //     handleModalOk(false);
-            //   }}
-            // >
-            //   继续添加
-            // </Button>,
+            <Button
+              key="continue"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
+                handleModalOk(false);
+              }}
+            >
+              继续添加
+            </Button>,
           ]
         : [
             <Button
@@ -878,6 +914,8 @@ class Index extends Component {
         disabled: !selectedBom.id,
       },
     ];
+
+    console.log(this.props);
 
     return (
       <div className={styles.page}>
@@ -1004,7 +1042,53 @@ class Index extends Component {
             {getModalContent()}
           </Modal>
         )}
+        <AddCraft craftShow={craftShow} onChange={craftInput} />
       </div>
+    );
+  }
+}
+
+@Form.create()
+class AddCraft extends Component {
+  state = {};
+
+  render() {
+    const { craftShow, onChange, form } = this.props;
+    const { getFieldDecorator } = form;
+    return (
+      <Modal
+        title={<BuildTitle title="添加工艺" />}
+        maskClosable={false}
+        destroyOnClose
+        visible={craftShow}
+        onOK={() => {}}
+      >
+        {/* <Form size="small" key="1">
+          <div className="addModal">
+            <FormItem>
+              {getFieldDecorator('', {
+                rules: [
+                  {
+                    required: !noNeed,
+                    message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
+                  },
+                ],
+                initialValue: undefined,
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+          </div>
+          <div className="addModal">
+            <FormItem>
+              <Input
+                placeholder="请输入"
+                onChange={() => {
+                  onChange();
+                }}
+              />
+            </FormItem>
+          </div>
+        </Form> */}
+      </Modal>
     );
   }
 }

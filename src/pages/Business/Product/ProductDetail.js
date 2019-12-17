@@ -687,7 +687,7 @@ class ProductDetail extends Component {
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
                     <Description term="模具">{showItem.mouldNo}</Description>
-                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                    <Description term="货号">{showItem.custoerProductNo}</Description>
                     <Description term="客户">{showItem.customerNo}</Description>
                     <Description term="供应商货号">{showItem.supplierId}</Description>
                     <Description term="供应商">{showItem.supplierProductNo}</Description>
@@ -1376,7 +1376,7 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
-            <FormItem label="客户货号" {...this.centerFormLayout}>
+            <FormItem label="货号" {...this.centerFormLayout}>
               {getFieldDecorator('custoerProductNo', {
                 rules: [{ message: '请输入货号' }],
                 initialValue: current.custoerProductNo,
@@ -1384,13 +1384,46 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
-            <FormItem label="产品描述" {...this.centerFormLayout}>
+            <FormItem label="描述" {...this.centerFormLayout}>
               {getFieldDecorator('productDesc', {
-                rules: [{ message: '请输入产品描述' }],
+                rules: [{ message: '请输入描述' }],
                 initialValue: current.productDesc,
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
+          <div className="adddevModal">
+            <FormItem label="条码" {...this.centerFormLayout}>
+              {getFieldDecorator('productDesc', {
+                rules: [{ message: '请输入描述' }],
+                initialValue: current.productDesc,
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem label="售价" {...this.centerFormLayout}>
+              {getFieldDecorator('productDesc', {
+                rules: [{ message: '请输入描述' }],
+                initialValue: current.productDesc,
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem label="币种" {...this.centerFormLayout}>
+              {getFieldDecorator('productDesc', {
+                rules: [{ message: '请输入描述' }],
+                initialValue: current.productDesc,
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem label="类别" {...this.centerFormLayout}>
+              {getFieldDecorator('productDesc', {
+                rules: [{ message: '请输入描述' }],
+                initialValue: current.productDesc,
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+          </div>
+
           {/* <Modal */}
           {/* maskClosable={false} */}
           {/* {...modalCropperFooter} */}
@@ -2082,7 +2115,7 @@ class ProductDetail extends Component {
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
                     <Description term="模具">{showItem.mouldNo}</Description>
-                    <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                    <Description term="货号">{showItem.custoerProductNo}</Description>
                     <Description term="客户">{showItem.customerNo}</Description>
                     <Description term="供应商货号">{showItem.supplierId}</Description>
                     <Description term="供应商">{showItem.supplierProductNo}</Description>
