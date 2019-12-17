@@ -1377,9 +1377,9 @@ class ProductDetail extends Component {
           </div>
           <div className="adddevModal">
             <FormItem label="客户货号" {...this.centerFormLayout}>
-              {getFieldDecorator('custoerProductNo', {
+              {getFieldDecorator('customerProductNo', {
                 rules: [{ message: '请输入货号' }],
-                initialValue: current.custoerProductNo,
+                initialValue: current.customerProductNo,
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
