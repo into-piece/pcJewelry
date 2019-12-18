@@ -1400,12 +1400,23 @@ class ProductDetail extends Component {
             <FormItem label="币种" {...this.centerFormLayout}>
               {getFieldDecorator('customerCurrency', {
                 initialValue: current.customerCurrency,
-              })(<Input placeholder="请输入" />)}
+              })(<Dict
+                  dict="H006"
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  style={{ width: 180 }}
+                  content={current.customerCurrency}
+                  placeholder="请输入"
+                />,
+              )}
             </FormItem>
           </div>
           <div className="adddevModal">
             <FormItem label="类别" {...this.centerFormLayout}>
-              {getFieldDecorator('customerCurrency', {
+              {getFieldDecorator('customerCategory', {
                 initialValue: current.customerCategory,
               })(<Input placeholder="请输入" />)}
             </FormItem>
@@ -1418,12 +1429,16 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
+          </div>
+
+          <div className="adddevModal" style={{ width: 1200 }}>
             <FormItem label="描述" {...this.centerFormLayout}>
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入描述' }],
                 initialValue: current.productDesc,
-              })(<TextArea placeholder="请输入" />)}
+              })(<TextArea placeholder="请输入" style={{ width: 1040 }}/>)}
             </FormItem>
+
           </div>
         </Form>
 
