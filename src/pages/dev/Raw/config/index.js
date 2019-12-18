@@ -107,8 +107,7 @@ export const modalContent = {
     { span: 8, 'key': '条码', 'value': 'barCode', 'noNeed': true },
     { span: 8, 'key': '客户编号', 'value': 'customerNo', 'noNeed': true, },
     { span: 8, 'key': '供应商编号', 'value': 'supplierNo', 'noNeed': true, },
-    { span: 8, 'key': '单价', 'value': 'price', 'noNeed': true, number: true,'convert':numberFixed4 },
-    { span: 8, 'key': '成本价', 'value': 'costPirce', 'noNeed': true,'convert':numberFixed4 },
+    { span: 8, 'key': '单价', 'value': 'price' , number: true,'convert':numberFixed4 },
     { span: 8, 'key': '计量单位', 'value': 'measureUnit', 'name': true, 'list': 'getBUMropDown', 'type': 2 },
     {
       span: 8,
