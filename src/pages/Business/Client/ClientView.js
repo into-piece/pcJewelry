@@ -138,24 +138,28 @@ let clientContentColumns2 = [
     title: '客户编号',
     dataIndex: 'customerNo',
     key: 'customerNo',
+    sorter: true,
   },
   {
     // title: <div className={clientInfoStyle.row_normal2}>简称</div>,
     title: '简称',
     dataIndex: 'shotName',
     key: 'shotName',
+    sorter: true,
   },
   {
     // title: <div className={clientInfoStyle.row_normal2}>英文名称</div>,
     title: '英文名称',
     dataIndex: 'enName',
     key: 'enName',
+    sorter: true,
   },
   {
     // title: <div className={clientInfoStyle.row_normal2}>中文名称</div>,
     title: '中文名称',
     dataIndex: 'zhName',
     key: 'zhName',
+    sorter: true,
   },
   {
     // title: <div className={clientInfoStyle.row_normal2}>联系人</div>,
@@ -180,11 +184,12 @@ let clientContentColumns2 = [
     title: '状态',
     dataIndex: 'status',
     key: 'status',
+    sorter: true,
     render: data => statusConvert[data],
   },
 ];
 
-clientContentColumns2 = clientContentColumns2.map(row => ({ ...row, sorter: true }));
+// clientContentColumns2 = clientContentColumns2.map(row => ({ ...row, sorter: true }));
 
 @connect(({ client, loading, customer }) => {
   const { rtnCode, rtnMsg } = client;
