@@ -1381,22 +1381,15 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
-<<<<<<< HEAD
-            <FormItem label="货号" {...this.centerFormLayout}>
-              {getFieldDecorator('custoerProductNo', {
-                rules: [{ message: '请输入货号' }],
-                initialValue: current.custoerProductNo,
-=======
+
             <FormItem label="条码" {...this.centerFormLayout}>
               {getFieldDecorator('barCode', {
                 initialValue: current.barCode,
->>>>>>> zengwl
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
           <div className="adddevModal">
-<<<<<<< HEAD
-=======
+
             <FormItem label="售价" {...this.centerFormLayout}>
               {getFieldDecorator('customerPrice', {
                 initialValue: current.customerPrice,
@@ -1425,7 +1418,6 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
->>>>>>> zengwl
             <FormItem label="描述" {...this.centerFormLayout}>
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入描述' }],
@@ -1433,51 +1425,6 @@ class ProductDetail extends Component {
               })(<TextArea placeholder="请输入" />)}
             </FormItem>
           </div>
-<<<<<<< HEAD
-          <div className="adddevModal">
-            <FormItem label="条码" {...this.centerFormLayout}>
-              {getFieldDecorator('productDesc', {
-                rules: [{ message: '请输入描述' }],
-                initialValue: current.productDesc,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem label="售价" {...this.centerFormLayout}>
-              {getFieldDecorator('productDesc', {
-                rules: [{ message: '请输入描述' }],
-                initialValue: current.productDesc,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem label="币种" {...this.centerFormLayout}>
-              {getFieldDecorator('productDesc', {
-                rules: [{ message: '请输入描述' }],
-                initialValue: current.productDesc,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem label="类别" {...this.centerFormLayout}>
-              {getFieldDecorator('productDesc', {
-                rules: [{ message: '请输入描述' }],
-                initialValue: current.productDesc,
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-          </div>
-
-          {/* <Modal */}
-          {/* maskClosable={false} */}
-          {/* {...modalCropperFooter} */}
-          {/* width={768} */}
-          {/* destroyOnClose */}
-          {/* visible={cropperVisible} */}
-          {/* > */}
-          {/* {this.openCutImageModal()} */}
-          {/* </Modal> */}
-=======
->>>>>>> zengwl
         </Form>
 
         {sourceOfProduct === 'H005005' ? (
