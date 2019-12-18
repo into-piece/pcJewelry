@@ -150,6 +150,33 @@ export default {
       if (callback) callback(list.records[0]);
     },
 
+    *materialNoList({ payload, callback }, { call, put }) {
+      const { params, name, materialType } = payload;
+      const arr = {
+        H016002: 'listStoneDropDown', //石材
+        H016001: 'listPrincipalMaterialDropDown', //主材
+        H016003: 'listAccessoriesDropDown', //配件
+        H016004: 'listWrapperDropDown', //包装
+        H016005: 'listAuxiliaryMaterialDropDown', //辅材
+      };
+      const services = servicesConfig[arr[materialType]];
+      const response = yield call(services, params);
+
+      let list =
+        response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
+      list = list.map(item => ({
+        ...item,
+        key: item.zhName,
+        value: item.id,
+      }));
+      console.log(list, name);
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: name },
+      });
+      if (callback) callback(list.records[0]);
+    },
+
     // 原料列表接口
     *getMaterialList({ payload, callback }, { call, put }) {
       const { params } = payload;

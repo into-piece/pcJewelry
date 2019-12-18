@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import { connect } from 'dva';
 import {
   Row,
@@ -34,6 +34,7 @@ import BuildTitle from '@/components/BuildTitle';
 import serviceObj from '@/services/dev';
 import component from '@/locales/en-US/component';
 
+const ButtonGroup = Button.Group;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -86,7 +87,19 @@ class Index extends Component {
     switchMenu: SECOND_TAG,
     selectedBom: { id: '' },
     craftShow: false, // 增加工艺弹窗
+    onCraft: { name: '' },
+    craftForm: [
+      [
+        { key: '镶石公艺', title: '镶石公艺', value: '' },
+        { key: '效率', title: '效率', value: '' },
+      ],
+    ],
   };
+
+  onCraft = [
+    { key: '镶石公艺', title: '镶石公艺', value: '' },
+    { key: '效率', title: '效率', value: '' },
+  ];
 
   componentDidMount() {
     this.initDrop();
@@ -215,6 +228,11 @@ class Index extends Component {
       dispatch({
         type: `${defaultModelName}/getDropdownList`,
         payload: { name: 'getTypeByWordbookCode', params: { key: value } },
+      });
+
+      dispatch({
+        type: `${defaultModelName}/materialNoList`,
+        payload: { name: 'materialNoList', materialType: value, params: {} },
       });
     }
   };
@@ -507,11 +525,32 @@ class Index extends Component {
     });
   };
 
+  addCraftRow = (index, option) => {
+    const func = option === 'add';
+    this.setState(preState => {
+      if (func) {
+        return preState.craftForm.push(this.onCraft);
+      } else {
+        return preState.craftForm.splice(index, 1);
+      }
+    });
+  };
+
+  craftChange = (e, index, subIndex) => {
+    console.log(e, index, subIndex, this.state.craftForm[index][subIndex].value);
+
+    const v = e.target.value;
+    this.setState(preState => {
+      preState.craftForm[index][subIndex].value = v;
+    });
+  };
+
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
     const { choosenRowData, choosenRowDataSecond, form } = this.props;
-    const { modalType, rightActive } = this.state;
+    const { modalType, rightActive, craftForm } = this.state;
     const { getFieldDecorator } = form;
+    console.log(craftForm, '=====');
 
     const content = '';
     const isEdit = modalType === 'edit';
@@ -587,35 +626,56 @@ class Index extends Component {
               );
             }
           )}
-        {
-          // <Col span={18}>
-          //   <FormItem
-          //     label="上传图片"
-          //     key="uploadPic"
-          //     labelCol={{ span: 3 }}
-          //     wrapperCol={{
-          //       span: 20,
-          //     }}
-          //   >
-          //     <UploadImg
-          //       key="uimg"
-          //       maxcount={10}
-          //       defaultFileList={
-          //         isEdit
-          //           ? rightActive === FIRST_TAG
-          //             ? choosenRowData.pictures
-          //             : choosenRowDataSecond.pictures
-          //           : []
-          //       }
-          //       fileListFun={list => {
-          //         this.setState({ filelist: list });
-          //       }}
-          //     />
-          //   </FormItem>
-          // </Col>
-        }
+
+        {rightActive === SECOND_TAG && this.returnCraftContent()}
         {content}
       </Form>
+    );
+  };
+
+  returnCraftContent = () => {
+    const { form } = this.props;
+    const { craftForm } = this.state;
+    const { getFieldDecorator } = form;
+    return (
+      <div style={{ width: '100%' }}>
+        {craftForm.map((item, index) => (
+          <div style={{ width: '100%', display: 'flex' }}>
+            {item.map(({ key, value }, subIndex) => {
+              console.log(key, value);
+              return (
+                <div className="addModal" key={key}>
+                  <CraftRow name={key}>
+                    <Input
+                      placeholder="请输入"
+                      onChange={e => {
+                        this.craftChange(e, index, subIndex);
+                      }}
+                      value={value}
+                    />
+                  </CraftRow>
+                </div>
+              );
+            })}
+            <ButtonGroup>
+              <Button
+                onClick={() => {
+                  this.addCraftRow(index, 'add');
+                }}
+              >
+                +
+              </Button>
+              <Button
+                onClick={() => {
+                  this.addCraftRow(index, 'jian');
+                }}
+              >
+                -
+              </Button>
+            </ButtonGroup>
+          </div>
+        ))}
+      </div>
     );
   };
 
@@ -1092,5 +1152,20 @@ class AddCraft extends Component {
     );
   }
 }
+
+const CraftRow = ({ name, value, children }) => {
+  return (
+    <div class="ant-row ant-form-item">
+      <div class="ant-col ant-form-item-label">
+        <label for="form1_craft1">{name}</label>
+      </div>
+      <div class="ant-col ant-form-item-control-wrapper">
+        <div class="ant-form-item-control">
+          <span class="ant-form-item-children">{children}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Index;
