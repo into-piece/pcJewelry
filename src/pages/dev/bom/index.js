@@ -542,6 +542,7 @@ class Index extends Component {
     const v = e.target.value;
     this.setState(preState => {
       preState.craftForm[index][subIndex].value = v;
+      return preState;
     });
   };
 
