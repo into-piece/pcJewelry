@@ -1436,7 +1436,7 @@ class ProductDetail extends Component {
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入描述' }],
                 initialValue: current.productDesc,
-              })(<TextArea placeholder="请输入" style={{ width: 1040 }}/>)}
+              })(<TextArea placeholder="请输入" style={{ width: 1040,height:32 }}/>)}
             </FormItem>
 
           </div>
