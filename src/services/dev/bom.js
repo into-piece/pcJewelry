@@ -9,6 +9,11 @@ const serviceArr = [
     path: 'develop.bom/develop-bom',
     arr: ['list', 'saveOrUpdate', 'delete', 'approval', 'revoke', 'copy'],
   },
+  {
+    name: 'bomDt',
+    path: 'develop.bom/develop-bom-dt',
+    arr: ['list', 'saveOrUpdate', 'delete', 'approval', 'revoke', 'copy'],
+  },
 ];
 
 const extraArr = [
@@ -23,27 +28,42 @@ const extraArr = [
   {
     key: 'listStoneDropDown',
     path: '/listStoneDropDown',
-    prefix1: env + '/bussiness/develop/basic/stone',
+    prefix1: env + '/business/develop/basic/stone',
   },
   {
     key: 'listPrincipalMaterialDropDown',
     path: '/listPrincipalMaterialDropDown',
-    prefix1: env + '/bussiness/develop/basic/principal-material',
+    prefix1: env + '/business/develop/basic/principal-material',
   },
   {
     key: 'listAccessoriesDropDown',
     path: '/listAccessoriesDropDown',
-    prefix1: env + '/bussiness/develop/basic/accessories',
+    prefix1: env + '/business/develop/basic/accessories',
   },
   {
     key: 'listWrapperDropDown',
     path: '/listWrapperDropDown',
-    prefix1: env + '/bussiness/develop/basic/wrapper',
+    prefix1: env + '/business/develop/basic/wrapper',
   },
   {
     key: 'listAuxiliaryMaterialDropDown',
     path: '/listAuxiliaryMaterialDropDown',
-    prefix1: env + '/bussiness/develop/basic/auxiliary-material',
+    prefix1: env + '/business/develop/basic/auxiliary-material',
+  },
+  {
+    key: 'listGemSetProcessDropDown',
+    path: '/listGemSetProcessDropDown',
+    prefix1: env + '/business/develop/basic/gem-set-process/',
+  },
+  {
+    key: 'listDeptDropDown',
+    path: '/listDeptDropDown',
+    prefix1: env + '/sys.user/sys-role/listDeptDropDown',
+  },
+  {
+    key: 'processDropdown',
+    path: '/listDropDown',
+    prefix1: env + '/business/develop/production/production-process-relation',
   },
 ];
 export default { serviceArr, extraArr };

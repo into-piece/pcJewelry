@@ -18,6 +18,7 @@ const {
   bomapprove,
   boomrevoke,
   materialList,
+  processList,
 } = servicesConfig;
 const defaultModelName = 'devbom';
 const rType = {
@@ -54,11 +55,12 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-    materialList: [],
     bomList: [],
-
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
+    listGemSetProcessDropDown: [], // 镶石工艺下拉
+    materialList: initData,
+    processList: initData,
   },
 
   effects: {
@@ -130,7 +132,7 @@ export default {
 
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
-      const response = yield call(servicesConfig[name], params);
+      const response = yield call(servicesConfig[name], params || {});
       const key = key1 ? key1 : 'zhName';
       const value = value1 ? value1 : 'id';
       console.log(key1, value1, '=========');
@@ -189,41 +191,18 @@ export default {
       if (callback) callback(list.records[0]);
     },
 
-    *getListSecond({ payload, callback }, { call, put, select }) {
-      const { type, params } = payload;
-      const response = yield call(servicesConfig[`list${type}`], params);
-      const listSecond =
-        response.head && response.head.rtnCode === '000000' ? response.body : initData;
+    // 原料列表接口
+    *getProccessList({ payload, callback }, { call, put }) {
+      const { params } = payload;
+      const response = yield call(processList, params);
+      const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
-        payload: { data: listSecond, typeName: 'listSecond' },
+        payload: { data: list, typeName: 'processList' },
       });
-      yield put({
-        type: 'changeState',
-        payload: {
-          data: { size: response.body.size, current: response.body.current },
-          typeName: 'paginationSecond',
-        },
-      });
-      const choosenRowDataSecond = yield select(
-        state => state[defaultModelName].choosenRowDataSecond
-      );
-
-      const selectRow =
-        listSecond.records && listSecond.records.filter(e => e.id === choosenRowDataSecond.id);
-      if (selectRow && selectRow.length > 0) {
-        yield put({
-          type: 'changeState',
-          payload: { data: selectRow[0], typeName: 'choosenRowDataSecond' },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
-        });
-      }
-      if (callback) callback();
+      if (callback) callback(list.records[0]);
     },
+
     *clearListSecond(_, { put }) {
       yield put({
         type: 'changeState',
