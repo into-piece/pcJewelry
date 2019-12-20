@@ -57,53 +57,53 @@ let product = [
 let material = [
   {
     title: '原料类别',
-    dataIndex: 'productNo',
-    key: 'productNo',
+    dataIndex: 'materialType',
+    key: 'materialType',
   },
   {
     title: '原料编号',
-    dataIndex: 'filmCodeName',
-    key: 'filmCodeName',
+    dataIndex: 'materialNo',
+    key: 'materialNo',
   },
   {
     title: '规格',
-    dataIndex: 'membraneProportion',
-    key: 'membraneProportion',
+    dataIndex: 'specification',
+    key: 'specification',
   },
   {
     title: '单件用量',
-    dataIndex: 'vacuumTime',
-    key: 'vacuumTime',
+    dataIndex: 'singleDosage',
+    key: 'singleDosage',
   },
   {
     title: '单件用重',
-    dataIndex: 'intoFilmPressure',
-    key: 'intoFilmPressure',
+    dataIndex: 'sheetWithHeavy',
+    key: 'sheetWithHeavy',
   },
   {
     title: '效率',
-    dataIndex: 'squeezeFilmPressure',
-    key: 'squeezeFilmPressure',
+    dataIndex: 'processCapacity',
+    key: 'processCapacity',
   },
   {
     title: '领料部门',
-    dataIndex: 'waxInjectionPressure',
-    key: 'waxInjectionPressure',
+    dataIndex: 'acquisitionDepartment',
+    key: 'acquisitionDepartment',
   },
   {
     title: '配膜',
-    dataIndex: 'noteWaxImmediately',
-    key: 'noteWaxImmediately',
+    dataIndex: 'filmMatch',
+    key: 'filmMatch',
   },
   {
     title: '计价类别',
-    dataIndex: 'waxInjectionTime',
-    key: 'waxInjectionTime',
+    dataIndex: 'valuationClass',
+    key: 'valuationClass',
   },
   {
     title: '备注',
-    dataIndex: 'waxWeight',
-    key: 'waxWeight',
+    dataIndex: 'remarks',
+    key: 'remarks',
   },
 ];
 

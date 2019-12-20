@@ -15,7 +15,7 @@ export const material = [
     key: '领料部门',
     value: 'acquisitionDepartment',
     type: 2,
-    list: '',
+    list: 'listDeptDropDown',
     noNeed: true,
   },
   {
@@ -29,7 +29,7 @@ export const material = [
     initValue: 1,
     mType: 1,
   },
-  { key: '原料编号', value: 'materialNo', type: 2, list: '', mType: 1 },
+  { key: '原料编号', value: 'materialNo', type: 2, list: 'materialNoList' },
   { key: '单件用量', value: 'singleDosage', mType: 1 },
   { key: '规格', value: 'specification', noNeed: true },
   { key: '中文名', value: 'zhName', noNeed: true },
@@ -37,13 +37,24 @@ export const material = [
   { key: '重量单位', value: 'weightUnit', noNeed: true },
   { key: '计量单位', value: 'measureUnit', noNeed: true },
   { key: '单重', value: 'inventoryWeight', noNeed: true },
-  { key: '单件用量', value: 'singleDosage', noNeed: true },
+  { key: '单件用重', value: 'sheetWithHeavy', noNeed: true },
   { key: '计价类别', value: 'valuationClass', noNeed: true },
   { key: '损耗率', value: 'attritionRate', noNeed: true },
   { key: '备注', value: 'remarks', noNeed: true },
 ];
 
+const productProcess = [
+  { key: '工序编号', value: 'workProcessCode' },
+  { key: '工序名称', value: 'zhName' },
+  { key: '耗损（%）', value: 'isWastage' },
+  { key: '效率（件/小时）', value: 'processCapacity' },
+  { key: '图片', value: 'picPath' },
+  { key: '文档', value: 'workProcessCode' },
+  { key: '备注', value: 'remarks' },
+];
+
 export default {
   product,
   material,
+  productProcess,
 };

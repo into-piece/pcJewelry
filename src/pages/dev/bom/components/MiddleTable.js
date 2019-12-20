@@ -8,7 +8,9 @@ import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
 const { Option } = Select;
 const { Group } = Radio;
-
+const FIRST_TAG = 'product';
+const SECOND_TAG = 'material';
+const THIRD_TAG = 'productProcess';
 const menuRadio = [
   {
     title: '原料信息',
@@ -49,11 +51,17 @@ const BtnGroup = ({ arr }) => {
     selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
+    materialList: model.materialList,
+    processList: model.processList,
+    processDropdown: model.processDropdown,
   };
 })
 class MiddleTable extends Component {
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
+    const { rightActive } = this.props;
+    // 判断 2/3
+    const isthird = rightActive === THIRD_TAG;
     const { dispatch, pagination, onSearch } = this.props;
     const str = type === 1 ? '' : 'Second';
     dispatch({
@@ -66,6 +74,7 @@ class MiddleTable extends Component {
       debugger;
       this.props.getbomlist({ pid: rowData.id });
     } else {
+      this.props.changeRightActive();
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
       //   payload: 2,
@@ -122,7 +131,8 @@ class MiddleTable extends Component {
       returnElement,
       onSearch,
       list,
-      listSecond,
+      materialList,
+      processList,
       choosenRowData,
       choosenRowDataSecond,
       pagination,
@@ -138,8 +148,16 @@ class MiddleTable extends Component {
       secondOprationArr,
       selectedBom,
       handleBomSelectChange,
+      rightActive,
+      processDropdown,
+      selectedProccess,
     } = props;
-    console.log(list, '=======');
+    const isthird = rightActive === THIRD_TAG;
+    const tablelist = isthird ? processList : materialList;
+    const menuValue =
+      rightActive === FIRST_TAG || rightActive === SECOND_TAG ? SECOND_TAG : THIRD_TAG;
+
+    console.log(selectedProccess, '=======');
 
     return (
       <div className={styles.view_left_content}>
@@ -180,7 +198,7 @@ class MiddleTable extends Component {
         {/*  操作部分  */}
         <div className={styles.tableBox}>
           <div>
-            <Group value={switchMenu} buttonStyle="solid" onChange={handleSwitchMenu}>
+            <Group value={menuValue} buttonStyle="solid" onChange={handleSwitchMenu}>
               {menuRadio.map(({ title, key }) => (
                 <Radio.Button value={key} key={key}>
                   {title}
@@ -191,19 +209,35 @@ class MiddleTable extends Component {
           </div>
           <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: 'space-between' }}>
             {/* bom列表 */}
-            <Select
-              style={{ width: 180 }}
-              placeholder="请选择"
-              value={selectedBom.id || undefined}
-              onChange={handleBomSelectChange}
-            >
-              {boomList &&
-                boomList.map(({ value, key }) => (
-                  <Option value={value} key={value}>
-                    {key}
-                  </Option>
-                ))}
-            </Select>
+            {isthird ? (
+              <Select
+                style={{ width: 180 }}
+                placeholder="请选择"
+                value={selectedProccess.processCode || undefined}
+                onChange={handleBomSelectChange}
+              >
+                {processDropdown &&
+                  processDropdown.map(({ value, key }) => (
+                    <Option value={value} key={value}>
+                      {key}
+                    </Option>
+                  ))}
+              </Select>
+            ) : (
+              <Select
+                style={{ width: 180 }}
+                placeholder="请选择"
+                value={selectedBom.id || undefined}
+                onChange={handleBomSelectChange}
+              >
+                {boomList &&
+                  boomList.map(({ value, key }) => (
+                    <Option value={value} key={value}>
+                      {key}
+                    </Option>
+                  ))}
+              </Select>
+            )}
             <BtnGroup arr={secondOprationArr} />
           </div>
 
@@ -216,7 +250,7 @@ class MiddleTable extends Component {
               onSearch(p, 2);
             }}
             selectedRowKeys={selectedRowKeysSecond}
-            body={listSecond}
+            body={tablelist}
             changeChoosenRow={record => {
               this.changeChoosenRow(record, 2);
             }}
