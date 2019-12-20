@@ -511,8 +511,8 @@ class Info extends Component {
     const { form } = this.props;
     console.log(form.getFieldValue('customerShotName'));
     const customerShotName = form.getFieldValue('customerShotName') || '';
-
-    const quoteDate = moment(date[0]).valueOf();
+    const quoteDate = moment(dateString);
+    // const quoteDate = moment(date[0]).valueOf();
     form.setFieldsValue({
       quoteDate,
       quoteNumber: `${moment(quoteDate).format('YYYYMMDD')}_Quote_${customerShotName}`,
@@ -768,8 +768,9 @@ class Info extends Component {
                           : choosenRowData[value]
                         : choosenDetailRowData[value]
                       : value === 'quoteDate'
-                      ? undefined
-                      : initValue || (number ? '0.00' : undefined),
+                        ? moment(moment().format('L'))
+                        : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
+                          : initValue || (number ? '0.00' : undefined),
                   })(
                     this.returnElement({
                       key,
