@@ -44,8 +44,8 @@ let product = [
   },
   {
     title: '客户货号',
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
+    dataIndex: 'customerProductNo',
+    key: 'customerProductNo',
   },
   {
     title: '客户简称',
