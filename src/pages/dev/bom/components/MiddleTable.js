@@ -6,6 +6,7 @@ import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
 import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
+
 const { Option } = Select;
 const { Group } = Radio;
 const FIRST_TAG = 'product';
@@ -27,7 +28,7 @@ const BtnGroup = ({ arr }) => {
   return (
     <div className={styles.btnGroup}>
       {arr.map(({ key, fn, disabled }) => (
-        <Button key={key} onClick={fn} type={'primary'} disabled={disabled}>
+        <Button key={key} onClick={fn} type="primary" disabled={disabled}>
           {key}
         </Button>
       ))}
@@ -54,27 +55,32 @@ const BtnGroup = ({ arr }) => {
     materialList: model.materialList,
     processList: model.processList,
     processDropdown: model.processDropdown,
+    bomlist:model.bomlist
   };
 })
 class MiddleTable extends Component {
+
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
-    const { rightActive } = this.props;
     // 判断 2/3
-    const isthird = rightActive === THIRD_TAG;
-    const { dispatch, pagination, onSearch } = this.props;
-    const str = type === 1 ? '' : 'Second';
+    const { dispatch, pagination, onSearch,rightActive } = this.props;
+    const str = type === 1 ? 'choosenRowData': rightActive === THIRD_TAG?'choosenProccessData':'choosenRowDataSecond';
     dispatch({
-      type: `${defaultModelName}/setChoosenRowData${str}`,
-      payload: rowData,
+      type: `${defaultModelName}/setChooseData`,
+      payload: {name:str,list:rowData},
     });
+
     if (type === 1) {
       // this.searchSecond.handleReset();
       if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
       debugger;
       this.props.getbomlist({ pid: rowData.id });
     } else {
-      this.props.changeRightActive();
+
+      if(rightActive === FIRST_TAG){
+        this.props.changeRightActive(SECOND_TAG);
+      }
+      // this.props.changeRightActive();
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
       //   payload: 2,
@@ -99,11 +105,12 @@ class MiddleTable extends Component {
     if (type === 1) {
       // 清除第二table数据
       dispatch({
-        type: `${defaultModelName}/clearListSecond`,
+        type: `${defaultModelName}/setChooseData`,
+        payload: {name:'choosenRowData',list:[]},
       });
       dispatch({
-        type: `${defaultModelName}/setChoosenRowData`,
-        payload: {},
+        type: `${defaultModelName}/setChooseData`,
+        payload: {name:'choosenRowDataSecond',list:[]},
       });
     }
   };
@@ -144,20 +151,24 @@ class MiddleTable extends Component {
       listLoadingSecond,
       switchMenu,
       handleSwitchMenu,
-      boomList,
+      bomlist,
       secondOprationArr,
       selectedBom,
       handleBomSelectChange,
       rightActive,
       processDropdown,
       selectedProccess,
+      selectedProccessRowKeys
     } = props;
     const isthird = rightActive === THIRD_TAG;
     const tablelist = isthird ? processList : materialList;
     const menuValue =
       rightActive === FIRST_TAG || rightActive === SECOND_TAG ? SECOND_TAG : THIRD_TAG;
 
-    console.log(selectedProccess, '=======');
+    console.log(selectedProccess, menuValue,switchMenu,'=======');
+
+
+    const selectedSecondRowKeys =  rightActive === FIRST_TAG || rightActive === SECOND_TAG ? selectedRowKeysSecond: selectedProccessRowKeys
 
     return (
       <div className={styles.view_left_content}>
@@ -213,7 +224,7 @@ class MiddleTable extends Component {
               <Select
                 style={{ width: 180 }}
                 placeholder="请选择"
-                value={selectedProccess.processCode || undefined}
+                value={selectedProccess&&selectedProccess.processCode || undefined}
                 onChange={handleBomSelectChange}
               >
                 {processDropdown &&
@@ -230,8 +241,8 @@ class MiddleTable extends Component {
                 value={selectedBom.id || undefined}
                 onChange={handleBomSelectChange}
               >
-                {boomList &&
-                  boomList.map(({ value, key }) => (
+                {bomlist &&
+                  bomlist.map(({ value, key }) => (
                     <Option value={value} key={value}>
                       {key}
                     </Option>
@@ -243,13 +254,13 @@ class MiddleTable extends Component {
 
           <Table
             scroll={{ x: 'max-content' }}
-            columns={columnsConfig[switchMenu]}
+            columns={columnsConfig[menuValue]}
             pagination={paginationSecond}
             selectKey={choosenRowDataSecond.id}
             handleTableChange={p => {
               onSearch(p, 2);
             }}
-            selectedRowKeys={selectedRowKeysSecond}
+            selectedRowKeys={selectedSecondRowKeys}
             body={tablelist}
             changeChoosenRow={record => {
               this.changeChoosenRow(record, 2);

@@ -109,7 +109,7 @@ const fetchArr = [
   {
     key: 'customerId',
     value: queryTerminalNoList,
-    key1: 'customerNo',
+    key1: 'shotName',
     value1: 'id',
   },
   {

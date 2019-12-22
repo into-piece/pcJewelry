@@ -55,12 +55,14 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-    bomList: [],
+    bomlist: [],
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
     listGemSetProcessDropDown: [], // 镶石工艺下拉
     materialList: initData,
     processList: initData,
+    choosenProccessData:{id:''},
+    selectedProccessRowKeys:[]
   },
 
   effects: {
@@ -103,9 +105,9 @@ export default {
       yield call(service, params);
     },
 
-    *bomOpration({ payload, callback }, { call, put }) {
-      const { type, params } = payload;
-      const service = 'bom' + rType[type];
+    *commonOpration({ payload, callback }, { call, put }) {
+      const { type, params,name ,listName} = payload;
+      const service = name+rType[type];
 
       const response = yield call(servicesConfig[service], params);
 
@@ -122,7 +124,7 @@ export default {
             : [];
         yield put({
           type: 'changeState',
-          payload: { data: arr, typeName: 'boomList' },
+          payload: { data: arr, typeName: listName },
         });
         callback && arr && callback(arr);
       } else {
@@ -133,9 +135,8 @@ export default {
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
       const response = yield call(servicesConfig[name], params || {});
-      const key = key1 ? key1 : 'zhName';
-      const value = value1 ? value1 : 'id';
-      console.log(key1, value1, '=========');
+      const key = key1 || 'zhName';
+      const value = value1 || 'id';
 
       let list =
         response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
@@ -144,22 +145,21 @@ export default {
         key: item[key],
         value: item[value],
       }));
-      console.log(list, name);
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: name },
       });
-      if (callback) callback(list.records[0]);
+      if (callback) callback(list[0]);
     },
 
     *materialNoList({ payload, callback }, { call, put }) {
       const { params, name, materialType } = payload;
       const arr = {
-        H016002: 'listStoneDropDown', //石材
-        H016001: 'listPrincipalMaterialDropDown', //主材
-        H016003: 'listAccessoriesDropDown', //配件
-        H016004: 'listWrapperDropDown', //包装
-        H016005: 'listAuxiliaryMaterialDropDown', //辅材
+        H016002: 'listStoneDropDown', // 石材
+        H016001: 'listPrincipalMaterialDropDown', // 主材
+        H016003: 'listAccessoriesDropDown', // 配件
+        H016004: 'listWrapperDropDown', // 包装
+        H016005: 'listAuxiliaryMaterialDropDown', // 辅材
       };
       const services = servicesConfig[arr[materialType]];
       const response = yield call(services, params);
@@ -242,16 +242,11 @@ export default {
       });
     },
 
-    *setChoosenRowData({ payload }, { put }) {
+    *setChooseData({ payload }, { put }) {
+      const { name,list } = payload;
       yield put({
-        type: 'getChoosenRowData2',
-        payload,
-      });
-    },
-    *setChoosenRowDataSecond({ payload }, { put }) {
-      yield put({
-        type: 'getchoosenRowDataSecond2',
-        payload,
+        type: 'changeState',
+        payload: { data: list, typeName: name },
       });
     },
 
@@ -348,19 +343,6 @@ export default {
       return {
         ...state,
         selectedRowKeysSecond: [...action.payload],
-      };
-    },
-
-    getchoosenRowDataSecond2(state, action) {
-      return {
-        ...state,
-        choosenRowDataSecond: action.payload,
-      };
-    },
-    getChoosenRowData2(state, action) {
-      return {
-        ...state,
-        choosenRowData: action.payload,
       };
     },
 

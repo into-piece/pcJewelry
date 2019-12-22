@@ -107,10 +107,46 @@ let material = [
   },
 ];
 
+let productProcess = [
+  {
+    title: '工序编号',
+    dataIndex: 'workProcessCode',
+    key: 'workProcessCode',
+  },
+  {
+    title: '工序名称',
+    dataIndex: 'zhName',
+    key: 'zhName',
+  },
+  {
+    title: '效率',
+    dataIndex: 'processCapacity',
+    key: 'processCapacity',
+  },
+  {
+    title: '损耗',
+    dataIndex: 'isWastage',
+    key: 'isWastage',
+  },
+  {
+    title: '重量范围',
+    dataIndex: 'weightRange',
+    key: 'weightRange',
+  },
+  {
+    title: '备注',
+    dataIndex: 'remarks',
+    key: 'remarks',
+  },
+];
+
+
 product = product.map(item => ({ ...item, sorter: true }));
 material = material.map(item => ({ ...item, sorter: true }));
+productProcess = productProcess.map(item => ({ ...item, sorter: true }));
 
 export default {
   product,
   material,
+  productProcess
 };

@@ -43,18 +43,23 @@ export const material = [
   { key: '备注', value: 'remarks', noNeed: true },
 ];
 
+const proccess = [
+  { key: '流程名称', value: 'processId', type: 2, list:'flowlistDropDown'},
+]
+
 const productProcess = [
-  { key: '工序编号', value: 'workProcessCode' },
-  { key: '工序名称', value: 'zhName' },
-  { key: '耗损（%）', value: 'isWastage' },
-  { key: '效率（件/小时）', value: 'processCapacity' },
-  { key: '图片', value: 'picPath' },
-  { key: '文档', value: 'workProcessCode' },
-  { key: '备注', value: 'remarks' },
+  { key: '工序编号', value: 'workProcessCode', row: 2 },
+  { key: '工序名称', value: 'zhName', row: 2 },
+  { key: '耗损（%）', value: 'isWastage', row: 2 },
+  { key: '效率（件/小时）', value: 'processCapacity', row: 2 ,number:true},
+  { key: '图片', value: 'picPath', row: 1 ,noNeed:true},
+  { key: '文档', value: 'workProcessCode', row: 1 ,noNeed:true},
+  { key: '备注', value: 'remarks', row: 1 ,noNeed:true},
 ];
 
 export default {
   product,
   material,
+  proccess,
   productProcess,
 };
