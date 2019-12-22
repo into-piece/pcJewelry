@@ -108,23 +108,13 @@ export default {
     *commonOpration({ payload, callback }, { call, put }) {
       const { type, params,name ,listName} = payload;
       const service = name+rType[type];
-
       const response = yield call(servicesConfig[service], params);
-
       if (type === 1) {
+        console.log(payload,response);
         const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
-        const { records } = list;
-        const arr =
-          records && records.length > 0
-            ? records.map(item => ({
-                ...item,
-                key: item.bName,
-                value: item.id,
-              }))
-            : [];
         yield put({
           type: 'changeState',
-          payload: { data: arr, typeName: listName },
+          payload: { data: list, typeName: listName },
         });
         callback && arr && callback(arr);
       } else {
@@ -217,6 +207,7 @@ export default {
         payload: { data: [], typeName: 'selectedRowKeysSecond' },
       });
     },
+
     *clearDetailSecond(_, { put }) {
       yield put({
         type: 'changeState',
@@ -250,12 +241,14 @@ export default {
       });
     },
 
-    *changeSelectedRowKeys({ payload }, { put }) {
+    *changeState({ payload }, { put }) {
+      const {name,data} = payload
       yield put({
-        type: 'changeSelectedRowKeys2',
-        payload,
+        type: 'changeState',
+        payload: { data, typeName: name },
       });
     },
+
     *changeSelectedRowKeysSecond({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeysSecond2',

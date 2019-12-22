@@ -126,6 +126,8 @@ class Index extends Component {
         this.setState({
           selectedProccess: data,
         });
+
+        this.getProccessList(data.id)
       },
     });
   };
@@ -421,8 +423,8 @@ class Index extends Component {
 
   // 删除按钮回调
   handleDelect = () => {
-    const {selectedBom}= this.state
-    const { selectedRowKeysSecond, dispatch ,selectedRowKeys,selectedProccess,selectedProccessRowKeys} = this.props;
+    const {selectedBom,selectedProccess}= this.state
+    const { selectedRowKeysSecond, dispatch ,selectedRowKeys,selectedProccessRowKeys} = this.props;
     const { rightActive, switchMenu } = this.state;
     const notFlowIsProccess = !this.isEditworkFlow&& rightActive === THIRD_TAG
     console.log(selectedBom);
@@ -509,8 +511,8 @@ class Index extends Component {
 
   // 新增||编辑 按钮事件回调
   handleAdd = close => {
-    const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,selectedProccess} = this.props;
-    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist} = this.state;
+    const { form, choosenRowData, choosenRowDataSecond,choosenProccessData} = this.props;
+    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess} = this.state;
     const { resetFields,getFieldValue } = form;
     const materialType = getFieldValue('materialType')
     let params = {};
@@ -638,15 +640,16 @@ class Index extends Component {
 
     let inputarr =rightActive
     const notFlowIsProccess = !this.isEditworkFlow&& rightActive === THIRD_TAG
-    if(!notFlowIsProccess){
+    if(rightActive === THIRD_TAG && this.isEditworkFlow){
       inputarr = 'proccess' 
     }
+    console.log(rightActive,'=======rightActive')
     const content = '';
     const isEdit = modalType === 'edit';
     const { model } = this.props;
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
-    console.log(model, '========');
+    console.log(model,modalInput[inputarr], '========');
 
     return (
       <Form size="small" key="1">

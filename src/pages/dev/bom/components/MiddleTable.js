@@ -55,16 +55,23 @@ const BtnGroup = ({ arr }) => {
     materialList: model.materialList,
     processList: model.processList,
     processDropdown: model.processDropdown,
-    bomlist:model.bomlist
+    bomlist:model.bomlist,
+    choosenProccessData:model.choosenProccessData,
+    selectedProccessRowKeys:model.selectedProccessRowKeys
   };
 })
 class MiddleTable extends Component {
 
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
+    
     // 判断 2/3
     const { dispatch, pagination, onSearch,rightActive } = this.props;
-    const str = type === 1 ? 'choosenRowData': rightActive === THIRD_TAG?'choosenProccessData':'choosenRowDataSecond';
+    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG
+    const choosenSecondRow = isMaterial ? 'choosenRowDataSecond': 'choosenProccessData'
+    const str = type === 1 ? 'choosenRowData': choosenSecondRow
+    console.log(isMaterial,choosenSecondRow,str,'=======');
+
     dispatch({
       type: `${defaultModelName}/setChooseData`,
       payload: {name:str,list:rowData},
@@ -73,13 +80,13 @@ class MiddleTable extends Component {
     if (type === 1) {
       // this.searchSecond.handleReset();
       if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
-      debugger;
-      this.props.getbomlist({ pid: rowData.id });
-    } else {
+        debugger;
+        this.props.getbomlist({ pid: rowData.id });
+      } else {
 
-      if(rightActive === FIRST_TAG){
-        this.props.changeRightActive(SECOND_TAG);
-      }
+        if(rightActive === FIRST_TAG){
+          this.props.changeRightActive(SECOND_TAG);
+        }
       // this.props.changeRightActive();
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -90,12 +97,13 @@ class MiddleTable extends Component {
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
-    const { dispatch } = this.props;
-
-    const str = type === 2 ? 'Second' : '';
+    const { dispatch,rightActive ,selectedRowKeysSecond,selectedProccessRowKeys} = this.props;
+    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG
+    const selectedSecondRowKeys =  isMaterial ? 'selectedRowKeysSecond': 'selectedProccessRowKeys'
+    const  selectedRowArr = type ===1?'selectedRowKeys':selectedSecondRowKeys
     dispatch({
-      type: `${defaultModelName}/changeSelectedRowKeys${str}`,
-      payload: selectedRowKeys,
+      type: `${defaultModelName}/changeState`,
+      payload: { name:selectedRowArr,data:selectedRowKeys},
     });
   };
 
@@ -158,18 +166,18 @@ class MiddleTable extends Component {
       rightActive,
       processDropdown,
       selectedProccess,
-      selectedProccessRowKeys
+      selectedProccessRowKeys,
+      choosenProccessData
     } = props;
     const isthird = rightActive === THIRD_TAG;
     const tablelist = isthird ? processList : materialList;
+    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG
     const menuValue =
-      rightActive === FIRST_TAG || rightActive === SECOND_TAG ? SECOND_TAG : THIRD_TAG;
-
-    console.log(selectedProccess, menuValue,switchMenu,'=======');
-
-
-    const selectedSecondRowKeys =  rightActive === FIRST_TAG || rightActive === SECOND_TAG ? selectedRowKeysSecond: selectedProccessRowKeys
-
+      isMaterial ? SECOND_TAG : THIRD_TAG;
+    const selectedSecondRowKeys =  isMaterial ? selectedRowKeysSecond: selectedProccessRowKeys
+    const choosenSecondRow = isMaterial ? choosenRowDataSecond: choosenProccessData
+    console.log(processList,selectedSecondRowKeys,'=====processList');
+    
     return (
       <div className={styles.view_left_content}>
         <SearchForm
@@ -256,7 +264,7 @@ class MiddleTable extends Component {
             scroll={{ x: 'max-content' }}
             columns={columnsConfig[menuValue]}
             pagination={paginationSecond}
-            selectKey={choosenRowDataSecond.id}
+            selectKey={choosenSecondRow.id}
             handleTableChange={p => {
               onSearch(p, 2);
             }}
