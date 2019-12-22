@@ -219,7 +219,7 @@ export default {
       const response = yield call(listEndCustomerDropDown, data.payload);
       let endCustomerList = response.body.records;
       endCustomerList = endCustomerList.map(({ id, endNo, endShotName }) => {
-        return { value: id, key: endShotName, endShotName };
+        return { value: id, key: endNo, endNo };
       });
       yield put({
         type: 'changeState',

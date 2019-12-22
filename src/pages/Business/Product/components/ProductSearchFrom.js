@@ -59,7 +59,7 @@ class ProductSearchFrom extends Component {
 
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="货号" className={business.from_content_col}>
-              {getFieldDecorator('custoerProductNo')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('customerProductNo')(<Input placeholder="请输入" />)}
 
             </FormItem>
           </Col>
@@ -98,7 +98,7 @@ class ProductSearchFrom extends Component {
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="货号" className={business.from_content_col}>
-              {getFieldDecorator('goodsNo', {
+              {getFieldDecorator('customerProductNo', {
                 initialValue: '',
               })(<Input placeholder="请输入" />)}
             </FormItem>

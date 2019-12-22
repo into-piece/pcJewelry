@@ -20,7 +20,7 @@ export const orderApproveProduct = [
   { 'key': '模具号', 'value': 'mouldNo' },
   { 'key': '成色', 'value': 'productColor' },
   { 'key': '成色重量', 'value': 'finishedWeight'  },
-  { 'key': '客户货号', 'value': 'custoerProductNo'  },
+  { 'key': '客户货号', 'value': 'customerProductNo'  },
 ];
 
 export const orderApproveResult = [

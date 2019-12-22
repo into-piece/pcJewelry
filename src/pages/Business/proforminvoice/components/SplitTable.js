@@ -117,8 +117,8 @@ class SplitTable extends Component {
     },
     {
       title: <div>客户货号</div>,
-      dataIndex: 'custoerProductNo',
-      key: 'custoerProductNo',
+      dataIndex: 'customerProductNo',
+      key: 'customerProductNo',
 
     },
     {

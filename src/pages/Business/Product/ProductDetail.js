@@ -675,7 +675,7 @@ class ProductDetail extends Component {
                     <Description term="编号">{showItem.productNo}</Description>
                     <Description term="类别">{showItem.productTypeName}</Description>
                     <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价" />
+                    {/* <Description term="工价" /> */}
                   </DescriptionList>
                   <span className={business.title_info}>参数详情</span>
                   <Divider className={business.divder} />
@@ -688,7 +688,7 @@ class ProductDetail extends Component {
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
                     <Description term="模具">{showItem.mouldNo}</Description>
-                    <Description term="货号">{showItem.custoerProductNo}</Description>
+                    <Description term="货号">{showItem.customerProductNo}</Description>
                     <Description term="客户">{showItem.customerNo}</Description>
                     <Description term="供应商货号">{showItem.supplierId}</Description>
                     <Description term="供应商">{showItem.supplierProductNo}</Description>
@@ -1400,12 +1400,23 @@ class ProductDetail extends Component {
             <FormItem label="币种" {...this.centerFormLayout}>
               {getFieldDecorator('customerCurrency', {
                 initialValue: current.customerCurrency,
-              })(<Input placeholder="请输入" />)}
+              })(<Dict
+                  dict="H006"
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  style={{ width: 180 }}
+                  content={current.customerCurrency}
+                  placeholder="请输入"
+                />,
+              )}
             </FormItem>
           </div>
           <div className="adddevModal">
             <FormItem label="类别" {...this.centerFormLayout}>
-              {getFieldDecorator('customerCurrency', {
+              {getFieldDecorator('customerCategory', {
                 initialValue: current.customerCategory,
               })(<Input placeholder="请输入" />)}
             </FormItem>
@@ -1418,12 +1429,16 @@ class ProductDetail extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
+          </div>
+
+          <div className="adddevModal" style={{ width: 1200 }}>
             <FormItem label="描述" {...this.centerFormLayout}>
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入描述' }],
                 initialValue: current.productDesc,
-              })(<TextArea placeholder="请输入" />)}
+              })(<TextArea placeholder="请输入" style={{ width: 1040,height:32 }}/>)}
             </FormItem>
+
           </div>
         </Form>
 
@@ -2095,7 +2110,7 @@ class ProductDetail extends Component {
                     <Description term="编号">{showItem.productNo}</Description>
                     <Description term="类别">{showItem.productTypeName}</Description>
                     <Description term="重量">{showItem.finishedWeight}</Description>
-                    <Description term="工价" />
+                    {/* <Description term="工价" /> */}
                   </DescriptionList>
                   <span className={business.title_info}>参数详情</span>
                   <Divider className={business.divder} />
@@ -2107,7 +2122,7 @@ class ProductDetail extends Component {
                     <Description term="成色">{showItem.productColorName}</Description>
                     <Description term="产品来源">{showItem.sourceOfProductName}</Description>
                     <Description term="模具">{showItem.mouldNo}</Description>
-                    <Description term="货号">{showItem.custoerProductNo}</Description>
+                    <Description term="货号">{showItem.customerProductNo}</Description>
                     <Description term="客户">{showItem.customerNo}</Description>
                     <Description term="供应商货号">{showItem.supplierId}</Description>
                     <Description term="供应商">{showItem.supplierProductNo}</Description>

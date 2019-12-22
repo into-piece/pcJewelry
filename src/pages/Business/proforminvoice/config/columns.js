@@ -108,8 +108,8 @@ let piDetail = [
   },
   {
     title: <div className={styles.row_normal2}>客户货号</div>,
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
+    dataIndex: 'customerProductNo',
+    key: 'customerProductNo',
 
   },
   {

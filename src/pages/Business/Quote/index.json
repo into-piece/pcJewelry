@@ -2,13 +2,15 @@
   "headList": [
     { "key": "报价单号", "value": "quoteNumber", "type": 7, "noNeed": true },
     { "key": "报价日期", "value": "quoteDate", "type": 10 },
-    { "key": "类别", "value": "type", "type": 2, "list": "wordbookdropdown", "noNeed": true },
+    { "key": "类别", "value": "type", "type": 2, "list": "wordbookdropdown",
+      "initValue": "H007001",
+      "noNeed": true },
     {
       "key": "紧急程度",
       "value": "emergency",
       "text": "紧急",
       "type": 5,
-      "initValue": 1,
+      "initValue": 0,
       "noNeed": true
     },
     { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
@@ -77,7 +79,7 @@
   ],
 
   "detailList": [
-    { "key": "客户货号", "value": "custoerProductNo", "noNeed": true, "type": 7 },
+    { "key": "客户货号", "value": "customerProductNo", "noNeed": true, "type": 7 },
     { "key": "类别", "value": "productTypeName", "noNeed": true, "type": 7 },
     { "key": "成色名称", "value": "productColorName", "noNeed": true, "type": 7 },
     { "key": "宝石颜色", "value": "gemColorName", "noNeed": true, "type": 7 },
