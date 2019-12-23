@@ -10,6 +10,7 @@ export default {
   'menu.erp.business.product': '产品档案',
   'menu.erp.business.proforminvoice': '产品发票',
   'menu.erp.business.quote': '产品报价',
+  'menu.erp.business.sample': '样品管理',
   'menu.erp.business.receiving': '对账查询',
   'menu.erp.business.specimen': '新款档案',
   'menu.erp.business.report': '数据报表',
@@ -24,6 +25,9 @@ export default {
   'menu.erp.dev.dieSet':'胶膜管理',
   'menu.erp.dev.dieSetChild':'胶膜明细',
   'menu.erp.dev.bom': '产品BOM',
+
+  'menu.erp.purchase': '采购管理',
+  'menu.erp.purchase.supplier': '供应商管理',
 
 
 
