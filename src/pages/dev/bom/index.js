@@ -1149,12 +1149,12 @@ class Index extends Component {
       {
         key: '取消审批',
         fn: cancelVerify,
-        disabled: !selectedBom.id || Number(selectedBom.status) === 0,
+        disabled: !selectedBom.id || ~~selectedBom.status === 0,
       },
       {
         key: '审批BOM',
         fn: verifyBom,
-        disabled: !selectedBom.id || Number(selectedBom.status) === 2,
+        disabled: !selectedBom.id || ~~selectedBom.status === 2,
       },
       {
         key: '导出BOM',
@@ -1218,7 +1218,7 @@ class Index extends Component {
                       handleBomSelectChange={handleBomSelectChange}
                       changeRightActive={changeRightActive}
                       selectedProccess={selectedProccess}
-                    />
+                    /> 
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}
                   <Col lg={8} md={24}>

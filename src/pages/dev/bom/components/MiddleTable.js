@@ -102,7 +102,7 @@ class MiddleTable extends Component {
     const selectedSecondRowKeys =  isMaterial ? 'selectedRowKeysSecond': 'selectedProccessRowKeys'
     const  selectedRowArr = type ===1?'selectedRowKeys':selectedSecondRowKeys
     dispatch({
-      type: `${defaultModelName}/changeState`,
+      type: `${defaultModelName}/changeStateOut`,
       payload: { name:selectedRowArr,data:selectedRowKeys},
     });
   };

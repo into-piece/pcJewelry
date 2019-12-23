@@ -241,7 +241,7 @@ export default {
       });
     },
 
-    *changeState({ payload }, { put }) {
+    *changeStateOut({ payload }, { put }) {
       const {name,data} = payload
       yield put({
         type: 'changeState',
