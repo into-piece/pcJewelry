@@ -221,8 +221,8 @@ class Index extends Component {
           payload: {name:'choosenRowData',list:rowData},
         });
         dispatch({
-          type: `${defaultModelName}/changeSelectedRowKeys`,
-          payload: [id],
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name:'selectedRowKeys',data:[id]},
         });
         this.getbomlist({ pid: id });
       },

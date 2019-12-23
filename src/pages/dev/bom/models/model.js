@@ -82,20 +82,19 @@ export default {
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
       });
-      const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
-
-      const selectRow = list.records && list.records.filter(e => e.id === choosenRowData.id);
-      if (selectRow && selectRow.length > 0) {
-        yield put({
-          type: 'changeState',
-          payload: { data: selectRow[0], typeName: 'choosenRowData' },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: { data: { id: '' }, typeName: 'choosenRowData' },
-        });
-      }
+      // const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
+      // const selectRow = list.records && list.records.filter(e => e.id === choosenRowData.id);
+      // if (selectRow && selectRow.length > 0) {
+      //   yield put({
+      //     type: 'changeState',
+      //     payload: { data: selectRow[0], typeName: 'choosenRowData' },
+      //   });
+      // } else {
+      //   yield put({
+      //     type: 'changeState',
+      //     payload: { data: { id: '' }, typeName: 'choosenRowData' },
+      //   });
+      // }
       if (callback) callback(list.records[0]);
     },
 
