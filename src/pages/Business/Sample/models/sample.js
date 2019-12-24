@@ -15,6 +15,7 @@ const {
   queryProductQuoteHeadersAlreadyDone,
   listProductQuoteDetail,
   deleteProductQuoteHeader,
+  listsampleList,
   listProductNotCreateQoute,
   listMstWordbook,
   listCustomerDropDown,
@@ -27,7 +28,8 @@ export default {
   namespace: 'sample',
 
   state: {
-    listProductType: initData,
+    typeList: initData,
+    sampleList: initData,
     quoteDatialList: initData,
     selectedRowKeys: [], // table1 select
     selectedDetailRowKeys: [], // table2 select
@@ -74,12 +76,32 @@ export default {
       //     ? queryProductQuoteHeadersNotDone
       //     : queryProductQuoteHeadersAlreadyDone;
       const response = yield call(listProductType, params);
-      const typelist =
+      const typeList =
         response.head && response.head.rtnCode === '000000' ? response.body : initData;
 
+      console.log(" effect ",typeList)
       yield put({
         type: 'changeState',
-        payload: { data: typelist, typeName: 'typelist' },
+        payload: { data: typeList, typeName: 'typeList' },
+      });
+    },
+
+ *getSampleList({ payload }, { call, put }) {
+
+      const { params, sendReq } = payload;
+   console.log( " getSampleList params ",params,payload);
+      // const sendType =
+      //   sendReq === 'currentQuote'
+      //     ? queryProductQuoteHeadersNotDone
+      //     : queryProductQuoteHeadersAlreadyDone;
+      const response = yield call(listsampleList, payload);
+      const sampleList =
+        response.head && response.head.rtnCode === '000000' ? response.body : initData;
+
+      console.log(" effect  sample detail ",sampleList)
+      yield put({
+        type: 'changeState',
+        payload: { data: sampleList, typeName: 'sampleList' },
       });
     },
 

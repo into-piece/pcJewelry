@@ -108,7 +108,7 @@ let clientContentColumns = [
     dataIndex: 'zhName',
     key: 'zhName',
 
-    render: (d, i) => i.customerShotName,
+    render: (d, i) => i.zhName,
   },
   {
     title: <div className={styles.row_normal2}>英文名称</div>,
@@ -120,7 +120,7 @@ let clientContentColumns = [
     dataIndex: 'weight',
     key: 'weight',
 
-    render: (d, i) => i.typeName,
+    // render: (d, i) => i.typeName,
   },
 
   {
@@ -128,7 +128,7 @@ let clientContentColumns = [
     dataIndex: 'quantity',
     key: 'quantity',
 
-    render: data => data,
+    // render: data => data,
   },
 
 ];
@@ -291,13 +291,13 @@ class Info extends Component {
     //todo 修改
 
     // dispatch({
-    //   type: 'smaple/getlistCustomerDropDown',
+    //   type: 'sample/getlistCustomerDropDown',
     // });
     //
     // // 类别下拉
     // //todo
     // dispatch({
-    //   type: 'smaple/getwordbookdropdown',
+    //   type: 'sample/getwordbookdropdown',
     // });
 
     //todo  change
@@ -307,7 +307,6 @@ class Info extends Component {
 
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
-    console.log(" get List")
     const { dispatch, pagination, searchParams } = this.props;
     // getDevList
     dispatch({
@@ -315,14 +314,14 @@ class Info extends Component {
       payload: { params: { ...pagination, ...searchParams, ...param }, ...args },
     });
     // dispatch({
-    //   type: `smaple/clearDetailList`,
+    //   type: `sample/clearDetailList`,
     // });
   };
 
   getProduct = args => {
     const { dispatch, productPagination } = this.props;
     dispatch({
-      type: 'smaple/getProductList',
+      type: 'sample/getProductList',
       payload: { params: { ...productPagination, ...args } },
       callback: res => {
         if (res && res.records.length === 1 && args.search) {
@@ -339,7 +338,7 @@ class Info extends Component {
 
     if (isHead) {
       dispatch({
-        type: 'smaple/getcurrencydropdown',
+        type: 'sample/getcurrencydropdown',
       });
     }
 
@@ -424,14 +423,14 @@ class Info extends Component {
       this.getProduct();
       // 获取筛选参数下拉
       dispatch({
-        type: 'smaple/getBrandsList',
+        type: 'sample/getBrandsList',
       });
       dispatch({
-        type: 'smaple/getbasicColourSettingsList',
+        type: 'sample/getbasicColourSettingsList',
       });
     }
     dispatch({
-      type: 'smaple/showProductModalFn',
+      type: 'sample/showProductModalFn',
       payload: type === 1,
     });
   };
@@ -454,13 +453,13 @@ class Info extends Component {
     if (type === 'customerId') {
       // 终客编号下拉
       dispatch({
-        type: 'smaple/getEndCustomerListDropDown',
+        type: 'sample/getEndCustomerListDropDown',
         payload: { key: value },
       });
 
       // 字印编码
       dispatch({
-        type: 'smaple/getMarkinglistDropDown',
+        type: 'sample/getMarkinglistDropDown',
         payload: { key: value },
       });
 
@@ -775,7 +774,7 @@ class Info extends Component {
 
     // 还要清空所选中项
     dispatch({
-      type: 'smaple/changeSelectedRowKeys',
+      type: 'sample/changeSelectedRowKeys',
       payload: [],
     });
 
@@ -840,7 +839,7 @@ class Info extends Component {
         });
         const payload = isLock ? 'historyQuote' : 'currentQuote';
         dispatch({
-          type: 'smaple/getTimeline',
+          type: 'sample/getTimeline',
           payload,
         });
 
@@ -857,28 +856,29 @@ class Info extends Component {
    * params: type 1为审批 2为撤销
    */
   returnLockType = () => {
-    const {
-      selectedRowKeys,
-      selectedDetailRowKeys,
-      quote,
-      rightMenu,
-      typeList,
-      quoteDatialList,
-    } = this.props;
-    const list = rightMenu === 1 ? typeList : quoteDatialList;
-    const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
-    // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
-    if (list && list.records.length === 0) return { name: '审批', disabled: true, type: 1 };
-    const isLock1 = selectedKeys.reduce((res, cur) => {
-      const singleObjcect = list.records.find(subItem => subItem.id === cur);
-      if (singleObjcect) res.push(singleObjcect.status);
-      return res;
-    }, []);
-    const isShenPi = isLock1.every(item => Number(item) === 0); // 是否全是0
-    const isChexiao = isLock1.every(item => Number(item) === 2); // 是否全是2
-    if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
-    if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
-    return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
+    // const {
+    //   selectedRowKeys,
+    //   selectedDetailRowKeys,
+    //   quote,
+    //   rightMenu,
+    //   typeList,
+    //   quoteDatialList,
+    // } = this.props;
+    // const list = rightMenu === 1 ? typeList : quoteDatialList;
+    // const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
+    // // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
+    // if (list && list.records.length === 0) return { name: '审批', disabled: true, type: 1 };
+    // const isLock1 = selectedKeys.reduce((res, cur) => {
+    //   const singleObjcect = list.records.find(subItem => subItem.id === cur);
+    //   if (singleObjcect) res.push(singleObjcect.status);
+    //   return res;
+    // }, []);
+    // const isShenPi = isLock1.every(item => Number(item) === 0); // 是否全是0
+    // const isChexiao = isLock1.every(item => Number(item) === 2); // 是否全是2
+    // if (isShenPi) return { name: '审批', disabled: false, type: 1, isShenPi, isChexiao };
+    // if (isChexiao) return { name: '取消审批', disabled: false, type: 2, isShenPi, isChexiao };
+    // return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
+    return { name: '审批', disabled: true, type: 1, isShenPi:false, isChexiao:false };
   };
 
   // 弹窗确定提交回调
@@ -899,24 +899,20 @@ class Info extends Component {
   // 判断按钮是否禁止 返回boolean
   returnSisabled = tag => {
     const { selectedRowKeys, rightMenu, selectedDetailRowKeys } = this.props;
+    console.log(" selectedRowKeys  = ",selectedRowKeys ," selectedDetailRowKeys = ",selectedDetailRowKeys,selectedDetailRowKeys.length === 0)
     if (tag === 'plus') return false;
     if (tag === 'lock')
       return (
-        (rightMenu === 1 && selectedRowKeys.length === 0) ||
-        (rightMenu === 2 && selectedDetailRowKeys.length === 0) ||
         this.returnLockType().disabled
       );
-    return (
-      (rightMenu === 1 && selectedRowKeys.length === 0) ||
-      (rightMenu === 2 && selectedDetailRowKeys.length === 0)
-    );
+    return selectedDetailRowKeys.length === 0
   };
 
   // 弹窗单选框 回调
   handleRadio = e => {
     const v = e.target.value;
     this.props.dispatch({
-      type: `smaple/getTimeline`,
+      type: `sample/getTimeline`,
       payload: e.target.value,
     });
     this.getList({ sendReq: v });
@@ -926,7 +922,7 @@ class Info extends Component {
   changeRightMenu = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'smaple/changeRightMenu',
+      type: 'sample/changeRightMenu',
       payload: v.target.value,
     });
   };
@@ -947,7 +943,7 @@ class Info extends Component {
   changeChoosenRow = rowData => {
     const { dispatch } = this.props;
     dispatch({
-      type: `smaple/getProductChoosenRowData`,
+      type: `sample/getProductChoosenRowData`,
       payload: rowData,
     });
   };
@@ -1065,7 +1061,7 @@ class Info extends Component {
 
   onSelectChange = selectedRowKeys => {
     this.props.dispatch({
-      type: `smaple/changeProductselectedKeys`,
+      type: `sample/changeProductselectedKeys`,
       payload: selectedRowKeys,
     });
   };
@@ -1465,8 +1461,8 @@ const GetRenderitem = ({ data, type, returnListName }) => {
 @connect(({ loading, sample }) => {
   return {
     sample,
-    listLoading: loading.effects['smaple/getList'],
-    listDetailLoading: loading.effects['smaple/getDetailList'],
+    listLoading: loading.effects['sample/getList'],
+    listDetailLoading: loading.effects['sample/getDetailList'],
     typeList: sample.typeList,
     pagination: sample.pagination,
     choosenRowData: sample.choosenRowData,
@@ -1485,7 +1481,7 @@ class CenterInfo extends Component {
   getDetailList = params => {
     const { dispatch, pagination, choosenRowData } = this.props;
     dispatch({
-      type: `smaple/getDetailList`,
+      type: `sample/getDetailList`,
       payload: {
         params: { quoteHeadId: choosenRowData.id, ...pagination, ...params },
       },
@@ -1495,26 +1491,19 @@ class CenterInfo extends Component {
   // 选中某行表头
   changeChoosenRow = (rowData, type) => {
     const { dispatch, pagination } = this.props;
-    const str = type === 1 ? '' : 'Detail';
+    console.log("==>changeChoosenRow ","param ",rowData)
     dispatch({
-      type: `smaple/getChoosen${str}RowData`,
+      type: `sample/getSampleList`,
       payload: rowData,
     });
-    if (type === 1) {
-      this.getDetailList({ quoteHeadId: rowData.id });
-    } else {
-      dispatch({
-        type: `smaple/changeRightMenu`,
-        payload: 2,
-      });
-    }
+
   };
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
     const str = type === 2 ? 'Detail' : '';
     this.props.dispatch({
-      type: `smaple/changeSelected${str}RowKeys`,
+      type: `sample/changeSelected${str}RowKeys`,
       payload: selectedRowKeys,
     });
   };
@@ -1524,10 +1513,10 @@ class CenterInfo extends Component {
     const { dispatch } = this.props;
     if (type === 1) {
       dispatch({
-        type: `smaple/clearDetailList`,
+        type: `sample/clearDetailList`,
       });
       dispatch({
-        type: `smaple/getChoosenRowData`,
+        type: `sample/getChoosenRowData`,
         payload: {},
       });
     }
@@ -1536,7 +1525,7 @@ class CenterInfo extends Component {
   changeSearchParams = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: `smaple/changeSearchParams`,
+      type: `sample/changeSearchParams`,
       payload: v,
     });
   };
@@ -1544,7 +1533,7 @@ class CenterInfo extends Component {
   changeSearchDetailParams = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: `smaple/changeSearchParams`,
+      type: `sample/changeSearchParams`,
       payload: v,
     });
   };
@@ -1583,7 +1572,7 @@ class CenterInfo extends Component {
         <div className={styles.tableBox}>
           <Table
             columns={clientContentColumns}
-            body={[]}
+            body={typeList}
             changeChoosenRow={record => {
               this.changeChoosenRow(record, 1);
             }}

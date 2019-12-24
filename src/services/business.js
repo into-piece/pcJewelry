@@ -66,7 +66,7 @@ const sampleList = sampleUrls.map(({ name, arr, path }) => (
     {
       key: sampleType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix: `${env}/business.sample/`
+      prefix: `${env}/business/business/sample`
     }
   ))
 ));
@@ -76,7 +76,7 @@ const resultArr = [
   ...piUrlsList.flat(),
   ...piDetailUrlsList.flat(),
   ...sampleList.flat(),
-  { key: 'listProductType', path: '/business/sample/business-sample/listProductType', prefix: `${env}` },// 产品类别
+  { key: 'listProductType', path: '/business/business/sample/business-sample/listProductType', prefix: `${env}` },// 产品类别
   { key: 'listAllPiDetail', path: '/business/business/order/proforma-invoice-detail/listAll', prefix: `${env}` },// PI详情 获取所有
   { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
   { key: 'getTypeByWordbookCode', path: '/business/develop/category/develop-basic-category-set/getTypeByWordbookCode', prefix: `${env}` },// 类别下拉
@@ -84,7 +84,6 @@ const resultArr = [
   { key: 'listMarkingDropDown', path: '/business/business/marking/listMarkingDropDown', prefix: `${env}` },// 字印编码下拉
   { key: 'dropDownRAT', path: '/business/basic/ring-around-the-standard/dropDownRAT', prefix: `${env}` },// 戒围标准下拉
 ];
-
 
 // 请求url配置
 const outPutObject = {};
