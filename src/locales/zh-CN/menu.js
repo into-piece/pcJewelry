@@ -10,7 +10,6 @@ export default {
   'menu.erp.business.product': '产品档案',
   'menu.erp.business.proforminvoice': '产品发票',
   'menu.erp.business.quote': '产品报价',
-  'menu.erp.business.sample': '样品管理',
   'menu.erp.business.receiving': '对账查询',
   'menu.erp.business.specimen': '新款档案',
   'menu.erp.business.report': '数据报表',
@@ -19,17 +18,13 @@ export default {
   'menu.erp.dev.productflow': '生产流程',
   'menu.erp.dev.productProcess': '生产工序',
   'menu.erp.dev.flowCostType': '流程工费',
-  'menu.erp.dev.Raw':'原料档案',
+  'menu.erp.dev.Raw': '原料档案',
   'menu.erp.dev.basic': '基础数据',
-  'menu.erp.dev.mould':'胶膜管理',
-  'menu.erp.dev.dieSet':'胶膜管理',
-  'menu.erp.dev.dieSetChild':'胶膜明细',
+  'menu.erp.dev.mould': '胶膜管理',
+  'menu.erp.dev.dieSet': '胶膜管理',
+  'menu.erp.dev.dieSetChild': '胶膜明细',
   'menu.erp.dev.bom': '产品BOM',
-
-  'menu.erp.purchase': '采购管理',
-  'menu.erp.purchase.supplier': '供应商管理',
-
-
+  'menu.erp.dev.material': '原料信息',
 
   'menu.erp.dev.eliver': '出货',
   'menu.erp.dev.product': '产品',
@@ -38,25 +33,16 @@ export default {
   'menu.erp.dev.receiving': '收付款',
   'menu.erp.dev.specimen': '新款档案',
   'menu.erp.dev.report': '报表',
-  'menu.erp.dev.FinishedProduct':'成品设定',
+  'menu.erp.dev.FinishedProduct': '成品设定',
 
+  'menu.erp.production': '生产',
+  'menu.erp.production.basic': '基础资料',
+  'menu.erp.production.orderApprove': '新订单审批',
 
-
-  'menu.erp.production':'生产',
-  'menu.erp.production.basic':'基础资料',
-  'menu.erp.production.orderApprove':'新订单审批',
-
-
-  'menu.erp.system':'系统',
-  'menu.erp.system.department':'部门设置',
-  'menu.erp.system.personnel':'员工设置',
-  'menu.erp.system.authority':'权限设置',
-
-
-
-
-
-
+  'menu.erp.system': '系统',
+  'menu.erp.system.department': '部门设置',
+  'menu.erp.system.personnel': '员工设置',
+  'menu.erp.system.authority': '权限设置',
 
   'menu.erp.dashboard': 'Dashboard',
   'menu.erp.dashboard.analysis': '分析页',

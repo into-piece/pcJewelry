@@ -24,6 +24,16 @@ export const material = [
   { key: '状态', value: 'status', convert: statusConvert },
 ];
 
+export const productProcess = [
+  { key: '工序编号', value: 'workProcessCode'},
+  { key: '工序名称', value: 'zhName'},
+  { key: '耗损（%）', value: 'isWastage'},
+  { key: '效率（件/小时）', value: 'processCapacity'},
+  { key: '图片', value: 'picPath' },
+  { key: '文档', value: 'workProcessCode' },
+  { key: '备注', value: 'remarks' },
+];
+
 export default {
   product,
   material,

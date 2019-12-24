@@ -7,7 +7,6 @@
  */
 import request from '@/utils/request';
 import { piUrls, piDetailUrls } from './business/piUrls';
-import { sampleUrls, sampleDetailUrls } from './business/sampleUrls';
 import { getCurrentUser } from '../utils/authority';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
@@ -27,15 +26,6 @@ const pidType = {
   2: 'update',
   3: 'delete',
 };
-
-const sampleType = {
-  1: 'list',
-  2: 'update',
-  3: 'delete',
-  4: 'approval',
-  5: 'revoke'
-};
-
 
 // 业务-PI 订单主页
 const piUrlsList = piUrls.map(({ name, arr, path }) => (
@@ -59,24 +49,9 @@ const piDetailUrlsList = piDetailUrls.map(({ name, arr, path }) => (
   ))
 ));
 
-
-// 业务-样品管理 订单主页
-const sampleList = sampleUrls.map(({ name, arr, path }) => (
-  arr.map((item, index) => (
-    {
-      key: sampleType[index + 1] + name,
-      path: `/${path}/${item}`,
-      prefix: `${env}/business/business/sample`
-    }
-  ))
-));
-
-
 const resultArr = [
   ...piUrlsList.flat(),
   ...piDetailUrlsList.flat(),
-  ...sampleList.flat(),
-  { key: 'listProductType', path: '/business/business/sample/business-sample/listProductType', prefix: `${env}` },// 产品类别
   { key: 'listAllPiDetail', path: '/business/business/order/proforma-invoice-detail/listAll', prefix: `${env}` },// PI详情 获取所有
   { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
   { key: 'getTypeByWordbookCode', path: '/business/develop/category/develop-basic-category-set/getTypeByWordbookCode', prefix: `${env}` },// 类别下拉
@@ -84,6 +59,7 @@ const resultArr = [
   { key: 'listMarkingDropDown', path: '/business/business/marking/listMarkingDropDown', prefix: `${env}` },// 字印编码下拉
   { key: 'dropDownRAT', path: '/business/basic/ring-around-the-standard/dropDownRAT', prefix: `${env}` },// 戒围标准下拉
 ];
+
 
 // 请求url配置
 const outPutObject = {};
@@ -97,8 +73,6 @@ resultArr.forEach(({ key, path, prefix }) => {
       data: params,
     });
   };
-
-  console.log(" business request arr ",resultArr)
 });
 
 export default outPutObject;

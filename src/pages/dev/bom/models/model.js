@@ -18,6 +18,7 @@ const {
   bomapprove,
   boomrevoke,
   materialList,
+  processList,
 } = servicesConfig;
 const defaultModelName = 'devbom';
 const rType = {
@@ -43,6 +44,10 @@ export default {
       current: 1,
       size: 10,
     },
+    proccessPagination:{
+      current: 1,
+      size: 10,
+    },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select
     list: initData,
@@ -54,11 +59,14 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-    materialList: [],
-    bomList: [],
-
+    bomlist: [],
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
+    listGemSetProcessDropDown: [], // 镶石工艺下拉
+    materialList: initData,
+    processList: initData,
+    choosenProccessData:{id:''},
+    selectedProccessRowKeys:[],
   },
 
   effects: {
@@ -78,20 +86,23 @@ export default {
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
       });
-      const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
-
-      const selectRow = list.records && list.records.filter(e => e.id === choosenRowData.id);
-      if (selectRow && selectRow.length > 0) {
-        yield put({
-          type: 'changeState',
-          payload: { data: selectRow[0], typeName: 'choosenRowData' },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: { data: { id: '' }, typeName: 'choosenRowData' },
-        });
-      }
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'pagination' },
+      });
+      // const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
+      // const selectRow = list.records && list.records.filter(e => e.id === choosenRowData.id);
+      // if (selectRow && selectRow.length > 0) {
+      //   yield put({
+      //     type: 'changeState',
+      //     payload: { data: selectRow[0], typeName: 'choosenRowData' },
+      //   });
+      // } else {
+      //   yield put({
+      //     type: 'changeState',
+      //     payload: { data: { id: '' }, typeName: 'choosenRowData' },
+      //   });
+      // }
       if (callback) callback(list.records[0]);
     },
 
@@ -101,26 +112,20 @@ export default {
       yield call(service, params);
     },
 
-    *bomOpration({ payload, callback }, { call, put }) {
-      const { type, params } = payload;
-      const service = 'bom' + rType[type];
-
+    *commonOpration({ payload, callback }, { call, put }) {
+      const { type, params,name ,listName} = payload;
+      const service = name+rType[type];
       const response = yield call(servicesConfig[service], params);
-
       if (type === 1) {
+        console.log(payload,response);
         const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
-        const { records } = list;
-        const arr =
-          records && records.length > 0
-            ? records.map(item => ({
-                ...item,
-                key: item.bName,
-                value: item.id,
-              }))
-            : [];
         yield put({
           type: 'changeState',
-          payload: { data: arr, typeName: 'boomList' },
+          payload: { data: list, typeName: listName },
+        });
+        yield put({
+          type: 'changeState',
+          payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'proccessPagination' },
         });
         callback && arr && callback(arr);
       } else {
@@ -130,10 +135,9 @@ export default {
 
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
-      const response = yield call(servicesConfig[name], params);
-      const key = key1 ? key1 : 'zhName';
-      const value = value1 ? value1 : 'id';
-      console.log(key1, value1, '=========');
+      const response = yield call(servicesConfig[name], params || {});
+      const key = key1 || 'zhName';
+      const value = value1 || 'id';
 
       let list =
         response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
@@ -142,22 +146,21 @@ export default {
         key: item[key],
         value: item[value],
       }));
-      console.log(list, name);
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: name },
       });
-      if (callback) callback(list.records[0]);
+      if (callback) callback(list[0]);
     },
 
     *materialNoList({ payload, callback }, { call, put }) {
       const { params, name, materialType } = payload;
       const arr = {
-        H016002: 'listStoneDropDown', //石材
-        H016001: 'listPrincipalMaterialDropDown', //主材
-        H016003: 'listAccessoriesDropDown', //配件
-        H016004: 'listWrapperDropDown', //包装
-        H016005: 'listAuxiliaryMaterialDropDown', //辅材
+        H016002: 'listStoneDropDown', // 石材
+        H016001: 'listPrincipalMaterialDropDown', // 主材
+        H016003: 'listAccessoriesDropDown', // 配件
+        H016004: 'listWrapperDropDown', // 包装
+        H016005: 'listAuxiliaryMaterialDropDown', // 辅材
       };
       const services = servicesConfig[arr[materialType]];
       const response = yield call(services, params);
@@ -167,7 +170,7 @@ export default {
       list = list.map(item => ({
         ...item,
         key: item.zhName,
-        value: item.id,
+        value: item.unitCode,
       }));
       console.log(list, name);
       yield put({
@@ -186,44 +189,25 @@ export default {
         type: 'changeState',
         payload: { data: list, typeName: 'materialList' },
       });
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'paginationSecond' },
+      });
       if (callback) callback(list.records[0]);
     },
 
-    *getListSecond({ payload, callback }, { call, put, select }) {
-      const { type, params } = payload;
-      const response = yield call(servicesConfig[`list${type}`], params);
-      const listSecond =
-        response.head && response.head.rtnCode === '000000' ? response.body : initData;
+    // 原料列表接口
+    *getProccessList({ payload, callback }, { call, put }) {
+      const { params } = payload;
+      const response = yield call(processList, params);
+      const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
-        payload: { data: listSecond, typeName: 'listSecond' },
+        payload: { data: list, typeName: 'processList' },
       });
-      yield put({
-        type: 'changeState',
-        payload: {
-          data: { size: response.body.size, current: response.body.current },
-          typeName: 'paginationSecond',
-        },
-      });
-      const choosenRowDataSecond = yield select(
-        state => state[defaultModelName].choosenRowDataSecond
-      );
-
-      const selectRow =
-        listSecond.records && listSecond.records.filter(e => e.id === choosenRowDataSecond.id);
-      if (selectRow && selectRow.length > 0) {
-        yield put({
-          type: 'changeState',
-          payload: { data: selectRow[0], typeName: 'choosenRowDataSecond' },
-        });
-      } else {
-        yield put({
-          type: 'changeState',
-          payload: { data: { id: '' }, typeName: 'choosenRowDataSecond' },
-        });
-      }
-      if (callback) callback();
+      if (callback) callback(list.records[0]);
     },
+
     *clearListSecond(_, { put }) {
       yield put({
         type: 'changeState',
@@ -238,6 +222,7 @@ export default {
         payload: { data: [], typeName: 'selectedRowKeysSecond' },
       });
     },
+
     *clearDetailSecond(_, { put }) {
       yield put({
         type: 'changeState',
@@ -249,6 +234,18 @@ export default {
       });
     },
 
+    *clearProccess(_, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: { id: '' }, typeName: 'choosenProccessData' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'selectedProccessRowKeys' },
+      });
+    },
+
+    
     *changeSearchParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchParams2',
@@ -263,25 +260,22 @@ export default {
       });
     },
 
-    *setChoosenRowData({ payload }, { put }) {
+    *setChooseData({ payload }, { put }) {
+      const { name,list } = payload;
       yield put({
-        type: 'getChoosenRowData2',
-        payload,
-      });
-    },
-    *setChoosenRowDataSecond({ payload }, { put }) {
-      yield put({
-        type: 'getchoosenRowDataSecond2',
-        payload,
+        type: 'changeState',
+        payload: { data: list, typeName: name },
       });
     },
 
-    *changeSelectedRowKeys({ payload }, { put }) {
+    *changeStateOut({ payload }, { put }) {
+      const {name,data} = payload
       yield put({
-        type: 'changeSelectedRowKeys2',
-        payload,
+        type: 'changeState',
+        payload: { data, typeName: name },
       });
     },
+
     *changeSelectedRowKeysSecond({ payload }, { put }) {
       yield put({
         type: 'changeSelectedRowKeysSecond2',
@@ -369,19 +363,6 @@ export default {
       return {
         ...state,
         selectedRowKeysSecond: [...action.payload],
-      };
-    },
-
-    getchoosenRowDataSecond2(state, action) {
-      return {
-        ...state,
-        choosenRowDataSecond: action.payload,
-      };
-    },
-    getChoosenRowData2(state, action) {
-      return {
-        ...state,
-        choosenRowData: action.payload,
       };
     },
 

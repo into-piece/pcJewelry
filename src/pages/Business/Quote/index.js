@@ -232,7 +232,7 @@ const searchParamsArr = [
 // 报价主页的筛选参数
 const searchDetailParams = [
   { key: '产品编号', value: 'productNo' },
-  { key: '客户货号', value: 'custoerProductNo' },
+  { key: '客户货号', value: 'customerProductNo' },
   { key: '前次工费/克', value: 'lastCount' },
   { key: '实际工费/克', value: 'actualCount' },
 ];

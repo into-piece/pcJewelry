@@ -79,7 +79,7 @@
   ],
 
   "detailList": [
-    { "key": "客户货号", "value": "custoerProductNo", "noNeed": true, "type": 7 },
+    { "key": "客户货号", "value": "customerProductNo", "noNeed": true, "type": 7 },
     { "key": "类别", "value": "productTypeName", "noNeed": true, "type": 7 },
     { "key": "成色名称", "value": "productColorName", "noNeed": true, "type": 7 },
     { "key": "宝石颜色", "value": "gemColorName", "noNeed": true, "type": 7 },

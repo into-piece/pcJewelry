@@ -44,8 +44,8 @@ let product = [
   },
   {
     title: '客户货号',
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
+    dataIndex: 'customerProductNo',
+    key: 'customerProductNo',
   },
   {
     title: '客户简称',
@@ -57,60 +57,96 @@ let product = [
 let material = [
   {
     title: '原料类别',
-    dataIndex: 'productNo',
-    key: 'productNo',
+    dataIndex: 'materialType',
+    key: 'materialType',
   },
   {
     title: '原料编号',
-    dataIndex: 'filmCodeName',
-    key: 'filmCodeName',
+    dataIndex: 'materialNo',
+    key: 'materialNo',
   },
   {
     title: '规格',
-    dataIndex: 'membraneProportion',
-    key: 'membraneProportion',
+    dataIndex: 'specification',
+    key: 'specification',
   },
   {
     title: '单件用量',
-    dataIndex: 'vacuumTime',
-    key: 'vacuumTime',
+    dataIndex: 'singleDosage',
+    key: 'singleDosage',
   },
   {
     title: '单件用重',
-    dataIndex: 'intoFilmPressure',
-    key: 'intoFilmPressure',
+    dataIndex: 'sheetWithHeavy',
+    key: 'sheetWithHeavy',
   },
   {
     title: '效率',
-    dataIndex: 'squeezeFilmPressure',
-    key: 'squeezeFilmPressure',
+    dataIndex: 'processCapacity',
+    key: 'processCapacity',
   },
   {
     title: '领料部门',
-    dataIndex: 'waxInjectionPressure',
-    key: 'waxInjectionPressure',
+    dataIndex: 'acquisitionDepartment',
+    key: 'acquisitionDepartment',
   },
   {
     title: '配膜',
-    dataIndex: 'noteWaxImmediately',
-    key: 'noteWaxImmediately',
+    dataIndex: 'filmMatch',
+    key: 'filmMatch',
   },
   {
     title: '计价类别',
-    dataIndex: 'waxInjectionTime',
-    key: 'waxInjectionTime',
+    dataIndex: 'valuationClass',
+    key: 'valuationClass',
   },
   {
     title: '备注',
-    dataIndex: 'waxWeight',
-    key: 'waxWeight',
+    dataIndex: 'remarks',
+    key: 'remarks',
   },
 ];
 
+let productProcess = [
+  {
+    title: '工序编号',
+    dataIndex: 'workProcessCode',
+    key: 'workProcessCode',
+  },
+  {
+    title: '工序名称',
+    dataIndex: 'zhName',
+    key: 'zhName',
+  },
+  {
+    title: '效率',
+    dataIndex: 'processCapacity',
+    key: 'processCapacity',
+  },
+  {
+    title: '损耗',
+    dataIndex: 'isWastage',
+    key: 'isWastage',
+  },
+  {
+    title: '重量范围',
+    dataIndex: 'weightRange',
+    key: 'weightRange',
+  },
+  {
+    title: '备注',
+    dataIndex: 'remarks',
+    key: 'remarks',
+  },
+];
+
+
 product = product.map(item => ({ ...item, sorter: true }));
 material = material.map(item => ({ ...item, sorter: true }));
+productProcess = productProcess.map(item => ({ ...item, sorter: true }));
 
 export default {
   product,
   material,
+  productProcess
 };

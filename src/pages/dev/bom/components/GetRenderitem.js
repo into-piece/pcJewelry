@@ -66,17 +66,17 @@ const GetRenderitem = ({ data, type, items }) => {
       {images && images.length > 0 && <Divider />}
       {data.id && (
         <DescriptionList className={styles.headerList} size="small" col="1">
-          {arr.map(({ key, value, cName, convert, date, fixed }) => (
-            <Description key={key} term={key}>
-              {date && data[value]
-                ? moment(data[value]).format(date)
+          {arr.map(({ key, value, cName, convert, date, fixed, title }) => (
+            <Description key={title} term={title}>
+              {date && data[key]
+                ? moment(data[key]).format(date)
                 : convert
                 ? convert instanceof Function
-                  ? convert(data[value], fixed)
-                  : convert[data[value]]
+                  ? convert(data[key], fixed)
+                  : convert[data[key]]
                 : cName
-                ? data[`${value}Name`]
-                : `${data[value]}`}
+                ? data[`${key}Name`]
+                : `${data[key]}`}
             </Description>
           ))}
         </DescriptionList>

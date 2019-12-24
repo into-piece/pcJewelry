@@ -209,13 +209,6 @@ export default [
                 routes: [],
               },
               {
-                path: '/erp/business/sample',
-                name: 'sample',
-                icon: 'form',
-                component: './Business/Sample',
-                routes: [],
-              },
-              {
                 path: '/erp/business/proforminvoice',
                 name: 'proforminvoice',
                 icon: 'form',
@@ -328,22 +321,7 @@ export default [
             ],
           },
 
-          //采购
-          {
-              path: '/erp/purchase',
-            icon: 'form',
-            name: 'purchase',
 
-            routes: [
-              {
-                path: '/erp/purchase/supplier',
-                name: 'supplier',
-                icon: 'bulb',
-                component: './purchase/Supplier',
-              },
-            ],
-
-          },
 
           //系统
           {
