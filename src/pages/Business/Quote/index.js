@@ -628,19 +628,6 @@ class Info extends Component {
             }}
           />
         );
-
-      case 11:
-        return (
-          <Radio.Group disabled style={{ width: '100' }}>
-            {arr.map(({ key, value }) => {
-              return (
-                <Radio value={value} key={value}>
-                  {key}
-                </Radio>
-              );
-            })}
-          </Radio.Group>
-        );
       default:
         return (
           <Input
@@ -1120,7 +1107,6 @@ class Info extends Component {
         res.body.records.length > 0
       ) {
         productLineCoefficientQuotation = res.body.records[0].productLineCoefficientQuotation;
-        console.log("call back  q ",res.body.records[0]);
       }
     });
     await geInitializeCountByProductId({
@@ -1303,8 +1289,8 @@ class Info extends Component {
             </Button>,
           ];
 
-    // console.log(choosenRowData, choosenRowData.id);
-    // console.log(productList, '=======');
+    console.log(choosenRowData, choosenRowData.id);
+    console.log(productList, '=======');
 
     return (
       <div className={styles.page}>
