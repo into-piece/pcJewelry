@@ -153,8 +153,16 @@ export default {
       if (callback) callback(list[0]);
     },
 
+    *clearmaterialNoList({ payload }, { put }) {
+      const { name } = payload;
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: name },
+      });
+    },
+
     *materialNoList({ payload, callback }, { call, put }) {
-      const { params, name, materialType } = payload;
+      const { params, name, materialType,listdata } = payload;
       const arr = {
         H016002: 'listStoneDropDown', // 石材
         H016001: 'listPrincipalMaterialDropDown', // 主材
@@ -169,13 +177,12 @@ export default {
         response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
       list = list.map(item => ({
         ...item,
-        key: item.zhName,
-        value: item.unitCode,
+        key: item.materialNo,
+        value: item.materialNo,
       }));
-      console.log(list, name);
       yield put({
         type: 'changeState',
-        payload: { data: list, typeName: name },
+        payload: { data: listdata||list, typeName: name },
       });
       if (callback) callback(list.records[0]);
     },

@@ -4,9 +4,9 @@
  * */
 
 import { Carousel, Card, Divider } from 'antd';
-import DescriptionList from '@/components/DescriptionList';
 import moment from 'moment';
 import Zmage from 'react-zmage';
+import DescriptionList from '@/components/DescriptionList';
 import styles from './GetRenderitem.less';
 import { defaultImages } from '@/utils/utils';
 
@@ -39,7 +39,7 @@ const GetRenderitem = ({ data, type, items }) => {
     ));
   };
   const arr = items[type];
-  console.log(items, type);
+  console.log(data,items, type);
   const images =
     data.pictures &&
     (data.pictures.length === 0 ? defaultImages : data.pictures.flatMap(e => e.picPath));

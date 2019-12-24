@@ -37,4 +37,5 @@ export const productProcess = [
 export default {
   product,
   material,
+  productProcess
 };

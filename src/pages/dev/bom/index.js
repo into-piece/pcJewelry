@@ -39,6 +39,9 @@ import component from '@/locales/en-US/component';
 import columnsConfig from './config/columns';
 import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 
+const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
+const uploadfile = `${priefx}/zuul/business/business/file/uploadFile`
+
 const { Dragger } = Upload;
 const ButtonGroup = Button.Group;
 const { RangePicker } = DatePicker;
@@ -64,6 +67,46 @@ const radioArr = [
   { key: '生产工序', value: THIRD_TAG },
 ];
 
+const UploadFile = ({type,saveFN}) => {
+  const uploadConfig = {
+    name: 'file',
+    multiple: true,
+    action: uploadfile,
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        const {response:{body}} = info.file
+        if(body&&body.records&&body.records.length>0){
+          saveFN({
+            [type]:body.records[0].savePath
+          })
+        }
+        
+        message.success(`${info.file.name} file uploaded successfully.`);
+        
+      } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+  return(
+    <Dragger {...uploadConfig}>
+      <p className="ant-upload-drag-icon">
+        <Icon type="inbox" />
+      </p>
+      <p className="ant-upload-text">Click or drag file to this area to upload</p>
+      <p className="ant-upload-hint">
+        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+        band files
+      </p>
+    </Dragger>
+  )
+ 
+}
+
 @Form.create({ name: 'form1' })
 @connect(({ loading, devbom: model }) => {
   return {
@@ -85,7 +128,8 @@ const radioArr = [
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
     processDropdown: model.processDropdown,
     choosenProccessData:model.choosenProccessData,
-    selectedProccessRowKeys:model.selectedProccessRowKeys
+    selectedProccessRowKeys:model.selectedProccessRowKeys,
+    proccessPagination:model.proccessPagination
   };
 })
 class Index extends Component {
@@ -98,7 +142,7 @@ class Index extends Component {
     // 第二个table选中tab标志 没有tab则冗余
     switchMenu: SECOND_TAG,
     selectedBom: { id: '' },
-    selectedProccess: { processCode: '' },
+    selectedProccess: { processId: '' },
     craftShow: false, // 增加工艺弹窗
     onCraft: { name: '' },
     craftForm: [
@@ -108,6 +152,8 @@ class Index extends Component {
       ],
     ],
   };
+
+  
 
   onCraft = [
     { key: '镶石公艺', title: '镶石公艺', value: '', },
@@ -127,12 +173,12 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
-      payload: { name: 'processDropdown', key1: 'processName', value1: 'processCode', params:{...params,bomId:selectedBom.id}},
+      payload: { name: 'processDropdown', key1: 'processName', value1: 'processId', params:{...params,bomId:selectedBom.id}},
       callback: data => {
         this.setState({
           selectedProccess: data,
         });
-        this.getProccessList(data.id)
+        this.getProccessList({id:data.id})
       },
     });
   };
@@ -244,15 +290,21 @@ class Index extends Component {
 
 
   handleSelectChange = (value, type) => {
-    const { dispatch } = this.props;
+    const { dispatch, form} = this.props;
+    const {setFieldsValue} = form
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
+      setFieldsValue({
+        materialNo:undefined
+      })
+      dispatch({
+        type: `${defaultModelName}/clearmaterialNoList`,
+      });
       // 原料小料
       dispatch({
         type: `${defaultModelName}/getDropdownList`,
         payload: { name: 'getTypeByWordbookCode', params: { key: value } },
       });
-
       dispatch({
         type: `${defaultModelName}/materialNoList`,
         payload: { name: 'materialNoList', materialType: value, params: {} },
@@ -298,6 +350,11 @@ class Index extends Component {
             onChange={v => {
               this.handleSelectChange && this.handleSelectChange(v, value);
             }}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
           >
             {data[list] &&
               data[list].length > 0 &&
@@ -405,8 +462,10 @@ class Index extends Component {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-      case 'edit':
         this.handleAdd(close);
+        break
+      case 'edit':
+        this.handleAdd(close,true);
         break;
       default:
         break;
@@ -432,7 +491,7 @@ class Index extends Component {
       case  THIRD_TAG:
         if(this.isEditworkFlow){
           service = 'workFlow'
-          data = [selectedProccess.processCode]
+          data = [selectedProccess.processId]
         }else{
           service = 'bomProcess'
           data = selectedProccessRowKeys
@@ -471,7 +530,7 @@ class Index extends Component {
         if(this.isEditworkFlow){
           this.getWorkFlowDropdownList()
           this.setState({
-            selectedProccess: { processCode: '' }
+            selectedProccess: { processId: '' }
           })
         }else{
           this.getProccessList()
@@ -531,7 +590,7 @@ class Index extends Component {
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = close => {
+  handleAdd = (close,isEdit) => {
     const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,dispatch} = this.props;
     const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess} = this.state;
     const { resetFields,getFieldValue } = form;
@@ -549,7 +608,8 @@ class Index extends Component {
     //   };
     // }
     if (rightActive === FIRST_TAG) {
-      params = { ...params, pId: choosenRowData.id };
+      params = { ...params, pId: choosenRowData.id};
+      if(isEdit){params.id = selectedBom.id}
     }else if(rightActive === SECOND_TAG && materialType === 'H016002'){
       const Technology = []
       console.log(craftForm);
@@ -566,6 +626,7 @@ class Index extends Component {
         Technology.push({mosaic,efficiency})
       })
       params = { ...params, pId: choosenRowData.id,Technology };
+      if(isEdit){params.id = choosenRowDataSecond.id}
     }
 
     if(rightActive === THIRD_TAG){
@@ -578,6 +639,8 @@ class Index extends Component {
             params[item.value] = Number(params[item.value])
           }
         })
+        // 编辑
+        if(isEdit){params.id = choosenProccessData.id}
       }else{
         params.bomId = selectedBom.id
         inputarr = 'proccess'
@@ -618,7 +681,7 @@ class Index extends Component {
             if(this.isEditworkFlow){
               this.getWorkFlowDropdownList()
               this.setState({
-                selectedProccess: { processCode: '' }
+                selectedProccess: { processId: '' }
               })
             }else{
               this.getProccessList()
@@ -708,7 +771,7 @@ class Index extends Component {
                     break
                   case THIRD_TAG:
                     if(this.isEditworkFlow){
-                      initValue2 = selectedProccess.processCode
+                      initValue2 = selectedProccess.processId
                     }else{
                       initValue2 = choosenProccessData[value]
                     }
@@ -730,18 +793,11 @@ class Index extends Component {
                           fileListFun={list => {
                             this.setState({ filelist: list });
                           }}
-                        />:
-                      // value === ''?
-                      //   <Dragger {...props}>
-                      //     <p className="ant-upload-drag-icon">
-                      //       <Icon type="inbox" />
-                      //     </p>
-                      //     <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                      //     <p className="ant-upload-hint">
-                      //       Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                      //       band files
-                      //     </p>
-                      //   </Dragger>:
+                        />
+                      :
+                      value === 'videoPath'|| value === 'filePath'?
+                          <UploadFile type={value} saveFN={this.setState}/>
+                        :
                         getFieldDecorator(value, {
                           rules: [
                             {
@@ -800,6 +856,11 @@ class Index extends Component {
                         style={{ width: 180 }}
                         placeholder="请选择"
                         value={value || undefined}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={v => {
                           this.craftChange(v, index, subIndex);
                         }}
@@ -1037,11 +1098,11 @@ class Index extends Component {
 
   // 获取生产工序列表
   getProccessList = (params) => {
-    const { dispatch, choosenProccessData } = this.props;
-    console.log(choosenProccessData);
-    
+    const { dispatch, proccessPagination} = this.props;
+    const {selectedProccess} = this.state
     const sendParams = {
-      processId:params && params.id||choosenProccessData.id,
+      ...proccessPagination,
+      processId:params && params.id||selectedProccess && selectedProccess.id,
       ...params
     }
     dispatch({
@@ -1059,8 +1120,8 @@ class Index extends Component {
     const key = isthird ? 'selectedProccess' : 'selectedBom';
     let arr = []
     if(isthird){
-      arr = list.filter(({ processCode }) => processCode === v);
-      this.getProccessList(arr[0])
+      arr = list.filter(({ processId }) => processId === v);
+      this.getProccessList({id:arr[0].id})
     }else{
       arr = list.filter(({ id }) => id === v);
       this.getMaterialList({ BomId: v })
@@ -1227,7 +1288,7 @@ class Index extends Component {
       {
         key: '删除流程',
         fn: deleteProccess,
-        disabled: !selectedProccess.processCode,
+        disabled: !(selectedProccess&&selectedProccess.processId),
       },
     ];
     const opration = rightActive === THIRD_TAG?secondProccessOprationArr:secondOprationArr
