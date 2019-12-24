@@ -44,6 +44,10 @@ export default {
       current: 1,
       size: 10,
     },
+    proccessPagination:{
+      current: 1,
+      size: 10,
+    },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select
     list: initData,
@@ -62,7 +66,7 @@ export default {
     materialList: initData,
     processList: initData,
     choosenProccessData:{id:''},
-    selectedProccessRowKeys:[]
+    selectedProccessRowKeys:[],
   },
 
   effects: {
@@ -81,6 +85,10 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: 'list' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'pagination' },
       });
       // const choosenRowData = yield select(state => state[defaultModelName].choosenRowData);
       // const selectRow = list.records && list.records.filter(e => e.id === choosenRowData.id);
@@ -114,6 +122,10 @@ export default {
         yield put({
           type: 'changeState',
           payload: { data: list, typeName: listName },
+        });
+        yield put({
+          type: 'changeState',
+          payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'proccessPagination' },
         });
         callback && arr && callback(arr);
       } else {
@@ -158,7 +170,7 @@ export default {
       list = list.map(item => ({
         ...item,
         key: item.zhName,
-        value: item.id,
+        value: item.unitCode,
       }));
       console.log(list, name);
       yield put({
@@ -176,6 +188,10 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: 'materialList' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'paginationSecond' },
       });
       if (callback) callback(list.records[0]);
     },
@@ -218,6 +234,18 @@ export default {
       });
     },
 
+    *clearProccess(_, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: { id: '' }, typeName: 'choosenProccessData' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'selectedProccessRowKeys' },
+      });
+    },
+
+    
     *changeSearchParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchParams2',

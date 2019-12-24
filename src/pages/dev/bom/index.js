@@ -15,6 +15,9 @@ import {
   Checkbox,
   DatePicker,
   notification,
+  Upload,
+  Icon,
+  message
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
@@ -34,7 +37,9 @@ import BuildTitle from '@/components/BuildTitle';
 import serviceObj from '@/services/dev';
 import component from '@/locales/en-US/component';
 import columnsConfig from './config/columns';
+import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 
+const { Dragger } = Upload;
 const ButtonGroup = Button.Group;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -79,7 +84,8 @@ const radioArr = [
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
     processDropdown: model.processDropdown,
-    choosenProccessData:model.choosenProccessData
+    choosenProccessData:model.choosenProccessData,
+    selectedProccessRowKeys:model.selectedProccessRowKeys
   };
 })
 class Index extends Component {
@@ -112,21 +118,20 @@ class Index extends Component {
     this.initDrop();
     // 获取初始表单数据
     this.getList();
-    this.getWorkFlowDropdownList();
   }
 
   // 获取生产流程的下拉
-  getWorkFlowDropdownList = () => {
+  getWorkFlowDropdownList = (params) => {
     const { dispatch } = this.props;
+    const {selectedBom} = this.state
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
-      payload: { name: 'processDropdown', key1: 'processName', value1: 'processCode' },
+      payload: { name: 'processDropdown', key1: 'processName', value1: 'processCode', params:{...params,bomId:selectedBom.id}},
       callback: data => {
         this.setState({
           selectedProccess: data,
         });
-
         this.getProccessList(data.id)
       },
     });
@@ -199,7 +204,10 @@ class Index extends Component {
       this.getList({}, params);
     }
     if (table === 2) {
-      this.getListSecond({}, params);
+      this.getMaterialList(params);
+    }
+    if(table === 3){
+      this.getProccessList(params);
     }
   };
 
@@ -234,22 +242,6 @@ class Index extends Component {
     });
   };
 
-  // 第二table获取list
-  getListSecond = (args, param) => {
-    const { dispatch, paginationSecond, searchParamsSecond, choosenRowData } = this.props;
-    const { switchMenu } = this.state;
-    const mainMoldCode = param.mainMoldCode || choosenRowData.id;
-    if (!mainMoldCode) return;
-    // getDevList
-    dispatch({
-      type: `${defaultModelName}/getListSecond`,
-      payload: {
-        type: switchMenu,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, mainMoldCode },
-        ...args,
-      },
-    });
-  };
 
   handleSelectChange = (value, type) => {
     const { dispatch } = this.props;
@@ -424,18 +416,35 @@ class Index extends Component {
   // 删除按钮回调
   handleDelect = () => {
     const {selectedBom,selectedProccess}= this.state
-    const { selectedRowKeysSecond, dispatch ,selectedRowKeys,selectedProccessRowKeys} = this.props;
+    const { selectedRowKeysSecond, dispatch ,selectedProccessRowKeys} = this.props;
     const { rightActive, switchMenu } = this.state;
-    const notFlowIsProccess = !this.isEditworkFlow&& rightActive === THIRD_TAG
-    console.log(selectedBom);
+    let data = ''
+    let service = ''
+    switch(rightActive){
+      case FIRST_TAG:
+        service =  'bom' 
+        data = [selectedBom.id]
+        break
+      case  SECOND_TAG:
+        service =  'bomDt' 
+        data = selectedRowKeysSecond
+        break
+      case  THIRD_TAG:
+        if(this.isEditworkFlow){
+          service = 'workFlow'
+          data = [selectedProccess.processCode]
+        }else{
+          service = 'bomProcess'
+          data = selectedProccessRowKeys
+        }
+        break
 
-    const data = rightActive === FIRST_TAG ?
-      [selectedBom.id]: 
-        rightActive === SECOND_TAG?
-          selectedRowKeysSecond:
-          notFlowIsProccess?
-          selectedProccessRowKeys: [selectedProccess.processCode];
-    const service = rightActive === FIRST_TAG ? 'bom' : rightActive === SECOND_TAG?'bomDt':'';
+      default:
+        break
+    }
+
+    console.log(service,data);
+
     serviceObj[`${service}delete`](data).then(res => {
       const { rtnCode, rtnMsg } = res ? res.head : {};
       if (rtnCode === '000000') {
@@ -443,22 +452,34 @@ class Index extends Component {
           message: '删除成功',
         });
         if (rightActive === FIRST_TAG) {
-          this.getList({ type: rightActive });
-          dispatch({
-            type: `${defaultModelName}/choosenRowData`,
-            payload: { id: '' },
-          });
-          // 清除第二table内容
-          dispatch({
-            type: `${defaultModelName}/clearListScond`,
-          });
-        } else {
-          this.getListSecond({ type: switchMenu }, {});
+          this.getbomlist()
+          this.setState({
+            selectedBom: { id: '' }
+          })
+          return
+        } 
+        if(rightActive === SECOND_TAG){
+          this.getMaterialList()
           // 清除第二table 选中 详情
           dispatch({
             type: `${defaultModelName}/clearDetailSecond`,
           });
+          
+          return
         }
+
+        if(this.isEditworkFlow){
+          this.getWorkFlowDropdownList()
+          this.setState({
+            selectedProccess: { processCode: '' }
+          })
+        }else{
+          this.getProccessList()
+          dispatch({
+            type: `${defaultModelName}/clearProccess`,
+          });
+        }
+      
       }
     });
   };
@@ -511,14 +532,12 @@ class Index extends Component {
 
   // 新增||编辑 按钮事件回调
   handleAdd = close => {
-    const { form, choosenRowData, choosenRowDataSecond,choosenProccessData} = this.props;
+    const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,dispatch} = this.props;
     const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess} = this.state;
     const { resetFields,getFieldValue } = form;
     const materialType = getFieldValue('materialType')
     let params = {};
     let inputarr = rightActive
-    console.log(choosenProccessData);
-    debugger
     const notFlowIsProccess = !this.isEditworkFlow&& rightActive === THIRD_TAG
     // if (rightActive !== FIRST_TAG) {
     //   params = { mainMoldCode: choosenRowData.id };
@@ -593,18 +612,22 @@ class Index extends Component {
             notification.success({
               message: rtnMsg,
             });
-            if (rightActive === FIRST_TAG) {
-              this.getbomlist({ type: rightActive }, {});
-            } else {
-              this.getListSecond({ type: switchMenu }, {});
-            }
+            rightActive === FIRST_TAG && this.getbomlist();
+            rightActive === SECOND_TAG && this.getMaterialList()
 
+            if(this.isEditworkFlow){
+              this.getWorkFlowDropdownList()
+              this.setState({
+                selectedProccess: { processCode: '' }
+              })
+            }else{
+              this.getProccessList()
+              dispatch({
+                type: `${defaultModelName}/clearProccess`,
+              });
+            }
             if (close) this.btnFn('');
             if (close) this.setState({ filelist: [] });
-
-            if (rightActive === 'dieSetChild') {
-              resetFields(['mainMoldNo']);
-            }
           }
         });
       }
@@ -634,7 +657,7 @@ class Index extends Component {
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
     const { choosenRowData, choosenRowDataSecond, form,choosenProccessData } = this.props;
-    const { modalType, rightActive, craftForm,selectedBom } = this.state;
+    const { modalType, rightActive, craftForm,selectedBom,selectedProccess } = this.state;
     const { getFieldDecorator,getFieldValue } = form;
     console.log(craftForm, '=====');
 
@@ -643,14 +666,12 @@ class Index extends Component {
     if(rightActive === THIRD_TAG && this.isEditworkFlow){
       inputarr = 'proccess' 
     }
-    console.log(rightActive,'=======rightActive')
     const content = '';
     const isEdit = modalType === 'edit';
     const { model } = this.props;
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
-    console.log(model,modalInput[inputarr], '========');
-
+    
     return (
       <Form size="small" key="1">
         {addArr &&
@@ -672,13 +693,29 @@ class Index extends Component {
               mType,
               row
             }) => {
-              if (rightActive === 'dieSetChild' && value === 'productNo') {
-                initValue = `${choosenRowData.productNo}()`;
-                // choosenRowDataSecond[value] = choosenRowData.id
-              }
-
               if (mType === 1 && materialType !== 'H016002') {
                 return;
+              }
+              // 判断编辑默认值
+              let initValue2 = ''
+              if(isEdit){
+                switch (rightActive){
+                  case FIRST_TAG:
+                    initValue2 = selectedBom[value]
+                    break
+                  case SECOND_TAG:
+                    initValue2 = choosenRowDataSecond[value]
+                    break
+                  case THIRD_TAG:
+                    if(this.isEditworkFlow){
+                      initValue2 = selectedProccess.processCode
+                    }else{
+                      initValue2 = choosenProccessData[value]
+                    }
+                    break
+                  default:
+                    break
+                }
               }
 
               return (
@@ -693,8 +730,18 @@ class Index extends Component {
                           fileListFun={list => {
                             this.setState({ filelist: list });
                           }}
-                        />
-                       :
+                        />:
+                      // value === ''?
+                      //   <Dragger {...props}>
+                      //     <p className="ant-upload-drag-icon">
+                      //       <Icon type="inbox" />
+                      //     </p>
+                      //     <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                      //     <p className="ant-upload-hint">
+                      //       Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                      //       band files
+                      //     </p>
+                      //   </Dragger>:
                         getFieldDecorator(value, {
                           rules: [
                             {
@@ -702,11 +749,7 @@ class Index extends Component {
                               message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                             },
                           ],
-                          initialValue: isEdit
-                            ? rightActive === FIRST_TAG
-                              ? selectedBom[value]
-                              : choosenRowDataSecond[value]
-                            : initValue || (number ? 0 : undefined),
+                          initialValue :initValue2|| initValue || (number ? 0 : undefined),
                         })(
                           this.returnElement({
                             key,
@@ -875,7 +918,10 @@ class Index extends Component {
       selectedRowKeysSecond,
       choosenRowData,
       choosenRowDataSecond,
+      selectedProccessRowKeys
     } = this.props;
+    console.log(selectedProccessRowKeys);
+    
     const { rightActive, selectedBom } = this.state;
 
     switch (tag) {
@@ -884,17 +930,20 @@ class Index extends Component {
       case 'delete':
         return (
           (FIRST_TAG === rightActive && selectedBom.state === 1) ||
-          (rightActive !== FIRST_TAG && selectedRowKeysSecond.length === 0)
+          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)
         );
       case 'edit':
         return (
           (FIRST_TAG === rightActive && selectedBom.state === 1) ||
-          (rightActive !== FIRST_TAG && selectedRowKeysSecond.length === 0)
+          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)
         );
       default:
         return (
           (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
-          (FIRST_TAG !== rightActive && selectedRowKeysSecond.length === 0)
+          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)
         );
     }
   };
@@ -948,10 +997,10 @@ class Index extends Component {
 
   // 获取原料信息列表
   getMaterialList = params => {
-    const { dispatch } = this.props;
+    const { dispatch,paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
-      payload: { params },
+      payload: { params:{...paginationSecond,...params }},
     });
   };
 
@@ -968,6 +1017,8 @@ class Index extends Component {
           selectedBom,
         });
         this.getMaterialList({ BomId: obj.id });
+        this.getWorkFlowDropdownList({ bomId: obj.id });
+
       }
     });
 
@@ -985,10 +1036,13 @@ class Index extends Component {
   };
 
   // 获取生产工序列表
-  getProccessList = (params={id:''}) => {
+  getProccessList = (params) => {
     const { dispatch, choosenProccessData } = this.props;
+    console.log(choosenProccessData);
+    
     const sendParams = {
-      processId:params.id||choosenProccessData.id,
+      processId:params && params.id||choosenProccessData.id,
+      ...params
     }
     dispatch({
       type: `${defaultModelName}/commonOpration`,
@@ -1039,11 +1093,8 @@ class Index extends Component {
     this.setState({ modalType:'plus' });
   }
 
-  editProccess=()=>{
-    this.setState({ modalType:'edit' });
-  }
-
   deleteProccess =()=>{
+    this.isEditworkFlow = true
      ModalConfirm({
       content: '确定删除吗？',
       onOk: () => {
@@ -1088,7 +1139,7 @@ class Index extends Component {
       craftShow,
       selectedProccess,
     } = state;
-    const { choosenRowData, choosenRowDataSecond, model, form } = props;
+    const { choosenRowData, choosenRowDataSecond, model, form,choosenProccessData } = props;
     const { getFieldDecorator } = form;
     const modalFooter =
       modalType === 'plus'
@@ -1168,16 +1219,10 @@ class Index extends Component {
       },
     ];
 
-    console.log(selectedProccess,'========')
     const secondProccessOprationArr = [
       {
         key: '新增流程',
         fn: addProccess,
-      },
-      {
-        key: '编辑流程',
-        fn: editProccess,
-        disabled: !selectedProccess.processCode,
       },
       {
         key: '删除流程',
@@ -1185,13 +1230,8 @@ class Index extends Component {
         disabled: !selectedProccess.processCode,
       },
     ];
-
     const opration = rightActive === THIRD_TAG?secondProccessOprationArr:secondOprationArr
-
-
     const isthird = rightActive === THIRD_TAG;
-
-    console.log(this.props);
 
     return (
       <div className={styles.page}>
@@ -1265,7 +1305,7 @@ class Index extends Component {
                             FIRST_TAG === rightActive
                               ? choosenRowData
                               : isthird
-                              ? ''
+                              ? choosenProccessData
                               : choosenRowDataSecond
                           }
                           type={rightActive}

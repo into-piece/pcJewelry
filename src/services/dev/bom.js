@@ -72,13 +72,13 @@ const extraArr = [
   },
   {
     key: 'processDropdown',
-    path: '/listDropDown',
-    prefix1: `${env  }/business/develop/production/production-process-relation`,
+    path: '/list',
+    prefix1: `${env}/business/develop.bom/develop-bom-work-flow`,
   },
   {
     key: 'flowlistDropDown',
     path: '/listDropDown ',
-    prefix1: `${env  }/business/develop/production/production-flow`,
+    prefix1: `${env}/business/develop/production/production-flow`,
   },
    
 ];

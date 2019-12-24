@@ -53,7 +53,7 @@ const productProcess = [
   { key: '耗损（%）', value: 'isWastage', row: 2 },
   { key: '效率（件/小时）', value: 'processCapacity', row: 2 ,number:true},
   { key: '图片', value: 'picPath', row: 1 ,noNeed:true},
-  { key: '文档', value: 'workProcessCode', row: 1 ,noNeed:true},
+  // { key: '文档', value: 'workProcessCode', row: 1 ,noNeed:true},
   { key: '备注', value: 'remarks', row: 1 ,noNeed:true},
 ];
 

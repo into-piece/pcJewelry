@@ -57,7 +57,8 @@ const BtnGroup = ({ arr }) => {
     processDropdown: model.processDropdown,
     bomlist:model.bomlist,
     choosenProccessData:model.choosenProccessData,
-    selectedProccessRowKeys:model.selectedProccessRowKeys
+    selectedProccessRowKeys:model.selectedProccessRowKeys,
+    proccessPagination: model.proccessPagination
   };
 })
 class MiddleTable extends Component {
@@ -167,7 +168,8 @@ class MiddleTable extends Component {
       processDropdown,
       selectedProccess,
       selectedProccessRowKeys,
-      choosenProccessData
+      choosenProccessData,
+      proccessPagination
     } = props;
     const isthird = rightActive === THIRD_TAG;
     const tablelist = isthird ? processList : materialList;
@@ -263,10 +265,10 @@ class MiddleTable extends Component {
           <Table
             scroll={{ x: 'max-content' }}
             columns={columnsConfig[menuValue]}
-            pagination={paginationSecond}
+            pagination={isMaterial?paginationSecond:proccessPagination}
             selectKey={choosenSecondRow.id}
-            handleTableChange={p => {
-              onSearch(p, 2);
+            handleTableChange={p=>{
+              onSearch(p,isMaterial?2:3)
             }}
             selectedRowKeys={selectedSecondRowKeys}
             body={tablelist}
