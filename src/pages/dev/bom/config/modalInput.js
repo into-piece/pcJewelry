@@ -1,7 +1,7 @@
 export const product = [{ key: 'BOM名称', value: 'bName', type: 1 }];
 
 export const material = [
-  { key: 'bom名称', value: 'BomId', type: 2, list: 'bomlist' },
+  { key: 'bom名称', value: 'bomId', type: 2, list: 'bomlist' },
   { key: '原料类别', value: 'materialType', type: 2, list: 'listMstWordbook' },
   { key: '模具编号', value: 'modelNo', type: 2, list: 'listFilmSettingsDropDown' },
   { key: '模比', value: 'modulusRatio' },

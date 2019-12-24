@@ -67,46 +67,6 @@ const radioArr = [
   { key: '生产工序', value: THIRD_TAG },
 ];
 
-const UploadFile = ({type,saveFN}) => {
-  const uploadConfig = {
-    name: 'file',
-    multiple: true,
-    action: uploadfile,
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        const {response:{body}} = info.file
-        if(body&&body.records&&body.records.length>0){
-          saveFN({
-            [type]:body.records[0].savePath
-          })
-        }
-        
-        message.success(`${info.file.name} file uploaded successfully.`);
-        
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-  return(
-    <Dragger {...uploadConfig}>
-      <p className="ant-upload-drag-icon">
-        <Icon type="inbox" />
-      </p>
-      <p className="ant-upload-text">Click or drag file to this area to upload</p>
-      <p className="ant-upload-hint">
-        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-        band files
-      </p>
-    </Dragger>
-  )
- 
-}
-
 @Form.create({ name: 'form1' })
 @connect(({ loading, devbom: model }) => {
   return {
@@ -151,6 +111,8 @@ class Index extends Component {
         { key: '效率', title: '效率', value: '' },
       ],
     ],
+    videoPath:'',
+    filePath:''
   };
 
   
@@ -164,6 +126,49 @@ class Index extends Component {
     this.initDrop();
     // 获取初始表单数据
     this.getList();
+  }
+
+
+
+  uploadFile = (type) => {
+    const uploadConfig = {
+      name: 'file',
+      multiple: true,
+      action: uploadfile,
+      onChange:(info)=> {
+        const { status } = info.file;
+        if (status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+          const {response:{body}} = info.file
+          if(body&&body.records&&body.records.length>0){
+            console.log(type,body,body.records[0],body.records[0],body.records[0].savePath);
+            this.setState({
+              [type]:body.records[0].savePath
+            })
+          }
+          
+          message.success(`${info.file.name} file uploaded successfully.`);
+          
+        } else if (status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+    };
+    return(
+      <Dragger {...uploadConfig}>
+        <p className="ant-upload-drag-icon">
+          <Icon type="inbox" />
+        </p>
+        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+        <p className="ant-upload-hint">
+          Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+          band files
+        </p>
+      </Dragger>
+    )
+   
   }
 
   // 获取生产流程的下拉
@@ -345,6 +350,7 @@ class Index extends Component {
       case 2:
         return (
           <Select
+            allowClear
             style={{ width: 180 }}
             placeholder="请选择"
             onChange={v => {
@@ -592,7 +598,7 @@ class Index extends Component {
   // 新增||编辑 按钮事件回调
   handleAdd = (close,isEdit) => {
     const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,dispatch} = this.props;
-    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess} = this.state;
+    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess,filePath,videoPath} = this.state;
     const { resetFields,getFieldValue } = form;
     const materialType = getFieldValue('materialType')
     let params = {};
@@ -639,6 +645,8 @@ class Index extends Component {
             params[item.value] = Number(params[item.value])
           }
         })
+        params.videoPath = videoPath
+        params.filePath = filePath
         // 编辑
         if(isEdit){params.id = choosenProccessData.id}
       }else{
@@ -796,7 +804,7 @@ class Index extends Component {
                         />
                       :
                       value === 'videoPath'|| value === 'filePath'?
-                          <UploadFile type={value} saveFN={this.setState}/>
+                        this.uploadFile(value)
                         :
                         getFieldDecorator(value, {
                           rules: [
@@ -847,12 +855,12 @@ class Index extends Component {
         {craftForm.map((item, index) => (
           <div style={{ width: '100%', display: 'flex' }}>
             {item.map(({ key, value }, subIndex) => {
-              console.log(key, value);
               return (
                 <div className="addModal" key={key}>
                   <CraftRow name={key}>
                     {subIndex === 0 ? (
                       <Select
+                        allowClear
                         style={{ width: 180 }}
                         placeholder="请选择"
                         value={value || undefined}
