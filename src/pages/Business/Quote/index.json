@@ -86,21 +86,10 @@
     { "key": "电镀颜色", "value": "platingColorName", "noNeed": true, "type": 7 },
     { "key": "计量单位", "value": "unitOfMeasurementName", "type": 7, "noNeed": true },
     { "key": "重量单位", "value": "unitOfWeightName", "type": 7, "noNeed": true },
-    {
-      "key": "是否计石重",
-      "value": "isWeighStones",
-      "type": 6,
-      "arr": [
-        { "key": "是", "value": "H009001" },
-        { "key": "否", "value": "H009002" }
-      ],
-      "initValue": "H009001"
-    },
     { "key": "石材重量", "value": "stonesWeight", "noNeed": true, "number": true },
     { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
     { "key": "成品重量", "value": "finishedWeight", "number": true },
-    { "key": "产品长度", "value": "productLength", "noNeed": true, "number": true },
-    { "key": "长度描述", "value": "lengthDescription", "noNeed": true },
+    { "key": "规格", "value": "specification", "noNeed": true, "number": true,"type": 7 },
     { "key": "长度单位", "value": "unitOfLengthName", "noNeed": true, "type": 7 },
     { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
@@ -152,8 +141,8 @@
       "noNeed": true,
       "priceUnit": 1
     },
-    { "key": "单价", "value": "price", "number": true, "priceUnit": 1 },
-    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1 },
+    { "key": "单价", "value": "price", "number": true, "priceUnit": 1 ,"type": 7},
+    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1, "type": 7},
     { "key": "报价数量", "value": "qty", "number": true },
     {
       "key": "报价金额",
