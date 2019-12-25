@@ -19,8 +19,8 @@ let product = [
   },
   {
     title: '颜色名称',
-    dataIndex: 'createTime',
-    key: 'createTime',
+    dataIndex: 'gemColorName',
+    key: 'gemColorName',
   },
   {
     title: '成色名称',
@@ -39,8 +39,8 @@ let product = [
   },
   {
     title: '客户编号',
-    dataIndex: 'customerId',
-    key: 'customerId',
+    dataIndex: 'customerNo',
+    key: 'customerNo',
   },
   {
     title: '客户货号',
@@ -57,8 +57,8 @@ let product = [
 let material = [
   {
     title: '原料类别',
-    dataIndex: 'materialType',
-    key: 'materialType',
+    dataIndex: 'materialTypeName',
+    key: 'materialTypeName',
   },
   {
     title: '原料编号',
@@ -87,8 +87,8 @@ let material = [
   },
   {
     title: '领料部门',
-    dataIndex: 'acquisitionDepartment',
-    key: 'acquisitionDepartment',
+    dataIndex: 'acquisitionDepartmentName',
+    key: 'acquisitionDepartmentName',
   },
   {
     title: '配膜',
