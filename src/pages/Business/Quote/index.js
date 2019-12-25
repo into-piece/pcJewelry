@@ -607,7 +607,7 @@ class Info extends Component {
       case 7:
         return <Input disabled style={{ width: '100' }} placeholder="自动带出" />;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea rows={1} placeholder="请输入" style={{width:820}} />;
       case 9:
         return (
           <RangePicker
