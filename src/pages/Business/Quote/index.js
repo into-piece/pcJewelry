@@ -1071,7 +1071,7 @@ class Info extends Component {
     const {
       id,
       productNo,
-      custoerProductNo,
+      customerProductNo,
       productTypeName,
       gemColorName,
       platingColorName,
@@ -1150,7 +1150,7 @@ class Info extends Component {
       productId: id,
       productNo,
       productColorName,
-      custoerProductNo,
+      customerProductNo,
       productTypeName,
       productType,
       gemColorName,
