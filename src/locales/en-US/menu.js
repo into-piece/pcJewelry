@@ -51,7 +51,11 @@ export default {
   'menu.erp.dev.Product': 'Product',
   'menu.erp.dev.Proform Invoice': 'Proform Invoice',
   'menu.erp.dev.Quote': 'Quote',
+  'menu.erp.business.sample': 'Sample',
   'menu.erp.dev.Receiving': 'Receiving',
   'menu.erp.dev.Specimen': 'Specimen',
   'menu.erp.dev.Report': 'Report',
+
+  'menu.erp.purchase': 'Purchase Manager',
+  'menu.erp.purchase.supplier': 'Supplier Manager',
 };
