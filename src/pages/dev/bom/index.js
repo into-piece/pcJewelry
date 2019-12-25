@@ -89,7 +89,8 @@ const radioArr = [
     processDropdown: model.processDropdown,
     choosenProccessData:model.choosenProccessData,
     selectedProccessRowKeys:model.selectedProccessRowKeys,
-    proccessPagination:model.proccessPagination
+    proccessPagination:model.proccessPagination,
+    materialNoList:model.materialNoList
   };
 })
 class Index extends Component {
@@ -295,7 +296,7 @@ class Index extends Component {
 
 
   handleSelectChange = (value, type) => {
-    const { dispatch, form} = this.props;
+    const { dispatch, form,materialNoList} = this.props;
     const {setFieldsValue} = form
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
@@ -314,6 +315,26 @@ class Index extends Component {
         type: `${defaultModelName}/materialNoList`,
         payload: { name: 'materialNoList', materialType: value, params: {} },
       });
+    }
+    if (type === 'materialNo') {
+      const {
+        zhName,
+        enName,
+        specification,
+        valuationClass,
+        measureUnit,
+        weightUnit,
+        inventoryWeight
+      } = materialNoList
+      setFieldsValue({
+        zhName,
+        enName,
+        specification,
+        valuationClass,
+        measureUnit,
+        weightUnit,
+        inventoryWeight,
+      })
     }
   };
 
