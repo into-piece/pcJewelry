@@ -153,11 +153,10 @@ export default {
       if (callback) callback(list[0]);
     },
 
-    *clearmaterialNoList({ payload }, { put }) {
-      const { name } = payload;
+    *clearmaterialNoList( {payload}, { put }) {
       yield put({
         type: 'changeState',
-        payload: { data: [], typeName: name },
+        payload: { data: [], typeName: 'materialNoList' },
       });
     },
 
