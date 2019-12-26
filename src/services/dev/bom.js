@@ -37,27 +37,27 @@ const extraArr = [
   },
   {
     key: 'listStoneDropDown',
-    path: '/listStoneDropDown',
+    path: '/list',
     prefix1: `${env  }/business/develop/basic/stone`,
   },
   {
     key: 'listPrincipalMaterialDropDown',
-    path: '/listPrincipalMaterialDropDown',
+    path: '/list',
     prefix1: `${env  }/business/develop/basic/principal-material`,
   },
   {
     key: 'listAccessoriesDropDown',
-    path: '/listAccessoriesDropDown',
+    path: '/list',
     prefix1: `${env  }/business/develop/basic/accessories`,
   },
   {
     key: 'listWrapperDropDown',
-    path: '/listWrapperDropDown',
+    path: '/list',
     prefix1: `${env  }/business/develop/basic/wrapper`,
   },
   {
     key: 'listAuxiliaryMaterialDropDown',
-    path: '/listAuxiliaryMaterialDropDown',
+    path: '/list',
     prefix1: `${env  }/business/develop/basic/auxiliary-material`,
   },
   {
@@ -80,6 +80,10 @@ const extraArr = [
     path: '/listDropDown ',
     prefix1: `${env}/business/develop/production/production-flow`,
   },
-   
+  {
+    key: 'listBasicMeasureUnitDropDown',
+    path: '/listBasicMeasureUnitDropDown ',
+    prefix1: `${env}/business/develop/basic/measure-unit/`,
+  },
 ];
 export default { serviceArr, extraArr };

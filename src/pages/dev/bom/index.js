@@ -38,6 +38,7 @@ import serviceObj from '@/services/dev';
 import component from '@/locales/en-US/component';
 import columnsConfig from './config/columns';
 import ThemeColor from '@/components/SettingDrawer/ThemeColor';
+import SelectMaterialNo from './components/SelectMaterialNo'
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
 const uploadfile = `${priefx}/zuul/business/business/file/uploadFile`
@@ -90,7 +91,10 @@ const radioArr = [
     choosenProccessData:model.choosenProccessData,
     selectedProccessRowKeys:model.selectedProccessRowKeys,
     proccessPagination:model.proccessPagination,
-    materialNoList:model.materialNoList
+    materialNoList:model.materialNoList,
+    materialNoChoosenRowData:model.materialNoChoosenRowData,
+    materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
+    materialSelectedKeys:model.materialSelectedKeys
   };
 })
 class Index extends Component {
@@ -113,7 +117,8 @@ class Index extends Component {
       ],
     ],
     videoPath:'',
-    filePath:''
+    filePath:'',
+    showMaterialNoModal:false
   };
 
   
@@ -128,8 +133,6 @@ class Index extends Component {
     // 获取初始表单数据
     this.getList();
   }
-
-
 
   uploadFile = (type) => {
     const uploadConfig = {
@@ -192,7 +195,7 @@ class Index extends Component {
   initDrop = () => {
     const { dispatch } = this.props;
     const { rightActive } = this.state;
-    // // 产品编号下拉
+    // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
     //   payload: { params: {}, listName: 'listDieSetSubDropDown' },
@@ -238,6 +241,9 @@ class Index extends Component {
         },
         {
           name: 'listDeptDropDown',
+        },
+        {
+          name: 'listBasicMeasureUnitDropDown',
         },
       ];
 
@@ -317,6 +323,9 @@ class Index extends Component {
       });
     }
     if (type === 'materialNo') {
+      console.log(materialNoList,'=====');
+      const selectedArr  = materialNoList.filter(item=>item.materialNo === value)
+      const chooseData  = selectedArr&&selectedArr.length>0&&selectedArr[0]
       const {
         zhName,
         enName,
@@ -325,7 +334,7 @@ class Index extends Component {
         measureUnit,
         weightUnit,
         inventoryWeight
-      } = materialNoList
+      } = chooseData
       setFieldsValue({
         zhName,
         enName,
@@ -394,17 +403,15 @@ class Index extends Component {
         );
       case 3:
         return (
-          <p style={{ maxWidth: 180 }}>
-            {' '}
-            {form.getFieldValue(value) || ''}{' '}
+           <p>
+            {form.getFieldValue(value) || ''}
             <span
               style={{ color: '#40a9ff', cursor: 'pointer' }}
               onClick={() => {
-                this[clickFn](1);
+                this.showMaterialModalFunc(1);
               }}
             >
-              {' '}
-              {text}
+              选择原料编号
             </span>
           </p>
         );
@@ -636,24 +643,30 @@ class Index extends Component {
     // }
     if (rightActive === FIRST_TAG) {
       params = { ...params, pId: choosenRowData.id};
-      if(isEdit){params.id = selectedBom.id}
-    }else if(rightActive === SECOND_TAG && materialType === 'H016002'){
-      const Technology = []
-      console.log(craftForm);
-      craftForm.forEach(item=>{
-        let mosaic = ''
-        let efficiency = ''
-        item.forEach(({value},index)=>{
-          if(index === 0){
-            mosaic = value
-          }else{
-            efficiency = value
-          }
+      if(isEdit){
+        debugger
+        params.id = selectedBom.id
+      }
+    }else if(rightActive === SECOND_TAG ) {
+      params.id = choosenRowDataSecond.id
+      if(materialType === 'H016002'){
+        const Technology = []
+        console.log(craftForm);
+        craftForm.forEach(item=>{
+          let mosaic = ''
+          let efficiency = ''
+          item.forEach(({value},index)=>{
+            if(index === 0){
+              mosaic = value
+            }else{
+              efficiency = value
+            }
+          })
+          Technology.push({mosaic,efficiency})
         })
-        Technology.push({mosaic,efficiency})
-      })
-      params = { ...params, pId: choosenRowData.id,Technology };
-      if(isEdit){params.id = choosenRowDataSecond.id}
+        params = { ...params, pId: choosenRowData.id,Technology };
+        if(isEdit){params.id = choosenRowDataSecond.id}
+      }
     }
 
     if(rightActive === THIRD_TAG){
@@ -763,6 +776,7 @@ class Index extends Component {
     const { model } = this.props;
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
+    const materialNo = getFieldValue('materialNo')
     
     return (
       <Form size="small" key="1">
@@ -1168,7 +1182,7 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
-      payload: { name: 'flowlistDropDown', key1: 'flowName', value1: 'id' },
+      payload: { name: 'flowlistDropDown', key1: 'flowName', value1: 'id',params:{flowClass: 'H017002'} },
       // callback: data => {
       //   this.setState({
       //     selectedProccess: data,
@@ -1192,6 +1206,52 @@ class Index extends Component {
       },
     });
   }
+
+    // 控制产品弹窗 type = 1出现
+    showMaterialModalFunc = (type = 1) => {
+      const { dispatch } = this.props;
+      if (type === 1) {
+        
+        // this.getProduct();
+  
+        // 获取筛选参数下拉
+        dispatch({
+          type: 'quote/getBrandsList',
+        });
+        dispatch({
+          type: 'quote/getbasicColourSettingsList',
+        });
+      }
+      this.setState({
+        showMaterialNoModal: type === 1,
+      });
+    };
+
+  handleMaterialNoOk = () => {
+    this.showMaterialModalFunc()
+  }
+
+  handleMaterialNoCancel = () => {
+    this.showMaterialModalFunc()
+  }
+
+   // 选中某行表头
+   changeMaterialChoosenRow = rowData => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `quote/getMaterialNoChoosenRowData`,
+      payload: rowData,
+    });
+  };
+
+
+  onMaterialSelectChange = selectedRowKeys => {
+    this.props.dispatch({
+      type: `quote/changeProductselectedKeys`,
+      payload: selectedRowKeys,
+    });
+  };
+
 
   render() {
     const {
@@ -1218,7 +1278,11 @@ class Index extends Component {
       craftInput,
       addProccess,
       editProccess,
-      deleteProccess
+      deleteProccess,
+      handleMaterialNoOk,
+      handleMaterialNoCancel,
+      changeMaterialChoosenRow,
+      onMaterialSelectChange
     } = this;
     const {
       modalType,
@@ -1228,8 +1292,21 @@ class Index extends Component {
       selectedBom,
       craftShow,
       selectedProccess,
+      showMaterialNoModal
     } = state;
-    const { choosenRowData, choosenRowDataSecond, model, form,choosenProccessData } = props;
+    const { 
+      choosenRowData, 
+      choosenRowDataSecond, 
+      model, 
+      form,
+      choosenProccessData, 
+      materialNoList,
+      materialNoPagination,
+      bomselectedKeys,
+      materialNoChoosenRowData,
+      materialNoListLoading,
+      materialSelectedKeys
+    } = props;
     const { getFieldDecorator } = form;
     const modalFooter =
       modalType === 'plus'
@@ -1399,7 +1476,7 @@ class Index extends Component {
                               : choosenRowDataSecond
                           }
                           type={rightActive}
-                          items={columnsConfig}
+                          items={showItem}
                         />
                       </div>
                       {/*  */}
@@ -1456,6 +1533,37 @@ class Index extends Component {
             {getModalContent()}
           </Modal>
         )}
+
+        <Modal
+          title={<BuildTitle title="选择原料编号" />}
+          maskClosable={false}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={handleMaterialNoOk}
+          visible={showMaterialNoModal}
+          onCancel={handleMaterialNoCancel}
+          zIndex={1002}
+        >
+          <SelectMaterialNo
+            list={materialNoList}
+            // productSearchParams={productSearchParams}
+            pagination={materialNoPagination}
+            returnElement={returnElement}
+            source={model}
+            selectedRowKeys={materialSelectedKeys}
+            changeChoosenRow={changeMaterialChoosenRow}
+            choosenRowData={materialNoChoosenRowData}
+            onSelectChange={onMaterialSelectChange}
+            listLoading={materialNoListLoading}
+            onSearch={this.getMaterialList}
+            changeProductSearch={args => {
+              // search 看看搜索完要不要做点处理
+              this.getMaterialList({ ...args, search: true });
+            }}
+          />
+        </Modal>
       </div>
     );
   }

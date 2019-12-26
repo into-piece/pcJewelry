@@ -67,6 +67,9 @@ export default {
     processList: initData,
     choosenProccessData:{id:''},
     selectedProccessRowKeys:[],
+    materialNoList:[],
+    materialNoChoosenRowData:{id:''},
+    materialSelectedKeys:[]
   },
 
   effects: {
@@ -146,6 +149,29 @@ export default {
         key: item[key],
         value: item[value],
       }));
+
+      // 计量单位和重量单位 都是由basicmeasuer list来的
+      if(name === 'listBasicMeasureUnitDropDown'){
+        const list1 = list.map(item => ({
+          ...item,
+          key: item[key],
+          value: item[value],
+        }));
+        yield put({
+          type: 'changeState',
+          payload: { data: list1, typeName: 'weightUnitList'},
+        });
+        const list2 = list.map(item => ({
+          ...item,
+          key: item[key],
+          value: item[value],
+        }));
+        yield put({
+          type: 'changeState',
+          payload: { data: list2, typeName: 'countist' },
+        });
+        return
+      }
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: name },

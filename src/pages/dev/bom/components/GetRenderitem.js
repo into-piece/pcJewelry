@@ -63,19 +63,19 @@ const GetRenderitem = ({ data, type, items }) => {
         {getImages(images)}
       </Carousel>}
       <DescriptionList className={styles.headerList} size="small" col="1">
-        {arr.map(({ key, value, cName, convert, date, fixed, title }) => {
+        {arr.map(({ key, value, cName, convert, date, fixed }) => {
             const showdata = date && data[key]
             ? moment(data[key]).format(date)
             : convert
             ? convert instanceof Function
-              ? convert(data[key], fixed)
-              : convert[data[key]]
+              ? convert(data[value], fixed)
+              : convert[data[value]]
             : cName
-            ? data[`${key}Name`]
-            : `${data[key]}`
+            ? data[`${value}Name`]
+            : `${data[value]}`
             if(showdata!=='undefined'&&showdata!=='null'&&showdata){
             return(
-              <Description key={title} term={title}>
+              <Description key={key} term={key}>
                 {showdata||''}
               </Description>
           )}return false
@@ -85,6 +85,41 @@ const GetRenderitem = ({ data, type, items }) => {
     
       {images && images.length > 0 && <Divider />}
  
+      {data.videos &&data.videos.length>0&& (
+          <List
+            header={<div className={styles.videotitle}>视频附件:</div>}
+            itemLayout="horizontal"
+            dataSource={videos}
+            renderItem={item => (
+              <List.Item>
+                {/* <List.Item.Meta */}
+                {/* avatar={<Avatar icon="video-camera" style={{ backgroundColor: '#1890ff' }} />} */}
+                {/* title={<a href={item.videoPath} target="_blank"></a>} */}
+                {/* /> */}
+                <Icon type="video-camera" style={{ color: '#1890ff',fontSize:'24px' ,marginRight:'20px',verticalAlign:'middle'}} />
+                <a href={item.videoPath} target="_blank">{item.fileName ||item.videoPath.substring(item.videoPath.lastIndexOf('\\')+1,item.videoPath.length)}</a>
+              </List.Item>
+            )}
+          />
+      )}
+
+      {data.files &&data.files.length>0&& (
+          <List
+            header={<div className={styles.videotitle}>文件附件:</div>}
+            itemLayout="horizontal"
+            dataSource={data.files}
+            renderItem={item => (
+              <List.Item>
+                {/* <List.Item.Meta */}
+                {/* avatar={<Avatar icon="video-camera" style={{ backgroundColor: '#1890ff' }} />} */}
+                {/* title={<a href={item.videoPath} target="_blank"></a>} */}
+                {/* /> */}
+                <Icon type="file" style={{ color: '#1890ff',fontSize:'24px' ,marginRight:'20px',verticalAlign:'middle'}} />
+                <a href={item.videoPath} target="_blank">{item.fileName ||item.videoPath.substring(item.videoPath.lastIndexOf('\\')+1,item.videoPath.length)}</a>
+              </List.Item>
+            )}
+          />
+      )}
     </Card>
   );
 };
@@ -92,22 +127,3 @@ const GetRenderitem = ({ data, type, items }) => {
 export default GetRenderitem;
 
 
-// {videos &&videos.length>0&& (
-//   <Card>
-//     <List
-//       header={<div className={styles.videotitle}>视频附件:</div>}
-//       itemLayout="horizontal"
-//       dataSource={videos}
-//       renderItem={item => (
-//         <List.Item>
-//           {/* <List.Item.Meta */}
-//           {/* avatar={<Avatar icon="video-camera" style={{ backgroundColor: '#1890ff' }} />} */}
-//           {/* title={<a href={item.videoPath} target="_blank"></a>} */}
-//           {/* /> */}
-//           <Icon type="video-camera" style={{ color: '#1890ff',fontSize:'24px' ,marginRight:'20px',verticalAlign:'middle'}} />
-//           <a href={item.videoPath} target="_blank">{item.fileName ||item.videoPath.substring(item.videoPath.lastIndexOf('\\')+1,item.videoPath.length)}</a>
-//         </List.Item>
-//       )}
-//     />
-//   </Card>
-// )}
