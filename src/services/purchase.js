@@ -8,7 +8,7 @@
 import request from '@/utils/request';
 
 const env = process.env.NODE_ENV === 'production' ? '' : '/server'
-const priefx = `${env}/business/business/product`;
+const priefx = `${env}/business/purchase.supplier`;
 const priefx2 = `${env}/business`
 const returnApi = (module) => {
   const pre = module === 4 ? priefx2 : priefx
@@ -21,6 +21,25 @@ const returnApi = (module) => {
 // moudle 3 product模块
 // 4/sys/mst-wordbook
 const resultArr = [
+
+
+  { key: 'listSupplier', path: '/purchase-supplier/list' },
+  { key: 'deleteSupplier', path: '/purchase-supplier/delete' },// 删除表头
+  { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
+
+  { key: 'listContacts', path: '/purchase-supplier-contacts/list' },
+  { key: 'deleteContacts', path: '/purchase-supplier-contacts/delete' },// 删除联系人
+  { key: 'addContacts', path: '/purchase-supplier-contacts/saveOrUpdate' },// 添加联系人
+
+  { key: 'listBlankAccount', path: '/purchase-supplier-bank-account/list' },
+  { key: 'deleteBlankAccount', path: '/purchase-supplier-bank-account/delete' },// 删除联系人
+  { key: 'addBlankAccount', path: '/purchase-supplier-bank-account/saveOrUpdate' },// 添加联系人
+
+
+  { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
+
+
+
   { key: 'queryProductQuoteHeadersAlreadyDone', path: '/product-quote-header/queryProductQuoteHeadersAlreadyDone' },
   { key: 'queryProductQuoteHeadersNotDone', path: '/product-quote-header/queryProductQuoteHeadersNotDone' },
   { key: 'createQuoteByProduct', path: '/product-quote-header/createQuoteByProduct' },
@@ -30,7 +49,7 @@ const resultArr = [
   { key: 'cancelApproval', path: '/product-quote-header/cancelApproval' },// 报价单取消审批
   { key: 'listProductQuoteDetail', path: '/product-quote-detail/listProductQuoteDetail', module: 2 },
   { key: 'listProductNotCreateQoute', path: '/listProductNotCreateQoute', module: 3 }, // 获取为报价的产品参数
-  { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
+
   { key: 'listCustomerDropDown', path: '/business/customer/listCustomerDropDown', module: 4 }, // 获取为报价的产品参数
   { key: 'listMarkingDropDown', path: '/business/marking/listMarkingDropDown', module: 4 }, // 字印编码
   { key: 'addquotelist', path: '/product-quote-header/saveProductQuoteHeader' },

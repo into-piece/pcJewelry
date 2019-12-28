@@ -1,6 +1,6 @@
 const sampleUrls = [
   {
-    'name': 'sampleList',
+    'name': 'sample',
     'path': 'business-sample',
     'arr': [
       'list',
@@ -14,7 +14,7 @@ const sampleUrls = [
 ];
 const sampleDetailUrls = [
   {
-    'name': 'sampleDetail',
+    'name': 'detail',
     'path': 'business-sample',
     'arr': [
       'list',
