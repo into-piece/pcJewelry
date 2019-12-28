@@ -2,9 +2,14 @@
   "headList": [
     { "key": "报价单号", "value": "quoteNumber", "type": 7, "noNeed": true },
     { "key": "报价日期", "value": "quoteDate", "type": 10 },
-    { "key": "类别", "value": "type", "type": 2, "list": "wordbookdropdown",
+    {
+      "key": "类别",
+      "value": "type",
+      "type": 2,
+      "list": "wordbookdropdown",
       "initValue": "H007001",
-      "noNeed": true },
+      "noNeed": true
+    },
     {
       "key": "紧急程度",
       "value": "emergency",
@@ -89,17 +94,16 @@
     { "key": "石材重量", "value": "stonesWeight", "noNeed": true, "number": true },
     { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
     { "key": "成品重量", "value": "finishedWeight", "number": true },
-    { "key": "规格", "value": "specification", "noNeed": true, "number": true,"type": 7 },
+    { "key": "规格", "value": "specification", "noNeed": true, "number": true, "type": 7 },
     { "key": "长度单位", "value": "unitOfLengthName", "noNeed": true, "type": 7 },
     { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
     { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 1 },
     {
-      "key": "石材价",
+      "key": "石材价（币种/件）",
       "value": "stonePrice",
       "noNeed": true,
-      "number": true,
-      "priceUnit": 1
+      "number": true
     },
     {
       "key": "包装单价",
@@ -141,8 +145,8 @@
       "noNeed": true,
       "priceUnit": 1
     },
-    { "key": "单价", "value": "price", "number": true, "priceUnit": 1 ,"type": 7},
-    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1, "type": 7},
+    { "key": "单价", "value": "price", "number": true, "priceUnit": 1, "type": 7 },
+    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1, "type": 7 },
     { "key": "报价数量", "value": "qty", "number": true },
     {
       "key": "报价金额",

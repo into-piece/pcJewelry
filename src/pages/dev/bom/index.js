@@ -308,7 +308,8 @@ class Index extends Component {
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
       setFieldsValue({
-        materialNo:undefined
+        materialNo:undefined,
+        materialSub:undefined
       })
       dispatch({
         type: `${defaultModelName}/clearmaterialNoList`,
@@ -318,6 +319,11 @@ class Index extends Component {
         type: `${defaultModelName}/getDropdownList`,
         payload: { name: 'getTypeByWordbookCode', params: { key: value } },
       });
+    }
+    if(type === 'materialSub'){
+      setFieldsValue({
+        materialNo:undefined,
+      })
     }
     if (type === 'materialNo') {
       const selectedArr  = materialNoList.filter(item=>item.materialNo === value)

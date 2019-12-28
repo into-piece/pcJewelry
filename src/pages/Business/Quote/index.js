@@ -270,6 +270,7 @@ const productSearchParams = [
     productListLoading: loading.effects['quote/getProductList'],
     searchParams: quote.searchParams,
     searchDetailParams: quote.searchDetailParams,
+    endCustomerList:quote.endCustomerList
   };
 })
 class Info extends Component {
@@ -282,8 +283,13 @@ class Info extends Component {
   };
 
   componentDidMount() {
+    this.initDropdownReq()
+  }
+
+  // 初始化表单数据
+  initDropdownReq = () => {
     const { dispatch } = this.props;
-    // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
+        // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown',
@@ -297,7 +303,6 @@ class Info extends Component {
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
   }
-
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
@@ -369,10 +374,24 @@ class Info extends Component {
       default:
         if (rightMenu === 2) {
           const { markingId, markingEnName } = choosenRowData;
-          form.setFieldsValue({
-            markingId,
-            markingEnName,
+          if(markingId){
+            form.setFieldsValue({
+              markingId,
+              markingEnName,
+            });
+          }
+
+          // 终客编号下拉
+          dispatch({
+            type: 'quote/getEndCustomerListDropDown',
+            payload: { key: choosenRowData.customerId },
           });
+          
+          dispatch({
+            type: 'quote/getMarkinglistDropDown',
+            payload: {key:choosenRowData.customerId},
+          });
+
         }
         if (modalType === 'edit') {
           const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
@@ -1153,7 +1172,7 @@ class Info extends Component {
       customerProductNo,
       productTypeName,
       productType,
-      gemColorName,
+      gemColorName, 
       platingColorName,
       productLineId,
       finishedWeight,
@@ -1244,6 +1263,7 @@ class Info extends Component {
       productselectedKeys,
       productChoosenRowData,
       productListLoading,
+      endCustomerList
     } = props;
 
     const modalFooter =
@@ -1282,7 +1302,7 @@ class Info extends Component {
               type="primary"
               loading={addloading}
               onClick={() => {
-                handleModalOk(false);
+                handleModalOk(true);
               }}
             >
               保存
@@ -1291,7 +1311,8 @@ class Info extends Component {
 
     console.log(choosenRowData, choosenRowData.id);
     console.log(productList, '=======');
-
+    console.log(endCustomerList, '=======');
+    
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
