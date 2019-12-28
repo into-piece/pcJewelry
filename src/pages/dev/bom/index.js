@@ -94,7 +94,8 @@ const radioArr = [
     materialNoList:model.materialNoList,
     materialNoChoosenRowData:model.materialNoChoosenRowData,
     materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
-    materialSelectedKeys:model.materialSelectedKeys
+    materialSelectedKeys:model.materialSelectedKeys,
+    materialNoPagination:model.materialNoPagination,
   };
 })
 class Index extends Component {
@@ -317,13 +318,8 @@ class Index extends Component {
         type: `${defaultModelName}/getDropdownList`,
         payload: { name: 'getTypeByWordbookCode', params: { key: value } },
       });
-      dispatch({
-        type: `${defaultModelName}/materialNoList`,
-        payload: { name: 'materialNoList', materialType: value, params: {} },
-      });
     }
     if (type === 'materialNo') {
-      console.log(materialNoList,'=====');
       const selectedArr  = materialNoList.filter(item=>item.materialNo === value)
       const chooseData  = selectedArr&&selectedArr.length>0&&selectedArr[0]
       const {
@@ -352,6 +348,25 @@ class Index extends Component {
       craftShow: true,
     });
   };
+
+  getmaterialNoList =(args={})=>{
+    const {materialNoPagination,form,dispatch} = this.props
+    const {getFieldValue} = form
+    const value = getFieldValue('materialType')
+    const sId = getFieldValue('materialSub')
+
+    if('current' in args){
+      dispatch({
+        type: `${defaultModelName}/changeStateOut`,
+        payload:{name:'materialNoPagination',data:{...materialNoPagination,current:args.current}}
+      })
+    }
+
+    dispatch({
+      type: `${defaultModelName}/materialNoList`,
+      payload: { name: 'materialNoList', materialType: value, params: {sId,size:10,current:1,...materialNoPagination,...args} },
+    });
+  }
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -403,11 +418,13 @@ class Index extends Component {
         );
       case 3:
         return (
-           <p>
+          <p>
             {form.getFieldValue(value) || ''}
             <span
-              style={{ color: '#40a9ff', cursor: 'pointer' }}
+              style={{ color: '#40a9ff', cursor: 'pointer',marginLeft:10}}
               onClick={() => {
+                // 获取原料编号列表
+                this.getmaterialNoList()
                 this.showMaterialModalFunc(1);
               }}
             >
@@ -1207,48 +1224,50 @@ class Index extends Component {
     });
   }
 
-    // 控制产品弹窗 type = 1出现
-    showMaterialModalFunc = (type = 1) => {
-      const { dispatch } = this.props;
-      if (type === 1) {
-        
-        // this.getProduct();
-  
-        // 获取筛选参数下拉
-        dispatch({
-          type: 'quote/getBrandsList',
-        });
-        dispatch({
-          type: 'quote/getbasicColourSettingsList',
-        });
-      }
-      this.setState({
-        showMaterialNoModal: type === 1,
-      });
-    };
+  // 控制产品弹窗 type = 1出现
+  showMaterialModalFunc = (type = 1) => {
+    const { dispatch } = this.props;
+    if (type === 1) {
+      // this.getProduct();
+      // 获取筛选参数下拉
+      // dispatch({
+      //   type: `${defaultModelName}/getBrandsList`,
+      // });
+      // dispatch({
+      //   type: `${defaultModelName}/getbasicColourSettingsList`,
+      // });
+    }
+    this.setState({
+      showMaterialNoModal: type === 1,
+    });
+  };
 
   handleMaterialNoOk = () => {
-    this.showMaterialModalFunc()
+    const {form,materialNoChoosenRowData} = this.props
+    const {setFieldsValue} = form
+    const {materialNo} = materialNoChoosenRowData
+    setFieldsValue({materialNo})
+    this.showMaterialModalFunc(2)
   }
 
   handleMaterialNoCancel = () => {
-    this.showMaterialModalFunc()
+    this.showMaterialModalFunc(2)
   }
 
    // 选中某行表头
    changeMaterialChoosenRow = rowData => {
     const { dispatch } = this.props;
     dispatch({
-      type: `quote/getMaterialNoChoosenRowData`,
-      payload: rowData,
+      type: `${defaultModelName}/changeStateOut`,
+      payload: {data:rowData,name:'materialNoChoosenRowData'},
     });
   };
 
 
   onMaterialSelectChange = selectedRowKeys => {
     this.props.dispatch({
-      type: `quote/changeProductselectedKeys`,
-      payload: selectedRowKeys,
+      type: `${defaultModelName}/changeStateOut`,
+      payload: {data:selectedRowKeys,name:'materialSelectedKeys'},
     });
   };
 
@@ -1307,7 +1326,7 @@ class Index extends Component {
       materialNoListLoading,
       materialSelectedKeys
     } = props;
-    const { getFieldDecorator } = form;
+    const { getFieldDecorator ,getFieldValue} = form;
     const modalFooter =
       modalType === 'plus'
         ? [
@@ -1399,7 +1418,10 @@ class Index extends Component {
     ];
     const opration = rightActive === THIRD_TAG?secondProccessOprationArr:secondOprationArr
     const isthird = rightActive === THIRD_TAG;
+    const materialType = getFieldValue('materialType')
 
+    console.log(materialNoPagination,'======materialNoPagination');
+    
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1548,7 +1570,7 @@ class Index extends Component {
         >
           <SelectMaterialNo
             list={materialNoList}
-            // productSearchParams={productSearchParams}
+            materialType={materialType}
             pagination={materialNoPagination}
             returnElement={returnElement}
             source={model}
@@ -1560,7 +1582,11 @@ class Index extends Component {
             onSearch={this.getMaterialList}
             changeProductSearch={args => {
               // search 看看搜索完要不要做点处理
-              this.getMaterialList({ ...args, search: true });
+              this.getmaterialNoList({ ...args });
+            }}
+            handleTableChange={args => {
+              // search 看看搜索完要不要做点处理
+              this.getmaterialNoList({ ...args });
             }}
           />
         </Modal>

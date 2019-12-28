@@ -42,12 +42,12 @@ const extraArr = [
   },
   {
     key: 'listPrincipalMaterialDropDown',
-    path: '/list',
+    path: '/listPrincipalMaterial',
     prefix1: `${env  }/business/develop/basic/principal-material`,
   },
   {
     key: 'listAccessoriesDropDown',
-    path: '/list',
+    path: '/listAccessories',
     prefix1: `${env  }/business/develop/basic/accessories`,
   },
   {

@@ -76,7 +76,7 @@ class SearchFrom extends Component {
     // 禁止表单提交，采用Ajax提交
     e.preventDefault();
     form.validateFields((err, fieldsValue) => {
-      if (onSearch) onSearch({ ...fieldsValue });
+      if (onSearch) onSearch({ ...fieldsValue ,current:1});
     });
   };
 

@@ -48,6 +48,10 @@ export default {
       current: 1,
       size: 10,
     },
+    materialNoPagination:{
+      current: 1,
+      size: 10,
+    },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select
     list: initData,
@@ -198,13 +202,8 @@ export default {
       const services = servicesConfig[arr[materialType]];
       const response = yield call(services, params);
 
-      let list =
-        response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
-      list = list.map(item => ({
-        ...item,
-        key: item.materialNo,
-        value: item.materialNo,
-      }));
+      const list =
+        response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
         payload: { data: listdata||list, typeName: name },
