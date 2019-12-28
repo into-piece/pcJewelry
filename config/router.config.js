@@ -307,7 +307,7 @@ export default [
             ],
           },
 
-          // 生产 production route
+             // 生产 production route
           {
             path: '/erp/production',
             icon: 'form',

@@ -97,8 +97,6 @@ resultArr.forEach(({ key, path, prefix }) => {
       data: params,
     });
   };
-
-  console.log(" business request arr ",resultArr)
 });
 
 export default outPutObject;
