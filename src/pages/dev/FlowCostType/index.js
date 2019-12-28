@@ -78,10 +78,11 @@ class Index extends Component {
       type: `${defaultModelName}/getTypeByWordbookCode`,
       payload: { params: { 'key': 'H016003' }, listName: 'H016003' },
     });
-    // 生产流程下拉
+
+    // 这个是新增生产流程 所对应的下拉
     dispatch({
       type: `${defaultModelName}/getListProductionFlowDropDown`,
-      payload: {},
+      payload: {flowClass: 'H017002'},
     });
 
     // 获取初始表单数据

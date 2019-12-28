@@ -178,7 +178,7 @@ class MiddleTable extends Component {
       isMaterial ? SECOND_TAG : THIRD_TAG;
     const selectedSecondRowKeys =  isMaterial ? selectedRowKeysSecond: selectedProccessRowKeys
     const choosenSecondRow = isMaterial ? choosenRowDataSecond: choosenProccessData
-    console.log(processList,selectedSecondRowKeys,'=====processList');
+    console.log(processList,selectedSecondRowKeys,selectedProccess,'=====selectedProccess');
     
     return (
       <div className={styles.view_left_content}>
@@ -234,7 +234,7 @@ class MiddleTable extends Component {
               <Select
                 style={{ width: 180 }}
                 placeholder="请选择"
-                value={selectedProccess&&selectedProccess.processCode || undefined}
+                value={selectedProccess&&selectedProccess.processId || undefined}
                 onChange={handleBomSelectChange}
               >
                 {processDropdown &&

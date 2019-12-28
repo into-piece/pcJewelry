@@ -48,6 +48,10 @@ export default {
       current: 1,
       size: 10,
     },
+    materialNoPagination:{
+      current: 1,
+      size: 10,
+    },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select
     list: initData,
@@ -67,6 +71,9 @@ export default {
     processList: initData,
     choosenProccessData:{id:''},
     selectedProccessRowKeys:[],
+    materialNoList:[],
+    materialNoChoosenRowData:{id:''},
+    materialSelectedKeys:[]
   },
 
   effects: {
@@ -146,6 +153,29 @@ export default {
         key: item[key],
         value: item[value],
       }));
+
+      // 计量单位和重量单位 都是由basicmeasuer list来的
+      if(name === 'listBasicMeasureUnitDropDown'){
+        const list1 = list.map(item => ({
+          ...item,
+          key: item[key],
+          value: item[value],
+        }));
+        yield put({
+          type: 'changeState',
+          payload: { data: list1, typeName: 'weightUnitList'},
+        });
+        const list2 = list.map(item => ({
+          ...item,
+          key: item[key],
+          value: item[value],
+        }));
+        yield put({
+          type: 'changeState',
+          payload: { data: list2, typeName: 'countist' },
+        });
+        return
+      }
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: name },
@@ -153,8 +183,15 @@ export default {
       if (callback) callback(list[0]);
     },
 
+    *clearmaterialNoList( {payload}, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: [], typeName: 'materialNoList' },
+      });
+    },
+
     *materialNoList({ payload, callback }, { call, put }) {
-      const { params, name, materialType } = payload;
+      const { params, name, materialType,listdata } = payload;
       const arr = {
         H016002: 'listStoneDropDown', // 石材
         H016001: 'listPrincipalMaterialDropDown', // 主材
@@ -165,17 +202,11 @@ export default {
       const services = servicesConfig[arr[materialType]];
       const response = yield call(services, params);
 
-      let list =
-        response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
-      list = list.map(item => ({
-        ...item,
-        key: item.zhName,
-        value: item.unitCode,
-      }));
-      console.log(list, name);
+      const list =
+        response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
-        payload: { data: list, typeName: name },
+        payload: { data: listdata||list, typeName: name },
       });
       if (callback) callback(list.records[0]);
     },

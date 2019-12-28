@@ -38,6 +38,10 @@ import serviceObj from '@/services/dev';
 import component from '@/locales/en-US/component';
 import columnsConfig from './config/columns';
 import ThemeColor from '@/components/SettingDrawer/ThemeColor';
+import SelectMaterialNo from './components/SelectMaterialNo'
+
+const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
+const uploadfile = `${priefx}/zuul/business/business/file/uploadFile`
 
 const { Dragger } = Upload;
 const ButtonGroup = Button.Group;
@@ -85,7 +89,13 @@ const radioArr = [
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
     processDropdown: model.processDropdown,
     choosenProccessData:model.choosenProccessData,
-    selectedProccessRowKeys:model.selectedProccessRowKeys
+    selectedProccessRowKeys:model.selectedProccessRowKeys,
+    proccessPagination:model.proccessPagination,
+    materialNoList:model.materialNoList,
+    materialNoChoosenRowData:model.materialNoChoosenRowData,
+    materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
+    materialSelectedKeys:model.materialSelectedKeys,
+    materialNoPagination:model.materialNoPagination,
   };
 })
 class Index extends Component {
@@ -98,7 +108,7 @@ class Index extends Component {
     // 第二个table选中tab标志 没有tab则冗余
     switchMenu: SECOND_TAG,
     selectedBom: { id: '' },
-    selectedProccess: { processCode: '' },
+    selectedProccess: { processId: '' },
     craftShow: false, // 增加工艺弹窗
     onCraft: { name: '' },
     craftForm: [
@@ -107,7 +117,12 @@ class Index extends Component {
         { key: '效率', title: '效率', value: '' },
       ],
     ],
+    videoPath:'',
+    filePath:'',
+    showMaterialNoModal:false
   };
+
+  
 
   onCraft = [
     { key: '镶石公艺', title: '镶石公艺', value: '', },
@@ -120,6 +135,47 @@ class Index extends Component {
     this.getList();
   }
 
+  uploadFile = (type) => {
+    const uploadConfig = {
+      name: 'file',
+      multiple: true,
+      action: uploadfile,
+      onChange:(info)=> {
+        const { status } = info.file;
+        if (status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+          const {response:{body}} = info.file
+          if(body&&body.records&&body.records.length>0){
+            console.log(type,body,body.records[0],body.records[0],body.records[0].savePath);
+            this.setState({
+              [type]:body.records[0].savePath
+            })
+          }
+          
+          message.success(`${info.file.name} file uploaded successfully.`);
+          
+        } else if (status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+    };
+    return(
+      <Dragger {...uploadConfig}>
+        <p className="ant-upload-drag-icon">
+          <Icon type="inbox" />
+        </p>
+        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+        <p className="ant-upload-hint">
+          Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+          band files
+        </p>
+      </Dragger>
+    )
+   
+  }
+
   // 获取生产流程的下拉
   getWorkFlowDropdownList = (params) => {
     const { dispatch } = this.props;
@@ -127,12 +183,12 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
-      payload: { name: 'processDropdown', key1: 'processName', value1: 'processCode', params:{...params,bomId:selectedBom.id}},
+      payload: { name: 'processDropdown', key1: 'processName', value1: 'processId', params:{...params,bomId:selectedBom.id}},
       callback: data => {
         this.setState({
           selectedProccess: data,
         });
-        this.getProccessList(data.id)
+        this.getProccessList({id:data.id})
       },
     });
   };
@@ -140,7 +196,7 @@ class Index extends Component {
   initDrop = () => {
     const { dispatch } = this.props;
     const { rightActive } = this.state;
-    // // 产品编号下拉
+    // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
     //   payload: { params: {}, listName: 'listDieSetSubDropDown' },
@@ -186,6 +242,9 @@ class Index extends Component {
         },
         {
           name: 'listDeptDropDown',
+        },
+        {
+          name: 'listBasicMeasureUnitDropDown',
         },
       ];
 
@@ -244,19 +303,43 @@ class Index extends Component {
 
 
   handleSelectChange = (value, type) => {
-    const { dispatch } = this.props;
+    const { dispatch, form,materialNoList} = this.props;
+    const {setFieldsValue} = form
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
+      setFieldsValue({
+        materialNo:undefined
+      })
+      dispatch({
+        type: `${defaultModelName}/clearmaterialNoList`,
+      });
       // 原料小料
       dispatch({
         type: `${defaultModelName}/getDropdownList`,
         payload: { name: 'getTypeByWordbookCode', params: { key: value } },
       });
-
-      dispatch({
-        type: `${defaultModelName}/materialNoList`,
-        payload: { name: 'materialNoList', materialType: value, params: {} },
-      });
+    }
+    if (type === 'materialNo') {
+      const selectedArr  = materialNoList.filter(item=>item.materialNo === value)
+      const chooseData  = selectedArr&&selectedArr.length>0&&selectedArr[0]
+      const {
+        zhName,
+        enName,
+        specification,
+        valuationClass,
+        measureUnit,
+        weightUnit,
+        inventoryWeight
+      } = chooseData
+      setFieldsValue({
+        zhName,
+        enName,
+        specification,
+        valuationClass,
+        measureUnit,
+        weightUnit,
+        inventoryWeight,
+      })
     }
   };
 
@@ -265,6 +348,25 @@ class Index extends Component {
       craftShow: true,
     });
   };
+
+  getmaterialNoList =(args={})=>{
+    const {materialNoPagination,form,dispatch} = this.props
+    const {getFieldValue} = form
+    const value = getFieldValue('materialType')
+    const sId = getFieldValue('materialSub')
+
+    if('current' in args){
+      dispatch({
+        type: `${defaultModelName}/changeStateOut`,
+        payload:{name:'materialNoPagination',data:{...materialNoPagination,current:args.current}}
+      })
+    }
+
+    dispatch({
+      type: `${defaultModelName}/materialNoList`,
+      payload: { name: 'materialNoList', materialType: value, params: {sId,size:10,current:1,...materialNoPagination,...args} },
+    });
+  }
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -293,11 +395,17 @@ class Index extends Component {
       case 2:
         return (
           <Select
+            allowClear
             style={{ width: 180 }}
             placeholder="请选择"
             onChange={v => {
               this.handleSelectChange && this.handleSelectChange(v, value);
             }}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
           >
             {data[list] &&
               data[list].length > 0 &&
@@ -310,17 +418,17 @@ class Index extends Component {
         );
       case 3:
         return (
-          <p style={{ maxWidth: 180 }}>
-            {' '}
-            {form.getFieldValue(value) || ''}{' '}
+          <p>
+            {form.getFieldValue(value) || ''}
             <span
-              style={{ color: '#40a9ff', cursor: 'pointer' }}
+              style={{ color: '#40a9ff', cursor: 'pointer',marginLeft:10}}
               onClick={() => {
-                this[clickFn](1);
+                // 获取原料编号列表
+                this.getmaterialNoList()
+                this.showMaterialModalFunc(1);
               }}
             >
-              {' '}
-              {text}
+              选择原料编号
             </span>
           </p>
         );
@@ -405,8 +513,10 @@ class Index extends Component {
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
-      case 'edit':
         this.handleAdd(close);
+        break
+      case 'edit':
+        this.handleAdd(close,true);
         break;
       default:
         break;
@@ -432,7 +542,7 @@ class Index extends Component {
       case  THIRD_TAG:
         if(this.isEditworkFlow){
           service = 'workFlow'
-          data = [selectedProccess.processCode]
+          data = [selectedProccess.processId]
         }else{
           service = 'bomProcess'
           data = selectedProccessRowKeys
@@ -471,7 +581,7 @@ class Index extends Component {
         if(this.isEditworkFlow){
           this.getWorkFlowDropdownList()
           this.setState({
-            selectedProccess: { processCode: '' }
+            selectedProccess: { processId: '' }
           })
         }else{
           this.getProccessList()
@@ -531,9 +641,9 @@ class Index extends Component {
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = close => {
+  handleAdd = (close,isEdit) => {
     const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,dispatch} = this.props;
-    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess} = this.state;
+    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess,filePath,videoPath} = this.state;
     const { resetFields,getFieldValue } = form;
     const materialType = getFieldValue('materialType')
     let params = {};
@@ -549,23 +659,31 @@ class Index extends Component {
     //   };
     // }
     if (rightActive === FIRST_TAG) {
-      params = { ...params, pId: choosenRowData.id };
-    }else if(rightActive === SECOND_TAG && materialType === 'H016002'){
-      const Technology = []
-      console.log(craftForm);
-      craftForm.forEach(item=>{
-        let mosaic = ''
-        let efficiency = ''
-        item.forEach(({value},index)=>{
-          if(index === 0){
-            mosaic = value
-          }else{
-            efficiency = value
-          }
+      params = { ...params, pId: choosenRowData.id};
+      if(isEdit){
+        debugger
+        params.id = selectedBom.id
+      }
+    }else if(rightActive === SECOND_TAG ) {
+      params.id = choosenRowDataSecond.id
+      if(materialType === 'H016002'){
+        const Technology = []
+        console.log(craftForm);
+        craftForm.forEach(item=>{
+          let mosaic = ''
+          let efficiency = ''
+          item.forEach(({value},index)=>{
+            if(index === 0){
+              mosaic = value
+            }else{
+              efficiency = value
+            }
+          })
+          Technology.push({mosaic,efficiency})
         })
-        Technology.push({mosaic,efficiency})
-      })
-      params = { ...params, pId: choosenRowData.id,Technology };
+        params = { ...params, pId: choosenRowData.id,Technology };
+        if(isEdit){params.id = choosenRowDataSecond.id}
+      }
     }
 
     if(rightActive === THIRD_TAG){
@@ -578,6 +696,10 @@ class Index extends Component {
             params[item.value] = Number(params[item.value])
           }
         })
+        params.videoPath = videoPath
+        params.filePath = filePath
+        // 编辑
+        if(isEdit){params.id = choosenProccessData.id}
       }else{
         params.bomId = selectedBom.id
         inputarr = 'proccess'
@@ -618,7 +740,7 @@ class Index extends Component {
             if(this.isEditworkFlow){
               this.getWorkFlowDropdownList()
               this.setState({
-                selectedProccess: { processCode: '' }
+                selectedProccess: { processId: '' }
               })
             }else{
               this.getProccessList()
@@ -671,6 +793,7 @@ class Index extends Component {
     const { model } = this.props;
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
+    const materialNo = getFieldValue('materialNo')
     
     return (
       <Form size="small" key="1">
@@ -708,7 +831,7 @@ class Index extends Component {
                     break
                   case THIRD_TAG:
                     if(this.isEditworkFlow){
-                      initValue2 = selectedProccess.processCode
+                      initValue2 = selectedProccess.processId
                     }else{
                       initValue2 = choosenProccessData[value]
                     }
@@ -730,18 +853,11 @@ class Index extends Component {
                           fileListFun={list => {
                             this.setState({ filelist: list });
                           }}
-                        />:
-                      // value === ''?
-                      //   <Dragger {...props}>
-                      //     <p className="ant-upload-drag-icon">
-                      //       <Icon type="inbox" />
-                      //     </p>
-                      //     <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                      //     <p className="ant-upload-hint">
-                      //       Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                      //       band files
-                      //     </p>
-                      //   </Dragger>:
+                        />
+                      :
+                      value === 'videoPath'|| value === 'filePath'?
+                        this.uploadFile(value)
+                        :
                         getFieldDecorator(value, {
                           rules: [
                             {
@@ -791,15 +907,20 @@ class Index extends Component {
         {craftForm.map((item, index) => (
           <div style={{ width: '100%', display: 'flex' }}>
             {item.map(({ key, value }, subIndex) => {
-              console.log(key, value);
               return (
                 <div className="addModal" key={key}>
                   <CraftRow name={key}>
                     {subIndex === 0 ? (
                       <Select
+                        allowClear
                         style={{ width: 180 }}
                         placeholder="请选择"
                         value={value || undefined}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={v => {
                           this.craftChange(v, index, subIndex);
                         }}
@@ -1037,11 +1158,11 @@ class Index extends Component {
 
   // 获取生产工序列表
   getProccessList = (params) => {
-    const { dispatch, choosenProccessData } = this.props;
-    console.log(choosenProccessData);
-    
+    const { dispatch, proccessPagination} = this.props;
+    const {selectedProccess} = this.state
     const sendParams = {
-      processId:params && params.id||choosenProccessData.id,
+      ...proccessPagination,
+      processId:params && params.id||selectedProccess && selectedProccess.id,
       ...params
     }
     dispatch({
@@ -1059,8 +1180,8 @@ class Index extends Component {
     const key = isthird ? 'selectedProccess' : 'selectedBom';
     let arr = []
     if(isthird){
-      arr = list.filter(({ processCode }) => processCode === v);
-      this.getProccessList(arr[0])
+      arr = list.filter(({ processId }) => processId === v);
+      this.getProccessList({id:arr[0].id})
     }else{
       arr = list.filter(({ id }) => id === v);
       this.getMaterialList({ BomId: v })
@@ -1078,7 +1199,7 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
-      payload: { name: 'flowlistDropDown', key1: 'flowName', value1: 'id' },
+      payload: { name: 'flowlistDropDown', key1: 'flowName', value1: 'id',params:{flowClass: 'H017002'} },
       // callback: data => {
       //   this.setState({
       //     selectedProccess: data,
@@ -1102,6 +1223,54 @@ class Index extends Component {
       },
     });
   }
+
+  // 控制产品弹窗 type = 1出现
+  showMaterialModalFunc = (type = 1) => {
+    const { dispatch } = this.props;
+    if (type === 1) {
+      // this.getProduct();
+      // 获取筛选参数下拉
+      // dispatch({
+      //   type: `${defaultModelName}/getBrandsList`,
+      // });
+      // dispatch({
+      //   type: `${defaultModelName}/getbasicColourSettingsList`,
+      // });
+    }
+    this.setState({
+      showMaterialNoModal: type === 1,
+    });
+  };
+
+  handleMaterialNoOk = () => {
+    const {form,materialNoChoosenRowData} = this.props
+    const {setFieldsValue} = form
+    const {materialNo} = materialNoChoosenRowData
+    setFieldsValue({materialNo})
+    this.showMaterialModalFunc(2)
+  }
+
+  handleMaterialNoCancel = () => {
+    this.showMaterialModalFunc(2)
+  }
+
+   // 选中某行表头
+   changeMaterialChoosenRow = rowData => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: {data:rowData,name:'materialNoChoosenRowData'},
+    });
+  };
+
+
+  onMaterialSelectChange = selectedRowKeys => {
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: {data:selectedRowKeys,name:'materialSelectedKeys'},
+    });
+  };
+
 
   render() {
     const {
@@ -1128,7 +1297,11 @@ class Index extends Component {
       craftInput,
       addProccess,
       editProccess,
-      deleteProccess
+      deleteProccess,
+      handleMaterialNoOk,
+      handleMaterialNoCancel,
+      changeMaterialChoosenRow,
+      onMaterialSelectChange
     } = this;
     const {
       modalType,
@@ -1138,9 +1311,22 @@ class Index extends Component {
       selectedBom,
       craftShow,
       selectedProccess,
+      showMaterialNoModal
     } = state;
-    const { choosenRowData, choosenRowDataSecond, model, form,choosenProccessData } = props;
-    const { getFieldDecorator } = form;
+    const { 
+      choosenRowData, 
+      choosenRowDataSecond, 
+      model, 
+      form,
+      choosenProccessData, 
+      materialNoList,
+      materialNoPagination,
+      bomselectedKeys,
+      materialNoChoosenRowData,
+      materialNoListLoading,
+      materialSelectedKeys
+    } = props;
+    const { getFieldDecorator ,getFieldValue} = form;
     const modalFooter =
       modalType === 'plus'
         ? [
@@ -1227,12 +1413,15 @@ class Index extends Component {
       {
         key: '删除流程',
         fn: deleteProccess,
-        disabled: !selectedProccess.processCode,
+        disabled: !(selectedProccess&&selectedProccess.processId),
       },
     ];
     const opration = rightActive === THIRD_TAG?secondProccessOprationArr:secondOprationArr
     const isthird = rightActive === THIRD_TAG;
+    const materialType = getFieldValue('materialType')
 
+    console.log(materialNoPagination,'======materialNoPagination');
+    
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1309,7 +1498,7 @@ class Index extends Component {
                               : choosenRowDataSecond
                           }
                           type={rightActive}
-                          items={columnsConfig}
+                          items={showItem}
                         />
                       </div>
                       {/*  */}
@@ -1366,6 +1555,41 @@ class Index extends Component {
             {getModalContent()}
           </Modal>
         )}
+
+        <Modal
+          title={<BuildTitle title="选择原料编号" />}
+          maskClosable={false}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={handleMaterialNoOk}
+          visible={showMaterialNoModal}
+          onCancel={handleMaterialNoCancel}
+          zIndex={1002}
+        >
+          <SelectMaterialNo
+            list={materialNoList}
+            materialType={materialType}
+            pagination={materialNoPagination}
+            returnElement={returnElement}
+            source={model}
+            selectedRowKeys={materialSelectedKeys}
+            changeChoosenRow={changeMaterialChoosenRow}
+            choosenRowData={materialNoChoosenRowData}
+            onSelectChange={onMaterialSelectChange}
+            listLoading={materialNoListLoading}
+            onSearch={this.getMaterialList}
+            changeProductSearch={args => {
+              // search 看看搜索完要不要做点处理
+              this.getmaterialNoList({ ...args });
+            }}
+            handleTableChange={args => {
+              // search 看看搜索完要不要做点处理
+              this.getmaterialNoList({ ...args });
+            }}
+          />
+        </Modal>
       </div>
     );
   }
