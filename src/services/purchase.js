@@ -26,6 +26,9 @@ const resultArr = [
   { key: 'listSupplier', path: '/purchase-supplier/list' },
   { key: 'deleteSupplier', path: '/purchase-supplier/delete' },// 删除表头
   { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
+  { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
+  { key: 'approval', path: '/purchase-supplier/approval' }, // 报价单审批
+  { key: 'cancelApproval', path: '/purchase-supplier/revoke' }, // 报价单审批
 
   { key: 'listContacts', path: '/purchase-supplier-contacts/list' },
   { key: 'deleteContacts', path: '/purchase-supplier-contacts/delete' },// 删除联系人
@@ -46,7 +49,6 @@ const resultArr = [
   { key: 'saveOrupdateProductQuoteRawMaterialDetail', path: '/product-quote-header/saveOrupdateProductQuoteRawMaterialDetail' },
   { key: 'listProductQuoteRawMaterialDetail', path: '/product-quote-header/listProductQuoteRawMaterialDetail' },
   { key: 'deleteProductQuoteHeader', path: '/product-quote-header/deleteProductQuoteHeader' },// 删除表头
-  { key: 'cancelApproval', path: '/product-quote-header/cancelApproval' },// 报价单取消审批
   { key: 'listProductQuoteDetail', path: '/product-quote-detail/listProductQuoteDetail', module: 2 },
   { key: 'listProductNotCreateQoute', path: '/listProductNotCreateQoute', module: 3 }, // 获取为报价的产品参数
 
@@ -57,8 +59,6 @@ const resultArr = [
   { key: 'unLockEdit', path: '/product-quote-header/unLockEdit' },
   { key: 'copyQuote', path: '/product-quote-header/copyQuote' }, // 复制
   { key: 'listEndCustomerDropDown', path: '/business/end-customer/listEndCustomerDropDown', module: 4 }, // 终客编号
-  { key: 'approval', path: '/product-quote-header/approval' }, // 报价单审批
-  { key: 'cancelApproval', path: '/product-quote-header/cancelApproval' }, // 报价单审批
   { key: 'deleteProductQuoteHeader', path: '/product-quote-header/deleteProductQuoteHeader' }, // 报价单审批
   { key: 'listBrands', path: '/basic/brand/listBrands', module: 4 }, // 报价单审批
   { key: 'listBasicColourSettingsDropDown', path: '/develop/basic/colour-settings/listBasicColourSettingsDropDown', module: 4 }, // 报价单审批

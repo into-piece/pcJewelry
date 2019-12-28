@@ -1,82 +1,5 @@
 {
-  "headList": [
-    { "key": "报价单号", "value": "quoteNumber", "type": 7, "noNeed": true },
-    { "key": "报价日期", "value": "quoteDate", "type": 10 },
-    { "key": "类别", "value": "type", "type": 2, "list": "wordbookdropdown",
-      "initValue": "H007001",
-      "noNeed": true },
-    {
-      "key": "紧急程度",
-      "value": "emergency",
-      "text": "紧急",
-      "type": 5,
-      "initValue": 0,
-      "noNeed": true
-    },
-    { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
-    { "key": "客户简称", "value": "customerShotName", "type": 7, "noNeed": true },
-    { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList", "noNeed": true },
-    { "key": "终客简称", "value": "endShotName", "noNeed": true },
-    {
-      "key": "报价方式",
-      "value": "quoteMethod",
-      "type": 6,
-      "arr": [
-        { "key": "计重", "value": "H008002" },
-        { "key": "计件", "value": "H008001" }
-      ],
-      "initValue": "H008002"
-    },
-    {
-      "key": "是否计石重",
-      "value": "isWeighStones",
-      "type": 6,
-      "arr": [
-        { "key": "是", "value": "H009001" },
-        { "key": "否", "value": "H009002" }
-      ],
-      "initValue": "H009001"
-    },
-    {
-      "key": "结算币种",
-      "value": "currency",
-      "type": 2,
-      "list": "currencydropdown"
-    },
-    { "key": "主材价", "value": "quotePrice", "priceUnit": 1 },
-    { "key": "税率 (%)", "value": "taxRate", "noNeed": true },
-    { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
-    { "key": "字印英文名", "value": "markingEnName", "type": 7, "noNeed": true },
-    {
-      "key": "包装单价",
-      "value": "packPriceType",
-      "type": 6,
-      "arr": [
-        { "key": "计收", "value": "H011001" },
-        { "key": "不计收", "value": "H011002" }
-      ],
-      "initValue": "H011002",
-      "priceUnit": 1
-    },
-    {
-      "key": "客户备料",
-      "value": "customerPreparation",
-      "text": "客户备料",
-      "type": 5,
-      "noNeed": true,
-      "initValue": 0
-    },
-    {
-      "key": "向客户采购用料",
-      "value": "purchasingMaterialsFromCustomers",
-      "text": "向客户采购",
-      "type": 5,
-      "noNeed": true,
-      "initValue": 0
-    },
-    { "key": "说明", "value": "explains", "type": 8, "noNeed": true },
-    { "key": "备注", "value": "remark", "type": 8, "noNeed": true }
-  ],
+
 
   "headList": [
     { "key": "供应商编号", "value": "supplierCode","noNeed": true ,"type": 11},
@@ -90,114 +13,27 @@
     { "key": "户名", "value": "accountName", "noNeed": true},
     { "key": "账号", "value": "accountNum","noNeed": true},
     { "key": "结算币种", "value": "countCurrency","noNeed": false ,"type": 2 ,"list": "wordbookdropdownCurrency" },
-    { "key": "税率", "value": "rate" ,"noNeed": true},
+    { "key": "税率", "value": "rate" ,"noNeed": true,"inputType": "float"},
     { "key": "结算方式", "value": "countMode","type": 2 ,"list": "wordbookdropdownMode" },
 
     { "key": "联络人姓名", "value": "contactName"},
-    { "key": "手机", "value": "mobilePhone"},
+    { "key": "手机", "value": "mobilePhone","inputType": "number"},
     { "key": "电话", "value": "telphone","noNeed": true},
-    { "key": "Email", "value": "email","noNeed": true},
-    { "key": "QQ", "value": "qq","noNeed": true},
+    { "key": "Email", "value": "email","noNeed": true,"inputType": "email"},
+    { "key": "QQ", "value": "qq","noNeed": true,"inputType": "number"},
     { "key": "微信", "value": "wechat","noNeed": true },
     { "key": "备注", "value": "remarks","noNeed": true ,"type": 8}
   ],
 
 
 
-  "detailList": [
-    { "key": "客户货号", "value": "custoerProductNo", "noNeed": true, "type": 7 },
-    { "key": "类别", "value": "productTypeName", "noNeed": true, "type": 7 },
-    { "key": "成色名称", "value": "productColorName", "noNeed": true, "type": 7 },
-    { "key": "宝石颜色", "value": "gemColorName", "noNeed": true, "type": 7 },
-    { "key": "电镀颜色", "value": "platingColorName", "noNeed": true, "type": 7 },
-    { "key": "计量单位", "value": "unitOfMeasurementName", "type": 7, "noNeed": true },
-    { "key": "重量单位", "value": "unitOfWeightName", "type": 7, "noNeed": true },
-    {
-      "key": "是否计石重",
-      "value": "isWeighStones",
-      "type": 6,
-      "arr": [
-        { "key": "是", "value": "H009001" },
-        { "key": "否", "value": "H009002" }
-      ],
-      "initValue": "H009001"
-    },
-    { "key": "石材重量", "value": "stonesWeight", "noNeed": true, "number": true },
-    { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
-    { "key": "成品重量", "value": "finishedWeight", "number": true },
-    { "key": "产品长度", "value": "productLength", "noNeed": true, "number": true },
-    { "key": "长度描述", "value": "lengthDescription", "noNeed": true },
-    { "key": "长度单位", "value": "unitOfLengthName", "noNeed": true, "type": 7 },
-    { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
-    { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
-    { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 1 },
-    {
-      "key": "石材价",
-      "value": "stonePrice",
-      "noNeed": true,
-      "number": true,
-      "priceUnit": 1
-    },
-    {
-      "key": "包装单价",
-      "value": "packPrice",
-      "number": true,
-      "noNeed": true,
-      "priceUnit": 1
-    },
-    { "key": "报价重量范围/%", "value": "quotedWeightRange", "noNeed": true, "initValue": "5" },
 
-    {
-      "key": "前次工费",
-      "value": "lastCount",
-      "number": true,
-      "type": 7,
-      "noNeed": true,
-      "priceUnit": 1
-    },
-    {
-      "key": "最高工费",
-      "value": "topCount",
-      "number": true,
-      "type": 7,
-      "noNeed": true,
-      "priceUnit": 1
-    },
-    {
-      "key": "实际工费",
-      "value": "actualCount",
-      "number": true,
-      "type": 7,
-      "noNeed": true,
-      "priceUnit": 1
-    },
-    {
-      "key": "此次工费",
-      "value": "nowCount",
-      "number": true,
-      "noNeed": true,
-      "priceUnit": 1
-    },
-    { "key": "单价", "value": "price", "number": true, "priceUnit": 1 },
-    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1 },
-    { "key": "报价数量", "value": "qty", "number": true },
-    {
-      "key": "报价金额",
-      "value": "quotedAmount",
-      "number": true,
-      "noNeed": true,
-      "type": 7,
-      "priceUnit": 1
-    },
-    { "key": "备注", "value": "remark", "noNeed": true, "type": 8 },
-    { "key": "客户要求", "value": "customerRequirements", "noNeed": true, "type": 8 }
-  ],
 
   "detailList": [
     { "key": "联系人姓名", "value": "contactName"},
     { "key": "手机", "value": "mobilePhone"},
-    { "key": "电话", "value": "telphone", "noNeed": true},
-    { "key": "email", "value": "email", "noNeed": true},
+    { "key": "电话", "value": "telphone", "noNeed": true,"inputType": "number"},
+    { "key": "email", "value": "email", "noNeed": true,"inputType": "email"},
     { "key": "QQ", "value": "qq", "noNeed": true},
     { "key": "微信", "value": "wechat", "noNeed": true }
   ],

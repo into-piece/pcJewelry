@@ -37,7 +37,7 @@ export default {
     selectedRowKeys: [], // table1 select
     selectedContactsRowKeys: [], // contacts select
     selectedBlankAccountRowKeys: [], // contacts select
-    timeline: 'contacts',
+    timeLine: 'contacts',
     detailChoosenType: 1,
     selectKey: '',
     pagination: {
@@ -89,7 +89,6 @@ export default {
       const supplierList =
         response.head && response.head.rtnCode === '000000' ? response.body : initData;
 
-      console.log(' effects response ', supplierList);
 
       yield put({
         type: 'changeState',
@@ -152,15 +151,24 @@ export default {
         payload: { data: {id:''}, typeName: 'choosenContactsRowData' },
       });
 
+      yield put({
+        type: 'changeState',
+        payload: { data:[], typeName: 'selectedContactsRowKeys' },
+      });
+
     },
 
 
 
     * clearBlankAccount(data, { put }) {
-      console.log("clearBlankAccount")
       yield put({
         type: 'changeState',
         payload: { data: {id:''}, typeName: 'choosenBlankAccountRowData' },
+      });
+
+      yield put({
+        type: 'changeState',
+        payload: { data:[], typeName: 'selectedBlankAccountRowKeys' },
       });
     },
 
@@ -198,7 +206,6 @@ export default {
     },
 
     * getChoosenBlankAccountRowData({ payload }, { put }) {
-      console.log("==>getChoosenBlankAccountRowData ",payload)
       yield put({
         type: 'getchoosenBlankAccountRowData2',
         payload,
@@ -223,7 +230,6 @@ export default {
       });
     },
     * changeSelectedBlankAccountRowKeys({ payload }, { put }) {
-      console.log("==>changeSelectedBlankAccountRowKeys ",payload)
       yield put({
         type: 'changeSelectedBlankAccountRowKeys2',
         payload,
@@ -382,7 +388,7 @@ export default {
     getTimeline2(state, action) {
       return {
         ...state,
-        timeline: action.payload,
+        timeLine: action.payload,
       };
     },
 
@@ -431,7 +437,6 @@ export default {
       };
     },
     changeSearchParams2(state, action) {
-      debugger;
       return {
         ...state,
         searchParams: {
