@@ -20,6 +20,7 @@ const searchParams = [
 ];
 
 const columnsarr = {
+  // 石材
   H016002:[
     {
       title: <div className={styles.row_normal2}>原料编号</div>,
@@ -57,6 +58,7 @@ const columnsarr = {
       key: 'zhName',
     },
   ],
+  // 主材
   H016001:[
     {
       title: <div className={styles.row_normal2}>原料编号</div>,
