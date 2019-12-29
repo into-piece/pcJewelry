@@ -64,7 +64,7 @@ export default {
       size: 10,
     },
     showProductModal: false,
-    wordbookdropdownType: [{ key: '', value: '' }],
+    wordbookdropdownType: [{ key: '', value: '' ,wordbookContentCode:''}],
     wordbookdropdownMode: [{ key: '', value: '' }],
     wordbookdropdownCurrency: [{ key: '', value: '' }],
     currencydropdown: [{ key: '', value: '' }],
@@ -76,6 +76,8 @@ export default {
     materialPriceList: [],
     searchParams: {},
     searchDetailParams: {},
+    searchContactsParams: {},
+    searchBlankAccountParams: {},
   },
 
   effects: {
@@ -179,9 +181,30 @@ export default {
       });
     },
 
-    *changeSearchDetailParams({ payload }, { put }) {
+    * changeSearchBlankAccountParams({ payload }, { put }) {
       yield put({
-        type: 'changeSearchDetailParams2',
+        type: 'changeSearchBlankAccountParams2',
+        payload,
+      });
+    },
+
+    *changeSearchContactsParams({ payload }, { put }) {
+      yield put({
+        type: 'changeSearchContactsParams2',
+        payload,
+      });
+    },
+
+    * clearSearchBlankAccountParams({ payload }, { put }) {
+      yield put({
+        type: 'clearSearchBlankAccountParams2',
+        payload,
+      });
+    },
+
+    *clearSearchContactsParams({ payload }, { put }) {
+      yield put({
+        type: 'clearSearchContactsParams2',
         payload,
       });
     },
@@ -268,8 +291,9 @@ export default {
     * getwordbookdropdownType(data, { call, put }) {
       const response = yield call(listMstWordbook, { wordbookTypeCode: 'H018' });
       const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
-        return { value: wordbookCode, key: wordbookContentZh };
+
+      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode,wordbookContentCode }) => {
+        return { value: wordbookCode, key: wordbookContentZh,wordbookContentCode };
       });
       yield put({
         type: 'changeState',
@@ -445,13 +469,36 @@ export default {
         },
       };
     },
-    changeSearchDetailParams2(state, action) {
+
+    changeSearchBlankAccountParams2(state, action) {
       return {
         ...state,
-        searchDetailParams: {
-          ...state.searchDetailParams,
+        searchBlankAccountParams: {
+          ...state.searchBlankAccountParams,
           ...action.payload,
         },
+      };
+    },
+    changeSearchContactsParams2(state, action) {
+      return {
+        ...state,
+        searchContactsParams: {
+          ...state.searchContactsParams,
+          ...action.payload,
+        },
+      };
+    },
+
+    clearSearchBlankAccountParams2(state) {
+      return {
+        ...state,
+        searchBlankAccountParams: {},
+      };
+    },
+    clearSearchContactsParams2(state) {
+      return {
+        ...state,
+        searchContactsParams: {},
       };
     },
   },
