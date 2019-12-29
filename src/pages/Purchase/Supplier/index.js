@@ -1677,7 +1677,6 @@ const GetRenderitem = ({ data, type, returnListName }) => {
     timeLine: purchase.timeLine,
     contactsList: purchase.contactsList,
     blankAccountList: purchase.blankAccountList,
-    quoteDatialList: purchase.quoteDatialList,
     choosenContactsRowData: purchase.choosenContactsRowData,
     selectedContactsRowKeys: purchase.selectedContactsRowKeys,
     choosenBlankAccountRowData: purchase.choosenBlankAccountRowData,
@@ -1692,7 +1691,7 @@ class CenterInfo extends Component {
   // 选中某行表头
   changeChoosenRow = (rowData, type) => {
 
-    const { dispatch, pagination, getDetailList, timeLine } = this.props;
+    const { dispatch, getDetailList, timeLine } = this.props;
     const str = type === 1 ? '' : type === 2 ? 'Contacts' : 'BlankAccount';
     dispatch({
       type: `purchase/getChoosen${str}RowData`,
@@ -1806,6 +1805,8 @@ class CenterInfo extends Component {
     const {
       choosenRowData,
       pagination,
+      blankAccountPagination,
+      contactsPagination,
       selectedRowKeys,
       selectedContactsRowKeys,
       selectedBlankAccountRowKeys,
@@ -1814,15 +1815,10 @@ class CenterInfo extends Component {
       timeLine,
       handleRadio,
       supplierList,
-      blankAccountList,
       choosenContactsRowData,
       choosenBlankAccountRowData,
-      blankAccountPagination,
-      contactsPagination,
-      detailChoosenType,
       purchase,
       returnElement,
-      listDetailLoading,
       listContactsLoading,
       listBlankAccountLoading,
       onSearch,
