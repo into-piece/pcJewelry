@@ -33,7 +33,7 @@ import { getCurrentUser } from '@/utils/authority';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
-import serviceObj from '@/services/quote';
+import serviceObj from '@/services/purchase';
 import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
@@ -48,6 +48,9 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const {
   deleteProductQuoteHeader,
+  deleteSupplier,
+  deleteContacts,
+  deleteBlankAccount,
   deleteProformaInvoiceDetail,
   getLastQuoteDetailByProductId,
   getTopQuoteDetailByProductId,
@@ -55,15 +58,29 @@ const {
   geInitializeCountByProductId,
   getMainMaterialPrice,
 } = serviceObj;
-const { headList, detailList } = jsonData;
+const { headList, detailList, blankAccountList } = jsonData;
 
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
+  { name: '删除', tag: 'delete', type: 'danger' },
+  { name: '打印', tag: 'copy' },
   { name: '审批', tag: 'lock' },
-  { name: '复制', tag: 'copy' },
+];
+
+const supplierBtnGroup = [
+  { name: '新增', tag: 'plus' },
+  { name: '编辑', tag: 'edit' },
+  { name: '删除', tag: 'delete', type: 'danger' },
+  { name: '打印', tag: 'copy' },
+  { name: '审批', tag: 'lock' },
+];
+
+const contactsBtnGroup = [
+  { name: '新增', tag: 'plus' },
+  { name: '编辑', tag: 'edit' },
+  { name: '删除', tag: 'delete', type: 'danger' },
 ];
 
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
@@ -96,146 +113,176 @@ const returnNameObj = {
 
 const returnName = (key, value) => returnNameObj[key][value];
 
-// 报价主页表头
+// 主页表头
 let clientContentColumns = [
   {
-    title: <div className={styles.row_normal2}>客户编号</div>,
-    dataIndex: 'customerNo',
-    key: 'customerNo',
+    title: <div className={styles.row_normal2}>供应商编号</div>,
+    dataIndex: 'supplierCode',
+    key: 'supplierCode',
   },
   {
     title: <div className={styles.row_normal2}>简称</div>,
-    dataIndex: 'customerShotName',
-    key: 'customerShotName',
+    dataIndex: 'shotName',
+    key: 'shotName',
 
     render: (d, i) => i.customerShotName,
   },
   {
-    title: <div className={styles.row_normal2}>报价单号</div>,
-    dataIndex: 'quoteNumber',
-    key: 'quoteNumber',
+    title: <div className={styles.row_normal2}>供应商类别</div>,
+    dataIndex: 'supplierCategory',
+    key: 'supplierCategory',
   },
   {
-    title: <div className={styles.row_normal2}>类别</div>, // ?
-    dataIndex: 'type',
-    key: 'typeName',
+    title: <div className={styles.row_normal2}>中文名</div>, // ?
+    dataIndex: 'zhName',
+    key: 'zhName',
 
     render: (d, i) => i.typeName,
   },
 
   {
-    title: <div className={styles.row_normal2}>报价日期</div>,
-    dataIndex: 'quoteDate',
-    key: 'quoteDate',
+    title: <div className={styles.row_normal2}>英文名</div>,
+    dataIndex: 'enName',
+    key: 'enName',
 
     render: data => data,
   },
 
   {
-    title: <div className={styles.row_normal2}>数量</div>,
-    dataIndex: 'quoteTotalCount',
-    key: 'quoteTotalCount',
+    title: <div className={styles.row_normal2}>中文地址</div>,
+    dataIndex: 'zhAddress',
+    key: 'zhAddress',
   },
 
   {
-    title: <div className={styles.row_normal2}>重量</div>,
-    dataIndex: 'quoteTotalWeight',
-    key: 'quoteTotalWeight',
+    title: <div className={styles.row_normal2}>英文地址</div>,
+    dataIndex: 'enAddress',
+    key: 'enAddress',
   },
   {
-    title: <div className={styles.row_normal2}>总额</div>,
-    dataIndex: 'quoteTotalAmount',
-    key: 'quoteTotalAmount',
+    title: <div className={styles.row_normal2}>开户行</div>,
+    dataIndex: 'openBank',
+    key: 'openBank',
   },
   {
-    title: <div className={styles.row_normal2}>终客号</div>,
-    dataIndex: 'endNo',
-    key: 'endNo',
+    title: <div className={styles.row_normal2}>户名</div>,
+    dataIndex: 'accountName',
+    key: 'accountName',
   },
   {
-    title: <div className={styles.row_normal2}>终客简称</div>,
-    dataIndex: 'endShotName',
-    key: 'endShotName',
+    title: <div className={styles.row_normal2}>银行账号</div>,
+    dataIndex: 'accountNum',
+    key: 'accountNum',
   },
   {
-    title: <div className={styles.row_normal2}>产品说明</div>, // ?
-    dataIndex: 'explains',
-    key: 'explains',
+    title: <div className={styles.row_normal2}>结算币种</div>, // ?
+    dataIndex: 'countCurrency',
+    key: 'countCurrency',
   },
+  {
+    title: <div className={styles.row_normal2}>结算币种名称</div>, // ?
+    dataIndex: 'countCurrencyName',
+    key: 'countCurrencyName',
+  },
+  {
+    title: <div className={styles.row_normal2}>税率</div>, // ?
+    dataIndex: 'rate',
+    key: 'rate',
+  },
+  {
+    title: <div className={styles.row_normal2}>结束方式</div>, // ?
+    dataIndex: 'countMode',
+    key: 'countMode',
+  }, {
+    title: <div className={styles.row_normal2}>结束方式名称</div>, // ?
+    dataIndex: 'countModeName',
+    key: 'countModeName',
+  },
+  {
+    title: <div className={styles.row_normal2}>备注</div>, // ?
+    dataIndex: 'remarks',
+    key: 'remarks',
+  },
+  // {
+  //   title: <div className={styles.row_normal2}>状态</div>, // ?
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+
 ];
 
 clientContentColumns = clientContentColumns.map(item => ({ ...item, sorter: true }));
 
-// 报价详情表头
-let customerColumns = [
+// 联系人详情表头
+let contactsColumns = [
   {
-    title: <div className={styles.row_normal2}>产品编号</div>,
-    dataIndex: 'productNo',
-    key: 'productNo',
+    title: <div className={styles.row_normal2}>联系人姓名</div>,
+    dataIndex: 'contactName',
+    key: 'contactName',
   },
   {
-    title: <div className={styles.row_normal2}>客户货号</div>,
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
+    title: <div className={styles.row_normal2}>手机</div>,
+    dataIndex: 'mobilePhone',
+    key: 'mobilePhone',
   },
   {
-    title: <div className={styles.row_normal2}>前次工费/克</div>,
-    dataIndex: 'lastCount',
-    key: 'lastCount',
+    title: <div className={styles.row_normal2}>电话</div>,
+    dataIndex: 'telphone',
+    key: 'telphone',
   },
   {
-    title: <div className={styles.row_normal2}>实际工费/克</div>,
-    dataIndex: 'actualCount',
-    key: 'actualCount',
+    title: <div className={styles.row_normal2}>email</div>,
+    dataIndex: 'email',
+    key: 'email',
   },
   {
-    title: <div className={styles.row_normal2}>最高工费/克</div>,
-    dataIndex: 'topCount',
-    key: 'topCount',
+    title: <div className={styles.row_normal2}>QQ</div>,
+    dataIndex: 'qq',
+    key: 'qq',
   },
   {
-    title: <div className={styles.row_normal2}>此次工费/克</div>,
-    dataIndex: 'nowCount',
-
-    key: 'nowCount',
-  },
-
-  {
-    title: <div className={styles.row_normal2}>字印价/件</div>,
-    dataIndex: 'markingPrice',
-    key: 'markingPrice',
-  },
-
-  {
-    title: <div className={styles.row_normal2}>包装价/件</div>,
-    dataIndex: 'packPrice',
-    key: 'packPrice',
-  },
-
-  {
-    title: <div className={styles.row_normal2}>报价金额</div>,
-    dataIndex: 'quotedAmount',
-    key: 'quotedAmount',
+    title: <div className={styles.row_normal2}>微信</div>,
+    dataIndex: 'supplierCode',
+    key: 'supplierCode',
   },
 ];
-customerColumns = customerColumns.map(item => ({ ...item, sorter: true }));
+contactsColumns = contactsColumns.map(item => ({ ...item, sorter: true }));
+
+// 开户行详情表头
+let openBlankColumns = [
+  {
+    title: <div className={styles.row_normal2}>开户行</div>,
+    dataIndex: 'openBank',
+    key: 'openBank',
+  },
+  {
+    title: <div className={styles.row_normal2}>户名</div>,
+    dataIndex: 'accountName',
+    key: 'accountName',
+  },
+  {
+    title: <div className={styles.row_normal2}>账号</div>,
+    dataIndex: 'accountNum',
+    key: 'accountNum',
+  },
+
+];
+openBlankColumns = openBlankColumns.map(item => ({ ...item, sorter: true }));
 
 // 报价主页的筛选参数
 const searchParamsArr = [
-  { key: '客户编号', value: 'customerId' },
-  { key: '报价单号', value: 'quoteNumber' },
-  { key: '类别', value: 'type', type: 2, list: 'wordbookdropdown', noNeed: true },
-  { key: '报价日期', value: 'quoteDate', type: 9 },
-  { key: '终客编号', value: 'endId' },
+  { key: '供应商编号', value: 'supplierCode' },
 ];
 
-// 报价主页的筛选参数
+// 筛选参数
 const searchDetailParams = [
-  { key: '产品编号', value: 'productNo' },
-  { key: '客户货号', value: 'customerProductNo' },
-  { key: '前次工费/克', value: 'lastCount' },
-  { key: '实际工费/克', value: 'actualCount' },
+  { key: '联系人姓名', value: 'contactName' },
 ];
+
+const searchBlackAccountParams = [
+  { key: '开户行', value: 'openBank' },
+];
+
 
 // 新增 产品 遍历配置
 const productSearchParams = [
@@ -244,33 +291,38 @@ const productSearchParams = [
 ];
 
 @Form.create()
-@connect(({ loading, quote }) => {
+@connect(({ loading, purchase }) => {
   return {
-    quote,
-    list: quote.list,
-    pagination: quote.pagination,
-    selectKey: quote.selectKey,
-    choosenRowData: quote.choosenRowData,
-    colorSetList: quote.colorSetList,
-    selectedRowKeys: quote.selectedRowKeys,
-    gemSetProcessDropDown: quote.gemSetProcessDropDown,
-    timeline: quote.timeline,
-    listLoading: loading.effects['quote/getList'],
-    rightMenu: quote.rightMenu,
-    choosenDetailRowData: quote.choosenDetailRowData,
-    detailChoosenType: quote.detailChoosenType,
-    productPagination: quote.productPagination,
-    showProductModal: quote.showProductModal,
-    quotelist: quote.quotelist,
-    quoteDatialList: quote.quoteDatialList,
-    selectedDetailRowKeys: quote.selectedDetailRowKeys,
-    productList: quote.productList,
-    productselectedKeys: quote.productselectedKeys,
-    productChoosenRowData: quote.productChoosenRowData,
-    productListLoading: loading.effects['quote/getProductList'],
-    searchParams: quote.searchParams,
-    searchDetailParams: quote.searchDetailParams,
-    endCustomerList:quote.endCustomerList
+    purchase,
+    list: purchase.list,
+    pagination: purchase.pagination,
+    contactsPagination: purchase.contactsPagination,
+    blankAccountPagination: purchase.blankAccountPagination,
+    selectKey: purchase.selectKey,
+    choosenRowData: purchase.choosenRowData,
+    colorSetList: purchase.colorSetList,
+    selectedRowKeys: purchase.selectedRowKeys,
+    gemSetProcessDropDown: purchase.gemSetProcessDropDown,
+    timeLine: purchase.timeLine,
+    listLoading: loading.effects['purchase/getList'],
+    rightMenu: purchase.rightMenu,
+    choosenContactsRowData: purchase.choosenContactsRowData,
+    choosenBlankAccountRowData: purchase.choosenBlankAccountRowData,
+    detailChoosenType: purchase.detailChoosenType,
+    productPagination: purchase.productPagination,
+    showProductModal: purchase.showProductModal,
+    supplierList: purchase.supplierList,
+    quoteDatialList: purchase.quoteDatialList,
+    contactsList: purchase.contactsList,
+    blankAccountList: purchase.blankAccountList,
+    selectedContactsRowKeys: purchase.selectedContactsRowKeys,
+    selectedBlankAccountRowKeys: purchase.selectedBlankAccountRowKeys,
+    productList: purchase.productList,
+    productselectedKeys: purchase.productselectedKeys,
+    productChoosenRowData: purchase.productChoosenRowData,
+    productListLoading: loading.effects['purchase/getProductList'],
+    searchParams: purchase.searchParams,
+    searchDetailParams: purchase.searchDetailParams,
   };
 })
 class Info extends Component {
@@ -283,43 +335,56 @@ class Info extends Component {
   };
 
   componentDidMount() {
-    this.initDropdownReq()
-  }
-
-  // 初始化表单数据
-  initDropdownReq = () => {
     const { dispatch } = this.props;
-        // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
+    // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
     // 获取客户编号下拉
-    dispatch({
-      type: 'quote/getlistCustomerDropDown',
-    });
+    // dispatch({
+    //   type: 'purchase/getlistCustomerDropDown',
+    // });
 
-    // 类别下拉
-    dispatch({
-      type: 'quote/getwordbookdropdown',
-    });
 
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
   }
+
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
     // getDevList
     dispatch({
-      type: `quote/getList`,
+      type: `purchase/getList`,
       payload: { params: { ...pagination, ...searchParams, ...param }, ...args },
     });
     dispatch({
-      type: `quote/clearDetailList`,
+      type: `purchase/clearDetailList`,
     });
+  };
+
+    getDetailList = (type, params) => {
+    console.log('getDetailList =>', type);
+    const { dispatch, pagination, contactsPagination,blankAccountPagination } = this.props;
+
+    if (type === 'contacts')
+      dispatch({
+        type: `purchase/getContactsList`,
+        payload: {
+          params: { ...contactsPagination, ...params },
+        },
+      });
+    else
+      dispatch({
+        type: `purchase/getBlankAccountList`,
+        payload: {
+          params: { ...blankAccountPagination, ...params },
+          // params: { ...pagination, ...param }, ...args
+        },
+      });
   };
 
   getProduct = args => {
     const { dispatch, productPagination } = this.props;
     dispatch({
-      type: 'quote/getProductList',
+      type: 'purchase/getProductList',
       payload: { params: { ...productPagination, ...args } },
       callback: res => {
         if (res && res.records.length === 1 && args.search) {
@@ -334,35 +399,50 @@ class Info extends Component {
     const { rightMenu, dispatch, form, choosenRowData } = this.props;
     const isHead = rightMenu === 1;
 
-    if (isHead) {
-      dispatch({
-        type: 'quote/getcurrencydropdown',
-      });
-    }
-
-    getMainMaterialPrice().then(res => {
-      const { head, body } = res;
-      if (head.rtnCode === '000000' && body.records.length > 0) {
-        const { silver } = body.records[0];
-        form.setFieldsValue({
-          quotePrice: silver,
-        });
-      }
+    // 类别下拉
+    dispatch({
+      type: 'purchase/getwordbookdropdownType',
     });
+
+    // 币种下拉
+    dispatch({
+      type: 'purchase/getwordbookdropdownCurrency',
+    });
+
+    // 方式下拉
+    dispatch({
+      type: 'purchase/getwordbookdropdownMode',
+    });
+
+    // if (isHead) {
+    //   dispatch({
+    //     type: 'purchase/getcurrencydropdown',
+    //   });
+    // }
+
+    // getMainMaterialPrice().then(res => {
+    //   const { head, body } = res;
+    //   if (head.rtnCode === '000000' && body.records.length > 0) {
+    //     const { silver } = body.records[0];
+    //     form.setFieldsValue({
+    //       quotePrice: silver,
+    //     });
+    //   }
+    // });
   };
 
   // 复制
   handleCopy = () => {
-    const { id } = this.props.choosenRowData;
-    serviceObj.copyQuote({ id }).then(res => {
-      const { rtnMsg, rtnCode } = res.head;
-      if (rtnCode === '000000') {
-        notification.success({
-          message: rtnMsg,
-        });
-        this.getList({ sendReq: 'currentQuote' });
-      }
-    });
+    // const { id } = this.props.choosenRowData;
+    // serviceObj.copyQuote({ id }).then(res => {
+    //   const { rtnMsg, rtnCode } = res.head;
+    //   if (rtnCode === '000000') {
+    //     notification.success({
+    //       message: rtnMsg,
+    //     });
+    //     this.getList({ sendReq: 'currentQuote' });
+    //   }
+    // });
   };
 
   // 列表对应操作button回调
@@ -372,34 +452,20 @@ class Info extends Component {
       case 'plus':
       case 'edit':
       default:
-        if (rightMenu === 2) {
-          const { markingId, markingEnName } = choosenRowData;
-          if(markingId){
-            form.setFieldsValue({
-              markingId,
-              markingEnName,
-            });
-          }
-
-          // 终客编号下拉
-          dispatch({
-            type: 'quote/getEndCustomerListDropDown',
-            payload: { key: choosenRowData.customerId },
-          });
-          
-          dispatch({
-            type: 'quote/getMarkinglistDropDown',
-            payload: {key:choosenRowData.customerId},
-          });
-
-        }
-        if (modalType === 'edit') {
-          const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
-            if (res.head.rtnCode !== '000000') return false;
-            return true;
-          });
-          if (!isEdit) return;
-        }
+        // if (rightMenu === 2) {
+        // const { markingId, markingEnName } = choosenRowData;
+        // form.setFieldsValue({
+        //   markingId,
+        //   markingEnName,
+        // });
+        // }
+        // if (modalType === 'edit') {
+        //   const isEdit = await serviceObj.checkIsEdit({ id: choosenRowData.id }).then(res => {
+        //     if (res.head.rtnCode !== '000000') return false;
+        //     return true;
+        //   });
+        //   if (!isEdit) return;
+        // }
         this.openAddModal();
         this.setState({ modalType });
         break;
@@ -435,24 +501,24 @@ class Info extends Component {
       this.getProduct();
       // 获取筛选参数下拉
       dispatch({
-        type: 'quote/getBrandsList',
+        type: 'purchase/getBrandsList',
       });
       dispatch({
-        type: 'quote/getbasicColourSettingsList',
+        type: 'purchase/getbasicColourSettingsList',
       });
     }
     dispatch({
-      type: 'quote/showProductModalFn',
+      type: 'purchase/showProductModalFn',
       payload: type === 1,
     });
   };
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu, dispatch } = this.props;
+    const { purchase, form, rightMenu, dispatch } = this.props;
     // 自动带出字印英文名
     if (type === 'markingId') {
-      const obj = quote.markinglist.find(item => {
+      const obj = purchase.markinglist.find(item => {
         return item.value === value;
       });
       const { enName } = obj;
@@ -465,18 +531,18 @@ class Info extends Component {
     if (type === 'customerId') {
       // 终客编号下拉
       dispatch({
-        type: 'quote/getEndCustomerListDropDown',
+        type: 'purchase/getEndCustomerListDropDown',
         payload: { key: value },
       });
 
       // 字印编码
       dispatch({
-        type: 'quote/getMarkinglistDropDown',
+        type: 'purchase/getMarkinglistDropDown',
         payload: { key: value },
       });
 
-      const { quote, form } = this.props;
-      const obj = quote.customerDropDownList.find(item => item.value === value);
+      const { purchase, form } = this.props;
+      const obj = purchase.customerDropDownList.find(item => item.value === value);
       const { shotName, currencyCode } = obj;
       const date = form.getFieldValue('quoteDate') || '';
       form.setFieldsValue({
@@ -487,7 +553,7 @@ class Info extends Component {
     }
 
     if (type === 'endId') {
-      const obj = quote.endCustomerList.find(item => item.value === value);
+      const obj = purchase.endCustomerList.find(item => item.value === value);
       const { endShotName } = obj;
       form.setFieldsValue({
         endShotName,
@@ -565,7 +631,7 @@ class Info extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   // type 9 RangePicker
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType }) => {
     switch (type) {
       case 2:
         return (
@@ -577,11 +643,11 @@ class Info extends Component {
             }}
           >
             {data[list] &&
-              data[list].map(({ value, key }) => (
-                <Option value={value} key={value}>
-                  {key}
-                </Option>
-              ))}
+            data[list].map(({ value, key }) => (
+              <Option value={value} key={value}>
+                {key}
+              </Option>
+            ))}
           </Select>
         );
       case 3:
@@ -624,9 +690,9 @@ class Info extends Component {
           </Radio.Group>
         );
       case 7:
-        return <Input disabled style={{ width: '100' }} placeholder="自动带出" />;
+        return <Input disabled style={{ width: '100' }} placeholder="自动带出"/>;
       case 8:
-        return <TextArea rows={1} placeholder="请输入" style={{width:820}} />;
+        return <TextArea rows={1} placeholder="请输入" style={{ width: 820 }}/>;
       case 9:
         return (
           <RangePicker
@@ -647,12 +713,15 @@ class Info extends Component {
             }}
           />
         );
+      case 11:
+        return <div style={{ width: 800 }}><Input placeholder="自动生成"/></div>;
       default:
         return (
           <Input
             disabled={this.disabledCondition(value, form)}
             style={{ width: '100' }}
             placeholder="请输入"
+            type={inputType ? inputType : 'text'}
             onChange={v => {
               this.inputChange(v, value);
             }}
@@ -690,15 +759,16 @@ class Info extends Component {
       rightMenu,
       choosenRowData,
       form,
-      choosenDetailRowData,
-      quote,
+      choosenContactsRowData,
+      choosenBlankAccountRowData,
+      purchase,
       productChoosenRowData,
     } = this.props;
     const { pictures } = productChoosenRowData;
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
     const isEdit = modalType === 'edit';
-    const addArr = rightMenu === 1 ? headList : detailList;
+    const addArr = rightMenu === 1 ? headList : rightMenu === 2 ? detailList : blankAccountList;
     const productTypeName = getFieldValue('productTypeName');
     const { currency, quoteMethod } = choosenRowData;
     const productNo = form.getFieldValue('productNo') || '';
@@ -707,129 +777,83 @@ class Info extends Component {
       H008002: '克',
       H008001: '件',
     };
+
     return (
       <Form size="small">
-        {rightMenu === 2 && (
-          <React.Fragment>
-            <div className="addModal" style={{ width: 800 }}>
-              <FormItem label="产品编号">
-                {getFieldDecorator('productNo', {
+        {addArr &&
+        addArr.map(
+          ({
+             key,
+             value,
+             noNeed,
+             type,
+             list,
+             clickFn,
+             text,
+             arr,
+             initValue,
+             number,
+             priceUnit,
+             inputType,
+           }) => (
+            <div
+              className="addModal"
+              key={key}
+              style={value === 'productTypeName' ? { marginRight: 100 } : {}}
+            >
+              <FormItem
+                label={
+                  priceUnit === 1 && rightMenu === 2
+                    ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
+                    : key
+                }
+              >
+                {getFieldDecorator(value, {
                   rules: [
                     {
-                      required: true,
-                      message: `选择产品编号`,
+                      required: !noNeed,
+                      message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                     },
                   ],
                   // eslint-disable-next-line
-                  initialValue: isEdit ? choosenDetailRowData.productNo : undefined,
+                  // initialValue: isEdit
+                  //   ? rightMenu === 1
+                  //     ? value === 'quoteDate'
+                  //       ? moment(choosenRowData[value])
+                  //       : choosenRowData[value]
+                  //     : choosenContactsRowData[value]
+                  //   : value === 'quoteDate'
+                  //     ? moment(moment().format('L'))
+                  //     : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
+                  //       : initValue || (number ? '0.00' : undefined),
+                  initialValue: isEdit
+                    ? rightMenu === 1
+                      ? choosenRowData[value]
+                      : rightMenu === 2 ? choosenContactsRowData[value]
+                        : choosenBlankAccountRowData[value]
+                    : initValue || (number ? '0.00' : undefined),
+
                 })(
-                  <p>
-                    {productNo}
-                    <span
-                      style={{ color: '#40a9ff', cursor: 'pointer', ...productNoStyle }}
-                      onClick={() => {
-                        this.showProductModalFunc(1);
-                      }}
-                    >
-                      选择产品编号
-                    </span>
-                  </p>
+                  this.returnElement({
+                    key,
+                    value,
+                    noNeed,
+                    type,
+                    list,
+                    clickFn,
+                    text,
+                    arr,
+                    initValue,
+                    data: purchase,
+                    form,
+                    inputType,
+                  }),
                 )}
               </FormItem>
             </div>
-
-            <div className={styles.carousel_content}>
-              <Carousel {...this.carouselsettings} autoplay key={`as${Math.random(2)}`}>
-                {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
-              </Carousel>
-            </div>
-          </React.Fragment>
+          ),
         )}
-        {addArr &&
-          addArr.map(
-            ({
-              key,
-              value,
-              noNeed,
-              type,
-              list,
-              clickFn,
-              text,
-              arr,
-              initValue,
-              number,
-              priceUnit,
-            }) => (
-              <div
-                className="addModal"
-                key={key}
-                style={value === 'productTypeName' ? { marginRight: 100 } : {}}
-              >
-                <FormItem
-                  label={
-                    priceUnit === 1 && rightMenu === 2
-                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
-                      : key
-                  }
-                >
-                  {getFieldDecorator(value, {
-                    rules: [
-                      {
-                        required: !noNeed,
-                        message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
-                      },
-                    ],
-                    // eslint-disable-next-line
-                    initialValue: isEdit
-                      ? rightMenu === 1
-                        ? value === 'quoteDate'
-                          ? moment(choosenRowData[value])
-                          : choosenRowData[value]
-                        : choosenDetailRowData[value]
-                      : value === 'quoteDate'
-                        ? moment(moment().format('L'))
-                        : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
-                          : initValue || (number ? '0.00' : undefined),
-                  })(
-                    this.returnElement({
-                      key,
-                      value,
-                      noNeed,
-                      type,
-                      list,
-                      clickFn,
-                      text,
-                      arr,
-                      initValue,
-                      data: quote,
-                      form,
-                    })
-                  )}
-                </FormItem>
-              </div>
-            )
-          )}
 
-        {/* {rightMenu === 2 && productTypeName === '戒指' && (
-          <React.Fragment>
-            <div className="addModal">
-              <FormItem label={'戒围标准'}>
-                {getFieldDecorator('ringAroundStId', {
-                  rules: [{ required: true, message: '请输入戒围标准' }],
-                  initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
-                })(<Input style={{ width: '100' }} placeholder="请输入戒围标准" />)}
-              </FormItem>
-            </div>
-            <div className="addModal">
-              <FormItem label={'戒围号'}>
-                {getFieldDecorator('ringAroundStId', {
-                  rules: [{ required: true, message: '请输入戒围标准' }],
-                  initialValue: isEdit ? choosenDetailRowData.ringAroundStId : undefined,
-                })(<Input style={{ width: '100' }} placeholder="请输入戒围标准" />)}
-              </FormItem>
-            </div>
-          </React.Fragment>
-        )} */}
       </Form>
     );
   };
@@ -849,20 +873,19 @@ class Info extends Component {
       default:
         break;
     }
-    const str = rightMenu === 1 ? '主页' : '明细';
-    return `${text}报价${str}`;
+    const str = rightMenu === 1 ? '供应商' : rightMenu === 2 ? '联系人' : '账号';
+    return `${text}${str}`;
   };
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData } = this.props;
+    const { rightMenu, form, choosenRowData, timeLine } = this.props;
     const { productLineId } = this.state;
     const isHead = rightMenu === 1;
-    const str = isHead ? 'quotelist' : 'quoteDatialList';
+    const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
     let params = {};
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id, productLineId };
-      debugger;
+      params = { supplierCode: choosenRowData.id };
     }
 
     form.validateFields((err, values) => {
@@ -871,9 +894,9 @@ class Info extends Component {
         params = {
           ...params,
           ...values,
-          emergency: values.emergency ? 1 : 0,
-          customerPreparation: values.customerPreparation ? 1 : 0,
-          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0,
+          // emergency: values.emergency ? 1 : 0,
+          // customerPreparation: values.customerPreparation ? 1 : 0,
+          // purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0,
         };
         serviceObj[`add${str}`]({ ...params }).then(res => {
           const { rtnCode, rtnMsg } = res.head;
@@ -881,7 +904,13 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList({ sendReq: 'currentQuote' });
+            // this.getList({ sendReq: 'currentQuote' });
+            if (isHead) {
+              this.getList({});
+            } else {
+              // this.getDetailList(rightMenu===2?'contacts':'blackAccount')
+              this.getDetailList(timeLine);
+            }
             if (close) this.btnFn('');
           }
           this.setState({ addLoading: false });
@@ -892,24 +921,27 @@ class Info extends Component {
 
   // 编辑按钮回调
   handleEdit = close => {
-    const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData } = this.props;
-    const { productLineId } = choosenDetailRowData;
+    const { rightMenu, form, choosenRowData, dispatch, choosenContactsRowData, choosenBlankAccountRowData } = this.props;
     const isHead = rightMenu === 1;
-    const str = isHead ? 'quotelist' : 'quoteDatialList';
+    const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
+    const id = isHead ? choosenRowData.id : rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
 
+    let type;
     let params = {
-      id: choosenRowData.id,
+      id,
     };
 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id, productLineId };
+      params = { supplierCode: choosenRowData.id, id };
+      type = rightMenu === 2 ? 'contacts' : 'blankAccount';
     }
 
     // 还要清空所选中项
     dispatch({
-      type: 'quote/changeSelectedRowKeys',
+      type: 'purchase/changeSelectedRowKeys',
       payload: [],
     });
+
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -918,9 +950,6 @@ class Info extends Component {
         params = {
           ...params,
           ...values,
-          emergency: values.emergency ? 1 : 0,
-          customerPreparation: values.customerPreparation ? 1 : 0,
-          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0,
         };
         serviceObj[`add${str}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head;
@@ -928,21 +957,25 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList({ sendReq: 'currentQuote' });
+            if (isHead)
+              this.getList();
+            else
+              this.getDetailList(type, { supplierCode: choosenRowData.id, id });
             if (close) this.btnFn('');
           }
           this.setState({ addLoading: false });
         });
+      }else{
+        err();
       }
     });
   };
 
   // 删除按钮回调
   handleDelect = () => {
-    const { rightMenu, selectedRowKeys, selectedDetailRowKeys } = this.props;
-    console.log(selectedRowKeys, selectedDetailRowKeys);
-    const sendApi = rightMenu === 1 ? deleteProductQuoteHeader : deleteProformaInvoiceDetail;
-    const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
+    const { rightMenu, selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys } = this.props;
+    const sendApi = rightMenu === 1 ? deleteSupplier : rightMenu === 2 ? deleteContacts : deleteBlankAccount;
+    const data = rightMenu === 1 ? selectedRowKeys : rightMenu === 2 ? selectedContactsRowKeys : selectedBlankAccountRowKeys;
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
@@ -970,13 +1003,14 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
-        const payload = isLock ? 'historyQuote' : 'currentQuote';
-        dispatch({
-          type: 'quote/getTimeline',
-          payload,
-        });
+        // const payload = isLock ? 'historyQuote' : 'currentQuote';
+        // dispatch({
+        //   type: 'purchase/getTimeline',
+        //   payload,
+        // });
 
-        this.getList({ sendReq: payload });
+        // this.getList({ sendReq: payload });
+        this.getList({});
       }
     });
   };
@@ -991,15 +1025,13 @@ class Info extends Component {
   returnLockType = () => {
     const {
       selectedRowKeys,
-      selectedDetailRowKeys,
-      quote,
-      rightMenu,
-      quotelist,
-      quoteDatialList,
+      supplierList,
     } = this.props;
-    const list = rightMenu === 1 ? quotelist : quoteDatialList;
-    const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
-    // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedDetailRowKeys, '============');
+    // const list = rightMenu === 1 ? supplierList : contactsList;
+    const list = supplierList;
+    // const selectedKeys = rightMenu === 1 ? selectedRowKeys : selectedContactsRowKeys;
+    const selectedKeys = selectedRowKeys;
+    // console.log(list, selectedKeys, rightMenu, selectedRowKeys, selectedContactsRowKeys, '============');
     if (list && list.records.length === 0) return { name: '审批', disabled: true, type: 1 };
     const isLock1 = selectedKeys.reduce((res, cur) => {
       const singleObjcect = list.records.find(subItem => subItem.id === cur);
@@ -1030,35 +1062,53 @@ class Info extends Component {
 
   // 判断按钮是否禁止 返回boolean
   returnSisabled = tag => {
-    const { selectedRowKeys, rightMenu, selectedDetailRowKeys } = this.props;
-    if (tag === 'plus') return false;
+    const { selectedRowKeys, rightMenu, selectedContactsRowKeys, selectedBlankAccountRowKeys } = this.props;
+
+    if (tag === 'plus')
+      return ((rightMenu === 2 || rightMenu === 3) && selectedRowKeys.length === 0);
     if (tag === 'lock')
       return (
         (rightMenu === 1 && selectedRowKeys.length === 0) ||
-        (rightMenu === 2 && selectedDetailRowKeys.length === 0) ||
+        (rightMenu === 2 && selectedContactsRowKeys.length === 0) ||
+        (rightMenu === 3 && selectedBlankAccountRowKeys.length === 0) ||
         this.returnLockType().disabled
       );
     return (
       (rightMenu === 1 && selectedRowKeys.length === 0) ||
-      (rightMenu === 2 && selectedDetailRowKeys.length === 0)
+      (rightMenu === 2 && selectedContactsRowKeys.length === 0) ||
+      (rightMenu === 3 && selectedBlankAccountRowKeys && selectedBlankAccountRowKeys.length === 0)
     );
   };
 
   // 弹窗单选框 回调
   handleRadio = e => {
+
+    const {
+      props,
+    } = this;
+
+    const {
+      choosenRowData,
+    } = props;
+
+
     const v = e.target.value;
     this.props.dispatch({
-      type: `quote/getTimeline`,
+      type: `purchase/getTimeline`,
       payload: e.target.value,
     });
-    this.getList({ sendReq: v });
+
+
+    this.getDetailList(v, { supplierCode: choosenRowData.id });
+
+    // this.getList({ sendReq: v });
   };
 
   // 更改dmenu主页/详情
   changeRightMenu = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'quote/changeRightMenu',
+      type: 'purchase/changeRightMenu',
       payload: v.target.value,
     });
   };
@@ -1066,7 +1116,8 @@ class Info extends Component {
   //
   unLockEdit = id => {
     const { choosenRowData } = this.props;
-    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {});
+    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {
+    });
   };
 
   // 取消弹窗回调
@@ -1075,14 +1126,14 @@ class Info extends Component {
     this.unLockEdit();
   };
 
-  // 选中某行表头
-  changeChoosenRow = rowData => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: `quote/getProductChoosenRowData`,
-      payload: rowData,
-    });
-  };
+  // // 选中某行表头
+  // changeChoosenRow = rowData => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: `purchase/getProductChoosenRowData`,
+  //     payload: rowData,
+  //   });
+  // };
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
@@ -1090,7 +1141,7 @@ class Info extends Component {
     const {
       id,
       productNo,
-      customerProductNo,
+      custoerProductNo,
       productTypeName,
       gemColorName,
       platingColorName,
@@ -1169,10 +1220,10 @@ class Info extends Component {
       productId: id,
       productNo,
       productColorName,
-      customerProductNo,
+      custoerProductNo,
       productTypeName,
       productType,
-      gemColorName, 
+      gemColorName,
       platingColorName,
       productLineId,
       finishedWeight,
@@ -1197,26 +1248,41 @@ class Info extends Component {
 
   onSelectChange = selectedRowKeys => {
     this.props.dispatch({
-      type: `quote/changeProductselectedKeys`,
+      type: `purchase/changeProductselectedKeys`,
       payload: selectedRowKeys,
     });
   };
 
   onSearch = v => {
-    const { timeline } = this.props;
-    const { quoteDateFrom, quoteDateTo } = this.state;
-    if (v.quoteDate) {
-      v.quoteDateFrom = quoteDateFrom;
-      v.quoteDateTo = quoteDateTo;
-      v.quoteDate = null;
-    }
-    this.getList({ sendReq: timeline }, v);
+    const { timeLine } = this.props;
+    // const { quoteDateFrom, quoteDateTo } = this.state;
+    // if (v.quoteDate) {
+    //   v.quoteDateFrom = quoteDateFrom;
+    //   v.quoteDateTo = quoteDateTo;
+    //   v.quoteDate = null;
+    // }
+    this.getList({ sendReq: timeLine }, v);
   };
 
+  onSearchDetail = v => {
+    console.log('==>onSearchDetail ');
+    const { timeLine, choosenRowData } = this.props;
+    if (!choosenRowData.id) return;
+    const params = { supplierCode: choosenRowData.id, ...v };
+    // const { quoteDateFrom, quoteDateTo } = this.state;
+    // if (v.quoteDate) {
+    //   v.quoteDateFrom = quoteDateFrom;
+    //   v.quoteDateTo = quoteDateTo;
+    //   v.quoteDate = null;
+    // }
+    this.getDetailList(timeLine, params);
+  };
+
+
   returnListName = (list, v) => {
-    const { quote } = this.props;
-    if (v && quote[list].length > 0) {
-      const value = quote[list].find(item => item.value === v);
+    const { purchase } = this.props;
+    if (v && list && purchase[list].length > 0) {
+      const value = purchase[list].find(item => item.value === v);
       return (value && value.key) || '';
     }
   };
@@ -1246,73 +1312,75 @@ class Info extends Component {
       onSelectChange,
       getProduct,
       onSearch,
+      onSearchDetail,
       returnListName,
       getProductSearch,
+      getDetailList,
     } = this;
     const { modalType, addloading } = state;
     const {
-      quote,
+      purchase,
       list,
       selectKey,
       choosenRowData,
       rightMenu,
-      choosenDetailRowData,
+      choosenContactsRowData,
+      choosenBlankAccountRowData,
       showProductModal,
       productPagination,
       productList,
       productselectedKeys,
       productChoosenRowData,
       productListLoading,
-      endCustomerList
+
     } = props;
+
 
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button key="back" onClick={onCancel}>
-              取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
-                handleModalOk(true);
-              }}
-            >
-              保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
-                handleModalOk(false);
-              }}
-            >
-              继续添加
-            </Button>,
-          ]
+          <Button key="back" onClick={onCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              handleModalOk(true);
+            }}
+          >
+            保存
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              handleModalOk(false);
+            }}
+          >
+            继续添加
+          </Button>,
+        ]
         : [
-            <Button key="back" onClick={onCancel}>
-              取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
-                handleModalOk(true);
-              }}
-            >
-              保存
-            </Button>,
-          ];
+          <Button key="back" onClick={onCancel}>
+            取消
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
+              handleModalOk(true);
+            }}
+          >
+            保存
+          </Button>,
 
-    console.log(choosenRowData, choosenRowData.id);
-    console.log(productList, '=======');
-    console.log(endCustomerList, '=======');
-    
+        ];
+
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1321,18 +1389,22 @@ class Info extends Component {
           <div className={styles.main}>
             <div className={styles.right} style={{ width: '100%' }}>
               <RightContent
-                choosenDetailRowData={choosenDetailRowData}
+                choosenContactsRowData={choosenContactsRowData}
+                choosenBlankAccountRowData={choosenBlankAccountRowData}
                 rightMenu={rightMenu}
                 type={selectKey}
                 sourceList={list}
                 changeRightMenu={changeRightMenu}
                 choosenRowData={choosenRowData}
                 btnFn={btnFn}
+                btnGroup={rightMenu === 1 ? supplierBtnGroup : contactsBtnGroup}
                 returnLockType={returnLockType}
                 returnSisabled={returnSisabled}
+                getDetailList={getDetailList}
                 handleRadio={handleRadio}
                 returnElement={returnElement}
                 onSearch={onSearch}
+                onSearchDetail={onSearchDetail}
                 returnListName={returnListName}
               />
             </div>
@@ -1340,7 +1412,7 @@ class Info extends Component {
         </div>
         {handleModalOk && (
           <Modal
-            title={<BuildTitle title={returnTitle()} />}
+            title={<BuildTitle title={returnTitle()}/>}
             zIndex={1000}
             maskClosable={false}
             width={1000}
@@ -1354,56 +1426,32 @@ class Info extends Component {
             {getModalContent()}
           </Modal>
         )}
-
-        <Modal
-          title={<BuildTitle title="选择产品" />}
-          maskClosable={false}
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          onOk={handleProductModalOk}
-          visible={showProductModal}
-          onCancel={handleProductModalCancel}
-          zIndex={1002}
-        >
-          <SelectProductModal
-            list={productList}
-            productSearchParams={productSearchParams}
-            pagination={productPagination}
-            returnElement={returnElement}
-            source={quote}
-            productselectedKeys={productselectedKeys}
-            changeChoosenRow={changeChoosenRow}
-            choosenRowData={productChoosenRowData}
-            onSelectChange={onSelectChange}
-            listLoading={productListLoading}
-            onSearch={getProduct}
-            changeProductSearch={getProductSearch}
-          />
-        </Modal>
       </div>
     );
   }
 }
 
-const radioArr = ['报价主页', '报价明细'];
+const radioArr = ['供应商', '联系人', '账号信息'];
 
 // 右手边正文内容
 const RightContent = ({
-  type,
-  choosenRowData,
-  btnFn,
-  returnLockType,
-  returnSisabled,
-  handleRadio,
-  changeRightMenu,
-  rightMenu,
-  choosenDetailRowData,
-  returnElement,
-  onSearch,
-  returnListName,
-}) => (
+                        type,
+                        choosenRowData,
+                        btnFn,
+                        returnLockType,
+                        returnSisabled,
+                        handleRadio,
+                        changeRightMenu,
+                        rightMenu,
+                        btnGroup,
+                        choosenContactsRowData,
+                        choosenBlankAccountRowData,
+                        returnElement,
+                        getDetailList,
+                        onSearch,
+                        onSearchDetail,
+                        returnListName,
+                      }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
       {/* 中间table组件 */}
@@ -1411,8 +1459,10 @@ const RightContent = ({
         <CenterInfo
           type={type}
           handleRadio={handleRadio}
+          getDetailList={getDetailList}
           returnElement={returnElement}
           onSearch={onSearch}
+          onSearchDetail={onSearchDetail}
         />
       </Col>
       {/* 右边显示详细信息和按钮操作 */}
@@ -1441,9 +1491,10 @@ const RightContent = ({
               </Radio.Button>
             ))}
           </Radio.Group>
+          {/*{console.log(" ==>choosenRowData ",choosenRowData)}*/}
           <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
             <GetRenderitem
-              data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
+              data={rightMenu === 1 ? choosenRowData : rightMenu === 2 ? choosenContactsRowData : choosenBlankAccountRowData}
               type={rightMenu}
               returnListName={returnListName}
             />
@@ -1460,61 +1511,28 @@ const RightContent = ({
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag, type: t }) => (
-                <Button
-                  key={tag}
-                  className={styles.buttomControl}
-                  type={
-                    t === 'danger' || (returnLockType().type === 2 && tag === 'lock')
-                      ? 'danger'
-                      : 'primary'
-                  }
-                  icon={tag}
-                  size="small"
-                  disabled={returnSisabled(tag)}
-                  onClick={() => {
-                    btnFn(tag);
-                  }}
-                >
-                  {tag === 'lock' ? returnLockType().name : name}
-                </Button>
-              ))}
-            </div>
-            <div style={{ paddingTop: '10px' }}>
-              <Upload
-                name="file"
-                action={HttpFetch.productExcelImport}
-                showUploadList={false}
-                headers={{
-                  token: getCurrentUser() ? getCurrentUser().token : '',
-                }}
-                onChange={info => {
-                  if (info.file.status !== 'uploading') {
-                    // console.log(info.file, info.fileList);
-                  }
-                  if (info.file.status === 'done') {
-                    // 获取初始表单数据
-                    btnFn('freshList');
-                    const { response } = info.file;
-
-                    if (response.head && response.head.btnCode !== '000000') {
-                      message.error(response.head.rtnMsg);
+              {
+                btnGroup.map(({ name, tag, type: t }) => (
+                  <Button
+                    key={tag}
+                    className={styles.buttomControl}
+                    type={
+                      t === 'danger' || (returnLockType().type === 2 && tag === 'lock')
+                        ? 'danger'
+                        : 'primary'
                     }
-
-                    // console.log(JSON.stringify(info.file.response))
-                    // message.success(info.file.response);
-                  } else if (info.file.status === 'error') {
-                    message.error(`import fail`);
-                  }
-                }}
-              >
-                {' '}
-                <Button type="primary" size="small" className={styles.buttomControl}>
-                  <Icon type="upload" />
-                  导入
-                </Button>
-              </Upload>
+                    icon={tag}
+                    size="small"
+                    disabled={returnSisabled(tag)}
+                    onClick={() => {
+                      btnFn(tag);
+                    }}
+                  >
+                    {tag === 'lock' ? returnLockType().name : name}
+                  </Button>
+                ))}
             </div>
+
           </Card>
         </div>
       </Col>
@@ -1524,37 +1542,22 @@ const RightContent = ({
 
 // 右手边详情显示
 const rowArr = [
-  { key: '报价单号', value: 'quoteNumber' },
-  { key: '报价日期', value: 'quoteDate' },
-  { key: '客户', value: 'customerNo' },
-  { key: '类别', value: 'type', belong: 3, list: 'wordbookdropdown' },
-  { key: '终客', value: 'endNo' },
+  { key: '供应商编号', value: 'supplierCode' },
+  { key: '简称', value: 'shotName' },
+  { key: '供应商类别', value: 'supplierCategory', list: 'wordbookdropdownType' },
   { key: '中文名', value: 'zhName' },
   { key: '英文名', value: 'enName' },
-  { key: '联系人', value: 'customerZhName' },
-  { key: '手机', value: 'customerPhone' },
-  { key: 'Email', value: 'customerEmail' },
-  { key: '报价方式', value: 'quoteMethod', belong: 2 },
-  { key: '主材价', value: 'quotePrice', belong: 3, list: 'materialPriceList' },
-  { key: '结算币种', value: 'currency' },
-  { key: '税率', value: 'taxRate' },
-  { key: '紧急程度', value: 'emergency', belong: 2 },
-  { key: '计石重', value: 'isWeighStones', belong: 2 },
-  { key: '字印编码', value: 'markingId', belong: 3, list: 'markinglist' },
-  { key: '字印英文名', value: 'markingEnName' },
-  { key: '包装单价', value: 'packPriceType', belong: 2 },
-  { key: '客户备料', value: 'customerPreparation', belong: 2 },
-  { key: '向客户采购用料', value: 'purchasingMaterialsFromCustomers', belong: 2 },
-  { key: '包装说明', value: 'packExplains' },
-  { key: '报价总数', value: 'quoteTotalCount' },
-  { key: '报价总重', value: 'quoteTotalWeight' },
-  { key: '报价总额', value: 'quoteTotalAmount' },
-  { key: '说明', value: 'explains' },
-  { key: '备注', value: 'remark' },
-  { key: '新增人', value: 'createUser' },
-  { key: '新增时间', value: 'createTime' },
-  { key: '修改人', value: 'modifier' },
-  { key: '修改时间', value: 'mtime' },
+  { key: '中文地址', value: 'zhAddress' },
+  { key: '英文地址', value: 'enAddress' },
+  { key: '开户行', value: 'openBank' },
+  { key: '户名', value: 'accountName' },
+  { key: '账号', value: 'accountNum' },
+  { key: '结算币种', value: 'countCurrency' },
+  { key: '税率', value: 'rate' },
+  { key: '结束方式', value: 'countMode' },
+  { key: '备注', value: 'remarks' },
+
+
 ];
 
 // 右手边显示的详情信息
@@ -1564,23 +1567,39 @@ const GetRenderitem = ({ data, type, returnListName }) => {
   };
 
   const returnRowName = ({ value, list, belong }) => {
-    return belong === 2
-      ? returnName(value, data[value])
-      : belong === 3
-      ? returnListName(list, data[value])
-      : data[value];
+    if (data[value])
+      return belong === 2
+        ? returnName(value, data[value])
+        : belong === 3
+          ? returnListName(list, data[value])
+          : data[value];
+    return '';
   };
 
   const arr =
     type === 1
-      ? rowArr
-      : [
-          ...detailList,
-          { key: '新增人', value: 'createUser' },
-          { key: '新增时间', value: 'createTime' },
-          { key: '修改人', value: 'modifier' },
-          { key: '修改时间', value: 'mtime' },
-        ];
+      ? [
+
+        ...rowArr,
+        { key: '新增人', value: 'createUser' },
+        { key: '新增时间', value: 'createTime' },
+        { key: '修改人', value: 'modifier' },
+        { key: '修改时间', value: 'mtime' },
+      ] : type === 2
+      ? [
+        ...detailList,
+        { key: '新增人', value: 'createUser' },
+        { key: '新增时间', value: 'createTime' },
+        { key: '修改人', value: 'modifier' },
+        { key: '修改时间', value: 'mtime' }] : [
+        ...blankAccountList,
+      ];
+
+
+  // console.log(" returnRowName key = ",key,"value = ",value ," belong - ",belong," list = ",list)
+
+  // console.log(" getRenderItem = type = ",type ," data ",arr,data)
+  // console.log(" getRenderItem   type = ",type ," data ",arr,data)
   return (
     <div
       style={{ marginLeft: 10, marginTop: 10 }}
@@ -1605,59 +1624,85 @@ const GetRenderitem = ({ data, type, returnListName }) => {
 
 // Table 中间列表内容
 @Form.create()
-@connect(({ loading, quote }) => {
+@connect(({ loading, purchase }) => {
   return {
-    quote,
-    listLoading: loading.effects['quote/getList'],
-    listDetailLoading: loading.effects['quote/getDetailList'],
-    quotelist: quote.quotelist,
-    pagination: quote.pagination,
-    choosenRowData: quote.choosenRowData,
-    selectedRowKeys: quote.selectedRowKeys,
-    selectedRowKeys2: quote.selectedRowKeys2,
-    timeline: quote.timeline,
-    quoteDatialList: quote.quoteDatialList,
-    choosenDetailRowData: quote.choosenDetailRowData,
-    selectedDetailRowKeys: quote.selectedDetailRowKeys,
-    detailChoosenType: quote.detailChoosenType,
-    rightMenu: quote.rightMenu,
-    detailPagination: quote.detailPagination,
+    purchase,
+    listLoading: loading.effects['purchase/getList'],
+    listDetailLoading: loading.effects['purchase/getDetailList'],
+    listContactsLoading: loading.effects['purchase/getContactsList'],
+    listBlankAccountLoading: loading.effects['purchase/getBlankAccountList'],
+    supplierList: purchase.supplierList,
+    pagination: purchase.pagination,
+    contactsPagination: purchase.contactsPagination,
+    blankAccountPagination: purchase.blankAccountPagination,
+    choosenRowData: purchase.choosenRowData,
+    selectedRowKeys: purchase.selectedRowKeys,
+    selectedRowKeys2: purchase.selectedRowKeys2,
+    timeLine: purchase.timeLine,
+    contactsList: purchase.contactsList,
+    blankAccountList: purchase.blankAccountList,
+    quoteDatialList: purchase.quoteDatialList,
+    choosenContactsRowData: purchase.choosenContactsRowData,
+    selectedContactsRowKeys: purchase.selectedContactsRowKeys,
+    choosenBlankAccountRowData: purchase.choosenBlankAccountRowData,
+    selectedBlankAccountRowKeys: purchase.selectedBlankAccountRowKeys,
+    detailChoosenType: purchase.detailChoosenType,
+    rightMenu: purchase.rightMenu,
+    detailPagination: purchase.detailPagination,
   };
 })
 class CenterInfo extends Component {
-  getDetailList = params => {
-    const { dispatch, pagination, choosenRowData } = this.props;
-    dispatch({
-      type: `quote/getDetailList`,
-      payload: {
-        params: { quoteHeadId: choosenRowData.id, ...pagination, ...params },
-      },
-    });
-  };
+
 
   // 选中某行表头
   changeChoosenRow = (rowData, type) => {
-    const { dispatch, pagination } = this.props;
-    const str = type === 1 ? '' : 'Detail';
+    console.log("==>changeChoosenRow ")
+
+    const { dispatch, pagination, getDetailList, timeLine } = this.props;
+    console.log("getDetailList = " ,getDetailList)
+    const str = type === 1 ? '' : type === 2 ? 'Contacts' : 'BlankAccount';
     dispatch({
-      type: `quote/getChoosen${str}RowData`,
+      type: `purchase/getChoosen${str}RowData`,
       payload: rowData,
     });
+
+    console.log(" url ",`purchase/getChoosen${str}RowData`)
+
     if (type === 1) {
-      this.getDetailList({ quoteHeadId: rowData.id });
-    } else {
+      console.log(' timeLine ', timeLine);
+
       dispatch({
-        type: `quote/changeRightMenu`,
+        type: `purchase/clearContacts`,
+      });
+      dispatch({
+        type: `purchase/clearBlankAccount`,
+      });
+      dispatch({
+        type: `purchase/clearContactsList`,
+      });
+      dispatch({
+        type: `purchase/clearBlankAccountList`,
+      });
+
+      getDetailList(timeLine, { supplierCode: rowData.id });
+    } else if (type === 2) {
+      dispatch({
+        type: `purchase/changeRightMenu`,
         payload: 2,
+      });
+    } else if (type === 3) {
+      dispatch({
+        type: `purchase/changeRightMenu`,
+        payload: 3,
       });
     }
   };
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
-    const str = type === 2 ? 'Detail' : '';
+    const str = type === 2 ? 'Contacts' : type === 3 ? 'BlankAccount' : '';
     this.props.dispatch({
-      type: `quote/changeSelected${str}RowKeys`,
+      type: `purchase/changeSelected${str}RowKeys`,
       payload: selectedRowKeys,
     });
   };
@@ -1667,11 +1712,28 @@ class CenterInfo extends Component {
     const { dispatch } = this.props;
     if (type === 1) {
       dispatch({
-        type: `quote/clearDetailList`,
+        type: `purchase/clearContacts`,
       });
       dispatch({
-        type: `quote/getChoosenRowData`,
+        type: `purchase/clearBlankAccount`,
+      });
+      dispatch({
+        type: `purchase/clearContactsList`,
+      });
+      dispatch({
+        type: `purchase/clearBlankAccountList`,
+      });
+      dispatch({
+        type: `purchase/getChoosenRowData`,
         payload: {},
+      });
+    } else if (type === 2) {
+      dispatch({
+        type: `purchase/clearContacts`,
+      });
+    } else if (type === 3) {
+      dispatch({
+        type: `purchase/clearBlankAccount`,
       });
     }
   };
@@ -1679,7 +1741,7 @@ class CenterInfo extends Component {
   changeSearchParams = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: `quote/changeSearchParams`,
+      type: `purchase/changeSearchParams`,
       payload: v,
     });
   };
@@ -1687,7 +1749,7 @@ class CenterInfo extends Component {
   changeSearchDetailParams = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: `quote/changeSearchParams`,
+      type: `purchase/changeSearchParams`,
       payload: v,
     });
   };
@@ -1697,7 +1759,6 @@ class CenterInfo extends Component {
       onSelectChange,
       props,
       clearFn,
-      getDetailList,
       changeSearchParams,
       changeSearchDetailParams,
     } = this;
@@ -1705,37 +1766,39 @@ class CenterInfo extends Component {
       choosenRowData,
       pagination,
       selectedRowKeys,
-      selectedDetailRowKeys,
+      selectedContactsRowKeys,
+      selectedBlankAccountRowKeys,
       listLoading,
-      quoteDatialList,
-      timeline,
+      contactsList,
+      timeLine,
       handleRadio,
-      quotelist,
-      choosenDetailRowData,
+      supplierList,
+      blankAccountList,
+      choosenContactsRowData,
+      choosenBlankAccountRowData,
+      blankAccountPagination,
+      contactsPagination,
       detailChoosenType,
-      detailPagination,
-      quote,
+      purchase,
       returnElement,
       listDetailLoading,
+      listContactsLoading,
+      listBlankAccountLoading,
       onSearch,
+      getDetailList,
+      onSearchDetail,
     } = props;
+
+    const ttype = timeLine === 'contacts' ? 2 : 3;
+
     return (
       <div className={styles.view_left_content}>
         <div style={{ marginBottom: 20 }}>
-          <Radio.Group value={timeline} buttonStyle="solid" onChange={handleRadio}>
-            <Radio.Button value="currentQuote">
-              当前报价
-              {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-            </Radio.Button>
-            <Radio.Button value="historyQuote">
-              历史报价
-              {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-            </Radio.Button>
-          </Radio.Group>
+
         </div>
         <SearchForm
           data={searchParamsArr}
-          source={quote}
+          source={purchase}
           onSearch={onSearch}
           returnElement={returnElement}
           onchange={changeSearchParams}
@@ -1743,7 +1806,7 @@ class CenterInfo extends Component {
         <div className={styles.tableBox}>
           <Table
             columns={clientContentColumns}
-            body={quotelist}
+            body={supplierList}
             changeChoosenRow={record => {
               this.changeChoosenRow(record, 1);
             }}
@@ -1761,40 +1824,40 @@ class CenterInfo extends Component {
         </div>
 
         <div style={{ marginBottom: 20 }}>
-          <Radio.Group value={detailChoosenType} buttonStyle="solid" onChange={handleRadio}>
-            {menuRadio2.map((item, index) => {
-              return (
-                <Radio.Button value={index + 1} key={item}>
-                  {item}
-                  {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-                </Radio.Button>
-              );
-            })}
+          <Radio.Group value={timeLine} buttonStyle="solid" onChange={handleRadio}>
+            <Radio.Button value="contacts">
+              联系人
+              {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+            </Radio.Button>
+            <Radio.Button value="blankAccount">
+              账号信息
+              {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+            </Radio.Button>
           </Radio.Group>
         </div>
         <SearchForm
           data={searchDetailParams}
-          source={quote}
-          onSearch={getDetailList}
+          source={purchase}
+          onSearch={onSearchDetail}
           returnElement={returnElement}
           onchange={changeSearchDetailParams}
         />
         <div className={styles.tableBox}>
           <Table
-            columns={customerColumns}
-            body={quoteDatialList}
-            type={2}
+            columns={timeLine === 'contacts' ? contactsColumns : openBlankColumns}
+            body={timeLine === 'contacts' ? contactsList : blankAccountList}
+            type={ttype}
             changeChoosenRow={record => {
-              this.changeChoosenRow(record, 2);
+              this.changeChoosenRow(record, ttype);
             }}
-            selectKey={choosenDetailRowData.id}
-            pagination={detailPagination}
+            selectKey={timeLine === 'contacts' ? choosenContactsRowData.id : choosenBlankAccountRowData.id}
+            pagination={timeLine === 'contacts' ? contactsPagination : blankAccountPagination}
             handleTableChange={getDetailList}
-            selectedRowKeys={selectedDetailRowKeys}
+            selectedRowKeys={timeLine === 'contacts' ? selectedContactsRowKeys : selectedBlankAccountRowKeys}
             onSelectChange={data => {
-              onSelectChange(data, 2);
+              onSelectChange(data, ttype);
             }}
-            listLoading={listDetailLoading}
+            listLoading={timeLine === 'contacts' ? listContactsLoading : listBlankAccountLoading}
             clearFn={clearFn}
           />
         </div>
@@ -1803,7 +1866,7 @@ class CenterInfo extends Component {
   }
 }
 
-const menuRadio2 = ['产品清单'];
+const menuRadio2 = ['联系人', '账户信息'];
 
 export default Info;
 

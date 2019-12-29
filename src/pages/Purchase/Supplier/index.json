@@ -1,0 +1,48 @@
+{
+
+
+  "headList": [
+    { "key": "供应商编号", "value": "supplierCode","noNeed": true ,"type": 11},
+    { "key": "供应商类别", "value": "supplierCategory","type": 2 ,"list": "wordbookdropdownType" },
+    { "key": "简称", "value": "shotName" },
+    { "key": "中文名", "value": "zhName" },
+    { "key": "英文名", "value": "enName","noNeed": true},
+    { "key": "中文地址", "value": "zhAddress" },
+    { "key": "英文地址", "value": "enAddress","noNeed": true },
+    { "key": "开户行", "value": "openBank","noNeed": true },
+    { "key": "户名", "value": "accountName", "noNeed": true},
+    { "key": "账号", "value": "accountNum","noNeed": true},
+    { "key": "结算币种", "value": "countCurrency","noNeed": false ,"type": 2 ,"list": "wordbookdropdownCurrency" },
+    { "key": "税率", "value": "rate" ,"noNeed": true,"inputType": "float"},
+    { "key": "结算方式", "value": "countMode","type": 2 ,"list": "wordbookdropdownMode" },
+
+    { "key": "联络人姓名", "value": "contactName"},
+    { "key": "手机", "value": "mobilePhone","inputType": "number"},
+    { "key": "电话", "value": "telphone","noNeed": true},
+    { "key": "Email", "value": "email","noNeed": true,"inputType": "email"},
+    { "key": "QQ", "value": "qq","noNeed": true,"inputType": "number"},
+    { "key": "微信", "value": "wechat","noNeed": true },
+    { "key": "备注", "value": "remarks","noNeed": true ,"type": 8}
+  ],
+
+
+
+
+
+  "detailList": [
+    { "key": "联系人姓名", "value": "contactName"},
+    { "key": "手机", "value": "mobilePhone"},
+    { "key": "电话", "value": "telphone", "noNeed": true,"inputType": "number"},
+    { "key": "email", "value": "email", "noNeed": true,"inputType": "email"},
+    { "key": "QQ", "value": "qq", "noNeed": true},
+    { "key": "微信", "value": "wechat", "noNeed": true }
+  ],
+
+
+  "blankAccountList": [
+    { "key": "开户行", "value": "openBank"},
+    { "key": "户名", "value": "accountName"},
+    { "key": "账号", "value": "accountNum"}
+
+  ]
+}
