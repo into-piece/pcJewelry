@@ -128,7 +128,7 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>供应商类别</div>,
-    dataIndex: 'supplierCategory',
+    dataIndex: 'supplierCategoryName',
     key: 'supplierCategoryName',
 
     render: (d, i) =>i.supplierCategoryName
@@ -175,13 +175,9 @@ let clientContentColumns = [
     dataIndex: 'accountNum',
     key: 'accountNum',
   },
+
   {
     title: <div className={styles.row_normal2}>结算币种</div>, // ?
-    dataIndex: 'countCurrency',
-    key: 'countCurrency',
-  },
-  {
-    title: <div className={styles.row_normal2}>结算币种名称</div>, // ?
     dataIndex: 'countCurrencyName',
     key: 'countCurrencyName',
   },
@@ -192,14 +188,8 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>结算方式</div>, // ?
-    dataIndex: 'countMode',
+    dataIndex: 'countModeName',
     key: 'countModeName',
-    render: (d, i) =>i.countModeName
-  }, {
-    title: <div className={styles.row_normal2}>结算方式名称</div>, // ?
-    dataIndex: 'countMode',
-    key: 'countModeName',
-    render: (d, i) =>i.countModeName
   },
   {
     title: <div className={styles.row_normal2}>备注</div>, // ?
@@ -375,7 +365,7 @@ class Info extends Component {
   };
 
   getDetailList = (type, params) => {
-    const { dispatch, pagination, contactsPagination, searchContactsParams, searchBlankAccountParams, blankAccountPagination } = this.props;
+    const { dispatch, contactsPagination, searchContactsParams, searchBlankAccountParams, blankAccountPagination } = this.props;
 
     if (type === 'contacts') {
       dispatch({
@@ -904,7 +894,8 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData, timeLine, dispatch } = this.props;
+    console.log(" ==>handleAdd ")
+    const { rightMenu, form, choosenRowData, timeLine, purchase } = this.props;
     const { productLineId } = this.state;
     const isHead = rightMenu === 1;
     const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
@@ -931,6 +922,22 @@ class Info extends Component {
             // this.getList({ sendReq: 'currentQuote' });
             if (isHead) {
               this.getList({});
+              if(!close)
+                serviceObj.getTurnoverCode({}).then(res => {
+                  if (res && res.body && res.body.records && res.body.records[0]) {
+                    const supplierCode = res.body.records[0].turnoverCode;
+
+                    console.log(' getTurnoverCode res ', supplierCode);
+                    const value = form.getFieldValue('supplierCategory')
+                    const obj = purchase.wordbookdropdownType.find(item => item.value === value);
+                    if(obj){
+                      const newSupplierCode = obj.wordbookContentCode + supplierCode;
+                      form.setFieldsValue({
+                        supplierCode:newSupplierCode
+                      });
+                    }
+                  }
+                });
             } else {
               // this.getDetailList(rightMenu===2?'contacts':'blackAccount')
               this.getDetailList(timeLine, { supplierCode: choosenRowData.id });
@@ -1342,6 +1349,8 @@ class Info extends Component {
       onSearchDetail,
       returnListName,
       getProductSearch,
+      blankAccountPagination,
+
       getDetailList,
     } = this;
     const { modalType, addloading } = state;
@@ -1353,13 +1362,7 @@ class Info extends Component {
       rightMenu,
       choosenContactsRowData,
       choosenBlankAccountRowData,
-      showProductModal,
-      productPagination,
-      productList,
-      productselectedKeys,
-      productChoosenRowData,
-      productListLoading,
-
+      contactsPagination
     } = props;
 
 
@@ -1423,6 +1426,8 @@ class Info extends Component {
                 sourceList={list}
                 changeRightMenu={changeRightMenu}
                 choosenRowData={choosenRowData}
+                blankAccountPagination={blankAccountPagination}
+                contactsPagination={contactsPagination}
                 btnFn={btnFn}
                 btnGroup={rightMenu === 1 ? supplierBtnGroup : contactsBtnGroup}
                 returnLockType={returnLockType}
@@ -1477,6 +1482,8 @@ const RightContent = ({
                         getDetailList,
                         onSearch,
                         onSearchDetail,
+                        contactsPagination,
+                        blankAccountPagination,
                         returnListName,
                       }) => (
   <GridContent>
@@ -1488,6 +1495,8 @@ const RightContent = ({
           handleRadio={handleRadio}
           getDetailList={getDetailList}
           returnElement={returnElement}
+          contactsPagination={contactsPagination}
+          blankAccountPagination={blankAccountPagination}
           onSearch={onSearch}
           onSearchDetail={onSearchDetail}
         />
@@ -1675,7 +1684,6 @@ const GetRenderitem = ({ data, type, returnListName }) => {
     selectedBlankAccountRowKeys: purchase.selectedBlankAccountRowKeys,
     detailChoosenType: purchase.detailChoosenType,
     rightMenu: purchase.rightMenu,
-    detailPagination: purchase.detailPagination,
   };
 })
 class CenterInfo extends Component {
@@ -1823,6 +1831,8 @@ class CenterInfo extends Component {
     } = props;
 
     const ttype = timeLine === 'contacts' ? 2 : 3;
+
+    console.log(" contactsPagination is ",contactsPagination)
 
     return (
       <div className={styles.view_left_content}>

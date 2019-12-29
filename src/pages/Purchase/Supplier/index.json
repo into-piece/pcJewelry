@@ -31,10 +31,10 @@
 
   "detailList": [
     { "key": "联系人姓名", "value": "contactName"},
-    { "key": "手机", "value": "mobilePhone"},
-    { "key": "电话", "value": "telphone", "noNeed": true,"inputType": "number"},
+    { "key": "手机", "value": "mobilePhone","inputType": "number"},
+    { "key": "电话", "value": "telphone", "noNeed": true},
     { "key": "email", "value": "email", "noNeed": true,"inputType": "email"},
-    { "key": "QQ", "value": "qq", "noNeed": true},
+    { "key": "QQ", "value": "qq", "noNeed": true,"inputType": "number"},
     { "key": "微信", "value": "wechat", "noNeed": true }
   ],
 
@@ -42,7 +42,7 @@
   "blankAccountList": [
     { "key": "开户行", "value": "openBank"},
     { "key": "户名", "value": "accountName"},
-    { "key": "账号", "value": "accountNum"}
+    { "key": "账号", "value": "accountNum","inputType": "number"}
 
   ]
 }

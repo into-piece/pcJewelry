@@ -96,6 +96,10 @@ export default {
         type: 'changeState',
         payload: { data: supplierList, typeName: 'supplierList' },
       });
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'pagination' },
+      });
     },
 
     * getContactsList({ payload }, { call, put }) {
@@ -110,6 +114,11 @@ export default {
         type: 'changeState',
         payload: { data: contactsList, typeName: 'contactsList' },
       });
+
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'contactsPagination' },
+      });
     },
 
     * getBlankAccountList({ payload }, { call, put }) {
@@ -123,6 +132,11 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: blankAccountList, typeName: 'blankAccountList' },
+      });
+
+      yield put({
+        type: 'changeState',
+        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'blankAccountPagination' },
       });
     },
 
