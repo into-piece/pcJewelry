@@ -39,7 +39,7 @@
   ],
 
 
-  "blankAccountList": [
+  "blankAccounts": [
     { "key": "开户行", "value": "openBank"},
     { "key": "户名", "value": "accountName"},
     { "key": "账号", "value": "accountNum","inputType": "number"}

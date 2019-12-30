@@ -38,6 +38,10 @@ export default {
     contactsList: initData,
     blankAccountList: initData,
     quoteDatialList: initData,
+    supplierSearchStatus: [
+      { key:'输入',value:0},
+      {key:'已审批',value:2}
+    ],
     selectedRowKeys: [], // table1 select
     selectedContactsRowKeys: [], // contacts select
     selectedBlankAccountRowKeys: [], // contacts select
