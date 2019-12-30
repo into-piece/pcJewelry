@@ -19,13 +19,13 @@ import {
   Icon,
   message
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import UploadImg from '@/components/UploadImg';
 
 // 弹窗输入配置&显示配置
@@ -521,7 +521,7 @@ class Index extends Component {
           </Radio.Group>
         );
       case 7:
-        return <span>{form.getFieldValue(value) || ''}</span>;
+        return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
@@ -928,7 +928,7 @@ class Index extends Component {
                               message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                             },
                           ],
-                          initialValue :initValue2|| initValue || (number ? 0 : undefined),
+                          initialValue :initValue2|| initValue || (number ? 0.00 : undefined),
                         })(
                           this.returnElement({
                             key,
@@ -1153,12 +1153,12 @@ class Index extends Component {
     const { selectedBom } = this.state;
     const str = type === 4 ? '审批' : '取消审批';
     dispatch({
-      type: defaultModelName + '/commonOpration',
+      type: `${defaultModelName  }/commonOpration`,
       payload: { params: [selectedBom.id], type, name:'bom' },
       callback: () => {
         debugger;
         notification.success({
-          message: str + '成功',
+          message: `${str  }成功`,
         });
         this.getbomlist();
       },
@@ -1200,9 +1200,15 @@ class Index extends Component {
         this.setState({
           selectedBom,
         });
-        this.getMaterialList({ BomId: obj.id });
-        this.getWorkFlowDropdownList({ bomId: obj.id });
-
+        if(obj){
+          this.getMaterialList({ BomId: obj.id });
+          this.getWorkFlowDropdownList({ bomId: obj.id });
+        }else{
+          dispatch({
+            type: `${defaultModelName}/changeStateOut`,
+            payload: {data:[],name:'materialList'},
+          });
+        }
       }
     });
 
@@ -1305,11 +1311,15 @@ class Index extends Component {
     });
   };
 
+
+  // 确认原料弹窗选择
   handleMaterialNoOk = () => {
     const {form,materialNoChoosenRowData} = this.props
     const {setFieldsValue} = form
     const {materialNo} = materialNoChoosenRowData
     setFieldsValue({materialNo})
+
+
     this.showMaterialModalFunc(2)
   }
 
@@ -1393,56 +1403,56 @@ class Index extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button
-              key="back"
-              onClick={() => {
+          <Button
+            key="back"
+            onClick={() => {
                 btnFn('');
                 this.setState({ filelist: [] });
               }}
-            >
+          >
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               继续添加
-            </Button>,
+          </Button>,
           ]
         : [
-            <Button
-              key="back"
-              onClick={() => {
+          <Button
+            key="back"
+            onClick={() => {
                 btnFn('');
                 this.setState({ filelist: [] });
               }}
-            >
+          >
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     const secondOprationArr = [
@@ -1660,13 +1670,13 @@ class Index extends Component {
 
 const CraftRow = ({ name, value, children }) => {
   return (
-    <div class="ant-row ant-form-item">
-      <div class="ant-col ant-form-item-label">
-        <label for="form1_craft1">{name}</label>
+    <div className="ant-row ant-form-item">
+      <div className="ant-col ant-form-item-label">
+        <label htmlFor="form1_craft1">{name}</label>
       </div>
-      <div class="ant-col ant-form-item-control-wrapper">
-        <div class="ant-form-item-control">
-          <span class="ant-form-item-children">{children}</span>
+      <div className="ant-col ant-form-item-control-wrapper">
+        <div className="ant-form-item-control">
+          <span className="ant-form-item-children">{children}</span>
         </div>
       </div>
     </div>

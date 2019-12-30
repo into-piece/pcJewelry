@@ -78,7 +78,7 @@ const product = [
 
 const material = [
   { key: '原料类别', value: 'materialTypeName' },
-  { key: '胶膜编号', value: 'modelNo' },
+  { key: '胶膜编号', value: 'modelNoName' },
   { key: '模比', value: 'modulusRatio' },
   {
     key: '原料小类',
