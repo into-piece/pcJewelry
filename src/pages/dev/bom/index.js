@@ -41,7 +41,8 @@ import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo'
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
-const uploadfile = `${priefx}/zuul/business/business/file/uploadFile`
+const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`
+const uploadfile = `${priefx}/zuul/business/business/file/uploadDocuments`
 
 const { Dragger } = Upload;
 const ButtonGroup = Button.Group;
@@ -136,10 +137,11 @@ class Index extends Component {
   }
 
   uploadFile = (type) => {
+    const action  = type === 'filePath'?uploadfile:uploadvideo
     const uploadConfig = {
       name: 'file',
       multiple: true,
-      action: uploadfile,
+      action,
       onChange:(info)=> {
         const { status } = info.file;
         if (status !== 'uploading') {

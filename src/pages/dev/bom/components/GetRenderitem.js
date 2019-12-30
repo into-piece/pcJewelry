@@ -3,7 +3,7 @@
  * 右边详情内容部分
  * */
 import React from 'react'
-import { Carousel, Card, Divider ,List,Icon} from 'antd';
+import { Carousel, Card, Divider ,List,Icon,Steps} from 'antd';
 import moment from 'moment';
 import Zmage from 'react-zmage';
 import DescriptionList from '@/components/DescriptionList';
@@ -11,7 +11,7 @@ import styles from './GetRenderitem.less';
 import { defaultImages } from '@/utils/utils';
 
 const { Description } = DescriptionList;
-
+const { Step } = Steps;
 // 右手边显示的详情信息
 /*
  * data 选中数据
@@ -45,6 +45,8 @@ const GetRenderitem = ({ data, type, items }) => {
   // import {defaultImages} from '@/utils/utils';
 
   const {videos} = data;
+  // const { current } = this.state;
+  const current = 0
   return (
     <Card
       bordered={false}
@@ -122,6 +124,26 @@ const GetRenderitem = ({ data, type, items }) => {
             )}
       />
       )}
+      {
+        data.flowList&&data.flowList.length>0&&(
+          <>
+            <p style={{marginBottom:20}}>生产流程</p>
+            <Steps
+              progressDot
+            >
+              {
+                data.flowList.map(item=>(
+                  <Step
+                    title={item.processName}
+                    status="finish"
+                  />
+                ))
+              }
+            </Steps>
+          </>
+        )
+      }
+        
     </Card>
   );
 };
