@@ -36,7 +36,6 @@ import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/purchase';
 import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
-import SelectProductModal from './SelectProductModal';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
@@ -125,19 +124,21 @@ let clientContentColumns = [
     dataIndex: 'shotName',
     key: 'shotName',
 
-    render: (d, i) => i.customerShotName,
+
   },
   {
     title: <div className={styles.row_normal2}>供应商类别</div>,
-    dataIndex: 'supplierCategory',
-    key: 'supplierCategory',
+    dataIndex: 'supplierCategoryName',
+    key: 'supplierCategoryName',
+
+    render: (d, i) =>i.supplierCategoryName
   },
   {
     title: <div className={styles.row_normal2}>中文名</div>, // ?
     dataIndex: 'zhName',
     key: 'zhName',
 
-    render: (d, i) => i.typeName,
+
   },
 
   {
@@ -174,13 +175,9 @@ let clientContentColumns = [
     dataIndex: 'accountNum',
     key: 'accountNum',
   },
+
   {
     title: <div className={styles.row_normal2}>结算币种</div>, // ?
-    dataIndex: 'countCurrency',
-    key: 'countCurrency',
-  },
-  {
-    title: <div className={styles.row_normal2}>结算币种名称</div>, // ?
     dataIndex: 'countCurrencyName',
     key: 'countCurrencyName',
   },
@@ -190,11 +187,7 @@ let clientContentColumns = [
     key: 'rate',
   },
   {
-    title: <div className={styles.row_normal2}>结束方式</div>, // ?
-    dataIndex: 'countMode',
-    key: 'countMode',
-  }, {
-    title: <div className={styles.row_normal2}>结束方式名称</div>, // ?
+    title: <div className={styles.row_normal2}>结算方式</div>, // ?
     dataIndex: 'countModeName',
     key: 'countModeName',
   },
@@ -242,8 +235,8 @@ let contactsColumns = [
   },
   {
     title: <div className={styles.row_normal2}>微信</div>,
-    dataIndex: 'supplierCode',
-    key: 'supplierCode',
+    dataIndex: 'wechat',
+    key: 'wechat',
   },
 ];
 contactsColumns = contactsColumns.map(item => ({ ...item, sorter: true }));
@@ -275,7 +268,7 @@ const searchParamsArr = [
 ];
 
 // 筛选参数
-const searchDetailParams = [
+const searchContactsParams = [
   { key: '联系人姓名', value: 'contactName' },
 ];
 
@@ -322,16 +315,14 @@ const productSearchParams = [
     productChoosenRowData: purchase.productChoosenRowData,
     productListLoading: loading.effects['purchase/getProductList'],
     searchParams: purchase.searchParams,
-    searchDetailParams: purchase.searchDetailParams,
+    searchContactsParams: purchase.searchContactsParams,
+    searchBlackAccountParams: purchase.searchBlackAccountParams,
   };
 })
 class Info extends Component {
   state = {
     addLoading: false,
     modalType: '',
-    quoteDateFrom: null,
-    quoteDateTo: null,
-    quoteDate: null,
   };
 
   componentDidMount() {
@@ -342,6 +333,19 @@ class Info extends Component {
     //   type: 'purchase/getlistCustomerDropDown',
     // });
 
+    dispatch({
+      type: 'purchase/getwordbookdropdownType',
+    });
+
+    // 币种下拉
+    dispatch({
+      type: 'purchase/getwordbookdropdownCurrency',
+    });
+
+    // 方式下拉
+    dispatch({
+      type: 'purchase/getwordbookdropdownMode',
+    });
 
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
@@ -360,25 +364,34 @@ class Info extends Component {
     });
   };
 
-    getDetailList = (type, params) => {
-    console.log('getDetailList =>', type);
-    const { dispatch, pagination, contactsPagination,blankAccountPagination } = this.props;
+  getDetailList = (type, params) => {
+    const { dispatch, contactsPagination, searchContactsParams, searchBlankAccountParams, blankAccountPagination } = this.props;
 
-    if (type === 'contacts')
+    if (type === 'contacts') {
+      dispatch({
+        type: `purchase/clearContacts`,
+      });
+
+
       dispatch({
         type: `purchase/getContactsList`,
         payload: {
-          params: { ...contactsPagination, ...params },
+          params: { ...contactsPagination, ...searchContactsParams, ...params },
         },
       });
-    else
+    } else {
+      dispatch({
+        type: `purchase/clearBlankAccount`,
+      });
+
+
       dispatch({
         type: `purchase/getBlankAccountList`,
         payload: {
-          params: { ...blankAccountPagination, ...params },
-          // params: { ...pagination, ...param }, ...args
+          params: { ...blankAccountPagination, ...searchBlankAccountParams, ...params },
         },
       });
+    }
   };
 
   getProduct = args => {
@@ -396,24 +409,28 @@ class Info extends Component {
   };
 
   openAddModal = () => {
-    const { rightMenu, dispatch, form, choosenRowData } = this.props;
-    const isHead = rightMenu === 1;
+    // const { rightMenu, dispatch, form, choosenRowData } = this.props;
+    // const isHead = rightMenu === 1;
 
-    // 类别下拉
-    dispatch({
-      type: 'purchase/getwordbookdropdownType',
-    });
 
-    // 币种下拉
-    dispatch({
-      type: 'purchase/getwordbookdropdownCurrency',
-    });
+    // if (isHead) {
+    //   // 类别下拉
+    //   dispatch({
+    //     type: 'purchase/getwordbookdropdownType',
+    //   });
+    //
+    //   // 币种下拉
+    //   dispatch({
+    //     type: 'purchase/getwordbookdropdownCurrency',
+    //   });
+    //
+    //   // 方式下拉
+    //   dispatch({
+    //     type: 'purchase/getwordbookdropdownMode',
+    //   });
 
-    // 方式下拉
-    dispatch({
-      type: 'purchase/getwordbookdropdownMode',
-    });
 
+    // }
     // if (isHead) {
     //   dispatch({
     //     type: 'purchase/getcurrencydropdown',
@@ -450,6 +467,15 @@ class Info extends Component {
     const { selectKey, dispatch, choosenRowData, form, rightMenu } = this.props;
     switch (modalType) {
       case 'plus':
+        serviceObj.getTurnoverCode({}).then(res => {
+          if (res && res.body && res.body.records && res.body.records[0]) {
+            const supplierCode = res.body.records[0].turnoverCode;
+            console.log(' getTurnoverCode res ', supplierCode);
+            form.setFieldsValue({
+              supplierCode,
+            });
+          }
+        });
       case 'edit':
       default:
         // if (rightMenu === 2) {
@@ -517,40 +543,28 @@ class Info extends Component {
   handleSelectChange = (value, type) => {
     const { purchase, form, rightMenu, dispatch } = this.props;
     // 自动带出字印英文名
-    if (type === 'markingId') {
-      const obj = purchase.markinglist.find(item => {
-        return item.value === value;
+    if (type === 'supplierCategory') {
+
+      serviceObj.getTurnoverCode({}).then(res => {
+        if (res && res.body && res.body.records && res.body.records[0]) {
+          const supplierCode = res.body.records[0].turnoverCode;
+
+          const obj = purchase.wordbookdropdownType.find(item => item.value === value);
+          const newSupplierCode = obj.wordbookContentCode + supplierCode;
+          form.setFieldsValue({
+            supplierCode:newSupplierCode
+          });
+
+          // console.log("select type supplierCode = ",supplierCode," obj = ",obj)
+        }
       });
-      const { enName } = obj;
-      form.setFieldsValue({
-        markingEnName: enName,
-      });
+
+
+
+
     }
 
-    // 自动带出
-    if (type === 'customerId') {
-      // 终客编号下拉
-      dispatch({
-        type: 'purchase/getEndCustomerListDropDown',
-        payload: { key: value },
-      });
 
-      // 字印编码
-      dispatch({
-        type: 'purchase/getMarkinglistDropDown',
-        payload: { key: value },
-      });
-
-      const { purchase, form } = this.props;
-      const obj = purchase.customerDropDownList.find(item => item.value === value);
-      const { shotName, currencyCode } = obj;
-      const date = form.getFieldValue('quoteDate') || '';
-      form.setFieldsValue({
-        customerShotName: shotName,
-        quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
-        currency: currencyCode,
-      });
-    }
 
     if (type === 'endId') {
       const obj = purchase.endCustomerList.find(item => item.value === value);
@@ -594,7 +608,6 @@ class Info extends Component {
 
   handleDatePicker1 = (date, dateString, v) => {
     const { form } = this.props;
-    console.log(form.getFieldValue('customerShotName'));
     const customerShotName = form.getFieldValue('customerShotName') || '';
     const quoteDate = moment(dateString);
     // const quoteDate = moment(date[0]).valueOf();
@@ -714,7 +727,7 @@ class Info extends Component {
           />
         );
       case 11:
-        return <div style={{ width: 800 }}><Input placeholder="自动生成"/></div>;
+        return  <Input placeholder="自动生成" disabled/>
       default:
         return (
           <Input
@@ -777,6 +790,8 @@ class Info extends Component {
       H008002: '克',
       H008001: '件',
     };
+    let suplierCode = '';
+
 
     return (
       <Form size="small">
@@ -799,7 +814,7 @@ class Info extends Component {
             <div
               className="addModal"
               key={key}
-              style={value === 'productTypeName' ? { marginRight: 100 } : {}}
+              style={value === 'supplierCode' ? { width: 800 } : {}}
             >
               <FormItem
                 label={
@@ -879,7 +894,8 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData, timeLine } = this.props;
+    console.log(" ==>handleAdd ")
+    const { rightMenu, form, choosenRowData, timeLine, purchase } = this.props;
     const { productLineId } = this.state;
     const isHead = rightMenu === 1;
     const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
@@ -887,7 +903,6 @@ class Info extends Component {
     if (!isHead) {
       params = { supplierCode: choosenRowData.id };
     }
-
     form.validateFields((err, values) => {
       if (!err) {
         this.setState({ addLoading: true });
@@ -907,9 +922,25 @@ class Info extends Component {
             // this.getList({ sendReq: 'currentQuote' });
             if (isHead) {
               this.getList({});
+              if(!close)
+                serviceObj.getTurnoverCode({}).then(res => {
+                  if (res && res.body && res.body.records && res.body.records[0]) {
+                    const supplierCode = res.body.records[0].turnoverCode;
+
+                    console.log(' getTurnoverCode res ', supplierCode);
+                    const value = form.getFieldValue('supplierCategory')
+                    const obj = purchase.wordbookdropdownType.find(item => item.value === value);
+                    if(obj){
+                      const newSupplierCode = obj.wordbookContentCode + supplierCode;
+                      form.setFieldsValue({
+                        supplierCode:newSupplierCode
+                      });
+                    }
+                  }
+                });
             } else {
               // this.getDetailList(rightMenu===2?'contacts':'blackAccount')
-              this.getDetailList(timeLine);
+              this.getDetailList(timeLine, { supplierCode: choosenRowData.id });
             }
             if (close) this.btnFn('');
           }
@@ -935,12 +966,12 @@ class Info extends Component {
       params = { supplierCode: choosenRowData.id, id };
       type = rightMenu === 2 ? 'contacts' : 'blankAccount';
     }
-
-    // 还要清空所选中项
-    dispatch({
-      type: 'purchase/changeSelectedRowKeys',
-      payload: [],
-    });
+    // else{
+    //   dispatch({
+    //     type: 'purchase/changeSelectedRowKeys',
+    //     payload: [],
+    //   });
+    // }
 
 
     form.validateFields((err, values) => {
@@ -965,15 +996,15 @@ class Info extends Component {
           }
           this.setState({ addLoading: false });
         });
-      }else{
-        err();
+      } else {
+        console.log('fieldValue error ', err);
       }
     });
   };
 
   // 删除按钮回调
   handleDelect = () => {
-    const { rightMenu, selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys } = this.props;
+    const { rightMenu, selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,choosenRowData } = this.props;
     const sendApi = rightMenu === 1 ? deleteSupplier : rightMenu === 2 ? deleteContacts : deleteBlankAccount;
     const data = rightMenu === 1 ? selectedRowKeys : rightMenu === 2 ? selectedContactsRowKeys : selectedBlankAccountRowKeys;
     sendApi(data).then(res => {
@@ -982,7 +1013,10 @@ class Info extends Component {
         notification.success({
           message: rtnMsg,
         });
+        if(rightMenu===1)
         this.getList({ sendReq: 'currentQuote' });
+        else
+          this.getDetailList(rightMenu === 2?'contacts':'blankAccount',{supplierCode:choosenRowData.id})
       }
     });
   };
@@ -1089,6 +1123,7 @@ class Info extends Component {
 
     const {
       choosenRowData,
+      dispatch,
     } = props;
 
 
@@ -1097,6 +1132,18 @@ class Info extends Component {
       type: `purchase/getTimeline`,
       payload: e.target.value,
     });
+
+    if (v === 'contacts') {
+      dispatch({
+        type: `purchase/clearSearchBlankAccountParams`,
+        payload: {},
+      });
+    } else {
+      dispatch({
+        type: `purchase/clearSearchContactsParams`,
+        payload: {},
+      });
+    }
 
 
     this.getDetailList(v, { supplierCode: choosenRowData.id });
@@ -1114,26 +1161,18 @@ class Info extends Component {
   };
 
   //
-  unLockEdit = id => {
-    const { choosenRowData } = this.props;
-    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {
-    });
-  };
+  // unLockEdit = id => {
+  //   const { choosenRowData } = this.props;
+  //   serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {
+  //   });
+  // };
 
   // 取消弹窗回调
   onCancel = () => {
     this.btnFn('');
-    this.unLockEdit();
+    // this.unLockEdit();
   };
 
-  // // 选中某行表头
-  // changeChoosenRow = rowData => {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: `purchase/getProductChoosenRowData`,
-  //     payload: rowData,
-  //   });
-  // };
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
@@ -1265,22 +1304,17 @@ class Info extends Component {
   };
 
   onSearchDetail = v => {
-    console.log('==>onSearchDetail ');
     const { timeLine, choosenRowData } = this.props;
     if (!choosenRowData.id) return;
     const params = { supplierCode: choosenRowData.id, ...v };
-    // const { quoteDateFrom, quoteDateTo } = this.state;
-    // if (v.quoteDate) {
-    //   v.quoteDateFrom = quoteDateFrom;
-    //   v.quoteDateTo = quoteDateTo;
-    //   v.quoteDate = null;
-    // }
     this.getDetailList(timeLine, params);
   };
 
 
   returnListName = (list, v) => {
+
     const { purchase } = this.props;
+
     if (v && list && purchase[list].length > 0) {
       const value = purchase[list].find(item => item.value === v);
       return (value && value.key) || '';
@@ -1315,6 +1349,8 @@ class Info extends Component {
       onSearchDetail,
       returnListName,
       getProductSearch,
+      blankAccountPagination,
+
       getDetailList,
     } = this;
     const { modalType, addloading } = state;
@@ -1326,13 +1362,7 @@ class Info extends Component {
       rightMenu,
       choosenContactsRowData,
       choosenBlankAccountRowData,
-      showProductModal,
-      productPagination,
-      productList,
-      productselectedKeys,
-      productChoosenRowData,
-      productListLoading,
-
+      contactsPagination
     } = props;
 
 
@@ -1396,6 +1426,8 @@ class Info extends Component {
                 sourceList={list}
                 changeRightMenu={changeRightMenu}
                 choosenRowData={choosenRowData}
+                blankAccountPagination={blankAccountPagination}
+                contactsPagination={contactsPagination}
                 btnFn={btnFn}
                 btnGroup={rightMenu === 1 ? supplierBtnGroup : contactsBtnGroup}
                 returnLockType={returnLockType}
@@ -1450,6 +1482,8 @@ const RightContent = ({
                         getDetailList,
                         onSearch,
                         onSearchDetail,
+                        contactsPagination,
+                        blankAccountPagination,
                         returnListName,
                       }) => (
   <GridContent>
@@ -1461,6 +1495,8 @@ const RightContent = ({
           handleRadio={handleRadio}
           getDetailList={getDetailList}
           returnElement={returnElement}
+          contactsPagination={contactsPagination}
+          blankAccountPagination={blankAccountPagination}
           onSearch={onSearch}
           onSearchDetail={onSearchDetail}
         />
@@ -1544,7 +1580,7 @@ const RightContent = ({
 const rowArr = [
   { key: '供应商编号', value: 'supplierCode' },
   { key: '简称', value: 'shotName' },
-  { key: '供应商类别', value: 'supplierCategory', list: 'wordbookdropdownType' },
+  { key: '供应商类别', value: 'supplierCategory', list: 'wordbookdropdownType' ,belong:3},
   { key: '中文名', value: 'zhName' },
   { key: '英文名', value: 'enName' },
   { key: '中文地址', value: 'zhAddress' },
@@ -1552,9 +1588,9 @@ const rowArr = [
   { key: '开户行', value: 'openBank' },
   { key: '户名', value: 'accountName' },
   { key: '账号', value: 'accountNum' },
-  { key: '结算币种', value: 'countCurrency' },
+  { key: '结算币种', value: 'countCurrency',list: 'wordbookdropdownCurrency' ,belong:3 },
   { key: '税率', value: 'rate' },
-  { key: '结束方式', value: 'countMode' },
+  { key: '结算方式', value: 'countMode',list: 'wordbookdropdownMode' ,belong:3 },
   { key: '备注', value: 'remarks' },
 
 
@@ -1641,14 +1677,12 @@ const GetRenderitem = ({ data, type, returnListName }) => {
     timeLine: purchase.timeLine,
     contactsList: purchase.contactsList,
     blankAccountList: purchase.blankAccountList,
-    quoteDatialList: purchase.quoteDatialList,
     choosenContactsRowData: purchase.choosenContactsRowData,
     selectedContactsRowKeys: purchase.selectedContactsRowKeys,
     choosenBlankAccountRowData: purchase.choosenBlankAccountRowData,
     selectedBlankAccountRowKeys: purchase.selectedBlankAccountRowKeys,
     detailChoosenType: purchase.detailChoosenType,
     rightMenu: purchase.rightMenu,
-    detailPagination: purchase.detailPagination,
   };
 })
 class CenterInfo extends Component {
@@ -1656,21 +1690,17 @@ class CenterInfo extends Component {
 
   // 选中某行表头
   changeChoosenRow = (rowData, type) => {
-    console.log("==>changeChoosenRow ")
 
-    const { dispatch, pagination, getDetailList, timeLine } = this.props;
-    console.log("getDetailList = " ,getDetailList)
+    const { dispatch, getDetailList, timeLine } = this.props;
     const str = type === 1 ? '' : type === 2 ? 'Contacts' : 'BlankAccount';
     dispatch({
       type: `purchase/getChoosen${str}RowData`,
       payload: rowData,
     });
 
-    console.log(" url ",`purchase/getChoosen${str}RowData`)
+    // console.log(' url ', `purchase/getChoosen${str}RowData`);
 
     if (type === 1) {
-      console.log(' timeLine ', timeLine);
-
       dispatch({
         type: `purchase/clearContacts`,
       });
@@ -1746,10 +1776,19 @@ class CenterInfo extends Component {
     });
   };
 
-  changeSearchDetailParams = v => {
+  changeSearchContactsParams = v => {
     const { dispatch } = this.props;
     dispatch({
-      type: `purchase/changeSearchParams`,
+      type: `purchase/changeSearchContactsParams`,
+      payload: v,
+    });
+  };
+
+
+  changeSearchBlankAccountParams = v => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `purchase/changeSearchBlankAccountParams`,
       payload: v,
     });
   };
@@ -1760,11 +1799,14 @@ class CenterInfo extends Component {
       props,
       clearFn,
       changeSearchParams,
-      changeSearchDetailParams,
+      changeSearchContactsParams,
+      changeSearchBlankAccountParams,
     } = this;
     const {
       choosenRowData,
       pagination,
+      blankAccountPagination,
+      contactsPagination,
       selectedRowKeys,
       selectedContactsRowKeys,
       selectedBlankAccountRowKeys,
@@ -1773,15 +1815,10 @@ class CenterInfo extends Component {
       timeLine,
       handleRadio,
       supplierList,
-      blankAccountList,
       choosenContactsRowData,
       choosenBlankAccountRowData,
-      blankAccountPagination,
-      contactsPagination,
-      detailChoosenType,
       purchase,
       returnElement,
-      listDetailLoading,
       listContactsLoading,
       listBlankAccountLoading,
       onSearch,
@@ -1790,6 +1827,8 @@ class CenterInfo extends Component {
     } = props;
 
     const ttype = timeLine === 'contacts' ? 2 : 3;
+
+    console.log(" contactsPagination is ",contactsPagination)
 
     return (
       <div className={styles.view_left_content}>
@@ -1835,32 +1874,59 @@ class CenterInfo extends Component {
             </Radio.Button>
           </Radio.Group>
         </div>
-        <SearchForm
-          data={searchDetailParams}
+        {timeLine === 'contacts' ? (<div><SearchForm
+          data={searchContactsParams}
           source={purchase}
           onSearch={onSearchDetail}
           returnElement={returnElement}
-          onchange={changeSearchDetailParams}
+          onchange={changeSearchContactsParams}
         />
-        <div className={styles.tableBox}>
-          <Table
-            columns={timeLine === 'contacts' ? contactsColumns : openBlankColumns}
-            body={timeLine === 'contacts' ? contactsList : blankAccountList}
-            type={ttype}
-            changeChoosenRow={record => {
-              this.changeChoosenRow(record, ttype);
-            }}
-            selectKey={timeLine === 'contacts' ? choosenContactsRowData.id : choosenBlankAccountRowData.id}
-            pagination={timeLine === 'contacts' ? contactsPagination : blankAccountPagination}
-            handleTableChange={getDetailList}
-            selectedRowKeys={timeLine === 'contacts' ? selectedContactsRowKeys : selectedBlankAccountRowKeys}
-            onSelectChange={data => {
-              onSelectChange(data, ttype);
-            }}
-            listLoading={timeLine === 'contacts' ? listContactsLoading : listBlankAccountLoading}
-            clearFn={clearFn}
-          />
-        </div>
+          <div className={styles.tableBox}>
+            <Table
+              columns={contactsColumns}
+              body={contactsList}
+              type={ttype}
+              changeChoosenRow={record => {
+                this.changeChoosenRow(record, ttype);
+              }}
+              selectKey={choosenContactsRowData.id}
+              pagination={contactsPagination}
+              handleTableChange={getDetailList}
+              selectedRowKeys={selectedContactsRowKeys}
+              onSelectChange={data => {
+                onSelectChange(data, ttype);
+              }}
+              listLoading={listContactsLoading}
+              clearFn={clearFn}
+            />
+          </div>
+        </div>) : (<div><SearchForm
+          data={searchBlackAccountParams}
+          source={purchase}
+          onSearch={onSearchDetail}
+          returnElement={returnElement}
+          onchange={changeSearchBlankAccountParams}
+        />
+          <div className={styles.tableBox}>
+            <Table
+              columns={openBlankColumns}
+              body={blankAccountList}
+              type={ttype}
+              changeChoosenRow={record => {
+                this.changeChoosenRow(record, ttype);
+              }}
+              selectKey={choosenBlankAccountRowData.id}
+              pagination={blankAccountPagination}
+              handleTableChange={getDetailList}
+              selectedRowKeys={selectedBlankAccountRowKeys}
+              onSelectChange={data => {
+                onSelectChange(data, ttype);
+              }}
+              listLoading={listBlankAccountLoading}
+              clearFn={clearFn}
+            />
+          </div>
+        </div>)}
       </div>
     );
   }
