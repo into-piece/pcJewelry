@@ -554,13 +554,13 @@ class Info extends Component {
   // type 8 inputext
   // type 9 RangePicker
   returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType,initValue }) => {
-    console.log(" initValue =>",initValue,data,value,key)
     switch (type) {
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
+            defaultOpen={true}
             onChange={v => {
               this.handleSelectChange(v, value);
             }}
