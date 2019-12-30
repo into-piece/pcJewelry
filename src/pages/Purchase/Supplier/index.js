@@ -48,7 +48,7 @@ const {
   getlistProductLine,
   geInitializeCountByProductId,
 } = serviceObj;
-const { headList, detailList, blankAccountList } = jsonData;
+const { headList, detailList, blankAccounts } = jsonData;
 
 // 右手边按钮集合
 const btnGroup = [
@@ -104,7 +104,7 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>供应商类别</div>,
-    dataIndex: 'supplierCategoryName',
+    dataIndex: 'supplierCategory',
     key: 'supplierCategoryName',
 
     render: (d, i) => i.supplierCategoryName,
@@ -154,8 +154,10 @@ let clientContentColumns = [
 
   {
     title: <div className={styles.row_normal2}>结算币种</div>, // ?
-    dataIndex: 'countCurrencyName',
+    dataIndex: 'countCurrency',
     key: 'countCurrencyName',
+
+    render: (d, i) => i.countCurrencyName,
   },
   {
     title: <div className={styles.row_normal2}>税率</div>, // ?
@@ -164,8 +166,10 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>结算方式</div>, // ?
-    dataIndex: 'countModeName',
+    dataIndex: 'countMode',
     key: 'countModeName',
+
+    render: (d, i) => i.countModeName,
   },
   {
     title: <div className={styles.row_normal2}>备注</div>, // ?
@@ -244,6 +248,7 @@ openBlankColumns = openBlankColumns.map(item => ({ ...item, sorter: true }));
 // 报价主页的筛选参数
 const searchParamsArr = [
   { key: '供应商编号', value: 'supplierCode' },
+  { key: '状态', value: 'status', type:2 ,list:'supplierSearchStatus',initValue:0,dfv:0},
 ];
 
 // 筛选参数
@@ -536,6 +541,7 @@ class Info extends Component {
   };
 
   inputChange = (v, type) => {
+
   };
 
   // 根据btn点击 返回对应弹窗内容
@@ -547,13 +553,14 @@ class Info extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   // type 9 RangePicker
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType,initValue }) => {
     switch (type) {
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
+            defaultOpen={true}
             onChange={v => {
               this.handleSelectChange(v, value);
             }}
@@ -631,6 +638,8 @@ class Info extends Component {
         );
       case 11:
         return <Input placeholder="自动生成" disabled/>;
+
+
       default:
         return (
           <Input
@@ -661,7 +670,7 @@ class Info extends Component {
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
     const isEdit = modalType === 'edit';
-    const addArr = rightMenu === 1 ? headList : rightMenu === 2 ? detailList : blankAccountList;
+    const addArr = rightMenu === 1 ? headList : rightMenu === 2 ? detailList : blankAccounts;
     const productTypeName = getFieldValue('productTypeName');
     const { currency, quoteMethod } = choosenRowData;
     const productNo = form.getFieldValue('productNo') || '';
@@ -710,24 +719,13 @@ class Info extends Component {
                       message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                     },
                   ],
-                  // eslint-disable-next-line
-                  // initialValue: isEdit
-                  //   ? rightMenu === 1
-                  //     ? value === 'quoteDate'
-                  //       ? moment(choosenRowData[value])
-                  //       : choosenRowData[value]
-                  //     : choosenContactsRowData[value]
-                  //   : value === 'quoteDate'
-                  //     ? moment(moment().format('L'))
-                  //     : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
-                  //       : initValue || (number ? '0.00' : undefined),
                   initialValue: isEdit
                     ? rightMenu === 1
                       ? choosenRowData[value]
                       : rightMenu === 2 ? choosenContactsRowData[value]
                         : choosenBlankAccountRowData[value]
-                    :value==='countCurrency'?initValue
-                      :initValue || (number ? '0.00' : undefined),
+                    : value === 'countCurrency' ? initValue
+                      : initValue || (number ? '0.00' : undefined),
 
                 })(
                   this.returnElement({
@@ -753,6 +751,8 @@ class Info extends Component {
       </Form>
     );
   };
+
+
 
   // 获取Modal的标题
   returnTitle = () => {
@@ -895,10 +895,10 @@ class Info extends Component {
           message: rtnMsg,
         });
         if (rightMenu === 1) {
-          this.clearPaginationHeadList()
+          this.clearPaginationHeadList();
           this.getList({ sendReq: 'currentQuote' });
         } else {
-          rightMenu === 2?this.clearContactsPaginationHeadList():this.clearBlankAccountPaginationHeadList();
+          rightMenu === 2 ? this.clearContactsPaginationHeadList() : this.clearBlankAccountPaginationHeadList();
           this.getDetailList(rightMenu === 2 ? 'contacts' : 'blankAccount', { supplierCode: choosenRowData.id });
 
         }
@@ -998,7 +998,8 @@ class Info extends Component {
   // 判断按钮是否禁止 返回boolean
   returnSisabled = tag => {
     const { selectedRowKeys, rightMenu, selectedContactsRowKeys, selectedBlankAccountRowKeys } = this.props;
-
+    if (tag === 'copy')
+      return ((rightMenu === 1) && selectedRowKeys.length === 0);
     if (tag === 'plus')
       return ((rightMenu === 2 || rightMenu === 3) && selectedRowKeys.length === 0);
     if (tag === 'lock')
@@ -1009,7 +1010,7 @@ class Info extends Component {
         this.returnLockType().disabled
       );
     return (
-      (rightMenu === 1 && selectedRowKeys.length === 0) ||
+      (this.returnLockType().type === 2 || (rightMenu === 1 && selectedRowKeys.length === 0)) ||
       (rightMenu === 2 && selectedContactsRowKeys.length === 0) ||
       (rightMenu === 3 && selectedBlankAccountRowKeys && selectedBlankAccountRowKeys.length === 0)
     );
@@ -1382,29 +1383,29 @@ const GetRenderitem = ({ data, type, returnListName }) => {
     return '';
   };
 
+  const baseArr = [{ key: '新增人', value: 'createUser' },
+    { key: '新增时间', value: 'createTime' },
+    { key: '修改人', value: 'modifier' },
+    { key: '修改时间', value: 'mtime' }]
+
   const arr =
     type === 1
       ? [
 
         ...rowArr,
-        { key: '新增人', value: 'createUser' },
-        { key: '新增时间', value: 'createTime' },
-        { key: '修改人', value: 'modifier' },
-        { key: '修改时间', value: 'mtime' },
+        ...baseArr,
       ] : type === 2
       ? [
         ...detailList,
-        { key: '新增人', value: 'createUser' },
-        { key: '新增时间', value: 'createTime' },
-        { key: '修改人', value: 'modifier' },
-        { key: '修改时间', value: 'mtime' }] : [
-        ...blankAccountList,
+        ...baseArr] :
+      [
+        ...blankAccounts,
+        ...baseArr
       ];
 
 
   // console.log(" returnRowName key = ",key,"value = ",value ," belong - ",belong," list = ",list)
 
-  // console.log(" getRenderItem = type = ",type ," data ",arr,data)
   // console.log(" getRenderItem   type = ",type ," data ",arr,data)
   return (
     <div
@@ -1592,12 +1593,12 @@ class CenterInfo extends Component {
       listBlankAccountLoading,
       onSearch,
       getDetailList,
+      blankAccountList,
       onSearchDetail,
     } = props;
 
     const ttype = timeLine === 'contacts' ? 2 : 3;
 
-    console.log(' contactsPagination is ', contactsPagination);
 
     return (
       <div className={styles.view_left_content}>
