@@ -3,7 +3,7 @@ export const product = [{ key: 'BOM名称', value: 'bName', type: 1 }];
 export const material = [
   { key: 'bom名称', value: 'bomId', type: 2, list: 'bomlist' },
   { key: '原料类别', value: 'materialType', type: 2, list: 'listMstWordbook' },
-  { key: '模具编号', value: 'modelNo', type: 2, list: 'listFilmSettingsDropDown' },
+  { key: '胶膜编号', value: 'modelNo', type: 2, list: 'listFilmSettingsDropDown' },
   { key: '模比', value: 'modulusRatio' },
   {
     key: '原料小类',
@@ -16,7 +16,6 @@ export const material = [
     value: 'acquisitionDepartment',
     type: 2,
     list: 'listDeptDropDown',
-    noNeed: true,
   },
   {
     key: '配模',
@@ -40,7 +39,7 @@ export const material = [
   { key: '单件用重', value: 'sheetWithHeavy', noNeed: true ,number:true},
   { key: '计价类别', value: 'valuationClass', noNeed: true },
   { key: '损耗率', value: 'attritionRate', noNeed: true },
-  { key: '备注', value: 'remarks', noNeed: true },
+  { key: '备注', value: 'remarks', noNeed: true , row: 1,type:8},
 ];
 
 const proccess = [
@@ -48,8 +47,8 @@ const proccess = [
 ]
 
 const productProcess = [
-  { key: '工序编号', value: 'workProcessCode', row: 2 },
-  { key: '工序名称', value: 'zhName', row: 2 },
+  { key: '工序名称', value: 'zhName', row: 2, type:2,list:'flowlistDropDown' },
+  { key: '工序编号', value: 'workProcessCode', row: 7 },
   { key: '耗损（%）', value: 'isWastage', row: 2 },
   { key: '效率（件/小时）', value: 'processCapacity', row: 2 ,number:true},
   { key: '图片', value: 'picPath', row: 1 ,noNeed:true},

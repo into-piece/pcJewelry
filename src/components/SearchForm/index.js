@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Form, Icon, Input } from 'antd';
+import { Button, Form, Icon, Input,Select } from 'antd';
 import styles from './index.less';
 
+const {Option} = Select
 const FormItem = Form.Item;
 @Form.create({
   onValuesChange(props, changedFields,allValues) {
@@ -20,7 +21,8 @@ class SearchFrom extends Component {
       data,
       source,
       returnElement,
-      onchange
+      onchange,
+      needStatus
     } = this.props;
     const { getFieldDecorator } = form
     return (
@@ -48,6 +50,19 @@ class SearchFrom extends Component {
                   })(returnElement({ ...data[0], data: source, }))}
                 </FormItem>
               </div>
+          }
+          {needStatus?
+            <div className="addModal">
+              <FormItem label="状态" className={styles.from_content_col}>
+                {getFieldDecorator('status', { initialValue: 0 })(
+                  <Select style={{ width: 174 }} placeholder="请选择">
+                    <Option value={undefined}>不限</Option>
+                    <Option value={0}>输入</Option>
+                    <Option value={2}>已审批</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </div>:null
           }
           <p className={styles.submitButtons}>
             <span className={styles.submitButtons}>

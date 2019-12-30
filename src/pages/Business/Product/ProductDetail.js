@@ -54,7 +54,7 @@ const {
   queryproductDropDown2,
   queryProductMaterial,
   queryunitColor,
-  queryPlatingColor,
+  queryPlatingColor, 
   queryTerminalNoList,
   queryMstWordList,
   queryMoldList, // 模具号

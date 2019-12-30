@@ -97,6 +97,7 @@ const radioArr = [
     materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
     materialSelectedKeys:model.materialSelectedKeys,
     materialNoPagination:model.materialNoPagination,
+    flowlistDropDown:model.flowlistDropDown
   };
 })
 class Index extends Component {
@@ -137,6 +138,7 @@ class Index extends Component {
   }
 
   uploadFile = (type) => {
+    const {choosenProccessData} = this.props
     const action  = type === 'filePath'?uploadfile:uploadvideo
     const uploadConfig = {
       name: 'file',
@@ -162,9 +164,32 @@ class Index extends Component {
           message.error(`${info.file.name} file upload failed.`);
         }
       },
-    };
+    }
+
+    const childkey = type === 'filePath'?'files':'videos'
+    const filekey = type === 'filePath'?'filePath':'videoPath'
+
+    const fileList = choosenProccessData&&choosenProccessData[childkey]?choosenProccessData[childkey].map((item)=>{
+      return(
+        {
+          uid:item.id,
+          url:item.filekey,
+          name:item[filekey].substring(item[filekey].lastIndexOf('\\')+1,item[filekey].length)
+        }
+      )
+    }):[]
+
+    // const fileList = [
+    //   {
+    //     uid: '-1',
+    //     name: 'xxx.png',
+    //     status: 'done',
+    //     url: 'http://www.baidu.com/xxx.png',
+    //   },
+    // ]
+
     return(
-      <Dragger {...uploadConfig}>
+      <Dragger {...uploadConfig} defaultFileList={fileList}>
         <p className="ant-upload-drag-icon">
           <Icon type="inbox" />
         </p>
@@ -196,7 +221,8 @@ class Index extends Component {
   };
 
   initDrop = () => {
-    const { dispatch } = this.props;
+    const { dispatch,form } = this.props;
+    const {setFieldsValue}  = form
     const { rightActive } = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
@@ -225,8 +251,27 @@ class Index extends Component {
     //   payload: {},
     // });
 
+    let arr = []
+    if(rightActive === FIRST_TAG){
+      arr = [
+        {
+          name: 'productTypeDropDown',
+          // value1:'unitCode',
+          params: {
+            bType: 'H015002',
+          },
+        },
+        {
+          name: 'listCustomerDropDown',
+          key1: 'shotName',
+          value1: 'id',
+        }
+      ]
+    }
+
     if (rightActive === SECOND_TAG) {
-      const arr = [
+        setFieldsValue({bomId:this.state.selectedBom.id})
+       arr = [
         // 原料类别
         {
           name: 'listMstWordbook',
@@ -248,15 +293,20 @@ class Index extends Component {
         {
           name: 'listBasicMeasureUnitDropDown',
         },
+       
       ];
-
-      arr.forEach(item => {
-        dispatch({
-          type: `${defaultModelName}/getDropdownList`,
-          payload: item,
-        });
-      });
     }
+
+    if(rightActive === THIRD_TAG){
+      this.getFlowDropdownList()
+    }
+
+    arr.forEach(item => {
+      dispatch({
+        type: `${defaultModelName}/getDropdownList`,
+        payload: item,
+      });
+    });
   };
 
   // table 搜索
@@ -305,7 +355,8 @@ class Index extends Component {
 
 
   handleSelectChange = (value, type) => {
-    const { dispatch, form,materialNoList} = this.props;
+    const {rightActive} = this.state
+    const { dispatch, form,materialNoList,flowlistDropDown} = this.props;
     const {setFieldsValue} = form
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
@@ -348,6 +399,10 @@ class Index extends Component {
         weightUnit,
         inventoryWeight,
       })
+    }
+    if(rightActive === THIRD_TAG && type === 'zhName'){
+      const workProcessCode = flowlistDropDown.filter(item=>(item.id === value))[0].flowCode
+      setFieldsValue({workProcessCode})
     }
   };
 
@@ -510,8 +565,8 @@ class Index extends Component {
       rightActive === FIRST_TAG
         ? 'bom'
         : rightActive === SECOND_TAG
-        ? 'material'
-        : 'productProcess';
+        ? 'material':
+        this.isEditworkFlow?'productflow': 'productProcess';
     const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings" />;
     return menuText;
   };
@@ -1503,7 +1558,7 @@ class Index extends Component {
                               ? choosenRowData
                               : isthird
                               ? choosenProccessData
-                              : choosenRowDataSecond
+                              : {...choosenRowDataSecond,pictures:choosenRowData.pictures}
                           }
                           type={rightActive}
                           items={showItem}
@@ -1549,7 +1604,7 @@ class Index extends Component {
           <Modal
             maskClosable={false}
             title={<BuildTitle title={returnTitle()} />}
-            width={1000}
+            width={this.isEditworkFlow||rightActive === FIRST_TAG?500:1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
