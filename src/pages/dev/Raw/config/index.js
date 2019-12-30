@@ -54,7 +54,7 @@ export const modalContent = {
     },
     { span: 8, 'key': '客户编号', 'value': 'customerNo', 'noNeed': true, },
     { span: 8, 'key': '供应商编号', 'value': 'supplierNo', 'noNeed': true, },
-    { span: 8, 'key': '单价', 'value': 'price', number: true ,'convert':numberFixed4},
+    { span: 8, 'key': '工费', 'value': 'price', number: true ,'convert':numberFixed4},
     { span: 8, 'key': '计价类别', 'value': 'valuationClass', 'name': true, 'type': 3, 'dfv': '1', search: true },
     { span: 8, 'key': '单重', 'value': 'inventoryWeight', 'noNeed': true, search: true ,'convert':numberFixed4},
     { span: 8, 'key': '状态', 'value': 'status', 'list': 'statusList', 'type': 2, noedit: true,'convert':statusConvert, },

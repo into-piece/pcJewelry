@@ -230,7 +230,7 @@ const columnsArr = {
 
     },
     {
-      title: '单价',
+      title: '工费',
       dataIndex: 'price',
       key: 'price',
       render: d => parseFloat(d || 0).toFixed(4),
