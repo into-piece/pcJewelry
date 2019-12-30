@@ -8,6 +8,10 @@
 import servicesConfig from '@/services/purchase';
 
 const initData = { records: [] };
+const initPagination = {
+  current: 1,
+  size: 10,
+};
 
 const {
   queryProductQuoteHeadersNotDone,
@@ -24,7 +28,7 @@ const {
 
   listSupplier,
   listContacts,
-   listBlankAccount,
+  listBlankAccount,
 } = servicesConfig;
 export default {
   namespace: 'purchase',
@@ -40,18 +44,9 @@ export default {
     timeLine: 'contacts',
     detailChoosenType: 1,
     selectKey: '',
-    pagination: {
-      current: 1,
-      size: 10,
-    },
-    contactsPagination: {
-      current: 1,
-      size: 10,
-    },
-    blankAccountPagination: {
-      current: 1,
-      size: 10,
-    },
+    pagination: initPagination,
+    contactsPagination: initPagination,
+    blankAccountPagination: initPagination,
     choosenRowData: {}, // select to show
     choosenContactsRowData: { id: '' }, // select to show
     choosenBlankAccountRowData: { id: '' }, // select to show
@@ -64,7 +59,7 @@ export default {
       size: 10,
     },
     showProductModal: false,
-    wordbookdropdownType: [{ key: '', value: '' ,wordbookContentCode:''}],
+    wordbookdropdownType: [{ key: '', value: '', wordbookContentCode: '' }],
     wordbookdropdownMode: [{ key: '', value: '' }],
     wordbookdropdownCurrency: [{ key: '', value: '' }],
     currencydropdown: [{ key: '', value: '' }],
@@ -102,6 +97,14 @@ export default {
       });
     },
 
+    * clearPagination(data, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: initPagination, typeName: 'pagination' },
+      });
+    },
+
+
     * getContactsList({ payload }, { call, put }) {
 
       const { type, params } = payload;
@@ -136,7 +139,10 @@ export default {
 
       yield put({
         type: 'changeState',
-        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'blankAccountPagination' },
+        payload: {
+          data: { size: response.body.size, current: response.body.current },
+          typeName: 'blankAccountPagination',
+        },
       });
     },
 
@@ -149,6 +155,12 @@ export default {
         payload: { data: initData, typeName: 'contactsList' },
       });
 
+      yield put({
+        type: 'changeState',
+        payload: { data: initPagination, typeName: 'contactsPagination' },
+      });
+
+
     },
 
  * clearBlankAccountList(data, { put }) {
@@ -157,34 +169,45 @@ export default {
         payload: { data: initData, typeName: 'blankAccountList' },
       });
 
-    },
+      yield put({
+        type: 'changeState',
+        payload: { data: initPagination, typeName: 'blankAccountPagination' },
+      });
 
+    },
 
 
     * clearContacts(data, { put }) {
       yield put({
         type: 'changeState',
-        payload: { data: {id:''}, typeName: 'choosenContactsRowData' },
+        payload: { data: { id: '' }, typeName: 'choosenContactsRowData' },
       });
 
       yield put({
         type: 'changeState',
-        payload: { data:[], typeName: 'selectedContactsRowKeys' },
+        payload: { data: [], typeName: 'selectedContactsRowKeys' },
       });
 
     },
 
 
+    * clearContactsPagination(data, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: initPagination, typeName: 'contactsPagination' },
+      });
+    },
+
 
     * clearBlankAccount(data, { put }) {
       yield put({
         type: 'changeState',
-        payload: { data: {id:''}, typeName: 'choosenBlankAccountRowData' },
+        payload: { data: { id: '' }, typeName: 'choosenBlankAccountRowData' },
       });
 
       yield put({
         type: 'changeState',
-        payload: { data:[], typeName: 'selectedBlankAccountRowKeys' },
+        payload: { data: [], typeName: 'selectedBlankAccountRowKeys' },
       });
     },
 
@@ -202,7 +225,14 @@ export default {
       });
     },
 
-    *changeSearchContactsParams({ payload }, { put }) {
+    * clearBlankAccountPagination(data, { put }) {
+      yield put({
+        type: 'changeState',
+        payload: { data: initPagination, typeName: 'BlankAccountPagination' },
+      });
+    },
+
+    * changeSearchContactsParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchContactsParams2',
         payload,
@@ -216,20 +246,20 @@ export default {
       });
     },
 
-    *clearSearchContactsParams({ payload }, { put }) {
+    * clearSearchContactsParams({ payload }, { put }) {
       yield put({
         type: 'clearSearchContactsParams2',
         payload,
       });
     },
 
-    *getTimeline({ payload }, { put }) {
+    * getTimeline({ payload }, { put }) {
       yield put({
         type: 'getTimeline2',
         payload,
       });
     },
-    *getChoosenRowData({ payload }, { put }) {
+    * getChoosenRowData({ payload }, { put }) {
       yield put({
         type: 'getChoosenRowData2',
         payload,
@@ -306,8 +336,8 @@ export default {
       const response = yield call(listMstWordbook, { wordbookTypeCode: 'H018' });
       const wordbookData = response.body.records;
 
-      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode,wordbookContentCode }) => {
-        return { value: wordbookCode, key: wordbookContentZh,wordbookContentCode };
+      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode, wordbookContentCode }) => {
+        return { value: wordbookCode, key: wordbookContentZh, wordbookContentCode };
       });
       yield put({
         type: 'changeState',
