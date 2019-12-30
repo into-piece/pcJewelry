@@ -12,7 +12,7 @@
     { "key": "开户行", "value": "openBank" },
     { "key": "户名", "value": "accountName"},
     { "key": "账号", "value": "accountNum"},
-    { "key": "结算币种", "value": "countCurrency","noNeed": false ,"type": 2 ,"list": "wordbookdropdownCurrency" },
+    { "key": "结算币种", "value": "countCurrency","noNeed": false ,"type": 2 ,"list": "wordbookdropdownCurrency","initValue": "H006004"  },
     { "key": "税率", "value": "rate" ,"noNeed": true,"inputType": "float"},
     { "key": "结算方式", "value": "countMode","type": 2 ,"list": "wordbookdropdownMode" },
 

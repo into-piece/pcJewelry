@@ -349,8 +349,8 @@ export default {
     * getwordbookdropdownCurrency(data, { call, put }) {
       const response = yield call(listMstWordbook, { wordbookTypeCode: 'H006' });
       const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
-        return { value: wordbookCode, key: wordbookContentZh };
+      const wordbookdropdown = wordbookData.map(({ wordbookContentCode, wordbookCode }) => {
+        return { value: wordbookCode, key: wordbookContentCode };
       });
       yield put({
         type: 'changeState',

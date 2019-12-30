@@ -726,7 +726,8 @@ class Info extends Component {
                       ? choosenRowData[value]
                       : rightMenu === 2 ? choosenContactsRowData[value]
                         : choosenBlankAccountRowData[value]
-                    : initValue || (number ? '0.00' : undefined),
+                    :value==='countCurrency'?initValue
+                      :initValue || (number ? '0.00' : undefined),
 
                 })(
                   this.returnElement({
