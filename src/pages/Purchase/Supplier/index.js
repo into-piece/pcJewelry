@@ -31,7 +31,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/purchase';
 import jsonData from './index.json';
-import SearchForm from '@/components/SearchForm';
+import SearchForm from './SearchForm';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
@@ -553,7 +553,7 @@ class Info extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   // type 9 RangePicker
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType,initValue }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType }) => {
     switch (type) {
       case 2:
         return (

@@ -39,6 +39,7 @@ export default {
     blankAccountList: initData,
     quoteDatialList: initData,
     supplierSearchStatus: [
+      { key:'不限',value:''},
       { key:'输入',value:0},
       {key:'已审批',value:2}
     ],
