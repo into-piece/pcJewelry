@@ -338,9 +338,7 @@ class Info extends Component {
     const { dispatch, contactsPagination, searchContactsParams, searchBlankAccountParams, blankAccountPagination } = this.props;
 
     if (type === 'contacts') {
-      dispatch({
-        type: `purchase/clearContacts`,
-      });
+
 
 
       dispatch({
@@ -350,9 +348,6 @@ class Info extends Component {
         },
       });
     } else {
-      dispatch({
-        type: `purchase/clearBlankAccount`,
-      });
 
 
       dispatch({
@@ -1009,7 +1004,7 @@ class Info extends Component {
         this.returnLockType().disabled
       );
     return (
-      (this.returnLockType().type === 2 || (rightMenu === 1 && selectedRowKeys.length === 0)) ||
+      (this.returnLockType().type === 2 && (rightMenu === 1)) ||
       (rightMenu === 2 && selectedContactsRowKeys.length === 0) ||
       (rightMenu === 3 && selectedBlankAccountRowKeys && selectedBlankAccountRowKeys.length === 0)
     );

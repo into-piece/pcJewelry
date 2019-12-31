@@ -145,7 +145,7 @@ export default {
       const rowData =  contactsList.records.filter(value=>value.id===choosenContactsRowData.id)
       if(rowData.length>0)
         yield put({
-          type: 'getChoosenRowData2',
+          type: 'getchoosenContactsRowData2',
           payload:rowData[0],
         });
       }
@@ -179,7 +179,7 @@ export default {
         const rowData =  blankAccountList.records.filter(value=>value.id===choosenBlankAccountRowData.id)
         if(rowData.length>0)
           yield put({
-            type: 'getChoosenRowData2',
+            type: 'getchoosenBlankAccountRowData2',
             payload:rowData[0],
           });
       }
