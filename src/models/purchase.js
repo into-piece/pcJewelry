@@ -151,7 +151,7 @@ export default {
       }
     },
 
-    * getBlankAccountList({ payload }, { call, put }) {
+    * getBlankAccountList({ payload }, { call, put ,select}) {
 
       const { type, params } = payload;
       const response = yield call(
