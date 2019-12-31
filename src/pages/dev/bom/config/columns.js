@@ -33,11 +33,6 @@ let product = [
     key: 'enName',
   },
   {
-    title: '单位',
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
     title: '客户编号',
     dataIndex: 'customerNo',
     key: 'customerNo',

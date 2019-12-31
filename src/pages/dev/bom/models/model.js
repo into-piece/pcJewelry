@@ -73,8 +73,8 @@ export default {
     selectedProccessRowKeys:[],
     materialNoList:[],
     materialNoChoosenRowData:{id:''},
-    materialSelectedKeys:[]
-  },
+    materialSelectedKeys:[],
+  },  
 
   effects: {
     *changeProps({ payload, callback }, { put }) {
@@ -176,6 +176,13 @@ export default {
         });
         return
       }
+
+      // 排除出不要的原料分类
+      if(name === 'listMstWordbook'){
+        const filterArr = ['H016001','H016002','H016003','H016004','H016005']
+        list = list.filter(item=>filterArr.includes(item.value))
+      }
+
       yield put({
         type: 'changeState',
         payload: { data: list, typeName: name },

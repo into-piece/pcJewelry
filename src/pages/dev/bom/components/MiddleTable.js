@@ -188,8 +188,9 @@ class MiddleTable extends Component {
           onSearch={p => {
             onSearch({ ...p, current: 1 }, 1);
           }}
-          returnElement={returnElement}
+          returnElement={returnElement}   
           onchange={changeSearchParams}
+          needStatus
         />
         <div className={styles.tableBox}>
           <Table

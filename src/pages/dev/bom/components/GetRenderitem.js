@@ -10,6 +10,8 @@ import DescriptionList from '@/components/DescriptionList';
 import styles from './GetRenderitem.less';
 import { defaultImages } from '@/utils/utils';
 
+
+
 const { Description } = DescriptionList;
 const { Step } = Steps;
 // 右手边显示的详情信息
@@ -121,7 +123,7 @@ const GetRenderitem = ({ data, type, items }) => {
             <Icon type="file" style={{ color: '#1890ff',fontSize:'24px' ,marginRight:'20px',verticalAlign:'middle'}} />
             <a href={item.filePath} target="_blank" rel="noopener">{item.fileName ||item.filePath.substring(item.filePath.lastIndexOf('\\')+1,item.filePath.length)}</a>
           </List.Item>
-            )}
+        )}
       />
       )}
       {
@@ -143,6 +145,8 @@ const GetRenderitem = ({ data, type, items }) => {
           </>
         )
       }
+
+
         
     </Card>
   );
