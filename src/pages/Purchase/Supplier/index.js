@@ -560,7 +560,6 @@ class Info extends Component {
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
-            defaultOpen={true}
             onChange={v => {
               this.handleSelectChange(v, value);
             }}
