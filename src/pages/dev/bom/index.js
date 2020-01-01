@@ -315,7 +315,7 @@ class Index extends Component {
       this.getList({}, params);
     }
     if (table === 2) {
-      this.getMaterialList(params);
+      // this.getMaterialList(params);
     }
     if(table === 3){
       this.getProccessList(params);
@@ -429,6 +429,16 @@ class Index extends Component {
       type: `${defaultModelName}/materialNoList`,
       payload: { name: 'materialNoList', materialType: value, params: {sId,size:10,current:1,...materialNoPagination,...args} },
     });
+  }
+  
+
+  handleInputChange = (v,type) =>{
+    const {setFieldsValue,getFieldValue} = this.props.form
+    const inventoryWeight = getFieldValue('inventoryWeight')
+    if(type === 'singleDosage'){
+      debugger
+      setFieldsValue({sheetWithHeavy:(~~v)+inventoryWeight}) 
+    }
   }
 
   // type 2 下啦选择
@@ -552,7 +562,7 @@ class Index extends Component {
             max={max}
           />
         ) : (
-          <Input placeholder="请输入" />
+          <Input placeholder="请输入" onChange={v=>{this.handleInputChange(v, value)}}/>
         );
     }
     //  type === 7 ?
@@ -1181,6 +1191,8 @@ class Index extends Component {
 
   // 获取原料信息列表
   getMaterialList = params => {
+    console.log(params,'==========');
+    
     const { dispatch,paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
@@ -1196,19 +1208,22 @@ class Index extends Component {
       type: `${defaultModelName}/getDropdownList`,
       payload:  { params: { pid: choosenRowData.id, ...params },key1: 'bName',value1: 'id',name: 'bomlist'},
       callback: obj => {
+        console.log(obj,'======obj');
         const selectedBom = obj || { id: undefined };
         this.setState({
           selectedBom,
+        },()=>{
+          if(obj){
+            this.getMaterialList({ BomId: obj.id });
+            this.getWorkFlowDropdownList({ bomId: obj.id });
+          }else{
+            dispatch({
+              type: `${defaultModelName}/changeStateOut`,
+              payload: {data:{ records: [] },name:'materialList'},
+            });
+          }
         });
-        if(obj){
-          this.getMaterialList({ BomId: obj.id });
-          this.getWorkFlowDropdownList({ bomId: obj.id });
-        }else{
-          dispatch({
-            type: `${defaultModelName}/changeStateOut`,
-            payload: {data:[],name:'materialList'},
-          });
-        }
+        
       }
     });
 
@@ -1316,8 +1331,10 @@ class Index extends Component {
   handleMaterialNoOk = () => {
     const {form,materialNoChoosenRowData} = this.props
     const {setFieldsValue} = form
-    const {materialNo} = materialNoChoosenRowData
-    setFieldsValue({materialNo})
+    console.log(materialNoChoosenRowData);
+    
+    const {materialNo,specification,zhName,enName,weightUnit,measureUnit,inventoryWeight,valuationClass} = materialNoChoosenRowData
+    setFieldsValue({materialNo,specification,zhName,enName,weightUnitName,measureUnit,inventoryWeight,valuationClass})
 
 
     this.showMaterialModalFunc(2)

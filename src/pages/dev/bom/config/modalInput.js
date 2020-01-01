@@ -35,11 +35,11 @@ export const material = [
   { key: '英文名', value: 'enName', noNeed: true ,type:7 },
   // { key: '重量单位', value: 'weightUnit', noNeed: true , type: 2, list: 'weightUnitList'},
   // { key: '计量单位', value: 'measureUnit', noNeed: true , type: 2, list: 'countist'},
-  { key: '重量单位', value: 'weightUnit', noNeed: true ,type:7 },
+  { key: '重量单位', value: 'weightUnitName', noNeed: true ,type:7 },
   { key: '计量单位', value: 'measureUnit', noNeed: true ,type:7 },
 
   { key: '单重', value: 'inventoryWeight', noNeed: true ,number:true,type:7 },
-  { key: '单件用重', value: 'sheetWithHeavy', noNeed: true ,number:true},
+  { key: '单件用重', value: 'sheetWithHeavy', noNeed: true ,type:7},
   { key: '计价类别', value: 'valuationClass', noNeed: true ,type:7 },
   { key: '损耗率（%）', value: 'attritionRate', noNeed: true ,initValue:10},
   { key: '备注', value: 'remarks', noNeed: true , row: 1,type:8},
@@ -51,7 +51,7 @@ const proccess = [
 
 const productProcess = [
   { key: '工序名称', value: 'zhName', row: 2, type:2,list:'flowlistDropDown' },
-  { key: '工序编号', value: 'workProcessCode', row: 7 },
+  { key: '工序编号', value: 'workProcessCode', row: 2,type:7 },
   { key: '耗损（%）', value: 'isWastage', row: 2 },
   { key: '效率（件/小时）', value: 'processCapacity', row: 2 ,number:true},
   { key: '图片', value: 'picPath', row: 1 ,noNeed:true},
