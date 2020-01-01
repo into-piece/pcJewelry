@@ -31,7 +31,7 @@ import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/purchase';
 import jsonData from './index.json';
-import SearchForm from '@/components/SearchForm';
+import SearchForm from './SearchForm';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
@@ -338,9 +338,7 @@ class Info extends Component {
     const { dispatch, contactsPagination, searchContactsParams, searchBlankAccountParams, blankAccountPagination } = this.props;
 
     if (type === 'contacts') {
-      dispatch({
-        type: `purchase/clearContacts`,
-      });
+
 
 
       dispatch({
@@ -350,9 +348,6 @@ class Info extends Component {
         },
       });
     } else {
-      dispatch({
-        type: `purchase/clearBlankAccount`,
-      });
 
 
       dispatch({
@@ -553,7 +548,7 @@ class Info extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   // type 9 RangePicker
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType,initValue }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, inputType }) => {
     switch (type) {
       case 2:
         return (
@@ -1009,7 +1004,7 @@ class Info extends Component {
         this.returnLockType().disabled
       );
     return (
-      (this.returnLockType().type === 2 || (rightMenu === 1 && selectedRowKeys.length === 0)) ||
+      (this.returnLockType().type === 2 && (rightMenu === 1)) ||
       (rightMenu === 2 && selectedContactsRowKeys.length === 0) ||
       (rightMenu === 3 && selectedBlankAccountRowKeys && selectedBlankAccountRowKeys.length === 0)
     );

@@ -14,10 +14,6 @@ const initPagination = {
 };
 
 const {
-  queryProductQuoteHeadersNotDone,
-  queryProductQuoteHeadersAlreadyDone,
-  listProductQuoteDetail,
-  deleteProductQuoteHeader,
   listProductNotCreateQoute,
   listMstWordbook,
   listCustomerDropDown,
@@ -39,6 +35,7 @@ export default {
     blankAccountList: initData,
     quoteDatialList: initData,
     supplierSearchStatus: [
+      { key:'不限',value:''},
       { key:'输入',value:0},
       {key:'已审批',value:2}
     ],
@@ -51,7 +48,7 @@ export default {
     pagination: initPagination,
     contactsPagination: initPagination,
     blankAccountPagination: initPagination,
-    choosenRowData: {}, // select to show
+    choosenRowData: {id: ''}, // select to show
     choosenContactsRowData: { id: '' }, // select to show
     choosenBlankAccountRowData: { id: '' }, // select to show
     rightMenu: 1,
@@ -80,8 +77,10 @@ export default {
   },
 
   effects: {
-    * getList({ payload }, { call, put }) {
+    * getList({ payload }, { call, put ,select  }) {
       const { params, sendReq } = payload;
+
+
       // const sendType =
       //   sendReq === 'currentQuote'
       //     ? queryProductQuoteHeadersNotDone
@@ -99,6 +98,18 @@ export default {
         type: 'changeState',
         payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'pagination' },
       });
+
+      const choosenRowData = yield select(state => {
+        return state.purchase.choosenRowData
+      });
+
+      console.log("get List this ",choosenRowData);
+      const rowData =  supplierList.records.filter(value=>value.id===choosenRowData.id)
+      if(rowData.length>0)
+      yield put({
+        type: 'getChoosenRowData2',
+        payload:rowData[0],
+      });
     },
 
     * clearPagination(data, { put }) {
@@ -109,7 +120,7 @@ export default {
     },
 
 
-    * getContactsList({ payload }, { call, put }) {
+    * getContactsList({ payload }, { call, put,select }) {
 
       const { type, params } = payload;
       const response = yield call(
@@ -126,9 +137,21 @@ export default {
         type: 'changeState',
         payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'contactsPagination' },
       });
+
+      const choosenContactsRowData = yield select(state => {
+        return state.purchase.choosenContactsRowData
+      });
+      if(choosenContactsRowData.id!==''){
+      const rowData =  contactsList.records.filter(value=>value.id===choosenContactsRowData.id)
+      if(rowData.length>0)
+        yield put({
+          type: 'getchoosenContactsRowData2',
+          payload:rowData[0],
+        });
+      }
     },
 
-    * getBlankAccountList({ payload }, { call, put }) {
+    * getBlankAccountList({ payload }, { call, put ,select}) {
 
       const { type, params } = payload;
       const response = yield call(
@@ -148,6 +171,18 @@ export default {
           typeName: 'blankAccountPagination',
         },
       });
+
+      const choosenBlankAccountRowData = yield select(state => {
+        return state.purchase.choosenBlankAccountRowData
+      });
+      if(choosenBlankAccountRowData.id!==''){
+        const rowData =  blankAccountList.records.filter(value=>value.id===choosenBlankAccountRowData.id)
+        if(rowData.length>0)
+          yield put({
+            type: 'getchoosenBlankAccountRowData2',
+            payload:rowData[0],
+          });
+      }
     },
 
 
