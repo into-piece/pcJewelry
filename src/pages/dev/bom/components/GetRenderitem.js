@@ -88,9 +88,9 @@ const GetRenderitem = ({ data, type, items }) => {
         })
         }
       </DescriptionList>
-    
+
       {images && images.length > 0 && <Divider />}
- 
+
       {data.videos &&data.videos.length>0&& (
       <List
         header={<div className={styles.videotitle}>视频附件:</div>}
@@ -130,24 +130,33 @@ const GetRenderitem = ({ data, type, items }) => {
         data.flowList&&data.flowList.length>0&&(
           <>
             <p style={{marginBottom:20}}>生产流程</p>
-            <Steps
-              progressDot
-            >
+            {/* <Steps */}
+              {/* progressDot */}
+              {/* size="small" */}
+            {/* > */}
+              {/* { */}
+            {/* data.flowList.map(item=>( */}
+            {/* <Step */}
+            {/* title={item.processName} */}
+            {/* status="finish" */}
+            {/* /> */}
+            {/* )) */}
+              {/* } */}
+            {/* </Steps> */}
+
+            <ul className={styles.navs}>
               {
                 data.flowList.map(item=>(
-                  <Step
-                    title={item.processName}
-                    status="finish"
-                  />
+                  <li>{item.processName}</li>
                 ))
               }
-            </Steps>
+            </ul>
           </>
         )
       }
 
 
-        
+
     </Card>
   );
 };
