@@ -124,7 +124,7 @@ class Index extends Component {
     showMaterialNoModal:false
   };
 
-  
+
 
   onCraft = [
     { key: '镶石公艺', title: '镶石公艺', value: '', },
@@ -157,9 +157,9 @@ class Index extends Component {
               [type]:body.records[0].savePath
             })
           }
-          
+
           message.success(`${info.file.name} file uploaded successfully.`);
-          
+
         } else if (status === 'error') {
           message.error(`${info.file.name} file upload failed.`);
         }
@@ -200,7 +200,7 @@ class Index extends Component {
         </p>
       </Dragger>
     )
-   
+
   }
 
   // 获取生产流程的下拉
@@ -293,7 +293,7 @@ class Index extends Component {
         {
           name: 'listBasicMeasureUnitDropDown',
         },
-       
+
       ];
     }
 
@@ -430,14 +430,14 @@ class Index extends Component {
       payload: { name: 'materialNoList', materialType: value, params: {sId,size:10,current:1,...materialNoPagination,...args} },
     });
   }
-  
+
 
   handleInputChange = (v,type) =>{
     const {setFieldsValue,getFieldValue} = this.props.form
     const inventoryWeight = getFieldValue('inventoryWeight')
     if(type === 'singleDosage'){
       debugger
-      setFieldsValue({sheetWithHeavy:(~~v)+inventoryWeight}) 
+      setFieldsValue({sheetWithHeavy:(~~v)+inventoryWeight})
     }
   }
 
@@ -562,7 +562,7 @@ class Index extends Component {
             max={max}
           />
         ) : (
-          <Input placeholder="请输入" onChange={v=>{this.handleInputChange(v, value)}}/>
+          <Input placeholder="请输入" onChange={v=>{this.handleInputChange(v, value)}} />
         );
     }
     //  type === 7 ?
@@ -605,11 +605,11 @@ class Index extends Component {
     let service = ''
     switch(rightActive){
       case FIRST_TAG:
-        service =  'bom' 
+        service =  'bom'
         data = [selectedBom.id]
         break
       case  SECOND_TAG:
-        service =  'bomDt' 
+        service =  'bomDt'
         data = selectedRowKeysSecond
         break
       case  THIRD_TAG:
@@ -640,14 +640,14 @@ class Index extends Component {
             selectedBom: { id: '' }
           })
           return
-        } 
+        }
         if(rightActive === SECOND_TAG){
           this.getMaterialList()
           // 清除第二table 选中 详情
           dispatch({
             type: `${defaultModelName}/clearDetailSecond`,
           });
-          
+
           return
         }
 
@@ -662,7 +662,7 @@ class Index extends Component {
             type: `${defaultModelName}/clearProccess`,
           });
         }
-      
+
       }
     });
   };
@@ -792,8 +792,8 @@ class Index extends Component {
 
         const addService =
           rightActive === FIRST_TAG ? 'bomadd' :
-             rightActive === SECOND_TAG ? 
-             'bomDtadd' : 
+             rightActive === SECOND_TAG ?
+             'bomDtadd' :
               notFlowIsProccess?
               'bomProcessadd':
                 'workFlowadd';
@@ -859,7 +859,7 @@ class Index extends Component {
     let inputarr =rightActive
     const notFlowIsProccess = !this.isEditworkFlow&& rightActive === THIRD_TAG
     if(rightActive === THIRD_TAG && this.isEditworkFlow){
-      inputarr = 'proccess' 
+      inputarr = 'proccess'
     }
     const content = '';
     const isEdit = modalType === 'edit';
@@ -867,7 +867,7 @@ class Index extends Component {
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo')
-    
+
     return (
       <Form size="small" key="1">
         {addArr &&
@@ -1115,7 +1115,7 @@ class Index extends Component {
       selectedProccessRowKeys
     } = this.props;
     console.log(selectedProccessRowKeys);
-    
+
     const { rightActive, selectedBom } = this.state;
 
     switch (tag) {
@@ -1192,7 +1192,7 @@ class Index extends Component {
   // 获取原料信息列表
   getMaterialList = params => {
     console.log(params,'==========');
-    
+
     const { dispatch,paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
@@ -1203,7 +1203,7 @@ class Index extends Component {
   // 获取bom下拉列表
   getbomlist = params => {
     const { dispatch, choosenRowData } = this.props;
-    
+
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
       payload:  { params: { pid: choosenRowData.id, ...params },key1: 'bName',value1: 'id',name: 'bomlist'},
@@ -1223,7 +1223,7 @@ class Index extends Component {
             });
           }
         });
-        
+
       }
     });
 
@@ -1332,9 +1332,9 @@ class Index extends Component {
     const {form,materialNoChoosenRowData} = this.props
     const {setFieldsValue} = form
     console.log(materialNoChoosenRowData);
-    
-    const {materialNo,specification,zhName,enName,weightUnit,measureUnit,inventoryWeight,valuationClass} = materialNoChoosenRowData
-    setFieldsValue({materialNo,specification,zhName,enName,weightUnitName,measureUnit,inventoryWeight,valuationClass})
+
+    const {materialNo,specification,zhName,enName,weightUnit,weightUnitName,measureUnit,inventoryWeight,valuationClass} = materialNoChoosenRowData
+    setFieldsValue({materialNo,specification,zhName,enName,weightUnit,weightUnitName,measureUnit,inventoryWeight,valuationClass})
 
 
     this.showMaterialModalFunc(2)
@@ -1403,12 +1403,12 @@ class Index extends Component {
       selectedProccess,
       showMaterialNoModal
     } = state;
-    const { 
-      choosenRowData, 
-      choosenRowDataSecond, 
-      model, 
+    const {
+      choosenRowData,
+      choosenRowDataSecond,
+      model,
       form,
-      choosenProccessData, 
+      choosenProccessData,
       materialNoList,
       materialNoPagination,
       bomselectedKeys,
@@ -1511,7 +1511,7 @@ class Index extends Component {
     const materialType = getFieldValue('materialType')
 
     console.log(materialNoPagination,'======materialNoPagination');
-    
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1537,7 +1537,7 @@ class Index extends Component {
                       handleBomSelectChange={handleBomSelectChange}
                       changeRightActive={changeRightActive}
                       selectedProccess={selectedProccess}
-                    /> 
+                    />
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}
                   <Col lg={8} md={24}>
