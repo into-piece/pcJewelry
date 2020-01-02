@@ -97,7 +97,8 @@ const radioArr = [
     materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
     materialSelectedKeys:model.materialSelectedKeys,
     materialNoPagination:model.materialNoPagination,
-    flowlistDropDown:model.flowlistDropDown
+    flowlistDropDown:model.flowlistDropDown,
+    processRelationDropDown:model.processRelationDropDown
   };
 })
 class Index extends Component {
@@ -121,7 +122,8 @@ class Index extends Component {
     ],
     videoPath:'',
     filePath:'',
-    showMaterialNoModal:false
+    showMaterialNoModal:false,
+    processCode:''
   };
 
 
@@ -221,7 +223,7 @@ class Index extends Component {
   };
 
   initDrop = () => {
-    const { dispatch,form } = this.props;
+    const { dispatch,form,choosenRowData } = this.props;
     const {setFieldsValue}  = form
     const { rightActive } = this.state;
     // // 产品编号下拉production-flow
@@ -282,7 +284,12 @@ class Index extends Component {
           value1: 'wordbookCode',
         },
         {
-          name: 'listFilmSettingsDropDown',
+          name: 'listChildDieSetDropDown',
+          key1: 'productNo',
+          value1: 'id',
+          params: {
+            productNo: choosenRowData.productNo.slice(0,9),
+          },
         },
         {
           name: 'listGemSetProcessDropDown',
@@ -298,7 +305,13 @@ class Index extends Component {
     }
 
     if(rightActive === THIRD_TAG){
-      this.getFlowDropdownList()
+      arr = [
+        {
+          name: 'processRelationDropDown',
+          key1: 'flowName',
+          value1: 'processCode',
+        }
+      ]
     }
 
     arr.forEach(item => {
@@ -356,7 +369,7 @@ class Index extends Component {
 
   handleSelectChange = (value, type) => {
     const {rightActive} = this.state
-    const { dispatch, form,materialNoList,flowlistDropDown} = this.props;
+    const { dispatch, form,materialNoList,flowlistDropDown,processRelationDropDown} = this.props;
     const {setFieldsValue} = form
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
@@ -401,8 +414,12 @@ class Index extends Component {
       })
     }
     if(rightActive === THIRD_TAG && type === 'zhName'){
-      const workProcessCode = flowlistDropDown.filter(item=>(item.id === value))[0].flowCode
+      const workProcessCode = processRelationDropDown.filter(item=>(item.processCode === value))[0].flowCode
       setFieldsValue({workProcessCode})
+    }
+    if(type === 'processId'){
+      const processCode = flowlistDropDown.filter(item=>(item.id === value))[0].flowCode
+      this.setState({processCode})
     }
   };
 
@@ -615,7 +632,7 @@ class Index extends Component {
       case  THIRD_TAG:
         if(this.isEditworkFlow){
           service = 'workFlow'
-          data = [selectedProccess.processId]
+          data = [selectedProccess.id]
         }else{
           service = 'bomProcess'
           data = selectedProccessRowKeys
@@ -693,31 +710,25 @@ class Index extends Component {
 
   // 复制 按钮回调
   handleCopy = () => {
-    // const { selectedRowKeys, selectedRowKeysSecond } = this.props;
-    // const { rightActive, switchMenu } = this.state;
-    // const data = rightActive === FIRST_TAG ? selectedRowKeys : selectedRowKeysSecond;
-    // const serviceType = 'copy';
-    // serviceObj[`${serviceType}${rightActive}`](data).then(res => {
-    //   const { rtnCode, rtnMsg } = res ? res.head : {};
-    //   if (rtnCode === '000000') {
-    //     notification.success({
-    //       message: rtnMsg,
-    //     });
-    //     if (rightActive === FIRST_TAG) {
-    //       this.getList({ type: rightActive });
-    //       this.getListSecond({ type: switchMenu }, {});
-    //     } else {
-    //       this.getListSecond({ type: switchMenu }, {});
-    //     }
-    //   }
-    // });
+    const { rightActive,selectedBom } = this.state;
+    console.log(selectedBom);
+    const data = [selectedBom.id]
+    serviceObj.bomcopy(data).then(res => {
+      const { rtnCode, rtnMsg } = res ? res.head : {};
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        this.getList({ type: rightActive });
+      }
+    });
   };
 
   // 新增||编辑 按钮事件回调
   handleAdd = (close,isEdit) => {
     const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,dispatch} = this.props;
-    const { switchMenu, rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess,filePath,videoPath} = this.state;
-    const { resetFields,getFieldValue } = form;
+    const { rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess,filePath,videoPath,processCode} = this.state;
+    const { getFieldValue } = form;
     const materialType = getFieldValue('materialType')
     let params = {};
     let inputarr = rightActive
@@ -783,7 +794,16 @@ class Index extends Component {
 
     const dataArr = modalInput[inputarr];
     const fieldslist = dataArr.map(e => e.value);
+
     form.validateFields(fieldslist, (err, values) => {
+      console.log(fieldslist,values,'=======values');
+      
+      if(inputarr === 'proccess'){
+        values = {
+          ...values,
+          processCode
+        }
+      }
       if (!err) {
         params = {
           ...params,
@@ -1120,24 +1140,27 @@ class Index extends Component {
 
     switch (tag) {
       case 'plus':
-        return false;
+        return ~~selectedBom.status === 2;
       case 'delete':
         return (
           (FIRST_TAG === rightActive && selectedBom.state === 1) ||
           (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
-          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)||
+          ~~selectedBom.status === 2
         );
       case 'edit':
         return (
           (FIRST_TAG === rightActive && selectedBom.state === 1) ||
           (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
-          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)||
+          ~~selectedBom.status === 2
         );
       default:
         return (
           (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
           (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
-          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)||
+          ~~selectedBom.status === 2
         );
     }
   };
@@ -1476,7 +1499,7 @@ class Index extends Component {
       {
         key: '取消审批',
         fn: cancelVerify,
-        disabled: !selectedBom.id || ~~selectedBom.status === 0,
+        disabled: !selectedBom.id || ~~selectedBom.status === 0 ,
       },
       {
         key: '审批BOM',
@@ -1631,7 +1654,7 @@ class Index extends Component {
           <Modal
             maskClosable={false}
             title={<BuildTitle title={returnTitle()} />}
-            width={this.isEditworkFlow||rightActive === FIRST_TAG?500:1000}
+            width={this.isEditworkFlow||rightActive === FIRST_TAG?600:1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
