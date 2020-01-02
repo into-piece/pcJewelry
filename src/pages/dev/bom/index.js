@@ -477,21 +477,21 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-                     key,
-                     value,
-                     noNeed,
-                     type,
-                     list,
-                     clickFn,
-                     text,
-                     arr,
-                     data,
-                     form,
-                     number,
-                     step,
-                     min,
-                     max,
-                   }) => {
+    key,
+    value,
+    noNeed,
+    type,
+    list,
+    clickFn,
+    text,
+    arr,
+    data,
+    form,
+    number,
+    step,
+    min,
+    max,
+  }) => {
     switch (type) {
       case 2:
         return (
@@ -872,16 +872,19 @@ class Index extends Component {
 
   addCraftRow = (index, option) => {
     const isAdd = option === 'add';
+    console.log(this.state.craftForm,'===this.state.craftForm')
     if (!isAdd && this.state.craftForm.length === 1) return;
     this.setState(preState => {
       if (isAdd) {
-        return preState.craftForm.push(this.onCraft);
+        return preState.craftForm.push([{ key: '镶石工艺', title: '镶石工艺', value: '' },
+        { key: '效率', title: '效率', value: '' }]);
       }
       return preState.craftForm.splice(index, 1);
     });
   };
 
   craftChange = (v, index, subIndex) => {
+    console.log(v, index, subIndex,'[============');
     this.setState(preState => {
       preState.craftForm[index][subIndex].value = v;
       console.log(preState);
@@ -979,6 +982,7 @@ class Index extends Component {
               }
             }
 
+            /* eslint-disable */
             return (
               <div
                 className="addModal"
