@@ -55,7 +55,7 @@ export default {
     wordbookdropdown: [{ key: '', value: '' }],
     currencydropdown: [{ key: '', value: '' }],
     customerDropDownList: [{ key: '', value: '' }],
-    endCustomerList: [{ key: '', value: '' }],
+    endCustomerList: [],
     markinglist: [],
     markingEnName: '',
     brandsList: [],

@@ -19,13 +19,13 @@ import {
   Icon,
   message
 } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import UploadImg from '@/components/UploadImg';
 
 // 弹窗输入配置&显示配置
@@ -41,7 +41,8 @@ import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo'
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server'
-const uploadfile = `${priefx}/zuul/business/business/file/uploadFile`
+const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`
+const uploadfile = `${priefx}/zuul/business/business/file/uploadDocuments`
 
 const { Dragger } = Upload;
 const ButtonGroup = Button.Group;
@@ -96,6 +97,7 @@ const radioArr = [
     materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
     materialSelectedKeys:model.materialSelectedKeys,
     materialNoPagination:model.materialNoPagination,
+    flowlistDropDown:model.flowlistDropDown
   };
 })
 class Index extends Component {
@@ -122,7 +124,7 @@ class Index extends Component {
     showMaterialNoModal:false
   };
 
-  
+
 
   onCraft = [
     { key: '镶石公艺', title: '镶石公艺', value: '', },
@@ -136,10 +138,12 @@ class Index extends Component {
   }
 
   uploadFile = (type) => {
+    const {choosenProccessData} = this.props
+    const action  = type === 'filePath'?uploadfile:uploadvideo
     const uploadConfig = {
       name: 'file',
       multiple: true,
-      action: uploadfile,
+      action,
       onChange:(info)=> {
         const { status } = info.file;
         if (status !== 'uploading') {
@@ -153,16 +157,39 @@ class Index extends Component {
               [type]:body.records[0].savePath
             })
           }
-          
+
           message.success(`${info.file.name} file uploaded successfully.`);
-          
+
         } else if (status === 'error') {
           message.error(`${info.file.name} file upload failed.`);
         }
       },
-    };
+    }
+
+    const childkey = type === 'filePath'?'files':'videos'
+    const filekey = type === 'filePath'?'filePath':'videoPath'
+
+    const fileList = choosenProccessData&&choosenProccessData[childkey]?choosenProccessData[childkey].map((item)=>{
+      return(
+        {
+          uid:item.id,
+          url:item.filekey,
+          name:item[filekey].substring(item[filekey].lastIndexOf('\\')+1,item[filekey].length)
+        }
+      )
+    }):[]
+
+    // const fileList = [
+    //   {
+    //     uid: '-1',
+    //     name: 'xxx.png',
+    //     status: 'done',
+    //     url: 'http://www.baidu.com/xxx.png',
+    //   },
+    // ]
+
     return(
-      <Dragger {...uploadConfig}>
+      <Dragger {...uploadConfig} defaultFileList={fileList}>
         <p className="ant-upload-drag-icon">
           <Icon type="inbox" />
         </p>
@@ -173,7 +200,7 @@ class Index extends Component {
         </p>
       </Dragger>
     )
-   
+
   }
 
   // 获取生产流程的下拉
@@ -194,7 +221,8 @@ class Index extends Component {
   };
 
   initDrop = () => {
-    const { dispatch } = this.props;
+    const { dispatch,form } = this.props;
+    const {setFieldsValue}  = form
     const { rightActive } = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
@@ -223,8 +251,27 @@ class Index extends Component {
     //   payload: {},
     // });
 
+    let arr = []
+    if(rightActive === FIRST_TAG){
+      arr = [
+        {
+          name: 'productTypeDropDown',
+          // value1:'unitCode',
+          params: {
+            bType: 'H015002',
+          },
+        },
+        {
+          name: 'listCustomerDropDown',
+          key1: 'shotName',
+          value1: 'id',
+        }
+      ]
+    }
+
     if (rightActive === SECOND_TAG) {
-      const arr = [
+        setFieldsValue({bomId:this.state.selectedBom.id})
+       arr = [
         // 原料类别
         {
           name: 'listMstWordbook',
@@ -246,15 +293,20 @@ class Index extends Component {
         {
           name: 'listBasicMeasureUnitDropDown',
         },
-      ];
 
-      arr.forEach(item => {
-        dispatch({
-          type: `${defaultModelName}/getDropdownList`,
-          payload: item,
-        });
-      });
+      ];
     }
+
+    if(rightActive === THIRD_TAG){
+      this.getFlowDropdownList()
+    }
+
+    arr.forEach(item => {
+      dispatch({
+        type: `${defaultModelName}/getDropdownList`,
+        payload: item,
+      });
+    });
   };
 
   // table 搜索
@@ -263,7 +315,7 @@ class Index extends Component {
       this.getList({}, params);
     }
     if (table === 2) {
-      this.getMaterialList(params);
+      // this.getMaterialList(params);
     }
     if(table === 3){
       this.getProccessList(params);
@@ -303,12 +355,14 @@ class Index extends Component {
 
 
   handleSelectChange = (value, type) => {
-    const { dispatch, form,materialNoList} = this.props;
+    const {rightActive} = this.state
+    const { dispatch, form,materialNoList,flowlistDropDown} = this.props;
     const {setFieldsValue} = form
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
       setFieldsValue({
-        materialNo:undefined
+        materialNo:undefined,
+        materialSub:undefined
       })
       dispatch({
         type: `${defaultModelName}/clearmaterialNoList`,
@@ -318,6 +372,11 @@ class Index extends Component {
         type: `${defaultModelName}/getDropdownList`,
         payload: { name: 'getTypeByWordbookCode', params: { key: value } },
       });
+    }
+    if(type === 'materialSub'){
+      setFieldsValue({
+        materialNo:undefined,
+      })
     }
     if (type === 'materialNo') {
       const selectedArr  = materialNoList.filter(item=>item.materialNo === value)
@@ -340,6 +399,10 @@ class Index extends Component {
         weightUnit,
         inventoryWeight,
       })
+    }
+    if(rightActive === THIRD_TAG && type === 'zhName'){
+      const workProcessCode = flowlistDropDown.filter(item=>(item.id === value))[0].flowCode
+      setFieldsValue({workProcessCode})
     }
   };
 
@@ -366,6 +429,16 @@ class Index extends Component {
       type: `${defaultModelName}/materialNoList`,
       payload: { name: 'materialNoList', materialType: value, params: {sId,size:10,current:1,...materialNoPagination,...args} },
     });
+  }
+
+
+  handleInputChange = (v,type) =>{
+    const {setFieldsValue,getFieldValue} = this.props.form
+    const inventoryWeight = getFieldValue('inventoryWeight')
+    if(type === 'singleDosage'){
+      debugger
+      setFieldsValue({sheetWithHeavy:(~~v)+inventoryWeight})
+    }
   }
 
   // type 2 下啦选择
@@ -458,7 +531,7 @@ class Index extends Component {
           </Radio.Group>
         );
       case 7:
-        return <span>{form.getFieldValue(value) || ''}</span>;
+        return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
       case 9:
@@ -489,7 +562,7 @@ class Index extends Component {
             max={max}
           />
         ) : (
-          <Input placeholder="请输入" />
+          <Input placeholder="请输入" onChange={v=>{this.handleInputChange(v, value)}} />
         );
     }
     //  type === 7 ?
@@ -502,8 +575,8 @@ class Index extends Component {
       rightActive === FIRST_TAG
         ? 'bom'
         : rightActive === SECOND_TAG
-        ? 'material'
-        : 'productProcess';
+        ? 'material':
+        this.isEditworkFlow?'productflow': 'productProcess';
     const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings" />;
     return menuText;
   };
@@ -532,11 +605,11 @@ class Index extends Component {
     let service = ''
     switch(rightActive){
       case FIRST_TAG:
-        service =  'bom' 
+        service =  'bom'
         data = [selectedBom.id]
         break
       case  SECOND_TAG:
-        service =  'bomDt' 
+        service =  'bomDt'
         data = selectedRowKeysSecond
         break
       case  THIRD_TAG:
@@ -567,14 +640,14 @@ class Index extends Component {
             selectedBom: { id: '' }
           })
           return
-        } 
+        }
         if(rightActive === SECOND_TAG){
           this.getMaterialList()
           // 清除第二table 选中 详情
           dispatch({
             type: `${defaultModelName}/clearDetailSecond`,
           });
-          
+
           return
         }
 
@@ -589,7 +662,7 @@ class Index extends Component {
             type: `${defaultModelName}/clearProccess`,
           });
         }
-      
+
       }
     });
   };
@@ -719,8 +792,8 @@ class Index extends Component {
 
         const addService =
           rightActive === FIRST_TAG ? 'bomadd' :
-             rightActive === SECOND_TAG ? 
-             'bomDtadd' : 
+             rightActive === SECOND_TAG ?
+             'bomDtadd' :
               notFlowIsProccess?
               'bomProcessadd':
                 'workFlowadd';
@@ -786,7 +859,7 @@ class Index extends Component {
     let inputarr =rightActive
     const notFlowIsProccess = !this.isEditworkFlow&& rightActive === THIRD_TAG
     if(rightActive === THIRD_TAG && this.isEditworkFlow){
-      inputarr = 'proccess' 
+      inputarr = 'proccess'
     }
     const content = '';
     const isEdit = modalType === 'edit';
@@ -794,7 +867,7 @@ class Index extends Component {
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo')
-    
+
     return (
       <Form size="small" key="1">
         {addArr &&
@@ -865,7 +938,7 @@ class Index extends Component {
                               message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                             },
                           ],
-                          initialValue :initValue2|| initValue || (number ? 0 : undefined),
+                          initialValue :initValue2|| initValue || (number ? 0.00 : undefined),
                         })(
                           this.returnElement({
                             key,
@@ -1042,7 +1115,7 @@ class Index extends Component {
       selectedProccessRowKeys
     } = this.props;
     console.log(selectedProccessRowKeys);
-    
+
     const { rightActive, selectedBom } = this.state;
 
     switch (tag) {
@@ -1090,12 +1163,12 @@ class Index extends Component {
     const { selectedBom } = this.state;
     const str = type === 4 ? '审批' : '取消审批';
     dispatch({
-      type: defaultModelName + '/commonOpration',
+      type: `${defaultModelName  }/commonOpration`,
       payload: { params: [selectedBom.id], type, name:'bom' },
       callback: () => {
         debugger;
         notification.success({
-          message: str + '成功',
+          message: `${str  }成功`,
         });
         this.getbomlist();
       },
@@ -1118,6 +1191,8 @@ class Index extends Component {
 
   // 获取原料信息列表
   getMaterialList = params => {
+    console.log(params,'==========');
+
     const { dispatch,paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
@@ -1128,17 +1203,26 @@ class Index extends Component {
   // 获取bom下拉列表
   getbomlist = params => {
     const { dispatch, choosenRowData } = this.props;
-    
+
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
       payload:  { params: { pid: choosenRowData.id, ...params },key1: 'bName',value1: 'id',name: 'bomlist'},
       callback: obj => {
+        console.log(obj,'======obj');
         const selectedBom = obj || { id: undefined };
         this.setState({
           selectedBom,
+        },()=>{
+          if(obj){
+            this.getMaterialList({ BomId: obj.id });
+            this.getWorkFlowDropdownList({ bomId: obj.id });
+          }else{
+            dispatch({
+              type: `${defaultModelName}/changeStateOut`,
+              payload: {data:{ records: [] },name:'materialList'},
+            });
+          }
         });
-        this.getMaterialList({ BomId: obj.id });
-        this.getWorkFlowDropdownList({ bomId: obj.id });
 
       }
     });
@@ -1242,11 +1326,17 @@ class Index extends Component {
     });
   };
 
+
+  // 确认原料弹窗选择
   handleMaterialNoOk = () => {
     const {form,materialNoChoosenRowData} = this.props
     const {setFieldsValue} = form
-    const {materialNo} = materialNoChoosenRowData
-    setFieldsValue({materialNo})
+    console.log(materialNoChoosenRowData);
+
+    const {materialNo,specification,zhName,enName,weightUnit,weightUnitName,measureUnit,inventoryWeight,valuationClass} = materialNoChoosenRowData
+    setFieldsValue({materialNo,specification,zhName,enName,weightUnit,weightUnitName,measureUnit,inventoryWeight,valuationClass})
+
+
     this.showMaterialModalFunc(2)
   }
 
@@ -1313,12 +1403,12 @@ class Index extends Component {
       selectedProccess,
       showMaterialNoModal
     } = state;
-    const { 
-      choosenRowData, 
-      choosenRowDataSecond, 
-      model, 
+    const {
+      choosenRowData,
+      choosenRowDataSecond,
+      model,
       form,
-      choosenProccessData, 
+      choosenProccessData,
       materialNoList,
       materialNoPagination,
       bomselectedKeys,
@@ -1330,56 +1420,56 @@ class Index extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button
-              key="back"
-              onClick={() => {
+          <Button
+            key="back"
+            onClick={() => {
                 btnFn('');
                 this.setState({ filelist: [] });
               }}
-            >
+          >
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               继续添加
-            </Button>,
+          </Button>,
           ]
         : [
-            <Button
-              key="back"
-              onClick={() => {
+          <Button
+            key="back"
+            onClick={() => {
                 btnFn('');
                 this.setState({ filelist: [] });
               }}
-            >
+          >
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     const secondOprationArr = [
@@ -1421,7 +1511,7 @@ class Index extends Component {
     const materialType = getFieldValue('materialType')
 
     console.log(materialNoPagination,'======materialNoPagination');
-    
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -1447,7 +1537,7 @@ class Index extends Component {
                       handleBomSelectChange={handleBomSelectChange}
                       changeRightActive={changeRightActive}
                       selectedProccess={selectedProccess}
-                    /> 
+                    />
                   </Col>
                   {/* 右边显示详细信息和按钮操作 */}
                   <Col lg={8} md={24}>
@@ -1495,7 +1585,7 @@ class Index extends Component {
                               ? choosenRowData
                               : isthird
                               ? choosenProccessData
-                              : choosenRowDataSecond
+                              : {...choosenRowDataSecond,pictures:choosenRowData.pictures}
                           }
                           type={rightActive}
                           items={showItem}
@@ -1541,7 +1631,7 @@ class Index extends Component {
           <Modal
             maskClosable={false}
             title={<BuildTitle title={returnTitle()} />}
-            width={1000}
+            width={this.isEditworkFlow||rightActive === FIRST_TAG?500:1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
@@ -1597,13 +1687,13 @@ class Index extends Component {
 
 const CraftRow = ({ name, value, children }) => {
   return (
-    <div class="ant-row ant-form-item">
-      <div class="ant-col ant-form-item-label">
-        <label for="form1_craft1">{name}</label>
+    <div className="ant-row ant-form-item">
+      <div className="ant-col ant-form-item-label">
+        <label htmlFor="form1_craft1">{name}</label>
       </div>
-      <div class="ant-col ant-form-item-control-wrapper">
-        <div class="ant-form-item-control">
-          <span class="ant-form-item-children">{children}</span>
+      <div className="ant-col ant-form-item-control-wrapper">
+        <div className="ant-form-item-control">
+          <span className="ant-form-item-children">{children}</span>
         </div>
       </div>
     </div>

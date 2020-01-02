@@ -83,7 +83,26 @@ const extraArr = [
   {
     key: 'listBasicMeasureUnitDropDown',
     path: '/listBasicMeasureUnitDropDown ',
-    prefix1: `${env}/business/develop/basic/measure-unit/`,
+    prefix1: `${env}/business/develop/basic/measure-unit`,
+  },
+  {
+    key: 'listBasicMeasureUnitDropDown',
+    path: '/listBasicMeasureUnitDropDown ',
+    prefix1: `${env}/business/develop/basic/measure-unit`,
+  },
+
+  // 类别下拉
+  {
+    key: 'productTypeDropDown',
+    path: '/dropdown ',
+    prefix1: `${env}/business/develop/category/develop-basic-category-set`,
+  },
+
+   // 类别下拉
+   {
+    key: 'listCustomerDropDown',
+    path: '/listCustomerDropDown ',
+    prefix1: `${env}/business/business/customer`,
   },
 ];
 export default { serviceArr, extraArr };

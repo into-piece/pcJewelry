@@ -80,14 +80,12 @@ class MiddleTable extends Component {
 
     if (type === 1) {
       // this.searchSecond.handleReset();
-      if (onSearch) onSearch({ mainMoldCode: rowData.id }, 2);
-        debugger;
-        this.props.getbomlist({ pid: rowData.id });
-      } else {
-
-        if(rightActive === FIRST_TAG){
-          this.props.changeRightActive(SECOND_TAG);
-        }
+      onSearch && onSearch({ mainMoldCode: rowData.id }, 2);
+      this.props.getbomlist({ pid: rowData.id });
+    } else {
+      if(rightActive === FIRST_TAG){
+        this.props.changeRightActive(SECOND_TAG);
+      }
       // this.props.changeRightActive();
       // dispatch({
       //   type: `${defaultModelName}/changeRightMenu`,
@@ -179,7 +177,8 @@ class MiddleTable extends Component {
     const selectedSecondRowKeys =  isMaterial ? selectedRowKeysSecond: selectedProccessRowKeys
     const choosenSecondRow = isMaterial ? choosenRowDataSecond: choosenProccessData
     console.log(processList,selectedSecondRowKeys,selectedProccess,'=====selectedProccess');
-    
+    console.log(materialList,'====materialList');
+      
     return (
       <div className={styles.view_left_content}>
         <SearchForm
@@ -188,8 +187,9 @@ class MiddleTable extends Component {
           onSearch={p => {
             onSearch({ ...p, current: 1 }, 1);
           }}
-          returnElement={returnElement}
+          returnElement={returnElement}   
           onchange={changeSearchParams}
+          needStatus
         />
         <div className={styles.tableBox}>
           <Table

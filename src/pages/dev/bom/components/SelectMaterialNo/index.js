@@ -20,6 +20,7 @@ const searchParams = [
 ];
 
 const columnsarr = {
+  // 石材
   H016002:[
     {
       title: <div className={styles.row_normal2}>原料编号</div>,
@@ -57,6 +58,7 @@ const columnsarr = {
       key: 'zhName',
     },
   ],
+  // 主材
   H016001:[
     {
       title: <div className={styles.row_normal2}>原料编号</div>,
@@ -80,8 +82,8 @@ const columnsarr = {
     },
     {
       title: <div className={styles.row_normal2}>重量单位</div>,
-      dataIndex: 'weightUnit',
-      key: 'weightUnit',
+      dataIndex: 'weightUnitName',
+      key: 'weightUnitName',
     },
   ],
   1:[
@@ -147,6 +149,7 @@ export default (({ pagination, returnElement, source, list, selectedRowKeys, cha
         selectKey={choosenRowData.id}
         onSelectChange={onSelectChange}
         handleTableChange={handleTableChange}
+        checkType="radio"
       />
     </div>
   )
