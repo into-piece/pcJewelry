@@ -121,7 +121,8 @@ class Index extends Component {
     ],
     videoPath:'',
     filePath:'',
-    showMaterialNoModal:false
+    showMaterialNoModal:false,
+    showSysModal:false
   };
 
 
@@ -1401,7 +1402,8 @@ class Index extends Component {
       selectedBom,
       craftShow,
       selectedProccess,
-      showMaterialNoModal
+      showMaterialNoModal,
+      showSysModal
     } = state;
     const {
       choosenRowData,
@@ -1655,6 +1657,42 @@ class Index extends Component {
           destroyOnClose
           onOk={handleMaterialNoOk}
           visible={showMaterialNoModal}
+          onCancel={handleMaterialNoCancel}
+          zIndex={1002}
+        >
+          <SelectMaterialNo
+            list={materialNoList}
+            materialType={materialType}
+            pagination={materialNoPagination}
+            returnElement={returnElement}
+            source={model}
+            selectedRowKeys={materialSelectedKeys}
+            changeChoosenRow={changeMaterialChoosenRow}
+            choosenRowData={materialNoChoosenRowData}
+            onSelectChange={onMaterialSelectChange}
+            listLoading={materialNoListLoading}
+            onSearch={this.getMaterialList}
+            changeProductSearch={args => {
+              // search 看看搜索完要不要做点处理
+              this.getmaterialNoList({ ...args });
+            }}
+            handleTableChange={args => {
+              // search 看看搜索完要不要做点处理
+              this.getmaterialNoList({ ...args });
+            }}
+          />
+        </Modal>
+
+        // todo  同步产品数据到其他产品modal
+        <Modal
+          title={<BuildTitle title="同步产品数据到其他产品" />}
+          maskClosable={false}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={handleMaterialNoOk}
+          visible={showSysModal}
           onCancel={handleMaterialNoCancel}
           zIndex={1002}
         >
