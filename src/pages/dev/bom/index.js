@@ -115,7 +115,7 @@ class Index extends Component {
     onCraft: { name: '' },
     craftForm: [
       [
-        { key: '镶石公艺', title: '镶石公艺', value: '' },
+        { key: '镶石工艺', title: '镶石工艺', value: '' },
         { key: '效率', title: '效率', value: '' },
       ],
     ],
@@ -127,7 +127,7 @@ class Index extends Component {
 
 
   onCraft = [
-    { key: '镶石公艺', title: '镶石公艺', value: '', },
+    { key: '镶石工艺', title: '镶石工艺', value: '', },
     { key: '效率', title: '效率', value: '' },
   ];
 

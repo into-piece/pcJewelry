@@ -196,16 +196,6 @@ const columnsArr = {
 
     },
     {
-      title: '客户编号',
-      dataIndex: 'customerNo',
-      key: 'customerNo',
-    },
-    {
-      title: '供应商编号',
-      dataIndex: 'supplierNo',
-      key: 'supplierNo',
-    },
-    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhNa2me',
@@ -214,6 +204,16 @@ const columnsArr = {
       title: '英文名',
       dataIndex: 'enName',
       key: 'enNa2me',
+    },
+    {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
     },
     {
       title: '计量单位',
@@ -230,7 +230,7 @@ const columnsArr = {
 
     },
     {
-      title: '单价',
+      title: '工费',
       dataIndex: 'price',
       key: 'price',
       render: d => parseFloat(d || 0).toFixed(4),
@@ -328,16 +328,6 @@ const columnsArr = {
 
     },
     {
-      title: '基本材料',
-      dataIndex: 'basicMaterials',
-      key: 'basicMaterials4',
-    },
-    {
-      title: '条码',
-      dataIndex: 'barCode',
-      key: 'barCode4',
-    },
-    {
       title: '形状',
       dataIndex: 'shape',
       key: 'shape4',
@@ -352,16 +342,6 @@ const columnsArr = {
 
     },
     {
-      title: '客户编号',
-      dataIndex: 'customerNo',
-      key: 'customerNo',
-    },
-    {
-      title: '供应商编号',
-      dataIndex: 'supplierNo',
-      key: 'supplierNo',
-    },
-    {
       title: '中文名',
       dataIndex: 'zhName',
       key: 'zhName4',
@@ -370,6 +350,26 @@ const columnsArr = {
       title: '英文名',
       dataIndex: 'enName',
       key: 'enName4',
+    },
+    {
+      title: '基本材料',
+      dataIndex: 'basicMaterials',
+      key: 'basicMaterials4',
+    },
+    {
+      title: '条码',
+      dataIndex: 'barCode',
+      key: 'barCode4',
+    },
+    {
+      title: '客户编号',
+      dataIndex: 'customerNo',
+      key: 'customerNo',
+    },
+    {
+      title: '供应商编号',
+      dataIndex: 'supplierNo',
+      key: 'supplierNo',
     },
     {
       title: '单价',
