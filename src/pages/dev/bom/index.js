@@ -887,29 +887,29 @@ class Index extends Component {
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo');
 
-    if(modalType === 'sys'){
-      // todo 同步产品数据到其他产品modal
-      return <SysProduct
-        list={materialNoList}
-        pagination={materialNoPagination}
-        returnElement={returnElement}
-        source={model}
-        selectedRowKeys={materialSelectedKeys}
-        changeChoosenRow={changeMaterialChoosenRow}
-        choosenRowData={materialNoChoosenRowData}
-        onSelectChange={onMaterialSelectChange}
-        listLoading={materialNoListLoading}
-        onSearch={this.getMaterialList}
-        changeProductSearch={args => {
-          // search 看看搜索完要不要做点处理
-          this.getmaterialNoList({ ...args });
-        }}
-        handleTableChange={args => {
-          // search 看看搜索完要不要做点处理
-          this.getmaterialNoList({ ...args });
-        }}
-      />
-    }
+    // if(modalType === 'sys'){
+    //   // todo 同步产品数据到其他产品modal
+    //   return <SysProduct
+    //     list={materialNoList}
+    //     pagination={materialNoPagination}
+    //     returnElement={returnElement}
+    //     source={model}
+    //     selectedRowKeys={materialSelectedKeys}
+    //     changeChoosenRow={changeMaterialChoosenRow}
+    //     choosenRowData={materialNoChoosenRowData}
+    //     onSelectChange={onMaterialSelectChange}
+    //     listLoading={materialNoListLoading}
+    //     onSearch={this.getMaterialList}
+    //     changeProductSearch={args => {
+    //       // search 看看搜索完要不要做点处理
+    //       this.getmaterialNoList({ ...args });
+    //     }}
+    //     handleTableChange={args => {
+    //       // search 看看搜索完要不要做点处理
+    //       this.getmaterialNoList({ ...args });
+    //     }}
+    //   />
+    // }
 
 
     return (
