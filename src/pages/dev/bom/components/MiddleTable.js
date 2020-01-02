@@ -218,7 +218,8 @@ class MiddleTable extends Component {
 
         {/*  操作部分  */}
         <div className={styles.tableBox}>
-          <div>
+          <div style={{marginBottom:20}}>
+            {/* <span>BOM: </span> */}
             {/* bom列表 */}
             <Select
               style={{ width: 180, marginRight: 20 }}
@@ -233,7 +234,8 @@ class MiddleTable extends Component {
                 </Option>
               ))}
             </Select>
-
+          </div>
+          <div>
             <Group value={menuValue} buttonStyle="solid" onChange={handleSwitchMenu}>
               {menuRadio.map(({ title, key }) => (
                 <Radio.Button value={key} key={key}>
@@ -246,19 +248,22 @@ class MiddleTable extends Component {
           <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: isthird?'space-between':'flex-end'}}>
             {/* 生产流程列表 */}
             {isthird ? (
-              <Select
-                style={{ width: 180 }}
-                placeholder="请选择"
-                value={selectedProccess && selectedProccess.processId || undefined}
-                onChange={handleBomSelectChange}
-              >
-                {processDropdown &&
+              <div>
+                {/* <span>生产流程: </span> */}
+                <Select
+                  style={{ width: 180 }}
+                  placeholder="请选择"
+                  value={selectedProccess && selectedProccess.processId || undefined}
+                  onChange={handleBomSelectChange}
+                >
+                  {processDropdown &&
                 processDropdown.map(({ value, key }) => (
                   <Option value={value} key={value}>
                     {key}
                   </Option>
                 ))}
-              </Select>) : null}
+                </Select>
+              </div>) : null}
 
             <BtnGroup arr={secondOprationArr} />
           </div>
