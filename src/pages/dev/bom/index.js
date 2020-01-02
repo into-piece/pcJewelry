@@ -39,6 +39,7 @@ import component from '@/locales/en-US/component';
 import columnsConfig from './config/columns';
 import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo';
+import SysProduct from './components/SysProduct';
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
@@ -123,7 +124,6 @@ class Index extends Component {
     videoPath: '',
     filePath: '',
     showMaterialNoModal: false,
-    showSysModal: false,
   };
 
 
@@ -575,8 +575,8 @@ class Index extends Component {
           <Input
             placeholder="请输入"
             onChange={v => {
-            this.handleInputChange(v, value);
-          }}
+              this.handleInputChange(v, value);
+            }}
           />
         );
     }
@@ -886,6 +886,31 @@ class Index extends Component {
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo');
+
+    if(modalType === 'sys'){
+      // todo 同步产品数据到其他产品modal
+      return <SysProduct
+        list={materialNoList}
+        pagination={materialNoPagination}
+        returnElement={returnElement}
+        source={model}
+        selectedRowKeys={materialSelectedKeys}
+        changeChoosenRow={changeMaterialChoosenRow}
+        choosenRowData={materialNoChoosenRowData}
+        onSelectChange={onMaterialSelectChange}
+        listLoading={materialNoListLoading}
+        onSearch={this.getMaterialList}
+        changeProductSearch={args => {
+          // search 看看搜索完要不要做点处理
+          this.getmaterialNoList({ ...args });
+        }}
+        handleTableChange={args => {
+          // search 看看搜索完要不要做点处理
+          this.getmaterialNoList({ ...args });
+        }}
+      />
+    }
+
 
     return (
       <Form size="small" key="1">
@@ -1438,7 +1463,6 @@ class Index extends Component {
       craftShow,
       selectedProccess,
       showMaterialNoModal,
-      showSysModal,
     } = state;
     const {
       choosenRowData,
@@ -1731,41 +1755,7 @@ class Index extends Component {
           />
         </Modal>
 
-        // todo 同步产品数据到其他产品modal
-        <Modal
-          title={<BuildTitle title="同步产品数据到其他产品" />}
-          maskClosable={false}
-          width={1000}
-          className={styles.standardListForm}
-          bodyStyle={{ padding: '28px 0 0' }}
-          destroyOnClose
-          onOk={handleMaterialNoOk}
-          visible={showSysModal}
-          onCancel={handleMaterialNoCancel}
-          zIndex={1002}
-        >
-          <SelectMaterialNo
-            list={materialNoList}
-            materialType={materialType}
-            pagination={materialNoPagination}
-            returnElement={returnElement}
-            source={model}
-            selectedRowKeys={materialSelectedKeys}
-            changeChoosenRow={changeMaterialChoosenRow}
-            choosenRowData={materialNoChoosenRowData}
-            onSelectChange={onMaterialSelectChange}
-            listLoading={materialNoListLoading}
-            onSearch={this.getMaterialList}
-            changeProductSearch={args => {
-              // search 看看搜索完要不要做点处理
-              this.getmaterialNoList({ ...args });
-            }}
-            handleTableChange={args => {
-              // search 看看搜索完要不要做点处理
-              this.getmaterialNoList({ ...args });
-            }}
-          />
-        </Modal>
+
       </div>
     );
   }
