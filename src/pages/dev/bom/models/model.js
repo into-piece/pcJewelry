@@ -308,6 +308,8 @@ export default {
 
     *changeStateOut({ payload }, { put }) {
       const {name,data} = payload
+      console.log(name,data);
+      
       yield put({
         type: 'changeState',
         payload: { data, typeName: name },

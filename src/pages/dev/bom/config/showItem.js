@@ -43,15 +43,15 @@ const product = [
   },
   {
     key: '重量单位',
-    value: 'unitOfWeight',
+    value: 'unitOfWeightName',
   },
   {
     key: '规格',
     value: 'specification',
   },
   {
-    key: '单位',
-    value: 'customerShotName',
+    key: '数量单位',
+    value: 'unitOfMeasurementName',
   },
 
   {
