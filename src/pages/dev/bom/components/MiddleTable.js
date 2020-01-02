@@ -55,27 +55,27 @@ const BtnGroup = ({ arr }) => {
     materialList: model.materialList,
     processList: model.processList,
     processDropdown: model.processDropdown,
-    bomlist:model.bomlist,
-    choosenProccessData:model.choosenProccessData,
-    selectedProccessRowKeys:model.selectedProccessRowKeys,
-    proccessPagination: model.proccessPagination
+    bomlist: model.bomlist,
+    choosenProccessData: model.choosenProccessData,
+    selectedProccessRowKeys: model.selectedProccessRowKeys,
+    proccessPagination: model.proccessPagination,
   };
 })
 class MiddleTable extends Component {
 
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
-    
+
     // 判断 2/3
-    const { dispatch, pagination, onSearch,rightActive } = this.props;
-    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG
-    const choosenSecondRow = isMaterial ? 'choosenRowDataSecond': 'choosenProccessData'
-    const str = type === 1 ? 'choosenRowData': choosenSecondRow
-    console.log(isMaterial,choosenSecondRow,str,'=======');
+    const { dispatch, pagination, onSearch, rightActive } = this.props;
+    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG;
+    const choosenSecondRow = isMaterial ? 'choosenRowDataSecond' : 'choosenProccessData';
+    const str = type === 1 ? 'choosenRowData' : choosenSecondRow;
+    console.log(isMaterial, choosenSecondRow, str, '=======');
 
     dispatch({
       type: `${defaultModelName}/setChooseData`,
-      payload: {name:str,list:rowData},
+      payload: { name: str, list: rowData },
     });
 
     if (type === 1) {
@@ -83,7 +83,7 @@ class MiddleTable extends Component {
       onSearch && onSearch({ mainMoldCode: rowData.id }, 2);
       this.props.getbomlist({ pid: rowData.id });
     } else {
-      if(rightActive === FIRST_TAG){
+      if (rightActive === FIRST_TAG) {
         this.props.changeRightActive(SECOND_TAG);
       }
       // this.props.changeRightActive();
@@ -96,13 +96,13 @@ class MiddleTable extends Component {
 
   // 更改table select数组
   onSelectChange = (selectedRowKeys, type) => {
-    const { dispatch,rightActive ,selectedRowKeysSecond,selectedProccessRowKeys} = this.props;
-    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG
-    const selectedSecondRowKeys =  isMaterial ? 'selectedRowKeysSecond': 'selectedProccessRowKeys'
-    const  selectedRowArr = type ===1?'selectedRowKeys':selectedSecondRowKeys
+    const { dispatch, rightActive, selectedRowKeysSecond, selectedProccessRowKeys } = this.props;
+    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG;
+    const selectedSecondRowKeys = isMaterial ? 'selectedRowKeysSecond' : 'selectedProccessRowKeys';
+    const selectedRowArr = type === 1 ? 'selectedRowKeys' : selectedSecondRowKeys;
     dispatch({
       type: `${defaultModelName}/changeStateOut`,
-      payload: { name:selectedRowArr,data:selectedRowKeys},
+      payload: { name: selectedRowArr, data: selectedRowKeys },
     });
   };
 
@@ -113,11 +113,11 @@ class MiddleTable extends Component {
       // 清除第二table数据
       dispatch({
         type: `${defaultModelName}/setChooseData`,
-        payload: {name:'choosenRowData',list:[]},
+        payload: { name: 'choosenRowData', list: [] },
       });
       dispatch({
         type: `${defaultModelName}/setChooseData`,
-        payload: {name:'choosenRowDataSecond',list:[]},
+        payload: { name: 'choosenRowDataSecond', list: [] },
       });
     }
   };
@@ -167,18 +167,18 @@ class MiddleTable extends Component {
       selectedProccess,
       selectedProccessRowKeys,
       choosenProccessData,
-      proccessPagination
+      proccessPagination,
     } = props;
     const isthird = rightActive === THIRD_TAG;
     const tablelist = isthird ? processList : materialList;
-    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG
+    const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG;
     const menuValue =
       isMaterial ? SECOND_TAG : THIRD_TAG;
-    const selectedSecondRowKeys =  isMaterial ? selectedRowKeysSecond: selectedProccessRowKeys
-    const choosenSecondRow = isMaterial ? choosenRowDataSecond: choosenProccessData
-    console.log(processList,selectedSecondRowKeys,selectedProccess,'=====selectedProccess');
-    console.log(materialList,'====materialList');
-      
+    const selectedSecondRowKeys = isMaterial ? selectedRowKeysSecond : selectedProccessRowKeys;
+    const choosenSecondRow = isMaterial ? choosenRowDataSecond : choosenProccessData;
+    console.log(processList, selectedSecondRowKeys, selectedProccess, '=====selectedProccess');
+    console.log(materialList, '====materialList');
+
     return (
       <div className={styles.view_left_content}>
         <SearchForm
@@ -187,7 +187,7 @@ class MiddleTable extends Component {
           onSearch={p => {
             onSearch({ ...p, current: 1 }, 1);
           }}
-          returnElement={returnElement}   
+          returnElement={returnElement}
           onchange={changeSearchParams}
           needStatus
         />
@@ -219,6 +219,21 @@ class MiddleTable extends Component {
         {/*  操作部分  */}
         <div className={styles.tableBox}>
           <div>
+            {/* bom列表 */}
+            <Select
+              style={{ width: 180, marginRight: 20 }}
+              placeholder="请选择"
+              value={selectedBom.id || undefined}
+              onChange={handleBomSelectChange}
+            >
+              {bomlist &&
+              bomlist.map(({ value, key }) => (
+                <Option value={value} key={value}>
+                  {key}
+                </Option>
+              ))}
+            </Select>
+
             <Group value={menuValue} buttonStyle="solid" onChange={handleSwitchMenu}>
               {menuRadio.map(({ title, key }) => (
                 <Radio.Button value={key} key={key}>
@@ -228,47 +243,33 @@ class MiddleTable extends Component {
               ))}
             </Group>
           </div>
-          <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: 'space-between' }}>
-            {/* bom列表 */}
+          <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: isthird?'space-between':'flex-end'}}>
+            {/* 生产流程列表 */}
             {isthird ? (
               <Select
                 style={{ width: 180 }}
                 placeholder="请选择"
-                value={selectedProccess&&selectedProccess.processId || undefined}
+                value={selectedProccess && selectedProccess.processId || undefined}
                 onChange={handleBomSelectChange}
               >
                 {processDropdown &&
-                  processDropdown.map(({ value, key }) => (
-                    <Option value={value} key={value}>
-                      {key}
-                    </Option>
-                  ))}
-              </Select>
-            ) : (
-              <Select
-                style={{ width: 180 }}
-                placeholder="请选择"
-                value={selectedBom.id || undefined}
-                onChange={handleBomSelectChange}
-              >
-                {bomlist &&
-                  bomlist.map(({ value, key }) => (
-                    <Option value={value} key={value}>
-                      {key}
-                    </Option>
-                  ))}
-              </Select>
-            )}
+                processDropdown.map(({ value, key }) => (
+                  <Option value={value} key={value}>
+                    {key}
+                  </Option>
+                ))}
+              </Select>) : null}
+
             <BtnGroup arr={secondOprationArr} />
           </div>
 
           <Table
             scroll={{ x: 'max-content' }}
             columns={columnsConfig[menuValue]}
-            pagination={isMaterial?paginationSecond:proccessPagination}
+            pagination={isMaterial ? paginationSecond : proccessPagination}
             selectKey={choosenSecondRow.id}
-            handleTableChange={p=>{
-              onSearch(p,isMaterial?2:3)
+            handleTableChange={p => {
+              onSearch(p, isMaterial ? 2 : 3);
             }}
             selectedRowKeys={selectedSecondRowKeys}
             body={tablelist}
