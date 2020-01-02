@@ -38,15 +38,15 @@ export default {
 
     pagination: {
       current: 1,
-      size: 10,
+      size: 6,
     },
     paginationSecond: {
       current: 1,
-      size: 10,
+      size: 6,
     },
     proccessPagination:{
       current: 1,
-      size: 10,
+      size: 6,
     },
     materialNoPagination:{
       current: 1,
@@ -74,7 +74,7 @@ export default {
     materialNoList:[],
     materialNoChoosenRowData:{id:''},
     materialSelectedKeys:[],
-  },  
+  },
 
   effects: {
     *changeProps({ payload, callback }, { put }) {
@@ -282,7 +282,7 @@ export default {
       });
     },
 
-    
+
     *changeSearchParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchParams2',
@@ -308,7 +308,7 @@ export default {
     *changeStateOut({ payload }, { put }) {
       const {name,data} = payload
       console.log(name,data);
-      
+
       yield put({
         type: 'changeState',
         payload: { data, typeName: name },
