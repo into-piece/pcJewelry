@@ -98,7 +98,8 @@ const radioArr = [
     materialSelectedKeys:model.materialSelectedKeys,
     materialNoPagination:model.materialNoPagination,
     flowlistDropDown:model.flowlistDropDown,
-    processRelationDropDown:model.processRelationDropDown
+    processRelationDropDown:model.processRelationDropDown,
+    listChildDieSetDropDown:model.listChildDieSetDropDown
   };
 })
 class Index extends Component {
@@ -1437,7 +1438,8 @@ class Index extends Component {
       bomselectedKeys,
       materialNoChoosenRowData,
       materialNoListLoading,
-      materialSelectedKeys
+      materialSelectedKeys,
+      listChildDieSetDropDown
     } = props;
     const { getFieldDecorator ,getFieldValue} = form;
     const modalFooter =
@@ -1533,7 +1535,7 @@ class Index extends Component {
     const isthird = rightActive === THIRD_TAG;
     const materialType = getFieldValue('materialType')
 
-    console.log(materialNoPagination,'======materialNoPagination');
+    console.log(listChildDieSetDropDown,'======listChildDieSetDropDown');
 
     return (
       <div className={styles.page}>
