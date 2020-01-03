@@ -216,7 +216,7 @@ export default {
 
     *productBomRevokeList({ payload, callback }, { call, put }) {
       const { params, name } = payload;
-      const response = yield call(productBomRevokeListApi, params);
+      const response = yield call(productBomRevokeListApi,params);
 
       const list =
         response.head && response.head.rtnCode === '000000' ? response.body : initData;

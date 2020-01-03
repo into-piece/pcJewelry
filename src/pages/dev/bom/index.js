@@ -210,7 +210,7 @@ class Index extends Component {
     return (
       <Dragger {...uploadConfig} defaultFileList={fileList}>
         <p className="ant-upload-drag-icon">
-          <Icon type="inbox"/>
+          <Icon type="inbox" />
         </p>
         <p className="ant-upload-text">Click or drag file to this area to upload</p>
         <p className="ant-upload-hint">
@@ -244,7 +244,8 @@ class Index extends Component {
     });
   };
 
-  initDrop = () => {
+  initDrop = (modalType) => {
+    const { getProductBomRevoke} = this;
     const { dispatch, form, choosenRowData } = this.props;
     const { setFieldsValue } = form;
     const { rightActive } = this.state;
@@ -274,7 +275,9 @@ class Index extends Component {
     //   type: `${defaultModelName}/getlistFilmSettings`,
     //   payload: {},
     // });
-
+    if(modalType==='sys'){
+      getProductBomRevoke({});
+    }
     let arr = [];
     if (rightActive === FIRST_TAG) {
       arr = [
@@ -604,7 +607,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入"/>;
+        return <TextArea rows={2} placeholder="请输入" />;
       case 9:
         return (
           <RangePicker
@@ -652,7 +655,7 @@ class Index extends Component {
         : rightActive === SECOND_TAG
         ? 'material' :
         this.isEditworkFlow ? 'productflow' : 'productProcess';
-    const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings"/>;
+    const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -944,21 +947,17 @@ class Index extends Component {
   };
 
 // start 复制产品 bom
-  getProductBomRevoke = () => {
+  getProductBomRevoke = (args) => {
     const { productBomRevokePagination, form, dispatch } = this.props;
 
-    if ('current' in args) {
-      dispatch({
-        type: `${defaultModelName}/changeStateOut`,
-        payload: { name: 'productBomRevokePagination', data: { ...productBomRevokePagination, current: args.current } },
-      });
-    }
 
     dispatch({
       type: `${defaultModelName}/productBomRevokeList`,
       payload: {
         name: 'productBomRevokeList',
-        params: { size: 10, current: 1, ...productBomRevokePagination, ...args },
+        params: {
+          // size: 10, current: 1, ...productBomRevokePagination,
+          ...args },
       },
     });
   };
@@ -983,7 +982,7 @@ class Index extends Component {
   handleProductBomSelectChange= v=>{
     this.props.dispatch({
       type: `${defaultModelName}/changeStateOut`,
-      payload: { data: v.split(','), name: 'sysProductSelectedBom' },
+      payload: { data: v, name: 'sysProductSelectedBom' },
     });
   }
 
@@ -1045,7 +1044,6 @@ class Index extends Component {
         productChoosenData={choosenRowData}
         choosenRowData={productBomRevokeChoosenRowData}
         pagination={productBomRevokePagination}
-        returnElement={returnElement}
         source={model}
         selectedRowKeys={productBomRevokeSelectedKeys}
         changeChoosenRow={changeProductBomRevokeChoosenRow}
@@ -1298,11 +1296,32 @@ class Index extends Component {
     if (this.isEditworkFlow) {
       this.isEditworkFlow = false;
     }
+    const {  dispatch } = this.props;
+
     switch (modalType) {
+      case '':
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'productBomRevokeChoosenRowData', data:{} },
+        });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'productBomRevokeSelectedKeys', data: []},
+        });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'sysProductSelectedBom', data: [] },
+        });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'productBomRevokeList', data: [] },
+        });
+        this.setState({ modalType });
+        break;
       case 'plus':
       case 'edit':
       default:
-        this.initDrop();
+        this.initDrop(modalType);
         this.setState({ modalType });
         break;
       case 'delete':
