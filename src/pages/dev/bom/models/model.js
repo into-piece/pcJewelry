@@ -77,6 +77,13 @@ export default {
   },
 
   effects: {
+    *batchUpdate({ payload }, { put }) {
+      yield put({
+        type: 'batchUpdateState',
+        payload,
+      });
+    },
+
     *changeProps({ payload, callback }, { put }) {
       yield put({
         type: 'changeState',
@@ -384,6 +391,13 @@ export default {
   },
 
   reducers: {
+    batchUpdateState(state, action) {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+
     changeState(state, action) {
       const { typeName, data } = action.payload;
       return {
