@@ -240,9 +240,10 @@ class Index extends Component {
   };
 
   initDrop = () => {
+    const { getProductBomRevoke} = this;
     const { dispatch, form, choosenRowData } = this.props;
     const { setFieldsValue } = form;
-    const { rightActive } = this.state;
+    const { rightActive ,modalType} = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
@@ -269,7 +270,9 @@ class Index extends Component {
     //   type: `${defaultModelName}/getlistFilmSettings`,
     //   payload: {},
     // });
-
+    if(modalType==='sys'){
+      getProductBomRevoke({});
+    }
     let arr = [];
     if (rightActive === FIRST_TAG) {
       arr = [
@@ -903,7 +906,7 @@ class Index extends Component {
   };
 
 // start 复制产品 bom
-  getProductBomRevoke = () => {
+  getProductBomRevoke = (args) => {
     const { productBomRevokePagination, form, dispatch } = this.props;
 
     if ('current' in args) {
@@ -942,7 +945,7 @@ class Index extends Component {
   handleProductBomSelectChange= v=>{
     this.props.dispatch({
       type: `${defaultModelName}/changeStateOut`,
-      payload: { data: v.split(','), name: 'sysProductSelectedBom' },
+      payload: { data: v, name: 'sysProductSelectedBom' },
     });
   }
 // end 复制产品 bom
@@ -1187,7 +1190,28 @@ class Index extends Component {
     if (this.isEditworkFlow) {
       this.isEditworkFlow = false;
     }
+    const {  dispatch } = this.props;
+
     switch (modalType) {
+      case '':
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'productBomRevokeChoosenRowData', data:{} },
+        });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'productBomRevokeSelectedKeys', data: []},
+        });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'sysProductSelectedBom', data: [] },
+        });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: { name: 'productBomRevokeList', data: [] },
+        });
+        this.setState({ modalType });
+        break;
       case 'plus':
       case 'edit':
       default:

@@ -1,7 +1,7 @@
-import React from 'react'
-import { Input,Select } from 'antd'
-import Table from '@/components/Table'
-import styles from './index.less'
+import React from 'react';
+import { Input, Select } from 'antd';
+import Table from '@/components/Table';
+import styles from './index.less';
 
 const { Option } = Select;
 
@@ -51,18 +51,18 @@ const columnsarr = [
     dataIndex: 'customerShotName',
     key: 'customerShotName',
   },
-]
+];
 
 
-export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagination, source, list, selectedRowKeys, changeChoosenRow,   onSelectChange, handleTableChange }) => {
-  console.log(pagination,'pagination======');
+export default (({ handleBomSelectChange, productChoosenData, choosenRowData, pagination, source, list, selectedRowKeys, changeChoosenRow, onSelectChange, handleTableChange }) => {
+  console.log(pagination, 'pagination======');
 
-  return(
+  return (
     <div className={styles.productModal}>
-      <div style={{marginBottom:20}}>
-        {productChoosenData.productNo}
-
+      <div style={{ marginBottom: 20 }}><span>产品编号：</span> {productChoosenData.productNo}</div>
+      <div style={{ marginBottom: 20 }}>
         {/* bom列表 */}
+        <span>BOM：</span>
         <Select
           value={source.sysProductSelectedBom || undefined}
           showSearch
@@ -71,19 +71,19 @@ export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagin
           style={{ width: 180 }}
           placeholder="请选择"
           onChange={v => {
-            handleBomSelectChange && handleBomSelectChange(v);
-          }}
+              handleBomSelectChange && handleBomSelectChange(v);
+            }}
           optionFilterProp="children"
           filterOption={(input, option) =>
-            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
         >
           {source.bomlist &&
-          source.bomlist.map(({ value, key }) => (
-            <Option value={value} key={value}>
-              {key}
-            </Option>
-          ))}
+            source.bomlist.map(({ value, key }) => (
+              <Option value={value} key={value}>
+                {key}
+              </Option>
+            ))}
         </Select>
       </div>
       <Table
@@ -99,5 +99,5 @@ export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagin
         checkType="radio"
       />
     </div>
-  )
-})
+  );
+});
