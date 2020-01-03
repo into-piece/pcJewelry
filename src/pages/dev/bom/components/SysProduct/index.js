@@ -52,12 +52,12 @@ const columnsarr = [
 ]
 
 
-export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeProductSearch,handleTableChange }) => {
+export default (({ productChoosenData,choosenRowData,pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow,   onSelectChange, handleTableChange }) => {
   console.log(pagination,'pagination======');
 
   return(
     <div className={styles.productModal}>
-
+      {productChoosenData.id}
       <Table
         columns={columnsarr}
         body={list}

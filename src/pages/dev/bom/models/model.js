@@ -52,6 +52,10 @@ export default {
       current: 1,
       size: 10,
     },
+    productBomRevokePagination:{
+      current: 1,
+      size: 10,
+    },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select
     list: initData,
@@ -74,6 +78,10 @@ export default {
     materialNoList:[],
     materialNoChoosenRowData:{id:''},
     materialSelectedKeys:[],
+
+    productBomRevokeList:[],
+    productBomRevokeChoosenRowData:{id:''},
+    productBomRevokeSelectedKeys:[],
   },
 
   effects: {
