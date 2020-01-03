@@ -87,11 +87,12 @@ export default {
   },
 
   effects: {
-    *batchUpdate({ payload }, { put }) {
+    *batchUpdatedispatch({ payload ,callback}, { put }) {
       yield put({
         type: 'batchUpdateState',
         payload,
       });
+      if (callback) callback();
     },
 
     *changeProps({ payload, callback }, { put }) {
