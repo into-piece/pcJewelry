@@ -3,7 +3,7 @@ export const product = [{ key: 'BOM名称', value: 'bName', type: 1 }];
 export const material = [
   { key: 'bom名称', value: 'bomId', type: 2, list: 'bomlist' },
   { key: '原料类别', value: 'materialType', type: 2, list: 'listMstWordbook' },
-  { key: '胶膜编号', value: 'modelNo', type: 2, list: 'listFilmSettingsDropDown' },
+  { key: '胶膜编号', value: 'productNo', type: 2, list: 'listChildDieSetDropDown' },
   { key: '模比', value: 'modulusRatio' },
   {
     key: '原料小类',
@@ -50,7 +50,7 @@ const proccess = [
 ]
 
 const productProcess = [
-  { key: '工序名称', value: 'zhName', row: 2, type:2,list:'flowlistDropDown' },
+  { key: '工序名称', value: 'zhName', row: 2, type:2,list:'processRelationDropDown' },
   { key: '工序编号', value: 'workProcessCode', row: 2,type:7 },
   { key: '耗损（%）', value: 'isWastage', row: 2 },
   { key: '效率（件/小时）', value: 'processCapacity', row: 2 ,number:true},

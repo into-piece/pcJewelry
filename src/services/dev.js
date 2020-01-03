@@ -188,6 +188,11 @@ const resultArr = [
     path: '/mold-positioning-settings/listMoldPositioningSettingsDropDown',
     prefix1: `${env}/business/develop/basic`,
   }, // 胶膜仓位编号下拉
+  {
+    key: 'productBomRevokeListApi',
+    path: '/develop.bom/develop-bom/listDraftProductDropDown',
+    prefix1: `${env}/business`,
+  }, // bom未审批产品下拉接口
 ];
 
 // console.log(resultArr, '============')

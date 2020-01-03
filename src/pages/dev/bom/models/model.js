@@ -18,6 +18,7 @@ const {
   bomapprove,
   boomrevoke,
   materialList,
+  productBomRevokeListApi,
   processList,
 } = servicesConfig;
 const defaultModelName = 'devbom';
@@ -38,17 +39,21 @@ export default {
 
     pagination: {
       current: 1,
-      size: 10,
+      size: 6,
     },
     paginationSecond: {
       current: 1,
-      size: 10,
+      size: 6,
     },
     proccessPagination:{
       current: 1,
-      size: 10,
+      size: 6,
     },
     materialNoPagination:{
+      current: 1,
+      size: 10,
+    },
+    productBomRevokePagination:{
       current: 1,
       size: 10,
     },
@@ -74,7 +79,12 @@ export default {
     materialNoList:[],
     materialNoChoosenRowData:{id:''},
     materialSelectedKeys:[],
-  },  
+
+    sysProductSelectedBom:[],
+    productBomRevokeList:[],
+    productBomRevokeChoosenRowData:{id:''},
+    productBomRevokeSelectedKeys:[],
+  },
 
   effects: {
     *changeProps({ payload, callback }, { put }) {
@@ -176,7 +186,6 @@ export default {
         });
         return
       }
-
       // 排除出不要的原料分类
       if(name === 'listMstWordbook'){
         const filterArr = ['H016001','H016002','H016003','H016004','H016005']
@@ -195,6 +204,19 @@ export default {
         type: 'changeState',
         payload: { data: [], typeName: 'materialNoList' },
       });
+    },
+
+    *productBomRevokeList({ payload, callback }, { call, put }) {
+      const { params, name } = payload;
+      const response = yield call(productBomRevokeListApi, params);
+
+      const list =
+        response.head && response.head.rtnCode === '000000' ? response.body : initData;
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: name },
+      });
+      if (callback) callback(list.records[0]);
     },
 
     *materialNoList({ payload, callback }, { call, put }) {
@@ -283,7 +305,7 @@ export default {
       });
     },
 
-    
+
     *changeSearchParams({ payload }, { put }) {
       yield put({
         type: 'changeSearchParams2',
@@ -309,7 +331,7 @@ export default {
     *changeStateOut({ payload }, { put }) {
       const {name,data} = payload
       console.log(name,data);
-      
+
       yield put({
         type: 'changeState',
         payload: { data, typeName: name },
