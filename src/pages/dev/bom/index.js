@@ -975,7 +975,6 @@ class Index extends Component {
     }
     const content = '';
     const isEdit = modalType === 'edit';
-    const { model } = this.props;
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo');
