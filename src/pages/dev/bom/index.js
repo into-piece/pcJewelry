@@ -91,17 +91,27 @@ const radioArr = [
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
     processDropdown: model.processDropdown,
-    choosenProccessData:model.choosenProccessData,
-    selectedProccessRowKeys:model.selectedProccessRowKeys,
-    proccessPagination:model.proccessPagination,
-    materialNoList:model.materialNoList,
-    materialNoChoosenRowData:model.materialNoChoosenRowData,
-    materialNoListLoading:loading.effects[`${defaultModelName}/getListSecond`],
-    materialSelectedKeys:model.materialSelectedKeys,
-    materialNoPagination:model.materialNoPagination,
-    flowlistDropDown:model.flowlistDropDown,
-    processRelationDropDown:model.processRelationDropDown,
-    listChildDieSetDropDown:model.listChildDieSetDropDown
+    choosenProccessData: model.choosenProccessData,
+    selectedProccessRowKeys: model.selectedProccessRowKeys,
+    proccessPagination: model.proccessPagination,
+
+    materialNoList: model.materialNoList,
+    materialNoChoosenRowData: model.materialNoChoosenRowData,
+    materialNoListLoading: loading.effects[`${defaultModelName}/materialNoList`],
+    materialSelectedKeys: model.materialSelectedKeys,
+    materialNoPagination: model.materialNoPagination,
+
+
+    productBomRevokeList:model.productBomRevokeList,
+    productBomRevokePagination:model.productBomRevokePagination,
+    productBomRevokeSelectedKeys:model.productBomRevokeSelectedKeys,
+    productBomRevokeChoosenRowData:model.productBomRevokeChoosenRowData,
+    productBomRevokeListLoading:loading.effects[`${defaultModelName}/getListSecond`],
+
+
+    flowlistDropDown: model.flowlistDropDown,
+    processRelationDropDown: model.processRelationDropDown,
+    listChildDieSetDropDown: model.listChildDieSetDropDown,
   };
 })
 class Index extends Component {
@@ -123,10 +133,10 @@ class Index extends Component {
         { key: '效率', title: '效率', value: '' },
       ],
     ],
-    videoPath:'',
-    filePath:'',
-    showMaterialNoModal:false,
-    processCode:''
+    videoPath: '',
+    filePath: '',
+    showMaterialNoModal: false,
+    processCode: '',
   };
 
 
@@ -195,7 +205,7 @@ class Index extends Component {
     return (
       <Dragger {...uploadConfig} defaultFileList={fileList}>
         <p className="ant-upload-drag-icon">
-          <Icon type="inbox" />
+          <Icon type="inbox"/>
         </p>
         <p className="ant-upload-text">Click or drag file to this area to upload</p>
         <p className="ant-upload-hint">
@@ -230,8 +240,8 @@ class Index extends Component {
   };
 
   initDrop = () => {
-    const { dispatch,form,choosenRowData } = this.props;
-    const {setFieldsValue}  = form
+    const { dispatch, form, choosenRowData } = this.props;
+    const { setFieldsValue } = form;
     const { rightActive } = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
@@ -295,7 +305,7 @@ class Index extends Component {
           key1: 'productNo',
           value1: 'id',
           params: {
-            productNo: choosenRowData.productNo.slice(0,9),
+            productNo: choosenRowData.productNo.slice(0, 9),
           },
         },
         {
@@ -311,14 +321,14 @@ class Index extends Component {
       ];
     }
 
-    if(rightActive === THIRD_TAG){
+    if (rightActive === THIRD_TAG) {
       arr = [
         {
           name: 'processRelationDropDown',
           key1: 'flowName',
           value1: 'processCode',
-        }
-      ]
+        },
+      ];
     }
 
     arr.forEach(item => {
@@ -375,9 +385,9 @@ class Index extends Component {
 
 
   handleSelectChange = (value, type) => {
-    const {rightActive} = this.state
-    const { dispatch, form,materialNoList,flowlistDropDown,processRelationDropDown} = this.props;
-    const {setFieldsValue} = form
+    const { rightActive } = this.state;
+    const { dispatch, form, materialNoList, flowlistDropDown, processRelationDropDown } = this.props;
+    const { setFieldsValue } = form;
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
       setFieldsValue({
@@ -420,13 +430,13 @@ class Index extends Component {
         inventoryWeight,
       });
     }
-    if(rightActive === THIRD_TAG && type === 'zhName'){
-      const workProcessCode = processRelationDropDown.filter(item=>(item.processCode === value))[0].flowCode
-      setFieldsValue({workProcessCode})
+    if (rightActive === THIRD_TAG && type === 'zhName') {
+      const workProcessCode = processRelationDropDown.filter(item => (item.processCode === value))[0].flowCode;
+      setFieldsValue({ workProcessCode });
     }
-    if(type === 'processId'){
-      const processCode = flowlistDropDown.filter(item=>(item.id === value))[0].flowCode
-      this.setState({processCode})
+    if (type === 'processId') {
+      const processCode = flowlistDropDown.filter(item => (item.id === value))[0].flowCode;
+      this.setState({ processCode });
     }
   };
 
@@ -477,21 +487,21 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-    key,
-    value,
-    noNeed,
-    type,
-    list,
-    clickFn,
-    text,
-    arr,
-    data,
-    form,
-    number,
-    step,
-    min,
-    max,
-  }) => {
+                     key,
+                     value,
+                     noNeed,
+                     type,
+                     list,
+                     clickFn,
+                     text,
+                     arr,
+                     data,
+                     form,
+                     number,
+                     step,
+                     min,
+                     max,
+                   }) => {
     switch (type) {
       case 2:
         return (
@@ -561,7 +571,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea rows={2} placeholder="请输入"/>;
       case 9:
         return (
           <RangePicker
@@ -610,7 +620,7 @@ class Index extends Component {
         : rightActive === SECOND_TAG
         ? 'material' :
         this.isEditworkFlow ? 'productflow' : 'productProcess';
-    const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings"/>;
     return menuText;
   };
 
@@ -646,12 +656,12 @@ class Index extends Component {
         data = selectedRowKeysSecond;
         break;
       case  THIRD_TAG:
-        if(this.isEditworkFlow){
-          service = 'workFlow'
-          data = [selectedProccess.id]
-        }else{
-          service = 'bomProcess'
-          data = selectedProccessRowKeys
+        if (this.isEditworkFlow) {
+          service = 'workFlow';
+          data = [selectedProccess.id];
+        } else {
+          service = 'bomProcess';
+          data = selectedProccessRowKeys;
         }
         break;
 
@@ -726,9 +736,9 @@ class Index extends Component {
 
   // 复制 按钮回调
   handleCopy = () => {
-    const { rightActive,selectedBom } = this.state;
+    const { rightActive, selectedBom } = this.state;
     console.log(selectedBom);
-    const data = [selectedBom.id]
+    const data = [selectedBom.id];
     serviceObj.bomcopy(data).then(res => {
       const { rtnCode, rtnMsg } = res ? res.head : {};
       if (rtnCode === '000000') {
@@ -741,11 +751,11 @@ class Index extends Component {
   };
 
   // 新增||编辑 按钮事件回调
-  handleAdd = (close,isEdit) => {
-    const { form, choosenRowData, choosenRowDataSecond,choosenProccessData,dispatch} = this.props;
-    const { rightActive, modalType ,craftForm,selectedBom,filelist,selectedProccess,filePath,videoPath,processCode} = this.state;
+  handleAdd = (close, isEdit) => {
+    const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch } = this.props;
+    const { rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode } = this.state;
     const { getFieldValue } = form;
-    const materialType = getFieldValue('materialType')
+    const materialType = getFieldValue('materialType');
     let params = {};
     let inputarr = rightActive;
     const notFlowIsProccess = !this.isEditworkFlow && rightActive === THIRD_TAG;
@@ -816,13 +826,13 @@ class Index extends Component {
     const fieldslist = dataArr.map(e => e.value);
 
     form.validateFields(fieldslist, (err, values) => {
-      console.log(fieldslist,values,'=======values');
-      
-      if(inputarr === 'proccess'){
+      console.log(fieldslist, values, '=======values');
+
+      if (inputarr === 'proccess') {
         values = {
           ...values,
-          processCode
-        }
+          processCode,
+        };
       }
       if (!err) {
         params = {
@@ -872,19 +882,19 @@ class Index extends Component {
 
   addCraftRow = (index, option) => {
     const isAdd = option === 'add';
-    console.log(this.state.craftForm,'===this.state.craftForm')
+    console.log(this.state.craftForm, '===this.state.craftForm');
     if (!isAdd && this.state.craftForm.length === 1) return;
     this.setState(preState => {
       if (isAdd) {
         return preState.craftForm.push([{ key: '镶石工艺', title: '镶石工艺', value: '' },
-        { key: '效率', title: '效率', value: '' }]);
+          { key: '效率', title: '效率', value: '' }]);
       }
       return preState.craftForm.splice(index, 1);
     });
   };
 
   craftChange = (v, index, subIndex) => {
-    console.log(v, index, subIndex,'[============');
+    console.log(v, index, subIndex, '[============');
     this.setState(preState => {
       preState.craftForm[index][subIndex].value = v;
       console.log(preState);
@@ -892,10 +902,69 @@ class Index extends Component {
     });
   };
 
+// start 复制产品 bom
+  getProductBomRevoke = () => {
+    const { productBomRevokePagination, form, dispatch } = this.props;
+
+    if ('current' in args) {
+      dispatch({
+        type: `${defaultModelName}/changeStateOut`,
+        payload: { name: 'productBomRevokePagination', data: { ...productBomRevokePagination, current: args.current } },
+      });
+    }
+
+    dispatch({
+      type: `${defaultModelName}/productBomRevokeList`,
+      payload: {
+        name: 'productBomRevokeList',
+        params: { size: 10, current: 1, ...productBomRevokePagination, ...args },
+      },
+    });
+  };
+
+  // 选中某行表头
+  changeProductBomRevokeChoosenRow = rowData => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: rowData, name: 'productBomRevokeChoosenRowData' },
+    });
+  };
+
+
+  onProductBomRevokeSelectChange = selectedRowKeys => {
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: selectedRowKeys, name: 'productBomRevokeSelectedKeys' },
+    });
+  };
+
+  handleProductBomSelectChange= v=>{
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: v.split(','), name: 'sysProductSelectedBom' },
+    });
+  }
+// end 复制产品 bom
+
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const { choosenRowData, choosenRowDataSecond, form, choosenProccessData } = this.props;
+    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleProductBomSelectChange}=this;
+    const { model,
+      choosenRowData,
+      choosenRowDataSecond,
+      form,
+      choosenProccessData,
+
+      productBomRevokeList,
+      productBomRevokePagination,
+      productBomRevokeSelectedKeys,
+      productBomRevokeListLoading,
+      productBomRevokeChoosenRowData,
+
+    } = this.props;
     const { modalType, rightActive, craftForm, selectedBom, selectedProccess } = this.state;
+
     const { getFieldDecorator, getFieldValue } = form;
     console.log(craftForm, '=====');
 
@@ -906,34 +975,34 @@ class Index extends Component {
     }
     const content = '';
     const isEdit = modalType === 'edit';
-    const { model } = this.props;
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo');
 
-    // if(modalType === 'sys'){
-    //   // todo 同步产品数据到其他产品modal
-    //   return <SysProduct
-    //     list={materialNoList}
-    //     pagination={materialNoPagination}
-    //     returnElement={returnElement}
-    //     source={model}
-    //     selectedRowKeys={materialSelectedKeys}
-    //     changeChoosenRow={changeMaterialChoosenRow}
-    //     choosenRowData={materialNoChoosenRowData}
-    //     onSelectChange={onMaterialSelectChange}
-    //     listLoading={materialNoListLoading}
-    //     onSearch={this.getMaterialList}
-    //     changeProductSearch={args => {
-    //       // search 看看搜索完要不要做点处理
-    //       this.getmaterialNoList({ ...args });
-    //     }}
-    //     handleTableChange={args => {
-    //       // search 看看搜索完要不要做点处理
-    //       this.getmaterialNoList({ ...args });
-    //     }}
-    //   />
-    // }
+    if (modalType === 'sys') {
+      // todo 同步产品数据到其他产品modal
+      return <SysProduct
+        list={productBomRevokeList}
+        productChoosenData={choosenRowData}
+        choosenRowData={productBomRevokeChoosenRowData}
+        pagination={productBomRevokePagination}
+        returnElement={returnElement}
+        source={model}
+        selectedRowKeys={productBomRevokeSelectedKeys}
+        changeChoosenRow={changeProductBomRevokeChoosenRow}
+        onSelectChange={onProductBomRevokeSelectChange}
+        listLoading={productBomRevokeListLoading}
+        onSearch={this.getProductBomRevoke}
+
+        handleBomSelectChange={handleProductBomSelectChange}
+
+
+        handleTableChange={args => {
+          // search 看看搜索完要不要做点处理
+          this.getProductBomRevoke({ ...args });
+        }}
+      />;
+    }
 
 
     return (
@@ -1197,22 +1266,22 @@ class Index extends Component {
       case 'delete':
         return (
           (FIRST_TAG === rightActive && selectedBom.state === 1) ||
-          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
-          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)||
+          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0) ||
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0) ||
           ~~selectedBom.status === 2
         );
       case 'edit':
         return (
           (FIRST_TAG === rightActive && selectedBom.state === 1) ||
-          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
-          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)||
+          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0) ||
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0) ||
           ~~selectedBom.status === 2
         );
       default:
         return (
           (FIRST_TAG === rightActive && selectedRowKeys.length === 0) ||
-          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0)||
-          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0)||
+          (rightActive === SECOND_TAG && selectedRowKeysSecond.length === 0) ||
+          (rightActive === THIRD_TAG && selectedProccessRowKeys.length === 0) ||
           ~~selectedBom.status === 2
         );
     }
@@ -1504,7 +1573,7 @@ class Index extends Component {
       materialNoChoosenRowData,
       materialNoListLoading,
       materialSelectedKeys,
-      listChildDieSetDropDown
+      listChildDieSetDropDown,
     } = props;
     const { getFieldDecorator, getFieldValue } = form;
     const modalFooter =
@@ -1566,7 +1635,7 @@ class Index extends Component {
       {
         key: '取消审批',
         fn: cancelVerify,
-        disabled: !selectedBom.id || ~~selectedBom.status === 0 ,
+        disabled: !selectedBom.id || ~~selectedBom.status === 0,
       },
       {
         key: '审批BOM',
@@ -1600,7 +1669,7 @@ class Index extends Component {
     const isthird = rightActive === THIRD_TAG;
     const materialType = getFieldValue('materialType');
 
-    console.log(listChildDieSetDropDown,'======listChildDieSetDropDown');
+    console.log(listChildDieSetDropDown, '======listChildDieSetDropDown');
 
     return (
       <div className={styles.page}>
@@ -1664,7 +1733,7 @@ class Index extends Component {
                               </Radio.Button>
                             ))}
                           </Radio.Group>
-                          <Divider className={styles.divder} />
+                          <Divider className={styles.divder}/>
                         </div>
                         <GetRenderitem
                           key={
@@ -1733,8 +1802,8 @@ class Index extends Component {
         {handleModalOk && (
           <Modal
             maskClosable={false}
-            title={<BuildTitle title={returnTitle()} />}
-            width={this.isEditworkFlow||rightActive === FIRST_TAG?600:1000}
+            title={<BuildTitle title={returnTitle()}/>}
+            width={this.isEditworkFlow || rightActive === FIRST_TAG ? 600 : 1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
@@ -1750,7 +1819,7 @@ class Index extends Component {
         )}
 
         <Modal
-          title={<BuildTitle title="选择原料编号" />}
+          title={<BuildTitle title="选择原料编号"/>}
           maskClosable={false}
           width={1000}
           className={styles.standardListForm}
