@@ -54,7 +54,7 @@ const columnsarr = [
 ]
 
 
-export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow,   onSelectChange, handleTableChange }) => {
+export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagination, source, list, selectedRowKeys, changeChoosenRow,   onSelectChange, handleTableChange }) => {
   console.log(pagination,'pagination======');
 
   return(

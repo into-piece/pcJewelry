@@ -205,7 +205,7 @@ class Index extends Component {
     return (
       <Dragger {...uploadConfig} defaultFileList={fileList}>
         <p className="ant-upload-drag-icon">
-          <Icon type="inbox"/>
+          <Icon type="inbox" />
         </p>
         <p className="ant-upload-text">Click or drag file to this area to upload</p>
         <p className="ant-upload-hint">
@@ -571,7 +571,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入"/>;
+        return <TextArea rows={2} placeholder="请输入" />;
       case 9:
         return (
           <RangePicker
@@ -620,7 +620,7 @@ class Index extends Component {
         : rightActive === SECOND_TAG
         ? 'material' :
         this.isEditworkFlow ? 'productflow' : 'productProcess';
-    const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings"/>;
+    const menuText = <FormattedMessage id={`menu.erp.dev.${name}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -986,7 +986,6 @@ class Index extends Component {
         productChoosenData={choosenRowData}
         choosenRowData={productBomRevokeChoosenRowData}
         pagination={productBomRevokePagination}
-        returnElement={returnElement}
         source={model}
         selectedRowKeys={productBomRevokeSelectedKeys}
         changeChoosenRow={changeProductBomRevokeChoosenRow}
