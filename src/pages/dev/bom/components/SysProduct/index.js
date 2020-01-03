@@ -89,14 +89,11 @@ export default (({ handleBomSelectChange, productChoosenData, choosenRowData, pa
       <Table
         columns={columnsarr}
         body={list}
-        pagination={pagination}
-        noSelect
         selectedRowKeys={selectedRowKeys}
         changeChoosenRow={changeChoosenRow}
         selectKey={choosenRowData.id}
         onSelectChange={onSelectChange}
         handleTableChange={handleTableChange}
-        checkType="radio"
       />
     </div>
   );

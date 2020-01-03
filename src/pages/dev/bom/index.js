@@ -239,11 +239,11 @@ class Index extends Component {
     });
   };
 
-  initDrop = () => {
+  initDrop = (modalType) => {
     const { getProductBomRevoke} = this;
     const { dispatch, form, choosenRowData } = this.props;
     const { setFieldsValue } = form;
-    const { rightActive ,modalType} = this.state;
+    const { rightActive } = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
@@ -909,18 +909,14 @@ class Index extends Component {
   getProductBomRevoke = (args) => {
     const { productBomRevokePagination, form, dispatch } = this.props;
 
-    if ('current' in args) {
-      dispatch({
-        type: `${defaultModelName}/changeStateOut`,
-        payload: { name: 'productBomRevokePagination', data: { ...productBomRevokePagination, current: args.current } },
-      });
-    }
 
     dispatch({
       type: `${defaultModelName}/productBomRevokeList`,
       payload: {
         name: 'productBomRevokeList',
-        params: { size: 10, current: 1, ...productBomRevokePagination, ...args },
+        params: {
+          // size: 10, current: 1, ...productBomRevokePagination,
+          ...args },
       },
     });
   };
@@ -1215,7 +1211,7 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
-        this.initDrop();
+        this.initDrop(modalType);
         this.setState({ modalType });
         break;
       case 'delete':
