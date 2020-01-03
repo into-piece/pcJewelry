@@ -60,7 +60,7 @@ export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagin
   return(
     <div className={styles.productModal}>
       <div style={{marginBottom:20}}>
-        {productChoosenData.id}
+        {productChoosenData.productNo}
 
         {/* bom列表 */}
         <Select
