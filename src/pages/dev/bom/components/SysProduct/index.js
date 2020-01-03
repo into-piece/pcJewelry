@@ -1,7 +1,9 @@
 import React from 'react'
-import { Input } from 'antd'
+import { Input,Select } from 'antd'
 import Table from '@/components/Table'
 import styles from './index.less'
+
+const { Option } = Select;
 
 const columnsarr = [
   {
@@ -52,12 +54,38 @@ const columnsarr = [
 ]
 
 
-export default (({ productChoosenData,choosenRowData,pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow,   onSelectChange, handleTableChange }) => {
+export default (({ handleBomSelectChange,productChoosenData,choosenRowData,pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow,   onSelectChange, handleTableChange }) => {
   console.log(pagination,'pagination======');
 
   return(
     <div className={styles.productModal}>
-      {productChoosenData.id}
+      <div style={{marginBottom:20}}>
+        {productChoosenData.id}
+
+        {/* bom列表 */}
+        <Select
+          value={source.sysProductSelectedBom || undefined}
+          showSearch
+          allowClear
+          mode="multiple"
+          style={{ width: 180 }}
+          placeholder="请选择"
+          onChange={v => {
+            handleBomSelectChange && handleBomSelectChange(v);
+          }}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {source.bomlist &&
+          source.bomlist.map(({ value, key }) => (
+            <Option value={value} key={value}>
+              {key}
+            </Option>
+          ))}
+        </Select>
+      </div>
       <Table
         columns={columnsarr}
         body={list}

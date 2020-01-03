@@ -79,6 +79,7 @@ export default {
     materialNoChoosenRowData:{id:''},
     materialSelectedKeys:[],
 
+    sysProductSelectedBom:[],
     productBomRevokeList:[],
     productBomRevokeChoosenRowData:{id:''},
     productBomRevokeSelectedKeys:[],

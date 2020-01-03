@@ -939,10 +939,16 @@ class Index extends Component {
     });
   };
 
+  handleBomSelectChange= v=>{
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: v.split(','), name: 'sysProductSelectedBom' },
+    });
+  }
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow}=this;
+    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleBomSelectChange}=this;
     const { model,
       choosenRowData,
       choosenRowDataSecond,
@@ -953,7 +959,7 @@ class Index extends Component {
       productBomRevokePagination,
       productBomRevokeSelectedKeys,
       productBomRevokeListLoading,
-      productBomRevokeChoosenRowData
+      productBomRevokeChoosenRowData,
 
     } = this.props;
     const { modalType, rightActive, craftForm, selectedBom, selectedProccess } = this.state;
@@ -987,6 +993,10 @@ class Index extends Component {
         onSelectChange={onProductBomRevokeSelectChange}
         listLoading={productBomRevokeListLoading}
         onSearch={this.getProductBomRevoke}
+
+        handleBomSelectChange={handleBomSelectChange}
+
+
         handleTableChange={args => {
           // search 看看搜索完要不要做点处理
           this.getProductBomRevoke({ ...args });
