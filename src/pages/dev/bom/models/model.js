@@ -18,6 +18,7 @@ const {
   bomapprove,
   boomrevoke,
   materialList,
+  productBomRevokeListApi,
   processList,
 } = servicesConfig;
 const defaultModelName = 'devbom';
@@ -203,6 +204,19 @@ export default {
         type: 'changeState',
         payload: { data: [], typeName: 'materialNoList' },
       });
+    },
+
+    *productBomRevokeList({ payload, callback }, { call, put }) {
+      const { params, name } = payload;
+      const response = yield call(productBomRevokeListApi, params);
+
+      const list =
+        response.head && response.head.rtnCode === '000000' ? response.body : initData;
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: name },
+      });
+      if (callback) callback(list.records[0]);
     },
 
     *materialNoList({ payload, callback }, { call, put }) {

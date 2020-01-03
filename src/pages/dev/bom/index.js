@@ -902,22 +902,22 @@ class Index extends Component {
     });
   };
 
-
+// start 复制产品 bom
   getProductBomRevoke = () => {
-    const { materialNoPagination, form, dispatch } = this.props;
+    const { productBomRevokePagination, form, dispatch } = this.props;
 
     if ('current' in args) {
       dispatch({
         type: `${defaultModelName}/changeStateOut`,
-        payload: { name: 'materialNoPagination', data: { ...materialNoPagination, current: args.current } },
+        payload: { name: 'productBomRevokePagination', data: { ...productBomRevokePagination, current: args.current } },
       });
     }
 
     dispatch({
-      type: `${defaultModelName}/materialNoList`,
+      type: `${defaultModelName}/productBomRevokeList`,
       payload: {
-        name: 'materialNoList',
-        params: { size: 10, current: 1, ...materialNoPagination, ...args },
+        name: 'productBomRevokeList',
+        params: { size: 10, current: 1, ...productBomRevokePagination, ...args },
       },
     });
   };
@@ -927,7 +927,7 @@ class Index extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: `${defaultModelName}/changeStateOut`,
-      payload: { data: rowData, name: 'materialNoChoosenRowData' },
+      payload: { data: rowData, name: 'productBomRevokeChoosenRowData' },
     });
   };
 
@@ -935,20 +935,21 @@ class Index extends Component {
   onProductBomRevokeSelectChange = selectedRowKeys => {
     this.props.dispatch({
       type: `${defaultModelName}/changeStateOut`,
-      payload: { data: selectedRowKeys, name: 'materialSelectedKeys' },
+      payload: { data: selectedRowKeys, name: 'productBomRevokeSelectedKeys' },
     });
   };
 
-  handleBomSelectChange= v=>{
+  handleProductBomSelectChange= v=>{
     this.props.dispatch({
       type: `${defaultModelName}/changeStateOut`,
       payload: { data: v.split(','), name: 'sysProductSelectedBom' },
     });
   }
+// end 复制产品 bom
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleBomSelectChange}=this;
+    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleProductBomSelectChange}=this;
     const { model,
       choosenRowData,
       choosenRowDataSecond,
@@ -994,7 +995,7 @@ class Index extends Component {
         listLoading={productBomRevokeListLoading}
         onSearch={this.getProductBomRevoke}
 
-        handleBomSelectChange={handleBomSelectChange}
+        handleBomSelectChange={handleProductBomSelectChange}
 
 
         handleTableChange={args => {
