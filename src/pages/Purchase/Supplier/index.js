@@ -105,10 +105,9 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>供应商类别</div>,
-    dataIndex: 'supplierCategory',
+    dataIndex: 'supplierCategoryName',
     key: 'supplierCategoryName',
 
-    render: (d, i) => i.supplierCategoryName,
   },
   {
     title: <div className={styles.row_normal2}>中文名</div>, // ?
@@ -125,7 +124,13 @@ let clientContentColumns = [
 
     render: data => data,
   },
+  {
+    title: <div className={styles.row_normal2}>联系人姓名</div>, // ?
+    dataIndex: 'contactName',
+    key: 'contactName',
 
+
+  },
   {
     title: <div className={styles.row_normal2}>中文地址</div>,
     dataIndex: 'zhAddress',
@@ -155,10 +160,9 @@ let clientContentColumns = [
 
   {
     title: <div className={styles.row_normal2}>结算币种</div>, // ?
-    dataIndex: 'countCurrency',
-    key: 'countCurrencyName',
+    dataIndex: 'currencyName',
+    key: 'currencyName',
 
-    render: (d, i) => i.countCurrencyName,
   },
   {
     title: <div className={styles.row_normal2}>税率</div>, // ?
@@ -167,10 +171,9 @@ let clientContentColumns = [
   },
   {
     title: <div className={styles.row_normal2}>结算方式</div>, // ?
-    dataIndex: 'countMode',
+    dataIndex: 'countModeName',
     key: 'countModeName',
 
-    render: (d, i) => i.countModeName,
   },
   {
     title: <div className={styles.row_normal2}>备注</div>, // ?
@@ -1017,7 +1020,7 @@ class Info extends Component {
     if (tag === 'copy')
       return ((rightMenu === 1) && selectedRowKeys.length === 0);
     if (tag === 'plus')
-      return ((rightMenu === 2 || rightMenu === 3) && selectedRowKeys.length === 0);
+      return ((rightMenu === 2 || rightMenu === 3) && (selectedRowKeys.length === 0||this.returnLockType().type === 2));
     if (tag === 'lock')
       return (
         (rightMenu === 1 && selectedRowKeys.length === 0) ||
@@ -1026,9 +1029,9 @@ class Info extends Component {
         this.returnLockType().disabled
       );
     return (
-      (this.returnLockType().type === 2 && (rightMenu === 1)) ||
-      (rightMenu === 2 && selectedContactsRowKeys.length === 0) ||
-      (rightMenu === 3 && selectedBlankAccountRowKeys && selectedBlankAccountRowKeys.length === 0)
+      ((rightMenu === 1&& selectedRowKeys.length === 0)||this.returnLockType().type === 2  ) ||
+      ((rightMenu === 2 && selectedContactsRowKeys.length === 0)||this.returnLockType().type === 2) ||
+      ((rightMenu === 3 && selectedBlankAccountRowKeys.length === 0)||this.returnLockType().type === 2)
     );
   };
 
@@ -1488,6 +1491,11 @@ class CenterInfo extends Component {
 
     if (type === 1) {
       dispatch({
+        type: `purchase/changeRightMenu`,
+        payload: 1,
+      });
+
+      dispatch({
         type: `purchase/clearContacts`,
       });
       dispatch({
@@ -1608,7 +1616,6 @@ class CenterInfo extends Component {
       listContactsLoading,
       listBlankAccountLoading,
       onSearch,
-      getDetailList,
       blankAccountList,
       onSearchDetail,
     } = props;

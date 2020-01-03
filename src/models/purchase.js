@@ -35,9 +35,9 @@ export default {
     blankAccountList: initData,
     quoteDatialList: initData,
     supplierSearchStatus: [
-      { key:'不限',value:''},
-      { key:'输入',value:0},
-      {key:'已审批',value:2}
+      { key: '不限', value: '' },
+      { key: '输入', value: 0 },
+      { key: '已审批', value: 2 },
     ],
     selectedRowKeys: [], // table1 select
     selectedContactsRowKeys: [], // contacts select
@@ -48,7 +48,7 @@ export default {
     pagination: initPagination,
     contactsPagination: initPagination,
     blankAccountPagination: initPagination,
-    choosenRowData: {id: ''}, // select to show
+    choosenRowData: { id: '' }, // select to show
     choosenContactsRowData: { id: '' }, // select to show
     choosenBlankAccountRowData: { id: '' }, // select to show
     rightMenu: 1,
@@ -77,7 +77,7 @@ export default {
   },
 
   effects: {
-    * getList({ payload }, { call, put ,select  }) {
+    * getList({ payload }, { call, put, select }) {
       const { params, sendReq } = payload;
 
 
@@ -100,16 +100,15 @@ export default {
       });
 
       const choosenRowData = yield select(state => {
-        return state.purchase.choosenRowData
+        return state.purchase.choosenRowData;
       });
 
-      console.log("get List this ",choosenRowData);
-      const rowData =  supplierList.records.filter(value=>value.id===choosenRowData.id)
-      if(rowData.length>0)
-      yield put({
-        type: 'getChoosenRowData2',
-        payload:rowData[0],
-      });
+      const rowData = supplierList.records.filter(value => value.id === choosenRowData.id);
+      if (rowData.length > 0)
+        yield put({
+          type: 'getChoosenRowData2',
+          payload: rowData[0],
+        });
     },
 
     * clearPagination(data, { put }) {
@@ -120,7 +119,7 @@ export default {
     },
 
 
-    * getContactsList({ payload }, { call, put,select }) {
+    * getContactsList({ payload }, { call, put, select }) {
 
       const { type, params } = payload;
       const response = yield call(
@@ -128,30 +127,41 @@ export default {
 
       const contactsList =
         response.head && response.head.rtnCode === '000000' ? response.body : initData;
-      yield put({
-        type: 'changeState',
-        payload: { data: contactsList, typeName: 'contactsList' },
+
+      const choosenRowData = yield select(state => {
+        return state.purchase.choosenRowData;
       });
 
-      yield put({
-        type: 'changeState',
-        payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'contactsPagination' },
-      });
-
-      const choosenContactsRowData = yield select(state => {
-        return state.purchase.choosenContactsRowData
-      });
-      if(choosenContactsRowData.id!==''){
-      const rowData =  contactsList.records.filter(value=>value.id===choosenContactsRowData.id)
-      if(rowData.length>0)
+      if (choosenRowData && choosenRowData.id && choosenRowData.id !== '') {
         yield put({
-          type: 'getchoosenContactsRowData2',
-          payload:rowData[0],
+          type: 'changeState',
+          payload: { data: contactsList, typeName: 'contactsList' },
         });
+
+
+        yield put({
+          type: 'changeState',
+          payload: {
+            data: { size: response.body.size, current: response.body.current },
+            typeName: 'contactsPagination',
+          },
+        });
+
+        const choosenContactsRowData = yield select(state => {
+          return state.purchase.choosenContactsRowData;
+        });
+        if (choosenContactsRowData.id !== '') {
+          const rowData = contactsList.records.filter(value => value.id === choosenContactsRowData.id);
+          if (rowData.length > 0)
+            yield put({
+              type: 'getchoosenContactsRowData2',
+              payload: rowData[0],
+            });
+        }
       }
     },
 
-    * getBlankAccountList({ payload }, { call, put ,select}) {
+    * getBlankAccountList({ payload }, { call, put, select }) {
 
       const { type, params } = payload;
       const response = yield call(
@@ -159,33 +169,39 @@ export default {
 
       const blankAccountList =
         response.head && response.head.rtnCode === '000000' ? response.body : initData;
-      yield put({
-        type: 'changeState',
-        payload: { data: blankAccountList, typeName: 'blankAccountList' },
-      });
 
-      yield put({
-        type: 'changeState',
-        payload: {
-          data: { size: response.body.size, current: response.body.current },
-          typeName: 'blankAccountPagination',
-        },
+      const choosenRowData = yield select(state => {
+        return state.purchase.choosenRowData;
       });
+      if (choosenRowData && choosenRowData.id && choosenRowData.id !== '') {
 
-      const choosenBlankAccountRowData = yield select(state => {
-        return state.purchase.choosenBlankAccountRowData
-      });
-      if(choosenBlankAccountRowData.id!==''){
-        const rowData =  blankAccountList.records.filter(value=>value.id===choosenBlankAccountRowData.id)
-        if(rowData.length>0)
-          yield put({
-            type: 'getchoosenBlankAccountRowData2',
-            payload:rowData[0],
-          });
+        yield put({
+          type: 'changeState',
+          payload: { data: blankAccountList, typeName: 'blankAccountList' },
+        });
+
+        yield put({
+          type: 'changeState',
+          payload: {
+            data: { size: response.body.size, current: response.body.current },
+            typeName: 'blankAccountPagination',
+          },
+        });
+
+
+        const choosenBlankAccountRowData = yield select(state => {
+          return state.purchase.choosenBlankAccountRowData;
+        });
+        if (choosenBlankAccountRowData.id !== '') {
+          const rowData = blankAccountList.records.filter(value => value.id === choosenBlankAccountRowData.id);
+          if (rowData.length > 0)
+            yield put({
+              type: 'getchoosenBlankAccountRowData2',
+              payload: rowData[0],
+            });
+        }
       }
     },
-
-
 
 
     * clearContactsList(data, { put }) {
@@ -202,7 +218,7 @@ export default {
 
     },
 
- * clearBlankAccountList(data, { put }) {
+    * clearBlankAccountList(data, { put }) {
       yield put({
         type: 'changeState',
         payload: { data: initData, typeName: 'blankAccountList' },
@@ -548,7 +564,7 @@ export default {
         ...state,
         selectedContactsRowKeys: [...action.payload],
       };
-    },changeSelectedBlankAccountRowKeys2(state, action) {
+    }, changeSelectedBlankAccountRowKeys2(state, action) {
       return {
         ...state,
         selectedBlankAccountRowKeys: [...action.payload],
@@ -561,7 +577,7 @@ export default {
       };
     },
 
-     getchoosenBlankAccountRowData2(state, action) {
+    getchoosenBlankAccountRowData2(state, action) {
       return {
         ...state,
         choosenBlankAccountRowData: action.payload,
