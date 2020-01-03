@@ -21,7 +21,7 @@ const {
   listEndCustomerDropDown,
   listBrands,
   listBasicColourSettingsDropDown,
-
+  change,
   listSupplier,
   listContacts,
   listBlankAccount,
@@ -481,6 +481,44 @@ export default {
         payload: { data: basicColourSettingsList, typeName: 'basicColourSettingsList' },
       });
     },
+    * change(data,{call}) {
+      // debugger
+      const supplierIds = data.payload.selectedRowKeys;
+      const contactIds = data.payload.selectedContactsRowKeys;
+      const bankAccountIds = data.payload.selectedBlankAccountRowKeys;
+
+      if (supplierIds) {
+        if (supplierIds.length > 1) {
+          console.log('不支持多选');
+        }
+      } else {
+        console.log('不支持多选');
+      }
+
+      if (bankAccountIds) {
+        if (bankAccountIds.length > 1) {
+          console.log('不支持多选');
+        }
+      } else {
+        console.log('不支持多选');
+      }
+
+      if (contactIds) {
+        if (contactIds.length > 1) {
+          console.log('不支持多选');
+        }
+      } else {
+        console.log('不支持多选');
+      }
+
+      const resp = yield call(change,{
+        supplierId: supplierIds[0],
+        contactId: contactIds[0],
+        bankAccountId: bankAccountIds[0],
+      });
+      console.log('1234123')
+      console.log(data)
+    }
   },
 
   reducers: {

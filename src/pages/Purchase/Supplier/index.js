@@ -70,6 +70,7 @@ const supplierBtnGroup = [
 const contactsBtnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '编辑', tag: 'edit' },
+  { name: '交换数据', tag: 'change'},
   { name: '删除', tag: 'delete', type: 'danger' },
 ];
 
@@ -338,9 +339,6 @@ class Info extends Component {
     const { dispatch, contactsPagination, searchContactsParams, searchBlankAccountParams, blankAccountPagination } = this.props;
 
     if (type === 'contacts') {
-
-
-
       dispatch({
         type: `purchase/getContactsList`,
         payload: {
@@ -348,8 +346,6 @@ class Info extends Component {
         },
       });
     } else {
-
-
       dispatch({
         type: `purchase/getBlankAccountList`,
         payload: {
@@ -453,6 +449,15 @@ class Info extends Component {
       case 'copy':
         this.handleCopy();
         break;
+      case 'change':
+        // console.log('>>>');
+        ModalConfirm({
+          content: '确定交换数据吗？',
+          onOk: () => {
+            this.handleChange();
+          }
+        });
+      break;
       case 'freshList':
         this.freshList();
         break;
@@ -876,6 +881,23 @@ class Info extends Component {
       }
     });
   };
+
+  // 数据更换
+  handleChange = () => {
+    const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,dispatch } = this.props;
+    // debugger
+    console.log(selectedRowKeys);
+    console.log(selectedContactsRowKeys);
+    console.log(selectedBlankAccountRowKeys);
+    dispatch({
+      type:'purchase/change',
+      payload:{
+        selectedRowKeys:selectedRowKeys,
+        selectedContactsRowKeys:selectedContactsRowKeys,
+        selectedBlankAccountRowKeys:selectedBlankAccountRowKeys
+      }
+    });
+  }
 
   // 删除按钮回调
   handleDelect = () => {
