@@ -87,7 +87,7 @@ export default (({ handleBomSelectChange, productChoosenData, choosenRowData, pa
         </Select>
       </div>
       <Table
-        scroll={{ x: "max-content" ,y: "400px" }}
+        scroll={{ x: "max-content" ,y: "280px" }}
 
         columns={columnsarr}
         body={list}

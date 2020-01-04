@@ -24,6 +24,7 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
+import Zmage from 'react-zmage';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
@@ -42,7 +43,6 @@ import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo';
 import SysProduct from './components/SysProduct';
 import { defaultImages } from '@/utils/utils';
-import Zmage from 'react-zmage';
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
@@ -640,7 +640,8 @@ class Index extends Component {
           />
         ) : (
           <Input
-            placeholder="请输入" />
+            placeholder="请输入"
+          />
         );
     }
     //  type === 7 ?
@@ -1080,32 +1081,32 @@ class Index extends Component {
                     ],
                     initialValue: choosenRowDataSecond.bomId||undefined,
                   })(
-                  <Select
-                    allowClear
-                    style={{ width: 180 }}
-                    placeholder="请选择"
-                    onChange={v => {
+                    <Select
+                      allowClear
+                      style={{ width: 180 }}
+                      placeholder="请选择"
+                      onChange={v => {
                       this.handleSelectChange && this.handleSelectChange(v, value);
                     }}
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
-                  >
-                    {bomlist &&
+                    >
+                      {bomlist &&
                       bomlist.length > 0 &&
                       bomlist.map(({ value, key }) => (
-                      <Option value={value} key={value}>
-                        {key}
-                      </Option>
+                        <Option value={value} key={value}>
+                          {key}
+                        </Option>
                     ))}
-                  </Select>
+                    </Select>
                 )}
               </FormItem>
             </div>
             <div className={styles.carousel_content}>
-              <Carousel {...this.carouselsettings}  key={`as${Math.random(2)}`}>
+              <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
                 {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
               </Carousel>
             </div>
