@@ -18,6 +18,7 @@ import {
   Upload,
   Icon,
   message,
+  Carousel
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import ModalConfirm from '@/utils/modal';
@@ -40,6 +41,8 @@ import columnsConfig from './config/columns';
 import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo';
 import SysProduct from './components/SysProduct';
+import { defaultImages } from '@/utils/utils';
+import Zmage from 'react-zmage';
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
@@ -136,7 +139,9 @@ class Index extends Component {
     videoPath: '',
     filePath: '',
     showMaterialNoModal: false,
+    showExplaintionModal:false,
     processCode: '',
+    flowList:[]
   };
 
 
@@ -396,6 +401,14 @@ class Index extends Component {
       setFieldsValue({
         materialNo: undefined,
         materialSub: undefined,
+        specification: undefined,
+        zhName: undefined,
+        enName: undefined,
+        weightUnit: undefined,
+        weightUnitName: undefined,
+        measureUnit: undefined,
+        inventoryWeight: undefined,
+        valuationClass: undefined,
       });
       dispatch({
         type: `${defaultModelName}/clearmaterialNoList`,
@@ -409,6 +422,14 @@ class Index extends Component {
     if (type === 'materialSub') {
       setFieldsValue({
         materialNo: undefined,
+        specification: undefined,
+        zhName: undefined,
+        enName: undefined,
+        weightUnit: undefined,
+        weightUnitName: undefined,
+        measureUnit: undefined,
+        inventoryWeight: undefined,
+        valuationClass: undefined,
       });
     }
     if (type === 'materialNo') {
@@ -438,8 +459,17 @@ class Index extends Component {
       setFieldsValue({ workProcessCode });
     }
     if (type === 'processId') {
-      const processCode = flowlistDropDown.filter(item => (item.id === value))[0].flowCode;
-      this.setState({ processCode });
+      console.log(value,flowlistDropDown)
+      debugger
+      const flowList = value.map(item=>{
+        const processCode = flowlistDropDown.filter(subitem => (subitem.id === item))[0].flowCode;
+        return ({processId:item,processCode})
+      })
+      this.setState({
+        flowList
+      })
+      // const processCode = flowlistDropDown.filter(item => (item.id === value))[0].flowCode;
+      // this.setState({ processCode });
     }
   };
 
@@ -477,8 +507,7 @@ class Index extends Component {
     const { setFieldsValue, getFieldValue } = this.props.form;
     const inventoryWeight = getFieldValue('inventoryWeight');
     if (type === 'singleDosage') {
-      debugger;
-      setFieldsValue({ sheetWithHeavy: (~~v) + inventoryWeight });
+      setFieldsValue({ sheetWithHeavy: v * Number(inventoryWeight) });
     }
   };
 
@@ -490,21 +519,23 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-                     key,
-                     value,
-                     noNeed,
-                     type,
-                     list,
-                     clickFn,
-                     text,
-                     arr,
-                     data,
-                     form,
-                     number,
-                     step,
-                     min,
-                     max,
-                   }) => {
+    key,
+    value,
+    noNeed,
+    type,
+    list,
+    clickFn,
+    text,
+    arr,
+    data,
+    form,
+    number,
+    step,
+    min,
+    max,
+    disabled,
+    multiple
+  }) => {
     switch (type) {
       case 2:
         return (
@@ -516,10 +547,12 @@ class Index extends Component {
               this.handleSelectChange && this.handleSelectChange(v, value);
             }}
             showSearch
+            disabled={disabled}
             optionFilterProp="children"
             filterOption={(input, option) =>
               option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
+            mode={multiple&&"multiple"}
           >
             {data[list] &&
             data[list].length > 0 &&
@@ -601,14 +634,13 @@ class Index extends Component {
             step={step}
             min={min}
             max={max}
-          />
-        ) : (
-          <Input
-            placeholder="请输入"
             onChange={v => {
               this.handleInputChange(v, value);
             }}
           />
+        ) : (
+          <Input
+            placeholder="请输入" />
         );
     }
     //  type === 7 ?
@@ -756,12 +788,16 @@ class Index extends Component {
   // 新增||编辑 按钮事件回调
   handleAdd = (close, isEdit) => {
     const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch } = this.props;
-    const { rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode } = this.state;
+    const { rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
+      flowList
+    } = this.state;
     const { getFieldValue } = form;
     const materialType = getFieldValue('materialType');
     let params = {};
     let inputarr = rightActive;
     const notFlowIsProccess = !this.isEditworkFlow && rightActive === THIRD_TAG;
+
+
     // if (rightActive !== FIRST_TAG) {
     //   params = { mainMoldCode: choosenRowData.id };
     // }
@@ -774,11 +810,12 @@ class Index extends Component {
     if (rightActive === FIRST_TAG) {
       params = { ...params, pId: choosenRowData.id };
       if (isEdit) {
-        debugger;
         params.id = selectedBom.id;
       }
     } else if (rightActive === SECOND_TAG) {
-      params.id = choosenRowDataSecond.id;
+      if (isEdit){
+        params.id = choosenRowDataSecond.id;
+      }
       if (materialType === 'H016002') {
         const Technology = [];
         console.log(craftForm);
@@ -819,6 +856,7 @@ class Index extends Component {
         }
       } else {
         params.bomId = selectedBom.id;
+        params.flowList = flowList
         inputarr = 'proccess';
       }
     }
@@ -828,6 +866,9 @@ class Index extends Component {
     const dataArr = modalInput[inputarr];
     const fieldslist = dataArr.map(e => e.value);
 
+    if(rightActive=== SECOND_TAG){
+      fieldslist.push('bomId')
+    }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
 
@@ -944,23 +985,40 @@ class Index extends Component {
       payload: { data: v, name: 'sysProductSelectedBom' },
     });
   }
-// end 复制产品 bom
+
+  getImages = pictures => {
+    const images = pictures && pictures.flatMap(e => e.picPath || e);
+    if (!images) return;
+    return images.map(v => (
+      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+        <Zmage
+          alt="图片"
+          align="center"
+          className={styles.carousel_image}
+          src={v}
+          edge={20}
+          set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
+        />
+      </div>
+    ));
+  };
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleProductBomSelectChange}=this;
+    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleProductBomSelectChange,
+      returnElement
+    }=this;
     const { model,
       choosenRowData,
       choosenRowDataSecond,
       form,
       choosenProccessData,
-
       productBomRevokeList,
       productBomRevokePagination,
       productBomRevokeSelectedKeys,
       productBomRevokeListLoading,
       productBomRevokeChoosenRowData,
-
+      bomlist
     } = this.props;
     const { modalType, rightActive, craftForm, selectedBom, selectedProccess } = this.state;
 
@@ -977,6 +1035,7 @@ class Index extends Component {
     const addArr = modalInput[inputarr];
     const materialType = getFieldValue('materialType');
     const materialNo = getFieldValue('materialNo');
+    const { pictures } = choosenRowData;
 
     if (modalType === 'sys') {
       // todo 同步产品数据到其他产品modal
@@ -1005,6 +1064,53 @@ class Index extends Component {
 
     return (
       <Form size="small" key="1">
+        {rightActive === SECOND_TAG||(rightActive===THIRD_TAG&&!this.isEditworkFlow)?
+          <React.Fragment>
+            <div
+              className="addModal"
+              style={{ width: '100%' }}
+            >
+              <FormItem label='bom名称'>
+                {getFieldDecorator('bomId', {
+                    rules: [
+                      {
+                        required: true,
+                        message: `请选择bom名称`,
+                      },
+                    ],
+                    initialValue: choosenRowDataSecond.bomId||undefined,
+                  })(
+                  <Select
+                    allowClear
+                    style={{ width: 180 }}
+                    placeholder="请选择"
+                    onChange={v => {
+                      this.handleSelectChange && this.handleSelectChange(v, value);
+                    }}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {bomlist &&
+                      bomlist.length > 0 &&
+                      bomlist.map(({ value, key }) => (
+                      <Option value={value} key={value}>
+                        {key}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            </div>
+            <div className={styles.carousel_content}>
+              <Carousel {...this.carouselsettings}  key={`as${Math.random(2)}`}>
+                {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
+              </Carousel>
+            </div>
+          </React.Fragment>
+        :null}
         {addArr &&
         addArr.map(
           ({
@@ -1023,6 +1129,8 @@ class Index extends Component {
              max,
              mType,
              row,
+             disabled,
+             multiple
            }) => {
             if (mType === 1 && materialType !== 'H016002') {
               return;
@@ -1054,7 +1162,7 @@ class Index extends Component {
               <div
                 className="addModal"
                 key={key}
-                style={row === 1 ? { width: '100%' } : row === 2 ? { width: '50%' } : {}}
+                style={row === 1 ? { width: '100%' } : row === 2 ? { width: '45%' } : value==='modelNo'?{ marginRight: 100 } : {}}
               >
                 <FormItem label={key}>
                   {
@@ -1096,6 +1204,8 @@ class Index extends Component {
                             step,
                             min,
                             max,
+                            disabled,
+                            multiple
                           }),
                         )
                   }
@@ -1493,33 +1603,78 @@ class Index extends Component {
     });
   };
 
+   // 控制说明弹窗 type = 1出现
+   showExplaintionModalFunc = (type = 1) => {
+     if(type===1){
+      const {choosenRowData:{productExplain}} = this.props
+      if(productExplain){
+        this.setState({
+          productExplain
+        })
+      }
+     }
+    this.setState({
+      showExplaintionModal: type === 1,
+    });
+  };
 
   // 确认原料弹窗选择
   handleMaterialNoOk = () => {
-    const { form, materialNoChoosenRowData } = this.props;
+    const { form, materialNoChoosenRowData,dispatch } = this.props;
     const { setFieldsValue } = form;
     console.log(materialNoChoosenRowData);
 
-    const { materialNo, specification, zhName, enName, weightUnit, weightUnitName, measureUnit, inventoryWeight, valuationClass } = materialNoChoosenRowData;
-    setFieldsValue({
-      materialNo,
-      specification,
-      zhName,
-      enName,
-      weightUnit,
-      weightUnitName,
-      measureUnit,
-      inventoryWeight,
-      valuationClass,
-    });
+    const { materialNo, specification, zhName, enName, weightUnit, weightUnitName, measureUnit, inventoryWeight, valuationClass,
+      valuationClassName,
+      measureUnitName, 
+    } = materialNoChoosenRowData;
+    const weightUnitList = [{key:weightUnitName,value:weightUnit}]
+    const countist = measureUnit?[{key:measureUnitName,value:measureUnit}]:[]
+    const valuationClasslist = [{key:valuationClassName,value:valuationClass}]
 
-
-    this.showMaterialModalFunc(2);
+    dispatch({
+      type: `${defaultModelName}/batchUpdatedispatch`,
+      payload: {weightUnitList,countist,valuationClasslist },
+      callback:()=>{
+        setFieldsValue({
+          materialNo,
+          specification,
+          zhName,
+          enName,
+          weightUnit,
+          weightUnitName,
+          measureUnit,
+          inventoryWeight,
+          valuationClass,
+        });
+        this.showMaterialModalFunc(2);
+      }
+    })
   };
 
   handleMaterialNoCancel = () => {
     this.showMaterialModalFunc(2);
   };
+
+  handleExplaintionModalCancel = () => {
+    this.showExplaintionModalFunc(2);
+  };
+
+  handleExplaintionModalOk = () => {
+    const {choosenRowData} = this.props
+    const {productExplain} = this.state
+    serviceObj.updateProductExplain({pId:choosenRowData.id,productExplain}).then(res=>{
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        this.showExplaintionModalFunc(2);
+        this.getList()
+      }
+    })
+  }
+  
 
   // 选中某行表头
   changeMaterialChoosenRow = rowData => {
@@ -1537,6 +1692,26 @@ class Index extends Component {
       payload: { data: selectedRowKeys, name: 'materialSelectedKeys' },
     });
   };
+
+  onchangeExplaination = (e) => {
+    console.log(e.target.value)
+    this.setState({
+      productExplain:e.target.value
+    })
+  }
+
+  getAddExplaintionModal = ()=>{
+    return(
+      <div
+        className="addModal"
+        style={{ width: '100%' }}
+      >
+        <FormItem label='bom名称'>
+          <TextArea placeholder="请输入说明" value={this.state.productExplain}onChange={this.onchangeExplaination}/>
+        </FormItem>
+      </div>
+    )
+  }
 
 
   render() {
@@ -1569,6 +1744,9 @@ class Index extends Component {
       handleMaterialNoCancel,
       changeMaterialChoosenRow,
       onMaterialSelectChange,
+      getAddExplaintionModal,
+      handleExplaintionModalCancel,
+      handleExplaintionModalOk,
     } = this;
     const {
       modalType,
@@ -1579,6 +1757,7 @@ class Index extends Component {
       craftShow,
       selectedProccess,
       showMaterialNoModal,
+      showExplaintionModal
     } = state;
     const {
       choosenRowData,
@@ -1675,7 +1854,7 @@ class Index extends Component {
 
     const secondProccessOprationArr = [
       {
-        key: '新增流程',
+        key: '批量新增',
         fn: addProccess,
       },
       {
@@ -1796,6 +1975,20 @@ class Index extends Component {
                               </Button>
                             );
                           })}
+                          {
+                            rightActive === FIRST_TAG &&
+                            <Button
+                              className={styles.buttomControl}
+                              type={'primary'}
+                              icon={'plus'}
+                              size="small"
+                              onClick={() => {
+                                this.showExplaintionModalFunc(1)
+                              }}
+                            >
+                              {choosenRowData.productExplain?'编辑':'新增'}说明
+                            </Button>
+                          }
                           {FIRST_TAG === rightActive ? <Button
                             key="sys"
                             className={styles.buttomControl}
@@ -1870,6 +2063,22 @@ class Index extends Component {
               this.getmaterialNoList({ ...args });
             }}
           />
+        </Modal>
+
+
+        <Modal
+          title={<BuildTitle title="新增说明"/>}
+          maskClosable={false}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={handleExplaintionModalOk}
+          visible={showExplaintionModal}
+          onCancel={handleExplaintionModalCancel}
+          zIndex={1002}
+        >
+          {getAddExplaintionModal()}
         </Modal>
 
 

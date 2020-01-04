@@ -74,6 +74,10 @@ const product = [
     key: '备注',
     value: 'marks',
   },
+  {
+    key: '说明',
+    value: 'productExplain',
+  },
 ];
 
 const material = [
