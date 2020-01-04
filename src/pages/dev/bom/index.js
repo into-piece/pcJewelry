@@ -351,6 +351,21 @@ class Index extends Component {
 
   // table 搜索
   onSearch = (params, table) => {
+    const obj = {
+      platingColorName:'platingColor',
+      productTypeName:'productType',
+      gemColorName:'gemColor',
+      productColorName:'productColor',
+
+      materialTypeName:'materialType',
+      acquisitionDepartmentName:'acquisitionDepartment',
+    }
+    const keys = Object.keys(obj)
+    if('orderByAsc' in params){
+      if(keys.includes(params.orderByAsc)){
+        params.orderByAsc = obj[params.orderByAsc]
+      }
+    }
     if (table === 1) {
       this.getList({}, params);
     }
@@ -1714,7 +1729,7 @@ class Index extends Component {
         style={{ width: '100%' }}
       >
         <FormItem label='产品说明'>
-          <TextArea placeholder="请输入说明" value={this.state.productExplain} onChange={this.onchangeExplaination}/>
+          <TextArea placeholder="请输入说明" value={this.state.productExplain} style={{width:400}} onChange={this.onchangeExplaination}/>
         </FormItem>
       </div>
     )
