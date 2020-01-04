@@ -57,7 +57,7 @@ const productProcess = [
   { key: '图片', value: 'picPath', row: 1 ,noNeed:true},
   { key: '视频', value: 'videoPath', row: 1 ,noNeed:true},
   { key: '文件', value: 'filePath', row: 1 ,noNeed:true},
-  { key: '备注', value: 'remarks', row: 1 ,noNeed:true},
+  { key: '备注', value: 'remarks', row: 1 ,noNeed:true, type:8},
 ];
 
 export default {

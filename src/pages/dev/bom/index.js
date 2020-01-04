@@ -208,16 +208,18 @@ class Index extends Component {
     // ]
 
     return (
-      <Dragger {...uploadConfig} defaultFileList={fileList}>
-        <p className="ant-upload-drag-icon">
-          <Icon type="inbox" />
-        </p>
-        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-          band files
-        </p>
-      </Dragger>
+      <div style={{width:400}}>
+        <Dragger {...uploadConfig} defaultFileList={fileList}>
+          <p className="ant-upload-drag-icon">
+            <Icon type="inbox" />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          <p className="ant-upload-hint">
+            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+            band files
+          </p>
+        </Dragger>
+      </div>
     );
 
   };
@@ -607,7 +609,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea rows={2} placeholder="请输入" style={{width:400}} />;
       case 9:
         return (
           <RangePicker
@@ -1065,7 +1067,7 @@ class Index extends Component {
 
     return (
       <Form size="small" key="1">
-        {rightActive === SECOND_TAG||(rightActive===THIRD_TAG&&!this.isEditworkFlow)?
+        {rightActive === SECOND_TAG&&
           <React.Fragment>
             <div
               className="addModal"
@@ -1105,13 +1107,17 @@ class Index extends Component {
                 )}
               </FormItem>
             </div>
-            <div className={styles.carousel_content}>
-              <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
-                {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
-              </Carousel>
-            </div>
+            
           </React.Fragment>
+        }
+        {rightActive === SECOND_TAG||(rightActive===THIRD_TAG&&!this.isEditworkFlow)?
+          <div className={styles.carousel_content}>
+            <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
+              {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
+            </Carousel>
+          </div>
         :null}
+
         {addArr &&
         addArr.map(
           ({
@@ -1707,8 +1713,8 @@ class Index extends Component {
         className="addModal"
         style={{ width: '100%' }}
       >
-        <FormItem label='bom名称'>
-          <TextArea placeholder="请输入说明" value={this.state.productExplain}onChange={this.onchangeExplaination}/>
+        <FormItem label='产品说明'>
+          <TextArea placeholder="请输入说明" value={this.state.productExplain} onChange={this.onchangeExplaination}/>
         </FormItem>
       </div>
     )
