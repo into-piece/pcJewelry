@@ -344,7 +344,22 @@ export default [
             ],
 
           },
+          //财务
+          {
+            path: '/erp/finance',
+            icon: 'money-collect',
+            name: 'finance',
 
+            routes: [
+              {
+                path: '/erp/finance/processSalary',
+                name: 'processSalary',
+                icon: 'snippets',
+                component: './finance/processSalary',
+              },
+            ],
+
+          },
           //系统
           {
             path: '/erp/system',

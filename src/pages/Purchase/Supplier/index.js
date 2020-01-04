@@ -581,9 +581,9 @@ class Info extends Component {
           </Radio.Group>
         );
       case 7:
-        return <Input disabled style={{ width: '100' }} placeholder="自动带出"/>;
+        return <Input disabled style={{ width: '100' }} placeholder="自动带出" />;
       case 8:
-        return <TextArea rows={1} placeholder="请输入" style={{ width: 820 }}/>;
+        return <TextArea rows={1} placeholder="请输入" style={{ width: 820 }} />;
       case 9:
         return (
           <RangePicker
@@ -605,7 +605,7 @@ class Info extends Component {
           />
         );
       case 11:
-        return <Input placeholder="自动生成" disabled/>;
+        return <Input placeholder="自动生成" disabled />;
 
 
       default:
@@ -614,7 +614,7 @@ class Info extends Component {
             disabled={this.disabledCondition(value, form)}
             style={{ width: '100' }}
             placeholder="请输入"
-            type={inputType ? inputType : 'text'}
+            type={inputType || 'text'}
             onChange={v => {
               this.inputChange(v, value);
             }}
@@ -647,7 +647,7 @@ class Info extends Component {
       H008002: '克',
       H008001: '件',
     };
-    let suplierCode = '';
+    const suplierCode = '';
 
 
     return (
@@ -668,19 +668,19 @@ class Info extends Component {
              priceUnit,
              inputType,
            }) => (
-            <div
-              className="addModal"
-              key={key}
-              style={value === 'supplierCode' ? { width: 800 } : {}}
-            >
-              <FormItem
-                label={
+             <div
+               className="addModal"
+               key={key}
+               style={value === 'supplierCode' ? { width: 800 } : {}}
+             >
+               <FormItem
+                 label={
                   priceUnit === 1 && rightMenu === 2
                     ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
                     : key
                 }
-              >
-                {getFieldDecorator(value, {
+               >
+                 {getFieldDecorator(value, {
                   rules: [
                     {
                       required: !noNeed,
@@ -711,8 +711,8 @@ class Info extends Component {
                     inputType,
                   }),
                 )}
-              </FormItem>
-            </div>
+               </FormItem>
+             </div>
           ),
         )}
 
@@ -1204,7 +1204,7 @@ class Info extends Component {
         </div>
         {handleModalOk && (
           <Modal
-            title={<BuildTitle title={returnTitle()}/>}
+            title={<BuildTitle title={returnTitle()} />}
             zIndex={1000}
             maskClosable={false}
             width={1000}
@@ -1246,68 +1246,68 @@ const RightContent = ({
                         blankAccountPagination,
                         returnListName,
                       }) => (
-  <GridContent>
-    <Row gutter={24} className={styles.row_content}>
-      {/* 中间table组件 */}
-      <Col lg={16} md={24}>
-        <CenterInfo
-          type={type}
-          handleRadio={handleRadio}
-          getDetailList={getDetailList}
-          returnElement={returnElement}
-          contactsPagination={contactsPagination}
-          blankAccountPagination={blankAccountPagination}
-          onSearch={onSearch}
-          onSearchDetail={onSearchDetail}
-        />
-      </Col>
-      {/* 右边显示详细信息和按钮操作 */}
-      <Col lg={8} md={24}>
-        <div className={styles.view_right_content}>
-          <Radio.Group
-            size="small"
-            className={styles.right_content_tabgroud}
-            onChange={changeRightMenu}
-            buttonStyle="solid"
-            value={rightMenu}
-            style={{ textAlign: 'center' }}
-          >
-            {radioArr.map((item, index) => (
-              <Radio.Button
-                key={item}
-                style={{
+                        <GridContent>
+                          <Row gutter={24} className={styles.row_content}>
+                            {/* 中间table组件 */}
+                            <Col lg={16} md={24}>
+                              <CenterInfo
+                                type={type}
+                                handleRadio={handleRadio}
+                                getDetailList={getDetailList}
+                                returnElement={returnElement}
+                                contactsPagination={contactsPagination}
+                                blankAccountPagination={blankAccountPagination}
+                                onSearch={onSearch}
+                                onSearchDetail={onSearchDetail}
+                              />
+                            </Col>
+                            {/* 右边显示详细信息和按钮操作 */}
+                            <Col lg={8} md={24}>
+                              <div className={styles.view_right_content}>
+                                <Radio.Group
+                                  size="small"
+                                  className={styles.right_content_tabgroud}
+                                  onChange={changeRightMenu}
+                                  buttonStyle="solid"
+                                  value={rightMenu}
+                                  style={{ textAlign: 'center' }}
+                                >
+                                  {radioArr.map((item, index) => (
+                                    <Radio.Button
+                                      key={item}
+                                      style={{
                   height: 40,
                   width: 130,
                   textalign: 'center',
                   lineHeight: '40px',
                 }}
-                value={index + 1}
-              >
-                {item}
-              </Radio.Button>
+                                      value={index + 1}
+                                    >
+                                      {item}
+                                    </Radio.Button>
             ))}
-          </Radio.Group>
-          {/*{console.log(" ==>choosenRowData ",choosenRowData)}*/}
-          <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
-            <GetRenderitem
-              data={rightMenu === 1 ? choosenRowData : rightMenu === 2 ? choosenContactsRowData : choosenBlankAccountRowData}
-              type={rightMenu}
-              returnListName={returnListName}
-            />
-          </Card>
+                                </Radio.Group>
+                                {/* {console.log(" ==>choosenRowData ",choosenRowData)} */}
+                                <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
+                                  <GetRenderitem
+                                    data={rightMenu === 1 ? choosenRowData : rightMenu === 2 ? choosenContactsRowData : choosenBlankAccountRowData}
+                                    type={rightMenu}
+                                    returnListName={returnListName}
+                                  />
+                                </Card>
 
-          {/*  */}
-          <Card
-            bodyStyle={{
+                                {/*  */}
+                                <Card
+                                  bodyStyle={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
               paddingLeft: 5,
               paddingRight: 5,
             }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {
+                                >
+                                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    {
                 btnGroup.map(({ name, tag, type: t }) => (
                   <Button
                     key={tag}
@@ -1327,13 +1327,13 @@ const RightContent = ({
                     {tag === 'lock' ? returnLockType().name : name}
                   </Button>
                 ))}
-            </div>
+                                  </div>
 
-          </Card>
-        </div>
-      </Col>
-    </Row>
-  </GridContent>
+                                </Card>
+                              </div>
+                            </Col>
+                          </Row>
+                        </GridContent>
 );
 
 // 右手边详情显示
@@ -1596,9 +1596,7 @@ class CenterInfo extends Component {
 
     return (
       <div className={styles.view_left_content}>
-        <div style={{ marginBottom: 20 }}>
-
-        </div>
+        <div style={{ marginBottom: 20 }} />
         <SearchForm
           data={searchParamsArr}
           source={purchase}
@@ -1665,32 +1663,32 @@ class CenterInfo extends Component {
             />
           </div>
         </div>) : (<div><SearchForm
-          data={searchBlackAccountParams}
-          source={purchase}
-          onSearch={onSearchDetail}
-          returnElement={returnElement}
-          onchange={changeSearchBlankAccountParams}
-        />
-          <div className={styles.tableBox}>
+                                      data={searchBlackAccountParams}
+                                      source={purchase}
+                                      onSearch={onSearchDetail}
+                                      returnElement={returnElement}
+                                      onchange={changeSearchBlankAccountParams}
+                                    />
+                                      <div className={styles.tableBox}>
             <Table
-              columns={openBlankColumns}
-              body={blankAccountList}
-              type={ttype}
-              changeChoosenRow={record => {
+                                          columns={openBlankColumns}
+                                          body={blankAccountList}
+                                          type={ttype}
+                                          changeChoosenRow={record => {
                 this.changeChoosenRow(record, ttype);
               }}
-              selectKey={choosenBlankAccountRowData.id}
-              pagination={blankAccountPagination}
-              handleTableChange={onSearchDetail}
-              selectedRowKeys={selectedBlankAccountRowKeys}
-              onSelectChange={data => {
+                                          selectKey={choosenBlankAccountRowData.id}
+                                          pagination={blankAccountPagination}
+                                          handleTableChange={onSearchDetail}
+                                          selectedRowKeys={selectedBlankAccountRowKeys}
+                                          onSelectChange={data => {
                 onSelectChange(data, ttype);
               }}
-              listLoading={listBlankAccountLoading}
-              clearFn={clearFn}
-            />
+                                          listLoading={listBlankAccountLoading}
+                                          clearFn={clearFn}
+                                        />
           </div>
-        </div>)}
+                                               </div>)}
       </div>
     );
   }
