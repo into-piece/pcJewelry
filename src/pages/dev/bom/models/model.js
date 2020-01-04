@@ -87,6 +87,14 @@ export default {
   },
 
   effects: {
+    *batchUpdatedispatch({ payload ,callback}, { put }) {
+      yield put({
+        type: 'batchUpdateState',
+        payload,
+      });
+      if (callback) callback();
+    },
+
     *changeProps({ payload, callback }, { put }) {
       yield put({
         type: 'changeState',
@@ -208,7 +216,7 @@ export default {
 
     *productBomRevokeList({ payload, callback }, { call, put }) {
       const { params, name } = payload;
-      const response = yield call(productBomRevokeListApi, params);
+      const response = yield call(productBomRevokeListApi,params);
 
       const list =
         response.head && response.head.rtnCode === '000000' ? response.body : initData;
@@ -407,6 +415,13 @@ export default {
   },
 
   reducers: {
+    batchUpdateState(state, action) {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+
     changeState(state, action) {
       const { typeName, data } = action.payload;
       return {

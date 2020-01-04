@@ -115,7 +115,10 @@ const extraArr = [
     path: '/listChildDieSetDropDown ',
     prefix1: `${env}/business/develop.die/develop-child-die-set`,
   },
-
-  
+  {
+    key: 'updateProductExplain',
+    path: '/updateProductExplain ',
+    prefix1: `${env}/business//develop.bom/develop-bom`,
+  },
 ];
 export default { serviceArr, extraArr };
