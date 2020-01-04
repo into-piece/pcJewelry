@@ -74,9 +74,18 @@ const product = [
     key: '备注',
     value: 'marks',
   },
+  {
+    key: '说明',
+    value: 'productExplain',
+  },
+  { key: '新增人', value: 'createUser' },
+  { key: '新增时间', value: 'createTime' },
+  { key: '修改人', value: 'modifier' },
+  { key: '修改时间', value: 'mtime' },
 ];
 
 const material = [
+  { key: 'bom名称', value: 'bomId' },
   { key: '原料类别', value: 'materialTypeName' },
   { key: '胶膜编号', value: 'modelNoName' },
   { key: '模比', value: 'modulusRatio' },
@@ -97,13 +106,17 @@ const material = [
   { key: '规格', value: 'specification' },
   { key: '中文名', value: 'zhName' },
   { key: '英文名', value: 'enName' },
-  { key: '重量单位', value: 'weightUnit' },
-  { key: '计量单位', value: 'measureUnit' },
+  { key: '重量单位', value: 'weightUnitName' },
+  { key: '计量单位', value: 'measureUnitName' },
   { key: '单重', value: 'inventoryWeight' },
   { key: '单件用重', value: 'sheetWithHeavy' },
-  { key: '计价类别', value: 'valuationClass' },
+  { key: '计价类别', value: 'valuationClassName' },
   { key: '损耗率', value: 'attritionRate' },
   { key: '备注', value: 'remarks' },
+  { key: '新增人', value: 'createUser' },
+  { key: '新增时间', value: 'createTime' },
+  { key: '修改人', value: 'modifier' },
+  { key: '修改时间', value: 'mtime' },
 ];
 
 const productProcess = [
@@ -114,6 +127,10 @@ const productProcess = [
   { key: '图片', value: 'picPath' },
   // { key: '文档', value: 'workProcessCode' },
   { key: '备注', value: 'remarks' },
+  { key: '新增人', value: 'createUser' },
+  { key: '新增时间', value: 'createTime' },
+  { key: '修改人', value: 'modifier' },
+  { key: '修改时间', value: 'mtime' },
 ];
 
 export default {

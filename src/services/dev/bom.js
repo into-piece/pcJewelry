@@ -104,5 +104,21 @@ const extraArr = [
     path: '/listCustomerDropDown ',
     prefix1: `${env}/business/business/customer`,
   },
+  // 工序名称
+  {
+    key: 'processRelationDropDown',
+    path: '/listDropDown ',
+    prefix1: `${env}/business/develop/production/production-process-relation`,
+  },
+  {
+    key: 'listChildDieSetDropDown',
+    path: '/listChildDieSetDropDown ',
+    prefix1: `${env}/business/develop.die/develop-child-die-set`,
+  },
+  {
+    key: 'updateProductExplain',
+    path: '/updateProductExplain ',
+    prefix1: `${env}/business//develop.bom/develop-bom`,
+  },
 ];
 export default { serviceArr, extraArr };
