@@ -26,10 +26,14 @@ export default {
   'menu.erp.dev.dieSetChild':'胶膜明细',
   'menu.erp.dev.bom': '产品BOM',
   'menu.erp.dev.material': '原料信息',
-  
+
 
   'menu.erp.purchase': '采购管理',
   'menu.erp.purchase.supplier': '供应商管理',
+
+
+  'menu.erp.finance': '财务',
+  'menu.erp.finance.processSalary': '流程薪资',
 
 
 
