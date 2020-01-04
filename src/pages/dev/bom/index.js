@@ -1137,7 +1137,7 @@ class Index extends Component {
         <React.Fragment>
           <div
             className="addModal"
-            style={{ width: '100%',height: '100px' }}
+            style={{ width: '100%',height: '150px' }}
           >
             <FormItem label='bom名称'>
               {getFieldDecorator('bomId', {
@@ -1178,7 +1178,7 @@ class Index extends Component {
         }
         {rightActive === SECOND_TAG || (rightActive === THIRD_TAG && !this.isEditworkFlow) ?
           <div className={styles.carousel_content}>
-            <Carousel {...this.carouselsettings} key={`as123`}>
+            <Carousel {...this.carouselsettings} key="as123">
               {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
             </Carousel>
           </div>
@@ -1208,6 +1208,12 @@ class Index extends Component {
             if (mType === 1 && materialType !== 'H016002') {
               return;
             }
+
+            if ( [ 'H016003', 'H016003', 'H016003'].indexOf(materialType)>-1 &&(['modelNo','modulusRatio'].indexOf(value)>-1)){
+             return;
+            }
+
+
             // 判断编辑默认值
             let initValue2 = '';
             if (isEdit) {
