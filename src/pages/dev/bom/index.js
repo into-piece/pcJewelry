@@ -248,7 +248,7 @@ class Index extends Component {
 
   initDrop = (modalType) => {
     const { getProductBomRevoke} = this;
-    const { dispatch, form, choosenRowData } = this.props;
+    const { dispatch, form, choosenRowData ,choosenRowDataSecond} = this.props;
     const { setFieldsValue } = form;
     const { rightActive } = this.state;
     // // 产品编号下拉production-flow
@@ -329,6 +329,15 @@ class Index extends Component {
         },
 
       ];
+
+      if(choosenRowDataSecond&&choosenRowDataSecond.materialType&&modalType ==='edit'){
+        // 原料小料
+        dispatch({
+          type: `${defaultModelName}/getDropdownList`,
+          payload: { name: 'getTypeByWordbookCode', params: { key: choosenRowDataSecond.materialType } },
+        });
+      }
+
     }
 
     if (rightActive === THIRD_TAG) {
@@ -624,7 +633,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" style={{width:400}} />;
+        return <TextArea rows={2} placeholder="请输入" style={{width:800}} />;
       case 9:
         return (
           <RangePicker
@@ -1729,7 +1738,7 @@ class Index extends Component {
         style={{ width: '100%' }}
       >
         <FormItem label='产品说明'>
-          <TextArea placeholder="请输入说明" value={this.state.productExplain} style={{width:400}} onChange={this.onchangeExplaination}/>
+          <TextArea placeholder="请输入说明" value={this.state.productExplain} style={{width:800}} onChange={this.onchangeExplaination}/>
         </FormItem>
       </div>
     )
