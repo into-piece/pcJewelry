@@ -358,49 +358,8 @@ class Info extends Component {
     }
   };
 
-
-  openAddModal = () => {
-    // const { rightMenu, dispatch, form, choosenRowData } = this.props;
-    // const isHead = rightMenu === 1;
-
-
-    // if (isHead) {
-    //   // 类别下拉
-    //   dispatch({
-    //     type: 'purchase/getwordbookdropdownType',
-    //   });
-    //
-    //   // 币种下拉
-    //   dispatch({
-    //     type: 'purchase/getwordbookdropdownCurrency',
-    //   });
-    //
-    //   // 方式下拉
-    //   dispatch({
-    //     type: 'purchase/getwordbookdropdownMode',
-    //   });
-
-
-    // }
-    // if (isHead) {
-    //   dispatch({
-    //     type: 'purchase/getcurrencydropdown',
-    //   });
-    // }
-
-    // getMainMaterialPrice().then(res => {
-    //   const { head, body } = res;
-    //   if (head.rtnCode === '000000' && body.records.length > 0) {
-    //     const { silver } = body.records[0];
-    //     form.setFieldsValue({
-    //       quotePrice: silver,
-    //     });
-    //   }
-    // });
-  };
-
   // 复制
-  handleCopy = () => {
+  // handleCopy = () => {
     // const { id } = this.props.choosenRowData;
     // serviceObj.copyQuote({ id }).then(res => {
     //   const { rtnMsg, rtnCode } = res.head;
@@ -411,11 +370,12 @@ class Info extends Component {
     //     this.getList({ sendReq: 'currentQuote' });
     //   }
     // });
-  };
+  // };
 
   // 列表对应操作button回调
   btnFn = async modalType => {
-    const { selectKey, dispatch, choosenRowData, form, rightMenu } = this.props;
+    const { selectKey, dispatch, choosenRowData, form, rightMenu,choosenContactsRowData, choosenBlankAccountRowData } = this.props;
+
     switch (modalType) {
       case 'plus':
         serviceObj.getTurnoverCode({}).then(res => {
@@ -430,7 +390,7 @@ class Info extends Component {
       case 'edit':
       default:
 
-        this.openAddModal();
+        // this.openAddModal();
         this.setState({ modalType });
         break;
       case 'delete':
@@ -450,14 +410,20 @@ class Info extends Component {
         });
         break;
       case 'copy':
-        this.handleCopy();
+        // this.handleCopy();
         break;
       case 'change':
         // console.log('>>>');
+        const isHead = rightMenu === 1;
+        const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
+        const id = isHead ? choosenRowData.id : rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
+        let type = rightMenu === 2 ? 'contacts' : 'blankAccount';
         ModalConfirm({
           content: '确定交换数据吗？',
           onOk: () => {
-            this.handleChange();
+            this.handleChange(type);
+            this.freshList();
+            this.getDetailList(type, { supplierCode: choosenRowData.id, id });
           }
         });
       break;
@@ -886,20 +852,25 @@ class Info extends Component {
   };
 
   // 数据更换
-  handleChange = () => {
+  handleChange = (type) => {
     const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,dispatch } = this.props;
-    // debugger
-    console.log(selectedRowKeys);
-    console.log(selectedContactsRowKeys);
-    console.log(selectedBlankAccountRowKeys);
-    dispatch({
-      type:'purchase/change',
-      payload:{
-        selectedRowKeys:selectedRowKeys,
-        selectedContactsRowKeys:selectedContactsRowKeys,
-        selectedBlankAccountRowKeys:selectedBlankAccountRowKeys
-      }
-    });
+
+      dispatch({
+        type:'purchase/change',
+        payload:{
+          selectedRowKeys:selectedRowKeys,
+          selectedContactsRowKeys:selectedContactsRowKeys,
+          selectedBlankAccountRowKeys:selectedBlankAccountRowKeys,
+          type:type,
+        }
+      }).then( (response) => {
+        console.log(response);
+        if (response.rtnCode === '000000') {
+          notification.success({
+            message: rtnMsg,
+          });
+        }
+      });
   }
 
   // 删除按钮回调
