@@ -1137,7 +1137,7 @@ class Index extends Component {
         <React.Fragment>
           <div
             className="addModal"
-            style={{ width: '100%' }}
+            style={{ width: '100%',height: '100px' }}
           >
             <FormItem label='bom名称'>
               {getFieldDecorator('bomId', {
@@ -1178,7 +1178,7 @@ class Index extends Component {
         }
         {rightActive === SECOND_TAG || (rightActive === THIRD_TAG && !this.isEditworkFlow) ?
           <div className={styles.carousel_content}>
-            <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
+            <Carousel {...this.carouselsettings} key={`as123`}>
               {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
             </Carousel>
           </div>

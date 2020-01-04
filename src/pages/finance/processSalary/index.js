@@ -39,10 +39,10 @@ const FormItem = Form.Item;
 const { Option } = Select;
 // 右手边按钮集合
 const btnGroup = [
-  { name: '新增', tag: 'plus' },
-  { name: '删除', tag: 'delete', type: 'danger' },
-  { name: '编辑', tag: 'edit' },
+  // { name: '新增', tag: 'plus' },
   { name: '审批', tag: 'lock' },
+  { name: '编辑', tag: 'edit' },
+  { name: '删除', tag: 'delete', type: 'danger' },
   // { name: '复制', tag: 'copy' },
 ];
 
