@@ -38,7 +38,7 @@ export const material = [
   // { key: '重量单位', value: 'weightUnitName', noNeed: true ,type:7 },
   // { key: '计量单位', value: 'measureUnit', noNeed: true ,type:7 },
 
-  { key: '单重', value: 'inventoryWeight', noNeed: true ,number:true,type:7 },
+  { key: '单重', value: 'inventoryWeight', noNeed: true ,number:true,type:7,mType: 1, },
   { key: '单件用重', value: 'sheetWithHeavy', noNeed: true ,type:7},
   { key: '计价类别', value: 'valuationClass', noNeed: true , type: 2, list: 'valuationClasslist',disabled:true},
   { key: '损耗率（%）', value: 'attritionRate', noNeed: true ,initValue:10},

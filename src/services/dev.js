@@ -193,6 +193,11 @@ const resultArr = [
     path: '/develop.bom/develop-bom/listDraftProductDropDown',
     prefix1: `${env}/business`,
   }, // bom未审批产品下拉接口
+  {
+    key: 'bomSynchronize',
+    path: '/develop.bom/develop-bom/synchronize',
+    prefix1: `${env}/business`,
+  }, // bom数据同步接口
 ];
 
 // console.log(resultArr, '============')

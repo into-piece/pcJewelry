@@ -68,10 +68,10 @@ export default (({ handleBomSelectChange, productChoosenData, choosenRowData, pa
           showSearch
           allowClear
           mode="multiple"
-          style={{ width: 180 }}
+          style={{ width: 480 }}
           placeholder="请选择"
           onChange={v => {
-              handleBomSelectChange && handleBomSelectChange(v);
+               handleBomSelectChange(v);
             }}
           optionFilterProp="children"
           filterOption={(input, option) =>
