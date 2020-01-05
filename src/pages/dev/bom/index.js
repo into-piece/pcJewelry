@@ -388,7 +388,7 @@ class Index extends Component {
       this.getList({}, params);
     }
     if (table === 2) {
-      // this.getMaterialList(params);
+      this.getMaterialList(params);
     }
     if (table === 3) {
       this.getProccessList(params);
@@ -554,23 +554,23 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-                     key,
-                     value,
-                     noNeed,
-                     type,
-                     list,
-                     clickFn,
-                     text,
-                     arr,
-                     data,
-                     form,
-                     number,
-                     step,
-                     min,
-                     max,
-                     disabled,
-                     multiple,
-                   }) => {
+    key,
+    value,
+    noNeed,
+    type,
+    list,
+    clickFn,
+    text,
+    arr,
+    data,
+    form,
+    number,
+    step,
+    min,
+    max,
+    disabled,
+    multiple,
+  }) => {
     switch (type) {
       case 2:
         return (
@@ -860,7 +860,7 @@ class Index extends Component {
 
   // 新增||编辑 按钮事件回调
   handleAdd = (close, isEdit) => {
-    const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch } = this.props;
+    const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch,materialNoChoosenRowData } = this.props;
     const {
       rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
       flowList,
@@ -887,9 +887,11 @@ class Index extends Component {
         params.id = selectedBom.id;
       }
     } else if (rightActive === SECOND_TAG) {
+
       if (isEdit) {
         params.id = choosenRowDataSecond.id;
       }
+      
       if (materialType === 'H016002') {
         const Technology = [];
         console.log(craftForm);
@@ -945,6 +947,8 @@ class Index extends Component {
 
     if (rightActive === SECOND_TAG) {
       fieldslist.push('bomId');
+      fieldslist.push('materialId')
+      params.materialId = materialNoChoosenRowData.id
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
@@ -1169,7 +1173,7 @@ class Index extends Component {
                   style={{ width: 180 }}
                   placeholder="请选择"
                   onChange={v => {
-                    this.handleSelectChange && this.handleSelectChange(v, value);
+                    this.handleSelectChange && this.handleSelectChange(v, 'bomId');
                   }}
                   showSearch
                   optionFilterProp="children"
@@ -1752,12 +1756,11 @@ class Index extends Component {
   handleMaterialNoOk = () => {
     const { form, materialNoChoosenRowData, dispatch } = this.props;
     const { setFieldsValue } = form;
-    console.log(materialNoChoosenRowData);
-
     const {
       materialNo, specification, zhName, enName, weightUnit, weightUnitName, measureUnit, inventoryWeight, valuationClass,
       valuationClassName,
       measureUnitName,
+      id
     } = materialNoChoosenRowData;
     const weightUnitList = [{ key: weightUnitName, value: weightUnit }];
     const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
@@ -1777,6 +1780,7 @@ class Index extends Component {
           measureUnit,
           inventoryWeight,
           valuationClass,
+          materialId:id
         });
         this.showMaterialModalFunc(2);
       },
@@ -2085,7 +2089,7 @@ class Index extends Component {
                               ? choosenRowData
                               : isthird
                               ? choosenProccessData
-                              : { ...choosenRowDataSecond, pictures: choosenRowData.pictures }
+                              : choosenRowDataSecond
                           }
                           type={rightActive}
                           items={showItem}
