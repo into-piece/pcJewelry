@@ -20,6 +20,7 @@ const {
   materialList,
   productBomRevokeListApi,
   processList,
+  listBasicSpecificationSettingsDropDown,
   bomSynchronize,
 } = servicesConfig;
 const defaultModelName = 'devbom';
@@ -73,6 +74,7 @@ export default {
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
     listGemSetProcessDropDown: [], // 镶石工艺下拉
+    listBasicSpecificationSettingsDropDown: [], // 规格下拉
     materialList: initData,
     processList: initData,
     choosenProccessData:{id:''},

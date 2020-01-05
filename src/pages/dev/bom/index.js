@@ -323,6 +323,11 @@ class Index extends Component {
           name: 'listGemSetProcessDropDown',
         },
         {
+          name: 'listBasicSpecificationSettingsDropDown',
+          key1:'specificationCode',
+          value1:'id',
+        },
+        {
           name: 'listDeptDropDown',
         },
         {
@@ -602,7 +607,7 @@ class Index extends Component {
                 this.showMaterialModalFunc(1);
               }}
             >
-              选择原料编号
+              选择
             </span>
           </p>
         );

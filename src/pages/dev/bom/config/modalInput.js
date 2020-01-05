@@ -30,7 +30,7 @@ export const material = [
   },
   { key: '原料编号', value: 'materialNo', type: 3, list: 'materialNoList' ,clickFn: 'showMaterialModalFunc'},
   { key: '单件用量', value: 'singleDosage',number:true,mutiply:true},
-  { key: '规格', value: 'specification', noNeed: true,type:7 },
+  { key: '规格', value: 'specification', noNeed: true,  type: 2, list: 'listBasicSpecificationSettingsDropDown',disabled:true},
   { key: '中文名', value: 'zhName', noNeed: true,type:7 },
   { key: '英文名', value: 'enName', noNeed: true ,type:7 },
   { key: '重量单位', value: 'weightUnit', noNeed: true , type: 2, list: 'weightUnitList',disabled:true},
