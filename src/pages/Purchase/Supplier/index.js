@@ -104,6 +104,11 @@ let clientContentColumns = [
 
   },
   {
+    title: <div className={styles.row_normal2}>中文地址</div>,
+    dataIndex: 'zhAddress',
+    key: 'zhAddress',
+  },
+  {
     title: <div className={styles.row_normal2}>供应商类别</div>,
     dataIndex: 'supplierCategoryName',
     key: 'supplierCategoryName',
@@ -128,15 +133,32 @@ let clientContentColumns = [
     title: <div className={styles.row_normal2}>联系人姓名</div>, // ?
     dataIndex: 'contactName',
     key: 'contactName',
-
-
   },
   {
-    title: <div className={styles.row_normal2}>中文地址</div>,
-    dataIndex: 'zhAddress',
-    key: 'zhAddress',
+    title: <div className={styles.row_normal2}>手机</div>, // ?telphone
+    dataIndex: 'mobilePhone',
+    key: 'mobilePhone',
   },
-
+  {
+    title: <div className={styles.row_normal2}>电话</div>, // ?
+    dataIndex: 'telphone',
+    key: 'telphone',
+  },
+  {
+    title: <div className={styles.row_normal2}>Email</div>, // ?
+    dataIndex: 'email',
+    key: 'email',
+  },
+  {
+    title: <div className={styles.row_normal2}>QQ</div>, // ?
+    dataIndex: 'qq',
+    key: 'qq',
+  },
+  {
+    title: <div className={styles.row_normal2}>微信</div>, // ?
+    dataIndex: 'wechat',
+    key: 'wechat',
+  },
   {
     title: <div className={styles.row_normal2}>英文地址</div>,
     dataIndex: 'enAddress',
@@ -301,11 +323,6 @@ class Info extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
-    // 获取客户编号下拉
-    // dispatch({
-    //   type: 'purchase/getlistCustomerDropDown',
-    // });
 
     dispatch({
       type: 'purchase/getwordbookdropdownType',
@@ -358,20 +375,6 @@ class Info extends Component {
     }
   };
 
-  // 复制
-  // handleCopy = () => {
-    // const { id } = this.props.choosenRowData;
-    // serviceObj.copyQuote({ id }).then(res => {
-    //   const { rtnMsg, rtnCode } = res.head;
-    //   if (rtnCode === '000000') {
-    //     notification.success({
-    //       message: rtnMsg,
-    //     });
-    //     this.getList({ sendReq: 'currentQuote' });
-    //   }
-    // });
-  // };
-
   // 列表对应操作button回调
   btnFn = async modalType => {
     const { selectKey, dispatch, choosenRowData, form, rightMenu,choosenContactsRowData, choosenBlankAccountRowData } = this.props;
@@ -389,8 +392,6 @@ class Info extends Component {
         });
       case 'edit':
       default:
-
-        // this.openAddModal();
         this.setState({ modalType });
         break;
       case 'delete':
@@ -414,6 +415,7 @@ class Info extends Component {
         break;
       case 'change':
         // console.log('>>>');
+        // debugger
         const isHead = rightMenu === 1;
         const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
         const id = isHead ? choosenRowData.id : rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
@@ -422,8 +424,6 @@ class Info extends Component {
           content: '确定交换数据吗？',
           onOk: () => {
             this.handleChange(type);
-            this.freshList();
-            this.getDetailList(type, { supplierCode: choosenRowData.id, id });
           }
         });
       break;
@@ -815,13 +815,6 @@ class Info extends Component {
       params = { supplierCode: choosenRowData.id, id };
       type = rightMenu === 2 ? 'contacts' : 'blankAccount';
     }
-    // else{
-    //   dispatch({
-    //     type: 'purchase/changeSelectedRowKeys',
-    //     payload: [],
-    //   });
-    // }
-
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -853,8 +846,9 @@ class Info extends Component {
 
   // 数据更换
   handleChange = (type) => {
-    const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,dispatch } = this.props;
-
+    const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,dispatch,choosenRowData,rightMenu,choosenContactsRowData,choosenBlankAccountRowData } = this.props;
+    const id = rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
+    
       dispatch({
         type:'purchase/change',
         payload:{
@@ -864,11 +858,14 @@ class Info extends Component {
           type:type,
         }
       }).then( (response) => {
+        // debugger
         console.log(response);
-        if (response.rtnCode === '000000') {
+        if (response.head.rtnCode === '000000') {
           notification.success({
-            message: rtnMsg,
+            message: response.head.rtnMsg,
           });
+          this.freshList();
+          this.getDetailList(type, { supplierCode: choosenRowData.id, id });
         }
       });
   }
@@ -1020,6 +1017,13 @@ class Info extends Component {
 
 
     const v = e.target.value;
+    let type = v === 'blankAccount' ? 3 : 2;
+
+    this.props.dispatch({
+      type: `purchase/changeRightMenu`,
+      payload: type,
+    });
+
     this.props.dispatch({
       type: `purchase/getTimeline`,
       payload: e.target.value,
@@ -1345,9 +1349,15 @@ const rowArr = [
   { key: '英文名', value: 'enName' },
   { key: '中文地址', value: 'zhAddress' },
   { key: '英文地址', value: 'enAddress' },
+  { key: '联系人姓名', value: 'contactName' },
+  { key: '手机', value: 'mobilePhone' },
+  { key: '电话', value: 'telphone' },
+  { key: 'Email', value: 'email' },
+  { key: 'QQ', value: 'qq' },
+  { key: '微信', value: 'wechat' },
   { key: '开户行', value: 'openBank' },
   { key: '户名', value: 'accountName' },
-  { key: '账号', value: 'accountNum' },
+  { key: '银行账号', value: 'accountNum' },
   { key: '结算币种', value: 'countCurrency', list: 'wordbookdropdownCurrency', belong: 3 },
   { key: '税率', value: 'rate' },
   { key: '结算方式', value: 'countMode', list: 'wordbookdropdownMode', belong: 3 },

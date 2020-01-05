@@ -498,6 +498,9 @@ export default {
       });
     },
     * change(data,{call}) {
+
+      // debugger
+
       const supplierIds = data.payload.selectedRowKeys;
       const contactIds = data.payload.selectedContactsRowKeys;
       const bankAccountIds = data.payload.selectedBlankAccountRowKeys;
@@ -520,6 +523,8 @@ export default {
           console.log('不支持多选');
         }
       }
+
+      console.log(type)
 
       if (type === 'contacts') {
         const response = yield call(change,{
