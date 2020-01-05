@@ -26,7 +26,6 @@ const resultArr = [
   { key: 'listSupplier', path: '/purchase-supplier/list' },
   { key: 'deleteSupplier', path: '/purchase-supplier/delete' },// 删除表头
   { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
-  { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
   { key: 'approval', path: '/purchase-supplier/approval' }, // 报价单审批
   { key: 'cancelApproval', path: '/purchase-supplier/revoke' }, // 报价单审批
   { key: 'getTurnoverCode', path: '/purchase-supplier/getTurnoverCode' }, // 报价单审批
@@ -40,7 +39,7 @@ const resultArr = [
   { key: 'addBlankAccount', path: '/purchase-supplier-bank-account/saveOrUpdate' },// 添加联系人
 
   { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
-
+  { key: 'change', path: '/purchase-supplier/change' }
 ]
 // /listMstWordbook
 

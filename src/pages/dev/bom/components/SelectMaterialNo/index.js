@@ -125,7 +125,7 @@ const returnMaterialType = {
 }
 
 
-export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeProductSearch,materialType,handleTableChange }) => {
+export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeMaterialSearch,materialType,handleTableChange }) => {
   const materialtype = returnMaterialType[materialType]
   console.log(pagination,'pagination======');
   
@@ -137,7 +137,7 @@ export default (({ pagination, returnElement, source, list, selectedRowKeys, cha
         data={searchParams}
         returnElement={returnElement}
         source={source}
-        onchange={changeProductSearch}
+        onchange={changeMaterialSearch}
       /> 
       <Table
         columns={tablecolumns}

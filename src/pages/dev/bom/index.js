@@ -18,7 +18,7 @@ import {
   Upload,
   Icon,
   message,
-  Carousel
+  Carousel,
 } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import ModalConfirm from '@/utils/modal';
@@ -90,6 +90,7 @@ const radioArr = [
     selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
+    materialNoSearchParams:model.materialNoSearchParams,
     bomlist: model.bomlist,
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
@@ -105,11 +106,12 @@ const radioArr = [
     materialNoPagination: model.materialNoPagination,
 
 
-    productBomRevokeList:model.productBomRevokeList,
-    productBomRevokePagination:model.productBomRevokePagination,
-    productBomRevokeSelectedKeys:model.productBomRevokeSelectedKeys,
-    productBomRevokeChoosenRowData:model.productBomRevokeChoosenRowData,
-    productBomRevokeListLoading:loading.effects[`${defaultModelName}/getListSecond`],
+    sysProductSelectedBom: model.sysProductSelectedBom,
+    productBomRevokeList: model.productBomRevokeList,
+    productBomRevokePagination: model.productBomRevokePagination,
+    productBomRevokeSelectedKeys: model.productBomRevokeSelectedKeys,
+    productBomRevokeChoosenRowData: model.productBomRevokeChoosenRowData,
+    productBomRevokeListLoading: loading.effects[`${defaultModelName}/productBomRevokeList`],
 
 
     flowlistDropDown: model.flowlistDropDown,
@@ -133,20 +135,22 @@ class Index extends Component {
     craftForm: [
       [
         { key: '镶石工艺', title: '镶石工艺', value: '' },
+        { key: '石头数量', title: '石头数量', value: '' },
         { key: '效率', title: '效率', value: '' },
       ],
     ],
     videoPath: '',
     filePath: '',
     showMaterialNoModal: false,
-    showExplaintionModal:false,
+    showExplaintionModal: false,
     processCode: '',
-    flowList:[]
+    flowList: [],
   };
 
 
   onCraft = [
     { key: '镶石工艺', title: '镶石工艺', value: '' },
+    { key: '石头数量', title: '石头数量', value: '' },
     { key: '效率', title: '效率', value: '' },
   ];
 
@@ -208,7 +212,7 @@ class Index extends Component {
     // ]
 
     return (
-      <div style={{width:400}}>
+      <div style={{ width: 400 }}>
         <Dragger {...uploadConfig} defaultFileList={fileList}>
           <p className="ant-upload-drag-icon">
             <Icon type="inbox" />
@@ -247,8 +251,8 @@ class Index extends Component {
   };
 
   initDrop = (modalType) => {
-    const { getProductBomRevoke} = this;
-    const { dispatch, form, choosenRowData ,choosenRowDataSecond} = this.props;
+    const { getProductBomRevoke } = this;
+    const { dispatch, form, choosenRowData, choosenRowDataSecond } = this.props;
     const { setFieldsValue } = form;
     const { rightActive } = this.state;
     // // 产品编号下拉production-flow
@@ -277,7 +281,7 @@ class Index extends Component {
     //   type: `${defaultModelName}/getlistFilmSettings`,
     //   payload: {},
     // });
-    if(modalType==='sys'){
+    if (modalType === 'sys') {
       getProductBomRevoke({});
     }
     let arr = [];
@@ -322,6 +326,11 @@ class Index extends Component {
           name: 'listGemSetProcessDropDown',
         },
         {
+          name: 'listBasicSpecificationSettingsDropDown',
+          key1:'specificationCode',
+          value1:'id',
+        },
+        {
           name: 'listDeptDropDown',
         },
         {
@@ -330,7 +339,7 @@ class Index extends Component {
 
       ];
 
-      if(choosenRowDataSecond&&choosenRowDataSecond.materialType&&modalType ==='edit'){
+      if (choosenRowDataSecond && choosenRowDataSecond.materialType && modalType === 'edit') {
         // 原料小料
         dispatch({
           type: `${defaultModelName}/getDropdownList`,
@@ -361,18 +370,18 @@ class Index extends Component {
   // table 搜索
   onSearch = (params, table) => {
     const obj = {
-      platingColorName:'platingColor',
-      productTypeName:'productType',
-      gemColorName:'gemColor',
-      productColorName:'productColor',
+      platingColorName: 'platingColor',
+      productTypeName: 'productType',
+      gemColorName: 'gemColor',
+      productColorName: 'productColor',
 
-      materialTypeName:'materialType',
-      acquisitionDepartmentName:'acquisitionDepartment',
-    }
-    const keys = Object.keys(obj)
-    if('orderByAsc' in params){
-      if(keys.includes(params.orderByAsc)){
-        params.orderByAsc = obj[params.orderByAsc]
+      materialTypeName: 'materialType',
+      acquisitionDepartmentName: 'acquisitionDepartment',
+    };
+    const keys = Object.keys(obj);
+    if ('orderByAsc' in params) {
+      if (keys.includes(params.orderByAsc)) {
+        params.orderByAsc = obj[params.orderByAsc];
       }
     }
     if (table === 1) {
@@ -485,15 +494,15 @@ class Index extends Component {
       setFieldsValue({ workProcessCode });
     }
     if (type === 'processId') {
-      console.log(value,flowlistDropDown)
-      debugger
-      const flowList = value.map(item=>{
+      console.log(value, flowlistDropDown);
+      debugger;
+      const flowList = value.map(item => {
         const processCode = flowlistDropDown.filter(subitem => (subitem.id === item))[0].flowCode;
-        return ({processId:item,processCode})
-      })
+        return ({ processId: item, processCode });
+      });
       this.setState({
-        flowList
-      })
+        flowList,
+      });
       // const processCode = flowlistDropDown.filter(item => (item.id === value))[0].flowCode;
       // this.setState({ processCode });
     }
@@ -506,7 +515,7 @@ class Index extends Component {
   };
 
   getmaterialNoList = (args = {}) => {
-    const { materialNoPagination, form, dispatch } = this.props;
+    const { materialNoPagination, form, dispatch,materialNoSearchParams } = this.props;
     const { getFieldValue } = form;
     const value = getFieldValue('materialType');
     const sId = getFieldValue('materialSub');
@@ -514,7 +523,7 @@ class Index extends Component {
     if ('current' in args) {
       dispatch({
         type: `${defaultModelName}/changeStateOut`,
-        payload: { name: 'materialNoPagination', data: { ...materialNoPagination, current: args.current } },
+        payload: { name: 'materialNoPagination', data: { ...materialNoPagination,...materialNoSearchParams, current: args.current } },
       });
     }
 
@@ -545,23 +554,23 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-    key,
-    value,
-    noNeed,
-    type,
-    list,
-    clickFn,
-    text,
-    arr,
-    data,
-    form,
-    number,
-    step,
-    min,
-    max,
-    disabled,
-    multiple
-  }) => {
+                     key,
+                     value,
+                     noNeed,
+                     type,
+                     list,
+                     clickFn,
+                     text,
+                     arr,
+                     data,
+                     form,
+                     number,
+                     step,
+                     min,
+                     max,
+                     disabled,
+                     multiple,
+                   }) => {
     switch (type) {
       case 2:
         return (
@@ -578,7 +587,7 @@ class Index extends Component {
             filterOption={(input, option) =>
               option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            mode={multiple&&"multiple"}
+            mode={multiple && 'multiple'}
           >
             {data[list] &&
             data[list].length > 0 &&
@@ -601,7 +610,7 @@ class Index extends Component {
                 this.showMaterialModalFunc(1);
               }}
             >
-              选择原料编号
+              选择
             </span>
           </p>
         );
@@ -633,7 +642,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" style={{width:800}} />;
+        return <TextArea rows={2} placeholder="请输入" style={{ width: 800 }} />;
       case 9:
         return (
           <RangePicker
@@ -695,6 +704,9 @@ class Index extends Component {
         break;
       case 'edit':
         this.handleAdd(close, true);
+        break;
+      case 'sys':
+        this.handleSysAdd(close);
         break;
       default:
         break;
@@ -812,11 +824,46 @@ class Index extends Component {
     });
   };
 
+  handleSysAdd = (close) => {
+    this.setState({ addloading: true });
+    const {
+      rightActive,
+    } = this.state;
+    const { choosenRowData, productBomRevokeSelectedKeys, sysProductSelectedBom } = this.props;
+    const params = {
+      sourcePId: choosenRowData.id,
+      bomIds: sysProductSelectedBom,
+      pIds: productBomRevokeSelectedKeys,
+    };
+    serviceObj.bomSynchronize(params).then(res => {
+      if (!res || !res.head) {
+        return;
+      }
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+        rightActive === FIRST_TAG && this.getbomlist();
+        rightActive === SECOND_TAG && this.getMaterialList();
+        if (close) this.btnFn('');
+
+      }
+
+    });
+
+    this.setState({ addloading: false });
+
+
+  };
+
+
   // 新增||编辑 按钮事件回调
   handleAdd = (close, isEdit) => {
     const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch } = this.props;
-    const { rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
-      flowList
+    const {
+      rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
+      flowList,
     } = this.state;
     const { getFieldValue } = form;
     const materialType = getFieldValue('materialType');
@@ -840,7 +887,7 @@ class Index extends Component {
         params.id = selectedBom.id;
       }
     } else if (rightActive === SECOND_TAG) {
-      if (isEdit){
+      if (isEdit) {
         params.id = choosenRowDataSecond.id;
       }
       if (materialType === 'H016002') {
@@ -849,14 +896,17 @@ class Index extends Component {
         craftForm.forEach(item => {
           let mosaic = '';
           let efficiency = '';
+          let stoneCount = ''
           item.forEach(({ value }, index) => {
             if (index === 0) {
               mosaic = value;
-            } else {
+            } else if(index === 1){
+              stoneCount = value
+            }else{
               efficiency = value;
             }
           });
-          Technology.push({ mosaic, efficiency });
+          Technology.push({ mosaic, stoneCount,efficiency });
         });
         params = { ...params, pId: choosenRowData.id, Technology };
         if (isEdit) {
@@ -883,7 +933,7 @@ class Index extends Component {
         }
       } else {
         params.bomId = selectedBom.id;
-        params.flowList = flowList
+        params.flowList = flowList;
         inputarr = 'proccess';
       }
     }
@@ -893,8 +943,8 @@ class Index extends Component {
     const dataArr = modalInput[inputarr];
     const fieldslist = dataArr.map(e => e.value);
 
-    if(rightActive=== SECOND_TAG){
-      fieldslist.push('bomId')
+    if (rightActive === SECOND_TAG) {
+      fieldslist.push('bomId');
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
@@ -957,8 +1007,11 @@ class Index extends Component {
     if (!isAdd && this.state.craftForm.length === 1) return;
     this.setState(preState => {
       if (isAdd) {
-        return preState.craftForm.push([{ key: '镶石工艺', title: '镶石工艺', value: '' },
-          { key: '效率', title: '效率', value: '' }]);
+        return preState.craftForm.push([
+          { key: '镶石工艺', title: '镶石工艺', value: '' },
+          { key: '石头数量', title: '石头数量', value: '' },
+          { key: '效率', title: '效率', value: '' }
+        ]);
       }
       return preState.craftForm.splice(index, 1);
     });
@@ -970,21 +1023,23 @@ class Index extends Component {
       preState.craftForm[index][subIndex].value = v;
       console.log(preState);
       return preState;
+    },()=>{
+      console.log(this.state.craftForm,'============');
+      
     });
   };
 
 // start 复制产品 bom
   getProductBomRevoke = (args) => {
     const { productBomRevokePagination, form, dispatch } = this.props;
-
-
     dispatch({
       type: `${defaultModelName}/productBomRevokeList`,
       payload: {
         name: 'productBomRevokeList',
         params: {
           // size: 10, current: 1, ...productBomRevokePagination,
-          ...args },
+          ...args,
+        },
       },
     });
   };
@@ -1006,12 +1061,12 @@ class Index extends Component {
     });
   };
 
-  handleProductBomSelectChange= v=>{
+  handleProductBomSelectChange = v => {
     this.props.dispatch({
       type: `${defaultModelName}/changeStateOut`,
       payload: { data: v, name: 'sysProductSelectedBom' },
     });
-  }
+  };
 
   getImages = pictures => {
     const images = pictures && pictures.flatMap(e => e.picPath || e);
@@ -1032,10 +1087,12 @@ class Index extends Component {
 
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
-    const {onProductBomRevokeSelectChange,changeProductBomRevokeChoosenRow,handleProductBomSelectChange,
-      returnElement
-    }=this;
-    const { model,
+    const {
+      onProductBomRevokeSelectChange, changeProductBomRevokeChoosenRow, handleProductBomSelectChange,
+      returnElement,
+    } = this;
+    const {
+      model,
       choosenRowData,
       choosenRowDataSecond,
       form,
@@ -1045,7 +1102,7 @@ class Index extends Component {
       productBomRevokeSelectedKeys,
       productBomRevokeListLoading,
       productBomRevokeChoosenRowData,
-      bomlist
+      bomlist,
     } = this.props;
     const { modalType, rightActive, craftForm, selectedBom, selectedProccess } = this.state;
 
@@ -1091,56 +1148,56 @@ class Index extends Component {
 
     return (
       <Form size="small" key="1">
-        {rightActive === SECOND_TAG&&
-          <React.Fragment>
-            <div
-              className="addModal"
-              style={{ width: '100%' }}
-            >
-              <FormItem label='bom名称'>
-                {getFieldDecorator('bomId', {
-                    rules: [
-                      {
-                        required: true,
-                        message: `请选择bom名称`,
-                      },
-                    ],
-                    initialValue: choosenRowDataSecond.bomId||undefined,
-                  })(
-                    <Select
-                      allowClear
-                      style={{ width: 180 }}
-                      placeholder="请选择"
-                      onChange={v => {
-                      this.handleSelectChange && this.handleSelectChange(v, value);
-                    }}
-                      showSearch
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    >
-                      {bomlist &&
-                      bomlist.length > 0 &&
-                      bomlist.map(({ value, key }) => (
-                        <Option value={value} key={value}>
-                          {key}
-                        </Option>
-                    ))}
-                    </Select>
-                )}
-              </FormItem>
-            </div>
-            
-          </React.Fragment>
+        {rightActive === SECOND_TAG &&
+        <React.Fragment>
+          <div
+            className="addModal"
+            style={{ width: '100%', height: '150px' }}
+          >
+            <FormItem label='bom名称'>
+              {getFieldDecorator('bomId', {
+                rules: [
+                  {
+                    required: true,
+                    message: `请选择bom名称`,
+                  },
+                ],
+                initialValue: choosenRowDataSecond.bomId || undefined,
+              })(
+                <Select
+                  allowClear
+                  style={{ width: 180 }}
+                  placeholder="请选择"
+                  onChange={v => {
+                    this.handleSelectChange && this.handleSelectChange(v, value);
+                  }}
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {bomlist &&
+                  bomlist.length > 0 &&
+                  bomlist.map(({ value, key }) => (
+                    <Option value={value} key={value}>
+                      {key}
+                    </Option>
+                  ))}
+                </Select>,
+              )}
+            </FormItem>
+          </div>
+
+        </React.Fragment>
         }
-        {rightActive === SECOND_TAG||(rightActive===THIRD_TAG&&!this.isEditworkFlow)?
+        {rightActive === SECOND_TAG || (rightActive === THIRD_TAG && !this.isEditworkFlow) ?
           <div className={styles.carousel_content}>
-            <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
+            <Carousel {...this.carouselsettings} key="as123">
               {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
             </Carousel>
           </div>
-        :null}
+          : null}
 
         {addArr &&
         addArr.map(
@@ -1161,11 +1218,17 @@ class Index extends Component {
              mType,
              row,
              disabled,
-             multiple
+             multiple,
            }) => {
             if (mType === 1 && materialType !== 'H016002') {
               return;
             }
+
+            if (['H016003', 'H016003', 'H016003'].indexOf(materialType) > -1 && (['modelNo', 'modulusRatio'].indexOf(value) > -1)) {
+              return;
+            }
+
+
             // 判断编辑默认值
             let initValue2 = '';
             if (isEdit) {
@@ -1193,7 +1256,9 @@ class Index extends Component {
               <div
                 className="addModal"
                 key={key}
-                style={row === 1 ? { width: '100%' } : row === 2 ? { width: '45%' } : value==='modelNo'?{ marginRight: 100 } : {}}
+                style={row === 1 ? { width: '100%' } : row === 2 ? { width: '45%' } :
+                  // value === 'modelNo' ? { marginRight: 100 } :
+                    {}}
               >
                 <FormItem label={key}>
                   {
@@ -1236,7 +1301,7 @@ class Index extends Component {
                             min,
                             max,
                             disabled,
-                            multiple
+                            multiple,
                           }),
                         )
                   }
@@ -1262,12 +1327,12 @@ class Index extends Component {
           <div style={{ width: '100%', display: 'flex' }}>
             {item.map(({ key, value }, subIndex) => {
               return (
-                <div className="addModal" key={key}>
+                <div className="addModal" key={key} style={{minWidth:240}}>
                   <CraftRow name={key}>
                     {subIndex === 0 ? (
                       <Select
                         allowClear
-                        style={{ width: 180 }}
+                        style={{ width: 130 }}
                         placeholder="请选择"
                         value={value || undefined}
                         showSearch
@@ -1287,12 +1352,25 @@ class Index extends Component {
                           </Option>
                         ))}
                       </Select>
-                    ) : (
+                    ) : 
+                    subIndex === 1?(
+                      <InputNumber
+                        style={{ width: 130 }}
+                        placeholder="请输入"
+                        // step={step}
+                        onChange={v => {
+                          this.craftChange(v, index, subIndex);
+                          // this.handleInputChange(v, value);
+                        }}
+                      />
+                    ):
+                    (
                       <Input
                         placeholder="请输入"
                         onChange={e => {
                           this.craftChange(e.target.value, index, subIndex);
                         }}
+                        style={{ width: 130 }}
                         value={value}
                       />
                     )}
@@ -1300,22 +1378,24 @@ class Index extends Component {
                 </div>
               );
             })}
-            <ButtonGroup style={{ paddingTop: 5 }}>
-              <Button
-                onClick={() => {
-                  this.addCraftRow(index, 'add');
-                }}
-              >
-                +
-              </Button>
-              <Button
-                onClick={() => {
-                  this.addCraftRow(index, 'jian');
-                }}
-              >
-                -
-              </Button>
-            </ButtonGroup>
+            {this.state.modalType !== 'edit'&&
+              <ButtonGroup style={{ paddingTop: 5 }}>
+                <Button
+                  onClick={() => {
+                    this.addCraftRow(index, 'add');
+                  }}
+                >
+                  +
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.addCraftRow(index, 'jian');
+                  }}
+                >
+                  -
+                </Button>
+              </ButtonGroup>
+            }
           </div>
         ))}
       </div>
@@ -1324,20 +1404,22 @@ class Index extends Component {
 
   // 列表对应操作button回调
   btnFn = async modalType => {
+    const {rightActive} = this.state
+    const {choosenRowDataSecond} = this.props
     if (this.isEditworkFlow) {
       this.isEditworkFlow = false;
     }
-    const {  dispatch } = this.props;
+    const { dispatch } = this.props;
 
     switch (modalType) {
       case '':
         dispatch({
           type: `${defaultModelName}/changeStateOut`,
-          payload: { name: 'productBomRevokeChoosenRowData', data:{} },
+          payload: { name: 'productBomRevokeChoosenRowData', data: {} },
         });
         dispatch({
           type: `${defaultModelName}/changeStateOut`,
-          payload: { name: 'productBomRevokeSelectedKeys', data: []},
+          payload: { name: 'productBomRevokeSelectedKeys', data: [] },
         });
         dispatch({
           type: `${defaultModelName}/changeStateOut`,
@@ -1352,6 +1434,23 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
+        if(rightActive === SECOND_TAG&&modalType==='edit'){
+          if(choosenRowDataSecond&&choosenRowDataSecond.technology){
+            const craftForm = []
+            choosenRowDataSecond.technology.forEach(({mosaic,stoneCount,efficiency})=>{
+              craftForm.push(
+                [
+                  { key: '镶石工艺', title: '镶石工艺', value: mosaic },
+                  { key: '石头数量', title: '石头数量', value: stoneCount },
+                  { key: '效率', title: '效率', value: efficiency },
+                ]
+              )
+            })
+            this.setState({
+              craftForm
+            })
+          }
+        }
         this.initDrop(modalType);
         this.setState({ modalType });
         break;
@@ -1634,16 +1733,16 @@ class Index extends Component {
     });
   };
 
-   // 控制说明弹窗 type = 1出现
-   showExplaintionModalFunc = (type = 1) => {
-     if(type===1){
-      const {choosenRowData:{productExplain}} = this.props
-      if(productExplain){
+  // 控制说明弹窗 type = 1出现
+  showExplaintionModalFunc = (type = 1) => {
+    if (type === 1) {
+      const { choosenRowData: { productExplain } } = this.props;
+      if (productExplain) {
         this.setState({
-          productExplain
-        })
+          productExplain,
+        });
       }
-     }
+    }
     this.setState({
       showExplaintionModal: type === 1,
     });
@@ -1651,22 +1750,23 @@ class Index extends Component {
 
   // 确认原料弹窗选择
   handleMaterialNoOk = () => {
-    const { form, materialNoChoosenRowData,dispatch } = this.props;
+    const { form, materialNoChoosenRowData, dispatch } = this.props;
     const { setFieldsValue } = form;
     console.log(materialNoChoosenRowData);
 
-    const { materialNo, specification, zhName, enName, weightUnit, weightUnitName, measureUnit, inventoryWeight, valuationClass,
+    const {
+      materialNo, specification, zhName, enName, weightUnit, weightUnitName, measureUnit, inventoryWeight, valuationClass,
       valuationClassName,
-      measureUnitName, 
+      measureUnitName,
     } = materialNoChoosenRowData;
-    const weightUnitList = [{key:weightUnitName,value:weightUnit}]
-    const countist = measureUnit?[{key:measureUnitName,value:measureUnit}]:[]
-    const valuationClasslist = [{key:valuationClassName,value:valuationClass}]
+    const weightUnitList = [{ key: weightUnitName, value: weightUnit }];
+    const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
+    const valuationClasslist = [{ key: valuationClassName, value: valuationClass }];
 
     dispatch({
       type: `${defaultModelName}/batchUpdatedispatch`,
-      payload: {weightUnitList,countist,valuationClasslist },
-      callback:()=>{
+      payload: { weightUnitList, countist, valuationClasslist },
+      callback: () => {
         setFieldsValue({
           materialNo,
           specification,
@@ -1679,8 +1779,8 @@ class Index extends Component {
           valuationClass,
         });
         this.showMaterialModalFunc(2);
-      }
-    })
+      },
+    });
   };
 
   handleMaterialNoCancel = () => {
@@ -1692,20 +1792,20 @@ class Index extends Component {
   };
 
   handleExplaintionModalOk = () => {
-    const {choosenRowData} = this.props
-    const {productExplain} = this.state
-    serviceObj.updateProductExplain({pId:choosenRowData.id,productExplain}).then(res=>{
+    const { choosenRowData } = this.props;
+    const { productExplain } = this.state;
+    serviceObj.updateProductExplain({ pId: choosenRowData.id, productExplain }).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
           message: rtnMsg,
         });
         this.showExplaintionModalFunc(2);
-        this.getList()
+        this.getList();
       }
-    })
-  }
-  
+    });
+  };
+
 
   // 选中某行表头
   changeMaterialChoosenRow = rowData => {
@@ -1725,23 +1825,34 @@ class Index extends Component {
   };
 
   onchangeExplaination = (e) => {
-    console.log(e.target.value)
+    console.log(e.target.value);
     this.setState({
-      productExplain:e.target.value
-    })
-  }
+      productExplain: e.target.value,
+    });
+  };
 
-  getAddExplaintionModal = ()=>{
-    return(
+  getAddExplaintionModal = () => {
+    return (
       <div
         className="addModal"
         style={{ width: '100%' }}
       >
         <FormItem label='产品说明'>
-          <TextArea placeholder="请输入说明" value={this.state.productExplain} style={{width:800}} onChange={this.onchangeExplaination}/>
+          <TextArea placeholder="请输入说明" value={this.state.productExplain} style={{ width: 800 }}
+                    onChange={this.onchangeExplaination}/>
         </FormItem>
       </div>
-    )
+    );
+  };
+
+
+  changeMaterialSearch = args => {
+    // search 看看搜索完要不要做点处理
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: args, name: 'materialNoSearchParams' },
+    });
+    this.getmaterialNoList({ ...args });
   }
 
 
@@ -1778,6 +1889,7 @@ class Index extends Component {
       getAddExplaintionModal,
       handleExplaintionModalCancel,
       handleExplaintionModalOk,
+      changeMaterialSearch
     } = this;
     const {
       modalType,
@@ -1788,7 +1900,7 @@ class Index extends Component {
       craftShow,
       selectedProccess,
       showMaterialNoModal,
-      showExplaintionModal
+      showExplaintionModal,
     } = state;
     const {
       choosenRowData,
@@ -1802,7 +1914,7 @@ class Index extends Component {
       materialNoChoosenRowData,
       materialNoListLoading,
       materialSelectedKeys,
-      listChildDieSetDropDown,
+      listChildDieSetDropDown
     } = props;
     const { getFieldDecorator, getFieldValue } = form;
     const modalFooter =
@@ -2014,10 +2126,10 @@ class Index extends Component {
                               icon={'plus'}
                               size="small"
                               onClick={() => {
-                                this.showExplaintionModalFunc(1)
+                                this.showExplaintionModalFunc(1);
                               }}
                             >
-                              {choosenRowData.productExplain?'编辑':'新增'}说明
+                              {choosenRowData.productExplain ? '编辑' : '新增'}说明
                             </Button>
                           }
                           {FIRST_TAG === rightActive ? <Button
@@ -2085,14 +2197,12 @@ class Index extends Component {
             onSelectChange={onMaterialSelectChange}
             listLoading={materialNoListLoading}
             onSearch={this.getMaterialList}
-            changeProductSearch={args => {
-              // search 看看搜索完要不要做点处理
-              this.getmaterialNoList({ ...args });
-            }}
+            changeMaterialSearch={changeMaterialSearch}
             handleTableChange={args => {
               // search 看看搜索完要不要做点处理
               this.getmaterialNoList({ ...args });
             }}
+            
           />
         </Modal>
 
