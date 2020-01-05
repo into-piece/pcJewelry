@@ -819,14 +819,14 @@ class Index extends Component {
   handleSysAdd = (close) => {
     this.setState({ addloading: true });
     const {
-      rightActive
+      rightActive,
     } = this.state;
-    const {choosenRowData,productBomRevokeSelectedKeys,sysProductSelectedBom} =this.props;
+    const { choosenRowData, productBomRevokeSelectedKeys, sysProductSelectedBom } = this.props;
     const params = {
-      sourcePId:choosenRowData.id,
-      bomIds:sysProductSelectedBom,
-      pIds:productBomRevokeSelectedKeys
-    }
+      sourcePId: choosenRowData.id,
+      bomIds: sysProductSelectedBom,
+      pIds: productBomRevokeSelectedKeys,
+    };
     serviceObj.bomSynchronize(params).then(res => {
       if (!res || !res.head) {
         return;
@@ -842,7 +842,7 @@ class Index extends Component {
 
       }
 
-    })
+    });
 
     this.setState({ addloading: false });
 
@@ -1137,7 +1137,7 @@ class Index extends Component {
         <React.Fragment>
           <div
             className="addModal"
-            style={{ width: '100%' }}
+            style={{ width: '100%', height: '150px' }}
           >
             <FormItem label='bom名称'>
               {getFieldDecorator('bomId', {
@@ -1178,7 +1178,7 @@ class Index extends Component {
         }
         {rightActive === SECOND_TAG || (rightActive === THIRD_TAG && !this.isEditworkFlow) ?
           <div className={styles.carousel_content}>
-            <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
+            <Carousel {...this.carouselsettings} key="as123">
               {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
             </Carousel>
           </div>
@@ -1208,6 +1208,12 @@ class Index extends Component {
             if (mType === 1 && materialType !== 'H016002') {
               return;
             }
+
+            if (['H016003', 'H016003', 'H016003'].indexOf(materialType) > -1 && (['modelNo', 'modulusRatio'].indexOf(value) > -1)) {
+              return;
+            }
+
+
             // 判断编辑默认值
             let initValue2 = '';
             if (isEdit) {
@@ -1235,7 +1241,9 @@ class Index extends Component {
               <div
                 className="addModal"
                 key={key}
-                style={row === 1 ? { width: '100%' } : row === 2 ? { width: '45%' } : value === 'modelNo' ? { marginRight: 100 } : {}}
+                style={row === 1 ? { width: '100%' } : row === 2 ? { width: '45%' } :
+                  // value === 'modelNo' ? { marginRight: 100 } :
+                    {}}
               >
                 <FormItem label={key}>
                   {
