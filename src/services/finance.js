@@ -34,6 +34,11 @@ const processSalaryUrlsSet = processSalaryUrls.map(({ name, arr, path }) =>
 const resultArr = [
 
   ...processSalaryUrlsSet.flat(),
+  {
+    key: 'listProductionFlowDropDown',
+    path: '/production-flow/listDropDown',
+    prefix1: `${env}/business/develop/production`,
+  }, // 生产流程下拉
 
 ];
 

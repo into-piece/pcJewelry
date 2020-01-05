@@ -31,7 +31,7 @@ import modalInput from './config/modalInput';
 import showItem from './config/showItem';
 import styles from './index.less';
 
-import serviceObj from '@/services/dev';
+import serviceObj from '@/services/finance';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -39,7 +39,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 // 右手边按钮集合
 const btnGroup = [
-  // { name: '新增', tag: 'plus' },
+  { name: '新增', tag: 'plus' },
   { name: '审批', tag: 'lock' },
   { name: '编辑', tag: 'edit' },
   { name: '删除', tag: 'delete', type: 'danger' },
@@ -73,11 +73,7 @@ class Index extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // 产品类别下拉
-    dispatch({
-      type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016003' }, listName: 'H016003' },
-    });
+
 
     // 这个是新增生产流程 所对应的下拉
     dispatch({
@@ -113,6 +109,10 @@ class Index extends Component {
 
 
   };
+
+  handleSelectChange(v,name){
+    console.log(v,name)
+  }
 
   // type 2 下啦选择
   // type 3 点击事件
@@ -257,7 +257,6 @@ class Index extends Component {
       params = { ...params, id: choosenRowData.id };
     }
     this.setState({ addloading: true });
-
     const dataArr = modalInput[rightActive];
     const fieldslist = dataArr.map(e=>e.value)
     form.validateFields(fieldslist,(err, values) => {
@@ -269,9 +268,11 @@ class Index extends Component {
 
 
         serviceObj[`add${rightActive}`](params).then(res => {
+
           if (!res.head) {
             return;
           }
+
           const { rtnCode, rtnMsg } = res.head;
           if (rtnCode === '000000') {
             notification.success({

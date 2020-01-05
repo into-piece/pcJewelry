@@ -9,6 +9,7 @@ export const processSalary = [
   { 'key': '员工至部门系数', 'value': 'staffCoefficient' },
   { 'key': '部门至工厂系数', 'value': 'departmentCoefficient' },
   { 'key': '工厂至业务系数', 'value': 'factoryCoefficient' },
+  { 'key': '备注', 'value': 'remarks' },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
 ];
 

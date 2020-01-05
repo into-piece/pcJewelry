@@ -11,7 +11,6 @@ const initData = { records: [] };
 
 const {
   listProductionFlowDropDown ,
-  getTypeByWordbookCode
 
 } = servicesConfig;
 const defaultModelName = 'processSalary';
