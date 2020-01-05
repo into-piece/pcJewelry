@@ -515,7 +515,7 @@ class Index extends Component {
   };
 
   getmaterialNoList = (args = {}) => {
-    const { materialNoPagination, form, dispatch } = this.props;
+    const { materialNoPagination, form, dispatch,materialNoSearchParams } = this.props;
     const { getFieldValue } = form;
     const value = getFieldValue('materialType');
     const sId = getFieldValue('materialSub');
@@ -523,7 +523,7 @@ class Index extends Component {
     if ('current' in args) {
       dispatch({
         type: `${defaultModelName}/changeStateOut`,
-        payload: { name: 'materialNoPagination', data: { ...materialNoPagination, current: args.current } },
+        payload: { name: 'materialNoPagination', data: { ...materialNoPagination,...materialNoSearchParams, current: args.current } },
       });
     }
 
@@ -1599,10 +1599,10 @@ class Index extends Component {
   getMaterialList = params => {
     console.log(params, '==========');
 
-    const { dispatch, paginationSecond,...searchParams } = this.props;
+    const { dispatch, paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
-      payload: { params: { ...paginationSecond, ...params,...searchParams } },
+      payload: { params: { ...paginationSecond, ...params } },
     });
   };
 
@@ -1846,6 +1846,16 @@ class Index extends Component {
   };
 
 
+  changeMaterialSearch = args => {
+    // search 看看搜索完要不要做点处理
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: args, name: 'materialNoSearchParams' },
+    });
+    this.getmaterialNoList({ ...args });
+  }
+
+
   render() {
     const {
       state,
@@ -1879,6 +1889,7 @@ class Index extends Component {
       getAddExplaintionModal,
       handleExplaintionModalCancel,
       handleExplaintionModalOk,
+      changeMaterialSearch
     } = this;
     const {
       modalType,
@@ -1903,7 +1914,7 @@ class Index extends Component {
       materialNoChoosenRowData,
       materialNoListLoading,
       materialSelectedKeys,
-      listChildDieSetDropDown,
+      listChildDieSetDropDown
     } = props;
     const { getFieldDecorator, getFieldValue } = form;
     const modalFooter =
@@ -2186,14 +2197,12 @@ class Index extends Component {
             onSelectChange={onMaterialSelectChange}
             listLoading={materialNoListLoading}
             onSearch={this.getMaterialList}
-            changeProductSearch={args => {
-              // search 看看搜索完要不要做点处理
-              this.getmaterialNoList({ ...args });
-            }}
+            changeMaterialSearch={changeMaterialSearch}
             handleTableChange={args => {
               // search 看看搜索完要不要做点处理
               this.getmaterialNoList({ ...args });
             }}
+            
           />
         </Modal>
 
