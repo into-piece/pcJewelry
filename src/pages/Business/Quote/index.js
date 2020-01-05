@@ -605,7 +605,7 @@ class Info extends Component {
         const v = form.getFieldValue(value);
         return (
           <Checkbox
-            checked={v===true?1:(v===false?0:Number.parseInt(v))}
+            checked={this.switchBooleanToInt(v)}
             onChange={e => {
               this.handleCheckChange(e, value);
             }}
@@ -663,6 +663,11 @@ class Info extends Component {
     }
     //  type === 7 ?
   };
+
+
+  switchBooleanToInt =(v)=>{
+    return v===true?1:(v===false?0:Number.parseInt(v));
+  }
 
   getImages = pictures => {
     const images = pictures && pictures.flatMap(e => e.picPath || e);
@@ -873,9 +878,9 @@ class Info extends Component {
         params = {
           ...params,
           ...values,
-          emergency: values.emergency ? 1 : 0,
-          customerPreparation: values.customerPreparation ? 1 : 0,
-          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0,
+          emergency: this.switchBooleanToInt(values.emergency),
+          customerPreparation: this.switchBooleanToInt(values.customerPreparation),
+          purchasingMaterialsFromCustomers: this.switchBooleanToInt(values.purchasingMaterialsFromCustomers),
         };
         serviceObj[`add${str}`]({ ...params }).then(res => {
           const { rtnCode, rtnMsg } = res.head;
@@ -920,9 +925,9 @@ class Info extends Component {
         params = {
           ...params,
           ...values,
-          emergency: values.emergency ? 1 : 0,
-          customerPreparation: values.customerPreparation ? 1 : 0,
-          purchasingMaterialsFromCustomers: values.purchasingMaterialsFromCustomers ? 1 : 0,
+          emergency: this.switchBooleanToInt(values.emergency),
+          customerPreparation: this.switchBooleanToInt(values.customerPreparation),
+          purchasingMaterialsFromCustomers: this.switchBooleanToInt(values.purchasingMaterialsFromCustomers),
         };
         serviceObj[`add${str}`](params).then(res => {
           const { rtnCode, rtnMsg } = res.head;
