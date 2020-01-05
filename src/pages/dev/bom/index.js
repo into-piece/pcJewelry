@@ -90,6 +90,7 @@ const radioArr = [
     selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
+    materialNoSearchParams:model.materialNoSearchParams,
     bomlist: model.bomlist,
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
@@ -134,6 +135,7 @@ class Index extends Component {
     craftForm: [
       [
         { key: '镶石工艺', title: '镶石工艺', value: '' },
+        { key: '石头数量', title: '石头数量', value: '' },
         { key: '效率', title: '效率', value: '' },
       ],
     ],
@@ -148,6 +150,7 @@ class Index extends Component {
 
   onCraft = [
     { key: '镶石工艺', title: '镶石工艺', value: '' },
+    { key: '石头数量', title: '石头数量', value: '' },
     { key: '效率', title: '效率', value: '' },
   ];
 
@@ -893,14 +896,17 @@ class Index extends Component {
         craftForm.forEach(item => {
           let mosaic = '';
           let efficiency = '';
+          let stoneCount = ''
           item.forEach(({ value }, index) => {
             if (index === 0) {
               mosaic = value;
-            } else {
+            } else if(index === 1){
+              stoneCount = value
+            }else{
               efficiency = value;
             }
           });
-          Technology.push({ mosaic, efficiency });
+          Technology.push({ mosaic, stoneCount,efficiency });
         });
         params = { ...params, pId: choosenRowData.id, Technology };
         if (isEdit) {
@@ -1001,8 +1007,11 @@ class Index extends Component {
     if (!isAdd && this.state.craftForm.length === 1) return;
     this.setState(preState => {
       if (isAdd) {
-        return preState.craftForm.push([{ key: '镶石工艺', title: '镶石工艺', value: '' },
-          { key: '效率', title: '效率', value: '' }]);
+        return preState.craftForm.push([
+          { key: '镶石工艺', title: '镶石工艺', value: '' },
+          { key: '石头数量', title: '石头数量', value: '' },
+          { key: '效率', title: '效率', value: '' }
+        ]);
       }
       return preState.craftForm.splice(index, 1);
     });
@@ -1014,14 +1023,15 @@ class Index extends Component {
       preState.craftForm[index][subIndex].value = v;
       console.log(preState);
       return preState;
+    },()=>{
+      console.log(this.state.craftForm,'============');
+      
     });
   };
 
 // start 复制产品 bom
   getProductBomRevoke = (args) => {
     const { productBomRevokePagination, form, dispatch } = this.props;
-
-
     dispatch({
       type: `${defaultModelName}/productBomRevokeList`,
       payload: {
@@ -1317,12 +1327,12 @@ class Index extends Component {
           <div style={{ width: '100%', display: 'flex' }}>
             {item.map(({ key, value }, subIndex) => {
               return (
-                <div className="addModal" key={key}>
+                <div className="addModal" key={key} style={{minWidth:240}}>
                   <CraftRow name={key}>
                     {subIndex === 0 ? (
                       <Select
                         allowClear
-                        style={{ width: 180 }}
+                        style={{ width: 130 }}
                         placeholder="请选择"
                         value={value || undefined}
                         showSearch
@@ -1342,12 +1352,25 @@ class Index extends Component {
                           </Option>
                         ))}
                       </Select>
-                    ) : (
+                    ) : 
+                    subIndex === 1?(
+                      <InputNumber
+                        style={{ width: 130 }}
+                        placeholder="请输入"
+                        // step={step}
+                        onChange={v => {
+                          this.craftChange(v, index, subIndex);
+                          // this.handleInputChange(v, value);
+                        }}
+                      />
+                    ):
+                    (
                       <Input
                         placeholder="请输入"
                         onChange={e => {
                           this.craftChange(e.target.value, index, subIndex);
                         }}
+                        style={{ width: 130 }}
                         value={value}
                       />
                     )}
@@ -1355,22 +1378,24 @@ class Index extends Component {
                 </div>
               );
             })}
-            <ButtonGroup style={{ paddingTop: 5 }}>
-              <Button
-                onClick={() => {
-                  this.addCraftRow(index, 'add');
-                }}
-              >
-                +
-              </Button>
-              <Button
-                onClick={() => {
-                  this.addCraftRow(index, 'jian');
-                }}
-              >
-                -
-              </Button>
-            </ButtonGroup>
+            {this.state.modalType !== 'edit'&&
+              <ButtonGroup style={{ paddingTop: 5 }}>
+                <Button
+                  onClick={() => {
+                    this.addCraftRow(index, 'add');
+                  }}
+                >
+                  +
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.addCraftRow(index, 'jian');
+                  }}
+                >
+                  -
+                </Button>
+              </ButtonGroup>
+            }
           </div>
         ))}
       </div>
@@ -1379,6 +1404,8 @@ class Index extends Component {
 
   // 列表对应操作button回调
   btnFn = async modalType => {
+    const {rightActive} = this.state
+    const {choosenRowDataSecond} = this.props
     if (this.isEditworkFlow) {
       this.isEditworkFlow = false;
     }
@@ -1407,6 +1434,23 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
+        if(rightActive === SECOND_TAG&&modalType==='edit'){
+          if(choosenRowDataSecond&&choosenRowDataSecond.technology){
+            const craftForm = []
+            choosenRowDataSecond.technology.forEach(({mosaic,stoneCount,efficiency})=>{
+              craftForm.push(
+                [
+                  { key: '镶石工艺', title: '镶石工艺', value: mosaic },
+                  { key: '石头数量', title: '石头数量', value: stoneCount },
+                  { key: '效率', title: '效率', value: efficiency },
+                ]
+              )
+            })
+            this.setState({
+              craftForm
+            })
+          }
+        }
         this.initDrop(modalType);
         this.setState({ modalType });
         break;
@@ -1555,10 +1599,10 @@ class Index extends Component {
   getMaterialList = params => {
     console.log(params, '==========');
 
-    const { dispatch, paginationSecond } = this.props;
+    const { dispatch, paginationSecond,...searchParams } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
-      payload: { params: { ...paginationSecond, ...params } },
+      payload: { params: { ...paginationSecond, ...params,...searchParams } },
     });
   };
 
