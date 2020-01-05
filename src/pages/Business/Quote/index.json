@@ -63,6 +63,18 @@
       "initValue": "H011002",
       "priceUnit": 1
     },
+
+    {
+      "key": "字印单价",
+      "value": "markingType",
+      "type": 6,
+      "arr": [
+        { "key": "计收", "value": "H011001" },
+        { "key": "不计收", "value": "H011002" }
+      ],
+      "initValue": "H011002",
+      "priceUnit": 1
+    },
     {
       "key": "客户备料",
       "value": "customerPreparation",

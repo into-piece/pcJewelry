@@ -11,9 +11,9 @@ const columns = [
     key: 'productNo',
   },
   {
-    title: <div className={styles.row_normal2}>客户编号</div>,
-    dataIndex: 'customerNo',
-    key: 'customerNo',
+    title: <div className={styles.row_normal2}>客户货号</div>,
+    dataIndex: 'customerProductNo',
+    key: 'customerProductNo',
   },
   {
     title: <div className={styles.row_normal2}>类别</div>,
