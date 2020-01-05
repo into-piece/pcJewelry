@@ -34,7 +34,7 @@ export default {
 
     searchParams: {},
 
-
+    statusList: [{key:"不限",value:undefined},{key:"输入",value:0},{key:"已审批",value:2}],
     listProductionFlowDropDown: [{ key: '', value: '' }],
     H016003: [{ key: '', value: '' }],
 
