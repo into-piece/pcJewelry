@@ -240,7 +240,7 @@ const searchDetailParams = [
 // 新增 产品 遍历配置
 const productSearchParams = [
   { key: '产品编号', value: 'productNo' },
-  { key: '客户编号', value: 'customerNo' },
+  { key: '客户货号', value: 'customerProductNo' },
 ];
 
 @Form.create()
@@ -317,10 +317,11 @@ class Info extends Component {
   };
 
   getProduct = args => {
-    const { dispatch, productPagination } = this.props;
+    const { dispatch, productPagination ,choosenRowData} = this.props;
+    const customerNo = choosenRowData.customerNo
     dispatch({
       type: 'quote/getProductList',
-      payload: { params: { ...productPagination, ...args } },
+      payload: { params: { customerNo,...productPagination, ...args } },
       callback: res => {
         if (res && res.records.length === 1 && args.search) {
           this.changeChoosenRow(res.records[0]);
@@ -386,7 +387,7 @@ class Info extends Component {
             type: 'quote/getEndCustomerListDropDown',
             payload: { key: choosenRowData.customerId },
           });
-          
+
           dispatch({
             type: 'quote/getMarkinglistDropDown',
             payload: {key:choosenRowData.customerId},
@@ -502,7 +503,7 @@ class Info extends Component {
       value: e.target.checked ? 1 : 0,
     });
     if (value === 'isWeighStones') {
-      const isWeighStones = e.target.checked === 1;
+      const isWeighStones = e.target.checked ;
       if (isWeighStones) {
         form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
       }
@@ -601,9 +602,10 @@ class Info extends Component {
       case 4:
         return <span>{value || ''}</span>;
       case 5:
+        const v = form.getFieldValue(value);
         return (
           <Checkbox
-            checked={form.getFieldValue(value)}
+            checked={v===true?1:(v===false?0:Number.parseInt(v))}
             onChange={e => {
               this.handleCheckChange(e, value);
             }}
@@ -1172,7 +1174,7 @@ class Info extends Component {
       customerProductNo,
       productTypeName,
       productType,
-      gemColorName, 
+      gemColorName,
       platingColorName,
       productLineId,
       finishedWeight,
@@ -1312,7 +1314,7 @@ class Info extends Component {
     console.log(choosenRowData, choosenRowData.id);
     console.log(productList, '=======');
     console.log(endCustomerList, '=======');
-    
+
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}

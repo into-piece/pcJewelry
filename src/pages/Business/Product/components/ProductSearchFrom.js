@@ -68,13 +68,14 @@ class ProductSearchFrom extends Component {
               {getFieldDecorator('productType')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
+
+        </Row>
+        <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="颜色" className={business.from_content_col}>
               {getFieldDecorator('gemColor')(<Input laceholder="请输入" />)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="成色" className={business.from_content_col}>
               {getFieldDecorator('productColor', {
@@ -89,13 +90,14 @@ class ProductSearchFrom extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
+
+        </Row>
+        <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="客户编号" className={business.from_content_col}>
               {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="货号" className={business.from_content_col}>
               {getFieldDecorator('customerProductNo', {
@@ -111,19 +113,21 @@ class ProductSearchFrom extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col lg={8} md={8} sm={8} xs={8}>
-            <FormItem label="状态" className={business.from_content_col}>
-              {getFieldDecorator('status', { initialValue: 0 })(
-                <Select style={{ width: 174 }} placeholder="请选择">
-                  <Option value={undefined}>不限</Option>
-                  <Option value={0}>输入</Option>
-                  <Option value={2}>已审批</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
 
+        </Row>
+        <Row gutter={1}>
+        <Col lg={8} md={8} sm={8} xs={8}>
+          <FormItem label="状态" className={business.from_content_col}>
+            {getFieldDecorator('status', { initialValue: 0 })(
+              <Select style={{ width: 174 }} placeholder="请选择">
+                <Option value={undefined}>不限</Option>
+                <Option value={0}>输入</Option>
+                <Option value={2}>已审批</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+        </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col lg={8}>
             <span className={styles.submitButtons}>
