@@ -350,10 +350,11 @@ class Index extends Component {
     }
 
     if (rightActive === THIRD_TAG) {
+      debugger
       arr = [
         {
           name: 'processRelationDropDown',
-          key1: 'flowName',
+          key1: 'processName',
           value1: 'processCode',
         },
       ];
@@ -496,7 +497,7 @@ class Index extends Component {
     }
     if (type === 'processId') {
       console.log(value, flowlistDropDown);
-      debugger;
+      // debugger;
       const flowList = value.map(item => {
         const processCode = flowlistDropDown.filter(subitem => (subitem.id === item))[0].flowCode;
         return ({ processId: item, processCode });
