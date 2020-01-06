@@ -254,7 +254,7 @@ class Index extends Component {
     const { getProductBomRevoke } = this;
     const { dispatch, form, choosenRowData, choosenRowDataSecond } = this.props;
     const { setFieldsValue } = form;
-    const { rightActive } = this.state;
+    const { rightActive,selectedProccess } = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
@@ -350,12 +350,16 @@ class Index extends Component {
     }
 
     if (rightActive === THIRD_TAG) {
-      debugger
+      console.log(selectedProccess,'==========');
+      
       arr = [
         {
           name: 'processRelationDropDown',
           key1: 'processName',
           value1: 'processCode',
+          params:{
+            flowId:selectedProccess.processId
+          }
         },
       ];
     }
@@ -521,8 +525,6 @@ class Index extends Component {
     const { getFieldValue } = form;
     const value = getFieldValue('materialType');
     const sId = getFieldValue('materialSub');
-
-    console.log(materialNoSearchParams)
     if ('current' in args) {
       dispatch({
         type: `${defaultModelName}/changeStateOut`,
@@ -986,7 +988,11 @@ class Index extends Component {
               message: rtnMsg,
             });
             rightActive === FIRST_TAG && this.getbomlist();
-            rightActive === SECOND_TAG && this.getMaterialList();
+            if(rightActive === SECOND_TAG){
+              this.getMaterialList();
+              // 清空镶石工艺
+              this.clearCraftForm()
+            }
 
             if (this.isEditworkFlow) {
               this.getWorkFlowDropdownList();
@@ -1007,6 +1013,20 @@ class Index extends Component {
       this.setState({ addloading: false });
     });
   };
+
+
+  clearCraftForm = () => {
+    const craftForm = [
+      [
+        { key: '镶石工艺', title: '镶石工艺', value: '' },
+        { key: '石头数量', title: '石头数量', value: '' },
+        { key: '效率', title: '效率', value: '' },
+      ],
+    ]
+    this.setState({
+      craftForm
+    })
+  }
 
   addCraftRow = (index, option) => {
     const isAdd = option === 'add';
