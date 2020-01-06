@@ -495,7 +495,7 @@ class Index extends Component {
       });
     }
     if (rightActive === THIRD_TAG && type === 'zhName') {
-      const workProcessCode = processRelationDropDown.filter(item => (item.processCode === value))[0].flowCode;
+      const workProcessCode = processRelationDropDown.filter(item => (item.processCode === value))[0].processCode;
       setFieldsValue({ workProcessCode });
     }
     if (type === 'processId') {
