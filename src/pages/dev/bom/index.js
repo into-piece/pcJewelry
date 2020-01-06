@@ -816,7 +816,9 @@ class Index extends Component {
   handleCopy = () => {
     const { rightActive, selectedBom } = this.state;
     if(!selectedBom.id){
-      message.error('请选择bom下拉')
+      notification.error({
+        message: '请选择BOM'
+      })
       return
     }
 
