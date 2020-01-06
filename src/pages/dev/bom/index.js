@@ -522,10 +522,11 @@ class Index extends Component {
     const value = getFieldValue('materialType');
     const sId = getFieldValue('materialSub');
 
+    console.log(materialNoSearchParams)
     if ('current' in args) {
       dispatch({
         type: `${defaultModelName}/changeStateOut`,
-        payload: { name: 'materialNoPagination', data: { ...materialNoPagination,...materialNoSearchParams, current: args.current } },
+        payload: { name: 'materialNoPagination', data: { ...materialNoPagination, current: args.current } },
       });
     }
 
@@ -534,7 +535,7 @@ class Index extends Component {
       payload: {
         name: 'materialNoList',
         materialType: value,
-        params: { sId, size: 10, current: 1, ...materialNoPagination, ...args },
+        params: { sId, size: 10, current: 1, ...materialNoPagination, ...materialNoSearchParams,...args },
       },
     });
   };
