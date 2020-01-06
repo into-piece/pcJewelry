@@ -59,7 +59,6 @@ const btnGroup = [
   { name: '新增', tag: 'plus', icon: 'plus' },
   { name: '删除', tag: 'delete', type: 'danger', icon: 'delete' },
   { name: '编辑', tag: 'edit', icon: 'edit' },
-  { name: '复制新增', tag: 'copy', icon: 'copy' },
   // { name: '同步数据', tag: 'sys' , icon: 'copy'},
 ];
 
@@ -816,6 +815,12 @@ class Index extends Component {
   // 复制 按钮回调
   handleCopy = () => {
     const { rightActive, selectedBom } = this.state;
+    if(!selectedBom.id){
+      message.error('请选择bom下拉')
+      return
+    }
+
+
     console.log(selectedBom);
     const data = [selectedBom.id];
     serviceObj.bomcopy(data).then(res => {
@@ -2146,32 +2151,46 @@ class Index extends Component {
                             );
                           })}
                           {
-                            rightActive === FIRST_TAG &&
-                            <Button
-                              className={styles.buttomControl}
-                              type={'primary'}
-                              icon={'plus'}
-                              size="small"
-                              onClick={() => {
-                                this.showExplaintionModalFunc(1);
-                              }}
-                            >
-                              {choosenRowData.productExplain ? '编辑' : '新增'}说明
-                            </Button>
+                            rightActive === FIRST_TAG ?
+                            <React.Fragment>
+                              <Button
+                                className={styles.buttomControl}
+                                type="primary"
+                                icon="copy"
+                                size="small"
+                                disabled={returnSisabled('copy')}
+                                onClick={() => {
+                                  btnFn('copy');
+                                }}
+                              >
+                                复制新增
+                              </Button> 
+                              <Button
+                                className={styles.buttomControl}
+                                type={'primary'}
+                                icon={'plus'}
+                                size="small"
+                                onClick={() => {
+                                  this.showExplaintionModalFunc(1);
+                                }}
+                              >
+                                {choosenRowData.productExplain ? '编辑' : '新增'}说明
+                              </Button>
+                              <Button
+                                className={styles.buttomControl}
+                                type="primary"
+                                icon="copy"
+                                size="small"
+                                disabled={returnSisabled('sys')}
+                                onClick={() => {
+                                  btnFn('sys');
+                                }}
+                              >
+                                同步数据
+                              </Button> 
+                            </React.Fragment>
+                            :null
                           }
-                          {FIRST_TAG === rightActive ? <Button
-                            key="sys"
-                            className={styles.buttomControl}
-                            type="primary"
-                            icon="copy"
-                            size="small"
-                            disabled={returnSisabled('sys')}
-                            onClick={() => {
-                              btnFn('sys');
-                            }}
-                          >
-                            同步数据
-                          </Button> : null}
                         </div>
                       </Card>
                     </div>
