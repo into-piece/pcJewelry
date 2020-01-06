@@ -1603,11 +1603,11 @@ class Index extends Component {
   // 获取原料信息列表
   getMaterialList = params => {
     console.log(params, '==========');
-
+    const {selectedBom} = this.state
     const { dispatch, paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
-      payload: { params: { ...paginationSecond, ...params } },
+      payload: { params: { BomId : selectedBom.id,...paginationSecond, ...params } },
     });
   };
 
