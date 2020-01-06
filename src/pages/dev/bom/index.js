@@ -377,6 +377,7 @@ class Index extends Component {
 
       materialTypeName: 'materialType',
       acquisitionDepartmentName: 'acquisitionDepartment',
+      specificationName:'specification'
     };
     const keys = Object.keys(obj);
     if ('orderByAsc' in params) {

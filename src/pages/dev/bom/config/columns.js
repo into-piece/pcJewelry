@@ -62,8 +62,8 @@ let material = [
   },
   {
     title: '规格',
-    dataIndex: 'specification',
-    key: 'specification',
+    dataIndex: 'specificationName',
+    key: 'specificationName',
   },
   {
     title: '单件用量',

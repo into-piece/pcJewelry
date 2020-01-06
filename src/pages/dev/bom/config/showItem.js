@@ -85,7 +85,7 @@ const product = [
 ];
 
 const material = [
-  { key: 'bom名称', value: 'bomId' },
+  { key: 'bom名称', value: 'bName' },
   { key: '原料类别', value: 'materialTypeName' },
   { key: '胶膜编号', value: 'modelNoName' },
   { key: '模比', value: 'modulusRatio' },
