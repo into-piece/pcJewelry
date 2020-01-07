@@ -47,7 +47,7 @@ const product = [
   },
   {
     key: '规格',
-    value: 'specification',
+    value: 'specificationName',
   },
   {
     key: '数量单位',
@@ -85,7 +85,7 @@ const product = [
 ];
 
 const material = [
-  { key: 'bom名称', value: 'bomId' },
+  { key: 'bom名称', value: 'bName' },
   { key: '原料类别', value: 'materialTypeName' },
   { key: '胶膜编号', value: 'modelNoName' },
   { key: '模比', value: 'modulusRatio' },
@@ -103,7 +103,7 @@ const material = [
   },
   { key: '原料编号', value: 'materialNo' },
   { key: '单件用量', value: 'singleDosage' },
-  { key: '规格', value: 'specification' },
+  { key: '规格', value: 'specificationName' },
   { key: '中文名', value: 'zhName' },
   { key: '英文名', value: 'enName' },
   { key: '重量单位', value: 'weightUnitName' },

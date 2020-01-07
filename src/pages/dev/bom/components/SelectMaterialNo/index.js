@@ -94,8 +94,8 @@ const columnsarr = {
     },
     {
       title: <div className={styles.row_normal2}>成色</div>,
-      dataIndex: 'productColorName',
-      key: 'productColorName',
+      dataIndex: 'assayingName',
+      key: 'assayingName',
     },
     {
       title: <div className={styles.row_normal2}>形状</div>,

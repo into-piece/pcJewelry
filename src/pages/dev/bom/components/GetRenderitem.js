@@ -41,6 +41,7 @@ const GetRenderitem = ({ data, type, items }) => {
   };
   const arr = items[type];
   console.log(data,items, type);
+  if(data.pictures ===null){data.pictures =[]}
   const images =
     data.pictures &&
     (data.pictures.length === 0 ? defaultImages : data.pictures.flatMap(e => e.picPath));
