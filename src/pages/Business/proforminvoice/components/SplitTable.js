@@ -7,9 +7,9 @@ import React, { Component } from 'react';
 import {
   Table, Divider, Radio, Button,
 } from 'antd';
+import moment from 'moment';
 import SbTable from '@/components/Table';
 
-import moment from 'moment';
 import styles from './SplitTable.less';
 
 
