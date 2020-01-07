@@ -55,7 +55,6 @@ const columnsarr = [
 
 
 export default (({ handleBomSelectChange, productChoosenData, choosenRowData, pagination, source, list, selectedRowKeys, changeChoosenRow, onSelectChange, handleTableChange }) => {
-  console.log(pagination, 'pagination======');
 
   return (
     <div className={styles.productModal}>
@@ -87,8 +86,8 @@ export default (({ handleBomSelectChange, productChoosenData, choosenRowData, pa
         </Select>
       </div>
       <Table
-        scroll={{ x: "max-content" ,y: "280px" }}
-
+        scroll={{ x: "max-content" ,scrollToFirstRowOnChange:true}}
+        pagination={pagination}
         columns={columnsarr}
         body={list}
         selectedRowKeys={selectedRowKeys}
