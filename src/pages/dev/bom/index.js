@@ -822,8 +822,6 @@ class Index extends Component {
       return
     }
 
-
-    console.log(selectedBom);
     const data = [selectedBom.id];
     serviceObj.bomcopy(data).then(res => {
       const { rtnCode, rtnMsg } = res ? res.head : {};
@@ -2044,7 +2042,7 @@ class Index extends Component {
     const isthird = rightActive === THIRD_TAG;
     const materialType = getFieldValue('materialType');
 
-    console.log(listChildDieSetDropDown, '======listChildDieSetDropDown');
+    console.log(materialNoList, '======materialNoList');
 
     return (
       <div className={styles.page}>

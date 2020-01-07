@@ -79,8 +79,7 @@ class MiddleTable extends Component {
     });
 
     if (type === 1) {
-      // this.searchSecond.handleReset();
-      onSearch && onSearch({ mainMoldCode: rowData.id }, 2);
+      // onSearch && onSearch({ mainMoldCode: rowData.id }, 2);
       this.props.getbomlist({ pid: rowData.id });
     } else {
       if (rightActive === FIRST_TAG) {
