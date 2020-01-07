@@ -57,7 +57,7 @@ export default {
     },
     productBomRevokePagination:{
       current: 1,
-      size: 10,
+      size: 5,
     },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select

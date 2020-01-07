@@ -89,7 +89,7 @@ const radioArr = [
     selectedRowKeysSecond: model.selectedRowKeysSecond,
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
-    materialNoSearchParams:model.materialNoSearchParams,
+    materialNoSearchParams: model.materialNoSearchParams,
     bomlist: model.bomlist,
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
@@ -253,7 +253,7 @@ class Index extends Component {
     const { getProductBomRevoke } = this;
     const { dispatch, form, choosenRowData, choosenRowDataSecond } = this.props;
     const { setFieldsValue } = form;
-    const { rightActive,selectedProccess } = this.state;
+    const { rightActive, selectedProccess } = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
@@ -326,8 +326,8 @@ class Index extends Component {
         },
         {
           name: 'listBasicSpecificationSettingsDropDown',
-          key1:'specificationCode',
-          value1:'id',
+          key1: 'specificationCode',
+          value1: 'id',
         },
         {
           name: 'listDeptDropDown',
@@ -349,16 +349,16 @@ class Index extends Component {
     }
 
     if (rightActive === THIRD_TAG) {
-      console.log(selectedProccess,'==========');
-      
+      console.log(selectedProccess, '==========');
+
       arr = [
         {
           name: 'processRelationDropDown',
           key1: 'processName',
           value1: 'processCode',
-          params:{
-            flowId:selectedProccess.processId
-          }
+          params: {
+            flowId: selectedProccess.processId,
+          },
         },
       ];
     }
@@ -381,7 +381,7 @@ class Index extends Component {
 
       materialTypeName: 'materialType',
       acquisitionDepartmentName: 'acquisitionDepartment',
-      specificationName:'specification'
+      specificationName: 'specification',
     };
     const keys = Object.keys(obj);
     if ('orderByAsc' in params) {
@@ -520,7 +520,7 @@ class Index extends Component {
   };
 
   getmaterialNoList = (args = {}) => {
-    const { materialNoPagination, form, dispatch,materialNoSearchParams } = this.props;
+    const { materialNoPagination, form, dispatch, materialNoSearchParams } = this.props;
     const { getFieldValue } = form;
     const value = getFieldValue('materialType');
     const sId = getFieldValue('materialSub');
@@ -536,7 +536,7 @@ class Index extends Component {
       payload: {
         name: 'materialNoList',
         materialType: value,
-        params: { sId, size: 10, current: 1, ...materialNoPagination, ...materialNoSearchParams,...args },
+        params: { sId, size: 10, current: 1, ...materialNoPagination, ...materialNoSearchParams, ...args },
       },
     });
   };
@@ -558,23 +558,23 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-    key,
-    value,
-    noNeed,
-    type,
-    list,
-    clickFn,
-    text,
-    arr,
-    data,
-    form,
-    number,
-    step,
-    min,
-    max,
-    disabled,
-    multiple,
-  }) => {
+                     key,
+                     value,
+                     noNeed,
+                     type,
+                     list,
+                     clickFn,
+                     text,
+                     arr,
+                     data,
+                     form,
+                     number,
+                     step,
+                     min,
+                     max,
+                     disabled,
+                     multiple,
+                   }) => {
     switch (type) {
       case 2:
         return (
@@ -815,11 +815,11 @@ class Index extends Component {
   // 复制 按钮回调
   handleCopy = () => {
     const { rightActive, selectedBom } = this.state;
-    if(!selectedBom.id){
+    if (!selectedBom.id) {
       notification.error({
-        message: '请选择BOM'
-      })
-      return
+        message: '请选择BOM',
+      });
+      return;
     }
 
 
@@ -872,7 +872,7 @@ class Index extends Component {
 
   // 新增||编辑 按钮事件回调
   handleAdd = (close, isEdit) => {
-    const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch,materialNoChoosenRowData } = this.props;
+    const { form, choosenRowData, choosenRowDataSecond, choosenProccessData, dispatch, materialNoChoosenRowData } = this.props;
     const {
       rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
       flowList,
@@ -903,24 +903,24 @@ class Index extends Component {
       if (isEdit) {
         params.id = choosenRowDataSecond.id;
       }
-      
+
       if (materialType === 'H016002') {
         const Technology = [];
         console.log(craftForm);
         craftForm.forEach(item => {
           let mosaic = '';
           let efficiency = '';
-          let stoneCount = ''
+          let stoneCount = '';
           item.forEach(({ value }, index) => {
             if (index === 0) {
               mosaic = value;
-            } else if(index === 1){
-              stoneCount = value
-            }else{
+            } else if (index === 1) {
+              stoneCount = value;
+            } else {
               efficiency = value;
             }
           });
-          Technology.push({ mosaic, stoneCount,efficiency });
+          Technology.push({ mosaic, stoneCount, efficiency });
         });
         params = { ...params, pId: choosenRowData.id, Technology };
         if (isEdit) {
@@ -959,8 +959,8 @@ class Index extends Component {
 
     if (rightActive === SECOND_TAG) {
       fieldslist.push('bomId');
-      fieldslist.push('materialId')
-      params.materialId = materialNoChoosenRowData.id
+      fieldslist.push('materialId');
+      params.materialId = materialNoChoosenRowData.id;
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
@@ -995,10 +995,10 @@ class Index extends Component {
               message: rtnMsg,
             });
             rightActive === FIRST_TAG && this.getbomlist();
-            if(rightActive === SECOND_TAG){
+            if (rightActive === SECOND_TAG) {
               this.getMaterialList();
               // 清空镶石工艺
-              this.clearCraftForm()
+              this.clearCraftForm();
             }
 
             if (this.isEditworkFlow) {
@@ -1029,11 +1029,11 @@ class Index extends Component {
         { key: '石头数量', title: '石头数量', value: '' },
         { key: '效率', title: '效率', value: '' },
       ],
-    ]
+    ];
     this.setState({
-      craftForm
-    })
-  }
+      craftForm,
+    });
+  };
 
   addCraftRow = (index, option) => {
     const isAdd = option === 'add';
@@ -1044,7 +1044,7 @@ class Index extends Component {
         return preState.craftForm.push([
           { key: '镶石工艺', title: '镶石工艺', value: '' },
           { key: '石头数量', title: '石头数量', value: '' },
-          { key: '效率', title: '效率', value: '' }
+          { key: '效率', title: '效率', value: '' },
         ]);
       }
       return preState.craftForm.splice(index, 1);
@@ -1057,9 +1057,9 @@ class Index extends Component {
       preState.craftForm[index][subIndex].value = v;
       console.log(preState);
       return preState;
-    },()=>{
-      console.log(this.state.craftForm,'============');
-      
+    }, () => {
+      console.log(this.state.craftForm, '============');
+
     });
   };
 
@@ -1077,6 +1077,7 @@ class Index extends Component {
       },
     });
   };
+
 
   // 选中某行表头
   changeProductBomRevokeChoosenRow = rowData => {
@@ -1168,13 +1169,20 @@ class Index extends Component {
         onSelectChange={onProductBomRevokeSelectChange}
         listLoading={productBomRevokeListLoading}
         onSearch={this.getProductBomRevoke}
-
         handleBomSelectChange={handleProductBomSelectChange}
 
 
         handleTableChange={args => {
-          // search 看看搜索完要不要做点处理
-          this.getProductBomRevoke({ ...args });
+          const { dispatch } = this.props;
+          dispatch({
+            type: `${defaultModelName}/changeStateOut`,
+            payload: {
+              name: 'productBomRevokePagination',
+              data: {
+                ...args,
+              },
+            },
+          });
         }}
       />;
     }
@@ -1292,7 +1300,7 @@ class Index extends Component {
                 key={key}
                 style={row === 1 ? { width: '100%' } : row === 2 ? { width: '45%' } :
                   // value === 'modelNo' ? { marginRight: 100 } :
-                    {}}
+                  {}}
               >
                 <FormItem label={key}>
                   {
@@ -1361,74 +1369,74 @@ class Index extends Component {
           <div style={{ width: '100%', display: 'flex' }}>
             {item.map(({ key, value }, subIndex) => {
               return (
-                <div className="addModal" key={key} style={{minWidth:240}}>
+                <div className="addModal" key={key} style={{ minWidth: 240 }}>
                   <CraftRow name={key}>
                     {subIndex === 0 ? (
-                      <Select
-                        allowClear
-                        style={{ width: 130 }}
-                        placeholder="请选择"
-                        value={value || undefined}
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        onChange={v => {
-                          this.craftChange(v, index, subIndex);
-                        }}
-                      >
-                        {listGemSetProcessDropDown &&
-                        listGemSetProcessDropDown.length > 0 &&
-                        listGemSetProcessDropDown.map(({ value, key }) => (
-                          <Option value={value} key={value}>
-                            {key}
-                          </Option>
-                        ))}
-                      </Select>
-                    ) : 
-                    subIndex === 1?(
-                      <InputNumber
-                        style={{ width: 130 }}
-                        placeholder="请输入"
-                        // step={step}
-                        onChange={v => {
-                          this.craftChange(v, index, subIndex);
-                          // this.handleInputChange(v, value);
-                        }}
-                      />
-                    ):
-                    (
-                      <Input
-                        placeholder="请输入"
-                        onChange={e => {
-                          this.craftChange(e.target.value, index, subIndex);
-                        }}
-                        style={{ width: 130 }}
-                        value={value}
-                      />
-                    )}
+                        <Select
+                          allowClear
+                          style={{ width: 130 }}
+                          placeholder="请选择"
+                          value={value || undefined}
+                          showSearch
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          onChange={v => {
+                            this.craftChange(v, index, subIndex);
+                          }}
+                        >
+                          {listGemSetProcessDropDown &&
+                          listGemSetProcessDropDown.length > 0 &&
+                          listGemSetProcessDropDown.map(({ value, key }) => (
+                            <Option value={value} key={value}>
+                              {key}
+                            </Option>
+                          ))}
+                        </Select>
+                      ) :
+                      subIndex === 1 ? (
+                          <InputNumber
+                            style={{ width: 130 }}
+                            placeholder="请输入"
+                            // step={step}
+                            onChange={v => {
+                              this.craftChange(v, index, subIndex);
+                              // this.handleInputChange(v, value);
+                            }}
+                          />
+                        ) :
+                        (
+                          <Input
+                            placeholder="请输入"
+                            onChange={e => {
+                              this.craftChange(e.target.value, index, subIndex);
+                            }}
+                            style={{ width: 130 }}
+                            value={value}
+                          />
+                        )}
                   </CraftRow>
                 </div>
               );
             })}
-            {this.state.modalType !== 'edit'&&
-              <ButtonGroup style={{ paddingTop: 5 }}>
-                <Button
-                  onClick={() => {
-                    this.addCraftRow(index, 'add');
-                  }}
-                >
-                  +
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.addCraftRow(index, 'jian');
-                  }}
-                >
-                  -
-                </Button>
-              </ButtonGroup>
+            {this.state.modalType !== 'edit' &&
+            <ButtonGroup style={{ paddingTop: 5 }}>
+              <Button
+                onClick={() => {
+                  this.addCraftRow(index, 'add');
+                }}
+              >
+                +
+              </Button>
+              <Button
+                onClick={() => {
+                  this.addCraftRow(index, 'jian');
+                }}
+              >
+                -
+              </Button>
+            </ButtonGroup>
             }
           </div>
         ))}
@@ -1438,8 +1446,8 @@ class Index extends Component {
 
   // 列表对应操作button回调
   btnFn = async modalType => {
-    const {rightActive} = this.state
-    const {choosenRowDataSecond} = this.props
+    const { rightActive } = this.state;
+    const { choosenRowDataSecond } = this.props;
     if (this.isEditworkFlow) {
       this.isEditworkFlow = false;
     }
@@ -1463,26 +1471,35 @@ class Index extends Component {
           type: `${defaultModelName}/changeStateOut`,
           payload: { name: 'productBomRevokeList', data: [] },
         });
+        dispatch({
+          type: `${defaultModelName}/changeStateOut`,
+          payload: {
+            name: 'productBomRevokePagination', data: {
+              current: 1,
+              size: 5,
+            },
+          },
+        });
         this.setState({ modalType });
         break;
       case 'plus':
       case 'edit':
       default:
-        if(rightActive === SECOND_TAG&&modalType==='edit'){
-          if(choosenRowDataSecond&&choosenRowDataSecond.technology){
-            const craftForm = []
-            choosenRowDataSecond.technology.forEach(({mosaic,stoneCount,efficiency})=>{
+        if (rightActive === SECOND_TAG && modalType === 'edit') {
+          if (choosenRowDataSecond && choosenRowDataSecond.technology) {
+            const craftForm = [];
+            choosenRowDataSecond.technology.forEach(({ mosaic, stoneCount, efficiency }) => {
               craftForm.push(
                 [
                   { key: '镶石工艺', title: '镶石工艺', value: mosaic },
                   { key: '石头数量', title: '石头数量', value: stoneCount },
                   { key: '效率', title: '效率', value: efficiency },
-                ]
-              )
-            })
+                ],
+              );
+            });
             this.setState({
-              craftForm
-            })
+              craftForm,
+            });
           }
         }
         this.initDrop(modalType);
@@ -1632,11 +1649,11 @@ class Index extends Component {
   // 获取原料信息列表
   getMaterialList = params => {
     console.log(params, '==========');
-    const {selectedBom} = this.state
+    const { selectedBom } = this.state;
     const { dispatch, paginationSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
-      payload: { params: { BomId : selectedBom.id,...paginationSecond, ...params } },
+      payload: { params: { BomId: selectedBom.id, ...paginationSecond, ...params } },
     });
   };
 
@@ -1790,7 +1807,7 @@ class Index extends Component {
       materialNo, specification, zhName, enName, weightUnit, weightUnitName, measureUnit, inventoryWeight, valuationClass,
       valuationClassName,
       measureUnitName,
-      id
+      id,
     } = materialNoChoosenRowData;
     const weightUnitList = [{ key: weightUnitName, value: weightUnit }];
     const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
@@ -1810,7 +1827,7 @@ class Index extends Component {
           measureUnit,
           inventoryWeight,
           valuationClass,
-          materialId:id
+          materialId: id,
         });
         this.showMaterialModalFunc(2);
       },
@@ -1887,7 +1904,7 @@ class Index extends Component {
       payload: { data: args, name: 'materialNoSearchParams' },
     });
     this.getmaterialNoList({ ...args });
-  }
+  };
 
 
   render() {
@@ -1923,7 +1940,7 @@ class Index extends Component {
       getAddExplaintionModal,
       handleExplaintionModalCancel,
       handleExplaintionModalOk,
-      changeMaterialSearch
+      changeMaterialSearch,
     } = this;
     const {
       modalType,
@@ -1948,7 +1965,7 @@ class Index extends Component {
       materialNoChoosenRowData,
       materialNoListLoading,
       materialSelectedKeys,
-      listChildDieSetDropDown
+      listChildDieSetDropDown,
     } = props;
     const { getFieldDecorator, getFieldValue } = form;
     const modalFooter =
@@ -2154,44 +2171,44 @@ class Index extends Component {
                           })}
                           {
                             rightActive === FIRST_TAG ?
-                            <React.Fragment>
-                              <Button
-                                className={styles.buttomControl}
-                                type="primary"
-                                icon="copy"
-                                size="small"
-                                disabled={returnSisabled('copy')}
-                                onClick={() => {
-                                  btnFn('copy');
-                                }}
-                              >
-                                复制新增
-                              </Button> 
-                              <Button
-                                className={styles.buttomControl}
-                                type={'primary'}
-                                icon={'plus'}
-                                size="small"
-                                onClick={() => {
-                                  this.showExplaintionModalFunc(1);
-                                }}
-                              >
-                                {choosenRowData.productExplain ? '编辑' : '新增'}说明
-                              </Button>
-                              <Button
-                                className={styles.buttomControl}
-                                type="primary"
-                                icon="copy"
-                                size="small"
-                                disabled={returnSisabled('sys')}
-                                onClick={() => {
-                                  btnFn('sys');
-                                }}
-                              >
-                                同步数据
-                              </Button> 
-                            </React.Fragment>
-                            :null
+                              <React.Fragment>
+                                <Button
+                                  className={styles.buttomControl}
+                                  type="primary"
+                                  icon="copy"
+                                  size="small"
+                                  disabled={returnSisabled('copy')}
+                                  onClick={() => {
+                                    btnFn('copy');
+                                  }}
+                                >
+                                  复制新增
+                                </Button>
+                                <Button
+                                  className={styles.buttomControl}
+                                  type={'primary'}
+                                  icon={'plus'}
+                                  size="small"
+                                  onClick={() => {
+                                    this.showExplaintionModalFunc(1);
+                                  }}
+                                >
+                                  {choosenRowData.productExplain ? '编辑' : '新增'}说明
+                                </Button>
+                                <Button
+                                  className={styles.buttomControl}
+                                  type="primary"
+                                  icon="copy"
+                                  size="small"
+                                  disabled={returnSisabled('sys')}
+                                  onClick={() => {
+                                    btnFn('sys');
+                                  }}
+                                >
+                                  同步数据
+                                </Button>
+                              </React.Fragment>
+                              : null
                           }
                         </div>
                       </Card>
@@ -2250,7 +2267,7 @@ class Index extends Component {
               // search 看看搜索完要不要做点处理
               this.getmaterialNoList({ ...args });
             }}
-            
+
           />
         </Modal>
 
