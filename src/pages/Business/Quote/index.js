@@ -334,12 +334,22 @@ class Info extends Component {
   openAddModal = () => {
     const { rightMenu, dispatch, form, choosenRowData } = this.props;
     const isHead = rightMenu === 1;
-
     if (isHead) {
       dispatch({
         type: 'quote/getcurrencydropdown',
       });
     }
+
+    // 终客编号下拉
+    dispatch({
+      type: 'quote/getEndCustomerListDropDown',
+      payload: { key: choosenRowData.customerId },
+    });
+    // 字印下拉
+    dispatch({
+      type: 'quote/getMarkinglistDropDown',
+      payload: {key:choosenRowData.customerId},
+    });
 
     getMainMaterialPrice().then(res => {
       const { head, body } = res;
@@ -382,16 +392,16 @@ class Info extends Component {
             });
           }
 
-          // 终客编号下拉
-          dispatch({
-            type: 'quote/getEndCustomerListDropDown',
-            payload: { key: choosenRowData.customerId },
-          });
-
-          dispatch({
-            type: 'quote/getMarkinglistDropDown',
-            payload: {key:choosenRowData.customerId},
-          });
+          // // 终客编号下拉
+          // dispatch({
+          //   type: 'quote/getEndCustomerListDropDown',
+          //   payload: { key: choosenRowData.customerId },
+          // });
+          // // 字印下拉
+          // dispatch({
+          //   type: 'quote/getMarkinglistDropDown',
+          //   payload: {key:choosenRowData.customerId},
+          // });
 
         }
         if (modalType === 'edit') {
@@ -489,9 +499,14 @@ class Info extends Component {
 
     if (type === 'endId') {
       const obj = quote.endCustomerList.find(item => item.value === value);
-      const { endShotName } = obj;
+      const { key } = obj;
+      // debugger
+      let startIndex = key.indexOf('(') + 1;
+      let endIndex = key.indexOf(')');
+      const endShotName = key.substring(startIndex,endIndex);
+      console.log(key)
       form.setFieldsValue({
-        endShotName,
+        endShotName: endShotName,
       });
     }
   };
