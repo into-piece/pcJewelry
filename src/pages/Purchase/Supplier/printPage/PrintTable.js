@@ -9,34 +9,55 @@ class ComponentToPrint extends Component {
   render() {
     return (
       <table border="1" cellSpacing="1" cellPadding="0" className={styles.table}>
-        <tr>
-          <th colSpan="3">标题</th>
+        <tr className={styles.title01}>
+          <th colSpan="9">供应商明细</th>
         </tr>
-        <tr>
-          <th>data 1</th>
-          <th>data 2</th>
-          <th>data 3</th>
+        <tr className={styles.title02}>
+          <th>序号</th>
+          <th>供应商简称</th>
+          <th>联系人</th>
+          <th>电话</th>
+          <th>开户行</th>
+          <th>开户人</th>
+          <th>账号</th>
+          <th>结算方式</th>
+          <th>备注</th>
         </tr>
-        <tr>
+        <tr className={styles.trtd}>
+          <td>data 1</td>
+          <td>data 2</td>
+          <td>data 3</td>
+          <td>data 1</td>
+          <td>data 2</td>
+          <td>data 3</td>
           <td>data 1</td>
           <td>data 2</td>
           <td>data 3</td>
         </tr>
-        <tr>
+        <tr className={styles.trtd}>
+          <td>data 1</td>
+          <td>data 2</td>
+          <td>data 3</td>
+          <td>data 1</td>
+          <td>data 2</td>
+          <td>data 3</td>
           <td>data 1</td>
           <td>data 2</td>
           <td>data 3</td>
         </tr>
-        <tr>
+
+        <tr className={styles.trtd}>
+          <td>data 1</td>
+          <td>data 2</td>
+          <td>data 3</td>
+          <td>data 1</td>
+          <td>data 2</td>
+          <td>data 3</td>
           <td>data 1</td>
           <td>data 2</td>
           <td>data 3</td>
         </tr>
-        <tr>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-        </tr>
+
       </table>
     );
   }
