@@ -2223,7 +2223,7 @@ class Index extends Component {
           <Modal
             maskClosable={false}
             title={<BuildTitle title={returnTitle()}/>}
-            width={this.isEditworkFlow || rightActive === FIRST_TAG ? 600 : 1000}
+            width={this.isEditworkFlow || rightActive === FIRST_TAG ?(modalType==='sys'?1000: 600 ): 1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
