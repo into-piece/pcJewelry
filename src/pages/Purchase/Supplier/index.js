@@ -32,6 +32,7 @@ import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/purchase';
 import jsonData from './index.json';
 import SearchForm from './SearchForm';
+import PrintTable from './printPage/PrintTable';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
@@ -50,20 +51,11 @@ const {
 } = serviceObj;
 const { headList, detailList, blankAccounts } = jsonData;
 
-// 右手边按钮集合
-const btnGroup = [
-  { name: '新增', tag: 'plus' },
-  { name: '编辑', tag: 'edit' },
-  { name: '删除', tag: 'delete', type: 'danger' },
-  { name: '打印', tag: 'copy' },
-  { name: '审批', tag: 'lock' },
-];
-
 const supplierBtnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '编辑', tag: 'edit' },
   { name: '删除', tag: 'delete', type: 'danger' },
-  { name: '打印', tag: 'copy' },
+  { name: '打印', tag: 'print' },
   { name: '审批', tag: 'lock' },
 ];
 
@@ -419,7 +411,7 @@ class Info extends Component {
         const isHead = rightMenu === 1;
         const str = isHead ? 'Supplier' : rightMenu === 2 ? 'Contacts' : 'BlankAccount';
         const id = isHead ? choosenRowData.id : rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
-        let type = rightMenu === 2 ? 'contacts' : 'blankAccount';
+        const type = rightMenu === 2 ? 'contacts' : 'blankAccount';
         ModalConfirm({
           content: '确定交换数据吗？',
           onOk: () => {
@@ -649,6 +641,10 @@ class Info extends Component {
     };
     const suplierCode = '';
 
+    if(modalType==='print'){
+      return <PrintTable />
+    }
+
 
     return (
       <Form size="small">
@@ -848,14 +844,14 @@ class Info extends Component {
   handleChange = (type) => {
     const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,dispatch,choosenRowData,rightMenu,choosenContactsRowData,choosenBlankAccountRowData } = this.props;
     const id = rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
-    
+
       dispatch({
         type:'purchase/change',
         payload:{
-          selectedRowKeys:selectedRowKeys,
-          selectedContactsRowKeys:selectedContactsRowKeys,
-          selectedBlankAccountRowKeys:selectedBlankAccountRowKeys,
-          type:type,
+          selectedRowKeys,
+          selectedContactsRowKeys,
+          selectedBlankAccountRowKeys,
+          type,
         }
       }).then( (response) => {
         // debugger
@@ -1017,7 +1013,7 @@ class Info extends Component {
 
 
     const v = e.target.value;
-    let type = v === 'blankAccount' ? 3 : 2;
+    const type = v === 'blankAccount' ? 3 : 2;
 
     this.props.dispatch({
       type: `purchase/changeRightMenu`,
