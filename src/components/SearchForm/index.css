@@ -1,0 +1,18 @@
+:global .searchform .ant-form-inline .ant-form-item {
+  display: flex;
+}
+:global .searchform .ant-form {
+  overflow: hidden;
+}
+:global .searchform .addModal .ant-row > .ant-col.ant-form-item-label {
+  width: auto;
+}
+:global .searchform .addModal .ant-form-item {
+  margin-bottom: 0;
+}
+.submitButtons {
+  display: flex;
+  float: left;
+  align-items: center;
+}
+/*# sourceMappingURL=index.css.map */
