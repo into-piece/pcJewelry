@@ -69,8 +69,8 @@ const btnGroup = [
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
 const isCheck = {
-  0: '是',
-  1: '否',
+  0: '否',
+  1: '是',
 };
 const returnNameObj = {
   status: {
