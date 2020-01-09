@@ -404,7 +404,7 @@ export default {
 
 
     * getListDropDownPurchase(data, { call, put }) {
-      const response = yield call(listDropDownPurchase);
+      const response = yield call(listDropDownPurchase,{});
       const wordbookData = response.body.records;
 
       const list = wordbookData.map(({ id, zhName }) => {
