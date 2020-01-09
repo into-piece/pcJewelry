@@ -266,7 +266,7 @@ openBlankColumns = openBlankColumns.map(item => ({ ...item, sorter: true }));
 // 报价主页的筛选参数
 const searchParamsArr = [
   { key: '供应商编号', value: 'supplierCode' },
-  { key: '供应商类别', value: 'supplierCategory' },
+  { key: '供应商类别', value: 'supplierCategory',"type": 2 ,"list": "wordbookdropdownType" },
   { key: '状态', value: 'status', type:2 ,list:'supplierSearchStatus',initValue:0,dfv:0},
 ];
 
