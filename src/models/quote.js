@@ -65,7 +65,7 @@ export default {
   },
 
   effects: {
-    *getList({ payload }, { call, put }) {
+    *getList({ payload }, { call, put , select }) {
       const { params, sendReq } = payload;
       const sendType =
         sendReq === 'currentQuote'
@@ -79,9 +79,21 @@ export default {
         type: 'changeState',
         payload: { data: quotelist, typeName: 'quotelist' },
       });
+
+      const choosenRowData = yield select(state => {
+        return state.quote.choosenRowData;
+      });
+      if (choosenRowData && choosenRowData.id && choosenRowData.id !== '') {
+        const rowData = quotelist.records.filter(value => value.id === choosenRowData.id);
+        if (rowData.length > 0)
+          yield put({
+            type: 'getChoosenRowData2',
+            payload: rowData[0],
+          });
+      }
     },
 
-    *getDetailList({ payload }, { call, put }) {
+    *getDetailList({ payload }, { call, put ,select}) {
       const { type, params } = payload;
       const response = yield call(listProductQuoteDetail, params);
       const quoteDatialList =
@@ -90,6 +102,19 @@ export default {
         type: 'changeState',
         payload: { data: quoteDatialList, typeName: 'quoteDatialList' },
       });
+
+
+      const choosenRowData = yield select(state => {
+        return state.quote.choosenDetailRowData;
+      });
+      if (choosenRowData && choosenRowData.id && choosenRowData.id !== '') {
+        const rowData = quoteDatialList.records.filter(value => value.id === choosenRowData.id);
+        if (rowData.length > 0)
+          yield put({
+            type: 'getChoosenDetailRowData2',
+            payload: rowData[0],
+          });
+      }
     },
 
     *clearDetailList(data, { put }) {
