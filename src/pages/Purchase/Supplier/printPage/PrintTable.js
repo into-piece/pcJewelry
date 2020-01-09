@@ -77,6 +77,13 @@ class Example extends React.Component {
           </Button>}
           content={() => this.componentRef}
         />
+        <Button
+          type="primary"
+          size="small"
+          icon="export"
+        >
+          导出
+        </Button>
         <ComponentToPrint ref={el => (this.componentRef = el)} />
       </div>
     );
