@@ -40,6 +40,7 @@ const resultArr = [
 
   { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
   { key: 'listDropDownPurchase', path: '/purchase.supplier/purchase-supplier/listDropDown', module: 4 }, // 新增供应商下拉接口
+  { key: 'purchaseExport', path: '/purchase.supplier/purchase-supplier/export', module: 4 }, // 供应商导出excel接口
   { key: 'change', path: '/purchase-supplier/change' }
 ]
 // /listMstWordbook

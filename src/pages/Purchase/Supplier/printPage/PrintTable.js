@@ -3,7 +3,10 @@ import ReactToPrint from 'react-to-print';
 import {
   Button,
 } from 'antd';
+import { notification } from 'antd/lib/index';
 import styles from './index.less';
+import servicesConfig from '@/services/purchase';
+
 
 class ComponentToPrint extends Component {
   render() {
@@ -23,68 +26,75 @@ class ComponentToPrint extends Component {
           <th>结算方式</th>
           <th>备注</th>
         </tr>
-        <tr className={styles.trtd}>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-        </tr>
-        <tr className={styles.trtd}>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-        </tr>
 
-        <tr className={styles.trtd}>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-          <td>data 1</td>
-          <td>data 2</td>
-          <td>data 3</td>
-        </tr>
-
+        {
+          this.props.list.map((i,k)=>{
+              return  <tr className={styles.trtd}>
+                <td>data 1</td>
+                <td>data 2</td>
+                <td>data 3</td>
+                <td>data 1</td>
+                <td>data 2</td>
+                <td>data 3</td>
+                <td>data 1</td>
+                <td>data 2</td>
+                <td>data 3</td>
+              </tr>
+          })
+        }
       </table>
     );
   }
 }
 
 class Example extends React.Component {
+
+
+  exportExcel = () => {
+    const {args} =this.props;
+
+    servicesConfig.purchaseExport(args).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+      }
+    });
+
+  };
+
+
   render() {
     return (
       <div>
-        <ReactToPrint
-          trigger={() => <Button
+        <div className={styles.btnDiv}>
+
+          <ReactToPrint
+            trigger={() => <Button
+              type="primary"
+              size="small"
+              icon="printer"
+              className={styles.buttomControl}
+            >
+              打印
+            </Button>}
+            content={() => this.componentRef}
+          />
+          <Button
+            className={styles.buttomControl}
+
             type="primary"
             size="small"
-            icon="printer"
+            onClick={this.exportExcel}
+            icon="export"
           >
-            打印
-          </Button>}
-          content={() => this.componentRef}
-        />
-        <Button
-          type="primary"
-          size="small"
-          icon="export"
-        >
-          导出
-        </Button>
-        <ComponentToPrint ref={el => (this.componentRef = el)} />
+            导出
+          </Button>
+        </div>
+        <div className={styles.tableOutDiv}>
+          <ComponentToPrint ref={el => (this.componentRef = el)} list={this.props.datalist} />
+        </div>
       </div>
     );
   }

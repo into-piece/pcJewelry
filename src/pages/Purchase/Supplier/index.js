@@ -22,9 +22,7 @@ import {
   DatePicker,
 } from 'antd';
 import moment from 'moment';
-import Zmage from 'react-zmage';
 import ModalConfirm from '@/utils/modal';
-import HttpFetch from '@/utils/HttpFetch';
 import { getCurrentUser } from '@/utils/authority';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
@@ -632,6 +630,7 @@ class Info extends Component {
       choosenContactsRowData,
       choosenBlankAccountRowData,
       purchase,
+      searchParams
     } = this.props;
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
@@ -648,7 +647,7 @@ class Info extends Component {
     const suplierCode = '';
 
     if(modalType==='print'){
-      return <PrintTable />
+      return <PrintTable args={searchParams} list={[1,2,3,5,6]} />
     }
 
 
