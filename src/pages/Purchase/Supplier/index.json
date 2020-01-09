@@ -2,7 +2,7 @@
 
 
   "headList": [
-    { "key": "供应商编号", "value": "supplierCode","noNeed": true ,"type": 11},
+    { "key": "供应商编号", "value": "supplierCode"  ,"type": 2,"list":"listDropDownPurchase"},
     { "key": "供应商类别", "value": "supplierCategory","type": 2 ,"list": "wordbookdropdownType" },
     { "key": "简称", "value": "shotName" },
     { "key": "中文名", "value": "zhName" },

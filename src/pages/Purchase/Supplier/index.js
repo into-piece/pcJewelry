@@ -265,7 +265,7 @@ openBlankColumns = openBlankColumns.map(item => ({ ...item, sorter: true }));
 
 // 报价主页的筛选参数
 const searchParamsArr = [
-  { key: '供应商编号', value: 'supplierCode' },
+  { key: '供应商编号', value: 'supplierCode',"type":2,"list":"listDropDownPurchase" },
   { key: '供应商类别', value: 'supplierCategory',"type": 2 ,"list": "wordbookdropdownType" },
   { key: '状态', value: 'status', type:2 ,list:'supplierSearchStatus',initValue:0,dfv:0},
 ];
@@ -329,6 +329,11 @@ class Info extends Component {
     // 方式下拉
     dispatch({
       type: 'purchase/getwordbookdropdownMode',
+    });
+
+    // 供应商下拉
+    dispatch({
+      type: 'purchase/getListDropDownPurchase',
     });
 
     // 获取初始表单数据

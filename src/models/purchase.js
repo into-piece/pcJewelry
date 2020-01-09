@@ -24,6 +24,7 @@ const {
   change,
   listSupplier,
   listContacts,
+  listDropDownPurchase,
   listBlankAccount,
 } = servicesConfig;
 export default {
@@ -61,6 +62,7 @@ export default {
     },
     showProductModal: false,
     wordbookdropdownType: [{ key: '', value: '', wordbookContentCode: '' }],
+    listDropDownPurchase: [{ key: '', value: '' }],
     wordbookdropdownMode: [{ key: '', value: '' }],
     wordbookdropdownCurrency: [{ key: '', value: '' }],
     currencydropdown: [{ key: '', value: '' }],
@@ -397,6 +399,20 @@ export default {
       yield put({
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: 'wordbookdropdownType' },
+      });
+    },
+
+
+    * getListDropDownPurchase(data, { call, put }) {
+      const response = yield call(listDropDownPurchase);
+      const wordbookData = response.body.records;
+
+      const list = wordbookData.map(({ id, zhName }) => {
+        return { value: id, key: zhName };
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: 'listDropDownPurchase' },
       });
     },
 
