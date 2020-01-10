@@ -24,7 +24,7 @@ const resultArr = [
 
 
   { key: 'listSupplier', path: '/purchase-supplier/list' },// 供应商list
-  { key: 'listSupplierNoPage', path: '/purchase-supplier/list' },// 供应商list
+  { key: 'listSupplierNoPage', path: '/purchase-supplier/listAll' },// 供应商list
   { key: 'deleteSupplier', path: '/purchase-supplier/delete' },// 删除表头
   { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
   { key: 'approval', path: '/purchase-supplier/approval' }, // 报价单审批

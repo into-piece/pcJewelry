@@ -54,7 +54,13 @@ class PrintTable extends Component {
   };
 
   componentWillMount() {
-    console.log('print', this.props.args);
+    const {args} =this.props;
+    servicesConfig.listSupplierNoPage(args).then(res => {
+      if (res && res.body && res.body.records ) {
+        this.setState({datalist:res.body.records})
+      }
+    });
+    console.log('print', args);
   }
 
 
@@ -101,7 +107,7 @@ class PrintTable extends Component {
           </Button>
         </div>
         <div className={styles.tableOutDiv}>
-          <ComponentToPrint ref={el => (this.componentRef = el)} list={this.state.datalist}/>
+          <ComponentToPrint ref={el => (this.componentRef = el)} list={this.state.datalist} />
         </div>
       </div>
     );
