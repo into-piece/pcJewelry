@@ -30,7 +30,7 @@ import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/purchase';
 import jsonData from './index.json';
 import SearchForm from './SearchForm';
-import PrintTable from './printPage/PrintTable';
+import PrintTable from './PrintPage';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
@@ -53,7 +53,7 @@ const supplierBtnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '编辑', tag: 'edit' },
   { name: '删除', tag: 'delete', type: 'danger' },
-  { name: '打印', tag: 'print' },
+  { name: '打印', tag: 'printer' },
   { name: '审批', tag: 'lock' },
 ];
 
@@ -646,9 +646,9 @@ class Info extends Component {
     };
     const suplierCode = '';
 
-    if(modalType==='print'){
+    if(modalType==='printer'){
       // 搜搜打印
-      return <PrintTable args={searchParams} list={[1,2,3,5,6]} />
+      return <PrintTable args={searchParams} datalist={[1,2,3,5,6]} />
     }
 
 

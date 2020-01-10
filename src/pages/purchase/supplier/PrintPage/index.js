@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import ReactToPrint from 'react-to-print';
 import {
   Button,
+  notification
 } from 'antd';
-import { notification } from 'antd/lib/index';
 import styles from './index.less';
 import servicesConfig from '@/services/purchase';
 
 
-class ComponentToPrint extends Component {
-  render() {
+const ComponentToPrint = ({list})=> {
     return (
       <table border="1" cellSpacing="1" cellPadding="0" className={styles.table}>
         <tr className={styles.title01}>
@@ -28,26 +27,25 @@ class ComponentToPrint extends Component {
         </tr>
 
         {
-          this.props.list.map((i,k)=>{
+          list.map((i,k)=>{
               return  <tr className={styles.trtd}>
-                <td>data 1</td>
-                <td>data 2</td>
-                <td>data 3</td>
-                <td>data 1</td>
-                <td>data 2</td>
-                <td>data 3</td>
-                <td>data 1</td>
-                <td>data 2</td>
-                <td>data 3</td>
+                <td>{k+1}</td>
+                <td>{i.shotName}</td>
+                <td>{i.contactName}</td>
+                <td>{i.telphone}</td>
+                <td>{i.openBank}</td>
+                <td>{i.accountName}</td>
+                <td>{i.accountNum}</td>
+                <td>{i.countMode}</td>
+                <td>{i.remarks}</td>
               </tr>
           })
         }
       </table>
     );
-  }
 }
 
-class Example extends React.Component {
+class PrintTable extends Component {
 
 
   exportExcel = () => {
@@ -101,5 +99,5 @@ class Example extends React.Component {
 }
 
 
-export default Example;
+export default PrintTable;
 

@@ -339,7 +339,7 @@ export default [
                 path: '/erp/purchase/supplier',
                 name: 'supplier',
                 icon: 'bulb',
-                component: './purchase/Supplier',
+                component: './purchase/supplier',
               },
             ],
 
