@@ -1158,7 +1158,9 @@ class Info extends Component {
             继续添加
           </Button>,
         ]
-        : [
+        : (modalType === 'printer'?[ <Button key="back" onClick={onCancel}>
+          取消
+        </Button>]:[
           <Button key="back" onClick={onCancel}>
             取消
           </Button>,
@@ -1173,7 +1175,7 @@ class Info extends Component {
             保存
           </Button>,
 
-        ];
+        ]);
 
 
     return (
