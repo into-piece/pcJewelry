@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactToPrint from 'react-to-print';
 import {
+  Spin,
   Button,
   notification,
 } from 'antd';
@@ -51,16 +52,19 @@ class ComponentToPrint extends Component {
 class PrintTable extends Component {
   state = {
     datalist: [],
+    loading:false
   };
 
   componentWillMount() {
+    this.setState({loading:true})
+
     const {args} =this.props;
     servicesConfig.listSupplierNoPage(args).then(res => {
       if (res && res.body && res.body.records ) {
         this.setState({datalist:res.body.records})
       }
+      this.setState({loading:false})
     });
-    console.log('print', args);
   }
 
 
@@ -89,6 +93,7 @@ class PrintTable extends Component {
               type="primary"
               size="small"
               icon="printer"
+              loading={this.state.loading}
               className={styles.buttomControl}
             >
               打印
@@ -97,7 +102,7 @@ class PrintTable extends Component {
           />
           <Button
             className={styles.buttomControl}
-
+            loading={this.state.loading}
             type="primary"
             size="small"
             onClick={this.exportExcel}
@@ -106,9 +111,9 @@ class PrintTable extends Component {
             导出
           </Button>
         </div>
-        <div className={styles.tableOutDiv}>
+        <Spin spinning={this.state.loading} className={styles.tableOutDiv}>
           <ComponentToPrint ref={el => (this.componentRef = el)} list={this.state.datalist} />
-        </div>
+        </Spin>
       </div>
     );
   }
