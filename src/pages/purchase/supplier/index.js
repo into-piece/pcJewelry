@@ -647,8 +647,7 @@ class Info extends Component {
     const suplierCode = '';
 
     if(modalType==='printer'){
-      // 搜搜打印
-      return <PrintTable args={searchParams} datalist={[1,2,3,5,6]} />
+      return <PrintTable args={searchParams}  />
     }
 
 
