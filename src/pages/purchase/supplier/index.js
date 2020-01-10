@@ -53,14 +53,14 @@ const supplierBtnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '编辑', tag: 'edit' },
   { name: '删除', tag: 'delete', type: 'danger' },
-  { name: '打印', tag: 'printer' },
+  // { name: '打印', tag: 'printer' },
   { name: '审批', tag: 'lock' },
 ];
 
 const contactsBtnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '编辑', tag: 'edit' },
-  { name: '交换数据', tag: 'change'},
+  { name: '交换数据', tag: 'change' },
   { name: '删除', tag: 'delete', type: 'danger' },
 ];
 
@@ -263,9 +263,9 @@ openBlankColumns = openBlankColumns.map(item => ({ ...item, sorter: true }));
 
 // 报价主页的筛选参数
 const searchParamsArr = [
-  { key: '供应商编号', value: 'supplierCode'},
-  { key: '供应商类别', value: 'supplierCategory',"type": 2 ,"list": "wordbookdropdownType" },
-  { key: '状态', value: 'status', type:2 ,list:'supplierSearchStatus',initValue:0,dfv:0},
+  { key: '供应商编号', value: 'supplierCode' },
+  { key: '供应商类别', value: 'supplierCategory', 'type': 2, 'list': 'wordbookdropdownType' },
+  { key: '状态', value: 'status', type: 2, list: 'supplierSearchStatus', initValue: 0, dfv: 0 },
 ];
 
 // 筛选参数
@@ -373,7 +373,7 @@ class Info extends Component {
 
   // 列表对应操作button回调
   btnFn = async modalType => {
-    const { selectKey, dispatch, choosenRowData, form, rightMenu,choosenContactsRowData, choosenBlankAccountRowData } = this.props;
+    const { selectKey, dispatch, choosenRowData, form, rightMenu, choosenContactsRowData, choosenBlankAccountRowData } = this.props;
 
     switch (modalType) {
       case 'plus':
@@ -420,9 +420,9 @@ class Info extends Component {
           content: '确定交换数据吗？',
           onOk: () => {
             this.handleChange(type);
-          }
+          },
         });
-      break;
+        break;
       case 'freshList':
         this.freshList();
         break;
@@ -630,7 +630,7 @@ class Info extends Component {
       choosenContactsRowData,
       choosenBlankAccountRowData,
       purchase,
-      searchParams
+      searchParams,
     } = this.props;
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
@@ -646,8 +646,8 @@ class Info extends Component {
     };
     const suplierCode = '';
 
-    if(modalType==='printer'){
-      return <PrintTable args={searchParams}  />
+    if (modalType === 'printer') {
+      return <PrintTable args={searchParams} />;
     }
 
 
@@ -720,7 +720,6 @@ class Info extends Component {
       </Form>
     );
   };
-
 
 
   // 获取Modal的标题
@@ -847,29 +846,29 @@ class Info extends Component {
 
   // 数据更换
   handleChange = (type) => {
-    const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys,dispatch,choosenRowData,rightMenu,choosenContactsRowData,choosenBlankAccountRowData } = this.props;
+    const { selectedRowKeys, selectedContactsRowKeys, selectedBlankAccountRowKeys, dispatch, choosenRowData, rightMenu, choosenContactsRowData, choosenBlankAccountRowData } = this.props;
     const id = rightMenu === 2 ? choosenContactsRowData.id : choosenBlankAccountRowData.id;
 
-      dispatch({
-        type:'purchase/change',
-        payload:{
-          selectedRowKeys,
-          selectedContactsRowKeys,
-          selectedBlankAccountRowKeys,
-          type,
-        }
-      }).then( (response) => {
-        // debugger
-        console.log(response);
-        if (response.head.rtnCode === '000000') {
-          notification.success({
-            message: response.head.rtnMsg,
-          });
-          this.freshList();
-          this.getDetailList(type, { supplierCode: choosenRowData.id, id });
-        }
-      });
-  }
+    dispatch({
+      type: 'purchase/change',
+      payload: {
+        selectedRowKeys,
+        selectedContactsRowKeys,
+        selectedBlankAccountRowKeys,
+        type,
+      },
+    }).then((response) => {
+      // debugger
+      console.log(response);
+      if (response.head.rtnCode === '000000') {
+        notification.success({
+          message: response.head.rtnMsg,
+        });
+        this.freshList();
+        this.getDetailList(type, { supplierCode: choosenRowData.id, id });
+      }
+    });
+  };
 
   // 删除按钮回调
   handleDelect = () => {
@@ -989,7 +988,7 @@ class Info extends Component {
     if (tag === 'copy')
       return ((rightMenu === 1) && selectedRowKeys.length === 0);
     if (tag === 'plus')
-      return ((rightMenu === 2 || rightMenu === 3) && (selectedRowKeys.length === 0||this.returnLockType().type === 2));
+      return ((rightMenu === 2 || rightMenu === 3) && (selectedRowKeys.length === 0 || this.returnLockType().type === 2));
     if (tag === 'lock')
       return (
         (rightMenu === 1 && selectedRowKeys.length === 0) ||
@@ -998,9 +997,9 @@ class Info extends Component {
         this.returnLockType().disabled
       );
     return (
-      ((rightMenu === 1&& selectedRowKeys.length === 0)||this.returnLockType().type === 2  ) ||
-      ((rightMenu === 2 && selectedContactsRowKeys.length === 0)||this.returnLockType().type === 2) ||
-      ((rightMenu === 3 && selectedBlankAccountRowKeys.length === 0)||this.returnLockType().type === 2)
+      ((rightMenu === 1 && selectedRowKeys.length === 0) || this.returnLockType().type === 2) ||
+      ((rightMenu === 2 && selectedContactsRowKeys.length === 0) || this.returnLockType().type === 2) ||
+      ((rightMenu === 3 && selectedBlankAccountRowKeys.length === 0) || this.returnLockType().type === 2)
     );
   };
 
@@ -1158,13 +1157,13 @@ class Info extends Component {
             继续添加
           </Button>,
         ]
-        : (modalType === 'printer'?[ <Button key="back" onClick={onCancel}>
+        : (modalType === 'printer' ? [<Button key="back" onClick={onCancel}>
           取消
-        </Button>]:[
-          <Button key="back" onClick={onCancel}>
+        </Button>] : [
+                                        <Button key="back" onClick={onCancel}>
             取消
           </Button>,
-          <Button
+                                        <Button
             key="submit"
             type="primary"
             loading={addloading}
@@ -1258,6 +1257,7 @@ const RightContent = ({
                             {/* 中间table组件 */}
                             <Col lg={16} md={24}>
                               <CenterInfo
+                                btnFn={btnFn}
                                 type={type}
                                 handleRadio={handleRadio}
                                 getDetailList={getDetailList}
@@ -1389,7 +1389,7 @@ const GetRenderitem = ({ data, type, returnListName }) => {
   const baseArr = [{ key: '新增人', value: 'createUser' },
     { key: '新增时间', value: 'createTime' },
     { key: '修改人', value: 'modifier' },
-    { key: '修改时间', value: 'mtime' }]
+    { key: '修改时间', value: 'mtime' }];
 
   const arr =
     type === 1
@@ -1403,7 +1403,7 @@ const GetRenderitem = ({ data, type, returnListName }) => {
         ...baseArr] :
       [
         ...blankAccounts,
-        ...baseArr
+        ...baseArr,
       ];
 
 
@@ -1595,6 +1595,7 @@ class CenterInfo extends Component {
       supplierList,
       choosenContactsRowData,
       choosenBlankAccountRowData,
+      btnFn,
       purchase,
       returnElement,
       listContactsLoading,
@@ -1614,6 +1615,9 @@ class CenterInfo extends Component {
           data={searchParamsArr}
           source={purchase}
           onSearch={onSearch}
+          handlePrint={()=>{
+            btnFn('printer')
+          }}
           returnElement={returnElement}
           onchange={changeSearchParams}
         />
@@ -1701,7 +1705,7 @@ class CenterInfo extends Component {
                                           clearFn={clearFn}
                                         />
           </div>
-                                               </div>)}
+                                    </div>)}
       </div>
     );
   }

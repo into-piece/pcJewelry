@@ -20,6 +20,7 @@ class SearchFrom extends Component {
       data,
       source,
       returnElement,
+      handlePrint,
       onchange
     } = this.props;
     const { getFieldDecorator } = form
@@ -57,6 +58,9 @@ class SearchFrom extends Component {
               <Button style={{ marginLeft: 5 }} onClick={this.handleReset}>
                 重置
               </Button>
+              {handlePrint? <Button type="primary"  style={{ marginLeft: 5 }} onClick={handlePrint}>
+                打印
+              </Button>:null}
 
               {data&&data.length>1&& <a style={{ marginLeft: 8, whiteSpace: 'nowrap' }} onClick={this.toggleForm}>
                 {
