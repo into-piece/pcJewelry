@@ -25,11 +25,11 @@ export default {
 
     pagination: {
       current: 1,
-      size: 10,
+      size: 6,
     },
     paginationSecond: {
       current: 1,
-      size: 10,
+      size: 6,
     },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select

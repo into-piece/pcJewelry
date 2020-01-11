@@ -72,7 +72,7 @@ export default {
     markingEnName: '',
     brandsList: [],
     materialPriceList: [],
-    searchParams: {},
+    searchParams: {status:0},
     searchDetailParams: {},
     searchContactsParams: {},
     searchBlankAccountParams: {},

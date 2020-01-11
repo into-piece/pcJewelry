@@ -33,9 +33,10 @@ class MiddleTable extends Component {
 
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
-    const { dispatch, pagination, onSearch } = this.props;
+    const { dispatch, pagination, onSearch ,changedetailtab} = this.props;
     const str = type === 1 ? '' : 'Second';
 
+    changedetailtab&&changedetailtab(type);
     dispatch({
       type: `${defaultModelName}/setChoosenRowData${str}`,
       payload: rowData,

@@ -633,6 +633,7 @@ class Index extends Component {
                   {/* 中间table组件 */}
                   <Col lg={16} md={24}>
                     <MiddleTable
+                      changedetailtab={(type)=>{this.setState({rightActive:(type===1?firstTabFlag:'productProcess')})}}
                       firstType={firstTabFlag}
                       secondType={secondTableActive}
                       returnElement={returnElement}

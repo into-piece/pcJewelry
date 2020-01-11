@@ -31,7 +31,7 @@ class ComponentToPrint extends Component {
 
         {
           this.props.list.map((i, k) => {
-            return <tr className={styles.trtd}>
+            return <tr className={styles.trtd} key={k}>
               <td>{k + 1}</td>
               <td>{i.shotName}</td>
               <td>{i.contactName}</td>
@@ -71,13 +71,19 @@ class PrintTable extends Component {
   exportExcel = () => {
     const { args } = this.props;
 
-    servicesConfig.purchaseExport(args).then(res => {
-      const { rtnCode, rtnMsg } = res.head;
-      if (rtnCode === '000000') {
-        notification.success({
-          message: rtnMsg,
-        });
+    servicesConfig.purchaseExport(args).then(data => {
+      if (!data) {
+        console.log(1)
+        return
       }
+      const url = window.URL.createObjectURL(new Blob([data]))
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', 'excel.xlsx')
+
+      document.body.appendChild(link)
+      link.click()
     });
 
   };

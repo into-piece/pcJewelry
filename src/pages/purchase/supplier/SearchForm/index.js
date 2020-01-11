@@ -87,7 +87,7 @@ class SearchFrom extends Component {
   // 重置回调
   handleReset = () => {
     const { onCustomerReset,onchange, form } = this.props;
-    if(onchange){onchange({})}
+    if(onchange){onchange({status:0})}
     form.resetFields();
     if (onCustomerReset) onCustomerReset();
   };
