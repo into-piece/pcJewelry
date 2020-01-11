@@ -43,6 +43,7 @@ import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo';
 import SysProduct from './components/SysProduct';
 import { defaultImages } from '@/utils/utils';
+import PrintTable from './PrintPage';
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
@@ -1154,7 +1155,9 @@ class Index extends Component {
       productBomRevokeListLoading,
       productBomRevokeChoosenRowData,
       bomlist,
+      
     } = this.props;
+    const printSearchParams = {}
     const { modalType, rightActive, craftForm, selectedBom, selectedProccess } = this.state;
 
     const { getFieldDecorator, getFieldValue } = form;
@@ -1203,6 +1206,10 @@ class Index extends Component {
       />;
     }
 
+
+    if (modalType === 'printer') {
+      return <PrintTable args={printSearchParams} />;
+    }
 
     return (
       <Form size="small" key="1">
@@ -1652,6 +1659,7 @@ class Index extends Component {
 
   // 打印bom
   printBom = () => {
+    this.btnFn('printer')
   };
 
   _changeRightActive = ({ target: { value } }) => {

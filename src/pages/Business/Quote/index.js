@@ -371,6 +371,22 @@ class Info extends Component {
         });
       }
     });
+
+    const arr = [
+      {
+        name: 'mainTypeDropdown',
+        params: {
+          sType: 'H016001',
+        },
+      },
+    ];
+
+    arr.forEach(item => {
+      dispatch({
+        type: `quote/getDropdownList`,
+        payload: item,
+      });
+    });
   };
 
   // 复制

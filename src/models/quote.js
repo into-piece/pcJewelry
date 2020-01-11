@@ -75,6 +75,25 @@ export default {
         payload: { data:value, typeName: key },
       });
     },
+    *getDropdownList({ payload, callback }, { call, put }) {
+      const { params, name, key1, value1 } = payload;
+      const response = yield call(servicesConfig[name], params || {});
+      const key = key1 || 'zhName';
+      const value = value1 || 'id';
+
+      let list =
+        response.head && response.head.rtnCode === '000000' ? response.body.records : initData;
+      list = list.map(item => ({
+        ...item,
+        key: item[key],
+        value: item[value],
+      }));
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: name },
+      });
+      if (callback) callback(list[0]);
+    },
     *getList({ payload }, { call, put , select }) {
       const { params, sendReq } = payload;
       const sendType =

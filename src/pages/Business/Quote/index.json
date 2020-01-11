@@ -18,6 +18,7 @@
       "initValue": 0,
       "noNeed": true
     },
+    { "key": "主材类别", "value": "p_type", "type": 2, "list": "mainTypeDropdown" },
     { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
     { "key": "客户简称", "value": "customerShotName", "type": 7, "noNeed": true },
     { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList", "noNeed": true },
