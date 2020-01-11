@@ -62,9 +62,19 @@ export default {
     materialPriceList: [],
     searchParams: {},
     searchDetailParams: {},
+    searchProductParams:{}
   },
 
   effects: {
+    *changeStateOut({ payload }, { put }) {
+      const { key, value } = payload;
+      console.log(key, value,'====');
+      
+      yield put({
+        type: 'changeState',
+        payload: { data:value, typeName: key },
+      });
+    },
     *getList({ payload }, { call, put , select }) {
       const { params, sendReq } = payload;
       const sendType =

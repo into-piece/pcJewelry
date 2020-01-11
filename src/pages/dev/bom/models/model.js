@@ -45,11 +45,11 @@ export default {
     },
     paginationSecond: {
       current: 1,
-      size: 6,
+      size: 100,
     },
     proccessPagination:{
       current: 1,
-      size: 6,
+      size: 100,
     },
     materialNoPagination:{
       current: 1,
