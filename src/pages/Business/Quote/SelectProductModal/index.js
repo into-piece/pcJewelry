@@ -41,7 +41,7 @@ const columns = [
     key: 'platingColorName',
   },
 ]
-export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeProductSearch }) => (
+export default (({ productSearchParams, pagination, returnElement, source, list, productselectedKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeProductSearch,handleTableChange }) => (
   <div className={styles.productModal}>
     <SearchForm
       onSearch={onSearch}
@@ -59,6 +59,7 @@ export default (({ productSearchParams, pagination, returnElement, source, list,
       changeChoosenRow={changeChoosenRow}
       selectKey={choosenRowData.id}
       onSelectChange={onSelectChange}
+      handleTableChange={handleTableChange}
     />
   </div>
 ))

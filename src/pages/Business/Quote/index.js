@@ -270,7 +270,8 @@ const productSearchParams = [
     productListLoading: loading.effects['quote/getProductList'],
     searchParams: quote.searchParams,
     searchDetailParams: quote.searchDetailParams,
-    endCustomerList:quote.endCustomerList
+    endCustomerList:quote.endCustomerList,
+    searchProductParams:quote.searchProductParams
   };
 })
 class Info extends Component {
@@ -316,12 +317,22 @@ class Info extends Component {
     });
   };
 
-  getProduct = args => {
-    const { dispatch, productPagination ,choosenRowData} = this.props;
+  getProduct = (args={}) => {
+    const { dispatch, productPagination ,choosenRowData,searchProductParams} = this.props;
     const customerNo = choosenRowData.customerNo
+
+    if ('current' in args) {
+      console.log(args);
+      
+      dispatch({
+        type: `quote/changeStateOut`,
+        payload: { key: 'productPagination', value: { ...productPagination, current: args.current } },
+      });
+    }
+
     dispatch({
       type: 'quote/getProductList',
-      payload: { params: { customerNo,...productPagination, ...args } },
+      payload: { params: {...searchProductParams, customerNo,...productPagination, ...args } },
       callback: res => {
         if (res && res.records.length === 1 && args.search) {
           this.changeChoosenRow(res.records[0]);
@@ -1244,6 +1255,11 @@ class Info extends Component {
   };
 
   getProductSearch = args => {
+    const {dispatch} = this.props
+    dispatch({
+      type:'quote/changeStateOut',
+      payload:{key:'searchProductParams',value:args}
+    })
     this.getProduct({ ...args, search: true });
   };
 
@@ -1402,6 +1418,10 @@ class Info extends Component {
             listLoading={productListLoading}
             onSearch={getProduct}
             changeProductSearch={getProductSearch}
+            handleTableChange={args => {
+              // search 看看搜索完要不要做点处理
+              this.getProduct({ ...args });
+            }}
           />
         </Modal>
       </div>
