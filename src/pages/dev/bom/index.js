@@ -317,9 +317,9 @@ class Index extends Component {
           name: 'listChildDieSetDropDown',
           key1: 'productNo',
           value1: 'id',
-          params: {
-            productNo: choosenRowData.productNo.slice(0, 9),
-          },
+          // params: {
+          //   productNo: choosenRowData.productNo.slice(0, 9),
+          // },
         },
         {
           name: 'listGemSetProcessDropDown',
@@ -403,12 +403,13 @@ class Index extends Component {
   // 第一table获取list
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
+    console.log(searchParams)
     // getDevList
     dispatch({
       type: `${defaultModelName}/getList`,
       payload: {
         type: FIRST_TAG,
-        params: { ...pagination, ...searchParams, ...param },
+        params: { status:0, ...pagination, ...searchParams, ...param },
         ...args,
       },
       callback: rowData => {
@@ -450,6 +451,9 @@ class Index extends Component {
         inventoryWeight: undefined,
         valuationClass: undefined,
       });
+      this.setState({
+        inventoryWeight:undefined
+      })
       dispatch({
         type: `${defaultModelName}/clearmaterialNoList`,
       });
@@ -471,6 +475,9 @@ class Index extends Component {
         inventoryWeight: undefined,
         valuationClass: undefined,
       });
+      this.setState({
+        inventoryWeight:undefined
+      })
     }
     if (type === 'materialNo') {
       const selectedArr = materialNoList.filter(item => item.materialNo === value);
@@ -493,6 +500,9 @@ class Index extends Component {
         weightUnit,
         inventoryWeight,
       });
+      this.setState({
+        inventoryWeight
+      })
     }
     if (rightActive === THIRD_TAG && type === 'zhName') {
       const workProcessCode = processRelationDropDown.filter(item => (item.processCode === value))[0].processCode;
@@ -544,8 +554,16 @@ class Index extends Component {
 
   handleInputChange = (v, type) => {
     const { setFieldsValue, getFieldValue } = this.props.form;
-    const inventoryWeight = getFieldValue('inventoryWeight');
+    const materialType = getFieldValue('materialType');
+    const {inventoryWeight} = this.state;
+    console.log(inventoryWeight,type,v)
+    
+    // 为主材 =》单件用重=单件用量
     if (type === 'singleDosage') {
+      if(materialType === 'H016001'){
+        setFieldsValue({ sheetWithHeavy: v  });
+        return
+      }
       setFieldsValue({ sheetWithHeavy: v * Number(inventoryWeight) });
     }
   };
@@ -1810,7 +1828,8 @@ class Index extends Component {
     const weightUnitList = [{ key: weightUnitName, value: weightUnit }];
     const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
     const valuationClasslist = [{ key: valuationClassName, value: valuationClass }];
-
+    console.log(inventoryWeight,'=======');
+    
     dispatch({
       type: `${defaultModelName}/batchUpdatedispatch`,
       payload: { weightUnitList, countist, valuationClasslist },
@@ -1827,6 +1846,9 @@ class Index extends Component {
           valuationClass,
           materialId: id,
         });
+        this.setState({
+          inventoryWeight
+        })
         this.showMaterialModalFunc(2);
       },
     });

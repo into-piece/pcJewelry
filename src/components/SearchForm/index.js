@@ -55,7 +55,7 @@ class SearchFrom extends Component {
             <div className="addModal">
               <FormItem label="状态" className={styles.from_content_col}>
                 {getFieldDecorator('status', { initialValue: 0 })(
-                  <Select style={{ width: 174 }} placeholder="请选择">
+                  <Select style={{ width: 180 }} placeholder="请选择">
                     <Option value={undefined}>不限</Option>
                     <Option value={0}>输入</Option>
                     <Option value={2}>已审批</Option>
