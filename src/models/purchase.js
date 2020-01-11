@@ -626,7 +626,6 @@ export default {
       return {
         ...state,
         searchParams: {
-          ...state.searchParams,
           ...action.payload,
         },
       };

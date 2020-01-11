@@ -26,7 +26,7 @@ class ComponentToPrint extends Component {
           <th>开户人</th>
           <th>账号</th>
           <th>结算方式</th>
-          <th>备注</th>
+          <th className={styles.maxthwidth}>备注</th>
         </tr>
 
         {
@@ -39,8 +39,8 @@ class ComponentToPrint extends Component {
               <td>{i.openBank}</td>
               <td>{i.accountName}</td>
               <td>{i.accountNum}</td>
-              <td>{i.countMode}</td>
-              <td>{i.remarks}</td>
+              <td>{i.countModeName}</td>
+              <td className={styles.maxthwidth}>{i.remarks}</td>
             </tr>;
           })
         }
