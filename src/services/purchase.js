@@ -7,13 +7,13 @@
  */
 import request from '@/utils/request';
 
-const env = process.env.NODE_ENV === 'production' ? '' : '/server'
+const env = process.env.NODE_ENV === 'production' ? '' : '/server';
 const priefx = `${env}/business/purchase.supplier`;
-const priefx2 = `${env}/business`
+const priefx2 = `${env}/business`;
 const returnApi = (module) => {
-  const pre = module === 4 ? priefx2 : priefx
-  return pre
-}
+  const pre = module === 4 ? priefx2 : priefx;
+  return pre;
+};
 
 
 // module 1 普通 product-quote-header模块
@@ -23,7 +23,8 @@ const returnApi = (module) => {
 const resultArr = [
 
 
-  { key: 'listSupplier', path: '/purchase-supplier/list' },
+  { key: 'listSupplier', path: '/purchase-supplier/list' },// 供应商list
+  { key: 'listSupplierNoPage', path: '/purchase-supplier/listAll' },// 供应商list
   { key: 'deleteSupplier', path: '/purchase-supplier/delete' },// 删除表头
   { key: 'addSupplier', path: '/purchase-supplier/saveOrUpdate' },// 删除表头
   { key: 'approval', path: '/purchase-supplier/approval' }, // 报价单审批
@@ -39,19 +40,21 @@ const resultArr = [
   { key: 'addBlankAccount', path: '/purchase-supplier-bank-account/saveOrUpdate' },// 添加联系人
 
   { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
-  { key: 'change', path: '/purchase-supplier/change' }
-]
+  { key: 'listDropDownPurchase', path: '/purchase.supplier/purchase-supplier/listDropDown', module: 4 }, // 新增供应商下拉接口
+  { key: 'purchaseExport', path: '/purchase.supplier/purchase-supplier/export', module: 4 }, // 供应商导出excel接口
+  { key: 'change', path: '/purchase-supplier/change' },
+];
 // /listMstWordbook
 
 // 请求url配置
-const outPutObject = {}
+const outPutObject = {};
 resultArr.forEach(({ key, path, module }) => {
   outPutObject[key] = async (params) => {
     return request(returnApi(module) + path, {
       method: 'POST',
       data: params,
     });
-  }
-})
+  };
+});
 
-export default outPutObject
+export default outPutObject;
