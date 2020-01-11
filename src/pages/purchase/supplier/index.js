@@ -53,7 +53,7 @@ const supplierBtnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '编辑', tag: 'edit' },
   { name: '删除', tag: 'delete', type: 'danger' },
-  // { name: '打印', tag: 'printer' },
+  { name: '打印', tag: 'printer' },
   { name: '审批', tag: 'lock' },
 ];
 

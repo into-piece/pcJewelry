@@ -58,7 +58,7 @@ class SearchFrom extends Component {
               <Button style={{ marginLeft: 5 }} onClick={this.handleReset}>
                 重置
               </Button>
-              {handlePrint? <Button type="primary"  style={{ marginLeft: 5 }} onClick={handlePrint}>
+              {handlePrint? <Button type="primary" style={{ marginLeft: 5 }} onClick={handlePrint}>
                 打印
               </Button>:null}
 
@@ -86,7 +86,7 @@ class SearchFrom extends Component {
 
   // 重置回调
   handleReset = () => {
-    const { onCustomerReset, form } = this.props;
+    const { onCustomerReset,onchange, form } = this.props;
     if(onchange){onchange({})}
     form.resetFields();
     if (onCustomerReset) onCustomerReset();
