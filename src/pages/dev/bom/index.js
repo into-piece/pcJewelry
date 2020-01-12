@@ -977,7 +977,7 @@ class Index extends Component {
     if (rightActive === SECOND_TAG) {
       fieldslist.push('bomId');
       fieldslist.push('materialId');
-      params.materialId = materialNoChoosenRowData.id;
+      params.materialId = choosenRowDataSecond.materialId||materialNoChoosenRowData.id;
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
@@ -1855,7 +1855,7 @@ class Index extends Component {
           materialId: id,
         });
         this.setState({
-          inventoryWeight
+          inventoryWeight,
         })
         this.showMaterialModalFunc(2);
       },

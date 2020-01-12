@@ -583,11 +583,11 @@ class Info extends Component {
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
         form.setFieldsValue({
-          price:  (quotePrice+nowCount)*finishedWeight+markingPrice*packPrice
+          price:  ((quotePrice+nowCount)*finishedWeight+markingPrice*packPrice).toFixed(2)
         });
       }else{
         form.setFieldsValue({
-          price:  (quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice
+          price:  ((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice).toFixed(2)
         });
       }
     }
@@ -596,11 +596,11 @@ class Info extends Component {
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
         form.setFieldsValue({
-          price:  quotePrice*finishedWeight+nowCount+markingPrice+packPrice
+          price:  (quotePrice*finishedWeight+nowCount+markingPrice+packPrice).toFixed(2)
         });
       }else{
         form.setFieldsValue({
-          price:  quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice
+          price:  (quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice).toFixed(2)
         });
       }
     }
