@@ -57,6 +57,14 @@ const resultArr = [
     path: '/develop/category/develop-basic-category-set/dropdown',
     module: 4
   },
+
+  {
+    key: 'listTodayRate',
+    path: '/basic/currency/listTodayRate',
+    module: 4
+  },
+
+  
 ]
 // /listMstWordbook
 

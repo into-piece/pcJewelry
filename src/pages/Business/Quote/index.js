@@ -373,22 +373,52 @@ class Info extends Component {
       }
     });
 
-    const arr = [
-      {
-        name: 'mainTypeDropdown',
-        params: {
-          sType: 'H016001',
+    let arr = []
+    if(rightMenu === 2){
+      arr = [
+        {
+          name: 'mainTypeDropdown',
+          params: {
+            sType: 'H016001',
+          },
         },
-      },
-    ];
+      ];
+      serviceObj.listTodayRate().then(res=>{
+        const { rtnMsg, rtnCode } = res.head;
+        if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)[0].bocConversionPrice
+          this.setState({ listTodayRate: Number(listTodayRate)/100 });
+        }
+      })
+    }
 
-    arr.forEach(item => {
+    arr.length>0 && arr.forEach(item => {
       dispatch({
         type: `quote/getDropdownList`,
         payload: item,
       });
     });
   };
+
+  countProductCost = (params) => {
+    const {listTodayRate} = this.state
+    const {form,choosenRowData} = this.props
+    const {quoteMethod} = choosenRowData
+    const nowCount = params.nowCount|| form.getFieldValue('nowCount') 
+    const finishedWeight = params.finishedWeight|| form.getFieldValue('finishedWeight') 
+    
+    // 计件
+    if(quoteMethod === 'H008001'){
+      form.setFieldsValue({
+        productCost:(listTodayRate*nowCount).toFixed(3)
+      })
+    }else{
+      form.setFieldsValue({
+        productCost:(listTodayRate*nowCount*finishedWeight).toFixed(3)
+      })
+    }
+  }
+      
 
   // 复制
   handleCopy = () => {
@@ -652,6 +682,11 @@ class Info extends Component {
     // 计算单价
     const arr = ['nowCount','finishedWeight','markingPrice','packPrice','mainMaterialWeight','stonePrice']
     arr.includes(type) && this.countPrice({[type]:value})
+
+
+    const arr2 = ['nowCount','finishedWeight']
+    arr2.includes(type) && this.countProductCost({[type]:value})
+    
   };
 
   // 根据btn点击 返回对应弹窗内容
@@ -962,12 +997,12 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData } = this.props;
+    const { rightMenu, form, choosenRowData,productChoosenRowData } = this.props;
     const isHead = rightMenu === 1;
     const str = isHead ? 'quotelist' : 'quoteDatialList';
-    let params = {};
+    let params = {}; 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id };
+      params = { quoteHeadId: choosenRowData.id ,productId:productChoosenRowData.id};
       debugger;
     }
 

@@ -318,9 +318,9 @@ class Index extends Component {
           name: 'listChildDieSetDropDown',
           key1: 'productNo',
           value1: 'id',
-          // params: {
-          //   productNo: choosenRowData.productNo.slice(0, 9),
-          // },
+          params: {
+            productNo: choosenRowData.productNo.slice(0, 9),
+          },
         },
         {
           name: 'listGemSetProcessDropDown',
@@ -453,7 +453,8 @@ class Index extends Component {
         valuationClass: undefined,
       });
       this.setState({
-        inventoryWeight:undefined
+        inventoryWeight:undefined,
+        singleWeight:undefined
       })
       dispatch({
         type: `${defaultModelName}/clearmaterialNoList`,
@@ -477,7 +478,8 @@ class Index extends Component {
         valuationClass: undefined,
       });
       this.setState({
-        inventoryWeight:undefined
+        inventoryWeight:undefined,
+        singleWeight:undefined
       })
     }
     if (type === 'materialNo') {
@@ -556,16 +558,17 @@ class Index extends Component {
   handleInputChange = (v, type) => {
     const { setFieldsValue, getFieldValue } = this.props.form;
     const materialType = getFieldValue('materialType');
-    const {inventoryWeight} = this.state;
-    console.log(inventoryWeight,type,v)
+    const {inventoryWeight,singleWeight} = this.state;
+    console.log(inventoryWeight,singleWeight,type,v)
     
-    // 为主材 =》单件用重=单件用量
+    const key = materialType==='H016004'? singleWeight:inventoryWeight
+    // 为主材 =》单件用重= 单件用量
     if (type === 'singleDosage') {
       if(materialType === 'H016001'){
         setFieldsValue({ sheetWithHeavy: v  });
         return
       }
-      setFieldsValue({ sheetWithHeavy: v * Number(inventoryWeight) });
+      setFieldsValue({ sheetWithHeavy: (v * Number(key)).toFixed(3) });
     }
   };
 
@@ -1832,6 +1835,7 @@ class Index extends Component {
       valuationClassName,
       measureUnitName,
       id,
+      singleWeight
     } = materialNoChoosenRowData;
     const weightUnitList = [{ key: weightUnitName, value: weightUnit }];
     const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
@@ -1856,6 +1860,7 @@ class Index extends Component {
         });
         this.setState({
           inventoryWeight,
+          singleWeight
         })
         this.showMaterialModalFunc(2);
       },
