@@ -304,6 +304,7 @@ class Info extends Component {
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
   }
+
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
@@ -528,12 +529,12 @@ class Info extends Component {
       const obj = quote.endCustomerList.find(item => item.value === value);
       const { key } = obj;
       // debugger
-      let startIndex = key.indexOf('(') + 1;
-      let endIndex = key.indexOf(')');
+      const startIndex = key.indexOf('(') + 1;
+      const endIndex = key.indexOf(')');
       const endShotName = key.substring(startIndex,endIndex);
       console.log(key)
       form.setFieldsValue({
-        endShotName: endShotName,
+        endShotName,
       });
     }
   };
@@ -565,6 +566,50 @@ class Info extends Component {
     return false;
   };
 
+  // 计算单价
+  countPrice=(params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
+    const {form,choosenRowData} = this.props
+    const {isWeighStones,quoteMethod,quotePrice} = choosenRowData
+    const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
+    const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )// 成品重量
+    const markingPrice=  Number(params.markingPrice||form.getFieldValue('markingPrice')) // 字印价
+    const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice')) // 包装单价
+    const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight')) // 主材重量
+    const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice')) // 石材价
+    
+    console.log(nowCount,finishedWeight,markingPrice,packPrice,mainMaterialWeight,stonePrice,'=======')
+    // 计重
+    if(quoteMethod === 'H008002'){
+      // 是否计石重 是
+      if(isWeighStones === 'H009001'){
+        form.setFieldsValue({
+          price:  (quotePrice+nowCount)*finishedWeight+markingPrice*packPrice
+        });
+      }else{
+        form.setFieldsValue({
+          price:  (quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice
+        });
+      }
+    }
+    // 计件
+    else{
+      // 是否计石重 是
+      if(isWeighStones === 'H009001'){
+        form.setFieldsValue({
+          price:  quotePrice*finishedWeight+nowCount+markingPrice+packPrice
+        });
+      }else{
+        form.setFieldsValue({
+          price:  quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice
+        });
+      }
+    }
+    
+    
+    quoteMethod === 'H008001'
+    
+  }
+
   handleDatePicker = (date, dateString) => {
     const quoteDateFrom = moment(date[0]).valueOf();
     const quoteDateTo = moment(date[1]).valueOf();
@@ -588,6 +633,7 @@ class Info extends Component {
 
   inputChange = (v, type) => {
     const { form } = this.props;
+    const value  = v.target.value
     const price = form.getFieldValue('price') || '';
     const qty = form.getFieldValue('qty') || '';
     if (type === 'price' && qty) {
@@ -602,6 +648,10 @@ class Info extends Component {
         quotedAmount,
       });
     }
+    
+    // 计算单价
+    const arr = ['nowCount','finishedWeight','markingPrice','packPrice','mainMaterialWeight','stonePrice']
+    arr.includes(type) && this.countPrice({[type]:value})
   };
 
   // 根据btn点击 返回对应弹窗内容
@@ -1335,44 +1385,44 @@ class Info extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               继续添加
-            </Button>,
+          </Button>,
           ]
         : [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);
