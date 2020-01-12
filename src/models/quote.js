@@ -66,14 +66,15 @@ export default {
   },
 
   effects: {
-    *changeStateOut({ payload }, { put }) {
+    *changeStateOut({ payload ,callback}, { put }) {
       const { key, value } = payload;
       console.log(key, value,'====');
-      
       yield put({
         type: 'changeState',
         payload: { data:value, typeName: key },
       });
+      if (callback) callback();
+
     },
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
