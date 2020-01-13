@@ -122,6 +122,7 @@ export default {
     basePath: './',
   },
   history: 'hash',
+  hash: true,
   base: './',
   exportStatic: {
     // dynamicRoot: true,
