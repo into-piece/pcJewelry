@@ -25,7 +25,7 @@ export const material = [
       { key: '是', value: 1 },
       { key: '否', value: 0 },
     ],
-    initValue: 1,
+    initValue: 0,
     mType: 1,
   },
   { key: '原料编号', value: 'materialNo', type: 3, list: 'materialNoList' ,clickFn: 'showMaterialModalFunc'},

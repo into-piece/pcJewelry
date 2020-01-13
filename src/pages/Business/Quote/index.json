@@ -150,7 +150,6 @@
       "key": "此次工费",
       "value": "nowCount",
       "number": true,
-      "noNeed": true,
       "priceUnit": 1
     },
     { "key": "单价", "value": "price", "number": true, "priceUnit": 1, "type": 7 },

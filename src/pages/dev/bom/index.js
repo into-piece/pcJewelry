@@ -254,7 +254,7 @@ class Index extends Component {
     const { getProductBomRevoke } = this;
     const { dispatch, form, choosenRowData, choosenRowDataSecond } = this.props;
     const { setFieldsValue } = form;
-    const { rightActive, selectedProccess } = this.state;
+    const { rightActive, selectedProccess,selectedBom} = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
@@ -303,7 +303,11 @@ class Index extends Component {
     }
 
     if (rightActive === SECOND_TAG) {
-      setFieldsValue({ bomId: this.state.selectedBom.id });
+      if(modalType !== 'edit'){
+        console.log(selectedBom.id);
+        
+        setFieldsValue({ bomId: selectedBom.id });
+      }
       arr = [
         // 原料类别
         {
@@ -666,7 +670,12 @@ class Index extends Component {
           </Radio.Group>
         );
       case 7:
-        return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
+        return <Input
+          placeholder="请输入"
+          disabled
+          value={form.getFieldValue(value) || '原料编号带出'}
+        />
+      // <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
         return <TextArea rows={2} placeholder="请输入" style={{ width: 800 }} />;
       case 9:
@@ -1222,7 +1231,7 @@ class Index extends Component {
             className="addModal"
             style={{ width: '100%', height: '150px' }}
           >
-            <FormItem label='bom名称'>
+            <FormItem label='BOM名称'>
               {getFieldDecorator('bomId', {
                 rules: [
                   {
@@ -1350,7 +1359,7 @@ class Index extends Component {
                               message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                             },
                           ],
-                          initialValue: initValue2 || initValue || (number ? 0.00 : undefined),
+                          initialValue: initValue2 || initValue||initValue===0 ? 0 : (number ? 0.00 : undefined),
                         })(
                           this.returnElement({
                             key,

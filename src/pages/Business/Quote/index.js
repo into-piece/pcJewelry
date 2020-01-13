@@ -449,6 +449,12 @@ class Info extends Component {
       default:
         if (rightMenu === 2) {
           const { markingId, markingEnName } = choosenRowData;
+          if(!choosenRowData.id){
+            notification.error({
+              message: '请先选择对应的报价主页',
+            })
+            return
+          }
           if(markingId){
             form.setFieldsValue({
               markingId,
