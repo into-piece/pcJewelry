@@ -1359,7 +1359,7 @@ class Index extends Component {
                               message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                             },
                           ],
-                          initialValue: initValue2 || initValue||initValue===0 ? 0 : (number ? 0.00 : undefined),
+                          initialValue: initValue2 || initValue|| (number ? 0.00 : undefined),
                         })(
                           this.returnElement({
                             key,
