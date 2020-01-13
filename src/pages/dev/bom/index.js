@@ -440,7 +440,7 @@ class Index extends Component {
 
   handleSelectChange = (value, type) => {
     const { rightActive } = this.state;
-    const { dispatch, form, materialNoList, flowlistDropDown, processRelationDropDown } = this.props;
+    const { dispatch, form, materialNoList, flowlistDropDown, processRelationDropDown,listChildDieSetDropDown } = this.props;
     const { setFieldsValue } = form;
     // 当原料类别下拉选中时请求
     if (type === 'materialType') {
@@ -528,6 +528,13 @@ class Index extends Component {
       // const processCode = flowlistDropDown.filter(item => (item.id === value))[0].flowCode;
       // this.setState({ processCode });
     }
+
+    if( type === 'modelNo'){
+      console.log(listChildDieSetDropDown,'=========')
+      const selectedmodelNo = listChildDieSetDropDown.filter(({id})=>id===value)
+
+      selectedmodelNo.length>0 && setFieldsValue({ modulusRatio: selectedmodelNo[0].membraneProportion})
+    }
   };
 
   addCraft = () => {
@@ -560,12 +567,14 @@ class Index extends Component {
 
 
   handleInputChange = (v, type) => {
-    const { setFieldsValue, getFieldValue } = this.props.form;
+    const {choosenRowDataSecond,form} = this.props
+    const { setFieldsValue, getFieldValue } = form;
     const materialType = getFieldValue('materialType');
     const {inventoryWeight,singleWeight} = this.state;
-    console.log(inventoryWeight,singleWeight,type,v)
     
-    const key = materialType==='H016004'|| materialType==='H016005'? singleWeight:inventoryWeight
+    const key = materialType==='H016004'|| materialType==='H016005'? singleWeight||choosenRowDataSecond.singleWeight:inventoryWeight||choosenRowDataSecond.inventoryWeight
+    console.log(key,v,materialType)
+
     // 为主材 =》单件用重= 单件用量
     if (type === 'singleDosage') {
       if(materialType === 'H016001'){
@@ -584,23 +593,23 @@ class Index extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   returnElement = ({
-                     key,
-                     value,
-                     noNeed,
-                     type,
-                     list,
-                     clickFn,
-                     text,
-                     arr,
-                     data,
-                     form,
-                     number,
-                     step,
-                     min,
-                     max,
-                     disabled,
-                     multiple,
-                   }) => {
+    key,
+    value,
+    noNeed,
+    type,
+    list,
+    clickFn,
+    text,
+    arr,
+    data,
+    form,
+    number,
+    step,
+    min,
+    max,
+    disabled,
+    multiple,
+  }) => {
     switch (type) {
       case 2:
         return (
@@ -990,6 +999,8 @@ class Index extends Component {
     if (rightActive === SECOND_TAG) {
       fieldslist = [...fieldslist,'bomId','materialId','inventoryWeight']
       params.materialId = choosenRowDataSecond.materialId||materialNoChoosenRowData.id;
+      params.inventoryWeight = this.state.inventoryWeight;
+      params.singleWeight = this.state.singleWeight;
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
@@ -1301,11 +1312,8 @@ class Index extends Component {
               return;
             }
 
-            if(mType===2&&materialType === 'H016005'){
-              return
-            }
 
-            if (['H016003', 'H016003', 'H016003'].indexOf(materialType) > -1 && (['modelNo', 'modulusRatio'].indexOf(value) > -1)) {
+            if (['H016003', 'H016005', 'H016004'].includes(materialType) && (['modelNo', 'modulusRatio'].indexOf(value) > -1)) {
               return;
             }
 
