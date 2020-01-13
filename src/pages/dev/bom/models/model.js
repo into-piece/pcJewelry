@@ -264,7 +264,7 @@ export default {
         type: 'changeState',
         payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'paginationSecond' },
       });
-      if (callback) callback(list.records[0]);
+      if (callback) callback(list.records);
     },
 
     // 原料列表接口

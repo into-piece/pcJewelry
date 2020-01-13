@@ -936,6 +936,7 @@ class Index extends Component {
       if (materialType === 'H016002') {
         const Technology = [];
         console.log(craftForm);
+
         craftForm.forEach(item => {
           let mosaic = '';
           let efficiency = '';
@@ -984,11 +985,10 @@ class Index extends Component {
     this.setState({ addloading: true });
 
     const dataArr = modalInput[inputarr];
-    const fieldslist = dataArr.map(e => e.value);
+    let fieldslist = dataArr.map(e => e.value);
 
     if (rightActive === SECOND_TAG) {
-      fieldslist.push('bomId');
-      fieldslist.push('materialId');
+      fieldslist = [...fieldslist,'bomId','materialId','inventoryWeight']
       params.materialId = choosenRowDataSecond.materialId||materialNoChoosenRowData.id;
     }
     form.validateFields(fieldslist, (err, values) => {
@@ -1686,10 +1686,19 @@ class Index extends Component {
   getMaterialList = params => {
     console.log(params, '==========');
     const { selectedBom } = this.state;
-    const { dispatch, paginationSecond } = this.props;
+    const { dispatch, paginationSecond,choosenRowDataSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
       payload: { params: { BomId: selectedBom.id, ...paginationSecond, ...params } },
+      callback:(data)=>{
+        if(choosenRowDataSecond.id){
+          const arr = data.filter(({id})=>id===choosenRowDataSecond.id)||[]
+          arr.length>0&& dispatch({
+            type:`${defaultModelName}/changeStateOut`,
+            payload:{name:'choosenRowDataSecond',data:arr[0]}
+          })
+        }
+      }
     });
   };
 

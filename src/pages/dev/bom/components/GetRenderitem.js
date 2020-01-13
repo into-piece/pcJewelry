@@ -10,7 +10,10 @@ import DescriptionList from '@/components/DescriptionList';
 import styles from './GetRenderitem.less';
 import { defaultImages } from '@/utils/utils';
 
-
+const checkObj = {
+  0:'否',
+  1:'是'
+}
 
 const { Description } = DescriptionList;
 const { Step } = Steps;
@@ -70,7 +73,7 @@ const GetRenderitem = ({ data, type, items }) => {
         </Carousel>
     }
       <DescriptionList className={styles.headerList} size="small" col="1">
-        {arr.map(({ key, value, cName, convert, date, fixed }) => {
+        {arr.map(({ key, value, cName, convert, date, fixed,ischeck }) => {
             const showdata = date && data[key]
             ? moment(data[key]).format(date)
             : convert
@@ -79,7 +82,7 @@ const GetRenderitem = ({ data, type, items }) => {
               : convert[data[value]]
             : cName
             ? data[`${value}Name`]
-            : `${data[value]}`
+            : ischeck===1?checkObj[Number(data[value])]:`${data[value]}`
             if(showdata!=='undefined'&&showdata!=='null'&&showdata){
             return(
               <Description key={key} term={key}>
