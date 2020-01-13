@@ -565,7 +565,7 @@ class Index extends Component {
     const {inventoryWeight,singleWeight} = this.state;
     console.log(inventoryWeight,singleWeight,type,v)
     
-    const key = materialType==='H016004'? singleWeight:inventoryWeight
+    const key = materialType==='H016004'|| materialType==='H016005'? singleWeight:inventoryWeight
     // 为主材 =》单件用重= 单件用量
     if (type === 'singleDosage') {
       if(materialType === 'H016001'){
@@ -1299,6 +1299,10 @@ class Index extends Component {
            }) => {
             if (mType === 1 && materialType !== 'H016002') {
               return;
+            }
+
+            if(mType===2&&materialType === 'H016005'){
+              return
             }
 
             if (['H016003', 'H016003', 'H016003'].indexOf(materialType) > -1 && (['modelNo', 'modulusRatio'].indexOf(value) > -1)) {

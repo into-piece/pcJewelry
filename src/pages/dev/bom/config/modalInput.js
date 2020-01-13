@@ -3,8 +3,8 @@ export const product = [{ key: 'BOM名称', value: 'bName', type: 1 }];
 export const material = [
   // { key: 'bom名称', value: 'bomId', type: 2, list: 'bomlist' },
   { key: '原料类别', value: 'materialType', type: 2, list: 'listMstWordbook' },
-  { key: '胶膜编号', value: 'modelNo', type: 2, list: 'listChildDieSetDropDown' },
-  { key: '模比', value: 'modulusRatio' },
+  { key: '胶膜编号', value: 'modelNo', type: 2, list: 'listChildDieSetDropDown' , mType: 2,},
+  { key: '模比', value: 'modulusRatio' , mType: 2,},
   {
     key: '原料小类',
     value: 'materialSub',
