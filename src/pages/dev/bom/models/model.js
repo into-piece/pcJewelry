@@ -87,6 +87,7 @@ export default {
     productBomRevokeList:[],
     productBomRevokeChoosenRowData:{id:''},
     productBomRevokeSelectedKeys:[],
+    valuationClasslist:[{ 'key': '计重', 'value': 0 }, { 'key': '计件', 'value': 1 }],
   },
 
   effects: {
