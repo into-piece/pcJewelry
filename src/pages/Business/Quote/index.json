@@ -105,12 +105,13 @@
     },
     { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
-    { "key": "字印价 币种/件", "value": "markingPrice", "number": true },
+    { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 2 },
     {
-      "key": "石材价 币种/件",
+      "key": "石材价",
       "value": "stonePrice",
       "noNeed": true,
-      "number": true
+      "number": true,
+      "priceUnit": 2
     },
     {
       "key": "包装单价",

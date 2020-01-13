@@ -386,8 +386,12 @@ class Info extends Component {
       serviceObj.listTodayRate().then(res=>{
         const { rtnMsg, rtnCode } = res.head;
         if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
-          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)[0].bocConversionPrice
-          this.setState({ listTodayRate: Number(listTodayRate)/100 });
+          console.log(res.body.records,choosenRowData.currency);
+          
+          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
+          console.log(listTodayRate)
+          
+          this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
         }
       })
     }
@@ -404,8 +408,10 @@ class Info extends Component {
     const {listTodayRate} = this.state
     const {form,choosenRowData} = this.props
     const {quoteMethod} = choosenRowData
-    const nowCount = params.nowCount|| form.getFieldValue('nowCount') 
-    const finishedWeight = params.finishedWeight|| form.getFieldValue('finishedWeight') 
+    const nowCount = Number(params.nowCount|| form.getFieldValue('nowCount') ) // 此次工费
+    const finishedWeight = Number(params.finishedWeight|| form.getFieldValue('finishedWeight')) // 成品重量
+    
+    console.log(nowCount,listTodayRate,finishedWeight);
     
     // 计件
     if(quoteMethod === 'H008001'){
@@ -909,7 +915,8 @@ class Info extends Component {
                 <FormItem
                   label={
                     priceUnit === 1 && rightMenu === 2
-                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
+                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
+                      priceUnit === 2 && rightMenu === 2?`${key+currency}/件`
                       : key
                   }
                 >
