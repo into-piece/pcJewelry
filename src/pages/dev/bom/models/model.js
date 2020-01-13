@@ -87,6 +87,7 @@ export default {
     productBomRevokeList:[],
     productBomRevokeChoosenRowData:{id:''},
     productBomRevokeSelectedKeys:[],
+    valuationClasslist:[{ 'key': '计重', 'value': 0 }, { 'key': '计件', 'value': 1 }],
   },
 
   effects: {
@@ -264,7 +265,7 @@ export default {
         type: 'changeState',
         payload: { data: { size: response.body.size, current: response.body.current }, typeName: 'paginationSecond' },
       });
-      if (callback) callback(list.records[0]);
+      if (callback) callback(list.records);
     },
 
     // 原料列表接口

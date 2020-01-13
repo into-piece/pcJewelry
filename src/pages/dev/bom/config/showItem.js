@@ -100,6 +100,7 @@ const material = [
   {
     key: '配模',
     value: 'filmMatch',
+    ischeck:1,
   },
   { key: '原料编号', value: 'materialNo' },
   { key: '单件用量', value: 'singleDosage' },

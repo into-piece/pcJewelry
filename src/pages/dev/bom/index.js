@@ -43,6 +43,7 @@ import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo';
 import SysProduct from './components/SysProduct';
 import { defaultImages } from '@/utils/utils';
+import PrintTable from './PrintPage';
 
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
@@ -253,7 +254,7 @@ class Index extends Component {
     const { getProductBomRevoke } = this;
     const { dispatch, form, choosenRowData, choosenRowDataSecond } = this.props;
     const { setFieldsValue } = form;
-    const { rightActive, selectedProccess } = this.state;
+    const { rightActive, selectedProccess,selectedBom} = this.state;
     // // 产品编号下拉production-flow
     // dispatch({
     //   type: `${defaultModelName}/getlistDieSetSubDropDown`,
@@ -302,7 +303,11 @@ class Index extends Component {
     }
 
     if (rightActive === SECOND_TAG) {
-      setFieldsValue({ bomId: this.state.selectedBom.id });
+      if(modalType !== 'edit'){
+        console.log(selectedBom.id);
+        
+        setFieldsValue({ bomId: selectedBom.id });
+      }
       arr = [
         // 原料类别
         {
@@ -317,9 +322,9 @@ class Index extends Component {
           name: 'listChildDieSetDropDown',
           key1: 'productNo',
           value1: 'id',
-          // params: {
-          //   productNo: choosenRowData.productNo.slice(0, 9),
-          // },
+          params: {
+            productNo: choosenRowData.productNo.slice(0, 9),
+          },
         },
         {
           name: 'listGemSetProcessDropDown',
@@ -452,7 +457,8 @@ class Index extends Component {
         valuationClass: undefined,
       });
       this.setState({
-        inventoryWeight:undefined
+        inventoryWeight:undefined,
+        singleWeight:undefined
       })
       dispatch({
         type: `${defaultModelName}/clearmaterialNoList`,
@@ -476,7 +482,8 @@ class Index extends Component {
         valuationClass: undefined,
       });
       this.setState({
-        inventoryWeight:undefined
+        inventoryWeight:undefined,
+        singleWeight:undefined
       })
     }
     if (type === 'materialNo') {
@@ -555,16 +562,17 @@ class Index extends Component {
   handleInputChange = (v, type) => {
     const { setFieldsValue, getFieldValue } = this.props.form;
     const materialType = getFieldValue('materialType');
-    const {inventoryWeight} = this.state;
-    console.log(inventoryWeight,type,v)
+    const {inventoryWeight,singleWeight} = this.state;
+    console.log(inventoryWeight,singleWeight,type,v)
     
-    // 为主材 =》单件用重=单件用量
+    const key = materialType==='H016004'|| materialType==='H016005'? singleWeight:inventoryWeight
+    // 为主材 =》单件用重= 单件用量
     if (type === 'singleDosage') {
       if(materialType === 'H016001'){
         setFieldsValue({ sheetWithHeavy: v  });
         return
       }
-      setFieldsValue({ sheetWithHeavy: v * Number(inventoryWeight) });
+      setFieldsValue({ sheetWithHeavy: (v * Number(key)).toFixed(3) });
     }
   };
 
@@ -662,7 +670,12 @@ class Index extends Component {
           </Radio.Group>
         );
       case 7:
-        return <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
+        return <Input
+          placeholder="请输入"
+          disabled
+          value={form.getFieldValue(value) || '原料编号带出'}
+        />
+      // <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
         return <TextArea rows={2} placeholder="请输入" style={{ width: 800 }} />;
       case 9:
@@ -923,6 +936,7 @@ class Index extends Component {
       if (materialType === 'H016002') {
         const Technology = [];
         console.log(craftForm);
+
         craftForm.forEach(item => {
           let mosaic = '';
           let efficiency = '';
@@ -971,12 +985,11 @@ class Index extends Component {
     this.setState({ addloading: true });
 
     const dataArr = modalInput[inputarr];
-    const fieldslist = dataArr.map(e => e.value);
+    let fieldslist = dataArr.map(e => e.value);
 
     if (rightActive === SECOND_TAG) {
-      fieldslist.push('bomId');
-      fieldslist.push('materialId');
-      params.materialId = materialNoChoosenRowData.id;
+      fieldslist = [...fieldslist,'bomId','materialId','inventoryWeight']
+      params.materialId = choosenRowDataSecond.materialId||materialNoChoosenRowData.id;
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
@@ -1154,7 +1167,9 @@ class Index extends Component {
       productBomRevokeListLoading,
       productBomRevokeChoosenRowData,
       bomlist,
+      
     } = this.props;
+    const printSearchParams = {}
     const { modalType, rightActive, craftForm, selectedBom, selectedProccess } = this.state;
 
     const { getFieldDecorator, getFieldValue } = form;
@@ -1204,6 +1219,10 @@ class Index extends Component {
     }
 
 
+    if (modalType === 'printer') {
+      return <PrintTable args={printSearchParams} />;
+    }
+
     return (
       <Form size="small" key="1">
         {rightActive === SECOND_TAG &&
@@ -1212,7 +1231,7 @@ class Index extends Component {
             className="addModal"
             style={{ width: '100%', height: '150px' }}
           >
-            <FormItem label='bom名称'>
+            <FormItem label='BOM名称'>
               {getFieldDecorator('bomId', {
                 rules: [
                   {
@@ -1282,6 +1301,10 @@ class Index extends Component {
               return;
             }
 
+            if(mType===2&&materialType === 'H016005'){
+              return
+            }
+
             if (['H016003', 'H016003', 'H016003'].indexOf(materialType) > -1 && (['modelNo', 'modulusRatio'].indexOf(value) > -1)) {
               return;
             }
@@ -1340,7 +1363,7 @@ class Index extends Component {
                               message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
                             },
                           ],
-                          initialValue: initValue2 || initValue || (number ? 0.00 : undefined),
+                          initialValue: initValue2 || initValue|| (number ? 0.00 : undefined),
                         })(
                           this.returnElement({
                             key,
@@ -1652,6 +1675,7 @@ class Index extends Component {
 
   // 打印bom
   printBom = () => {
+    this.btnFn('printer')
   };
 
   _changeRightActive = ({ target: { value } }) => {
@@ -1666,10 +1690,19 @@ class Index extends Component {
   getMaterialList = params => {
     console.log(params, '==========');
     const { selectedBom } = this.state;
-    const { dispatch, paginationSecond } = this.props;
+    const { dispatch, paginationSecond,choosenRowDataSecond } = this.props;
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
       payload: { params: { BomId: selectedBom.id, ...paginationSecond, ...params } },
+      callback:(data)=>{
+        if(choosenRowDataSecond.id){
+          const arr = data.filter(({id})=>id===choosenRowDataSecond.id)||[]
+          arr.length>0&& dispatch({
+            type:`${defaultModelName}/changeStateOut`,
+            payload:{name:'choosenRowDataSecond',data:arr[0]}
+          })
+        }
+      }
     });
   };
 
@@ -1824,6 +1857,7 @@ class Index extends Component {
       valuationClassName,
       measureUnitName,
       id,
+      singleWeight
     } = materialNoChoosenRowData;
     const weightUnitList = [{ key: weightUnitName, value: weightUnit }];
     const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
@@ -1847,7 +1881,8 @@ class Index extends Component {
           materialId: id,
         });
         this.setState({
-          inventoryWeight
+          inventoryWeight,
+          singleWeight
         })
         this.showMaterialModalFunc(2);
       },

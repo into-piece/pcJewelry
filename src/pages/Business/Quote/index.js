@@ -304,6 +304,7 @@ class Info extends Component {
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
   }
+
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
@@ -371,7 +372,61 @@ class Info extends Component {
         });
       }
     });
+
+    let arr = []
+    if(rightMenu === 1){
+      arr = [
+        {
+          name: 'mainTypeDropdown',
+          params: {
+            sType: 'H016001',
+          },
+        },
+      ];
+    }
+    if(rightMenu === 2){
+      serviceObj.listTodayRate().then(res=>{
+        const { rtnMsg, rtnCode } = res.head;
+        if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+          console.log(res.body.records,choosenRowData.currency);
+          
+          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
+          console.log(listTodayRate)
+          
+          this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
+        }
+      })
+    }
+
+    arr.length>0 && arr.forEach(item => {
+      dispatch({
+        type: `quote/getDropdownList`,
+        payload: item,
+      });
+    });
   };
+
+  countProductCost = (params) => {
+    const {listTodayRate} = this.state
+    const {form,choosenRowData} = this.props
+    const {quoteMethod} = choosenRowData
+    const nowCount = Number(params.nowCount|| form.getFieldValue('nowCount') ) // 此次工费
+    const finishedWeight = Number(params.finishedWeight|| form.getFieldValue('finishedWeight')) // 成品重量
+    
+    console.log(nowCount,listTodayRate,finishedWeight);
+    
+    // 计件
+    if(quoteMethod === 'H008001'){
+      form.setFieldsValue({
+        productCost:(listTodayRate*nowCount).toFixed(3)
+      })
+    }else{
+      form.setFieldsValue({
+        productCost:(listTodayRate*nowCount*finishedWeight).toFixed(3)
+      })
+    }
+  }
+      
 
   // 复制
   handleCopy = () => {
@@ -396,6 +451,12 @@ class Info extends Component {
       default:
         if (rightMenu === 2) {
           const { markingId, markingEnName } = choosenRowData;
+          if(!choosenRowData.id){
+            notification.error({
+              message: '请先选择对应的报价主页',
+            })
+            return
+          }
           if(markingId){
             form.setFieldsValue({
               markingId,
@@ -512,12 +573,12 @@ class Info extends Component {
       const obj = quote.endCustomerList.find(item => item.value === value);
       const { key } = obj;
       // debugger
-      let startIndex = key.indexOf('(') + 1;
-      let endIndex = key.indexOf(')');
+      const startIndex = key.indexOf('(') + 1;
+      const endIndex = key.indexOf(')');
       const endShotName = key.substring(startIndex,endIndex);
       console.log(key)
       form.setFieldsValue({
-        endShotName: endShotName,
+        endShotName,
       });
     }
   };
@@ -537,12 +598,61 @@ class Info extends Component {
   };
 
   disabledCondition = (v, form) => {
+    const {markingType,packPriceType} = this.props.choosenRowData
     // const isstonePrice = v === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001';
     // const ismainMaterialWeight =
     //   v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001';
     // return isstonePrice || ismainMaterialWeight;
+    if((markingType === 'H011002'&&v==='markingPrice') || (packPriceType === 'H011002'&&v==='packPrice') ){
+      return true
+    }
+
     return false;
   };
+
+  // 计算单价
+  countPrice=(params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
+    const {form,choosenRowData} = this.props
+    const {isWeighStones,quoteMethod,quotePrice} = choosenRowData
+    const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
+    const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )// 成品重量
+    const markingPrice=  Number(params.markingPrice||form.getFieldValue('markingPrice')) // 字印价
+    const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice')) // 包装单价
+    const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight')) // 主材重量
+    const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice')) // 石材价
+    
+    console.log(nowCount,finishedWeight,markingPrice,packPrice,mainMaterialWeight,stonePrice,'=======')
+    // 计重
+    if(quoteMethod === 'H008002'){
+      // 是否计石重 是
+      if(isWeighStones === 'H009001'){
+        form.setFieldsValue({
+          price:  ((quotePrice+nowCount)*finishedWeight+markingPrice*packPrice).toFixed(2)
+        });
+      }else{
+        form.setFieldsValue({
+          price:  ((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice).toFixed(2)
+        });
+      }
+    }
+    // 计件
+    else{
+      // 是否计石重 是
+      if(isWeighStones === 'H009001'){
+        form.setFieldsValue({
+          price:  (quotePrice*finishedWeight+nowCount+markingPrice+packPrice).toFixed(2)
+        });
+      }else{
+        form.setFieldsValue({
+          price:  (quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice).toFixed(2)
+        });
+      }
+    }
+    
+    
+    quoteMethod === 'H008001'
+    
+  }
 
   handleDatePicker = (date, dateString) => {
     const quoteDateFrom = moment(date[0]).valueOf();
@@ -567,6 +677,7 @@ class Info extends Component {
 
   inputChange = (v, type) => {
     const { form } = this.props;
+    const value  = v.target.value
     const price = form.getFieldValue('price') || '';
     const qty = form.getFieldValue('qty') || '';
     if (type === 'price' && qty) {
@@ -581,6 +692,15 @@ class Info extends Component {
         quotedAmount,
       });
     }
+    
+    // 计算单价
+    const arr = ['nowCount','finishedWeight','markingPrice','packPrice','mainMaterialWeight','stonePrice']
+    arr.includes(type) && this.countPrice({[type]:value})
+
+
+    const arr2 = ['nowCount','finishedWeight']
+    arr2.includes(type) && this.countProductCost({[type]:value})
+    
   };
 
   // 根据btn点击 返回对应弹窗内容
@@ -592,13 +712,14 @@ class Info extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   // type 9 RangePicker
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form,disabled }) => {
     switch (type) {
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
+            disabled={disabled}
             onChange={v => {
               this.handleSelectChange(v, value);
             }}
@@ -772,7 +893,7 @@ class Info extends Component {
             </div>
 
             <div className={styles.carousel_content}>
-              <Carousel {...this.carouselsettings} autoplay key={`as${Math.random(2)}`}>
+              <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
                 {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
               </Carousel>
             </div>
@@ -792,6 +913,7 @@ class Info extends Component {
               initValue,
               number,
               priceUnit,
+              disabled
             }) => (
               <div
                 className="addModal"
@@ -801,7 +923,8 @@ class Info extends Component {
                 <FormItem
                   label={
                     priceUnit === 1 && rightMenu === 2
-                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`
+                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
+                      priceUnit === 2 && rightMenu === 2?`${key+currency}/件`
                       : key
                   }
                 >
@@ -836,6 +959,7 @@ class Info extends Component {
                       initValue,
                       data: quote,
                       form,
+                      disabled
                     })
                   )}
                 </FormItem>
@@ -888,13 +1012,12 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData } = this.props;
-    const { productLineId } = this.state;
+    const { rightMenu, form, choosenRowData,productChoosenRowData } = this.props;
     const isHead = rightMenu === 1;
     const str = isHead ? 'quotelist' : 'quoteDatialList';
-    let params = {};
+    let params = {}; 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id, productLineId };
+      params = { quoteHeadId: choosenRowData.id ,productId:productChoosenRowData.id};
       debugger;
     }
 
@@ -926,7 +1049,6 @@ class Info extends Component {
   // 编辑按钮回调
   handleEdit = close => {
     const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData } = this.props;
-    const { productLineId } = choosenDetailRowData;
     const isHead = rightMenu === 1;
     const str = isHead ? 'quotelist' : 'quoteDatialList';
 
@@ -935,7 +1057,7 @@ class Info extends Component {
     };
 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id, productLineId };
+      params = { quoteHeadId: choosenRowData.id };
     }
 
     // 还要清空所选中项
@@ -1119,7 +1241,7 @@ class Info extends Component {
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
-    const { choosenRowData, form } = this.props;
+    const { choosenRowData, form ,dispatch} = this.props;
     const {
       id,
       productNo,
@@ -1129,11 +1251,13 @@ class Info extends Component {
       platingColorName,
       productColorName,
       productType,
-      productLineId,
       productLineName,
       unitOfMeasurementName,
       unitOfWeightName,
       finishedWeight,
+      specification,
+      unitOfLengthName,
+      unitOfLength
     } = this.props.productChoosenRowData;
     let lastCount = '0.00';
     let topCount = '0.00';
@@ -1197,30 +1321,34 @@ class Info extends Component {
     //     actualCount = res.body.records[0].count
     //   }
     // })
-    this.showProductModalFunc(2);
-    form.setFieldsValue({
-      productId: id,
-      productNo,
-      productColorName,
-      customerProductNo,
-      productTypeName,
-      productType,
-      gemColorName,
-      platingColorName,
-      productLineId,
-      finishedWeight,
-      topCount,
-      lastCount,
-      unitOfMeasurementName,
-      unitOfWeightName,
-      productLineName,
-      packPrice,
-      actualCount,
-      productLineCoefficientQuotation,
-    });
-    this.setState({
-      productLineId,
-    });
+    dispatch({
+      type:'quote/changeStateOut',
+      payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
+      callback:()=>{
+        this.showProductModalFunc(2);
+        form.setFieldsValue({
+          productId: id,
+          productNo,
+          productColorName,
+          customerProductNo,
+          productTypeName,
+          productType,
+          gemColorName,
+          platingColorName,
+          finishedWeight,
+          topCount,
+          lastCount,
+          unitOfMeasurementName,
+          unitOfWeightName,
+          productLineName,
+          packPrice,
+          actualCount,
+          productLineCoefficientQuotation,
+          specification,
+          unitOfLength
+        });
+      }
+    })
   };
 
   // 产品选择弹窗取消回调
@@ -1307,44 +1435,44 @@ class Info extends Component {
     const modalFooter =
       modalType === 'plus'
         ? [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
-            <Button
-              key="continue"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(false);
               }}
-            >
+          >
               继续添加
-            </Button>,
+          </Button>,
           ]
         : [
-            <Button key="back" onClick={onCancel}>
+          <Button key="back" onClick={onCancel}>
               取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={addloading}
-              onClick={() => {
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={addloading}
+            onClick={() => {
                 handleModalOk(true);
               }}
-            >
+          >
               保存
-            </Button>,
+          </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);

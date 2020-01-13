@@ -3,8 +3,8 @@ export const product = [{ key: 'BOM名称', value: 'bName', type: 1 }];
 export const material = [
   // { key: 'bom名称', value: 'bomId', type: 2, list: 'bomlist' },
   { key: '原料类别', value: 'materialType', type: 2, list: 'listMstWordbook' },
-  { key: '胶膜编号', value: 'modelNo', type: 2, list: 'listChildDieSetDropDown' },
-  { key: '模比', value: 'modulusRatio' },
+  { key: '胶膜编号', value: 'modelNo', type: 2, list: 'listChildDieSetDropDown' , mType: 2,},
+  { key: '模比', value: 'modulusRatio' , mType: 2,},
   {
     key: '原料小类',
     value: 'materialSub',
@@ -22,10 +22,10 @@ export const material = [
     value: 'filmMatch',
     type: 6,
     arr: [
-      { key: '是', value: 1 },
-      { key: '否', value: 0 },
+      { key: '是', value: '1' },
+      { key: '否', value: '0' },
     ],
-    initValue: 1,
+    initValue: '0',
     mType: 1,
   },
   { key: '原料编号', value: 'materialNo', type: 3, list: 'materialNoList' ,clickFn: 'showMaterialModalFunc'},

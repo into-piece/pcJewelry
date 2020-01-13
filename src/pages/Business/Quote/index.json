@@ -18,6 +18,7 @@
       "initValue": 0,
       "noNeed": true
     },
+    { "key": "主材类别", "value": "p_type", "type": 2, "list": "mainTypeDropdown" },
     { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
     { "key": "客户简称", "value": "customerShotName", "type": 7, "noNeed": true },
     { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList", "noNeed": true },
@@ -26,20 +27,14 @@
       "key": "报价方式",
       "value": "quoteMethod",
       "type": 6,
-      "arr": [
-        { "key": "计重", "value": "H008002" },
-        { "key": "计件", "value": "H008001" }
-      ],
+      "arr": [{ "key": "计重", "value": "H008002" }, { "key": "计件", "value": "H008001" }],
       "initValue": "H008002"
     },
     {
       "key": "是否计石重",
       "value": "isWeighStones",
       "type": 6,
-      "arr": [
-        { "key": "是", "value": "H009001" },
-        { "key": "否", "value": "H009002" }
-      ],
+      "arr": [{ "key": "是", "value": "H009001" }, { "key": "否", "value": "H009002" }],
       "initValue": "H009001"
     },
     {
@@ -56,22 +51,15 @@
       "key": "包装单价",
       "value": "packPriceType",
       "type": 6,
-      "arr": [
-        { "key": "计收", "value": "H011001" },
-        { "key": "不计收", "value": "H011002" }
-      ],
+      "arr": [{ "key": "计收", "value": "H011001" }, { "key": "不计收", "value": "H011002" }],
       "initValue": "H011002",
       "priceUnit": 1
     },
-
     {
       "key": "字印单价",
       "value": "markingType",
       "type": 6,
-      "arr": [
-        { "key": "计收", "value": "H011001" },
-        { "key": "不计收", "value": "H011002" }
-      ],
+      "arr": [{ "key": "计收", "value": "H011001" }, { "key": "不计收", "value": "H011002" }],
       "initValue": "H011002",
       "priceUnit": 1
     },
@@ -107,15 +95,23 @@
     { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
     { "key": "成品重量", "value": "finishedWeight", "number": true },
     { "key": "规格", "value": "specification", "noNeed": true, "number": true, "type": 7 },
-    { "key": "长度单位", "value": "unitOfLengthName", "noNeed": true, "type": 7 },
+    {
+      "key": "长度单位",
+      "value": "unitOfLength",
+      "noNeed": true,
+      "type": 2,
+      "list": "unitOfLengthDropdown",
+      "disabled": true
+    },
     { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
-    { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 1 },
+    { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 2 },
     {
-      "key": "石材价（币种/件）",
+      "key": "石材价",
       "value": "stonePrice",
       "noNeed": true,
-      "number": true
+      "number": true,
+      "priceUnit": 2
     },
     {
       "key": "包装单价",
@@ -154,11 +150,10 @@
       "key": "此次工费",
       "value": "nowCount",
       "number": true,
-      "noNeed": true,
       "priceUnit": 1
     },
     { "key": "单价", "value": "price", "number": true, "priceUnit": 1, "type": 7 },
-    { "key": "产品工费", "value": "productCost", "number": true, "priceUnit": 1, "type": 7 },
+    { "key": "产品工费 RMB/件", "value": "productCost", "number": true, "type": 7 },
     { "key": "报价数量", "value": "qty", "number": true },
     {
       "key": "报价金额",

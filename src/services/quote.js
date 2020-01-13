@@ -52,6 +52,19 @@ const resultArr = [
   { key: 'getActualCountByProductId', path: '/product-quote-detail/getActualCountByProductId' }, // 抓出该款产品的最近一次PI工费
   { key: 'geInitializeCountByProductId', path: '/product-quote-detail/geInitializeCountByProductId' }, // 抓出该款产品的多个参数
   { key: 'getMainMaterialPrice', path: '/product-quote-header/getMainMaterialPrice' }, // 获取当天银价（主材价）
+  {
+    key: 'mainTypeDropdown',
+    path: '/develop/category/develop-basic-category-set/dropdown',
+    module: 4
+  },
+
+  {
+    key: 'listTodayRate',
+    path: '/basic/currency/listTodayRate',
+    module: 4
+  },
+
+  
 ]
 // /listMstWordbook
 
