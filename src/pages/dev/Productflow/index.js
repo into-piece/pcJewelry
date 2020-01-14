@@ -339,14 +339,17 @@ class Index extends Component {
   // 新增||编辑 按钮事件回调
   handleAdd = (close) => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
-    const { secondTableActive, rightActive, modalType } = this.state;
+    const { secondTableActive, rightActive, modalType,filelist,videolist } = this.state;
     let params = {};
     if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode };
+      params = { flowCode: choosenRowData.flowCode,filePath:videolist.flatMap(e => e.url),picPath:filelist.flatMap(e => e.url) };
     }
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
+
+
+
     this.setState({ addloading: true });
 
     const dataArr = modalInput[rightActive];
@@ -480,6 +483,9 @@ class Index extends Component {
   // 列表对应操作button回调
   btnFn = async (modalType) => {
     switch (modalType) {
+      case '':
+        this.setState({ modalType,addloading: false,filelist:[],videolist:[] });
+      break;
       case 'plus':
       case 'edit':
       default:
@@ -724,6 +730,7 @@ class Index extends Component {
           footer={modalFooter}
           onCancel={() => {
             btnFn('');
+
           }}
         >
           {getModalContent()}

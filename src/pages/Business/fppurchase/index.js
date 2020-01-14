@@ -88,8 +88,6 @@ class Index extends Component {
     secondTableActive: 'fpdetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
-    filelist: [],
-    videolist: [],
   };
 
   componentDidMount() {
@@ -458,26 +456,7 @@ class Index extends Component {
             />
           </FormItem>
         </Col>}
-        {(['fpdetail'].indexOf(rightActive)>-1) && <Col span={18}>
-          <FormItem
-            label="上传视频"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadVideo
-              key="upvideo"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.videos  : choosenRowDataSecond.videos): []}
-              fileListFun={(list) => {
-                this.setState({ videolist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
+
         {content}
       </Form>
     );
