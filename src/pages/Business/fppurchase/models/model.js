@@ -5,7 +5,7 @@
  * @LastEditTime: 2019-08-17 15:15:50
  * @LastEditors: Please set LastEditors
  */
-import servicesConfig from '@/services/dev';
+import servicesConfig from '@/services/business';
 
 const initData = { records: [] };
 

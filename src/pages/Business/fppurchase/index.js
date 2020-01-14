@@ -32,7 +32,7 @@ import showItem from './config/showItem';
 import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
-import serviceObj from '@/services/dev';
+import serviceObj from '@/services/business';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -323,7 +323,7 @@ class Index extends Component {
     const { rightActive, secondTableActive } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke';
+    const serviceType = isLock ? 'approval' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
       const { rtnCode, rtnMsg } = res.head;
@@ -410,6 +410,11 @@ class Index extends Component {
             return (
               <div className="addModal" key={key}>
                 <FormItem
+                  labelCol={{ span: 3 }}
+                  wrapperCol={{
+                    span: 20,
+                  }
+                  }
                   label={key}
                 >
                   {
@@ -436,27 +441,6 @@ class Index extends Component {
             );
           })
         }
-        {(['fpdetail'].indexOf(rightActive)>-1) && <Col span={18}>
-          <FormItem
-            label="上传图片"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadImg
-              key="uimg"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
-              fileListFun={(list) => {
-                this.setState({ filelist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
-
         {content}
       </Form>
     );
@@ -516,7 +500,10 @@ class Index extends Component {
   returnSisabled = (tag) => {
     const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
     const { rightActive } = this.state;
-
+    if(rightActive === 'fpdetail'&&choosenRowData.status==='2'){
+      // 主页选中数据为已审批，详细不可新增 编辑 删除
+      return true;
+    }
     if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
     if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
 
@@ -528,10 +515,7 @@ class Index extends Component {
       return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
     }
 
-    if(rightActive === 'fpdetail'&&choosenRowData.status===2){
-      // 主页选中数据为已审批，详细不可新增 编辑 删除
-      return true;
-    }
+
 
     return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
   };

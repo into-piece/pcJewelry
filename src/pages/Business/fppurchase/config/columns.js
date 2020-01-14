@@ -104,8 +104,8 @@ let fppurchase = [
   },
   {
     title: <div className={styles.row_normal2}>客户订单</div>,
-    dataIndex: 'customerOrderId',
-    key: 'customerOrderId',
+    dataIndex: 'orderNo',
+    key: 'orderNo',
   },
   {
     title: <div className={styles.row_normal2}>币种</div>,
@@ -132,161 +132,161 @@ let fpdetail = [
     dataIndex: 'processCode',
     key: 'processCode',
   },
-  {
-    title: <div className={styles.row_normal2}>供应商编号</div>,
-    dataIndex: 'processName',
-    key: 'processName',
-  },
-  {
-    title: <div className={styles.row_normal2}>中文名</div>,
-    dataIndex: 'zhName',
-    key: 'zhName',
-  },
-  {
-    title: <div className={styles.row_normal2}>英文名</div>,
-    dataIndex: 'enName',
-    key: 'enName',
-  },
-  {
-    title: <div className={styles.row_normal2}>生产工序产能(件/小时)</div>,
-    dataIndex: 'processCapacity',
-    key: 'processCapacity',
-  },
-  {
-    title: <div className={styles.row_normal2}>类别</div>,
-    dataIndex: 'createTime',
-    key: 'createTime',
-  },
-  {
-    title: <div className={styles.row_normal2}>成色名称</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>宝石颜色</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>电镀颜色</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>计量单位</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>创建人</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>返主材类别</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>工价类别</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>此次工费(克/件)</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>最低工费(克/件)</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>成品重量(g)</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>是否记石重</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>石材重量(g)</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>主材重量(g)</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>石材价</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>字印编辑</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>字印价</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>包装单价</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>单价</div>,
-    dataIndex: 'createUser',
-    key: 'createUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>客户订单数量</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>采购重量</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>采购金额</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>返主材重量</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>采购重量范围</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>成品长度</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>产品单位</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: <div className={styles.row_normal2}>戒围标准</div>,
-    dataIndex: 'status',
-    key: 'status',
-  },
+  // {
+  //   title: <div className={styles.row_normal2}>供应商编号</div>,
+  //   dataIndex: 'processName',
+  //   key: 'processName',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>中文名</div>,
+  //   dataIndex: 'zhName',
+  //   key: 'zhName',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>英文名</div>,
+  //   dataIndex: 'enName',
+  //   key: 'enName',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>生产工序产能(件/小时)</div>,
+  //   dataIndex: 'processCapacity',
+  //   key: 'processCapacity',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>类别</div>,
+  //   dataIndex: 'createTime',
+  //   key: 'createTime',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>成色名称</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>宝石颜色</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>电镀颜色</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>计量单位</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>创建人</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>返主材类别</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>工价类别</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>此次工费(克/件)</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>最低工费(克/件)</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>成品重量(g)</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>是否记石重</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>石材重量(g)</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>主材重量(g)</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>石材价</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>字印编辑</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>字印价</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>包装单价</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>单价</div>,
+  //   dataIndex: 'createUser',
+  //   key: 'createUser',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>客户订单数量</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>采购重量</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>采购金额</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>返主材重量</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>采购重量范围</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>成品长度</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>产品单位</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
+  // {
+  //   title: <div className={styles.row_normal2}>戒围标准</div>,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  // },
 ];
 
 fppurchase = fppurchase.map(item => ({ ...item, sorter: true }));
