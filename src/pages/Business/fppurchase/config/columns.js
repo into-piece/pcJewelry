@@ -1,119 +1,128 @@
+import {statusConvert} from '@/utils/convert';
+import moment from 'moment';
 import styles from './columns.less';
-import {statusConvert,YoNConvert} from '@/utils/convert';
 
 let fppurchase = [
   {
-    title: <div className={styles.row_normal2}>采购单号</div>,
-    dataIndex: 'flowCode',
-    key: 'flowCode',
-  },
-  {
-    title: <div className={styles.row_normal2}>客户订单</div>,
-    dataIndex: 'flowName',
-    key: 'flowName',
-  },
-  {
     title: <div className={styles.row_normal2}>客户编号</div>,
-    dataIndex: 'engName',
-    key: 'engName',
+    dataIndex: 'customerNo',
+    key: 'customerNo',
   },
   {
     title: <div className={styles.row_normal2}>客户简称</div>,
-    dataIndex: 'department',
-    key: 'departmentName',
-    width: 100,
-    render:(d,i)=>(i.departmentName)
-
+    dataIndex: 'customerShotName',
+    key: 'customerShotName',
   },
   {
-    title: <div className={styles.row_normal2}>供应商编号</div>,
-    dataIndex: 'efficiency',
-    key: 'efficiency',
+    title: <div className={styles.row_normal2}>采购单号</div>,
+    dataIndex: 'purchaseNo',
+    key: 'purchaseNo',
   },
-
   {
     title: <div className={styles.row_normal2}>采购日期</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
-  },
-
-  {
-    title: <div className={styles.row_normal2}>供应商简称</div>,
-    dataIndex: 'weightRange',
-    key: 'weightRange',
-  },
-
-  {
-    title: <div className={styles.row_normal2}>联系人</div>,
-    dataIndex: 'flowClass',
-    key: 'flowClass',
-
-  },
+    dataIndex: 'purchaseDate',
+    key: 'purchaseDate',
+    render: d => moment(d).format("YYYY/MM/DD")
+  }
+  ,
   {
     title: <div className={styles.row_normal2}>供应商交期</div>,
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'supplierDate',
+    key: 'supplierDate',
+    render:d=>moment(d).format("YYYY/MM/DD")
   },
   {
-    title: <div className={styles.row_normal2}>手机</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>采购数量</div>,
+    dataIndex: 'purchaseTotal',
+    key: 'purchaseTotal',
+
   },
   {
-    title: <div className={styles.row_normal2}>电话</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>主材价</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>币种</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>采购总数</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
-  },
-  {
-    title: <div className={styles.row_normal2}>采购总重(g)</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>采购重量</div>,
+    dataIndex: 'procurementWeightTotal',
+    key: 'procurementWeightTotal',
   },
   {
     title: <div className={styles.row_normal2}>采购总额</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    dataIndex: 'purchasePriceTotal',
+    key: 'purchasePriceTotal',
   },
   {
-    title: <div className={styles.row_normal2}>返回主材总重</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>收货数量</div>,
+    dataIndex: 'goodsAmount',
+    key: 'goodsAmount',
   },
   {
-    title: <div className={styles.row_normal2}>税率</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>收货重量</div>,
+    dataIndex: 'goodsWeight',
+    key: 'goodsWeight',
   },
   {
-    title: <div className={styles.row_normal2}>采购人</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>确认金额</div>,
+    dataIndex: 'amountRecognized',
+    key: 'amountRecognized',
   },
   {
-    title: <div className={styles.row_normal2}>备注</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>退货数量</div>,
+    dataIndex: 'salesReturnAmount',
+    key: 'salesReturnAmount',
   },
   {
-    title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'chargeUser',
-    key: 'chargeUser',
+    title: <div className={styles.row_normal2}>退货重量</div>,
+    dataIndex: 'rtnWeight',
+    key: 'rtnWeight',
   },
+  {
+    title: <div className={styles.row_normal2}>供应商简称</div>,
+    dataIndex: 'supplierShotName',
+    key: 'supplierShotName',
+  },
+  {
+    title: <div className={styles.row_normal2}>联系人</div>,
+    dataIndex: 'contactName',
+    key: 'contactName',
+  },
+  {
+    title: <div className={styles.row_normal2}>手机</div>,
+    dataIndex: 'mobilePhone',
+    key: 'mobilePhone',
+  },
+  {
+    title: <div className={styles.row_normal2}>预付款金额</div>,
+    dataIndex: 'advance',
+    key: 'advance',
+  },
+  {
+    title: <div className={styles.row_normal2}>主材价</div>,
+    dataIndex: 'principalPrice',
+    key: 'principalPrice',
+  },
+  {
+    title: <div className={styles.row_normal2}>返主材总重</div>,
+    dataIndex: 'rtnPrincipalWeightTotal',
+    key: 'rtnPrincipalWeightTotal',
+  },
+  {
+    title: <div className={styles.row_normal2}>客户订单</div>,
+    dataIndex: 'customerOrderId',
+    key: 'customerOrderId',
+  },
+  {
+    title: <div className={styles.row_normal2}>币种</div>,
+    dataIndex: 'currency',
+    key: 'currency',
+  },
+  {
+    title: <div className={styles.row_normal2}>汇率</div>,
+    dataIndex: 'taxRate',
+    key: 'taxRate',
+  },
+  {
+    title: <div className={styles.row_normal2}>数据状态</div>,
+    dataIndex: 'status',
+    key: 'status',
+    render:d=>statusConvert[d]
+  }
 ];
 
 

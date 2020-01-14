@@ -79,7 +79,7 @@ const fppurchaseList = fppurchaseUrls.map(({ name, arr, path }) => (
     {
       key: sampleType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix: `${env}/business/business/purchase`
+      prefix: `${env}/business/business.purchase`
     }
   ))
 ));
@@ -91,7 +91,7 @@ const fpdetailList = fpdetailUrls.map(({ name, arr, path }) => (
     {
       key: sampleType[index + 1] + name,
       path: `/${path}/${item}`,
-      prefix: `${env}/business/business/purchaseDetail`
+      prefix: `${env}/business/business.purchase`
     }
   ))
 ));

@@ -1,15 +1,13 @@
 const fppurchaseUrls = [
   {
     'name': 'fppurchase',
-    'path': 'proforma-invoice-head',
+    'path': 'purchase-order-header',
     'arr': [
-      'notdone/list',
-      'already/list',
-      'approval',
-      'cancelApproval',
-      'merge',
-      'split',
+      'list',
       'saveOrUpdate',
+      'delete',
+      'approve',
+      'revoke',
     ],
   },
 
@@ -17,7 +15,7 @@ const fppurchaseUrls = [
 const fpdetailUrls = [
   {
     'name': 'fpdetail',
-    'path': 'proforma-invoice-detail',
+    'path': 'proforma-order-detail',
     'arr': [
       'list',
       'saveOrUpdate',
