@@ -7,6 +7,7 @@
  */
 import request from '@/utils/request';
 import { piUrls, piDetailUrls } from './business/piUrls';
+import { fppurchaseUrls, fpdetailUrls } from './business/fppurchaseUrls';
 import { sampleUrls, sampleDetailUrls } from './business/sampleUrls';
 import { getCurrentUser } from '../utils/authority';
 
@@ -72,10 +73,36 @@ const sampleList = sampleUrls.map(({ name, arr, path }) => (
 ));
 
 
+// 业务-成品采购主页
+const fppurchaseList = fppurchaseUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: sampleType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix: `${env}/business/business/purchase`
+    }
+  ))
+));
+
+
+// 业务-成品采购详细
+const fpdetailList = fpdetailUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: sampleType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix: `${env}/business/business/purchaseDetail`
+    }
+  ))
+));
+
+
 const resultArr = [
   ...piUrlsList.flat(),
   ...piDetailUrlsList.flat(),
   ...sampleList.flat(),
+  ...fppurchaseList.flat(),
+  ...fpdetailList.flat(),
   { key: 'listProductType', path: '/business/business/sample/business-sample/listProductType', prefix: `${env}` },// 产品类别
   { key: 'listAllPiDetail', path: '/business/business/order/proforma-invoice-detail/listAll', prefix: `${env}` },// PI详情 获取所有
   { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
