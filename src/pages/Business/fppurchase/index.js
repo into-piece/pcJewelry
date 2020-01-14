@@ -44,7 +44,11 @@ const btnGroup = [
   { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
-  // { name: '复制', tag: 'copy' },
+];
+const btnGroupSecond = [
+  { name: '新增', tag: 'plus' },
+  { name: '删除', tag: 'delete', type: 'danger' },
+  { name: '编辑', tag: 'edit' },
 ];
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
@@ -543,6 +547,11 @@ class Index extends Component {
       return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
     }
 
+    if(rightActive === 'fpdetail'&&choosenRowData.status===2){
+      // 主页选中数据为已审批，详细不可新增 编辑 删除
+      return true;
+    }
+
     return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
   };
 
@@ -570,6 +579,9 @@ class Index extends Component {
     } = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
+
+    const btnrealGroup = rightActive===firstTabFlag?btnGroup:btnGroupSecond;
+
 
     const modalFooter = modalType === 'plus' ? [
       <Button
@@ -687,7 +699,7 @@ class Index extends Component {
                       {/*  */}
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {btnGroup.map(({ name, tag }) => (
+                          {btnrealGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
                               className={styles.buttomControl}

@@ -3,28 +3,22 @@ import {statusConvert,YoNConvert} from '@/utils/convert';
 
 let fppurchase = [
   {
-    title: <div className={styles.row_normal2}>流程编号</div>,
+    title: <div className={styles.row_normal2}>采购单号</div>,
     dataIndex: 'flowCode',
     key: 'flowCode',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-    ),
   },
   {
-    title: <div className={styles.row_normal2}>流程名称</div>,
+    title: <div className={styles.row_normal2}>客户订单</div>,
     dataIndex: 'flowName',
     key: 'flowName',
-    width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>英文名称</div>,
+    title: <div className={styles.row_normal2}>客户编号</div>,
     dataIndex: 'engName',
     key: 'engName',
-    width: 100,
   },
   {
-    title: <div className={styles.row_normal2}>所属部门</div>,
+    title: <div className={styles.row_normal2}>客户简称</div>,
     dataIndex: 'department',
     key: 'departmentName',
     width: 100,
@@ -32,110 +26,257 @@ let fppurchase = [
 
   },
   {
-    title: <div className={styles.row_normal2}>工作效率</div>,
+    title: <div className={styles.row_normal2}>供应商编号</div>,
     dataIndex: 'efficiency',
     key: 'efficiency',
-    width: 100,
-    render: (data) => (data),
   },
 
   {
-    title: <div className={styles.row_normal2}>损耗</div>,
+    title: <div className={styles.row_normal2}>采购日期</div>,
     dataIndex: 'isWastage',
     key: 'isWastage',
-    width: 100,
-    render: (data) => (data),
   },
 
   {
-    title: <div className={styles.row_normal2}>重量范围</div>,
+    title: <div className={styles.row_normal2}>供应商简称</div>,
     dataIndex: 'weightRange',
     key: 'weightRange',
-    width: 100,
   },
 
   {
-    title: <div className={styles.row_normal2}>类别</div>,
+    title: <div className={styles.row_normal2}>联系人</div>,
     dataIndex: 'flowClass',
     key: 'flowClass',
-    width: 100,
-    render: (data,item) =>item.flowClassName
 
+  },
+  {
+    title: <div className={styles.row_normal2}>供应商交期</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>手机</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>电话</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>主材价</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>币种</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购总数</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购总重(g)</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购总额</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>返回主材总重</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>税率</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购人</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>备注</div>,
+    dataIndex: 'chargeUser',
+    key: 'chargeUser',
   },
   {
     title: <div className={styles.row_normal2}>状态</div>,
-    dataIndex: 'status',
-    key: 'status',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
-    ),
-  },
-  {
-    title: <div className={styles.row_normal2}>负责人</div>,
     dataIndex: 'chargeUser',
     key: 'chargeUser',
-    render: (data,item) =>item.chargeUserName
-
   },
 ];
 
 
 let fpdetail = [
   {
-    title: <div className={styles.row_normal2}>生产工序编号</div>,
+    title: <div className={styles.row_normal2}>产品编号</div>,
     dataIndex: 'processCode',
     key: 'processCode',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{data}</div>
-    ),
   },
   {
-    title: <div className={styles.row_normal2}>工序名称</div>,
+    title: <div className={styles.row_normal2}>供应商编号</div>,
     dataIndex: 'processName',
     key: 'processName',
-    width: 100,
-    render:(d,i)=>(i.processName)
   },
   {
-    title: <div className={styles.row_normal2}>英文名称</div>,
-    dataIndex: 'engName',
-    key: 'engName',
-    width: 60,
+    title: <div className={styles.row_normal2}>中文名</div>,
+    dataIndex: 'zhName',
+    key: 'zhName',
   },
   {
-    title: <div className={styles.row_normal2}>耗损(%)</div>,
-    dataIndex: 'isWastage',
-    key: 'isWastage',
-    width: 40,
+    title: <div className={styles.row_normal2}>英文名</div>,
+    dataIndex: 'enName',
+    key: 'enName',
   },
   {
     title: <div className={styles.row_normal2}>生产工序产能(件/小时)</div>,
     dataIndex: 'processCapacity',
     key: 'processCapacity',
-    width: 60,
   },
   {
-    title: <div className={styles.row_normal2}>创建时间</div>,
+    title: <div className={styles.row_normal2}>类别</div>,
     dataIndex: 'createTime',
     key: 'createTime',
-    width: 80,
+  },
+  {
+    title: <div className={styles.row_normal2}>成色名称</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>宝石颜色</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>电镀颜色</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>计量单位</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
   },
   {
     title: <div className={styles.row_normal2}>创建人</div>,
     dataIndex: 'createUser',
     key: 'createUser',
-    width: 40,
   },
   {
-    title: <div className={styles.row_normal2}>状态</div>,
+    title: <div className={styles.row_normal2}>返主材类别</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>工价类别</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>此次工费(克/件)</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>最低工费(克/件)</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>成品重量(g)</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>是否记石重</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>石材重量(g)</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>主材重量(g)</div>,
     dataIndex: 'status',
     key: 'status',
-    width: 100,
-    render: (data) => (
-      <div className={styles.tableRow1} style={{ maxWidth: 100 }}>{statusConvert[data]}</div>
-    ),
+  },
+  {
+    title: <div className={styles.row_normal2}>石材价</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>字印编辑</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>字印价</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>包装单价</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>单价</div>,
+    dataIndex: 'createUser',
+    key: 'createUser',
+  },
+  {
+    title: <div className={styles.row_normal2}>客户订单数量</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购重量</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购金额</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>返主材重量</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>采购重量范围</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>成品长度</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>产品单位</div>,
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: <div className={styles.row_normal2}>戒围标准</div>,
+    dataIndex: 'status',
+    key: 'status',
   },
 ];
 
