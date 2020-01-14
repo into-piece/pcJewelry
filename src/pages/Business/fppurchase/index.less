@@ -1,0 +1,273 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/common';
+.main {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 16px;
+  background-color: #00000000;
+  .leftmenu {
+    padding-top: 20px;
+    width: 170px;
+    background-color: @globalbgcolor;
+    border-right: @border-width-base @border-style-base @border-color-split;
+    :global {
+      .ant-menu-inline {
+        border: none;
+      }
+      .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+        font-weight: bold;
+      }
+    }
+  }
+  .right {
+    flex: 1;
+    padding: 0;
+    .title {
+      margin-bottom: 12px;
+      color: @heading-color;
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+
+  :global {
+    .ant-list-split .ant-list-item:last-child {
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .ant-list-item {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+  }
+}
+
+.row_content {
+  display: flex;
+  justify-content: space-between;
+}
+.tableBox {
+  padding: 20px;
+  padding-left: 0;
+}
+.view_left_content {
+  background-color: @globalbgcolor;
+  min-height: 85vh;
+  max-height: 85vh;
+  overflow: auto;
+  padding: 24px;
+}
+.contentTitle {
+  font-size: 25px;
+  text-align: left;
+}
+
+.right_content_tbs {
+  display: flex;
+  jusitify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.right_content_tabgroud {
+  padding: 20px 0;
+  width: 100%;
+}
+.right_content_tabs {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  width: 100%;
+}
+.right_radio_tab {
+  width: 50%;
+}
+.row_controller {
+  width: 100%;
+}
+.row_select {
+  background-color: #2eabff;
+}
+.row_table {
+  border-width: 0;
+  border-color: #fff;
+  padding: 0;
+  border-radius: 0;
+  background-color: #fff;
+}
+.row_normal {
+  background-color: #e5f6fe;
+}
+.menu_content {
+  backgroundcolor: @globalbgcolor;
+  height: 100%;
+}
+.list_info {
+  background-color: @globalbgcolor;
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: auto;
+}
+.view_dwon {
+  background-color: #fff;
+  display: flex;
+  flex: 1 1;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+}
+
+.divder {
+  margin-top: 5px;
+  padding-top: 0;
+  margin-bottom: 5px;
+  padding-bottom: 0;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.view_right_content {
+  background-color: @globalbgcolor;
+  height: 100%;
+  width: 100%;
+  min-height: 85vh;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.rignum_right_card_view {
+  width: 100%;
+}
+.buttomControl {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.view_right_list_content {
+  background-color: @globalbgcolor;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.view_right_list {
+  background-color: @globalbgcolor;
+  height: 100%;
+}
+.view_edit_list {
+  background-color: @globalbgcolor;
+  width: 100%;
+}
+.headerList {
+  margin-bottom: 5px;
+}
+.bottom_view {
+  width: 100%;
+  position: 'absolute';
+  bottom: 30px;
+  text-align: 'center';
+}
+.tableListForm :global .ant-form-item {
+  display: flex;
+  margin-right: 0;
+  margin-bottom: 24px;
+}
+.tableListForm :global .ant-form-item > .ant-form-item-label {
+  width: auto;
+  padding-right: 8px;
+  line-height: 32px;
+}
+.tableListForm :global .ant-form-item .ant-form-item-control {
+  line-height: 32px;
+}
+.tableListForm :global .ant-form-item-control-wrapper {
+  flex: 1 1;
+}
+.tableListForm .submitButtons {
+  display: block;
+  margin-bottom: 24px;
+  white-space: nowrap;
+}
+
+// 全局
+:global {
+  .ant-list-item-meta {
+    // 账号绑定图标
+    .taobao {
+      display: block;
+      color: #ff4000;
+      font-size: 48px;
+      line-height: 48px;
+      border-radius: @border-radius-base;
+    }
+    .dingding {
+      margin: 2px;
+      padding: 6px;
+      color: #fff;
+      font-size: 32px;
+      line-height: 32px;
+      background-color: #2eabff;
+      border-radius: @border-radius-base;
+    }
+    .alipay {
+      color: #2eabff;
+      font-size: 48px;
+      line-height: 48px;
+      border-radius: @border-radius-base;
+    }
+  }
+  .addModal .ant-row > .ant-col.ant-form-item-label {
+    width: 120px;
+  }
+
+  // 密码强度
+  font.strong {
+    color: @success-color;
+  }
+  font.medium {
+    color: @warning-color;
+  }
+  font.weak {
+    color: @error-color;
+  }
+  .ant-card-body {
+    padding: 24px;
+    zoom: 1;
+  }
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    position: relative;
+  }
+}
+
+.titleIcon {
+  width: 50px;
+  height: 50px;
+  padding-right: 10px;
+  padding-top: 10px;
+}
+
+.tableRow1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.standardListForm{
+
+}
+
+@media screen and (max-width: @screen-md) {
+  .main {
+    flex-direction: column;
+    .leftmenu {
+      width: 100%;
+      border: none;
+    }
+    .right {
+      padding: 20px;
+    }
+  }
+}

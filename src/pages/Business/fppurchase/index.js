@@ -13,6 +13,7 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  InputNumber,
   notification,
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
@@ -28,36 +29,42 @@ import UploadVideo from '@/components/UploadVideo';
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
 import showItem from './config/showItem';
+
 import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
-import serviceObj from '@/services/dev';
-import { modalContent } from '../Raw/config';
+import serviceObj from '@/services/business';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
-// 右手边按钮集合
+// 成品采购主页按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
-  // { name: '复制', tag: 'copy' },
+];
+
+// 主页详细按钮
+const btnGroupSecond = [
+  { name: '新增', tag: 'plus' },
+  { name: '删除', tag: 'delete', type: 'danger' },
+  { name: '编辑', tag: 'edit' },
 ];
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-const defaultModelName = 'productflow';
+const defaultModelName = 'fppurchase';
 
-const firstTabFlag = 'productflow';
+const firstTabFlag = 'fppurchase';
 
-const radioArr = [{ key: '生产流程', value: 'productflow' },
-  { key: '生产工序', value: 'productProcess' }];
+const radioArr = [{ key: '成品采购主页', value: 'fppurchase' },
+  { key: '主页详细', value: 'fpdetail' }];
 
 @Form.create()
-@connect(({ loading, productflow: model }) => {
+@connect(({ loading, fppurchase: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
@@ -79,11 +86,9 @@ class Index extends Component {
     addloading: false,
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'productProcess',
+    secondTableActive: 'fpdetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
-    filelist: [],
-    videolist: [],
   };
 
   componentDidMount() {
@@ -179,7 +184,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, step, min, max,precision  }) => {
     switch (type) {
       case 2:
         return (
@@ -252,7 +257,8 @@ class Index extends Component {
         />;
 
       default:
-        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+        return number ? <InputNumber placeholder="请输入" style={{ width: '100%' }} precision={precision} step={step} min={min} max={max} /> :
+        <Input placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -319,7 +325,7 @@ class Index extends Component {
     const { rightActive, secondTableActive } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke';
+    const serviceType = isLock ? 'approval' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
       const { rtnCode, rtnMsg } = res.head;
@@ -339,17 +345,14 @@ class Index extends Component {
   // 新增||编辑 按钮事件回调
   handleAdd = (close) => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
-    const { secondTableActive, rightActive, modalType,filelist,videolist } = this.state;
+    const { secondTableActive, rightActive, modalType } = this.state;
     let params = {};
     if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode,filePath:videolist.flatMap(e => e.url),picPath:filelist.flatMap(e => e.url) };
+      params = { flowCode: choosenRowData.flowCode };
     }
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
-
-
-
     this.setState({ addloading: true });
 
     const dataArr = modalInput[rightActive];
@@ -405,10 +408,15 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv, step, min, max,precision  }) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
+                  labelCol={{ span: 3 }}
+                  wrapperCol={{
+                    span: 20,
+                  }
+                  }
                   label={key}
                 >
                   {
@@ -428,53 +436,14 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
-                    }))
+                      step, min, max,precision
+                  }))
                   }
                 </FormItem>
               </div>
             );
           })
         }
-        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
-          <FormItem
-            label="上传图片"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadImg
-              key="uimg"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
-              fileListFun={(list) => {
-                this.setState({ filelist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
-        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
-          <FormItem
-            label="上传视频"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadVideo
-              key="upvideo"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.videos  : choosenRowDataSecond.videos): []}
-              fileListFun={(list) => {
-                this.setState({ videolist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
         {content}
       </Form>
     );
@@ -483,9 +452,6 @@ class Index extends Component {
   // 列表对应操作button回调
   btnFn = async (modalType) => {
     switch (modalType) {
-      case '':
-        this.setState({ modalType,addloading: false,filelist:[],videolist:[] });
-      break;
       case 'plus':
       case 'edit':
       default:
@@ -537,7 +503,10 @@ class Index extends Component {
   returnSisabled = (tag) => {
     const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
     const { rightActive } = this.state;
-
+    if(rightActive === 'fpdetail'&&choosenRowData.status==='2'){
+      // 主页选中数据为已审批，详细不可新增 编辑 删除
+      return true;
+    }
     if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
     if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
 
@@ -548,6 +517,8 @@ class Index extends Component {
       const d = firstTabFlag === rightActive ? choosenRowData : choosenRowDataSecond;
       return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
     }
+
+
 
     return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
   };
@@ -576,6 +547,9 @@ class Index extends Component {
     } = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
+
+    const btnrealGroup = rightActive===firstTabFlag?btnGroup:btnGroupSecond;
+
 
     const modalFooter = modalType === 'plus' ? [
       <Button
@@ -639,7 +613,7 @@ class Index extends Component {
                   {/* 中间table组件 */}
                   <Col lg={16} md={24}>
                     <MiddleTable
-                      changedetailtab={(type)=>{this.setState({rightActive:(type===1?firstTabFlag:'productProcess')})}}
+                      changedetailtab={(type)=>{this.setState({rightActive:(type===1?firstTabFlag:'fpdetail')})}}
                       firstType={firstTabFlag}
                       secondType={secondTableActive}
                       returnElement={returnElement}
@@ -693,7 +667,7 @@ class Index extends Component {
                       {/*  */}
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {btnGroup.map(({ name, tag }) => (
+                          {btnrealGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
                               className={styles.buttomControl}
@@ -730,7 +704,6 @@ class Index extends Component {
           footer={modalFooter}
           onCancel={() => {
             btnFn('');
-
           }}
         >
           {getModalContent()}

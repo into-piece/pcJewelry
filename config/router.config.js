@@ -187,6 +187,13 @@ export default [
                 ],
               },
               {
+                path: '/erp/business/fppurchase',
+                name: 'fppurchase',
+                icon: 'build',
+                component: './Business/fppurchase',
+                routes: [],
+              },
+              {
                 path: '/erp/business/product',
                 name: 'product',
                 icon: 'shopping',

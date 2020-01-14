@@ -86,8 +86,8 @@ let dieSetChild = [
   },
   {
     title: <div className={styles.row_normal2}>真空时间(秒)</div>,
-    dataIndex: 'noteWaxImmediately',
-    key: 'noteWaxImmediately',
+    dataIndex: 'vacuumTime',
+    key: 'vacuumTime',
     render:d=>  numberConvert(d,1)
 
   },
