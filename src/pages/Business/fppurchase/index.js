@@ -53,8 +53,8 @@ const defaultModelName = 'fppurchase';
 
 const firstTabFlag = 'fppurchase';
 
-const radioArr = [{ key: '成品采购', value: 'fppurchase' },
-  { key: '采购详细', value: 'fpdetail' }];
+const radioArr = [{ key: '成品采购主页', value: 'fppurchase' },
+  { key: '主页详细', value: 'fpdetail' }];
 
 @Form.create()
 @connect(({ loading, fppurchase: model }) => {
