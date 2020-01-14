@@ -184,7 +184,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, step, min, max  }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, step, min, max,precision  }) => {
     switch (type) {
       case 2:
         return (
@@ -257,7 +257,7 @@ class Index extends Component {
         />;
 
       default:
-        return number ? <InputNumber placeholder="请输入" style={{ width: '100%' }} step={step} min={min} max={max} /> :
+        return number ? <InputNumber placeholder="请输入" style={{ width: '100%' }} precision={precision} step={step} min={min} max={max} /> :
         <Input placeholder="请输入" />;
     }
     //  type === 7 ?
@@ -408,7 +408,7 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv, step, min, max  }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv, step, min, max,precision  }) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -436,7 +436,7 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
-                      step, min, max
+                      step, min, max,precision
                   }))
                   }
                 </FormItem>

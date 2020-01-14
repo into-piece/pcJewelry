@@ -8,7 +8,7 @@ export const fppurchase = [
   { 'key': '供货商简称', 'value': 'supplierShotName' ,readonly:true},
   { 'key': '联系人', 'value': 'contactName' ,readonly:true},
   { 'key': '手机', 'value': 'mobilePhone',readonly:true},
-  { 'key': '预付款金额', 'value': 'advance' ,  'number': true,'initValue':0.0,'step':0.1,'min':0},
+  { 'key': '预付款金额', 'value': 'advance' ,  'number': true,'initValue':0.0,'step':0.1,'min':0,precision:1},
   { 'key': '付款类别', 'value': 'typeOfPayment',  'type': 7, 'list': 'listH017',},
   { 'key': '供货商交期', 'value': 'supplierDate', 'type': 7, 'list': 'listH017', },
   { 'key': '主材价', 'value': 'principalPrice'  },
