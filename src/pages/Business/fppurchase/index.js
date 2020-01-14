@@ -28,23 +28,25 @@ import UploadVideo from '@/components/UploadVideo';
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
 import showItem from './config/showItem';
+
 import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
 import serviceObj from '@/services/dev';
-import { modalContent } from '../Raw/config';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
-// 右手边按钮集合
+// 成品采购主页按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
 ];
+
+// 主页详细按钮
 const btnGroupSecond = [
   { name: '新增', tag: 'plus' },
   { name: '删除', tag: 'delete', type: 'danger' },
