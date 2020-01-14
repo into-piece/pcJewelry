@@ -998,7 +998,7 @@ class Index extends Component {
 
     if (rightActive === SECOND_TAG) {
       fieldslist = [...fieldslist,'bomId','materialId','inventoryWeight']
-      params.materialId = choosenRowDataSecond.materialId||materialNoChoosenRowData.id;
+      params.materialId = materialNoChoosenRowData.id||choosenRowDataSecond.materialId;
       params.inventoryWeight = this.state.inventoryWeight;
       params.singleWeight = this.state.singleWeight;
     }
@@ -1037,8 +1037,9 @@ class Index extends Component {
             rightActive === FIRST_TAG && this.getbomlist();
             if (rightActive === SECOND_TAG) {
               this.getMaterialList();
+              
               // 清空镶石工艺
-              this.clearCraftForm();
+              close && this.clearCraftForm();
             }
 
             if (this.isEditworkFlow) {
@@ -1887,6 +1888,8 @@ class Index extends Component {
           inventoryWeight,
           valuationClass,
           materialId: id,
+          singleDosage:undefined,
+          sheetWithHeavy:undefined
         });
         this.setState({
           inventoryWeight,
