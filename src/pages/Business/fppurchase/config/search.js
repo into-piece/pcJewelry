@@ -9,7 +9,7 @@ export const fppurchase = [
 ];
 
 // 生产工序的筛选参数
-export const productProcess = [
+export const fpdetail = [
   { key: '工序编号', value: 'processCode' },
   { key: '工序名称', value: 'processName' },
   { key: '工序产能', value: 'processCapacity' },
@@ -20,5 +20,5 @@ export const productProcess = [
 
 export default {
   fppurchase,
-  productProcess
+  fpdetail
 }

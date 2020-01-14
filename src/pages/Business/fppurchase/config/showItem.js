@@ -34,7 +34,7 @@ export const fppurchase = [
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
 ];
 
-export const productProcess = [
+export const fpdetail = [
   { 'key': '流程编号', 'value': 'flowCode' },
   { 'key': '工序编号', 'value': 'processCode' },
   { 'key': '工序名称', 'value': 'processName' },
@@ -50,5 +50,5 @@ export const productProcess = [
 
 export default {
   fppurchase,
-  productProcess,
+  fpdetail,
 };

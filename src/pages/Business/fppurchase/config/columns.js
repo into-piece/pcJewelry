@@ -81,7 +81,7 @@ let fppurchase = [
 ];
 
 
-let productProcess = [
+let fpdetail = [
   {
     title: <div className={styles.row_normal2}>生产工序编号</div>,
     dataIndex: 'processCode',
@@ -140,9 +140,9 @@ let productProcess = [
 ];
 
 fppurchase = fppurchase.map(item => ({ ...item, sorter: true }));
-productProcess = productProcess.map(item => ({ ...item, sorter: true }));
+fpdetail = fpdetail.map(item => ({ ...item, sorter: true }));
 
 export default {
   fppurchase,
-  productProcess,
+  fpdetail,
 };

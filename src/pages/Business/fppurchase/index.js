@@ -53,8 +53,8 @@ const defaultModelName = 'fppurchase';
 
 const firstTabFlag = 'fppurchase';
 
-const radioArr = [{ key: '生产流程', value: 'fppurchase' },
-  { key: '生产工序', value: 'productProcess' }];
+const radioArr = [{ key: '成品采购', value: 'fppurchase' },
+  { key: '采购详细', value: 'fpdetail' }];
 
 @Form.create()
 @connect(({ loading, fppurchase: model }) => {
@@ -79,7 +79,7 @@ class Index extends Component {
     addloading: false,
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'productProcess',
+    secondTableActive: 'fpdetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
     filelist: [],
@@ -432,7 +432,7 @@ class Index extends Component {
             );
           })
         }
-        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
+        {(['fpdetail'].indexOf(rightActive)>-1) && <Col span={18}>
           <FormItem
             label="上传图片"
             key="uploadPic"
@@ -452,7 +452,7 @@ class Index extends Component {
             />
           </FormItem>
         </Col>}
-        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
+        {(['fpdetail'].indexOf(rightActive)>-1) && <Col span={18}>
           <FormItem
             label="上传视频"
             key="uploadPic"
@@ -633,7 +633,7 @@ class Index extends Component {
                   {/* 中间table组件 */}
                   <Col lg={16} md={24}>
                     <MiddleTable
-                      changedetailtab={(type)=>{this.setState({rightActive:(type===1?firstTabFlag:'productProcess')})}}
+                      changedetailtab={(type)=>{this.setState({rightActive:(type===1?firstTabFlag:'fpdetail')})}}
                       firstType={firstTabFlag}
                       secondType={secondTableActive}
                       returnElement={returnElement}

@@ -13,7 +13,7 @@ export const fppurchase = [
 
 ];
 
-export const productProcess = [
+export const fpdetail = [
   { 'key': '工序编号', 'value': 'processCode',  },
   { 'key': '工序名称', 'value': 'processName',},
   { 'key': '英文名称', 'value': 'engName', 'noNeed': true},
@@ -25,5 +25,5 @@ export const productProcess = [
 
 export default {
   fppurchase,
-  productProcess
+  fpdetail
 }
