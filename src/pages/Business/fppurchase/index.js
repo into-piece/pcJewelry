@@ -13,6 +13,7 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  InputNumber,
   notification,
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
@@ -183,7 +184,7 @@ class Index extends Component {
   // type 6 radio
   // type 7 被顺带出的文字
   // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number, step, min, max  }) => {
     switch (type) {
       case 2:
         return (
@@ -256,7 +257,8 @@ class Index extends Component {
         />;
 
       default:
-        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+        return number ? <InputNumber placeholder="请输入" style={{ width: '100%' }} step={step} min={min} max={max} /> :
+        <Input placeholder="请输入" />;
     }
     //  type === 7 ?
   };
@@ -406,7 +408,7 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv }) => {
+          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv, step, min, max  }) => {
             return (
               <div className="addModal" key={key}>
                 <FormItem
@@ -434,7 +436,8 @@ class Index extends Component {
                       initValue,
                       data: model,
                       form,
-                    }))
+                      step, min, max
+                  }))
                   }
                 </FormItem>
               </div>
