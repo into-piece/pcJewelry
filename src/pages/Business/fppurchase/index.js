@@ -69,6 +69,7 @@ const radioArr = [{ key: '成品采购主页', value: 'fppurchase' },
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
     listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
+    customerListLoading: loading.effects[`${defaultModelName}/getListCustomer`],
     list: model.list,
     listSecond: model.listSecond,
     pagination: model.pagination,
@@ -89,6 +90,8 @@ class Index extends Component {
     secondTableActive: 'fpdetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
+
+    showCustomerNoModal: false,
   };
 
   componentDidMount() {
@@ -136,16 +139,55 @@ class Index extends Component {
   };
 
   // 获取客户订单 table数据
-  customerSearch = () => {
+  customerSearch = (args) => {
+    const { dispatch, model } = this.props;
     dispatch({
-      type: `${defaultModelName}/getCommonList`,
+      type: `${defaultModelName}/getListCustomer`,
+      payload: { ...model.customerPagination, ...args },
+    });
+  };
+
+  handleCustomerNoOk = () => {
+    // 选择客户订单 反显客户编号  客户简称
+    const { dispatch, form } = this.props;
+    // form.setFieldsValue({remarks:'',customerOrderId:model.listPInotdone.id,customerNo:model.listPInotdone.customerNo,customerShotName:model.listPInotdone.customerShotName})
+
+  };
+
+  handleCustomerNoCancel = () => {
+    const { dispatch } = this.props;
+    this.setState({ showCustomerNoModal: false });
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
       payload: {
-        params: { size: 1000, current: 1 },
-        key: 'customerNo',
-        value: 'id',
-        propsName: 'listPInotdone',
-        apiname: 'listnotdonepiHead',
+        typeName: 'paginationCustomer', data: {
+          current: 1,
+          size: 10,
+        },
       },
+    });
+    // 清空列表
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: {
+        typeName: 'customerList', data:  { records: [] },
+      },
+    });
+  };
+
+  changeCustomerChoosenRow = (rowData) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: rowData,
+    });
+  };
+
+  onCustomerSelectChange = (selectedRowKeys) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: selectedRowKeys,
     });
   };
 
@@ -511,9 +553,8 @@ class Index extends Component {
                 clickFn = () => {
                   // 弹出 客户订单选择
                   // 成品采购主页  客户订单 反显客户编号  客户简称
-                  // form.setFieldsValue({remarks:'',customerOrderId:model.listPInotdone.id,customerNo:model.listPInotdone.customerNo,customerShotName:model.listPInotdone.customerShotName})
-
-                  console.log(1111);
+                  this.setState({ showCustomerNoModal: true });
+                  this.customerSearch({ size: 6, current: 1 });
                 };
               }
 
@@ -580,6 +621,19 @@ class Index extends Component {
         });
         break;
       default:
+        const { dispatch } = this.props;
+        const { rightActive } = this.state;
+
+        if (rightActive === firstTabFlag) {
+          dispatch({
+            type: `${defaultModelName}/changeProps`,
+            payload: {
+              typeName: 'customerChoosenRowData', data: { id: '' },
+            },
+          });
+        }
+
+
         this.setState({ modalType });
         break;
     }
@@ -669,7 +723,7 @@ class Index extends Component {
 
       = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
-    const { choosenRowData, choosenRowDataSecond ,model} = props;
+    const { choosenRowData, choosenRowDataSecond, model } = props;
 
     const btnrealGroup = rightActive === firstTabFlag ? btnGroup : btnGroupSecond;
 
@@ -848,17 +902,17 @@ class Index extends Component {
           zIndex={1002}
         >
           <SelectCustomerOrder
-            list={model.materialNoList}
-            pagination={model.materialNoPagination}
+            list={model.customerList}
+            pagination={model.customerPagination}
             // returnElement={returnElement}
             // source={model}
             // onSearch={this.customerSearch}
             // changeCustomerSearch={model.changeCustomerSearch}
-            selectedRowKeys={model.materialSelectedKeys}
+            selectedRowKeys={model.customerSelectedKeys}
             changeChoosenRow={this.changeCustomerChoosenRow}
-            choosenRowData={model.materialNoChoosenRowData}
+            choosenRowData={model.customerChoosenRowData}
             onSelectChange={this.onCustomerSelectChange}
-            listLoading={model.materialNoListLoading}
+            listLoading={this.props.customerListLoading}
             handleTableChange={args => {
               // 翻页 search 看看搜索完要不要做点处理
               this.customerSearch({ ...args });

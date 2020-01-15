@@ -27,7 +27,7 @@ export default {
 
     choosenRowData: { id: '' }, // select to show table 1
     choosenRowDataCustomer: { id: '' }, // select to show table 1
-    choosenRowDataSecond: { id: '' }, // select to show table 2
+    customerChoosenRowData: { id: '' }, // 客户订单
 
     pagination: {
       current: 1,
@@ -40,17 +40,20 @@ export default {
     paginationCustomer: {
       current: 1,
       size: 10,
-    },
+    }, // 客户订单
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select
+    customerSelectedKeys: [], // 客户订单
     list: initData,
     listSecond: initData,
+    customerList: initData, // 客户订单
 
     searchParams: {},
     searchParamsSecond: {},
+    searchcustomerParams: {}, // 客户订单
 
 
-    materialPriceToday: 0,
+    customerPriceToday: 0,
     listH006: [{ key: '', value: '' }],
     listH019: [{ key: '', value: '' }],
     supplierlistDropDown: [{ key: '', value: '' }],
@@ -68,6 +71,24 @@ export default {
       if (callback) callback();
 
     },
+
+    * getListCustomer({ payload, callback }, { call, put }) {
+      const response = yield call(servicesConfig.listnotdonepiHead, payload);
+      const list =
+        response.head && response.head.rtnCode === '000000'
+          ? response.body
+          : initData;
+      yield put({
+        type: 'changeState',
+        payload: { data: list, typeName: 'customerList' },
+      });
+      yield put({
+        type: 'changeState',
+        payload: { data: {size:response.body.size,current:response.body.current} , typeName: 'customerPagination' },
+      });
+      if (callback) callback();
+    },
+
 
     * getList({ payload, callback }, { call, put,select }) {
       const { type, params } = payload;
