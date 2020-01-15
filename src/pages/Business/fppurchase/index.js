@@ -24,6 +24,7 @@ import moment from 'moment/moment';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
+import SelectCustomerOrder from './components/SelectCustomerOrder';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -196,22 +197,19 @@ class Index extends Component {
 
 // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { purchase, form, dispatch } = this.props;
-    // 自动带出字印英文名
-    // if (type === 'supplierCategory') {
-    //   serviceObj.getTurnoverCode({}).then(res => {
-    //     if (res && res.body && res.body.records && res.body.records[0]) {
-    //       const supplierCode = res.body.records[0].turnoverCode;
-    //
-    //       const obj = purchase.wordbookdropdownType.find(item => item.value === value);
-    //       const newSupplierCode = obj.wordbookContentCode + supplierCode;
-    //       form.setFieldsValue({
-    //         supplierCode: newSupplierCode,
-    //       });
-    //
-    //       // console.log("select type supplierCode = ",supplierCode," obj = ",obj)
-    //     }
-    //   });
+    const { model, form, dispatch } = this.props;
+    // 成品采购主页  供货商编号 反显供货商简称 联系人 手机
+    if(type==='supplierId'){
+      const mm = model.supplierlistDropDown.filter(item=>item.id===value)[0];
+      if(mm){
+        form.setFieldsValue({supplierId:mm.id,
+          supplierShotName:mm.shotName,
+          contactName:mm.contactName,
+          mobilePhone:mm.mobilePhone})
+      }
+
+    }
+
   };
 
   handleDatePicker = (date, dateString, v) => {
@@ -224,7 +222,7 @@ class Index extends Component {
     // });
   };
 
-  returnElement = ({ key, value, disabled, type, list, arr, data, form, number, step, min, max, precision }) => {
+  returnElement = ({ key, value, disabled, type, list, arr, data,clickFn, form, number, step, min, max, precision }) => {
     switch (type) {
       case 1:
         return <RangePicker
@@ -257,6 +255,20 @@ class Index extends Component {
             this.handleDatePicker(date, dateString, value);
           }}
         />;
+      case 4:
+        return (
+          <p style={{margin: 0}}>
+            {/* {form.getFieldValue(value) || ''} */}
+            <span
+              style={{ color: '#40a9ff', cursor: 'pointer', marginLeft: 10 }}
+              onClick={() => {
+                clickFn&&clickFn();
+              }}
+            >
+              选择
+            </span>
+          </p>
+        );
       case 5:
         return <Checkbox
           disabled={disabled}
@@ -278,7 +290,9 @@ class Index extends Component {
       case 7:
         return (<Select
           disabled={disabled}
-
+          onChange={(v) => {
+            this.handleSelectChange(v, value);
+          }}
           placeholder="请选择"
           showSearch
           optionFilterProp="children"
@@ -477,6 +491,16 @@ class Index extends Component {
                   choosenRowData[value] = moment(choosenRowData[value]);
                 } else {
                   choosenRowDataSecond[value] = moment(choosenRowDataSecond[value]);
+                }
+              }
+
+              if(value==='customerOrderId'&&rightActive===firstTabFlag){
+                clickFn = ()=>{
+                  // 弹出 客户订单选择
+                  // 成品采购主页  客户订单 反显客户编号  客户简称
+                  // form.setFieldsValue({remarks:'',customerOrderId:model.listPInotdone.id,customerNo:model.listPInotdone.customerNo,customerShotName:model.listPInotdone.customerShotName})
+
+                  console.log(1111)
                 }
               }
 
@@ -797,6 +821,39 @@ class Index extends Component {
           {getModalContent()}
         </Modal>
         }
+
+        <Modal
+          title={<BuildTitle title="选择客户订单" />}
+          maskClosable={false}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={handleMaterialNoOk}
+          visible={showMaterialNoModal}
+          onCancel={handleMaterialNoCancel}
+          zIndex={1002}
+        >
+          <SelectCustomerOrder
+            list={materialNoList}
+            materialType={materialType}
+            pagination={materialNoPagination}
+            returnElement={returnElement}
+            source={model}
+            selectedRowKeys={materialSelectedKeys}
+            changeChoosenRow={changeMaterialChoosenRow}
+            choosenRowData={materialNoChoosenRowData}
+            onSelectChange={onMaterialSelectChange}
+            listLoading={materialNoListLoading}
+            onSearch={this.getMaterialList}
+            changeMaterialSearch={changeMaterialSearch}
+            handleTableChange={args => {
+              // search 看看搜索完要不要做点处理
+              this.getmaterialNoList({ ...args });
+            }}
+
+          />
+        </Modal>
       </div>
     );
   }
