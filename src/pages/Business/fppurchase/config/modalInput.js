@@ -1,5 +1,5 @@
 export const fppurchase = [
-  { 'key': '采购单号', 'value': 'purchaseNo',auto:true },
+  { 'key': '采购单号', 'value': 'purchaseNo',auto:true ,wrapperColSpan:24,labelColSpan:24},
   { 'key': '采购日期', 'value': 'purchaseDate' },
   { 'key': '客户订单', 'value': 'orderNo' , 'type': 7, 'list': 'listPInotdone',},
   { 'key': '客户编号', 'value': 'customerNo',readonly:true },
@@ -14,7 +14,7 @@ export const fppurchase = [
   { 'key': '主材价', 'value': 'principalPrice'  },// 获取当天默认主材价格
   { 'key': '币种', 'value': 'currency' , 'type': 7, 'list': 'listH006',},
   { 'key': '税率', 'value': 'taxRate' ,  'number': true},
-  { 'key': '备注', 'value': 'remarks', type:8 },
+  { 'key': '备注', 'value': 'remarks', wrapperColSpan:24,labelColSpan:24 },
 
 ];
 
