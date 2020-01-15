@@ -7,6 +7,7 @@
  */
 import request from '@/utils/request';
 import { piUrls, piDetailUrls } from './business/piUrls';
+import { fppurchaseUrls, fpdetailUrls } from './business/fppurchaseUrls';
 import { sampleUrls, sampleDetailUrls } from './business/sampleUrls';
 import { getCurrentUser } from '../utils/authority';
 
@@ -72,10 +73,45 @@ const sampleList = sampleUrls.map(({ name, arr, path }) => (
 ));
 
 
+// 业务-成品采购主页
+const fppurchaseList = fppurchaseUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: sampleType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix: `${env}/business/business.purchase`
+    }
+  ))
+));
+
+
+// 业务-成品采购详细
+const fpdetailList = fpdetailUrls.map(({ name, arr, path }) => (
+  arr.map((item, index) => (
+    {
+      key: sampleType[index + 1] + name,
+      path: `/${path}/${item}`,
+      prefix: `${env}/business/business.purchase`
+    }
+  ))
+));
+// 客户订单接口：/business/order/proforma-invoice-head/notdone/list
+// 客户编号(customerNo)、简称(customerShotName)、订单号(piNo)、主材价(mainMaterialPrice)、PI日期(piDate)、要求交货日期(deliveryTime)
+//
+// 供应商编号接口：/purchase.supplier/purchase-supplier/listDropDown
+//
+// 付款类别接口：/business/sys/mst-wordbook/listMstWordbook；入参：{"wordbookTypeCode":"H019"}
+//
+// 主材价接口：/business/product/product-quote-header/getMainMaterialPrice
+//
+// 币种接口：/business/sys/mst-wordbook/listMstWordbook；入参：{"wordbookTypeCode":"H006"}
+
 const resultArr = [
   ...piUrlsList.flat(),
   ...piDetailUrlsList.flat(),
   ...sampleList.flat(),
+  ...fppurchaseList.flat(),
+  ...fpdetailList.flat(),
   { key: 'listProductType', path: '/business/business/sample/business-sample/listProductType', prefix: `${env}` },// 产品类别
   { key: 'listAllPiDetail', path: '/business/business/order/proforma-invoice-detail/listAll', prefix: `${env}` },// PI详情 获取所有
   { key: 'productBatchUpdate', path: '/business/business/product/batch', prefix: `${env}` },// 部门下拉
@@ -83,6 +119,10 @@ const resultArr = [
   { key: 'listMstWordbook', path: '/business/sys/mst-wordbook/listMstWordbook', prefix: `${env}` },// 类别下拉
   { key: 'listMarkingDropDown', path: '/business/business/marking/listMarkingDropDown', prefix: `${env}` },// 字印编码下拉
   { key: 'dropDownRAT', path: '/business/basic/ring-around-the-standard/dropDownRAT', prefix: `${env}` },// 戒围标准下拉
+
+
+  { key: 'getMainMaterialPrice', path: '/business/product/product-quote-header/getMainMaterialPrice', prefix: `${env}` },// 获取当天默认主材价格接口
+  { key: 'supplierlistDropDown', path: '/business/purchase.supplier/purchase-supplier/listDropDown', prefix: `${env}` },// 供应商编号接口
 ];
 
 // 请求url配置

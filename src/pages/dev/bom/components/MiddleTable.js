@@ -67,7 +67,7 @@ class MiddleTable extends Component {
   changeChoosenRow = (rowData, type) => {
 
     // 判断 2/3
-    const { dispatch, pagination, onSearch, rightActive } = this.props;
+    const { dispatch, pagination, onSearch, rightActive,changedetailtab } = this.props;
     const isMaterial = rightActive === FIRST_TAG || rightActive === SECOND_TAG;
     const choosenSecondRow = isMaterial ? 'choosenRowDataSecond' : 'choosenProccessData';
     const str = type === 1 ? 'choosenRowData' : choosenSecondRow;
@@ -77,7 +77,7 @@ class MiddleTable extends Component {
       type: `${defaultModelName}/setChooseData`,
       payload: { name: str, list: rowData },
     });
-
+    changedetailtab&&changedetailtab(type);
     if (type === 1) {
       // onSearch && onSearch({ mainMoldCode: rowData.id }, 2);
       this.props.getbomlist({ pid: rowData.id });
@@ -155,7 +155,6 @@ class MiddleTable extends Component {
       model,
       listLoading,
       listLoadingSecond,
-      switchMenu,
       handleSwitchMenu,
       bomlist,
       secondOprationArr,

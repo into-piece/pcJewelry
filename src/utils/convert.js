@@ -3,7 +3,7 @@ import { formatMessage } from 'umi/locale';
 export const statusConvert = {
   0:'输入',
   1:'使用中',
-  2:'审批',
+  2:'已审批',
 };
 
 export const YoNConvert = {

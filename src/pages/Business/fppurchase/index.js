@@ -13,51 +13,57 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  InputNumber,
   notification,
 } from 'antd';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import moment from 'moment/moment';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
-import UploadImg from '@/components/UploadImg';
-import UploadVideo from '@/components/UploadVideo';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
 import showItem from './config/showItem';
+
 import styles from './index.less';
 import BuildTitle from '@/components/BuildTitle';
 
-import serviceObj from '@/services/dev';
-import { modalContent } from '../Raw/config';
+import serviceObj from '@/services/business';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
-// 右手边按钮集合
+// 成品采购主页按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
   { name: '删除', tag: 'delete', type: 'danger' },
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
-  // { name: '复制', tag: 'copy' },
+];
+
+// 主页详细按钮
+const btnGroupSecond = [
+  { name: '新增', tag: 'plus' },
+  { name: '删除', tag: 'delete', type: 'danger' },
+  { name: '编辑', tag: 'edit' },
 ];
 
 // const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
 
-const defaultModelName = 'productflow';
+const defaultModelName = 'fppurchase';
 
-const firstTabFlag = 'productflow';
+const firstTabFlag = 'fppurchase';
 
-const radioArr = [{ key: '生产流程', value: 'productflow' },
-  { key: '生产工序', value: 'productProcess' }];
+const radioArr = [{ key: '成品采购主页', value: 'fppurchase' },
+  { key: '主页详细', value: 'fpdetail' }];
 
 @Form.create()
-@connect(({ loading, productflow: model }) => {
+@connect(({ loading, fppurchase: model }) => {
   return {
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
@@ -79,16 +85,12 @@ class Index extends Component {
     addloading: false,
     modalType: '',
     // 第二个table选中tab标志 没有tab则冗余
-    secondTableActive: 'productProcess',
+    secondTableActive: 'fpdetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
-    filelist: [],
-    videolist: [],
   };
 
   componentDidMount() {
-
-
     this.initDrop();
     // 获取初始表单数据
     this.getList();
@@ -104,31 +106,36 @@ class Index extends Component {
   };
 
   initDrop = () => {
+    const { secondTableActive } = this.state;
     const { dispatch } = this.props;
-    // 负责人下拉
-    dispatch({
-      type: `${defaultModelName}/getUsersList`,
-      payload:{current:0,size:5000}
-    });
-    // 类别下拉
-    dispatch({
-      type: `${defaultModelName}/getwordbookdropdown`,
-      payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
-    });
-    // 成品类别下拉
-    dispatch({
-      type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
-    });
-    // 部门下拉
-    dispatch({
-      type: `${defaultModelName}/listDeptDropDown`,
-    });
-    // 镶石工艺下拉
-    dispatch({
-      type: `${defaultModelName}/listGemSetProcessDropDown`,
-      payload: {},
-    });
+    if (secondTableActive === firstTabFlag) {
+      // 付款类别接口
+      dispatch({
+        type: `${defaultModelName}/getwordbookdropdown`,
+        payload: { params: { 'wordbookTypeCode': 'H019' }, listName: 'listH019' },
+      });
+      // 币种接口
+      dispatch({
+        type: `${defaultModelName}/getwordbookdropdown`,
+        payload: { params: { 'wordbookTypeCode': 'H006' }, listName: 'listH006' },
+      });
+      // 获取当天默认主材价格接口
+      dispatch({
+        type: `${defaultModelName}/getMainMaterialPrice`,
+        payload: {},
+      });
+      // 供应商编号接口下拉
+      dispatch({
+        type: `${defaultModelName}/getCommonList`,
+        payload: { params: {}, propsName: 'supplierlistDropDown', apiname: 'supplierlistDropDown' },
+      });
+      // 获取客户订单下拉
+      dispatch({
+        type: `${defaultModelName}/getCommonList`,
+        payload: { params: {}, propsName: 'listPInotdone', apiname: 'listnotdonepiHead' },
+      });
+    }
+
   };
 
   // table 搜索
@@ -165,29 +172,74 @@ class Index extends Component {
       type: `${defaultModelName}/getListSecond`,
       payload: {
         type: secondTableActive,
-        params: { ...paginationSecond, ...searchParamsSecond, ...param, flowCode: param.flowCode||choosenRowData.flowCode }, ...args,
+        params: {
+          ...paginationSecond, ...searchParamsSecond, ...param,
+          flowCode: param.flowCode || choosenRowData.flowCode,
+        }, ...args,
       },
     });
 
   };
 
+  //  弹窗表单 check回调
+  handleCheckChange = (e, value) => {
+    const { form } = this.props;
+    form.setFieldsValue({
+      value: e.target.checked ? 1 : 0,
+    });
+    // if (value === 'isWeighStones') {
+    //   const isWeighStones = e.target.checked === 1;
+    //   if (isWeighStones) {
+    //     form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
+    //   }
+  };
 
-  // type 2 下啦选择
-  // type 3 点击事件
-  // type 4 文字
-  // type 5 check
-  // type 6 radio
-  // type 7 被顺带出的文字
-  // type 8 inputext
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, number }) => {
+// 弹窗表单 下拉回调
+  handleSelectChange = (value, type) => {
+    const { purchase, form, dispatch } = this.props;
+    // 自动带出字印英文名
+    // if (type === 'supplierCategory') {
+    //   serviceObj.getTurnoverCode({}).then(res => {
+    //     if (res && res.body && res.body.records && res.body.records[0]) {
+    //       const supplierCode = res.body.records[0].turnoverCode;
+    //
+    //       const obj = purchase.wordbookdropdownType.find(item => item.value === value);
+    //       const newSupplierCode = obj.wordbookContentCode + supplierCode;
+    //       form.setFieldsValue({
+    //         supplierCode: newSupplierCode,
+    //       });
+    //
+    //       // console.log("select type supplierCode = ",supplierCode," obj = ",obj)
+    //     }
+    //   });
+  };
+
+  handleDatePicker = (date, dateString, v) => {
+    const { form } = this.props;
+    const customerShotName = form.getFieldValue('customerShotName') || '';
+    const quoteDate = moment(dateString);
+    // form.setFieldsValue({
+    //   quoteDate,
+    //   quoteNumber: `${moment(quoteDate).format('YYYYMMDD')}_Quote_${customerShotName}`,
+    // });
+  };
+
+  returnElement = ({ key, value, readonly, type, list, arr, data, form, number, step, min, max, precision }) => {
     switch (type) {
+      case 1:
+        return <RangePicker
+          style={{ marginRight: 10 }}
+          onChange={(date, dateString) => {
+            this.handleDatePicker(date, dateString, value);
+          }}
+        />;
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
             onChange={(v) => {
-              this.handleSelectChange && this.handleSelectChange(v, value);
+              this.handleSelectChange(v, value);
             }}
           >
             {data[list] && data[list].map((i) => <Option value={i.value} key={i.value}>{i.key}</Option>,
@@ -195,20 +247,13 @@ class Index extends Component {
           </Select>
         );
       case 3:
-        return (
-          <p style={{ maxWidth: 180 }}> {form.getFieldValue(value) || ''} <span
-            style={{ color: '#40a9ff', cursor: 'pointer' }}
-            onClick={() => {
-              this[clickFn](1);
-            }}
-          > {text}
-          </span>
-          </p>
-        );
-      case 4:
-        return (
-          <span>{value || ''}</span>
-        );
+        return <DatePicker
+          allowClear={false}
+          style={{ marginRight: 10 }}
+          onChange={(date, dateString) => {
+            this.handleDatePicker(date, dateString, value);
+          }}
+        />;
       case 5:
         return <Checkbox
           checked={form.getFieldValue(value)}
@@ -228,7 +273,6 @@ class Index extends Component {
       case 7:
         return (<Select
           style={{ width: 180 }}
-
           placeholder="请选择"
           showSearch
           optionFilterProp="children"
@@ -237,28 +281,28 @@ class Index extends Component {
           }
         >
           {data && data[list] && data[list].map(({ value, key }) =>
-
             <Option value={value} key={value}>{key}</Option>,
           )}
         </Select>);
       case 8:
         return <TextArea rows={2} placeholder="请输入" />;
-      case 9:
-        return <RangePicker
-          style={{ marginRight: 10 }}
-          onChange={(date, dateString) => {
-            this.handleDatePicker(date, dateString, value);
-          }}
-        />;
-
       default:
-        return <Input style={{ width: '100' }} type={number ? 'number' : 'text'} placeholder="请输入" />;
+        return number ?
+          <InputNumber
+            placeholder="请输入"
+            style={{ width: '100%' }}
+            precision={precision}
+            step={step}
+            min={min}
+            max={max}
+          /> :
+          <Input placeholder="请输入" />;
     }
     //  type === 7 ?
   };
 
 
-  // 获取Modal的标题
+// 获取Modal的标题
   returnTitle = () => {
     const { rightActive } = this.state;
 
@@ -266,7 +310,7 @@ class Index extends Component {
     return menuText;
   };
 
-  // 弹窗确定提交回调
+// 弹窗确定提交回调
   handleModalOk = (close) => {
     const { modalType } = this.state;
     switch (modalType) {
@@ -280,7 +324,7 @@ class Index extends Component {
 
   };
 
-  // 删除按钮回调
+// 删除按钮回调
   handleDelect = () => {
     const { selectedRowKeys, selectedRowKeysSecond, dispatch } = this.props;
     const { rightActive, secondTableActive } = this.state;
@@ -313,13 +357,13 @@ class Index extends Component {
     });
   };
 
-  // 审批/撤销 按钮回调
+// 审批/撤销 按钮回调
   handleLock = () => {
     const { selectedRowKeys, selectedRowKeysSecond } = this.props;
     const { rightActive, secondTableActive } = this.state;
     const data = rightActive === firstTabFlag ? selectedRowKeys : selectedRowKeysSecond;
     const isLock = this.returnLockType().type === 1;  // 根据this.returnLockType()判断返回当前是撤回还是审批
-    const serviceType = isLock ? 'approve' : 'revoke';
+    const serviceType = isLock ? 'approval' : 'revoke';
 
     serviceObj[`${serviceType}${rightActive}`](data).then(res => {
       const { rtnCode, rtnMsg } = res.head;
@@ -336,25 +380,22 @@ class Index extends Component {
     });
   };
 
-  // 新增||编辑 按钮事件回调
+// 新增||编辑 按钮事件回调
   handleAdd = (close) => {
     const { form, choosenRowData, choosenRowDataSecond } = this.props;
-    const { secondTableActive, rightActive, modalType,filelist,videolist } = this.state;
+    const { secondTableActive, rightActive, modalType } = this.state;
     let params = {};
     if (rightActive !== firstTabFlag) {
-      params = { flowCode: choosenRowData.flowCode,filePath:videolist.flatMap(e => e.url),picPath:filelist.flatMap(e => e.url) };
+      params = { flowCode: choosenRowData.flowCode };
     }
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
-
-
-
     this.setState({ addloading: true });
 
     const dataArr = modalInput[rightActive];
-    const fieldslist = dataArr.map(e=>e.value)
-    form.validateFields(fieldslist,(err, values) => {
+    const fieldslist = dataArr.map(e => e.value);
+    form.validateFields(fieldslist, (err, values) => {
       if (!err) {
         params = {
           ...params,
@@ -385,7 +426,7 @@ class Index extends Component {
 
   };
 
-  // 获取新增/编辑弹窗内容
+// 获取新增/编辑弹窗内容
   getModalContent = () => {
     const {
       choosenRowData,
@@ -405,29 +446,44 @@ class Index extends Component {
     return (
       <Form size="small" key="1">
         {
-          addArr && addArr.map(({ key, value, noNeed, type, list, clickFn, text, arr, initValue, number,dfv }) => {
+          addArr && addArr.map(({ key, value, noNeed, readonly, type, list, clickFn, arr, initValue, number, dfv, step, min, max, precision, wrapperColSpan, labelColSpan, auto }) => {
+            if (rightActive === firstTabFlag && value === 'principalPrice') {
+              // 主材价默认值
+              initValue = model.materialPriceToday || 0;
+            }
+            if (auto && rightActive === firstTabFlag && value === 'purchaseNo'&&!isEdit) {
+              // 新增成品采购主页时 不显示自动生成的采购单号  由后端生成
+              return null;
+            }
+
+
             return (
               <div className="addModal" key={key}>
                 <FormItem
+                  labelCol={{ span: labelColSpan || 3 }}
+                  wrapperCol={{
+                    span: wrapperColSpan || 20,
+                  }
+                  }
                   label={key}
                 >
                   {
                     getFieldDecorator(value, {
                       rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : dfv||undefined),
+                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : dfv || undefined),
                     })(this.returnElement({
                       key,
                       value,
-                      noNeed,
+                      readonly,
                       number,
                       type,
                       list,
                       clickFn,
-                      text,
                       arr,
                       initValue,
                       data: model,
                       form,
+                      step, min, max, precision,
                     }))
                   }
                 </FormItem>
@@ -435,60 +491,18 @@ class Index extends Component {
             );
           })
         }
-        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
-          <FormItem
-            label="上传图片"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadImg
-              key="uimg"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.pictures  : choosenRowDataSecond.pictures): []}
-              fileListFun={(list) => {
-                this.setState({ filelist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
-        {(['productProcess'].indexOf(rightActive)>-1) && <Col span={18}>
-          <FormItem
-            label="上传视频"
-            key="uploadPic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{
-              span: 20,
-            }
-            }
-          >
-            <UploadVideo
-              key="upvideo"
-              maxcount={10}
-              defaultFileList={isEdit ? (rightActive === firstTabFlag ?choosenRowData.videos  : choosenRowDataSecond.videos): []}
-              fileListFun={(list) => {
-                this.setState({ videolist: list });
-              }}
-            />
-          </FormItem>
-        </Col>}
         {content}
       </Form>
     );
   };
 
-  // 列表对应操作button回调
+// 列表对应操作button回调
   btnFn = async (modalType) => {
     switch (modalType) {
-      case '':
-        this.setState({ modalType,addloading: false,filelist:[],videolist:[] });
-      break;
       case 'plus':
       case 'edit':
       default:
+        this.initDrop();
         this.setState({ modalType });
         break;
       case 'delete':
@@ -533,11 +547,14 @@ class Index extends Component {
     return { name: '审批', disabled: true, type: 1, isShenPi, isChexiao }; // 当两种状态都有 禁止点击
   };
 
-  // 判断按钮是否禁止 返回boolean
+// 判断按钮是否禁止 返回boolean
   returnSisabled = (tag) => {
     const { selectedRowKeys, selectedRowKeysSecond, choosenRowData, choosenRowDataSecond } = this.props;
     const { rightActive } = this.state;
-
+    if (rightActive === 'fpdetail' && choosenRowData.status === '2') {
+      // 主页选中数据为已审批，详细不可新增 编辑 删除
+      return true;
+    }
     if (tag === 'plus') return (firstTabFlag === rightActive ? false : !choosenRowData.id);
     if (tag === 'lock') return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || this.returnLockType().disabled;
 
@@ -549,10 +566,11 @@ class Index extends Component {
       return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0) || Number(d.status) === 2;
     }
 
+
     return (firstTabFlag === rightActive && selectedRowKeys.length === 0) || (firstTabFlag !== rightActive && selectedRowKeysSecond.length === 0);
   };
 
-  // 取消弹窗回调
+// 取消弹窗回调
   onCancel = () => {
     this.btnFn('');
   };
@@ -560,22 +578,38 @@ class Index extends Component {
 
   render() {
     const {
-      state,
-      props,
-      btnFn,
-      returnSisabled,
-      returnLockType,
-      returnListName,
-      changeRightActive,
-      getModalContent,
-      handleModalOk,
-      onCancel,
-      returnElement,
-      onSearch,
-      returnTitle,
-    } = this;
+      state
+      ,
+      props
+      ,
+      btnFn
+      ,
+      returnSisabled
+      ,
+      returnLockType
+      ,
+      changeRightActive
+      ,
+      getModalContent
+      ,
+      handleModalOk
+      ,
+      onCancel
+      ,
+      returnElement
+      ,
+      onSearch
+      ,
+      returnTitle
+      ,
+    }
+
+      = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
     const { choosenRowData, choosenRowDataSecond } = props;
+
+    const btnrealGroup = rightActive === firstTabFlag ? btnGroup : btnGroupSecond;
+
 
     const modalFooter = modalType === 'plus' ? [
       <Button
@@ -639,7 +673,9 @@ class Index extends Component {
                   {/* 中间table组件 */}
                   <Col lg={16} md={24}>
                     <MiddleTable
-                      changedetailtab={(type)=>{this.setState({rightActive:(type===1?firstTabFlag:'productProcess')})}}
+                      changedetailtab={(type) => {
+                        this.setState({ rightActive: (type === 1 ? firstTabFlag : 'fpdetail') });
+                      }}
                       firstType={firstTabFlag}
                       secondType={secondTableActive}
                       returnElement={returnElement}
@@ -693,7 +729,7 @@ class Index extends Component {
                       {/*  */}
                       <Card bodyStyle={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {btnGroup.map(({ name, tag }) => (
+                          {btnrealGroup.map(({ name, tag }) => (
                             <Button
                               key={tag}
                               className={styles.buttomControl}
@@ -730,7 +766,6 @@ class Index extends Component {
           footer={modalFooter}
           onCancel={() => {
             btnFn('');
-
           }}
         >
           {getModalContent()}
@@ -742,5 +777,6 @@ class Index extends Component {
 
 
 }
+;
 
 export default Index;
