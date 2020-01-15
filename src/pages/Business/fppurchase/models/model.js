@@ -10,7 +10,12 @@ import servicesConfig from '@/services/business';
 const initData = { records: [] };
 
 const {
-  listMstWordbook, listDeptDropDown, getTypeByWordbookCode, listGemSetProcessDropDown,listUsers
+  listMstWordbook,
+  getMainMaterialPrice,
+  supplierlistDropDown,
+  listnotdonepiHead,
+
+
 } = servicesConfig;
 const defaultModelName = 'fppurchase';
 
@@ -40,11 +45,11 @@ export default {
     searchParamsSecond: {},
 
 
-    userlist: [{ key: '', value: '' }],
-    listGemSetProcessDropDown: [{ key: '', value: '' }],
-    listDeptDrop: [{ key: '', value: '' }],
-    listH017: [{ key: '', value: '' }],
-    listH016009: [{ key: '', value: '' }],
+    materialPriceToday: 0,
+    listH006: [{ key: '', value: '' }],
+    listH019: [{ key: '', value: '' }],
+    supplierlistDropDown: [{ key: '', value: '' }],
+    listPInotdone: [{ key: '', value: '' }],
 
   },
 
@@ -178,72 +183,42 @@ export default {
         payload,
       });
     },
+    // 获取当天主材价格
+    * getMainMaterialPrice( {payload}, { call, put }) {
+      const response = yield call(getMainMaterialPrice,payload);
+      const value = response.body;
+      yield put({
+        type: 'changeState',
+        payload: { data: value, typeName: 'materialPriceToday' },
+      });
 
+    },
     // 下拉获取
-
-    * getUsersList( {payload}, { call, put }) {
-      const response = yield call(listUsers,payload);
+    * getCommonList( {payload}, { call, put }) {
+      const {params,propsName,apiname,value='id',key='zhName'} = payload;
+      const response = yield call(servicesConfig[apiname],params);
       const listtemp = response.body.records;
-      const list = listtemp.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
+      const list = listtemp.map((item) => {
+        return { ...item,value: item[value], key: item[key] };
       });
       yield put({
         type: 'changeState',
-        payload: { data: list, typeName: "userlist" },
+        payload: { data: list, typeName: propsName },
       });
 
     },
     * getwordbookdropdown({ payload }, { call, put }) {
       const response = yield call(listMstWordbook, payload.params);
       const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ wordbookContentZh, wordbookCode }) => {
-        return { value: wordbookCode, key: wordbookContentZh };
+      const wordbookdropdown = wordbookData.map((item) => {
+        return { ...item,value: item.wordbookCode, key: item.wordbookContentZh };
       });
       yield put({
         type: 'changeState',
         payload: { data: wordbookdropdown, typeName: payload.listName },
       });
-
     },
 
-    * getTypeByWordbookCode({ payload }, { call, put }) {
-      const response = yield call(getTypeByWordbookCode, payload.params);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: payload.listName },
-      });
-
-    },
-
-    * listDeptDropDown(_, { call, put }) {
-      const response = yield call(listDeptDropDown);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listDeptDrop' },
-      });
-
-    },
-
-    * listGemSetProcessDropDown({ payload }, { call, put }) {
-      const response = yield call(listGemSetProcessDropDown, payload);
-      const wordbookData = response.body.records;
-      const wordbookdropdown = wordbookData.map(({ id, zhName }) => {
-        return { value: id, key: zhName };
-      });
-      yield put({
-        type: 'changeState',
-        payload: { data: wordbookdropdown, typeName: 'listGemSetProcessDropDown' },
-      });
-
-    },
 
   },
 

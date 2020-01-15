@@ -109,31 +109,36 @@ class Index extends Component {
   };
 
   initDrop = () => {
+    const { secondTableActive } = this.state;
     const { dispatch } = this.props;
-    // 负责人下拉
-    dispatch({
-      type: `${defaultModelName}/getUsersList`,
-      payload:{current:0,size:5000}
-    });
-    // 类别下拉
-    dispatch({
-      type: `${defaultModelName}/getwordbookdropdown`,
-      payload: { params: { 'wordbookTypeCode': 'H017' }, listName: 'listH017' },
-    });
-    // 成品类别下拉
-    dispatch({
-      type: `${defaultModelName}/getTypeByWordbookCode`,
-      payload: { params: { 'key': 'H016009' }, listName: 'listH016009' },
-    });
-    // 部门下拉
-    dispatch({
-      type: `${defaultModelName}/listDeptDropDown`,
-    });
-    // 镶石工艺下拉
-    dispatch({
-      type: `${defaultModelName}/listGemSetProcessDropDown`,
-      payload: {},
-    });
+    if(secondTableActive===firstTabFlag){
+      // 付款类别接口
+      dispatch({
+        type: `${defaultModelName}/getwordbookdropdown`,
+        payload: { params: { 'wordbookTypeCode': 'H019' }, listName: 'listH019' },
+      });
+      // 币种接口
+      dispatch({
+        type: `${defaultModelName}/getwordbookdropdown`,
+        payload: { params: { 'wordbookTypeCode': 'H006' }, listName: 'listH006' },
+      });
+      // 获取当天默认主材价格接口
+      dispatch({
+        type: `${defaultModelName}/getMainMaterialPrice`,
+        payload: {},
+      });
+      // 供应商编号接口
+      dispatch({
+        type: `${defaultModelName}/getCommonList`,
+        payload: { params: {  }, propsName: 'supplierlistDropDown',apiname:'supplierlistDropDown' },
+      });
+      // 获取客户订单下拉
+      dispatch({
+        type: `${defaultModelName}/getCommonList`,
+        payload: { params: {}, propsName: 'listPInotdone' ,apiname:'listnotdonepiHead'},
+      });
+    }
+
   };
 
   // table 搜索
