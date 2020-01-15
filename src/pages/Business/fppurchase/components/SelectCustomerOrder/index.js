@@ -1,5 +1,4 @@
 import React from 'react'
-import { Input } from 'antd'
 import Table from '@/components/Table'
 import styles from './index.less'
 import SearchForm from '@/components/SearchForm'
@@ -18,6 +17,7 @@ const searchParams = [
   { key: '规格', value: 'specification' },
   { key: '中文名', value: 'zhName' },
 ];
+
 
 const columnsarr = [
     {
@@ -59,16 +59,16 @@ const columnsarr = [
 
 
 
-export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeMaterialSearch,materialType,handleTableChange }) => {
+export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeMaterialSearch,handleTableChange }) => {
   return(
     <div className={styles.productModal}>
-      <SearchForm
-        onSearch={onSearch}
-        data={searchParams}
-        returnElement={returnElement}
-        source={source}
-        onchange={changeMaterialSearch}
-      />
+      {/* <SearchForm */}
+      {/* onSearch={onSearch} */}
+      {/* data={searchParams} */}
+      {/* returnElement={returnElement} */}
+      {/* source={source} */}
+      {/* onchange={changeMaterialSearch} */}
+      {/* /> */}
       <Table
         columns={columnsarr}
         body={list}

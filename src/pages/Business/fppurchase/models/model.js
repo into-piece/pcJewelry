@@ -26,6 +26,7 @@ export default {
   state: {
 
     choosenRowData: { id: '' }, // select to show table 1
+    choosenRowDataCustomer: { id: '' }, // select to show table 1
     choosenRowDataSecond: { id: '' }, // select to show table 2
 
     pagination: {
@@ -35,6 +36,10 @@ export default {
     paginationSecond: {
       current: 1,
       size: 6,
+    },
+    paginationCustomer: {
+      current: 1,
+      size: 10,
     },
     selectedRowKeys: [], // table1 select
     selectedRowKeysSecond: [], // table2 select

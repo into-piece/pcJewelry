@@ -130,14 +130,25 @@ class Index extends Component {
         type: `${defaultModelName}/getCommonList`,
         payload: { params: {}, propsName: 'supplierlistDropDown', apiname: 'supplierlistDropDown' },
       });
-      // 获取客户订单下拉
-      dispatch({
-        type: `${defaultModelName}/getCommonList`,
-        payload: { params: { size: 1000, current: 1 },key:'customerNo',value:'id', propsName: 'listPInotdone', apiname: 'listnotdonepiHead' },
-      });
+
     }
 
   };
+
+  // 获取客户订单 table数据
+  customerSearch = () => {
+    dispatch({
+      type: `${defaultModelName}/getCommonList`,
+      payload: {
+        params: { size: 1000, current: 1 },
+        key: 'customerNo',
+        value: 'id',
+        propsName: 'listPInotdone',
+        apiname: 'listnotdonepiHead',
+      },
+    });
+  };
+
 
   // table 搜索
   onSearch = (params, table) => {
@@ -199,13 +210,15 @@ class Index extends Component {
   handleSelectChange = (value, type) => {
     const { model, form, dispatch } = this.props;
     // 成品采购主页  供货商编号 反显供货商简称 联系人 手机
-    if(type==='supplierId'){
-      const mm = model.supplierlistDropDown.filter(item=>item.id===value)[0];
-      if(mm){
-        form.setFieldsValue({supplierId:mm.id,
-          supplierShotName:mm.shotName,
-          contactName:mm.contactName,
-          mobilePhone:mm.mobilePhone})
+    if (type === 'supplierId') {
+      const mm = model.supplierlistDropDown.filter(item => item.id === value)[0];
+      if (mm) {
+        form.setFieldsValue({
+          supplierId: mm.id,
+          supplierShotName: mm.shotName,
+          contactName: mm.contactName,
+          mobilePhone: mm.mobilePhone,
+        });
       }
 
     }
@@ -222,7 +235,7 @@ class Index extends Component {
     // });
   };
 
-  returnElement = ({ key, value, disabled, type, list, arr, data,clickFn, form, number, step, min, max, precision }) => {
+  returnElement = ({ key, value, disabled, type, list, arr, data, clickFn, form, number, step, min, max, precision }) => {
     switch (type) {
       case 1:
         return <RangePicker
@@ -257,12 +270,12 @@ class Index extends Component {
         />;
       case 4:
         return (
-          <p style={{margin: 0}}>
+          <p style={{ margin: 0 }}>
             {/* {form.getFieldValue(value) || ''} */}
             <span
               style={{ color: '#40a9ff', cursor: 'pointer', marginLeft: 10 }}
               onClick={() => {
-                clickFn&&clickFn();
+                clickFn && clickFn();
               }}
             >
               选择
@@ -494,14 +507,14 @@ class Index extends Component {
                 }
               }
 
-              if(value==='customerOrderId'&&rightActive===firstTabFlag){
-                clickFn = ()=>{
+              if (value === 'customerOrderId' && rightActive === firstTabFlag) {
+                clickFn = () => {
                   // 弹出 客户订单选择
                   // 成品采购主页  客户订单 反显客户编号  客户简称
                   // form.setFieldsValue({remarks:'',customerOrderId:model.listPInotdone.id,customerNo:model.listPInotdone.customerNo,customerShotName:model.listPInotdone.customerShotName})
 
-                  console.log(1111)
-                }
+                  console.log(1111);
+                };
               }
 
 
@@ -656,7 +669,7 @@ class Index extends Component {
 
       = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
-    const { choosenRowData, choosenRowDataSecond } = props;
+    const { choosenRowData, choosenRowDataSecond ,model} = props;
 
     const btnrealGroup = rightActive === firstTabFlag ? btnGroup : btnGroupSecond;
 
@@ -807,7 +820,7 @@ class Index extends Component {
         <Modal
           maskClosable={false}
           title={<BuildTitle title={returnTitle()} />}
-
+          zIndex={1001}
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
@@ -829,29 +842,27 @@ class Index extends Component {
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
           destroyOnClose
-          onOk={handleMaterialNoOk}
-          visible={showMaterialNoModal}
-          onCancel={handleMaterialNoCancel}
+          onOk={this.handleCustomerNoOk}
+          visible={this.state.showCustomerNoModal}
+          onCancel={this.handleCustomerNoCancel}
           zIndex={1002}
         >
           <SelectCustomerOrder
-            list={materialNoList}
-            materialType={materialType}
-            pagination={materialNoPagination}
-            returnElement={returnElement}
-            source={model}
-            selectedRowKeys={materialSelectedKeys}
-            changeChoosenRow={changeMaterialChoosenRow}
-            choosenRowData={materialNoChoosenRowData}
-            onSelectChange={onMaterialSelectChange}
-            listLoading={materialNoListLoading}
-            onSearch={this.getMaterialList}
-            changeMaterialSearch={changeMaterialSearch}
+            list={model.materialNoList}
+            pagination={model.materialNoPagination}
+            // returnElement={returnElement}
+            // source={model}
+            // onSearch={this.customerSearch}
+            // changeCustomerSearch={model.changeCustomerSearch}
+            selectedRowKeys={model.materialSelectedKeys}
+            changeChoosenRow={this.changeCustomerChoosenRow}
+            choosenRowData={model.materialNoChoosenRowData}
+            onSelectChange={this.onCustomerSelectChange}
+            listLoading={model.materialNoListLoading}
             handleTableChange={args => {
-              // search 看看搜索完要不要做点处理
-              this.getmaterialNoList({ ...args });
+              // 翻页 search 看看搜索完要不要做点处理
+              this.customerSearch({ ...args });
             }}
-
           />
         </Modal>
       </div>
