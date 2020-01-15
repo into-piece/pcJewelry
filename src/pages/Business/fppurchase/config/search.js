@@ -1,11 +1,7 @@
 
 // 生产流程的筛选参数
 export const fppurchase = [
-  { key: '流程编号', value: 'flowCode' },
-  { key: '流程名称', value: 'flowName' },
-  { key: '英文名称', value: 'engName' },
-  { key: '所属部门', value: 'department', 'type': 2, 'list': 'listDeptDrop'},
-  { key: '允许损耗(%)', value: 'isWastage',number:true},
+  { 'key': '采购单号', 'value': 'purchaseNo'},
 ];
 
 // 生产工序的筛选参数

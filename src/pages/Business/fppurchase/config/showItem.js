@@ -1,37 +1,23 @@
-import {statusConvert,YoNConvert} from '@/utils/convert';
-//
-// export const fppurchase = [
-//   { 'key': '成品类别', 'value': 'productType',cName:true },
-//   { 'key': '流程名称', 'value': 'flowName' },
-//   { 'key': '流程编号', 'value': 'flowCode' },
-//   { 'key': '所属部门', 'value': 'department'  ,cName:true},
-//   { 'key': '英文名称', 'value': 'engName' },
-//   { 'key': '类别', 'value': 'type' ,cName:true},
-//   { 'key': '镶石工艺', 'value': 'stoneCraft',cName:true },
-//   {
-//     'key': '是否外发',
-//     'value': 'isOutbound',
-//     'convert':YoNConvert,
-//   },
-//   { 'key': '允许损耗(%)', 'value': 'isWastage' },
-//   { 'key': '出货重量范围', 'value': 'weightRange' },
-//   { 'key': '标准工时', 'value': 'workingHour' },
-//   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
-// ];
+import {statusConvert} from '@/utils/convert';
 
 export const fppurchase = [
-  { 'key': '流程名称', 'value': 'flowName' },
-  { 'key': '流程编号', 'value': 'flowCode' },
-  { 'key': '所属部门', 'value': 'department'  ,cName:true},
-  { 'key': '英文名称', 'value': 'engName' },
-  { 'key': '负责人', 'value': 'chargeUser',cName:true },
-  { 'key': '工作效率', 'value': 'efficiency' },
-  { 'key': '计价类别', 'value': 'valuationClass'  ,cName:true},
-  { 'key': '允许损耗(%)', 'value': 'isWastage' },
-  { 'key': '出货重量范围', 'value': 'weightRange' },
-  { 'key': '说明', 'value': 'remarks' },
-  { 'key': '类别', 'value': 'flowClass' ,cName:true },
+  { 'key': '采购单号', 'value': 'purchaseNo' },
+  { 'key': '采购日期', 'value': 'purchaseDate',date:'YYYY-MM-DD'  },
+  { 'key': '客户订单', 'value': 'orderNo'  },
+  { 'key': '客户编号', 'value': 'customerNo' },
+  { 'key': '客户简称', 'value': 'customerShotName' },
+  { 'key': '供货商编号', 'value': 'supplierCode' },
+  { 'key': '供货商简称', 'value': 'supplierShotName' },
+  { 'key': '联系人', 'value': 'contactName'  },
+  { 'key': '手机', 'value': 'mobilePhone' },
+  { 'key': '预付款金额', 'value': 'advance' },
+  { 'key': '付款类别', 'value': 'typeOfPayment',cName:true },
+  { 'key': '供货商交期', 'value': 'supplierDate',date:'YYYY-MM-DD' },
+  { 'key': '主材价', 'value': 'principalPrice'  },
+  { 'key': '币种', 'value': 'currency' },
+  { 'key': '税率', 'value': 'taxRate' },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
+  { 'key': '备注', 'value': 'remarks' },
 ];
 
 export const fpdetail = [

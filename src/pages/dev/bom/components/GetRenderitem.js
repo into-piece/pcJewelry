@@ -74,8 +74,8 @@ const GetRenderitem = ({ data, type, items }) => {
     }
       <DescriptionList className={styles.headerList} size="small" col="1">
         {arr.map(({ key, value, cName, convert, date, fixed,ischeck }) => {
-            const showdata = date && data[key]
-            ? moment(data[key]).format(date)
+            const showdata = date && data[value]
+            ? moment(data[value]).format(date)
             : convert
             ? convert instanceof Function
               ? convert(data[value], fixed)

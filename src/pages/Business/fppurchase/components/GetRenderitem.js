@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import Zmage from 'react-zmage';
+import moment from 'moment';
 import styles from './GetRenderitem.less';
 import {defaultImages} from '@/utils/utils';
 
@@ -54,10 +55,10 @@ const GetRenderitem = ({ data, type, items }) => {
       {images && images.length > 0 && <Divider />}
       {data.id&&<DescriptionList className={styles.headerList} size="small" col="1">
         {
-          arr.map(({ key, value, cName, convert }) =>
+          arr.map(({ key, value, cName, convert ,date}) =>
             <Description key={key} term={key}>
               {
-                convert ? convert[data[value]] : (cName ? data[`${value}Name`] : data[value])
+                convert ? convert[data[value]] : (cName ? data[`${value}Name`] : (date?(moment(data[value]).format(date)):data[value]))
               }
             </Description>,
           )
