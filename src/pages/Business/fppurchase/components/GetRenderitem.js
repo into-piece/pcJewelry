@@ -10,9 +10,9 @@ import {
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import Zmage from 'react-zmage';
+import moment from 'moment';
 import styles from './GetRenderitem.less';
 import {defaultImages} from '@/utils/utils';
-import moment from 'moment';
 
 const { Description } = DescriptionList;
 

@@ -1,4 +1,4 @@
-import {statusConvert,YoNConvert} from '@/utils/convert';
+import {statusConvert} from '@/utils/convert';
 
 export const fppurchase = [
   { 'key': '采购单号', 'value': 'purchaseNo' },
@@ -12,12 +12,12 @@ export const fppurchase = [
   { 'key': '手机', 'value': 'mobilePhone' },
   { 'key': '预付款金额', 'value': 'advance' },
   { 'key': '付款类别', 'value': 'typeOfPayment',cName:true },
-  { 'key': '供货商交期', 'value': 'supplierDate',data:'YYYY-MM-DD' },
+  { 'key': '供货商交期', 'value': 'supplierDate',date:'YYYY-MM-DD' },
   { 'key': '主材价', 'value': 'principalPrice'  },
   { 'key': '币种', 'value': 'currency' },
   { 'key': '税率', 'value': 'taxRate' },
-  { 'key': '备注', 'value': 'remarks' },
   { 'key': '状态', 'value': 'status' ,'convert':statusConvert,},
+  { 'key': '备注', 'value': 'remarks' },
 ];
 
 export const fpdetail = [

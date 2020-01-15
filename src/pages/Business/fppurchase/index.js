@@ -91,8 +91,6 @@ class Index extends Component {
   };
 
   componentDidMount() {
-
-
     this.initDrop();
     // 获取初始表单数据
     this.getList();
@@ -504,6 +502,7 @@ class Index extends Component {
       case 'plus':
       case 'edit':
       default:
+        this.initDrop();
         this.setState({ modalType });
         break;
       case 'delete':
