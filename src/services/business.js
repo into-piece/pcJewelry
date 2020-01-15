@@ -121,7 +121,7 @@ const resultArr = [
   { key: 'dropDownRAT', path: '/business/basic/ring-around-the-standard/dropDownRAT', prefix: `${env}` },// 戒围标准下拉
 
 
-  { key: 'getMainMaterialPrice', path: '/business/product/product-quote-header/getMainMaterialPrice', prefix: `${env}` },// 获取当天默认主材价格接口
+  { key: 'getMainMaterialPrice', path: '/business/business/product/product-quote-header/getMainMaterialPrice', prefix: `${env}` },// 获取当天默认主材价格接口
   { key: 'supplierlistDropDown', path: '/business/purchase.supplier/purchase-supplier/listDropDown', prefix: `${env}` },// 供应商编号接口
 ];
 

@@ -106,9 +106,9 @@ class Index extends Component {
   };
 
   initDrop = () => {
-    const { secondTableActive } = this.state;
+    const { rightActive } = this.state;
     const { dispatch } = this.props;
-    if (secondTableActive === firstTabFlag) {
+    if (rightActive === firstTabFlag) {
       // 付款类别接口
       dispatch({
         type: `${defaultModelName}/getwordbookdropdown`,
@@ -132,7 +132,7 @@ class Index extends Component {
       // 获取客户订单下拉
       dispatch({
         type: `${defaultModelName}/getCommonList`,
-        payload: { params: {}, propsName: 'listPInotdone', apiname: 'listnotdonepiHead' },
+        payload: { params: { size: 1000, current: 1 },key:'customerNo',value:'id', propsName: 'listPInotdone', apiname: 'listnotdonepiHead' },
       });
     }
 
@@ -224,11 +224,11 @@ class Index extends Component {
     // });
   };
 
-  returnElement = ({ key, value, readonly, type, list, arr, data, form, number, step, min, max, precision }) => {
+  returnElement = ({ key, value, disabled, type, list, arr, data, form, number, step, min, max, precision }) => {
     switch (type) {
       case 1:
         return <RangePicker
-          style={{ marginRight: 10 }}
+          disabled={disabled}
           onChange={(date, dateString) => {
             this.handleDatePicker(date, dateString, value);
           }}
@@ -236,7 +236,8 @@ class Index extends Component {
       case 2:
         return (
           <Select
-            style={{ width: 180 }}
+            disabled={disabled}
+
             placeholder="请选择"
             onChange={(v) => {
               this.handleSelectChange(v, value);
@@ -248,14 +249,18 @@ class Index extends Component {
         );
       case 3:
         return <DatePicker
+          disabled={disabled}
+
+          style={{ width: '100%' }}
           allowClear={false}
-          style={{ marginRight: 10 }}
           onChange={(date, dateString) => {
             this.handleDatePicker(date, dateString, value);
           }}
         />;
       case 5:
         return <Checkbox
+          disabled={disabled}
+
           checked={form.getFieldValue(value)}
           onChange={e => {
             this.handleCheckChange(e, value);
@@ -263,7 +268,7 @@ class Index extends Component {
         >{text}
         </Checkbox>;
       case 6:
-        return <Radio.Group>
+        return <Radio.Group disabled>
           {
             arr.map(({ key, value }) => {
               return <Radio value={value} key={value}>{key}</Radio>;
@@ -272,7 +277,8 @@ class Index extends Component {
         </Radio.Group>;
       case 7:
         return (<Select
-          style={{ width: 180 }}
+          disabled={disabled}
+
           placeholder="请选择"
           showSearch
           optionFilterProp="children"
@@ -285,10 +291,16 @@ class Index extends Component {
           )}
         </Select>);
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea
+          disabled={disabled}
+          rows={2}
+          placeholder="请输入"
+        />;
       default:
         return number ?
           <InputNumber
+            disabled={disabled}
+
             placeholder="请输入"
             style={{ width: '100%' }}
             precision={precision}
@@ -296,7 +308,10 @@ class Index extends Component {
             min={min}
             max={max}
           /> :
-          <Input placeholder="请输入" />;
+          <Input
+            disabled={disabled}
+            placeholder="请输入"
+          />;
     }
     //  type === 7 ?
   };
@@ -306,7 +321,7 @@ class Index extends Component {
   returnTitle = () => {
     const { rightActive } = this.state;
 
-    const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`menu.erp.business.${rightActive}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -445,53 +460,62 @@ class Index extends Component {
     const addArr = modalInput[rightActive];
     return (
       <Form size="small" key="1">
-        {
-          addArr && addArr.map(({ key, value, noNeed, readonly, type, list, clickFn, arr, initValue, number, dfv, step, min, max, precision, wrapperColSpan, labelColSpan, auto }) => {
-            if (rightActive === firstTabFlag && value === 'principalPrice') {
-              // 主材价默认值
-              initValue = model.materialPriceToday || 0;
-            }
-            if (auto && rightActive === firstTabFlag && value === 'purchaseNo'&&!isEdit) {
-              // 新增成品采购主页时 不显示自动生成的采购单号  由后端生成
-              return null;
-            }
+        <Row gutter={16}>
+          {
+            addArr && addArr.map(({ key, value, noNeed, disabled, type, list, clickFn, arr, number, dfv, step, min, max, precision, wrapperColSpan, labelColSpan, auto, colSpan }) => {
+              if (rightActive === firstTabFlag && value === 'principalPrice') {
+                // 主材价默认值
+                dfv = model.materialPriceToday || 0;
+              }
+              if (auto && rightActive === firstTabFlag && value === 'purchaseNo' && !isEdit) {
+                // 新增成品采购主页时 不显示自动生成的采购单号  由后端生成
+                return null;
+              }
+              if (['supplierDate', 'purchaseDate'].indexOf(value) > -1) {
+                dfv = moment();
+                if (rightActive === firstTabFlag) {
+                  choosenRowData[value] = moment(choosenRowData[value]);
+                } else {
+                  choosenRowDataSecond[value] = moment(choosenRowDataSecond[value]);
+                }
+              }
 
 
-            return (
-              <div className="addModal" key={key}>
-                <FormItem
-                  labelCol={{ span: labelColSpan || 3 }}
-                  wrapperCol={{
-                    span: wrapperColSpan || 20,
-                  }
-                  }
-                  label={key}
-                >
-                  {
-                    getFieldDecorator(value, {
-                      rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : dfv || undefined),
-                    })(this.returnElement({
-                      key,
-                      value,
-                      readonly,
-                      number,
-                      type,
-                      list,
-                      clickFn,
-                      arr,
-                      initValue,
-                      data: model,
-                      form,
-                      step, min, max, precision,
-                    }))
-                  }
-                </FormItem>
-              </div>
-            );
-          })
-        }
-        {content}
+              return (
+                <Col span={colSpan || 6} style={{ paddingRight: '5px"' }} key={key}>
+                  <FormItem
+                    labelCol={{ span: labelColSpan || 3 }}
+                    wrapperCol={{
+                      span: wrapperColSpan || 20,
+                    }
+                    }
+                    label={key}
+                  >
+                    {
+                      getFieldDecorator(value, {
+                        rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
+                        initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : (number ? 0 : dfv || undefined),
+                      })(this.returnElement({
+                        key,
+                        value,
+                        disabled,
+                        number,
+                        type,
+                        list,
+                        clickFn,
+                        arr,
+                        data: model,
+                        form,
+                        step, min, max, precision,
+                      }))
+                    }
+                  </FormItem>
+                </Col>
+              );
+            })
+          }
+          {content}
+        </Row>
       </Form>
     );
   };
@@ -501,7 +525,6 @@ class Index extends Component {
     switch (modalType) {
       case 'plus':
       case 'edit':
-      default:
         this.initDrop();
         this.setState({ modalType });
         break;
@@ -518,6 +541,9 @@ class Index extends Component {
             this.handleLock();
           },
         });
+        break;
+      default:
+        this.setState({ modalType });
         break;
     }
   };

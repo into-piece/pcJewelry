@@ -186,7 +186,7 @@ export default {
     // 获取当天主材价格
     * getMainMaterialPrice( {payload}, { call, put }) {
       const response = yield call(getMainMaterialPrice,payload);
-      const value = response.body;
+      const value = response.body.records[0].silver;
       yield put({
         type: 'changeState',
         payload: { data: value, typeName: 'materialPriceToday' },

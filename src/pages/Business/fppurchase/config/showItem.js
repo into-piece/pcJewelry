@@ -2,7 +2,7 @@ import {statusConvert} from '@/utils/convert';
 
 export const fppurchase = [
   { 'key': '采购单号', 'value': 'purchaseNo' },
-  { 'key': '采购日期', 'value': '采购日期' },
+  { 'key': '采购日期', 'value': 'purchaseDate',date:'YYYY-MM-DD'  },
   { 'key': '客户订单', 'value': 'orderNo'  },
   { 'key': '客户编号', 'value': 'customerNo' },
   { 'key': '客户简称', 'value': 'customerShotName' },
