@@ -148,9 +148,15 @@ class Index extends Component {
   };
 
   handleCustomerNoOk = () => {
-    // 选择客户订单 反显客户编号  客户简称
-    const { dispatch, form } = this.props;
-    // form.setFieldsValue({remarks:'',customerOrderId:model.listPInotdone.id,customerNo:model.listPInotdone.customerNo,customerShotName:model.listPInotdone.customerShotName})
+    // 选择客户订单 反显客户编号  客户简称 备注
+    const { dispatch, form, model } = this.props;
+    const value = model.listPInotdone.filter(item => item.id === model.customerChoosenRowData.id)[0];
+    form.setFieldsValue({
+      remarks: value.remarks,
+      customerOrderId: value.id,
+      customerNo: value.customerNo,
+      customerShotName: value.customerShotName,
+    });
 
   };
 
@@ -170,7 +176,7 @@ class Index extends Component {
     dispatch({
       type: `${defaultModelName}/changeProps`,
       payload: {
-        typeName: 'customerList', data:  { records: [] },
+        typeName: 'customerList', data: { records: [] },
       },
     });
   };
@@ -390,7 +396,7 @@ class Index extends Component {
   returnTitle = () => {
     const { rightActive } = this.state;
 
-    const menuText = <FormattedMessage id={`menu.erp.business.${rightActive}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`menu.erp.business.${rightActive}`} defaultMessage="Settings"/>;
     return menuText;
   };
 
@@ -834,7 +840,7 @@ class Index extends Component {
                                 </Radio.Button>)
                             }
                           </Radio.Group>
-                          <Divider className={styles.divder} />
+                          <Divider className={styles.divder}/>
                         </div>
                         <GetRenderitem
                           key={firstTabFlag === rightActive ? choosenRowData.id : choosenRowDataSecond.id}
@@ -873,7 +879,7 @@ class Index extends Component {
         {handleModalOk &&
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()} />}
+          title={<BuildTitle title={returnTitle()}/>}
           zIndex={1001}
           width={1000}
           className={styles.standardListForm}
@@ -890,7 +896,7 @@ class Index extends Component {
         }
 
         <Modal
-          title={<BuildTitle title="选择客户订单" />}
+          title={<BuildTitle title="选择客户订单"/>}
           maskClosable={false}
           width={1000}
           className={styles.standardListForm}
