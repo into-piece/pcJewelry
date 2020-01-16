@@ -157,7 +157,7 @@ class Index extends Component {
       customerNo: value.customerNo,
       customerShotName: value.customerShotName,
     });
-
+    this.setState({ showCustomerNoModal: false });
   };
 
   handleCustomerNoCancel = () => {
@@ -396,7 +396,7 @@ class Index extends Component {
   returnTitle = () => {
     const { rightActive } = this.state;
 
-    const menuText = <FormattedMessage id={`menu.erp.business.${rightActive}`} defaultMessage="Settings"/>;
+    const menuText = <FormattedMessage id={`menu.erp.business.${rightActive}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -846,7 +846,7 @@ class Index extends Component {
                                 </Radio.Button>)
                             }
                           </Radio.Group>
-                          <Divider className={styles.divder}/>
+                          <Divider className={styles.divder} />
                         </div>
                         <GetRenderitem
                           key={firstTabFlag === rightActive ? choosenRowData.id : choosenRowDataSecond.id}
@@ -885,7 +885,7 @@ class Index extends Component {
         {handleModalOk &&
         <Modal
           maskClosable={false}
-          title={<BuildTitle title={returnTitle()}/>}
+          title={<BuildTitle title={returnTitle()} />}
           zIndex={1001}
           width={1000}
           className={styles.standardListForm}
@@ -902,7 +902,7 @@ class Index extends Component {
         }
 
         <Modal
-          title={<BuildTitle title="选择客户订单"/>}
+          title={<BuildTitle title="选择客户订单" />}
           maskClosable={false}
           width={1000}
           className={styles.standardListForm}
