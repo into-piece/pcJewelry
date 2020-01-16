@@ -24,6 +24,7 @@ import moment from 'moment/moment';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
+import SelectCustomerOrder from './components/SelectCustomerOrder';
 
 // 弹窗输入配置&显示配置
 import modalInput from './config/modalInput';
@@ -68,6 +69,7 @@ const radioArr = [{ key: '成品采购主页', value: 'fppurchase' },
     model,
     listLoading: loading.effects[`${defaultModelName}/getList`],
     listLoadingSecond: loading.effects[`${defaultModelName}/getListSecond`],
+    customerListLoading: loading.effects[`${defaultModelName}/getListCustomer`],
     list: model.list,
     listSecond: model.listSecond,
     pagination: model.pagination,
@@ -88,6 +90,8 @@ class Index extends Component {
     secondTableActive: 'fpdetail',
     // 右边默认选中tab标志
     rightActive: firstTabFlag,
+
+    showCustomerNoModal: false,
   };
 
   componentDidMount() {
@@ -106,9 +110,9 @@ class Index extends Component {
   };
 
   initDrop = () => {
-    const { secondTableActive } = this.state;
+    const { rightActive } = this.state;
     const { dispatch } = this.props;
-    if (secondTableActive === firstTabFlag) {
+    if (rightActive === firstTabFlag) {
       // 付款类别接口
       dispatch({
         type: `${defaultModelName}/getwordbookdropdown`,
@@ -129,14 +133,70 @@ class Index extends Component {
         type: `${defaultModelName}/getCommonList`,
         payload: { params: {}, propsName: 'supplierlistDropDown', apiname: 'supplierlistDropDown' },
       });
-      // 获取客户订单下拉
-      dispatch({
-        type: `${defaultModelName}/getCommonList`,
-        payload: { params: {}, propsName: 'listPInotdone', apiname: 'listnotdonepiHead' },
-      });
+
     }
 
   };
+
+  // 获取客户订单 table数据
+  customerSearch = (args) => {
+    const { dispatch, model } = this.props;
+    dispatch({
+      type: `${defaultModelName}/getListCustomer`,
+      payload: { ...model.customerPagination, ...args },
+    });
+  };
+
+  handleCustomerNoOk = () => {
+    // 选择客户订单 反显客户编号  客户简称 备注
+    const { dispatch, form, model } = this.props;
+    const value = model.listPInotdone.filter(item => item.id === model.customerChoosenRowData.id)[0];
+    form.setFieldsValue({
+      remarks: value.remarks,
+      customerOrderId: value.id,
+      customerNo: value.customerNo,
+      customerShotName: value.customerShotName,
+    });
+    this.setState({ showCustomerNoModal: false });
+  };
+
+  handleCustomerNoCancel = () => {
+    const { dispatch } = this.props;
+    this.setState({ showCustomerNoModal: false });
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: {
+        typeName: 'paginationCustomer', data: {
+          current: 1,
+          size: 10,
+        },
+      },
+    });
+    // 清空列表
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: {
+        typeName: 'customerList', data: { records: [] },
+      },
+    });
+  };
+
+  changeCustomerChoosenRow = (rowData) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: rowData,
+    });
+  };
+
+  onCustomerSelectChange = (selectedRowKeys) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${defaultModelName}/changeProps`,
+      payload: selectedRowKeys,
+    });
+  };
+
 
   // table 搜索
   onSearch = (params, table) => {
@@ -196,22 +256,21 @@ class Index extends Component {
 
 // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { purchase, form, dispatch } = this.props;
-    // 自动带出字印英文名
-    // if (type === 'supplierCategory') {
-    //   serviceObj.getTurnoverCode({}).then(res => {
-    //     if (res && res.body && res.body.records && res.body.records[0]) {
-    //       const supplierCode = res.body.records[0].turnoverCode;
-    //
-    //       const obj = purchase.wordbookdropdownType.find(item => item.value === value);
-    //       const newSupplierCode = obj.wordbookContentCode + supplierCode;
-    //       form.setFieldsValue({
-    //         supplierCode: newSupplierCode,
-    //       });
-    //
-    //       // console.log("select type supplierCode = ",supplierCode," obj = ",obj)
-    //     }
-    //   });
+    const { model, form, dispatch } = this.props;
+    // 成品采购主页  供货商编号 反显供货商简称 联系人 手机
+    if (type === 'supplierId') {
+      const mm = model.supplierlistDropDown.filter(item => item.id === value)[0];
+      if (mm) {
+        form.setFieldsValue({
+          supplierId: mm.id,
+          supplierShotName: mm.shotName,
+          contactName: mm.contactName,
+          mobilePhone: mm.mobilePhone,
+        });
+      }
+
+    }
+
   };
 
   handleDatePicker = (date, dateString, v) => {
@@ -224,11 +283,11 @@ class Index extends Component {
     // });
   };
 
-  returnElement = ({ key, value, readonly, type, list, arr, data, form, number, step, min, max, precision }) => {
+  returnElement = ({ key, value, disabled, type, list, arr, data, clickFn, form, number, step, min, max, precision }) => {
     switch (type) {
       case 1:
         return <RangePicker
-          style={{ marginRight: 10 }}
+          disabled={disabled}
           onChange={(date, dateString) => {
             this.handleDatePicker(date, dateString, value);
           }}
@@ -236,7 +295,8 @@ class Index extends Component {
       case 2:
         return (
           <Select
-            style={{ width: 180 }}
+            disabled={disabled}
+
             placeholder="请选择"
             onChange={(v) => {
               this.handleSelectChange(v, value);
@@ -248,14 +308,32 @@ class Index extends Component {
         );
       case 3:
         return <DatePicker
+          disabled={disabled}
+
+          style={{ width: '100%' }}
           allowClear={false}
-          style={{ marginRight: 10 }}
           onChange={(date, dateString) => {
             this.handleDatePicker(date, dateString, value);
           }}
         />;
+      case 4:
+        return (
+          <p style={{ margin: 0 }}>
+            {/* {form.getFieldValue(value) || ''} */}
+            <span
+              style={{ color: '#40a9ff', cursor: 'pointer', marginLeft: 10 }}
+              onClick={() => {
+                clickFn && clickFn();
+              }}
+            >
+              选择
+            </span>
+          </p>
+        );
       case 5:
         return <Checkbox
+          disabled={disabled}
+
           checked={form.getFieldValue(value)}
           onChange={e => {
             this.handleCheckChange(e, value);
@@ -263,7 +341,7 @@ class Index extends Component {
         >{text}
         </Checkbox>;
       case 6:
-        return <Radio.Group>
+        return <Radio.Group disabled>
           {
             arr.map(({ key, value }) => {
               return <Radio value={value} key={value}>{key}</Radio>;
@@ -272,7 +350,10 @@ class Index extends Component {
         </Radio.Group>;
       case 7:
         return (<Select
-          style={{ width: 180 }}
+          disabled={disabled}
+          onChange={(v) => {
+            this.handleSelectChange(v, value);
+          }}
           placeholder="请选择"
           showSearch
           optionFilterProp="children"
@@ -285,10 +366,16 @@ class Index extends Component {
           )}
         </Select>);
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea
+          disabled={disabled}
+          rows={2}
+          placeholder="请输入"
+        />;
       default:
         return number ?
           <InputNumber
+            disabled={disabled}
+
             placeholder="请输入"
             style={{ width: '100%' }}
             precision={precision}
@@ -296,7 +383,10 @@ class Index extends Component {
             min={min}
             max={max}
           /> :
-          <Input placeholder="请输入" />;
+          <Input
+            disabled={disabled}
+            placeholder="请输入"
+          />;
     }
     //  type === 7 ?
   };
@@ -306,7 +396,7 @@ class Index extends Component {
   returnTitle = () => {
     const { rightActive } = this.state;
 
-    const menuText = <FormattedMessage id={`menu.erp.dev.${rightActive}`} defaultMessage="Settings" />;
+    const menuText = <FormattedMessage id={`menu.erp.business.${rightActive}`} defaultMessage="Settings" />;
     return menuText;
   };
 
@@ -388,6 +478,8 @@ class Index extends Component {
     if (rightActive !== firstTabFlag) {
       params = { flowCode: choosenRowData.flowCode };
     }
+
+
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
@@ -401,6 +493,10 @@ class Index extends Component {
           ...params,
           ...values,
         };
+        // 日期转换 成时间戳提交
+        if(rightActive===firstTabFlag){
+          params={...params,purchaseDate:moment(params.purchaseDate).valueOf(),supplierDate:moment(params.supplierDate).valueOf()}
+        }
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res.head) {
@@ -445,53 +541,71 @@ class Index extends Component {
     const addArr = modalInput[rightActive];
     return (
       <Form size="small" key="1">
-        {
-          addArr && addArr.map(({ key, value, noNeed, readonly, type, list, clickFn, arr, initValue, number, dfv, step, min, max, precision, wrapperColSpan, labelColSpan, auto }) => {
-            if (rightActive === firstTabFlag && value === 'principalPrice') {
-              // 主材价默认值
-              initValue = model.materialPriceToday || 0;
-            }
-            if (auto && rightActive === firstTabFlag && value === 'purchaseNo'&&!isEdit) {
-              // 新增成品采购主页时 不显示自动生成的采购单号  由后端生成
-              return null;
-            }
+        <Row gutter={16}>
+          {
+            addArr && addArr.map(({ key, value, noNeed, disabled, type, list, clickFn, arr, number, dfv, step, min, max, precision, wrapperColSpan, labelColSpan, auto, colSpan }) => {
+              if (rightActive === firstTabFlag && value === 'principalPrice') {
+                // 主材价默认值
+                dfv = model.materialPriceToday || 0;
+              }
+              if (auto && rightActive === firstTabFlag && value === 'purchaseNo' && !isEdit) {
+                // 新增成品采购主页时 不显示自动生成的采购单号  由后端生成
+                return null;
+              }
+              if (['supplierDate', 'purchaseDate'].indexOf(value) > -1) {
+                dfv = moment();
+                if (rightActive === firstTabFlag) {
+                  choosenRowData[value] = moment(choosenRowData[value]);
+                } else {
+                  choosenRowDataSecond[value] = moment(choosenRowDataSecond[value]);
+                }
+              }
+
+              if (value === 'customerOrderId' && rightActive === firstTabFlag) {
+                clickFn = () => {
+                  // 弹出 客户订单选择
+                  // 成品采购主页  客户订单 反显客户编号  客户简称
+                  this.setState({ showCustomerNoModal: true });
+                  this.customerSearch({ size: 6, current: 1 });
+                };
+              }
 
 
-            return (
-              <div className="addModal" key={key}>
-                <FormItem
-                  labelCol={{ span: labelColSpan || 3 }}
-                  wrapperCol={{
-                    span: wrapperColSpan || 20,
-                  }
-                  }
-                  label={key}
-                >
-                  {
-                    getFieldDecorator(value, {
-                      rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
-                      initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : initValue || (number ? 0 : dfv || undefined),
-                    })(this.returnElement({
-                      key,
-                      value,
-                      readonly,
-                      number,
-                      type,
-                      list,
-                      clickFn,
-                      arr,
-                      initValue,
-                      data: model,
-                      form,
-                      step, min, max, precision,
-                    }))
-                  }
-                </FormItem>
-              </div>
-            );
-          })
-        }
-        {content}
+              return (
+                <Col span={colSpan || 6} style={{ paddingRight: '5px"' }} key={key}>
+                  <FormItem
+                    labelCol={{ span: labelColSpan || 3 }}
+                    wrapperCol={{
+                      span: wrapperColSpan || 20,
+                    }
+                    }
+                    label={key}
+                  >
+                    {
+                      getFieldDecorator(value, {
+                        rules: [{ required: !noNeed, message: `请${type && type === 2 ? '选择' : '输入'}${key}` }],
+                        initialValue: isEdit ? (rightActive === firstTabFlag ? choosenRowData[value] : choosenRowDataSecond[value]) : (number ? 0 : dfv || undefined),
+                      })(this.returnElement({
+                        key,
+                        value,
+                        disabled,
+                        number,
+                        type,
+                        list,
+                        clickFn,
+                        arr,
+                        data: model,
+                        form,
+                        step, min, max, precision,
+                      }))
+                    }
+                  </FormItem>
+                </Col>
+              );
+            })
+          }
+          {content}
+        </Row>
       </Form>
     );
   };
@@ -501,7 +615,6 @@ class Index extends Component {
     switch (modalType) {
       case 'plus':
       case 'edit':
-      default:
         this.initDrop();
         this.setState({ modalType });
         break;
@@ -518,6 +631,22 @@ class Index extends Component {
             this.handleLock();
           },
         });
+        break;
+      default:
+        const { dispatch } = this.props;
+        const { rightActive } = this.state;
+
+        if (rightActive === firstTabFlag) {
+          dispatch({
+            type: `${defaultModelName}/changeProps`,
+            payload: {
+              typeName: 'customerChoosenRowData', data: { id: '' },
+            },
+          });
+        }
+
+
+        this.setState({ modalType });
         break;
     }
   };
@@ -606,7 +735,7 @@ class Index extends Component {
 
       = this;
     const { modalType, rightActive, secondTableActive, addloading } = state;
-    const { choosenRowData, choosenRowDataSecond } = props;
+    const { choosenRowData, choosenRowDataSecond, model } = props;
 
     const btnrealGroup = rightActive === firstTabFlag ? btnGroup : btnGroupSecond;
 
@@ -757,7 +886,7 @@ class Index extends Component {
         <Modal
           maskClosable={false}
           title={<BuildTitle title={returnTitle()} />}
-
+          zIndex={1001}
           width={1000}
           className={styles.standardListForm}
           bodyStyle={{ padding: '28px 0 0' }}
@@ -771,6 +900,37 @@ class Index extends Component {
           {getModalContent()}
         </Modal>
         }
+
+        <Modal
+          title={<BuildTitle title="选择客户订单" />}
+          maskClosable={false}
+          width={1000}
+          className={styles.standardListForm}
+          bodyStyle={{ padding: '28px 0 0' }}
+          destroyOnClose
+          onOk={this.handleCustomerNoOk}
+          visible={this.state.showCustomerNoModal}
+          onCancel={this.handleCustomerNoCancel}
+          zIndex={1002}
+        >
+          <SelectCustomerOrder
+            list={model.customerList}
+            pagination={model.customerPagination}
+            // returnElement={returnElement}
+            // source={model}
+            // onSearch={this.customerSearch}
+            // changeCustomerSearch={model.changeCustomerSearch}
+            selectedRowKeys={model.customerSelectedKeys}
+            changeChoosenRow={this.changeCustomerChoosenRow}
+            choosenRowData={model.customerChoosenRowData}
+            onSelectChange={this.onCustomerSelectChange}
+            listLoading={this.props.customerListLoading}
+            handleTableChange={args => {
+              // 翻页 search 看看搜索完要不要做点处理
+              this.customerSearch({ ...args });
+            }}
+          />
+        </Modal>
       </div>
     );
   }
