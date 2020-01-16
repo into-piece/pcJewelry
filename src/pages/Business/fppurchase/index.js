@@ -150,7 +150,7 @@ class Index extends Component {
   handleCustomerNoOk = () => {
     // 选择客户订单 反显客户编号  客户简称 备注
     const { dispatch, form, model } = this.props;
-    const value = model.listPInotdone.filter(item => item.id === model.customerChoosenRowData.id)[0];
+    const value = model.customerList.records.filter(item => item.id === model.choosenRowDataCustomer.id)[0];
     form.setFieldsValue({
       remarks: value.remarks,
       customerOrderId: value.id,
@@ -185,7 +185,7 @@ class Index extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: `${defaultModelName}/changeProps`,
-      payload: rowData,
+      payload: {data:rowData,typeName:'choosenRowDataCustomer'},
     });
   };
 
@@ -193,7 +193,7 @@ class Index extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: `${defaultModelName}/changeProps`,
-      payload: selectedRowKeys,
+      payload: {data:selectedRowKeys,typeName:'customerSelectedKeys'},
     });
   };
 
@@ -922,7 +922,7 @@ class Index extends Component {
             // changeCustomerSearch={model.changeCustomerSearch}
             selectedRowKeys={model.customerSelectedKeys}
             changeChoosenRow={this.changeCustomerChoosenRow}
-            choosenRowData={model.customerChoosenRowData}
+            choosenRowData={model.choosenRowDataCustomer}
             onSelectChange={this.onCustomerSelectChange}
             listLoading={this.props.customerListLoading}
             handleTableChange={args => {
