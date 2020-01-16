@@ -26,8 +26,8 @@ export default {
   state: {
 
     choosenRowData: { id: '' }, // select to show table 1
-    choosenRowDataCustomer: { id: '' }, // select to show table 1
-    customerChoosenRowData: { id: '' }, // 客户订单
+    choosenRowDataSecond: { id: '' }, // select to show table 1
+    choosenRowDataCustomer: { id: '' }, // 客户订单
 
     pagination: {
       current: 1,
@@ -57,7 +57,6 @@ export default {
     listH006: [{ key: '', value: '' }],
     listH019: [{ key: '', value: '' }],
     supplierlistDropDown: [{ key: '', value: '' }],
-    listPInotdone: [{ key: '', value: '' }],
 
   },
 
