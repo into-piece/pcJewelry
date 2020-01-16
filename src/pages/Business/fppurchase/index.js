@@ -478,6 +478,8 @@ class Index extends Component {
     if (rightActive !== firstTabFlag) {
       params = { flowCode: choosenRowData.flowCode };
     }
+
+
     if (modalType === 'edit') {
       params = { ...params, id: (rightActive !== firstTabFlag ? choosenRowDataSecond.id : choosenRowData.id) };
     }
@@ -491,6 +493,10 @@ class Index extends Component {
           ...params,
           ...values,
         };
+        // 日期转换 成时间戳提交
+        if(rightActive===firstTabFlag){
+          params={...params,purchaseDate:moment(params.purchaseDate).valueOf(),supplierDate:moment(params.supplierDate).valueOf()}
+        }
 
         serviceObj[`add${rightActive}`](params).then(res => {
           if (!res.head) {

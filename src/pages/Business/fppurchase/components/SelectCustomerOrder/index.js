@@ -45,9 +45,8 @@ const columnsarr = [
     title: <div className={styles.row_normal2}>订单日期</div>,
     dataIndex: 'piDate',
     key: 'piDate',
-
     render: data => moment(data || new Date()).format('YYYY-MM-DD'),
-  }
+  },
   {
     title: <div className={styles.row_normal2}>要求交货日期</div>,
     dataIndex: 'deliveryTime',
