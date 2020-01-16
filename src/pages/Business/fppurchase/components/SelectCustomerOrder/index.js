@@ -1,66 +1,65 @@
-import React from 'react'
-import Table from '@/components/Table'
-import styles from './index.less'
-import SearchForm from '@/components/SearchForm'
+import React from 'react';
+import Table from '@/components/Table';
+import moment from 'moment/moment';
+import styles from './index.less';
+import SearchForm from '@/components/SearchForm';
 
-// const arr = {
-//   H016002: 'listStoneDropDown', // 石材
-//   H016001: 'listPrincipalMaterialDropDown', // 主材
-//   H016003: 'listAccessoriesDropDown', // 配件
-//   H016004: 'listWrapperDropDown', // 包装
-//   H016005: 'listAuxiliaryMaterialDropDown', // 辅材
-// };
+//
+// // 新增 产品 遍历配置
+// const searchParams = [
+//   { key: '原料编号', value: 'materialNo' },
+//   { key: '规格', value: 'specification' },
+//   { key: '中文名', value: 'zhName' },
+// ];
 
-// 新增 产品 遍历配置
-const searchParams = [
-  { key: '原料编号', value: 'materialNo' },
-  { key: '规格', value: 'specification' },
-  { key: '中文名', value: 'zhName' },
+// 客户编号、简称、订单号、主材价、PI日期、要求交货日期。
+const columnsarr = [
+  {
+    title: <div className={styles.row_normal2}>客户编号</div>,
+    dataIndex: 'customerNo',
+    key: 'customerNo',
+  },
+  {
+    title: <div className={styles.row_normal2}>客户简称</div>,
+    dataIndex: 'customerShotName',
+    key: 'customerShotName',
+  },
+  {
+    title: <div className={styles.row_normal2}>订单号码</div>,
+    dataIndex: 'piNo',
+    key: 'piNo',
+  },
+  {
+    title: <div className={styles.row_normal2}>主材价</div>,
+    dataIndex: 'mainMaterialPrice',
+    key: 'mainMaterialPrice',
+
+  },
+  // {
+  //   title: <div className={styles.row_normal2}>金额</div>,
+  //   dataIndex: 'totalQuotation',
+  //   key: 'totalQuotation',
+  //
+  // },
+  {
+    title: <div className={styles.row_normal2}>订单日期</div>,
+    dataIndex: 'piDate',
+    key: 'piDate',
+
+    render: data => moment(data || new Date()).format('YYYY-MM-DD'),
+  }
+  {
+    title: <div className={styles.row_normal2}>要求交货日期</div>,
+    dataIndex: 'deliveryTime',
+    key: 'deliveryTime',
+
+    render: data => moment(data || new Date()).format('YYYY-MM-DD'),
+  }
 ];
 
 
-const columnsarr = [
-    {
-      title: <div className={styles.row_normal2}>原料编号</div>,
-      dataIndex: 'materialNo',
-      key: 'materialNo',
-    },
-    {
-      title: <div className={styles.row_normal2}>规格</div>,
-      dataIndex: 'specificationName',
-      key: 'specificationName',
-    },
-    {
-      title: <div className={styles.row_normal2}>形状</div>,
-      dataIndex: 'shapeName',
-      key: 'shapeName',
-    },
-    {
-      title: <div className={styles.row_normal2}>切工</div>,
-      dataIndex: 'cutName',
-      key: 'cutName',
-    },
-    {
-      title: <div className={styles.row_normal2}>颜色</div>,
-      dataIndex: 'colorName',
-      key: 'colorName',
-    },
-    {
-      title: <div className={styles.row_normal2}>等级</div>,
-      dataIndex: 'qualityName',
-      key: 'qualityName',
-    },
-    {
-      title: <div className={styles.row_normal2}>中文名</div>,
-      dataIndex: 'zhName',
-      key: 'zhName',
-    },
-  ]
-
-
-
-export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeMaterialSearch,handleTableChange }) => {
-  return(
+export default (({ pagination, returnElement, source, list, selectedRowKeys, changeChoosenRow, choosenRowData, onSelectChange, onSearch, changeMaterialSearch, handleTableChange }) => {
+  return (
     <div className={styles.productModal}>
       {/* <SearchForm */}
       {/* onSearch={onSearch} */}
@@ -82,5 +81,5 @@ export default (({ pagination, returnElement, source, list, selectedRowKeys, cha
         checkType="radio"
       />
     </div>
-  )
-})
+  );
+});
