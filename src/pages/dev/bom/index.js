@@ -25,6 +25,7 @@ import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
 import Zmage from 'react-zmage';
+import ReactToPrint from 'react-to-print';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
@@ -1040,6 +1041,10 @@ class Index extends Component {
               
               // 清空镶石工艺
               close && this.clearCraftForm();
+              dispatch({
+                type: `${defaultModelName}/changeStateOut`,
+                payload: { data: {}, name: 'materialNoSearchParams' },
+              });
             }
 
             if (this.isEditworkFlow) {
@@ -2373,5 +2378,6 @@ const CraftRow = ({ name, value, children }) => {
     </div>
   );
 };
+
 
 export default Index;
