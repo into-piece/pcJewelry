@@ -132,7 +132,7 @@ const clientContentColumns = [
 
 const defaultPageSize = 5;
 
-let clientContentColumns2 = [
+const clientContentColumns2 = [
   {
     // title: <div className={clientInfoStyle.row_normal2}>客户编号</div>,
     title: '客户编号',
@@ -532,7 +532,7 @@ class ClientView extends PureComponent {
       } else {
         newSort.splice(
           newSort.findIndex(v => v.field === field),
-          1
+          1,
         );
       }
     } else if (sort !== 'normal') {
@@ -782,21 +782,21 @@ class ClientView extends PureComponent {
     if (selects.includes(id)) {
       selects.splice(
         selects.findIndex(index => index === id),
-        1
+        1,
       );
       if (rowData.includes(record)) rowData = [];
       if (rowSelectedData.includes(record)) {
         // console.log('includes ' + record.id);
         rowSelectedData.splice(
           rowSelectedData.findIndex(item => item.id === id),
-          1
+          1,
         );
       }
     } else {
       if (rowData.length > 0) {
         selects.splice(
           selects.findIndex(index => index === rowData[0].id),
-          1
+          1,
         );
       }
       rowData = [];
@@ -814,7 +814,7 @@ class ClientView extends PureComponent {
         },
         () => {
           this.showSelectItem(r[0]);
-        }
+        },
       );
     } else {
       this.setState({
@@ -853,13 +853,13 @@ class ClientView extends PureComponent {
     if (selects.includes(id)) {
       selects.splice(
         selects.findIndex(index => index === id),
-        1
+        1,
       );
       if (rowCustomerData.includes(record)) rowCustomerData = [];
       if (rowCustomerSelectedData.includes(record)) {
         rowCustomerSelectedData.splice(
           rowCustomerSelectedData.findIndex(item => item.id === id),
-          1
+          1,
         );
       }
     } else {
@@ -867,7 +867,7 @@ class ClientView extends PureComponent {
       if (rowCustomerSelectedData.length > 0) {
         selects.splice(
           selects.findIndex(index => index === rowCustomerSelectedData[0].id),
-          1
+          1,
         );
       }
       rowCustomerData = [];
@@ -1291,7 +1291,7 @@ class ClientView extends PureComponent {
       },
       () => {
         this.loadCustomerList({ typeId: showItem.id, ...params });
-      }
+      },
     );
     this.state.customerPageCurrent = current;
 
@@ -1385,7 +1385,7 @@ class ClientView extends PureComponent {
           // this.startClient();
           // 更新右视图
           this.startShowTab();
-        }
+        },
       );
     } else {
       this.state.selectCustomerItem = '';
@@ -1534,7 +1534,7 @@ class ClientView extends PureComponent {
     }
     this.setState({
       Component: (
-        <TerminalClient params={params} customLock={this.state.selectCustomerItem.status === '2'} />
+        <TerminalClient params={params} customLock={false} />
       ),
     });
     // console.log('select customer t', selectCustomerItem, params);
@@ -1594,7 +1594,7 @@ class ClientView extends PureComponent {
       params.customerId = '';
     }
     this.setState({
-      Component: <Mark params={params} customLock={this.state.selectCustomerItem.status === '2'} />,
+      Component: <Mark params={params} customLock={false} />,
     });
     // router.replace({ pathname: '/business/client/marking', params: params });
   };
@@ -1606,7 +1606,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <Product customLock={this.state.selectCustomerItem.status === '2'} />,
+      Component: <Product customLock={false} />,
     });
     // router.replace({ pathname: '/business/client/product', query: { id: 3 } });
   };
@@ -1626,7 +1626,7 @@ class ClientView extends PureComponent {
     }
     this.setState({
       Component: (
-        <PackageInfo params={params} customLock={this.state.selectCustomerItem.status === '2'} />
+        <PackageInfo params={params} customLock={false} />
       ),
     });
     // router.replace({ pathname: '/business/client/package', params: params });
@@ -1639,7 +1639,7 @@ class ClientView extends PureComponent {
       leftlg: 8,
     });
     this.setState({
-      Component: <History customLock={this.state.selectCustomerItem.status === '2'} />,
+      Component: <History customLock={false} />,
     });
   };
 
@@ -2314,44 +2314,44 @@ class ClientView extends PureComponent {
     const modalFooter = isAdd
       ? [
         <Button key="back" onClick={this.handleCancel}>
-            取消
+          取消
         </Button>,
         <Button
           key="submit"
           type="primary"
           loading={clientSaveloading}
           onClick={() => {
-              this.handleSubmit(true);
-            }}
+            this.handleSubmit(true);
+          }}
         >
-            保存
+          保存
         </Button>,
         <Button
           key="continue"
           type="primary"
           loading={clientSaveloading}
           onClick={() => {
-              this.handleSubmit(false);
-            }}
+            this.handleSubmit(false);
+          }}
         >
-            继续添加
+          继续添加
         </Button>,
-        ]
+      ]
       : [
         <Button key="back" onClick={this.handleCancel}>
-            取消
+          取消
         </Button>,
         <Button
           key="submit"
           type="primary"
           loading={clientUpdateloading}
           onClick={() => {
-              this.handleSubmit(false);
-            }}
+            this.handleSubmit(false);
+          }}
         >
-            保存
+          保存
         </Button>,
-        ];
+      ];
     const { contactsItem } = this.state;
 
     console.log(clientContentColumns2);
@@ -2447,8 +2447,7 @@ class ClientView extends PureComponent {
                     }
                     disabled={
                       !selectCustomerItem ||
-                      selectCustomerItem === '' ||
-                      this.state.selectCustomerItem.status === '2'
+                      selectCustomerItem === ''
                     }
                   >
                     新建
@@ -2467,8 +2466,7 @@ class ClientView extends PureComponent {
                     }}
                     disabled={
                       !maintainsItem ||
-                      maintainsItem === '' ||
-                      this.state.selectCustomerItem.status === '2'
+                      maintainsItem === ''
                     }
                   >
                     删除
@@ -2491,8 +2489,7 @@ class ClientView extends PureComponent {
                     }
                     disabled={
                       !selectCustomerItem ||
-                      selectCustomerItem === '' ||
-                      this.state.selectCustomerItem.status === '2'
+                      selectCustomerItem === ''
                     }
                   >
                     新建
@@ -2533,8 +2530,7 @@ class ClientView extends PureComponent {
                     }
                     disabled={
                       !selectCustomerItem ||
-                      selectCustomerItem === '' ||
-                      this.state.selectCustomerItem.status === '2'
+                      selectCustomerItem === ''
                     }
                   >
                     新建
@@ -2564,8 +2560,7 @@ class ClientView extends PureComponent {
                     }}
                     disabled={
                       !contactsItem ||
-                      contactsItem === '' ||
-                      this.state.selectCustomerItem.status === '2'
+                      contactsItem === ''
                     }
                   >
                     编辑
@@ -2585,8 +2580,7 @@ class ClientView extends PureComponent {
                     }}
                     disabled={
                       !contactsItem ||
-                      contactsItem === '' ||
-                      this.state.selectCustomerItem.status === '2'
+                      contactsItem === ''
                     }
                   >
                     删除
