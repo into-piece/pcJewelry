@@ -48,7 +48,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const {
   deleteProductQuoteHeader,
-  deleteProformaInvoiceDetail,
+  deleteProductQuoteDetail,
   getLastQuoteDetailByProductId,
   getTopQuoteDetailByProductId,
   getlistProductLine,
@@ -1096,7 +1096,7 @@ class Info extends Component {
   handleDelect = () => {
     const { rightMenu, selectedRowKeys, selectedDetailRowKeys } = this.props;
     console.log(selectedRowKeys, selectedDetailRowKeys);
-    const sendApi = rightMenu === 1 ? deleteProductQuoteHeader : deleteProformaInvoiceDetail;
+    const sendApi = rightMenu === 1 ? deleteProductQuoteHeader : deleteProductQuoteDetail;
     const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head;

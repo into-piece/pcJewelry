@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { Form, Divider, Radio, Select, Button } from 'antd';
+import ReactToPrint from 'react-to-print';
 import styles from './MiddleTable.less';
 import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
