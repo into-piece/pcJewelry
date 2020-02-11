@@ -7,6 +7,10 @@ import Table from '@/components/Table';
 import SearchForm from '@/components/SearchForm';
 import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
+import { getCurrentUser } from '../../../../utils/authority';
+
+const {permission} =  getCurrentUser()
+const bomPermission = permission.bom
 
 const { Option } = Select;
 const { Group } = Radio;
@@ -28,11 +32,14 @@ const defaultModelName = 'devbom';
 const BtnGroup = ({ arr }) => {
   return (
     <div className={styles.btnGroup}>
-      {arr.map(({ key, fn, disabled }) => (
-        <Button key={key} onClick={fn} type="primary" disabled={disabled}>
-          {key}
-        </Button>
-      ))}
+      {arr.map(({ key, fn, disabled,permissionConfig}) => {
+        if(!bomPermission.includes(permissionConfig)) return null
+        return(
+          <Button key={key} onClick={fn} type="primary" disabled={disabled}>
+            {key}
+          </Button>
+        )
+      })}
     </div>
   );
 };

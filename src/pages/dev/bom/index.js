@@ -18,14 +18,16 @@ import {
   Upload,
   Icon,
   message,
+  Spin,
   Carousel,
+  Table
 } from 'antd';
+import ReactToPrint from 'react-to-print';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import ModalConfirm from '@/utils/modal';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 // 详情内容
 import Zmage from 'react-zmage';
-import ReactToPrint from 'react-to-print';
 import GetRenderitem from './components/GetRenderitem';
 // 中间Table
 import MiddleTable from './components/MiddleTable';
@@ -44,8 +46,12 @@ import ThemeColor from '@/components/SettingDrawer/ThemeColor';
 import SelectMaterialNo from './components/SelectMaterialNo';
 import SysProduct from './components/SysProduct';
 import { defaultImages } from '@/utils/utils';
-import PrintTable from './PrintPage';
+// import PrintTable from './PrintPage';
+import servicesConfig from '@/services/purchase';
+import { getCurrentUser } from '../../../utils/authority';
 
+const {permission} =  getCurrentUser()
+const bomPermission = permission.bom
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
 const uploadfile = `${priefx}/zuul/business/business/file/uploadDocuments`;
@@ -58,9 +64,9 @@ const FormItem = Form.Item;
 const { Option } = Select;
 // 右手边按钮集合
 const btnGroup = [
-  { name: '新增', tag: 'plus', icon: 'plus' },
-  { name: '删除', tag: 'delete', type: 'danger', icon: 'delete' },
-  { name: '编辑', tag: 'edit', icon: 'edit' },
+  { name: '新增', tag: 'plus', icon: 'plus',permission:'add' },
+  { name: '删除', tag: 'delete', type: 'danger', icon: 'delete' ,permission:'del' },
+  { name: '编辑', tag: 'edit', icon: 'edit',permission:'edit'  },
   // { name: '同步数据', tag: 'sys' , icon: 'copy'},
 ];
 
@@ -74,6 +80,8 @@ const radioArr = [
   { key: '原料信息', value: SECOND_TAG },
   { key: '生产工序', value: THIRD_TAG },
 ];
+
+const { Column, ColumnGroup } = Table;
 
 @Form.create({ name: 'form1' })
 @connect(({ loading, devbom: model }) => {
@@ -148,6 +156,8 @@ class Index extends Component {
     flowList: [],
   };
 
+  isEditworkFlow = false
+  
 
   onCraft = [
     { key: '镶石工艺', title: '镶石工艺', value: '' },
@@ -2099,21 +2109,25 @@ class Index extends Component {
         key: '取消审批',
         fn: cancelVerify,
         disabled: !selectedBom.id || ~~selectedBom.status === 0,
+        permissionConfig:'raw.revoke'
       },
       {
         key: '审批BOM',
         fn: verifyBom,
         disabled: !selectedBom.id || ~~selectedBom.status === 2,
+        permissionConfig:'raw.approve'
       },
-      {
-        key: '导出BOM',
-        fn: exportBom,
-        disabled: !selectedBom.id,
-      },
+      // {
+      //   key: '导出BOM',
+      //   fn: exportBom,
+      //   disabled: !selectedBom.id,
+      //   permissionConfig:'raw.approve'
+      // },
       {
         key: '打印BOM',
         fn: printBom,
         disabled: !selectedBom.id,
+        permissionConfig:'bom.print'
       },
     ];
 
@@ -2131,9 +2145,7 @@ class Index extends Component {
     const opration = rightActive === THIRD_TAG ? secondProccessOprationArr : secondOprationArr;
     const isthird = rightActive === THIRD_TAG;
     const materialType = getFieldValue('materialType');
-
-    console.log(materialNoList, '======materialNoList');
-
+    console.log(bomPermission,'========bomPermission')
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -2223,7 +2235,8 @@ class Index extends Component {
                             flexWrap: 'wrap',
                           }}
                         >
-                          {btnGroup.map(({ name, tag, icon }) => {
+                          {btnGroup.map(({ name, tag, icon,permission }) => {
+                            if(!bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
                             return (
                               <Button
                                 key={tag}
@@ -2243,29 +2256,34 @@ class Index extends Component {
                           {
                             rightActive === FIRST_TAG ?
                               <React.Fragment>
-                                <Button
-                                  className={styles.buttomControl}
-                                  type="primary"
-                                  icon="copy"
-                                  size="small"
-                                  disabled={returnSisabled('copy')}
-                                  onClick={() => {
-                                    btnFn('copy');
-                                  }}
-                                >
-                                  复制新增
-                                </Button>
-                                <Button
-                                  className={styles.buttomControl}
-                                  type={'primary'}
-                                  icon={'plus'}
-                                  size="small"
-                                  onClick={() => {
-                                    this.showExplaintionModalFunc(1);
-                                  }}
-                                >
-                                  {choosenRowData.productExplain ? '编辑' : '新增'}说明
-                                </Button>
+                                {bomPermission.includes('bom.copy')&&
+                                  <Button
+                                    className={styles.buttomControl}
+                                    type="primary"
+                                    icon="copy"
+                                    size="small"
+                                    disabled={returnSisabled('copy')}
+                                    onClick={() => {
+                                      btnFn('copy');
+                                    }}
+                                  >
+                                    复制新增
+                                  </Button>
+                                }
+                                {bomPermission.includes('bom.desc')&&
+                                  <Button
+                                    className={styles.buttomControl}
+                                    type={'primary'}
+                                    icon={'plus'}
+                                    size="small"
+                                    onClick={() => {
+                                      this.showExplaintionModalFunc(1);
+                                    }}
+                                  >
+                                    {choosenRowData.productExplain ? '编辑' : '新增'}说明
+                                  </Button>
+                                }
+                                {bomPermission.includes('bom.dataSync')&&
                                 <Button
                                   className={styles.buttomControl}
                                   type="primary"
@@ -2277,7 +2295,7 @@ class Index extends Component {
                                   }}
                                 >
                                   同步数据
-                                </Button>
+                                </Button>}
                               </React.Fragment>
                               : null
                           }
@@ -2294,7 +2312,7 @@ class Index extends Component {
           <Modal
             maskClosable={false}
             title={<BuildTitle title={returnTitle()}/>}
-            width={this.isEditworkFlow || (rightActive === FIRST_TAG && modalType!=='sys') ?600: 1000}
+            width={this.isEditworkFlow || (rightActive === FIRST_TAG && modalType!=='sys'&&modalType!=='printer') ?600: 1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
@@ -2378,6 +2396,278 @@ const CraftRow = ({ name, value, children }) => {
     </div>
   );
 };
+
+
+const PrintTableHeader = () => (
+  <div>
+    产品明细 
+  </div>
+)
+
+const PrintTableHeader2 = () => (
+  <div>
+    注 蜡 
+  </div>
+)
+
+const WaxInjectionColumns = [
+  {
+    title: '工序',
+    dataIndex: 'a',
+    key: 'a',
+  },
+  {
+    title: '工资(元/小时)',
+    dataIndex: 'b',
+    key: 'b',
+  },
+  {
+    title: '效率(pcs/小时)',
+    dataIndex: 'c',
+    key: 'c',
+  },
+  {
+    title: '单价',
+    dataIndex: 'd',
+    key: 'd',
+  },
+  {
+    title: '用量',
+    dataIndex: 'e',
+    key: 'e',
+  },
+  {
+    title: '总工费',
+    dataIndex: 'e',
+    key: 'e',
+  },
+  {
+    title: '部门系数',
+    dataIndex: 'e',
+    key: 'e',
+  },
+
+  {
+    title: '部门工费',
+    dataIndex: 'f',
+    key: 'f',
+  },
+  {
+    title: '工厂系数',
+    dataIndex: 'g',
+    key: 'g',
+  },
+  {
+    title: '工厂工费',
+    dataIndex: 'h',
+    key: 'h',
+  },
+]
+
+
+
+
+const PrintTableColumns = [  {
+  title: '效率',
+  dataIndex: 'a',
+  key: 'a',
+},
+]
+
+const dataSource = [
+  {
+    type:1,
+    name:1,
+    dosage:1,
+    sigleprice:1,
+    cost:1,
+    sliver:1,
+    totalprice:1,
+    workflow:1,
+    count:1,
+  },
+  {
+    type:1,
+    name:1,
+    dosage:1,
+    sigleprice:1,
+    cost:1,
+    sliver:1,
+    totalprice:1,
+    workflow:1,
+    count:1,
+  },
+  {
+    type:1,
+    name:1,
+    dosage:1,
+    sigleprice:1,
+    cost:1,
+    sliver:1,
+    totalprice:1,
+    workflow:1,
+    count:1,
+  },
+]
+
+
+const renderContent = (value, row, index) => {
+  const obj = {
+    children: value,
+    props: {},
+  };
+  if (index === dataSource.length-1) {
+    // obj.props.colSpan = 0;
+    return ''
+  }
+  return obj;
+};
+
+
+const rendertotal = (value, row, index) => {
+  const obj = {
+    children: value,
+    props: {},
+  };
+  if (index === dataSource.length-1) {
+    return '合计'
+  }
+  return obj;
+};
+
+const rendertotalPrice = (value, row, index) => {
+  const obj = {
+    children: value,
+    props: {},
+  };
+  if (index === dataSource.length-1) {
+    return '123'
+  }
+  return obj;
+};
+
+class ComponentTable extends Component {
+  render() {
+    return (
+      <div className={styles.componentTable}>
+      <Table
+        title={PrintTableHeader}
+        pagination={false}
+        bordered
+        // columns={PrintTableColumns}
+        dataSource={dataSource}
+      >
+        <ColumnGroup title="物 料 明 细">
+          <Column title="类别" dataIndex="type" key="type" render={renderContent}/>
+          <Column title="名称" dataIndex="name" key="name" render={renderContent}/>
+          <Column title="用量" dataIndex="dosage" key="dosage" render={renderContent}/>
+          <Column title="单价" dataIndex="sigleprice" key="sigleprice" render={renderContent}/>
+          <Column title="损耗率" dataIndex="cost" key="cost" render={renderContent}/>
+          <Column title="银重" dataIndex="sliver" key="sliver" render={rendertotal}/>
+          <Column title="物料总价" dataIndex="totalprice" key="totalprice" render={rendertotalPrice}/>
+        </ColumnGroup>
+        <ColumnGroup title="生 产 流 程">
+          <Column title="流程" dataIndex="workflow" key="workflow" render={renderContent}/>
+          <Column title="工费" dataIndex="count" key="count" render={renderContent}/>
+        </ColumnGroup>
+      </Table>
+
+      <Table
+        title={PrintTableHeader2}
+        pagination={false}
+        bordered
+        columns={WaxInjectionColumns}
+        dataSource={
+          [
+            {
+              type:1,
+              name:1,
+              dosage:1,
+              sigleprice:1,
+              cost:1,
+              sliver:1,
+              totalprice:1,
+              workflow:1,
+              count:1,
+            },
+          ]
+        }
+      />
+      </div>
+    )
+  }
+}
+
+class PrintTable extends Component {
+  state = {
+    datalist: [],
+    loading:false
+  };
+
+  componentWillMount() {
+    this.setState({loading:true})
+
+    const {args} =this.props;
+    servicesConfig.listSupplierNoPage(args).then(res => {
+      if (res && res.body && res.body.records ) {
+        this.setState({datalist:res.body.records})
+      }
+      this.setState({loading:false})
+    });
+  }
+
+
+  exportExcel = () => {
+    const { args } = this.props;
+
+    servicesConfig.purchaseExport(args).then(res => {
+      const { rtnCode, rtnMsg } = res.head;
+      if (rtnCode === '000000') {
+        notification.success({
+          message: rtnMsg,
+        });
+      }
+    });
+
+  };
+
+
+  render() {
+    return (
+      <div>
+        <div className={styles.btnDiv}>
+          <ReactToPrint
+            trigger={() => <Button
+              type="primary"
+              size="small"
+              icon="printer"
+              loading={this.state.loading}
+              className={styles.buttomControl}
+            >
+              打印
+            </Button>}
+            content={() => this.componentRef}
+          />
+          <Button
+            className={styles.buttomControl}
+            loading={this.state.loading}
+            type="primary"
+            size="small"
+            onClick={this.exportExcel}
+            icon="export"
+          >
+            导出
+          </Button>
+        </div>
+        <Spin spinning={this.state.loading} className={styles.tableOutDiv}>
+          <ComponentTable ref={el => {this.componentRef = el}} />
+          {/* <ComponentToPrint ref={el => (this.componentRef = el)} list={this.state.datalist} /> */}
+        </Spin>
+        
+      </div>
+    );
+  }
+}
 
 
 export default Index;
