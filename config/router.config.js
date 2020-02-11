@@ -277,7 +277,7 @@ export default [
                 component: './dev/bom',
                 routes: [],
               },
-              //模具设定
+              //模框设定
               {
                 path: '/erp/dev/mould',
                 name: 'mould',

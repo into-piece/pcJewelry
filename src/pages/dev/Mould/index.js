@@ -152,7 +152,7 @@ class Index extends Component {
     // getDevList
     dispatch({
       type: `${defaultModelName}/getList`,
-      payload: { type: firstTabFlag, params: { ...pagination, ...searchParams, ...param }, ...args },
+      payload: { type: firstTabFlag, params: {status : 0, ...pagination, ...searchParams, ...param }, ...args },
     });
 
     // 清除第二table内容
@@ -235,7 +235,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea style={{width : '100%'}} rows={2} placeholder="请输入" />;
       case 9:
         return <RangePicker
           style={{ marginRight: 10 }}
