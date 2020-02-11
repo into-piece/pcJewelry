@@ -9,8 +9,7 @@ import columnsConfig from '../config/columns';
 import searchParamsArrConfig from '../config/search';
 import { getCurrentUser } from '../../../../utils/authority';
 
-const {permission} =  getCurrentUser()
-const bomPermission = permission.bom
+
 
 const { Option } = Select;
 const { Group } = Radio;
@@ -30,6 +29,8 @@ const menuRadio = [
 const defaultModelName = 'devbom';
 
 const BtnGroup = ({ arr }) => {
+
+  const bomPermission = getCurrentUser().permission.bom || []
   return (
     <div className={styles.btnGroup}>
       {arr.map(({ key, fn, disabled,permissionConfig}) => {
@@ -70,6 +71,8 @@ const BtnGroup = ({ arr }) => {
   };
 })
 class MiddleTable extends Component {
+
+
 
   // 选中某行   type  1 主table
   changeChoosenRow = (rowData, type) => {
@@ -271,7 +274,7 @@ class MiddleTable extends Component {
                 </Select>
               </div>) : null}
 
-            <BtnGroup arr={secondOprationArr} />
+            {selectedBom.processName===getCurrentUser().dept&&<BtnGroup arr={secondOprationArr} />}
           </div>
 
           <Table
