@@ -4,6 +4,7 @@ import {
   Spin,
   Button,
   notification,
+  Table,
 } from 'antd';
 import styles from './index.less';
 import servicesConfig from '@/services/purchase';
@@ -12,7 +13,6 @@ import servicesConfig from '@/services/purchase';
 class ComponentToPrint extends Component {
   render() {
     return (
-
       <table border="1" cellSpacing="1" cellPadding="0" className={styles.table}>
         <tr className={styles.title01}>
           <th colSpan="9">供应商明细</th>
@@ -46,6 +46,22 @@ class ComponentToPrint extends Component {
         }
       </table>
     );
+  }
+}
+
+const columns = [  {
+  title: '效率',
+  dataIndex: 'a',
+  key: 'a',
+},]
+class ComponentToPrint extends Component {
+  render() {
+    return (
+      <Table
+        columns={columns}
+        data={[{a:1}]}
+      />
+    )
   }
 }
 
@@ -87,7 +103,6 @@ class PrintTable extends Component {
     return (
       <div>
         <div className={styles.btnDiv}>
-
           <ReactToPrint
             trigger={() => <Button
               type="primary"
@@ -112,8 +127,10 @@ class PrintTable extends Component {
           </Button>
         </div>
         <Spin spinning={this.state.loading} className={styles.tableOutDiv}>
-          <ComponentToPrint ref={el => (this.componentRef = el)} list={this.state.datalist} />
+          <ComponentTable ref={el => {this.componentRef = el}} />
+          {/* <ComponentToPrint ref={el => (this.componentRef = el)} list={this.state.datalist} /> */}
         </Spin>
+        
       </div>
     );
   }
