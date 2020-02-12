@@ -697,7 +697,7 @@ class Index extends Component {
         />
       // <span>{form.getFieldValue(value) || '原料编号带出'}</span>;
       case 8:
-        return <TextArea rows={2} placeholder="请输入" style={{ width: 800 }} />;
+        return <TextArea rows={1} placeholder="请输入" style={{width:820}} />;
       case 9:
         return (
           <RangePicker
@@ -1121,7 +1121,8 @@ class Index extends Component {
 
 // start 复制产品 bom
   getProductBomRevoke = (args) => {
-    const { productBomRevokePagination, form, dispatch } = this.props;
+    const {choosenRowData, productBomRevokePagination, form, dispatch } = this.props;
+    const { productNo } = choosenRowData;
     dispatch({
       type: `${defaultModelName}/productBomRevokeList`,
       payload: {
@@ -1129,6 +1130,8 @@ class Index extends Component {
         params: {
           // size: 10, current: 1, ...productBomRevokePagination,
           ...args,
+          productNoPre : productNo.substr(0,9),
+          productNo:productNo
         },
       },
     });

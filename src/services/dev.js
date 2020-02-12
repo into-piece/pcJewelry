@@ -61,7 +61,7 @@ const resultFLow = devFlowUrls.map(({ name, arr, path }) =>
   }))
 );
 
-// 开发-模具设定
+// 开发-模框设定
 const resultSet = devDieUrls.map(({ name, arr, path }) =>
   arr.map((item, index) => ({
     key: rType[index + 1] + name,

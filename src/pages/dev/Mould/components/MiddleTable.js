@@ -127,6 +127,7 @@ class MiddleTable extends Component {
           }}
           returnElement={returnElement}
           onchange={changeSearchParams}
+          needStatus={true}
         />
         <div className={styles.tableBox}>
           <Table
