@@ -29,11 +29,12 @@ const menuRadio = [
 const defaultModelName = 'devbom';
 
 const BtnGroup = ({ arr }) => {
-
   const bomPermission = getCurrentUser().permission.bom || []
+  console.log(arr,bomPermission,'===============bomPermission')
   return (
     <div className={styles.btnGroup}>
       {arr.map(({ key, fn, disabled,permissionConfig}) => {
+
         if(!bomPermission.includes(permissionConfig)) return null
         return(
           <Button key={key} onClick={fn} type="primary" disabled={disabled}>
@@ -273,7 +274,7 @@ class MiddleTable extends Component {
                 </Select>
               </div>) : null}
 
-            {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept&&<BtnGroup arr={secondOprationArr} />}
+            {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null}
           </div>
 
           <Table

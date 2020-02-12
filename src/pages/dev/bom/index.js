@@ -581,7 +581,8 @@ class Index extends Component {
     const {choosenRowDataSecond,form} = this.props
     const { setFieldsValue, getFieldValue } = form;
     const materialType = getFieldValue('materialType');
-    const {inventoryWeight,singleWeight} = this.state;
+    let {inventoryWeight,singleWeight} = this.state;
+    singleWeight = singleWeight||choosenRowDataSecond.singleWeight
     
     const key = materialType==='H016004'|| materialType==='H016005'? singleWeight||choosenRowDataSecond.singleWeight:inventoryWeight||choosenRowDataSecond.inventoryWeight
     console.log(key,v,materialType)
@@ -592,6 +593,7 @@ class Index extends Component {
         setFieldsValue({ sheetWithHeavy: v  });
         return
       }
+      console.log(v,key,'============单件用重= 单件用量')
       setFieldsValue({ sheetWithHeavy: (v * Number(key)).toFixed(3) });
     }
   };
@@ -925,6 +927,7 @@ class Index extends Component {
     const {
       rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
       flowList,
+      singleWeight
     } = this.state;
     const { getFieldValue } = form;
     const materialType = getFieldValue('materialType');
@@ -943,7 +946,7 @@ class Index extends Component {
     //   };
     // }
     if (rightActive === FIRST_TAG) {
-      params = { ...params, pId: choosenRowData.id };
+      params = { ...params, pId: choosenRowData.id,singleWeight:singleWeight||choosenRowDataSecond&&choosenRowDataSecond.singleWeight };
       if (isEdit) {
         params.id = selectedBom.id;
       }
