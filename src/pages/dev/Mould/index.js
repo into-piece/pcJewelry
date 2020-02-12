@@ -235,7 +235,7 @@ class Index extends Component {
       case 7:
         return <span>{form.getFieldValue(value) || ''}</span>;
       case 8:
-        return <TextArea style={{width : '100%'}} rows={2} placeholder="请输入" />;
+        return <TextArea rows={1} placeholder="请输入" style={{width:820}} />;
       case 9:
         return <RangePicker
           style={{ marginRight: 10 }}

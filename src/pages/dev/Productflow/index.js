@@ -242,7 +242,7 @@ class Index extends Component {
           )}
         </Select>);
       case 8:
-        return <TextArea rows={2} placeholder="请输入" />;
+        return <TextArea rows={1} placeholder="请输入" style={{width:820}} />;
       case 9:
         return <RangePicker
           style={{ marginRight: 10 }}
