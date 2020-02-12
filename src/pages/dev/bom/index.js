@@ -49,9 +49,6 @@ import { defaultImages } from '@/utils/utils';
 // import PrintTable from './PrintPage';
 import servicesConfig from '@/services/purchase';
 import { getCurrentUser } from '../../../utils/authority';
-
-const {permission} =  getCurrentUser()
-const bomPermission = permission.bom
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
 const uploadfile = `${priefx}/zuul/business/business/file/uploadDocuments`;
@@ -129,6 +126,9 @@ const { Column, ColumnGroup } = Table;
   };
 })
 class Index extends Component {
+
+  bomPermission = getCurrentUser().permission.bom || []
+
   state = {
     addloading: false,
     modalType: '',
@@ -164,7 +164,7 @@ class Index extends Component {
     { key: '石头数量', title: '石头数量', value: '' },
     { key: '效率', title: '效率', value: '' },
   ];
-
+  
   componentDidMount() {
     this.initDrop();
     // 获取初始表单数据
@@ -2145,7 +2145,7 @@ class Index extends Component {
     const opration = rightActive === THIRD_TAG ? secondProccessOprationArr : secondOprationArr;
     const isthird = rightActive === THIRD_TAG;
     const materialType = getFieldValue('materialType');
-    console.log(bomPermission,'========bomPermission')
+    console.log(this.bomPermission,'========bomPermission')
     return (
       <div className={styles.page}>
         {/* <Bread data={breadData} /> */}
@@ -2236,7 +2236,8 @@ class Index extends Component {
                           }}
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
-                            if(!bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
+                            if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
+                            if(selectedBom.processName===getCurrentUser().dept&&rightActive===THIRD_TAG)return
                             return (
                               <Button
                                 key={tag}
@@ -2256,7 +2257,7 @@ class Index extends Component {
                           {
                             rightActive === FIRST_TAG ?
                               <React.Fragment>
-                                {bomPermission.includes('bom.copy')&&
+                                {this.bomPermission.includes('bom.copy')&&
                                   <Button
                                     className={styles.buttomControl}
                                     type="primary"
@@ -2270,7 +2271,7 @@ class Index extends Component {
                                     复制新增
                                   </Button>
                                 }
-                                {bomPermission.includes('bom.desc')&&
+                                {this.bomPermission.includes('bom.desc')&&
                                   <Button
                                     className={styles.buttomControl}
                                     type={'primary'}
@@ -2283,7 +2284,7 @@ class Index extends Component {
                                     {choosenRowData.productExplain ? '编辑' : '新增'}说明
                                   </Button>
                                 }
-                                {bomPermission.includes('bom.dataSync')&&
+                                {this.bomPermission.includes('bom.dataSync')&&
                                 <Button
                                   className={styles.buttomControl}
                                   type="primary"

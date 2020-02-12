@@ -117,7 +117,7 @@ export default {
     },
     changeLoginStatus(state, { payload }) {
       // setAuthority(payload.currentAuthority);
-      if (payload.head && payload.head.rtnCode === '000000')
+      if (payload.head && payload.head.rtnCode === '000000' && payload.body && payload.body.records && payload.body.records[0])
         setAuthority(payload.body.records[0].userName);
       // console.log(" save user ",payload.body[0])
       setCurrentUser(payload.body.records[0]);
