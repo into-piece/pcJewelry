@@ -138,7 +138,7 @@ class Index extends Component {
     // 第二个table选中tab标志 没有tab则冗余
     switchMenu: SECOND_TAG,
     selectedBom: { id: '' },
-    selectedProccess: { processId: '' },
+    selectedProccess: { processId: '' ,processName:''},
     craftShow: false, // 增加工艺弹窗
     onCraft: { name: '' },
     craftForm: [
