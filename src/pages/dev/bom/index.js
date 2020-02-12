@@ -2135,11 +2135,13 @@ class Index extends Component {
       {
         key: '批量新增',
         fn: addProccess,
+        permissionConfig:'flow.add'
       },
       {
         key: '删除流程',
         fn: deleteProccess,
         disabled: !(selectedProccess && selectedProccess.processId),
+        permissionConfig:'flow.del'
       },
     ];
     const opration = rightActive === THIRD_TAG ? secondProccessOprationArr : secondOprationArr;
@@ -2237,7 +2239,7 @@ class Index extends Component {
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
                             if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
-                            if(selectedBom.processName===getCurrentUser().dept&&rightActive===THIRD_TAG)return
+                            if(selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
                             return (
                               <Button
                                 key={tag}
