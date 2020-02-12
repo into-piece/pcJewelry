@@ -2239,7 +2239,7 @@ class Index extends Component {
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
                             if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
-                            if(selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
+                            if(selectedProccess&&selectedProccess.processName&&selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
                             return (
                               <Button
                                 key={tag}

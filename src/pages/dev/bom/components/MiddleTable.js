@@ -187,7 +187,6 @@ class MiddleTable extends Component {
     const choosenSecondRow = isMaterial ? choosenRowDataSecond : choosenProccessData;
     console.log(processList, selectedSecondRowKeys, selectedProccess, '=====selectedProccess');
     console.log(materialList, '====materialList');
-    console.log(selectedProccess,selectedProccess.processName,getCurrentUser().dept,'selectedProccess.processName===getCurrentUser().dept')
     return (
       <div className={styles.view_left_content}>
         <SearchForm
@@ -274,7 +273,7 @@ class MiddleTable extends Component {
                 </Select>
               </div>) : null}
 
-            {selectedProccess.processName===getCurrentUser().dept&&<BtnGroup arr={secondOprationArr} />}
+            {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept&&<BtnGroup arr={secondOprationArr} />}
           </div>
 
           <Table
