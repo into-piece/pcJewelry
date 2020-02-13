@@ -927,7 +927,8 @@ class Index extends Component {
     const {
       rightActive, modalType, craftForm, selectedBom, filelist, selectedProccess, filePath, videoPath, processCode,
       flowList,
-      singleWeight
+      singleWeight,
+      inventoryWeight
     } = this.state;
     const { getFieldValue } = form;
     const materialType = getFieldValue('materialType');
@@ -946,7 +947,7 @@ class Index extends Component {
     //   };
     // }
     if (rightActive === FIRST_TAG) {
-      params = { ...params, pId: choosenRowData.id,singleWeight:singleWeight||choosenRowDataSecond&&choosenRowDataSecond.singleWeight };
+      params = { ...params, pId: choosenRowData.id};
       if (isEdit) {
         params.id = selectedBom.id;
       }
@@ -1013,8 +1014,10 @@ class Index extends Component {
     if (rightActive === SECOND_TAG) {
       fieldslist = [...fieldslist,'bomId','materialId','inventoryWeight']
       params.materialId = materialNoChoosenRowData.id||choosenRowDataSecond.materialId;
-      params.inventoryWeight = this.state.inventoryWeight;
-      params.singleWeight = this.state.singleWeight;
+      params.inventoryWeight = inventoryWeight||choosenRowDataSecond.inventoryWeight;
+      console.log(singleWeight,'=======singleWeight')
+      debugger
+      params.singleWeight = singleWeight ||choosenRowDataSecond&&choosenRowDataSecond.singleWeight;
     }
     form.validateFields(fieldslist, (err, values) => {
       console.log(fieldslist, values, '=======values');
