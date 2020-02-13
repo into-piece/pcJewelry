@@ -1794,18 +1794,25 @@ class Index extends Component {
   // bom 列表切换
   handleBomSelectChange = v => {
     const { rightActive } = this.state;
-    const { bomlist, processDropdown } = this.props;
-    const isthird = rightActive === THIRD_TAG;
-    const list = isthird ? processDropdown : bomlist;
-    const key = isthird ? 'selectedProccess' : 'selectedBom';
+    const { bomlist } = this.props;
+    const key =  'selectedBom';
     let arr = [];
-    if (isthird) {
-      arr = list.filter(({ processId }) => processId === v);
-      this.getProccessList({ id: arr[0].id });
-    } else {
-      arr = list.filter(({ id }) => id === v);
-      this.getMaterialList({ BomId: v });
-    }
+    arr = bomlist.filter(({ id }) => id === v);
+    this.getMaterialList({ BomId: v });
+    this.getWorkFlowDropdownList({ bomId: v });
+    this.setState({
+      [key]: arr[0],
+    });
+  };
+
+
+  handleWorkFlowSelectChange= v => {
+    const { rightActive } = this.state;
+    const {  processDropdown } = this.props;
+    const key = 'selectedProccess' 
+    let arr = [];
+    arr = processDropdown.filter(({ processId }) => processId === v);
+    this.getProccessList({ id: arr[0].id });
     this.setState({
       [key]: arr[0],
     });
@@ -2015,6 +2022,7 @@ class Index extends Component {
       exportBom,
       printBom,
       handleBomSelectChange,
+      handleWorkFlowSelectChange,
       getbomlist,
       craftInput,
       addProccess,
@@ -2177,6 +2185,7 @@ class Index extends Component {
                       getbomlist={getbomlist}
                       rightActive={rightActive}
                       handleBomSelectChange={handleBomSelectChange}
+                      handleWorkFlowSelectChange={handleWorkFlowSelectChange}
                       changeRightActive={changeRightActive}
                       selectedProccess={selectedProccess}
                     />

@@ -172,6 +172,7 @@ class MiddleTable extends Component {
       secondOprationArr,
       selectedBom,
       handleBomSelectChange,
+      handleWorkFlowSelectChange,
       rightActive,
       processDropdown,
       selectedProccess,
@@ -263,7 +264,7 @@ class MiddleTable extends Component {
                   style={{ width: 180 }}
                   placeholder="请选择"
                   value={selectedProccess && selectedProccess.processId || undefined}
-                  onChange={handleBomSelectChange}
+                  onChange={handleWorkFlowSelectChange}
                 >
                   {processDropdown &&
                 processDropdown.map(({ value, key }) => (
