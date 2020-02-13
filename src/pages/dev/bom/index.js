@@ -1903,7 +1903,10 @@ class Index extends Component {
     const countist = measureUnit ? [{ key: measureUnitName, value: measureUnit }] : [];
     const valuationClasslist = [{ key: valuationClassName, value: valuationClass }];
     console.log(inventoryWeight,'=======');
-    
+    dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: {}, name: 'materialNoSearchParams' },
+    });
     dispatch({
       type: `${defaultModelName}/batchUpdatedispatch`,
       payload: { weightUnitList, countist, valuationClasslist },
@@ -1933,6 +1936,10 @@ class Index extends Component {
 
   handleMaterialNoCancel = () => {
     this.showMaterialModalFunc(2);
+    this.props.dispatch({
+      type: `${defaultModelName}/changeStateOut`,
+      payload: { data: {}, name: 'materialNoSearchParams' },
+    });
   };
 
   handleExplaintionModalCancel = () => {
