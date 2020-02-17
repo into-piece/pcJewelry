@@ -343,8 +343,8 @@ class Info extends Component {
     });
   };
 
-  openAddModal = () => {
-    const { rightMenu, dispatch, form, choosenRowData } = this.props;
+  openAddModal = (isEdit) => {
+    const { rightMenu, dispatch, form, choosenRowData,productChoosenRowData } = this.props;
     const isHead = rightMenu === 1;
     if (isHead) {
       dispatch({
@@ -363,15 +363,18 @@ class Info extends Component {
       payload: {key:choosenRowData.customerId},
     });
 
-    getMainMaterialPrice().then(res => {
-      const { head, body } = res;
-      if (head.rtnCode === '000000' && body.records.length > 0) {
-        const { silver } = body.records[0];
-        form.setFieldsValue({
-          quotePrice: silver,
-        });
-      }
-    });
+
+    if(!isEdit){
+      getMainMaterialPrice().then(res => {
+        const { head, body } = res;
+        if (head.rtnCode === '000000' && body.records.length > 0) {
+          const { silver } = body.records[0];
+          form.setFieldsValue({
+            quotePrice: silver,
+          });
+        }
+      });
+    }
 
     let arr = []
     if(rightMenu === 1){
@@ -395,7 +398,7 @@ class Info extends Component {
           
           this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
         }
-      })
+      })      
     }
 
     arr.length>0 && arr.forEach(item => {
@@ -483,7 +486,7 @@ class Info extends Component {
           });
           if (!isEdit) return;
         }
-        this.openAddModal();
+        this.openAddModal(modalType === 'edit');
         this.setState({ modalType });
         break;
       case 'delete':
@@ -648,10 +651,6 @@ class Info extends Component {
         });
       }
     }
-    
-    
-    quoteMethod === 'H008001'
-    
   }
 
   handleDatePicker = (date, dateString) => {
@@ -676,8 +675,12 @@ class Info extends Component {
   };
 
   inputChange = (v, type) => {
-    const { form } = this.props;
-    const value  = v.target.value
+    const { form,choosenRowData,choosenDetailRowData } = this.props;
+    const {listTodayRate} = this.state
+    const productCostValue = this.state.productCostValue||choosenDetailRowData.productCostValue
+    const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
+    
+    const {value}  = v.target
     const price = form.getFieldValue('price') || '';
     const qty = form.getFieldValue('qty') || '';
     if (type === 'price' && qty) {
@@ -701,6 +704,32 @@ class Info extends Component {
     const arr2 = ['nowCount','finishedWeight']
     arr2.includes(type) && this.countProductCost({[type]:value})
     
+
+    const  stonesWeight = Number(form.getFieldValue('stonesWeight')) || '';
+    const  finishedWeight = Number(form.getFieldValue('finishedWeight')) || '';
+    
+    // 计算主材重量  成品重量-石材重量
+    console.log(stonesWeight,finishedWeight,value,'==========成品重量-石材重量')
+    if(type === 'stonesWeight'&&finishedWeight){
+      form.setFieldsValue({
+        mainMaterialWeight: (finishedWeight - value).toFixed(2),
+      });
+    }
+    if(type === 'finishedWeight' && stonesWeight){
+      form.setFieldsValue({
+        mainMaterialWeight: (value - stonesWeight).toFixed(2),
+      });
+    }
+
+    console.log(productCostValue,customerQuoteCoeff,'=========productCostValue')
+    // 计算实际工费 计重
+    if(choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight'){
+      const productCost = (productCostValue*listTodayRate*value).toFixed(2)
+      form.setFieldsValue({
+        actualCount:(productCost*customerQuoteCoeff/value*listTodayRate).toFixed(2),
+        productCost
+      })
+    }
   };
 
   // 根据btn点击 返回对应弹窗内容
@@ -855,8 +884,9 @@ class Info extends Component {
     const addArr = rightMenu === 1 ? headList : detailList;
     const productTypeName = getFieldValue('productTypeName');
     const { currency, quoteMethod } = choosenRowData;
-    const productNo = form.getFieldValue('productNo') || '';
+    const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
+    const {isWeighStones} = choosenRowData
     const quoteMethodobj = {
       H008002: '克',
       H008001: '件',
@@ -914,21 +944,23 @@ class Info extends Component {
               number,
               priceUnit,
               disabled
-            }) => (
-              <div
-                className="addModal"
-                key={key}
-                style={value === 'productTypeName' ? { marginRight: 100 } : {}}
-              >
-                <FormItem
-                  label={
+            }) => {
+              if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
+              return(
+                <div
+                  className="addModal"
+                  key={key}
+                  style={value === 'productTypeName' ? { marginRight: 100 } : {}}
+                >
+                  <FormItem
+                    label={
                     priceUnit === 1 && rightMenu === 2
                       ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
                       priceUnit === 2 && rightMenu === 2?`${key+currency}/件`
                       : key
                   }
-                >
-                  {getFieldDecorator(value, {
+                  >
+                    {getFieldDecorator(value, {
                     rules: [
                       {
                         required: !noNeed,
@@ -962,9 +994,9 @@ class Info extends Component {
                       disabled
                     })
                   )}
-                </FormItem>
-              </div>
-            )
+                  </FormItem>
+                </div>
+            )}
           )}
 
         {/* {rightMenu === 2 && productTypeName === '戒指' && (
@@ -1012,13 +1044,18 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData,productChoosenRowData } = this.props;
+    const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
+    const {productCostValue,customerQuoteCoeff} = this.state
     const isHead = rightMenu === 1;
     const str = isHead ? 'quotelist' : 'quoteDatialList';
     let params = {}; 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id ,productId:productChoosenRowData.id};
-      debugger;
+      params = { 
+        quoteHeadId: choosenRowData.id ,
+        productId:productChoosenRowData.id || choosenDetailRowData.productId ,
+        productCostValue: productCostValue|| choosenDetailRowData.productCostValue ,
+        customerQuoteCoeff:customerQuoteCoeff|| choosenDetailRowData.customerQuoteCoeff ,
+      };
     }
 
     form.validateFields((err, values) => {
@@ -1057,7 +1094,12 @@ class Info extends Component {
     };
 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id };
+      params = { 
+        quoteHeadId: choosenRowData.id ,
+        productId: choosenDetailRowData.productId ,
+        productCostValue:  choosenDetailRowData.productCostValue ,
+        customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff ,
+      };
     }
 
     // 还要清空所选中项
@@ -1218,7 +1260,6 @@ class Info extends Component {
     });
   };
 
-  //
   unLockEdit = id => {
     const { choosenRowData } = this.props;
     serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {});
@@ -1241,7 +1282,7 @@ class Info extends Component {
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
-    const { choosenRowData, form ,dispatch} = this.props;
+    const { choosenRowData, form ,dispatch,productChoosenRowData} = this.props;
     const {
       id,
       productNo,
@@ -1258,7 +1299,8 @@ class Info extends Component {
       specification,
       unitOfLengthName,
       unitOfLength
-    } = this.props.productChoosenRowData;
+    } = productChoosenRowData;
+    const {listTodayRate} = this.state
     let lastCount = '0.00';
     let topCount = '0.00';
     let productLineCoefficientQuotation = '';
@@ -1307,6 +1349,44 @@ class Info extends Component {
         }
       }
     });
+
+
+    // 获取计算明细的相关数据
+    serviceObj.getQuoteDtInit({key:id}).then(res=>{
+      const { rtnMsg, rtnCode } = res.head;
+      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+        console.log(res.body.records,'==========getQuoteDtInit')
+        const {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal} = res.body.records[0]
+
+        // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
+        let productCostValue = '0.00'
+
+        // 计算实际工费 计件情况下
+        if(choosenRowData.quoteMethod === 'H008001'){
+          actualCount = (productCost*customerQuoteCoeff*listTodayRate).toFixed(2)
+          productCostValue = (productCost*listTodayRate).toFixed(2)
+        }
+        if(choosenRowData.quoteMethod === 'H008002'){
+          actualCount = (productCost*customerQuoteCoeff/finishedWeight*listTodayRate).toFixed(2)
+          productCostValue = (productCost*listTodayRate*finishedWeight).toFixed(2)
+        }
+        
+        form.setFieldsValue({
+          productCost:productCostValue,
+          actualCount,
+          stonesWeight:stoneWeightTotal,
+          stonePrice:stonePriceTotal
+        })
+
+        this.setState({
+          productCostValue,
+          customerQuoteCoeff,
+        })
+        
+        // const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
+        // this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
+      }
+    })
 
     // let packPrice = ''
     // await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {

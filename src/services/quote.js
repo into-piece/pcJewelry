@@ -45,7 +45,7 @@ const resultArr = [
   { key: 'listBasicColourSettingsDropDown', path: '/develop/basic/colour-settings/listBasicColourSettingsDropDown', module: 4 }, // 报价单审批
   { key: 'deleteProformaInvoiceDetail', path: '/business/order/proforma-invoice-detail/deleteProformaInvoiceDetail', module: 4 }, // 报价单审批
   { key: 'deleteProductQuoteDetail', path: '/business/product/product-quote-detail/deleteProductQuoteDetail', module: 4 }, // 报价单明细删除
-  { key: 'addquoteDatialList', path: '/product-quote-detail/saveOrupdateProductQuoteDetail' }, // 7）添加或更新报价单产品明细信息：
+  { key: 'addquoteDatialList', path: '/product-quote-detail/saveOrUpdate' }, // 7）添加或更新报价单产品明细信息：
   { key: 'getLastQuoteDetailByProductId', path: '/product-quote-detail/getLastQuoteDetailByProductId' }, // 前次工费
   { key: 'getTopQuoteDetailByProductId', path: '/product-quote-detail/getTopQuoteDetailByProductId' }, // 最高工费
   { key: 'getlistProductLine', path: '/business/product-line/listProductLine', module: 4 }, // 产品报价系数
@@ -65,6 +65,11 @@ const resultArr = [
     module: 4
   },
 
+  {
+    key: 'getQuoteDtInit',
+    path: '/business/product/product-quote-detail/getQuoteDtInit',
+    module: 4
+  },
   
 ]
 // /listMstWordbook
