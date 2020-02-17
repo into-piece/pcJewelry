@@ -674,7 +674,7 @@ class ProductDetail extends Component {
                     <Description term="名称">{showItem.zhName}</Description>
                     <Description term="编号">{showItem.productNo}</Description>
                     <Description term="类别">{showItem.productTypeName}</Description>
-                    <Description term="重量">{showItem.finishedWeight}</Description>
+                    <Description term="成品重量">{showItem.finishedWeight}</Description>
                     {/* <Description term="工价" /> */}
                   </DescriptionList>
                   <span className={business.title_info}>参数详情</span>
@@ -2126,7 +2126,7 @@ class ProductDetail extends Component {
                     <Description term="名称">{showItem.zhName}</Description>
                     <Description term="编号">{showItem.productNo}</Description>
                     <Description term="类别">{showItem.productTypeName}</Description>
-                    <Description term="重量">{showItem.finishedWeight}</Description>
+                    <Description term="成品重量">{showItem.finishedWeight}</Description>
                     {/* <Description term="工价" /> */}
                   </DescriptionList>
                   <span className={business.title_info}>参数详情</span>
