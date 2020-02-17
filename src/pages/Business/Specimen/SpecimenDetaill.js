@@ -268,15 +268,19 @@ class SpecimenDetaill extends Component {
                         <Description term="供应商货号">{showItem.supplierId}</Description>
                         <Description term="供应商">{showItem.supplierProductNo}</Description>
                         <Description term="品牌">{showItem.brandNo}</Description>
-                        <Description term="新增人">{showItem.createUser}</Description>
-                        <Description term="新增时间">{showItem.createTime}</Description>
-                        <Description term="修改人">{showItem.modifier}</Description>
-                        <Description term="修改时间">{showItem.mtime}</Description>
                       </DescriptionList>
                       <div className={business.title_info}>备注</div>
                       <Divider className={business.divder} />
                       <DescriptionList size="small" col="1">
                         <Description>{showItem.marks}</Description>
+                      </DescriptionList>
+                      <Divider className={business.divder} />
+                      <DescriptionList size="small" col="1">
+                        <Description>{showItem.marks}</Description>
+                        <Description term="新增人">{showItem.createUser}</Description>
+                        <Description term="新增时间">{showItem.createTime}</Description>
+                        <Description term="修改人">{showItem.modifier}</Description>
+                        <Description term="修改时间">{showItem.mtime}</Description>
                       </DescriptionList>
                     </Spin>
                   </div>
