@@ -54,7 +54,7 @@ const {
   queryproductDropDown2,
   queryProductMaterial,
   queryunitColor,
-  queryPlatingColor, 
+  queryPlatingColor,
   queryTerminalNoList,
   queryMstWordList,
   queryMoldList, // 模具号
@@ -1484,7 +1484,7 @@ class ProductDetail extends Component {
   };
 
   handleSubmit = close => {
-    const { dispatch, form } = this.props;
+    const { dispatch, form ,clearSelect} = this.props;
     const { isAdd, fileList, showItem, current, productTypeId } = this.state;
     let arr2 = [];
     if (
@@ -1553,6 +1553,7 @@ class ProductDetail extends Component {
             });
           },
         });
+        clearSelect();
       }
 
       this.setState({
@@ -1714,7 +1715,7 @@ class ProductDetail extends Component {
 
   // 点击编辑按钮弹出编辑弹窗
   handleEditProduct = async () => {
-    const { item } = this.props;
+    const { item , clearSelect} = this.props;
 
     // 是否可编辑
     const isEdit = await this.loadProductLock(item);
@@ -1770,10 +1771,7 @@ class ProductDetail extends Component {
       payload: { list: selectProductData },
     });
 
-    this.setState({
-      isEdit: true,
-      showItem: false,
-    });
+    clearSelect();
   };
 
   handleUnFreezeProduct = () => {
@@ -1790,6 +1788,25 @@ class ProductDetail extends Component {
       type: 'product/freezeProduct',
       payload: { list: selectProductData },
     });
+  };
+
+  handleCopyProduct = () => {
+    const { item } = this.props;
+
+    this.resetParse();
+    const { imageObject } = this.state;
+    this.parseImages(imageObject);
+
+    this.setState({
+      current: item,
+      visible: true,
+      isAdd:true,
+      fileList: this.state.showItem.pictures, // 测试真实数据重接口获取
+      isEditItem: true,
+    });
+
+    this.state.isEditItem = true;
+    this.productRefresh();
   };
 
   openCutImageModal = () => {
@@ -2101,7 +2118,7 @@ class ProductDetail extends Component {
                     autoplay
                   >
                     {this.getImages(
-                      showItem.pictures.length === 0 ? defaultImages : showItem.pictures
+                      (showItem.pictures&&showItem.pictures.length === 0) ? defaultImages : showItem.pictures
                     )}
                   </Carousel>
                   {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
@@ -2245,7 +2262,10 @@ class ProductDetail extends Component {
                 type="primary"
                 size="small"
                 icon="copy"
-                disabled
+                disabled={
+                  !showItem || showItem === '' || !isProductUpdate
+                }
+                onClick={this.handleCopyProduct}
               >
                 复制
               </Button>
