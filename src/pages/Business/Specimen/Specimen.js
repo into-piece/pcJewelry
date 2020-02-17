@@ -48,7 +48,7 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column="客户编号"
+            column="流水号"
             field="product_no"
             sortChange={this.sortFilter}
           />
@@ -58,13 +58,44 @@ class Specimen extends Component {
       key: 'productNo',
       width: 200,
     },
-
     {
       // title: <div className={product.row_normal2}>颜色</div>,
       title: () => {
         return (
           <TableSortView
-            column="颜色"
+            column="品牌"
+            field="brand_no"
+            className={specimen.row_normal2}
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'brandNo',
+      key: 'brandNo',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="类别"
+            field="product_type_name"
+            className={specimen.row_normal2}
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'productTypeName',
+      key: 'productTypeName',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="宝石颜色"
             field="gem_color_name"
             className={specimen.row_normal2}
             sortChange={this.sortFilter}
@@ -73,6 +104,66 @@ class Specimen extends Component {
       },
       dataIndex: 'gemColorName',
       key: 'gemColorName',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>电镀颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="电镀颜色"
+            field="plating_color_name"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'platingColorName',
+      key: 'platingColorName',
+      width: 150,
+    },
+    {
+      // title: <div className={product.row_normal2}>电镀颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="中文名称"
+            field="zh_name"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'zhName',
+      key: 'zhName',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>电镀颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="英文名称"
+            field="en_name"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'enName',
+      key: 'enName',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>电镀颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="产品来源"
+            field="source_of_product_name"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'sourceOfProductName',
+      key: 'sourceOfProductName',
       width: 100,
     },
     {
@@ -91,21 +182,68 @@ class Specimen extends Component {
       width: 100,
     },
     {
-      // title: <div className={product.row_normal2}>电镀颜色</div>,
+      // title: <div className={product.row_normal2}>成色</div>,
       title: () => {
         return (
           <TableSortView
-            column="电镀颜色"
-            field="plating_color_name"
+            column="规格"
+            field="specification"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'platingColorName',
-      key: 'platingColorName',
-      width: 150,
+      dataIndex: 'specification',
+      key: 'specification',
+      width: 100,
     },
-
+    {
+      // title: <div className={product.row_normal2}>颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="计量单位"
+            field="unit_of_measurement"
+            className={specimen.row_normal2}
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'unitOfMeasurement',
+      key: 'unitOfMeasurement',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="重量单位"
+            field="unit_of_weight"
+            className={specimen.row_normal2}
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'unitOfWeight',
+      key: 'unitOfWeight',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>颜色</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="成品重量"
+            field="finished_weight"
+            className={specimen.row_normal2}
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'finishedWeight',
+      key: 'finishedWeight',
+      width: 100,
+    },
 
     {
       // title: <div className={product.row_normal2}>客户编号</div>,
@@ -120,6 +258,36 @@ class Specimen extends Component {
       },
       dataIndex: 'customerNo',
       key: 'customerNo',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>客户编号</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="客户简称"
+            field="customer_shotName"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'customerShotName',
+      key: 'customerShotName',
+      width: 100,
+    },
+    {
+      // title: <div className={product.row_normal2}>客户编号</div>,
+      title: () => {
+        return (
+          <TableSortView
+            column="客户代号"
+            field="custoer_product_no"
+            sortChange={this.sortFilter}
+          />
+        );
+      },
+      dataIndex: 'custoerProductNo',
+      key: 'custoerProductNo',
       width: 100,
     },
 

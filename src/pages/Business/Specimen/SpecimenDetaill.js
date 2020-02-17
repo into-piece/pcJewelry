@@ -538,23 +538,6 @@ class SpecimenDetaill extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
-            <FormItem label="中文名称" {...this.centerFormLayout}>
-              {getFieldDecorator('zhName', {
-                rules: [{ required: true, message: '请输入中文名称' }],
-                initialValue: current.zhName,
-              })(<Input placeholder="自动生成" readOnly />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem label="英文名称" {...this.centerFormLayout}>
-              {getFieldDecorator('enName', {
-                rules: [{ required: true, message: '请输入英文名称' }],
-                initialValue: current.enName,
-              })(<Input placeholder="自动生成" readOnly />)}
-            </FormItem>
-          </div>
-
-          <div className="adddevModal">
             <FormItem label="品牌" {...this.centerFormLayout}>
               {getFieldDecorator('brand', {
                 rules: [{ required: true, message: '请输入品牌' }],
@@ -633,7 +616,8 @@ class SpecimenDetaill extends Component {
               )}
             </FormItem>
           </div>
-          <div className="adddevModal">
+
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem label="电镀颜色" {...this.centerFormLayout}>
               {getFieldDecorator('platingColor', {
                 rules: [{ required: true, message: '请输入电镀颜色' }],
@@ -646,7 +630,7 @@ class SpecimenDetaill extends Component {
                   filterOption={(input, option) =>
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                  style={{ width: 180 }}
+                  style={{ width: 1040 }}
                   onSelect={v => {
                     if (v.colorCode) {
                       this.state.cNoColorCode = v.colorCode;
@@ -658,6 +642,27 @@ class SpecimenDetaill extends Component {
               )}
             </FormItem>
           </div>
+
+          <div className="adddevModal">
+            <FormItem label="中文名称" {...this.centerFormLayout}>
+              {getFieldDecorator('zhName', {
+                rules: [{ required: true, message: '请输入中文名称' }],
+                initialValue: current.zhName,
+              })(<Input placeholder="自动生成" readOnly />)}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem label="英文名称" {...this.centerFormLayout}>
+              {getFieldDecorator('enName', {
+                rules: [{ required: true, message: '请输入英文名称' }],
+                initialValue: current.enName,
+              })(<Input placeholder="自动生成" readOnly />)}
+            </FormItem>
+          </div>
+
+
+
+
           <div className="adddevModal">
             <FormItem label="产品来源" {...this.centerFormLayout}>
               {getFieldDecorator('sourceOfProduct', {
@@ -770,7 +775,7 @@ class SpecimenDetaill extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
-          <div className="adddevModal">
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem label="产品描述" {...this.centerFormLayout}>
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入产品描述' }],
@@ -778,7 +783,7 @@ class SpecimenDetaill extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
-          <div className="adddevModal">
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem label="备注" {...this.centerFormLayout}>
               {getFieldDecorator('marks', {
                 initialValue: current.marks,
@@ -801,7 +806,7 @@ class SpecimenDetaill extends Component {
           </Row>
         </Form>
 
-        <Form size="small" labelAlign="left" layout="inline" className={business.from_content}>
+        <Form size="small" labelAlign="left" layout="inline"  className={styles.standardListForm} style={{width:'100%'}}>
           <span className={business.sun_title_info}>客户信息</span>
           <Divider className={business.divder} />
           <Row>
