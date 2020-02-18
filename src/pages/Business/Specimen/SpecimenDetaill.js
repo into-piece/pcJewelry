@@ -262,7 +262,7 @@ class SpecimenDetaill extends Component {
                         <Description term="电镀">{showItem.platingColorName}</Description>
                         <Description term="成色">{showItem.productColorName}</Description>
                         <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                        <Description term="客户货号">{showItem.custoerProductNo}</Description>
+                        <Description term="客户货号">{showItem.customerProductNo}</Description>
                         <Description term="客户">{showItem.customerNo}</Description>
                         <Description term="供应商货号">{showItem.supplierId}</Description>
                         <Description term="供应商">{showItem.supplierProductNo}</Description>
@@ -536,7 +536,7 @@ class SpecimenDetaill extends Component {
             <FormItem label="流水号" {...this.centerFormLayout}>
               {getFieldDecorator('productNo', {
                 rules: [{ required: true, message: '请输入流水号' }],
-                initialValue: current.productNo,
+                initialValue: current.productNo?current.productNo:`${moment().format('YYYYMMDDHHmmssSS')}`,
               })(<Input placeholder="自动生成流水号" readOnly />)}
             </FormItem>
           </div>
@@ -868,9 +868,9 @@ class SpecimenDetaill extends Component {
 
             <div className="adddevModal">
               <FormItem label="客户货号" {...this.centerFormLayout}>
-                {getFieldDecorator('custoerProductNo', {
+                {getFieldDecorator('customerProductNo', {
                   rules: [{ message: '请输入货号' }],
-                  initialValue: current.custoerProductNo,
+                  initialValue: current.customerProductNo,
                 })(<Input placeholder="请输入" />)}
               </FormItem>
             </div>
@@ -1323,10 +1323,22 @@ class SpecimenDetaill extends Component {
       cNoCustomerCombine = '',
     } = this.state;
     const {
-      form: { setFieldsValue },
+      form: { setFieldsValue ,getFieldValue},
     } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
-    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
+    let productNo;
+    const newBrandNo = getFieldValue("productNo");
+
+    if(cNoBrandNo){
+      if (newBrandNo.split("-").length === 2) {
+        productNo = `${cNoBrandNo}-${newBrandNo.split("-")[1]}`;
+      }else if(newBrandNo.split("-").length === 1){
+        productNo = `${cNoBrandNo}-${newBrandNo}`;
+      }
+    }else{
+      productNo = newBrandNo;
+    }
+    // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别
