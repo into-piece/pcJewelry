@@ -249,7 +249,7 @@ class SpecimenDetaill extends Component {
                         <Description term="名称">{showItem.zhName}</Description>
                         <Description term="编号">{showItem.productNo}</Description>
                         <Description term="类别">{showItem.productTypeName}</Description>
-                        <Description term="重量">{showItem.finishedWeight}</Description>
+                        <Description term="成品重量">{showItem.finishedWeight}</Description>
                         {/* <Description term="工价" /> */}
                       </DescriptionList>
                       <div className={business.title_info}>参数详情</div>
@@ -262,21 +262,24 @@ class SpecimenDetaill extends Component {
                         <Description term="电镀">{showItem.platingColorName}</Description>
                         <Description term="成色">{showItem.productColorName}</Description>
                         <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                        <Description term="模具">{showItem.mouldNoName}</Description>
                         <Description term="客户货号">{showItem.custoerProductNo}</Description>
                         <Description term="客户">{showItem.customerNo}</Description>
                         <Description term="供应商货号">{showItem.supplierId}</Description>
                         <Description term="供应商">{showItem.supplierProductNo}</Description>
                         <Description term="品牌">{showItem.brandNo}</Description>
-                        <Description term="新增人">{showItem.createUser}</Description>
-                        <Description term="新增时间">{showItem.createTime}</Description>
-                        <Description term="修改人">{showItem.modifier}</Description>
-                        <Description term="修改时间">{showItem.mtime}</Description>
                       </DescriptionList>
                       <div className={business.title_info}>备注</div>
                       <Divider className={business.divder} />
                       <DescriptionList size="small" col="1">
                         <Description>{showItem.marks}</Description>
+                      </DescriptionList>
+                      <Divider className={business.divder} />
+                      <DescriptionList size="small" col="1">
+                        <Description>{showItem.marks}</Description>
+                        <Description term="新增人">{showItem.createUser}</Description>
+                        <Description term="新增时间">{showItem.createTime}</Description>
+                        <Description term="修改人">{showItem.modifier}</Description>
+                        <Description term="修改时间">{showItem.mtime}</Description>
                       </DescriptionList>
                     </Spin>
                   </div>
@@ -538,23 +541,6 @@ class SpecimenDetaill extends Component {
             </FormItem>
           </div>
           <div className="adddevModal">
-            <FormItem label="中文名称" {...this.centerFormLayout}>
-              {getFieldDecorator('zhName', {
-                rules: [{ required: true, message: '请输入中文名称' }],
-                initialValue: current.zhName,
-              })(<Input placeholder="自动生成" readOnly />)}
-            </FormItem>
-          </div>
-          <div className="adddevModal">
-            <FormItem label="英文名称" {...this.centerFormLayout}>
-              {getFieldDecorator('enName', {
-                rules: [{ required: true, message: '请输入英文名称' }],
-                initialValue: current.enName,
-              })(<Input placeholder="自动生成" readOnly />)}
-            </FormItem>
-          </div>
-
-          <div className="adddevModal">
             <FormItem label="品牌" {...this.centerFormLayout}>
               {getFieldDecorator('brand', {
                 rules: [{ required: true, message: '请输入品牌' }],
@@ -597,7 +583,7 @@ class SpecimenDetaill extends Component {
                     // console.log(" select  ",v)
                     if (v.zhName) {
                       this.state.cNofCodezhName = v.zhName;
-                      this.state.cNofCode = v.fCode;
+                      this.state.cNofCode = v.unitCode;
                       this.parseProductNo();
                     }
                   }}
@@ -633,7 +619,8 @@ class SpecimenDetaill extends Component {
               )}
             </FormItem>
           </div>
-          <div className="adddevModal">
+
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem label="电镀颜色" {...this.centerFormLayout}>
               {getFieldDecorator('platingColor', {
                 rules: [{ required: true, message: '请输入电镀颜色' }],
@@ -646,7 +633,7 @@ class SpecimenDetaill extends Component {
                   filterOption={(input, option) =>
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                  style={{ width: 180 }}
+                  style={{ width: 1040 }}
                   onSelect={v => {
                     if (v.colorCode) {
                       this.state.cNoColorCode = v.colorCode;
@@ -658,6 +645,27 @@ class SpecimenDetaill extends Component {
               )}
             </FormItem>
           </div>
+
+          <div className="adddevModal">
+            <FormItem label="中文名称" {...this.centerFormLayout}>
+              {getFieldDecorator('zhName', {
+                rules: [{ required: true, message: '请输入中文名称' }],
+                initialValue: current.zhName,
+              })(<Input placeholder="自动生成" readOnly />)}
+            </FormItem>
+          </div>
+          <div className="adddevModal">
+            <FormItem label="英文名称" {...this.centerFormLayout}>
+              {getFieldDecorator('enName', {
+                rules: [{ required: true, message: '请输入英文名称' }],
+                initialValue: current.enName,
+              })(<Input placeholder="自动生成" readOnly />)}
+            </FormItem>
+          </div>
+
+
+
+
           <div className="adddevModal">
             <FormItem label="产品来源" {...this.centerFormLayout}>
               {getFieldDecorator('sourceOfProduct', {
@@ -770,7 +778,7 @@ class SpecimenDetaill extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
-          <div className="adddevModal">
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem label="产品描述" {...this.centerFormLayout}>
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入产品描述' }],
@@ -778,7 +786,7 @@ class SpecimenDetaill extends Component {
               })(<Input placeholder="请输入" />)}
             </FormItem>
           </div>
-          <div className="adddevModal">
+          <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem label="备注" {...this.centerFormLayout}>
               {getFieldDecorator('marks', {
                 initialValue: current.marks,
@@ -801,7 +809,7 @@ class SpecimenDetaill extends Component {
           </Row>
         </Form>
 
-        <Form size="small" labelAlign="left" layout="inline" className={business.from_content}>
+        <Form size="small" labelAlign="left" layout="inline"  className={styles.standardListForm} style={{width:'100%'}}>
           <span className={business.sun_title_info}>客户信息</span>
           <Divider className={business.divder} />
           <Row>
@@ -1312,22 +1320,26 @@ class SpecimenDetaill extends Component {
       cNoenNameUniCode,
       cNoPercentageZhName = '',
       cNoPercentageEnName = '',
+      cNoCustomerCombine = '',
     } = this.state;
     const {
       form: { setFieldsValue },
     } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
-    // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
+    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别
     this.setState({
       zhName,
       enName,
+      productNo,
+
     });
     setFieldsValue({
       zhName,
       enName,
+      productNo,
     });
   };
 

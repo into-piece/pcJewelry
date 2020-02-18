@@ -174,6 +174,7 @@ class ProductInfo extends Component {
         isProductUpdate={isProductUpdate}
         selectProductData={selectProductData}
         key="556"
+        clearSelect={this.clearSelect}
         isloading={isLoad => {
           this.setState({
             isLoad,
@@ -303,10 +304,11 @@ class ProductInfo extends Component {
   };
 
   onSelectChange = v => {
-    console.log(v);
-    this.setState({
-      selectProductData: v,
-    });
+    const showItem = (v&&v.length>0)?v[v.length-1]:false;
+      this.setState({
+        selectProductData: v,
+        showItem,
+      });
   };
 
   // 选中某行表头
@@ -317,6 +319,14 @@ class ProductInfo extends Component {
       showItem: rowData,
     });
   };
+
+  clearSelect =()=>{
+    this.setState({
+      showItem:false,
+      choosenRowData:{},
+      selectProductData: []
+    })
+  }
 
   render() {
     const { onSelectChange, state, props, changeChoosenRow } = this;
