@@ -271,7 +271,8 @@ const productSearchParams = [
     searchParams: quote.searchParams,
     searchDetailParams: quote.searchDetailParams,
     endCustomerList:quote.endCustomerList,
-    searchProductParams:quote.searchProductParams
+    searchProductParams:quote.searchProductParams,
+    customerDropDownList:quote.customerDropDownList
   };
 })
 class Info extends Component {
@@ -543,7 +544,7 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu, dispatch } = this.props;
+    const { quote, form, rightMenu, dispatch,customerDropDownList } = this.props;
     const {currencyArr,quotePriceUSA} = this.state
     // 自动带出字印英文名
     if (type === 'markingId') {
@@ -570,14 +571,13 @@ class Info extends Component {
         payload: { key: value },
       });
 
-      const { quote, form } = this.props;
-      const obj = quote.customerDropDownList.find(item => item.value === value);
-      const { shotName, currencyCode } = obj;
+      const obj = customerDropDownList.find(item => item.value === value);
+      const { shotName, settlementCurrency } = obj;
       const date = form.getFieldValue('quoteDate') || '';
       form.setFieldsValue({
         customerShotName: shotName,
         quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
-        currency: currencyCode,
+        currency: settlementCurrency||'USD',
       });
     }
 
@@ -638,7 +638,7 @@ class Info extends Component {
   };
 
   // 计算单价
-  countPrice=(params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
+  countPrice = (params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
     const {form,choosenRowData} = this.props
     const {isWeighStones,quoteMethod,quotePrice} = choosenRowData
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
