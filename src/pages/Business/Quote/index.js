@@ -292,7 +292,7 @@ class Info extends Component {
   // 初始化表单数据
   initDropdownReq = () => {
     const { dispatch } = this.props;
-        // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
+        // this.unLockEdit("424f66d2-2cff-4312-8a0e-67ccd3332589")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown',
@@ -1114,6 +1114,7 @@ class Info extends Component {
 
     if (!isHead) {
       params = { 
+        id:choosenDetailRowData.id,
         quoteHeadId: choosenRowData.id ,
         productId: choosenDetailRowData.productId ,
         productCostValue:  choosenDetailRowData.productCostValue ,
@@ -1122,10 +1123,10 @@ class Info extends Component {
     }
 
     // 还要清空所选中项
-    dispatch({
-      type: 'quote/changeSelectedRowKeys',
-      payload: [],
-    });
+    // dispatch({
+    //   type: 'quote/changeSelectedRowKeys',
+    //   payload: [],
+    // });
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -1231,6 +1232,7 @@ class Info extends Component {
 
   // 弹窗确定提交回调
   handleModalOk = close => {
+    this.unLockEdit();
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
