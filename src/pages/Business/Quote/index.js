@@ -281,6 +281,7 @@ class Info extends Component {
     quoteDateFrom: null,
     quoteDateTo: null,
     quoteDate: null,
+    quotePriceUSA:''// 美元的主材价
   };
 
   componentDidMount() {
@@ -303,6 +304,9 @@ class Info extends Component {
 
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
+
+    // 获取汇率数组
+    this.setCurrency()
   }
 
   // 获取对应key=》页面进行数据请求
@@ -344,7 +348,8 @@ class Info extends Component {
   };
 
   openAddModal = (isEdit) => {
-    const { rightMenu, dispatch, form, choosenRowData,productChoosenRowData } = this.props;
+    const { rightMenu, dispatch, form, choosenRowData } = this.props;
+    const {currencyArr} = this.state
     const isHead = rightMenu === 1;
     if (isHead) {
       dispatch({
@@ -365,13 +370,14 @@ class Info extends Component {
 
 
     if(!isEdit){
+      // 获取到的是美元的主材价 还需
       getMainMaterialPrice().then(res => {
         const { head, body } = res;
         if (head.rtnCode === '000000' && body.records.length > 0) {
           const { silver } = body.records[0];
-          form.setFieldsValue({
-            quotePrice: silver,
-          });
+          this.setState({
+            quotePriceUSA: silver,
+          })
         }
       });
     }
@@ -388,17 +394,8 @@ class Info extends Component {
       ];
     }
     if(rightMenu === 2){
-      serviceObj.listTodayRate().then(res=>{
-        const { rtnMsg, rtnCode } = res.head;
-        if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
-          console.log(res.body.records,choosenRowData.currency);
-          
-          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
-          console.log(listTodayRate)
-          
-          this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
-        }
-      })      
+      const listTodayRate =currencyArr.filter(item=>item.currency === choosenRowData.currency )        
+      this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
     }
 
     arr.length>0 && arr.forEach(item => {
@@ -408,6 +405,17 @@ class Info extends Component {
       });
     });
   };
+
+  setCurrency = () => {
+    serviceObj.listTodayRate().then(res=>{
+      const {  rtnCode } = res.head;
+      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+        this.setState({
+          currencyArr:res.body.records
+        })
+      }
+    })   
+  }
 
   countProductCost = (params) => {
     const {listTodayRate} = this.state
@@ -536,6 +544,7 @@ class Info extends Component {
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
     const { quote, form, rightMenu, dispatch } = this.props;
+    const {currencyArr,quotePriceUSA} = this.state
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -583,6 +592,21 @@ class Info extends Component {
       form.setFieldsValue({
         endShotName,
       });
+    }
+
+    // 更换当前汇率
+
+    if(type==='currency'){
+      const currencyArrNew = [...currencyArr,{currency:'RMB',bocConversionPrice:100}]
+      const listTodayRateArr =currencyArrNew.filter(item=>item.currency === value )       
+      const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
+      const listTodayRateUsaArr =currencyArrNew.filter(item=>item.currency === 'USD' )       
+      const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
+      // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
+      console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
+      form.setFieldsValue({
+        quotePrice: ((quotePriceUSA/listTodayRateUsa)*listTodayRateCur).toFixed(2)
+      })
     }
   };
 
