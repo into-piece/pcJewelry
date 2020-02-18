@@ -262,7 +262,6 @@ class SpecimenDetaill extends Component {
                         <Description term="电镀">{showItem.platingColorName}</Description>
                         <Description term="成色">{showItem.productColorName}</Description>
                         <Description term="产品来源">{showItem.sourceOfProductName}</Description>
-                        <Description term="模具">{showItem.mouldNoName}</Description>
                         <Description term="客户货号">{showItem.custoerProductNo}</Description>
                         <Description term="客户">{showItem.customerNo}</Description>
                         <Description term="供应商货号">{showItem.supplierId}</Description>
@@ -584,7 +583,7 @@ class SpecimenDetaill extends Component {
                     // console.log(" select  ",v)
                     if (v.zhName) {
                       this.state.cNofCodezhName = v.zhName;
-                      this.state.cNofCode = v.fCode;
+                      this.state.cNofCode = v.unitCode;
                       this.parseProductNo();
                     }
                   }}
@@ -1321,22 +1320,26 @@ class SpecimenDetaill extends Component {
       cNoenNameUniCode,
       cNoPercentageZhName = '',
       cNoPercentageEnName = '',
+      cNoCustomerCombine = '',
     } = this.state;
     const {
       form: { setFieldsValue },
     } = this.props;
     const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
-    // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
+    const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别
     this.setState({
       zhName,
       enName,
+      productNo,
+
     });
     setFieldsValue({
       zhName,
       enName,
+      productNo,
     });
   };
 
