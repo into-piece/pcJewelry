@@ -253,7 +253,7 @@ class SpecimenDetaill extends Component {
                         {/* <Description term="工价" /> */}
                       </DescriptionList>
                       <div className={business.title_info}>参数详情</div>
-                      <Divider className={business.divder} />
+                      <Divider className={business.divder} style={{marginTop:10}}/>
                       <DescriptionList size="small" col="2">
                         <Description term="颜色">{showItem.gemColorName}</Description>
                         <Description term="单位件数">{showItem.unitOfMeasurementName}</Description>
@@ -269,11 +269,11 @@ class SpecimenDetaill extends Component {
                         <Description term="品牌">{showItem.brandNo}</Description>
                       </DescriptionList>
                       <div className={business.title_info}>备注</div>
-                      <Divider className={business.divder} />
+                      <Divider className={business.divder} style={{marginTop:10}}/>
                       <DescriptionList size="small" col="1">
                         <Description>{showItem.marks}</Description>
                       </DescriptionList>
-                      <Divider className={business.divder} />
+                      <Divider className={business.divder} style={{marginTop:10}}/>
                       <DescriptionList size="small" col="1">
                         <Description>{showItem.marks}</Description>
                         <Description term="新增人">{showItem.createUser}</Description>
