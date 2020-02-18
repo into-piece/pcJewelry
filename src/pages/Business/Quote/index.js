@@ -705,16 +705,11 @@ class Info extends Component {
     const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
     
     const {value}  = v.target
+
+    // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
-    const qty = form.getFieldValue('qty') || '';
-    if (type === 'price' && qty) {
-      const quotedAmount = Number(v.target.value) * Number(qty);
-      form.setFieldsValue({
-        quotedAmount,
-      });
-    }
     if (type === 'qty' && price) {
-      const quotedAmount = Number(v.target.value) * Number(price);
+      const quotedAmount = Number(value) * Number(price);
       form.setFieldsValue({
         quotedAmount,
       });
@@ -1412,6 +1407,9 @@ class Info extends Component {
       }
     })
 
+
+    
+
     // let packPrice = ''
     // await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {
     //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
@@ -1430,7 +1428,7 @@ class Info extends Component {
       payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
       callback:()=>{
         this.showProductModalFunc(2);
-        form.setFieldsValue({
+        const obj = {
           productId: id,
           productNo,
           productColorName,
@@ -1450,7 +1448,9 @@ class Info extends Component {
           productLineCoefficientQuotation,
           specification,
           unitOfLength
-        });
+        }
+        form.setFieldsValue(obj);
+        this.countPrice(obj)
       }
     })
   };
