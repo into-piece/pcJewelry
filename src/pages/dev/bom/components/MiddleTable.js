@@ -275,7 +275,8 @@ class MiddleTable extends Component {
                 </Select>
               </div>) : null}
 
-            {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null}
+            {/* {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null} */}
+            <BtnGroup arr={secondOprationArr} />
           </div>
 
           <Table
