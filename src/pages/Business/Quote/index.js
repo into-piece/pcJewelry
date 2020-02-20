@@ -409,12 +409,14 @@ class Info extends Component {
   };
 
   setCurrency = () => {
-    serviceObj.listTodayRate().then(res=>{
+    serviceObj.z().then(res=>{
       const {  rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
         this.setState({
           currencyArr:res.body.records
         })
+      }else{
+        notification.error({message:'无汇率数据，无法自动计算'})
       }
     })   
   }
