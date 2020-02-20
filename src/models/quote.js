@@ -250,8 +250,8 @@ export default {
       const response = yield call(listCustomerDropDown, {});
       let customerDropDownList = response.body.records;
       customerDropDownList = customerDropDownList.map(
-        ({ customerNo, id, shotName, currencyCode }) => {
-          return { value: id, key: customerNo, shotName, currencyCode };
+        ({ customerNo, id, shotName, settlementCurrency }) => {
+          return { value: id, key: customerNo, shotName, settlementCurrency };
         }
       );
       yield put({

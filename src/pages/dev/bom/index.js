@@ -49,6 +49,7 @@ import { defaultImages } from '@/utils/utils';
 // import PrintTable from './PrintPage';
 import servicesConfig from '@/services/purchase';
 import { getCurrentUser } from '../../../utils/authority';
+
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
 const uploadfile = `${priefx}/zuul/business/business/file/uploadDocuments`;
@@ -1137,7 +1138,7 @@ class Index extends Component {
           // size: 10, current: 1, ...productBomRevokePagination,
           ...args,
           productNoPre : productNo.substr(0,9),
-          productNo:productNo
+          productNo
         },
       },
     });
@@ -2264,7 +2265,7 @@ class Index extends Component {
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
                             if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
-                            if(selectedProccess&&selectedProccess.processName&&selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
+                            // if(selectedProccess&&selectedProccess.processName&&selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
                             return (
                               <Button
                                 key={tag}

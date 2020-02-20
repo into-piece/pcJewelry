@@ -271,7 +271,8 @@ const productSearchParams = [
     searchParams: quote.searchParams,
     searchDetailParams: quote.searchDetailParams,
     endCustomerList:quote.endCustomerList,
-    searchProductParams:quote.searchProductParams
+    searchProductParams:quote.searchProductParams,
+    customerDropDownList:quote.customerDropDownList
   };
 })
 class Info extends Component {
@@ -281,6 +282,7 @@ class Info extends Component {
     quoteDateFrom: null,
     quoteDateTo: null,
     quoteDate: null,
+    quotePriceUSA:''// 美元的主材价
   };
 
   componentDidMount() {
@@ -290,7 +292,7 @@ class Info extends Component {
   // 初始化表单数据
   initDropdownReq = () => {
     const { dispatch } = this.props;
-        // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
+        // this.unLockEdit("424f66d2-2cff-4312-8a0e-67ccd3332589")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown',
@@ -303,6 +305,9 @@ class Info extends Component {
 
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
+
+    // 获取汇率数组
+    this.setCurrency()
   }
 
   // 获取对应key=》页面进行数据请求
@@ -344,7 +349,8 @@ class Info extends Component {
   };
 
   openAddModal = (isEdit) => {
-    const { rightMenu, dispatch, form, choosenRowData,productChoosenRowData } = this.props;
+    const { rightMenu, dispatch, form, choosenRowData } = this.props;
+    const {currencyArr} = this.state
     const isHead = rightMenu === 1;
     if (isHead) {
       dispatch({
@@ -365,13 +371,14 @@ class Info extends Component {
 
 
     if(!isEdit){
+      // 获取到的是美元的主材价 还需
       getMainMaterialPrice().then(res => {
         const { head, body } = res;
         if (head.rtnCode === '000000' && body.records.length > 0) {
           const { silver } = body.records[0];
-          form.setFieldsValue({
-            quotePrice: silver,
-          });
+          this.setState({
+            quotePriceUSA: silver,
+          })
         }
       });
     }
@@ -388,17 +395,8 @@ class Info extends Component {
       ];
     }
     if(rightMenu === 2){
-      serviceObj.listTodayRate().then(res=>{
-        const { rtnMsg, rtnCode } = res.head;
-        if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
-          console.log(res.body.records,choosenRowData.currency);
-          
-          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
-          console.log(listTodayRate)
-          
-          this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
-        }
-      })      
+      const listTodayRate =currencyArr.filter(item=>item.currency === choosenRowData.currency )        
+      this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
     }
 
     arr.length>0 && arr.forEach(item => {
@@ -408,6 +406,17 @@ class Info extends Component {
       });
     });
   };
+
+  setCurrency = () => {
+    serviceObj.listTodayRate().then(res=>{
+      const {  rtnCode } = res.head;
+      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+        this.setState({
+          currencyArr:res.body.records
+        })
+      }
+    })   
+  }
 
   countProductCost = (params) => {
     const {listTodayRate} = this.state
@@ -535,7 +544,8 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu, dispatch } = this.props;
+    const { quote, form, rightMenu, dispatch,customerDropDownList } = this.props;
+    const {currencyArr,quotePriceUSA} = this.state
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -561,14 +571,13 @@ class Info extends Component {
         payload: { key: value },
       });
 
-      const { quote, form } = this.props;
-      const obj = quote.customerDropDownList.find(item => item.value === value);
-      const { shotName, currencyCode } = obj;
+      const obj = customerDropDownList.find(item => item.value === value);
+      const { shotName, settlementCurrency } = obj;
       const date = form.getFieldValue('quoteDate') || '';
       form.setFieldsValue({
         customerShotName: shotName,
         quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
-        currency: currencyCode,
+        currency: settlementCurrency||'USD',
       });
     }
 
@@ -583,6 +592,21 @@ class Info extends Component {
       form.setFieldsValue({
         endShotName,
       });
+    }
+
+    // 更换当前汇率
+
+    if(type==='currency'){
+      const currencyArrNew = [...currencyArr,{currency:'RMB',bocConversionPrice:100}]
+      const listTodayRateArr =currencyArrNew.filter(item=>item.currency === value )       
+      const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
+      const listTodayRateUsaArr =currencyArrNew.filter(item=>item.currency === 'USD' )       
+      const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
+      // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
+      console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
+      form.setFieldsValue({
+        quotePrice: ((quotePriceUSA/listTodayRateUsa)*listTodayRateCur).toFixed(2)
+      })
     }
   };
 
@@ -614,7 +638,7 @@ class Info extends Component {
   };
 
   // 计算单价
-  countPrice=(params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
+  countPrice = (params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
     const {form,choosenRowData} = this.props
     const {isWeighStones,quoteMethod,quotePrice} = choosenRowData
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
@@ -681,16 +705,11 @@ class Info extends Component {
     const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
     
     const {value}  = v.target
+
+    // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
-    const qty = form.getFieldValue('qty') || '';
-    if (type === 'price' && qty) {
-      const quotedAmount = Number(v.target.value) * Number(qty);
-      form.setFieldsValue({
-        quotedAmount,
-      });
-    }
     if (type === 'qty' && price) {
-      const quotedAmount = Number(v.target.value) * Number(price);
+      const quotedAmount = Number(value) * Number(price);
       form.setFieldsValue({
         quotedAmount,
       });
@@ -1095,6 +1114,7 @@ class Info extends Component {
 
     if (!isHead) {
       params = { 
+        id:choosenDetailRowData.id,
         quoteHeadId: choosenRowData.id ,
         productId: choosenDetailRowData.productId ,
         productCostValue:  choosenDetailRowData.productCostValue ,
@@ -1103,10 +1123,10 @@ class Info extends Component {
     }
 
     // 还要清空所选中项
-    dispatch({
-      type: 'quote/changeSelectedRowKeys',
-      payload: [],
-    });
+    // dispatch({
+    //   type: 'quote/changeSelectedRowKeys',
+    //   payload: [],
+    // });
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -1212,6 +1232,7 @@ class Info extends Component {
 
   // 弹窗确定提交回调
   handleModalOk = close => {
+    this.unLockEdit();
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
@@ -1388,6 +1409,9 @@ class Info extends Component {
       }
     })
 
+
+    
+
     // let packPrice = ''
     // await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {
     //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
@@ -1406,7 +1430,7 @@ class Info extends Component {
       payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
       callback:()=>{
         this.showProductModalFunc(2);
-        form.setFieldsValue({
+        const obj = {
           productId: id,
           productNo,
           productColorName,
@@ -1426,7 +1450,9 @@ class Info extends Component {
           productLineCoefficientQuotation,
           specification,
           unitOfLength
-        });
+        }
+        form.setFieldsValue(obj);
+        this.countPrice(obj)
       }
     })
   };
