@@ -30,7 +30,6 @@ class TerminalSelected extends PureComponent {
 
   // eslint-disable-next-line react/sort-comp
   handleChange = value => {
-    console.log('terminalSelected onChange');
     const { onChange, onSelectEndName } = this.props;
     const { records } = this.state;
     this.setState({
@@ -206,7 +205,6 @@ class TerminalSelected extends PureComponent {
           else {
             const { onSelectEndName } = this.props;
             if (onSelectEndName) {
-              console.log(" find select ",item)
               if (item) {
                 let select = '';
                 const r = records.filter(v => {
