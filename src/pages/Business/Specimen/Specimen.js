@@ -280,14 +280,14 @@ class Specimen extends Component {
       title: () => {
         return (
           <TableSortView
-            column="客户代号"
-            field="custoer_product_no"
+            column="客户货号"
+            field="customer_product_no"
             sortChange={this.sortFilter}
           />
         );
       },
-      dataIndex: 'custoerProductNo',
-      key: 'custoerProductNo',
+      dataIndex: 'customerProductNo',
+      key: 'customerProductNo',
       width: 100,
     },
 
