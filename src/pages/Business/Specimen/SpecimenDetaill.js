@@ -42,6 +42,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import UploadImg from '@/components/UploadImg';
 import { defaultImages } from '@/utils/utils';
+import ProductForm from '@/pages/Business/Specimen/components/ProductForm';
 
 const { Description } = DescriptionList;
 
@@ -102,6 +103,7 @@ class SpecimenDetaill extends Component {
       productParams: {},
       isEditItem: false,
       showItem: {},
+      swiProductvisible:false
     };
   }
 
@@ -157,7 +159,7 @@ class SpecimenDetaill extends Component {
   }
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
+    const { imageObject, drawVisible, visible, showItem, isLoading, isAdd ,swiProductvisible} = this.state;
     const { isProductUpdate, productUpdateloading, productSaveloading } = this.props;
 
     const modalFooter = isAdd
@@ -410,12 +412,9 @@ class SpecimenDetaill extends Component {
                     icon="retweet"
                     disabled={!showItem || showItem === '' || !isProductUpdate}
                     onClick={() => {
-                      ModalConfirm({
-                        content: '确定转产品吗？',
-                        onOk: () => {
-                          this.handleTransferProduct();
-                        },
-                      });
+                      this.setState({
+                        swiProductvisible:true
+                      })
                     }}
                   >
                     转产品
@@ -441,6 +440,13 @@ class SpecimenDetaill extends Component {
               >
                 {this.getProductModalContent()}
               </Modal>
+
+                 <ProductForm
+                   title='转产品'
+                   visible={swiProductvisible}
+                   submit={this.handleSwiProductSave}
+                   cancle={this.handleSwiProductCancle}
+                 />
             </Card>
           </div>
         </div>
@@ -870,8 +876,10 @@ class SpecimenDetaill extends Component {
           </Row>
           <Modal
             maskClosable={false}
-            {...modalCropperFooter}
             width={740}
+            okText='保存'
+            onOk={this.handleCropSubmit}
+            onCancel={this.handleCropCancle}
             destroyOnClose
             visible={cropperVisible}
           >
@@ -1184,15 +1192,21 @@ class SpecimenDetaill extends Component {
     });
   };
 
-  handleTransferProduct = () => {
+  handleTransferProduct = (modalNo) => {
     const { selectProductData = [] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
+    const item = selectProductData[0];
+    const parmas ={
+      id:item.id,
+      mould:modalNo.mould
+    }
+    // console.log(' handleTransferProduct ', item, modalNo,parmas);
     const { dispatch } = this.props;
     dispatch({
       type: 'specimen/transferProduct',
-      payload: ids,
+      payload: parmas,
     });
   };
 
@@ -1291,6 +1305,19 @@ class SpecimenDetaill extends Component {
       uploadFileUid: '',
     });
   };
+
+  handleSwiProductSave=(modal)=>{
+    this.handleTransferProduct(modal);
+    this.setState({
+      swiProductvisible:false
+    })
+  }
+
+  handleSwiProductCancle=()=>{
+    this.setState({
+      swiProductvisible:false
+    })
+  }
 
   handleCropDone = () => {
     this.setState({
