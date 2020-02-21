@@ -1802,7 +1802,7 @@ class ProductDetail extends Component {
       visible: true,
       isAdd:true,
       fileList: this.state.showItem.pictures, // 测试真实数据重接口获取
-      isEditItem: true,
+      isEditItem: false,
     });
 
     this.state.isEditItem = true;
