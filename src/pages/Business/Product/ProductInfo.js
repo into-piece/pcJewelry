@@ -228,7 +228,7 @@ class ProductInfo extends Component {
   loadProduct = () => {
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
-    const params = { ...searchProductParams };
+    const params = {status:0, ...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
     if (this.state.productSorts.length > 0) {

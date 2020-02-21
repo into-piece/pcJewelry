@@ -123,7 +123,7 @@ const extraArr = [
   {
     key: 'newBomList',
     path: '/list ',
-    prefix1: `${env}/business/develop.newbom`,
+    prefix1: `${env}/business/develop.newbom/develop-new-bom`,
   },
 ];
 export default { serviceArr, extraArr };

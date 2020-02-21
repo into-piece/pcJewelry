@@ -70,7 +70,7 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-    bomlist: [],
+    newBomList: [],
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
     listGemSetProcessDropDown: [], // 镶石工艺下拉
@@ -165,7 +165,6 @@ export default {
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
       const response = yield call(servicesConfig[name], params || {});
-      debugger
       const key = key1 || 'zhName';
       const value = value1 || 'id';
 

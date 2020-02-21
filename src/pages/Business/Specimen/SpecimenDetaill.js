@@ -554,12 +554,11 @@ class SpecimenDetaill extends Component {
                   }
                   style={{ width: 180 }}
                   placeholder="请输入"
-                  onSelect={v => {
-                    if (v && v.brandNo) {
-                      this.state.cNoBrandNo = v.brandNo;
-                      this.parseProductNo();
-                    }
-                  }}
+                  // onSelect={v => {
+                  //   if (v && v.brandNo) {
+                  //     this.parseProductNo();
+                  //   }
+                  // }}
                   content={current.brand}
                 />
               )}
@@ -827,22 +826,17 @@ class SpecimenDetaill extends Component {
                     }
                     style={{ width: 180 }}
                     content={current.customerId}
-                    onSelectEndName={(file, customerCombine) => {
-                      if (file && customerCombine) {
-                        // console.log('end name ', file);
-                        this.setState(
-                          {
-                            customerShotName: customerCombine,
-                            customerNo: file,
-                          },
-                          () => {
-                            this.parseProductNo2();
-                          }
-                        );
-                        // setFieldsValue({
-                        //   customerShotName: customerCombine,
-                        // });
-                      }
+                    onSelectEndName={(v,no,name) => {
+                      // debugger
+                      this.setState(
+                        {
+                          customerNo: no,
+                          customerShotName:name
+                        },
+                        () => {
+                          this.parseProductNo();
+                        }
+                      );
                     }}
                   />
                 )}
@@ -962,7 +956,6 @@ class SpecimenDetaill extends Component {
             });
           },
         });
-        // todo
 
         this.setState({
           isEdit: true,
@@ -1068,7 +1061,7 @@ class SpecimenDetaill extends Component {
           });
           // console.log(" update data ",showItem)
         }
-        this.fetchImages(showItem);
+        // this.fetchImages(showItem);
 
         _this.setState({
           isLoading: false,
@@ -1310,35 +1303,30 @@ class SpecimenDetaill extends Component {
 
   parseProductNo = () => {
     const {
-      cNoColorCode = '',
-      cNoBrandNo = '',
       cNofCode = '',
       cNofCodezhName = '',
-      cNoUnitCode = '',
+      customerNo='',
       cNomainMold = '',
       cNozhNameUniCode,
       cNoenNameUniCode,
       cNoPercentageZhName = '',
       cNoPercentageEnName = '',
-      cNoCustomerCombine = '',
     } = this.state;
     const {
       form: { setFieldsValue ,getFieldValue},
     } = this.props;
-    const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     let productNo;
-    const newBrandNo = getFieldValue("productNo");
+    const newProduct = getFieldValue("productNo");
 
-    if(cNoBrandNo){
-      if (newBrandNo.split("-").length === 2) {
-        productNo = `${cNoBrandNo}-${newBrandNo.split("-")[1]}`;
-      }else if(newBrandNo.split("-").length === 1){
-        productNo = `${cNoBrandNo}-${newBrandNo}`;
+    if(customerNo){
+      if (newProduct.split("-").length === 2) {
+        productNo = `${customerNo}-${newProduct.split("-")[1]}`;
+      }else if(newProduct.split("-").length === 1){
+        productNo = `${customerNo}-${newProduct}`;
       }
     }else{
-      productNo = newBrandNo;
+      productNo = newProduct;
     }
-    // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别

@@ -65,7 +65,7 @@ const BtnGroup = ({ arr }) => {
     materialList: model.materialList,
     processList: model.processList,
     processDropdown: model.processDropdown,
-    bomlist: model.bomlist,
+    bomlist: model.newBomList,
     choosenProccessData: model.choosenProccessData,
     selectedProccessRowKeys: model.selectedProccessRowKeys,
     proccessPagination: model.proccessPagination,
@@ -274,8 +274,6 @@ class MiddleTable extends Component {
                 ))}
                 </Select>
               </div>) : null}
-
-            {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null}
           </div>
 
           <Table
