@@ -282,7 +282,8 @@ class Info extends Component {
     quoteDateFrom: null,
     quoteDateTo: null,
     quoteDate: null,
-    quotePriceUSA:''// 美元的主材价
+    quotePriceUSA:'',// 美元的主材价
+    currencyArr:[]
   };
 
   componentDidMount() {
@@ -394,7 +395,7 @@ class Info extends Component {
         },
       ];
     }
-    if(rightMenu === 2){
+    if(rightMenu === 2 && currencyArr.length>0){
       const listTodayRate =currencyArr.filter(item=>item.currency === choosenRowData.currency )        
       this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
     }
@@ -408,12 +409,14 @@ class Info extends Component {
   };
 
   setCurrency = () => {
-    serviceObj.listTodayRate().then(res=>{
+    serviceObj.z().then(res=>{
       const {  rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
         this.setState({
           currencyArr:res.body.records
         })
+      }else{
+        notification.error({message:'无汇率数据，无法自动计算'})
       }
     })   
   }
