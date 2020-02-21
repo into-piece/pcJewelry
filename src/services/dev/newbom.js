@@ -28,7 +28,7 @@ const serviceArr = [
 
 const extraArr = [
   { key: 'getsample', path: '/listProduct', prefix1 },
-  { key: 'materialList', path: '/list', prefix1: prefix2 },
+  { key: 'newBomMaterialList', path: '/list', prefix1: prefix2 },
   { key: 'listMstWordbook', path: '/listMstWordbook', prefix1: `${env  }/sys/mst-wordbook` },
   {
     key: 'listFilmSettingsDropDown',
@@ -71,9 +71,9 @@ const extraArr = [
     prefix1: `${env  }/sys.user/sys-role/listDeptDropDown`,
   },
   {
-    key: 'processDropdown',
+    key: 'newBomProcessDropdown',
     path: '/list',
-    prefix1: `${env}/business/develop.bom/develop-bom-work-flow`,
+    prefix1: `${env}/business/develop.newbom/develop-new-bom-work-flow`,
   },
   {
     key: 'flowlistDropDown',
@@ -116,9 +116,14 @@ const extraArr = [
     prefix1: `${env}/business/develop.die/develop-child-die-set`,
   },
   {
-    key: 'updateProductExplain',
-    path: '/updateProductExplain ',
-    prefix1: `${env}/business/develop.bom/develop-bom`,
+    key: 'newBomUpdateSampletExplain',
+    path: '/updateSampleExplain ',
+    prefix1: `${env}/business/develop.newbom/develop-new-bom`,
+  },
+  {
+    key: 'newBomList',
+    path: '/list ',
+    prefix1: `${env}/business/develop.newbom`,
   },
 ];
 export default { serviceArr, extraArr };

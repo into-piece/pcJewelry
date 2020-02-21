@@ -76,7 +76,7 @@ const sample = [
   },
   {
     key: '说明',
-    value: 'productExplain',
+    value: 'sampleExplain',
   },
   { key: '新增人', value: 'createUser' },
   { key: '新增时间', value: 'createTime' },

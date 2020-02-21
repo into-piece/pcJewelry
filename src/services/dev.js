@@ -214,6 +214,7 @@ const resultArr = [
 ];
 
 // console.log(resultArr, '============')
+// debugger
 
 // 请求url配置
 const outPutObject = {};
@@ -228,6 +229,6 @@ resultArr.forEach(({ key, path, prefix1 }) => {
     });
   };
 });
-// console.log(outPutObject)
+console.log(outPutObject)
 
 export default outPutObject;

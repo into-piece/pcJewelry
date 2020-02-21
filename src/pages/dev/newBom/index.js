@@ -247,7 +247,7 @@ class Index extends Component {
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
       payload: {
-        name: 'processDropdown',
+        name: 'newBomProcessDropdown',
         key1: 'processName',
         value1: 'processId',
         params: { ...params, bomId: selectedBom.id },
@@ -1745,7 +1745,7 @@ class Index extends Component {
 
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
-      payload: { params: { pid: choosenRowData.id, ...params }, key1: 'bName', value1: 'id', name: 'bomlist' },
+      payload: { params: { pid: choosenRowData.id, ...params }, key1: 'bName', value1: 'id', name: 'newBomList' },
       callback: obj => {
         console.log(obj, '======obj');
         const selectedBom = obj || { id: undefined };
@@ -1876,10 +1876,10 @@ class Index extends Component {
   // 控制说明弹窗 type = 1出现
   showExplaintionModalFunc = (type = 1) => {
     if (type === 1) {
-      const { choosenRowData: { productExplain } } = this.props;
-      if (productExplain) {
+      const { choosenRowData: { sampleExplain } } = this.props;
+      if (sampleExplain) {
         this.setState({
-          productExplain,
+          sampleExplain,
         });
       }
     }
@@ -1948,8 +1948,8 @@ class Index extends Component {
 
   handleExplaintionModalOk = () => {
     const { choosenRowData } = this.props;
-    const { productExplain } = this.state;
-    serviceObj.updateProductExplain({ pId: choosenRowData.id, productExplain }).then(res => {
+    const { sampleExplain } = this.state;
+    serviceObj.newBomUpdateSampletExplain({ pId: choosenRowData.id, sampleExplain }).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
         notification.success({
@@ -1982,7 +1982,7 @@ class Index extends Component {
   onchangeExplaination = (e) => {
     console.log(e.target.value);
     this.setState({
-      productExplain: e.target.value,
+      sampleExplain: e.target.value,
     });
   };
 
@@ -1992,8 +1992,8 @@ class Index extends Component {
         className="addModal"
         style={{ width: '100%' }}
       >
-        <FormItem label='产品说明'>
-          <TextArea placeholder="请输入说明" value={this.state.productExplain} style={{ width: 800 }}
+        <FormItem label='样品说明'>
+          <TextArea placeholder="请输入说明" value={this.state.sampleExplain} style={{ width: 800 }}
                     onChange={this.onchangeExplaination}/>
         </FormItem>
       </div>
@@ -2308,7 +2308,7 @@ class Index extends Component {
                                       this.showExplaintionModalFunc(1);
                                     }}
                                   >
-                                    {choosenRowData.productExplain ? '编辑' : '新增'}说明
+                                    {choosenRowData.sampleExplain ? '编辑' : '新增'}说明
                                   </Button>
                                 }
                                 {this.bomPermission.includes('bom.dataSync')&&

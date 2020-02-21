@@ -13,7 +13,7 @@ import { getCurrentUser } from '../../../../utils/authority';
 
 const { Option } = Select;
 const { Group } = Radio;
-const FIRST_TAG = 'product';
+const FIRST_TAG = 'sample';
 const SECOND_TAG = 'material';
 const THIRD_TAG = 'productProcess';
 const menuRadio = [
@@ -26,7 +26,7 @@ const menuRadio = [
     key: 'productProcess',
   },
 ];
-const defaultModelName = 'devbom';
+const defaultModelName = 'devnewbom';
 
 const BtnGroup = ({ arr }) => {
   const bomPermission = getCurrentUser().permission.bom || []

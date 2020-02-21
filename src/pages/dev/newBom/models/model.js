@@ -165,6 +165,7 @@ export default {
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
       const response = yield call(servicesConfig[name], params || {});
+      debugger
       const key = key1 || 'zhName';
       const value = value1 || 'id';
 
@@ -255,7 +256,7 @@ export default {
     // 原料列表接口
     *getMaterialList({ payload, callback }, { call, put }) {
       const { params } = payload;
-      const response = yield call(materialList, params);
+      const response = yield call(newBomMaterialList, params);
       const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
