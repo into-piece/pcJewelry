@@ -165,7 +165,6 @@ export default {
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
       const response = yield call(servicesConfig[name], params || {});
-      debugger
       const key = key1 || 'zhName';
       const value = value1 || 'id';
 

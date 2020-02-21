@@ -1035,12 +1035,12 @@ class Index extends Component {
         };
 
         const addService =
-          rightActive === FIRST_TAG ? 'bomadd' :
+          rightActive === FIRST_TAG ? 'newBomadd' :
             rightActive === SECOND_TAG ?
-              'bomDtadd' :
+              'newBomDtadd' :
               notFlowIsProccess ?
-                'bomProcessadd' :
-                'workFlowadd';
+                'newBomProcessadd' :
+                'newWorkFlowadd';
 
         serviceObj[addService](params).then(res => {
           if (!res || !res.head) {
@@ -1691,7 +1691,7 @@ class Index extends Component {
     const str = type === 4 ? '审批' : '取消审批';
     dispatch({
       type: `${defaultModelName  }/commonOpration`,
-      payload: { params: [selectedBom.id], type, name: 'bom' },
+      payload: { params: [selectedBom.id], type, name: 'newBom' },
       callback: () => {
         debugger;
         notification.success({
@@ -1748,6 +1748,7 @@ class Index extends Component {
       payload: { params: { pid: choosenRowData.id, ...params }, key1: 'bName', value1: 'id', name: 'newBomList' },
       callback: obj => {
         console.log(obj, '======obj');
+        debugger
         const selectedBom = obj || { id: undefined };
         this.setState({
           selectedBom,
@@ -1992,7 +1993,7 @@ class Index extends Component {
         className="addModal"
         style={{ width: '100%' }}
       >
-        <FormItem label='样品说明'>
+        <FormItem label='新款说明'>
           <TextArea placeholder="请输入说明" value={this.state.sampleExplain} style={{ width: 800 }}
                     onChange={this.onchangeExplaination}/>
         </FormItem>

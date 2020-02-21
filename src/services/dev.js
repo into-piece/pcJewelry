@@ -213,8 +213,8 @@ const resultArr = [
   }, // bom数据同步接口
 ];
 
-// console.log(resultArr, '============')
-// debugger
+console.log(resultArr, '============')
+debugger
 
 // 请求url配置
 const outPutObject = {};
