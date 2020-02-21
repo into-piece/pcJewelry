@@ -409,7 +409,7 @@ class Info extends Component {
   };
 
   setCurrency = () => {
-    serviceObj.z().then(res=>{
+    serviceObj.listTodayRate().then(res=>{
       const {  rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
         this.setState({
