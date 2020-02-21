@@ -360,15 +360,15 @@ class Specimen extends Component {
 
   componentDidMount() {
     this.loadProduct();
-    window.onbeforeunload = () => {
-      console.log('onbeforeunload ');
-      const { showItem } = this.state;
-      if (showItem) {
-        // console.log('执行解锁3');
+    // window.onbeforeunload = () => {
+    //   console.log('onbeforeunload ');
+    //   const { showItem } = this.state;
+    //   if (showItem) {
+    //     // console.log('执行解锁3');
 
-        this.updateProductLock(showItem);
-      }
-    };
+    //     this.updateProductLock(showItem);
+    //   }
+    // };
   };
 
   // router.replace('/business/client/emptyView');
@@ -646,14 +646,14 @@ class Specimen extends Component {
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {
                       // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
+                      // this.updateProductLock(showItem);
                       // console.log('执行解锁 ： ',showItem.id);
                     }
 
                     if (item) {
-                      if (!showItem || showItem.id !== item.id)
+                      if (!showItem || showItem.id !== item.id){}
                         // this.fetchImages(item);
-                        this.loadProductLock(item);
+                        // this.loadProductLock(item);
                     }
                     this.state.showItem = item ? { ...item } : false
                     this.setState({

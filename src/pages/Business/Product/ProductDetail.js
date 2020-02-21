@@ -1336,30 +1336,22 @@ class ProductDetail extends Component {
                   showSearch
                   optionFilterProp="children"
                   filterOption={(input, option) => {
-                    debugger;
                     option.props.children &&
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
                   }}
                   content={current.customerId}
-                  onSelect={v => {
-                    const { customerNo, shotName } = v;
-                    const { setFieldsValue } = this.props.form;
-                    if (customerNo && shotName) {
-                      // console.log('end name ', file);
+                  onSelectEndName={(v,no,name) => {
+                      // debugger
                       this.setState(
                         {
-                          customerShotName: shotName,
-                          customerNo: shotName,
+                          customerNo: no,
+                          customerShotName:name
                         },
                         () => {
                           this.parseProductNo();
                         }
                       );
-                      setFieldsValue({
-                        customerShotName: shotName,
-                      });
-                    }
-                  }}
+                    }}
                 />
               )}
             </FormItem>
@@ -1928,6 +1920,7 @@ class ProductDetail extends Component {
       cNoPercentageEnName = '',
       customerNo = '',
       brand = '',
+      customerShotName,
     } = this.state;
     const {
       form: { setFieldsValue },
@@ -1937,7 +1930,7 @@ class ProductDetail extends Component {
     // const showMold = mouldNo !== '' ? mouldNo.substr(2, mouldNo.length) : '';
     // console.log(" showMold ",mouldNo,showMold)
     const productNo = `${brand +
-      productType}-${showMold}${productColor}${gemColor}${platingColor}${customerNo}`;
+      productType}-${showMold}${productColor}${gemColor}${platingColor}${customerShotName}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCodeehName}`;
     // 成色+宝石颜色+类别

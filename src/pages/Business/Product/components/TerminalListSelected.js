@@ -105,11 +105,12 @@ class TerminalSelected extends PureComponent {
       }).length === 0
     )
       list.unshift(empty);
-
+      // debugger
     return list.map(item => (
       // const str = item.name+'/'+item.namePinyin+"/"+item.nameEn
+      
       <Option key={item.id} value={item.id}>
-        { this.parseValue(item)}
+        { item.customerNo }
       </Option>
     ));
   };
@@ -213,6 +214,8 @@ class TerminalSelected extends PureComponent {
                   }
                 });
                 if (r.length > 0) select = r[0];
+                // onSelectEndName(select,this.parseValue(select), this.parseShortName(select));
+                // debugger
                 onSelectEndName(select,this.parseValue(select), this.parseShortName(select));
               } else {
                 // console.log("设置默认值 ")
