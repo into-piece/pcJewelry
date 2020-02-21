@@ -548,7 +548,7 @@ class Info extends Component {
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
     const { quote, form, rightMenu, dispatch,customerDropDownList } = this.props;
-    const {currencyArr,quotePriceUSA} = this.state
+    
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -582,6 +582,8 @@ class Info extends Component {
         quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
         currency: settlementCurrency||'USD',
       });
+
+      this.countQuotePrice(settlementCurrency||'USD')
     }
 
     if (type === 'endId') {
@@ -600,18 +602,24 @@ class Info extends Component {
     // 更换当前汇率
 
     if(type==='currency'){
-      const currencyArrNew = [...currencyArr,{currency:'RMB',bocConversionPrice:100}]
-      const listTodayRateArr =currencyArrNew.filter(item=>item.currency === value )       
-      const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
-      const listTodayRateUsaArr =currencyArrNew.filter(item=>item.currency === 'USD' )       
-      const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
-      // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
-      console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
-      form.setFieldsValue({
-        quotePrice: ((quotePriceUSA/listTodayRateUsa)*listTodayRateCur).toFixed(2)
-      })
+      this.countQuotePrice(value)
     }
   };
+
+  countQuotePrice = (value) => {
+    const {form} = this.props
+    const {currencyArr,quotePriceUSA} = this.state
+    const currencyArrNew = [...currencyArr,{currency:'RMB',bocConversionPrice:100}]
+    const listTodayRateArr =currencyArrNew.filter(item=>item.currency === value )       
+    const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
+    const listTodayRateUsaArr =currencyArrNew.filter(item=>item.currency === 'USD' )       
+    const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
+    // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
+    console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
+    form.setFieldsValue({
+      quotePrice: ((quotePriceUSA/listTodayRateUsa)*listTodayRateCur).toFixed(2)
+    })
+  }
 
   //  弹窗表单 check回调
   handleCheckChange = (e, value) => {
