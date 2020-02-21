@@ -369,7 +369,7 @@ export default {
       };
     },
     changeSearchParams2(state, action) {
-      debugger;
+      // debugger;
       return {
         ...state,
         searchParams: {

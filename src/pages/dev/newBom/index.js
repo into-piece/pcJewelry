@@ -97,7 +97,7 @@ const { Column, ColumnGroup } = Table;
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
     materialNoSearchParams: model.materialNoSearchParams,
-    bomlist: model.bomlist,
+    bomlist: model.newBomList,
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
     processDropdown: model.processDropdown,
@@ -1016,7 +1016,7 @@ class Index extends Component {
       params.materialId = materialNoChoosenRowData.id||choosenRowDataSecond.materialId;
       params.inventoryWeight = inventoryWeight||choosenRowDataSecond.inventoryWeight;
       console.log(singleWeight,'=======singleWeight')
-      debugger
+      // debugger
       params.singleWeight = singleWeight ||choosenRowDataSecond&&choosenRowDataSecond.singleWeight;
     }
     form.validateFields(fieldslist, (err, values) => {
@@ -1693,7 +1693,7 @@ class Index extends Component {
       type: `${defaultModelName  }/commonOpration`,
       payload: { params: [selectedBom.id], type, name: 'newBom' },
       callback: () => {
-        debugger;
+        // debugger;
         notification.success({
           message: `${str  }成功`,
         });
@@ -1748,7 +1748,7 @@ class Index extends Component {
       payload: { params: { pid: choosenRowData.id, ...params }, key1: 'bName', value1: 'id', name: 'newBomList' },
       callback: obj => {
         console.log(obj, '======obj');
-        debugger
+        // debugger
         const selectedBom = obj || { id: undefined };
         this.setState({
           selectedBom,
@@ -2265,7 +2265,6 @@ class Index extends Component {
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
                             if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
-                            if(selectedProccess&&selectedProccess.processName&&selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
                             return (
                               <Button
                                 key={tag}

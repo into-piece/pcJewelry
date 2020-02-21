@@ -70,7 +70,7 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-    bomlist: [],
+    newBomList: [],
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
     listGemSetProcessDropDown: [], // 镶石工艺下拉

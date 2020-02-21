@@ -1017,7 +1017,7 @@ class Index extends Component {
       params.materialId = materialNoChoosenRowData.id||choosenRowDataSecond.materialId;
       params.inventoryWeight = inventoryWeight||choosenRowDataSecond.inventoryWeight;
       console.log(singleWeight,'=======singleWeight')
-      debugger
+      // debugger
       params.singleWeight = singleWeight ||choosenRowDataSecond&&choosenRowDataSecond.singleWeight;
     }
     form.validateFields(fieldslist, (err, values) => {
@@ -1694,7 +1694,7 @@ class Index extends Component {
       type: `${defaultModelName  }/commonOpration`,
       payload: { params: [selectedBom.id], type, name: 'bom' },
       callback: () => {
-        debugger;
+        // debugger;
         notification.success({
           message: `${str  }成功`,
         });
