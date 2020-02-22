@@ -229,6 +229,7 @@ resultArr.forEach(({ key, path, prefix1 }) => {
     });
   };
 });
-console.log(outPutObject)
+// console.log(outPutObject)
+// debugger
 
 export default outPutObject;

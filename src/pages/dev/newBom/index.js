@@ -100,7 +100,7 @@ const { Column, ColumnGroup } = Table;
     bomlist: model.newBomList,
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
-    processDropdown: model.processDropdown,
+    processDropdown: model.newBomProcessDropdown,
     choosenProccessData: model.choosenProccessData,
     selectedProccessRowKeys: model.selectedProccessRowKeys,
     proccessPagination: model.proccessPagination,
@@ -127,7 +127,7 @@ const { Column, ColumnGroup } = Table;
 })
 class Index extends Component {
 
-  bomPermission = getCurrentUser().permission.bom || []
+  bomPermission = getCurrentUser().permission.newbom || []
 
   state = {
     addloading: false,
@@ -242,7 +242,7 @@ class Index extends Component {
   // 获取生产流程的下拉
   getWorkFlowDropdownList = (params) => {
     const { dispatch } = this.props;
-    const { selectedBom } = this.state;
+    const { selectedBom,selectedProccess } = this.state;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
@@ -1721,13 +1721,16 @@ class Index extends Component {
 
   // 获取原料信息列表
   getMaterialList = params => {
+    // debugger
     console.log(params, '==========');
     const { selectedBom } = this.state;
     const { dispatch, paginationSecond,choosenRowDataSecond } = this.props;
+    // debugger
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
       payload: { params: { BomId: selectedBom.id, ...paginationSecond, ...params } },
       callback:(data)=>{
+        // debugger
         if(choosenRowDataSecond.id){
           const arr = data.filter(({id})=>id===choosenRowDataSecond.id)||[]
           arr.length>0&& dispatch({
@@ -1791,7 +1794,7 @@ class Index extends Component {
     };
     dispatch({
       type: `${defaultModelName}/commonOpration`,
-      payload: { params: sendParams, type: 1, name: 'bomProcess', listName: 'processList' },
+      payload: { params: sendParams, type: 1, name: 'newBomProcess', listName: 'processList' },
     });
   };
 
@@ -2134,13 +2137,13 @@ class Index extends Component {
         key: '取消审批',
         fn: cancelVerify,
         disabled: !selectedBom.id || ~~selectedBom.status === 0,
-        permissionConfig:'raw.revoke'
+        permissionConfig:'newbom.raw.revoke'
       },
       {
         key: '审批BOM',
         fn: verifyBom,
         disabled: !selectedBom.id || ~~selectedBom.status === 2,
-        permissionConfig:'raw.approve'
+        permissionConfig:'newbom.raw.approve'
       },
       // {
       //   key: '导出BOM',
@@ -2152,7 +2155,7 @@ class Index extends Component {
         key: '打印BOM',
         fn: printBom,
         disabled: !selectedBom.id,
-        permissionConfig:'bom.print'
+        permissionConfig:'newbom.bom.print'
       },
     ];
 
@@ -2160,13 +2163,13 @@ class Index extends Component {
       {
         key: '批量新增',
         fn: addProccess,
-        permissionConfig:'flow.add'
+        permissionConfig:'newbom.flow.add'
       },
       {
         key: '删除流程',
         fn: deleteProccess,
         disabled: !(selectedProccess && selectedProccess.processId),
-        permissionConfig:'flow.del'
+        permissionConfig:'newbom.flow.del'
       },
     ];
     const opration = rightActive === THIRD_TAG ? secondProccessOprationArr : secondOprationArr;
@@ -2264,7 +2267,7 @@ class Index extends Component {
                           }}
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
-                            if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
+                            if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'newbom.bom':rightActive===SECOND_TAG?'newbom.raw':'newbom.process'}.${permission}`))return null
                             return (
                               <Button
                                 key={tag}
@@ -2284,7 +2287,7 @@ class Index extends Component {
                           {
                             rightActive === FIRST_TAG ?
                               <React.Fragment>
-                                {this.bomPermission.includes('bom.copy')&&
+                                {this.bomPermission.includes('newbom.bom.copy')&&
                                   <Button
                                     className={styles.buttomControl}
                                     type="primary"
@@ -2298,7 +2301,7 @@ class Index extends Component {
                                     复制新增
                                   </Button>
                                 }
-                                {this.bomPermission.includes('bom.desc')&&
+                                {this.bomPermission.includes('newbom.bom.desc')&&
                                   <Button
                                     className={styles.buttomControl}
                                     type={'primary'}
@@ -2311,7 +2314,7 @@ class Index extends Component {
                                     {choosenRowData.sampleExplain ? '编辑' : '新增'}说明
                                   </Button>
                                 }
-                                {this.bomPermission.includes('bom.dataSync')&&
+                                {this.bomPermission.includes('newbom.bom.dataSync')&&
                                 <Button
                                   className={styles.buttomControl}
                                   type="primary"

@@ -18,6 +18,7 @@ const {
   bomapprove,
   boomrevoke,
   materialList,
+  getMaterialList,
   productBomRevokeListApi,
   processList,
   listBasicSpecificationSettingsDropDown,
@@ -82,6 +83,7 @@ export default {
     materialNoList:[],
     materialNoChoosenRowData:{id:''},
     materialSelectedKeys:[],
+    newBomProcessDropdown:[],
 
     sysProductSelectedBom:[],
     productBomRevokeList:[],
@@ -254,8 +256,10 @@ export default {
 
     // 原料列表接口
     *getMaterialList({ payload, callback }, { call, put }) {
+      // debugger
       const { params } = payload;
-      const response = yield call(newBomMaterialList, params);
+      const response = yield call(getMaterialList, params);
+      
       const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',
