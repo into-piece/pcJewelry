@@ -461,7 +461,7 @@ class Specimen extends Component {
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
 
-    const params = { bomStatus:0,...searchProductParams };
+    const params = { status:0,...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
 
