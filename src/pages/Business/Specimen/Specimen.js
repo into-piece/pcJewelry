@@ -407,9 +407,19 @@ class Specimen extends Component {
 
 
   onSelectRowClass = (record, index) => {
-    let color = specimen.row_normal2;
-    if (index % 2 == 0) {
-      color = specimen.row_normal;
+
+    let color;
+
+    if (index % 2 === 0) {
+      if (record.bomStatus === '2')
+        color = specimen.row_normal_red;
+      else
+        color = specimen.row_normal;
+    } else {
+      if (record.bomStatus === '2')
+        color = specimen.row_normal2_red;
+      else
+        color = specimen.row_normal2;
     }
     return color;
   };
