@@ -410,7 +410,7 @@ class SpecimenDetaill extends Component {
                     size="small"
                     type="primary"
                     icon="retweet"
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    disabled={!isBomStatus||!showItem || showItem === '' || !isProductUpdate}
                     onClick={() => {
                       this.setState({
                         swiProductvisible:true
