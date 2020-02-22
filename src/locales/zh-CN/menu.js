@@ -26,6 +26,7 @@ export default {
   'menu.erp.dev.dieSet':'胶膜管理',
   'menu.erp.dev.dieSetChild':'胶膜明细',
   'menu.erp.dev.bom': '产品BOM',
+  'menu.erp.dev.newBom': '新款BOM',
   'menu.erp.dev.material': '原料信息',
 
 

@@ -271,7 +271,8 @@ const productSearchParams = [
     searchParams: quote.searchParams,
     searchDetailParams: quote.searchDetailParams,
     endCustomerList:quote.endCustomerList,
-    searchProductParams:quote.searchProductParams
+    searchProductParams:quote.searchProductParams,
+    customerDropDownList:quote.customerDropDownList
   };
 })
 class Info extends Component {
@@ -281,6 +282,8 @@ class Info extends Component {
     quoteDateFrom: null,
     quoteDateTo: null,
     quoteDate: null,
+    quotePriceUSA:'',// 美元的主材价
+    currencyArr:[]
   };
 
   componentDidMount() {
@@ -290,7 +293,7 @@ class Info extends Component {
   // 初始化表单数据
   initDropdownReq = () => {
     const { dispatch } = this.props;
-        // this.unLockEdit("6ededc36-3322-4232-b0dd-183a4cfdf9a3")
+        // this.unLockEdit("424f66d2-2cff-4312-8a0e-67ccd3332589")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown',
@@ -303,6 +306,9 @@ class Info extends Component {
 
     // 获取初始表单数据
     this.getList({ sendReq: 'currentQuote' });
+
+    // 获取汇率数组
+    this.setCurrency()
   }
 
   // 获取对应key=》页面进行数据请求
@@ -343,8 +349,9 @@ class Info extends Component {
     });
   };
 
-  openAddModal = () => {
+  openAddModal = (isEdit) => {
     const { rightMenu, dispatch, form, choosenRowData } = this.props;
+    const {currencyArr} = this.state
     const isHead = rightMenu === 1;
     if (isHead) {
       dispatch({
@@ -363,15 +370,19 @@ class Info extends Component {
       payload: {key:choosenRowData.customerId},
     });
 
-    getMainMaterialPrice().then(res => {
-      const { head, body } = res;
-      if (head.rtnCode === '000000' && body.records.length > 0) {
-        const { silver } = body.records[0];
-        form.setFieldsValue({
-          quotePrice: silver,
-        });
-      }
-    });
+
+    if(!isEdit){
+      // 获取到的是美元的主材价 还需
+      getMainMaterialPrice().then(res => {
+        const { head, body } = res;
+        if (head.rtnCode === '000000' && body.records.length > 0) {
+          const { silver } = body.records[0];
+          this.setState({
+            quotePriceUSA: silver,
+          })
+        }
+      });
+    }
 
     let arr = []
     if(rightMenu === 1){
@@ -384,18 +395,9 @@ class Info extends Component {
         },
       ];
     }
-    if(rightMenu === 2){
-      serviceObj.listTodayRate().then(res=>{
-        const { rtnMsg, rtnCode } = res.head;
-        if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
-          console.log(res.body.records,choosenRowData.currency);
-          
-          const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
-          console.log(listTodayRate)
-          
-          this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
-        }
-      })
+    if(rightMenu === 2 && currencyArr.length>0){
+      const listTodayRate =currencyArr.filter(item=>item.currency === choosenRowData.currency )        
+      this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
     }
 
     arr.length>0 && arr.forEach(item => {
@@ -405,6 +407,19 @@ class Info extends Component {
       });
     });
   };
+
+  setCurrency = () => {
+    serviceObj.listTodayRate().then(res=>{
+      const {  rtnCode } = res.head;
+      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+        this.setState({
+          currencyArr:res.body.records
+        })
+      }else{
+        notification.error({message:'无汇率数据，无法自动计算'})
+      }
+    })   
+  }
 
   countProductCost = (params) => {
     const {listTodayRate} = this.state
@@ -483,7 +498,7 @@ class Info extends Component {
           });
           if (!isEdit) return;
         }
-        this.openAddModal();
+        this.openAddModal(modalType === 'edit');
         this.setState({ modalType });
         break;
       case 'delete':
@@ -532,7 +547,8 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu, dispatch } = this.props;
+    const { quote, form, rightMenu, dispatch,customerDropDownList } = this.props;
+    
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -558,15 +574,16 @@ class Info extends Component {
         payload: { key: value },
       });
 
-      const { quote, form } = this.props;
-      const obj = quote.customerDropDownList.find(item => item.value === value);
-      const { shotName, currencyCode } = obj;
+      const obj = customerDropDownList.find(item => item.value === value);
+      const { shotName, settlementCurrency } = obj;
       const date = form.getFieldValue('quoteDate') || '';
       form.setFieldsValue({
         customerShotName: shotName,
         quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
-        currency: currencyCode,
+        currency: settlementCurrency||'USD',
       });
+
+      this.countQuotePrice(settlementCurrency||'USD')
     }
 
     if (type === 'endId') {
@@ -581,7 +598,28 @@ class Info extends Component {
         endShotName,
       });
     }
+
+    // 更换当前汇率
+
+    if(type==='currency'){
+      this.countQuotePrice(value)
+    }
   };
+
+  countQuotePrice = (value) => {
+    const {form} = this.props
+    const {currencyArr,quotePriceUSA} = this.state
+    const currencyArrNew = [...currencyArr,{currency:'RMB',bocConversionPrice:100}]
+    const listTodayRateArr =currencyArrNew.filter(item=>item.currency === value )       
+    const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
+    const listTodayRateUsaArr =currencyArrNew.filter(item=>item.currency === 'USD' )       
+    const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
+    // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
+    console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
+    form.setFieldsValue({
+      quotePrice: ((quotePriceUSA/listTodayRateUsa)*listTodayRateCur).toFixed(2)
+    })
+  }
 
   //  弹窗表单 check回调
   handleCheckChange = (e, value) => {
@@ -611,7 +649,7 @@ class Info extends Component {
   };
 
   // 计算单价
-  countPrice=(params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
+  countPrice = (params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
     const {form,choosenRowData} = this.props
     const {isWeighStones,quoteMethod,quotePrice} = choosenRowData
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
@@ -648,10 +686,6 @@ class Info extends Component {
         });
       }
     }
-    
-    
-    quoteMethod === 'H008001'
-    
   }
 
   handleDatePicker = (date, dateString) => {
@@ -676,18 +710,17 @@ class Info extends Component {
   };
 
   inputChange = (v, type) => {
-    const { form } = this.props;
-    const value  = v.target.value
+    const { form,choosenRowData,choosenDetailRowData } = this.props;
+    const {listTodayRate} = this.state
+    const productCostValue = this.state.productCostValue||choosenDetailRowData.productCostValue
+    const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
+    
+    const {value}  = v.target
+
+    // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
-    const qty = form.getFieldValue('qty') || '';
-    if (type === 'price' && qty) {
-      const quotedAmount = Number(v.target.value) * Number(qty);
-      form.setFieldsValue({
-        quotedAmount,
-      });
-    }
     if (type === 'qty' && price) {
-      const quotedAmount = Number(v.target.value) * Number(price);
+      const quotedAmount = Number(value) * Number(price);
       form.setFieldsValue({
         quotedAmount,
       });
@@ -701,6 +734,32 @@ class Info extends Component {
     const arr2 = ['nowCount','finishedWeight']
     arr2.includes(type) && this.countProductCost({[type]:value})
     
+
+    const  stonesWeight = Number(form.getFieldValue('stonesWeight')) || '';
+    const  finishedWeight = Number(form.getFieldValue('finishedWeight')) || '';
+    
+    // 计算主材重量  成品重量-石材重量
+    console.log(stonesWeight,finishedWeight,value,'==========成品重量-石材重量')
+    if(type === 'stonesWeight'&&finishedWeight){
+      form.setFieldsValue({
+        mainMaterialWeight: (finishedWeight - value).toFixed(2),
+      });
+    }
+    if(type === 'finishedWeight' && stonesWeight){
+      form.setFieldsValue({
+        mainMaterialWeight: (value - stonesWeight).toFixed(2),
+      });
+    }
+
+    console.log(productCostValue,customerQuoteCoeff,'=========productCostValue')
+    // 计算实际工费 计重
+    if(choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight'){
+      const productCost = (productCostValue*listTodayRate*value).toFixed(2)
+      form.setFieldsValue({
+        actualCount:(productCost*customerQuoteCoeff/value*listTodayRate).toFixed(2),
+        productCost
+      })
+    }
   };
 
   // 根据btn点击 返回对应弹窗内容
@@ -855,8 +914,9 @@ class Info extends Component {
     const addArr = rightMenu === 1 ? headList : detailList;
     const productTypeName = getFieldValue('productTypeName');
     const { currency, quoteMethod } = choosenRowData;
-    const productNo = form.getFieldValue('productNo') || '';
+    const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
+    const {isWeighStones} = choosenRowData
     const quoteMethodobj = {
       H008002: '克',
       H008001: '件',
@@ -914,21 +974,23 @@ class Info extends Component {
               number,
               priceUnit,
               disabled
-            }) => (
-              <div
-                className="addModal"
-                key={key}
-                style={value === 'productTypeName' ? { marginRight: 100 } : {}}
-              >
-                <FormItem
-                  label={
+            }) => {
+              if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
+              return(
+                <div
+                  className="addModal"
+                  key={key}
+                  style={value === 'productTypeName' ? { marginRight: 100 } : {}}
+                >
+                  <FormItem
+                    label={
                     priceUnit === 1 && rightMenu === 2
                       ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
                       priceUnit === 2 && rightMenu === 2?`${key+currency}/件`
                       : key
                   }
-                >
-                  {getFieldDecorator(value, {
+                  >
+                    {getFieldDecorator(value, {
                     rules: [
                       {
                         required: !noNeed,
@@ -962,9 +1024,9 @@ class Info extends Component {
                       disabled
                     })
                   )}
-                </FormItem>
-              </div>
-            )
+                  </FormItem>
+                </div>
+            )}
           )}
 
         {/* {rightMenu === 2 && productTypeName === '戒指' && (
@@ -1012,13 +1074,18 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData,productChoosenRowData } = this.props;
+    const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
+    const {productCostValue,customerQuoteCoeff} = this.state
     const isHead = rightMenu === 1;
     const str = isHead ? 'quotelist' : 'quoteDatialList';
     let params = {}; 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id ,productId:productChoosenRowData.id};
-      debugger;
+      params = { 
+        quoteHeadId: choosenRowData.id ,
+        productId:productChoosenRowData.id || choosenDetailRowData.productId ,
+        productCostValue: productCostValue|| choosenDetailRowData.productCostValue ,
+        customerQuoteCoeff:customerQuoteCoeff|| choosenDetailRowData.customerQuoteCoeff ,
+      };
     }
 
     form.validateFields((err, values) => {
@@ -1057,14 +1124,20 @@ class Info extends Component {
     };
 
     if (!isHead) {
-      params = { quoteHeadId: choosenRowData.id };
+      params = { 
+        id:choosenDetailRowData.id,
+        quoteHeadId: choosenRowData.id ,
+        productId: choosenDetailRowData.productId ,
+        productCostValue:  choosenDetailRowData.productCostValue ,
+        customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff ,
+      };
     }
 
     // 还要清空所选中项
-    dispatch({
-      type: 'quote/changeSelectedRowKeys',
-      payload: [],
-    });
+    // dispatch({
+    //   type: 'quote/changeSelectedRowKeys',
+    //   payload: [],
+    // });
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -1170,6 +1243,7 @@ class Info extends Component {
 
   // 弹窗确定提交回调
   handleModalOk = close => {
+    this.unLockEdit();
     const { modalType } = this.state;
     switch (modalType) {
       case 'plus':
@@ -1218,7 +1292,6 @@ class Info extends Component {
     });
   };
 
-  //
   unLockEdit = id => {
     const { choosenRowData } = this.props;
     serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {});
@@ -1241,7 +1314,7 @@ class Info extends Component {
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
-    const { choosenRowData, form ,dispatch} = this.props;
+    const { choosenRowData, form ,dispatch,productChoosenRowData} = this.props;
     const {
       id,
       productNo,
@@ -1258,7 +1331,8 @@ class Info extends Component {
       specification,
       unitOfLengthName,
       unitOfLength
-    } = this.props.productChoosenRowData;
+    } = productChoosenRowData;
+    const {listTodayRate} = this.state
     let lastCount = '0.00';
     let topCount = '0.00';
     let productLineCoefficientQuotation = '';
@@ -1308,6 +1382,47 @@ class Info extends Component {
       }
     });
 
+
+    // 获取计算明细的相关数据
+    serviceObj.getQuoteDtInit({key:id}).then(res=>{
+      const { rtnMsg, rtnCode } = res.head;
+      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+        console.log(res.body.records,'==========getQuoteDtInit')
+        const {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal} = res.body.records[0]
+
+        // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
+        let productCostValue = '0.00'
+
+        // 计算实际工费 计件情况下
+        if(choosenRowData.quoteMethod === 'H008001'){
+          actualCount = (productCost*customerQuoteCoeff*listTodayRate).toFixed(2)
+          productCostValue = (productCost*listTodayRate).toFixed(2)
+        }
+        if(choosenRowData.quoteMethod === 'H008002'){
+          actualCount = (productCost*customerQuoteCoeff/finishedWeight*listTodayRate).toFixed(2)
+          productCostValue = (productCost*listTodayRate*finishedWeight).toFixed(2)
+        }
+        
+        form.setFieldsValue({
+          productCost:productCostValue,
+          actualCount,
+          stonesWeight:stoneWeightTotal,
+          stonePrice:stonePriceTotal
+        })
+
+        this.setState({
+          productCostValue,
+          customerQuoteCoeff,
+        })
+        
+        // const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
+        // this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
+      }
+    })
+
+
+    
+
     // let packPrice = ''
     // await getLastPackPriceByProductId({ productId: id, customerId: choosenRowData.customerId }).then(res => {
     //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
@@ -1326,7 +1441,7 @@ class Info extends Component {
       payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
       callback:()=>{
         this.showProductModalFunc(2);
-        form.setFieldsValue({
+        const obj = {
           productId: id,
           productNo,
           productColorName,
@@ -1346,7 +1461,9 @@ class Info extends Component {
           productLineCoefficientQuotation,
           specification,
           unitOfLength
-        });
+        }
+        form.setFieldsValue(obj);
+        this.countPrice(obj)
       }
     })
   };

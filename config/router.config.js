@@ -277,6 +277,13 @@ export default [
                 component: './dev/bom',
                 routes: [],
               },
+              {
+                path: '/erp/dev/newBom',
+                name: 'bom',
+                icon: 'snippets',
+                component: './dev/newBom',
+                routes: [],
+              },
               //模框设定
               {
                 path: '/erp/dev/mould',

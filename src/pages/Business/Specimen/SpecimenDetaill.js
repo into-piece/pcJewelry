@@ -560,11 +560,11 @@ class SpecimenDetaill extends Component {
                   }
                   style={{ width: 180 }}
                   placeholder="请输入"
-                  onSelect={v => {
-                    if (v && v.brandNo) {
-                      this.parseProductNo();
-                    }
-                  }}
+                  // onSelect={v => {
+                  //   if (v && v.brandNo) {
+                  //     this.parseProductNo();
+                  //   }
+                  // }}
                   content={current.brand}
                 />
               )}
@@ -833,6 +833,7 @@ class SpecimenDetaill extends Component {
                     style={{ width: 180 }}
                     content={current.customerId}
                     onSelectEndName={(v,no,name) => {
+                      // debugger
                       this.setState(
                         {
                           customerNo: no,
@@ -1068,7 +1069,7 @@ class SpecimenDetaill extends Component {
           });
           // console.log(" update data ",showItem)
         }
-        this.fetchImages(showItem);
+        // this.fetchImages(showItem);
 
         _this.setState({
           isLoading: false,

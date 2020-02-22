@@ -11,6 +11,7 @@ import devRawUrls from './dev/devRawUrls';
 import devFlowUrls from './dev/devFlowUrls';
 import devFlowCostUrls from './dev/devFlowCostUrls';
 import devboom from './dev/bom';
+import devnewbom from './dev/newbom';
 import devDieUrls from './dev/devDieUrls';
 // import bom from './dev/bom';
 import { getCurrentUser } from '../utils/authority';
@@ -89,6 +90,16 @@ const bomlist = devboom.serviceArr.map(({ name, arr, path }) =>
 );
 console.log(bomlist);
 
+// 开发-新款bom
+const newBomList = devnewbom.serviceArr.map(({ name, arr, path }) =>
+  arr.map((item, index) => ({
+    key: name + rType[index + 1],
+    path: `/${path}/${item}`,
+    prefix1: `${env}/business`,
+  }))
+);
+console.log('newBomList',newBomList);
+
 const resultArr = [
   ...resultBasic.flat(),
   ...resultRaw.flat(),
@@ -96,7 +107,9 @@ const resultArr = [
   ...resultFLowCost.flat(),
   ...resultSet.flat(),
   ...bomlist.flat(),
+  ...newBomList.flat(),
   ...devboom.extraArr,
+  ...devnewbom.extraArr,
   { key: 'listGemSetProcessDropDown', path: '/gem-set-process/listGemSetProcessDropDown' },
   { key: 'listBasicMeasureUnitDropDown', path: '/measure-unit/listBasicMeasureUnitDropDown' },
   { key: 'listBasicShapeSettingsDropDown', path: '/shape-settings/listBasicShapeSettingsDropDown' },
@@ -201,6 +214,7 @@ const resultArr = [
 ];
 
 // console.log(resultArr, '============')
+// debugger
 
 // 请求url配置
 const outPutObject = {};
@@ -216,5 +230,6 @@ resultArr.forEach(({ key, path, prefix1 }) => {
   };
 });
 // console.log(outPutObject)
+// debugger
 
 export default outPutObject;
