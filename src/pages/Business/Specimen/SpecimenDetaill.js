@@ -161,7 +161,9 @@ class SpecimenDetaill extends Component {
   getDetailInfo = () => {
     const { imageObject, drawVisible, visible, showItem, isLoading, isAdd ,swiProductvisible} = this.state;
     const { isProductUpdate, productUpdateloading, productSaveloading } = this.props;
-    const isBomStatus = showItem.bomStatus==='2';
+    const isBomStatus = (showItem.bomStatus==='2' && showItem.turnProductStatus === '0');
+    const cancel = (showItem.status === '2' && showItem.bomStatus === '0');
+    
     const modalFooter = isAdd
       ? [
           <Button key="back" onClick={this.handleCancel}>
@@ -354,7 +356,8 @@ class SpecimenDetaill extends Component {
                           },
                         });
                       }}
-                      disabled={!showItem || showItem === '' || !isProductUpdate||isBomStatus}
+                      // disabled={!showItem || showItem === '' || !isProductUpdate||isBomStatus}
+                      disabled={!cancel}
                     >
                       取消审批
                     </Button>

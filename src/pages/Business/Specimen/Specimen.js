@@ -411,12 +411,12 @@ class Specimen extends Component {
     let color;
 
     if (index % 2 === 0) {
-      if (record.bomStatus === '2')
+      if (record.bomStatus === '2' && record.turnProductStatus === '0')
         color = specimen.row_normal_red;
       else
         color = specimen.row_normal;
     } else {
-      if (record.bomStatus === '2')
+      if (record.bomStatus === '2' && record.turnProductStatus === '0')
         color = specimen.row_normal2_red;
       else
         color = specimen.row_normal2;
@@ -461,7 +461,7 @@ class Specimen extends Component {
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
 
-    const params = { bomStatus:0,...searchProductParams };
+    const params = { status:0,...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
 
