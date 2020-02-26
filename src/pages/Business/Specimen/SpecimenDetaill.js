@@ -163,7 +163,7 @@ class SpecimenDetaill extends Component {
     const { isProductUpdate, productUpdateloading, productSaveloading } = this.props;
     const isBomStatus = (showItem.bomStatus==='2' && showItem.turnProductStatus === '0');
     const cancel = (showItem.status === '2' && showItem.bomStatus === '0');
-    
+
     const modalFooter = isAdd
       ? [
           <Button key="back" onClick={this.handleCancel}>
@@ -395,7 +395,10 @@ class SpecimenDetaill extends Component {
                     type="primary"
                     size="small"
                     icon="copy"
-                    disabled
+                    disabled={
+                      !showItem || showItem === '' || !isProductUpdate
+                    }
+                    onClick={this.handleCopySpecimen}
                   >
                     复制
                   </Button>
@@ -1194,6 +1197,23 @@ class SpecimenDetaill extends Component {
       type: 'specimen/freezeSpecimen',
       payload: { list: ids },
     });
+  };
+
+  handleCopySpecimen = () => {
+    const { item } = this.props;
+
+    this.resetParse();
+
+    this.setState({
+      current: item,
+      visible: true,
+      isAdd:true,
+      fileList: this.state.showItem.pictures, // 测试真实数据重接口获取
+      isEditItem: false,
+    });
+
+    this.state.isEditItem = true;
+    this.productRefresh();
   };
 
   handleTransferProduct = (modalNo) => {
