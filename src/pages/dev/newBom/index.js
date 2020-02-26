@@ -307,7 +307,7 @@ class Index extends Component {
         },
         {
           name: 'listCustomerDropDown',
-          key1: 'shotName',
+          key1: 'customerNo',
           value1: 'id',
         },
       ];
