@@ -1,0 +1,25 @@
+{
+
+
+  "headList": [
+
+    { "key": "用户名", "value": "userName" ,"noNeed": true, "type": 7 },
+    { "key": "中文名称", "value": "zhName" },
+    { "key": "英文名称", "value": "enName","noNeed": true},
+    { "key": "籍贯", "value": "nativePlace","noNeed": true },
+    { "key": "地址", "value": "address"  ,"noNeed": true},
+    { "key": "出生日期", "value": "birthdate","noNeed": true},
+    { "key": "身份证", "value": "idCard","noNeed": true },
+    { "key": "e-mail", "value": "email" ,"noNeed": true},
+    { "key": "宿舍", "value": "dorm","noNeed": true },
+    { "key": "手机号", "value": "tel","noNeed": true },
+    { "key": "电话", "value": "phone","noNeed": true},
+    { "key": "密码", "value": "password","noNeed": true ,
+      "inputType": "password"
+    },
+    { "key": "邮编", "value": "postcode","noNeed": true}
+
+
+  ]
+
+}
