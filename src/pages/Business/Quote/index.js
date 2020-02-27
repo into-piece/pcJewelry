@@ -617,7 +617,7 @@ class Info extends Component {
     // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
     console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
     form.setFieldsValue({
-      quotePrice: ((quotePriceUSA/listTodayRateUsa)*listTodayRateCur).toFixed(2)
+      quotePrice: ((quotePriceUSA*listTodayRateUsa)/listTodayRateCur).toFixed(2)
     })
   }
 
