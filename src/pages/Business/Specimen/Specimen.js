@@ -360,15 +360,15 @@ class Specimen extends Component {
 
   componentDidMount() {
     this.loadProduct();
-    window.onbeforeunload = () => {
-      console.log('onbeforeunload ');
-      const { showItem } = this.state;
-      if (showItem) {
-        // console.log('执行解锁3');
+    // window.onbeforeunload = () => {
+    //   console.log('onbeforeunload ');
+    //   const { showItem } = this.state;
+    //   if (showItem) {
+    //     // console.log('执行解锁3');
 
-        this.updateProductLock(showItem);
-      }
-    };
+    //     this.updateProductLock(showItem);
+    //   }
+    // };
   };
 
   // router.replace('/business/client/emptyView');
@@ -407,9 +407,19 @@ class Specimen extends Component {
 
 
   onSelectRowClass = (record, index) => {
-    let color = specimen.row_normal2;
-    if (index % 2 == 0) {
-      color = specimen.row_normal;
+
+    let color;
+
+    if (index % 2 === 0) {
+      if (record.bomStatus === '2' && record.turnProductStatus === '0')
+        color = specimen.row_normal_red;
+      else
+        color = specimen.row_normal;
+    } else {
+      if (record.bomStatus === '2' && record.turnProductStatus === '0')
+        color = specimen.row_normal2_red;
+      else
+        color = specimen.row_normal2;
     }
     return color;
   };
@@ -451,7 +461,7 @@ class Specimen extends Component {
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
 
-    const params = { ...searchProductParams };
+    const params = { status:0,...searchProductParams };
     params.current = productPage;
     params.size = defaultPageSize;
 
@@ -646,14 +656,14 @@ class Specimen extends Component {
                     const { showItem } = this.state;
                     if (showItem && showItem.id !== item.id) {
                       // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
+                      // this.updateProductLock(showItem);
                       // console.log('执行解锁 ： ',showItem.id);
                     }
 
                     if (item) {
-                      if (!showItem || showItem.id !== item.id)
+                      if (!showItem || showItem.id !== item.id){}
                         // this.fetchImages(item);
-                        this.loadProductLock(item);
+                        // this.loadProductLock(item);
                     }
                     this.state.showItem = item ? { ...item } : false
                     this.setState({

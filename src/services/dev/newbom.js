@@ -28,7 +28,7 @@ const serviceArr = [
 
 const extraArr = [
   { key: 'getsample', path: '/listProduct', prefix1 },
-  { key: 'newBomMaterialList', path: '/list', prefix1: prefix2 },
+  { key: 'getMaterialList', path: '/list',prefix1: prefix2 },
   { key: 'listMstWordbook', path: '/listMstWordbook', prefix1: `${env  }/sys/mst-wordbook` },
   {
     key: 'listFilmSettingsDropDown',
@@ -123,7 +123,7 @@ const extraArr = [
   {
     key: 'newBomList',
     path: '/list ',
-    prefix1: `${env}/business/develop.newbom`,
+    prefix1: `${env}/business/develop.newbom/develop-new-bom`,
   },
 ];
 export default { serviceArr, extraArr };

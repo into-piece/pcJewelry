@@ -18,6 +18,7 @@ const {
   bomapprove,
   boomrevoke,
   materialList,
+  getMaterialList,
   productBomRevokeListApi,
   processList,
   listBasicSpecificationSettingsDropDown,
@@ -70,7 +71,7 @@ export default {
     listBasicColourSetDropDown: [{ key: '', value: '' }],
     listMoldPositioningSettingsDropDown: [{ key: '', value: '' }],
     H016009: [{ key: '', value: '' }],
-    bomlist: [],
+    newBomList: [],
     listMstWordbook: [], // 原料类别下拉
     listFilmSettingsDropDown: [], // 模具号
     listGemSetProcessDropDown: [], // 镶石工艺下拉
@@ -82,12 +83,14 @@ export default {
     materialNoList:[],
     materialNoChoosenRowData:{id:''},
     materialSelectedKeys:[],
+    newBomProcessDropdown:[],
 
     sysProductSelectedBom:[],
     productBomRevokeList:[],
     productBomRevokeChoosenRowData:{id:''},
     productBomRevokeSelectedKeys:[],
     valuationClasslist:[{ 'key': '计重', 'value': 0 }, { 'key': '计件', 'value': 1 }],
+    flowlistDropDown:[],
   },
 
   effects: {
@@ -165,7 +168,6 @@ export default {
     *getDropdownList({ payload, callback }, { call, put }) {
       const { params, name, key1, value1 } = payload;
       const response = yield call(servicesConfig[name], params || {});
-      debugger
       const key = key1 || 'zhName';
       const value = value1 || 'id';
 
@@ -255,8 +257,10 @@ export default {
 
     // 原料列表接口
     *getMaterialList({ payload, callback }, { call, put }) {
+      // debugger
       const { params } = payload;
-      const response = yield call(newBomMaterialList, params);
+      const response = yield call(getMaterialList, params);
+      
       const list = response.head && response.head.rtnCode === '000000' ? response.body : initData;
       yield put({
         type: 'changeState',

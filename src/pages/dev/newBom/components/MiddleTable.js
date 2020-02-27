@@ -29,8 +29,9 @@ const menuRadio = [
 const defaultModelName = 'devnewbom';
 
 const BtnGroup = ({ arr }) => {
-  const bomPermission = getCurrentUser().permission.bom || []
-  console.log(arr,bomPermission,'===============bomPermission')
+  const bomPermission = getCurrentUser().permission.newbom || []
+  console.log(arr,bomPermission,'XXXXXXXXXXXXXXXXXXX=====bomPermission')
+  
   return (
     <div className={styles.btnGroup}>
       {arr.map(({ key, fn, disabled,permissionConfig}) => {
@@ -64,8 +65,8 @@ const BtnGroup = ({ arr }) => {
     searchParamsSecond: model.searchParamsSecond,
     materialList: model.materialList,
     processList: model.processList,
-    processDropdown: model.processDropdown,
-    bomlist: model.bomlist,
+    processDropdown: model.newBomProcessDropdown,
+    bomlist: model.newBomList,
     choosenProccessData: model.choosenProccessData,
     selectedProccessRowKeys: model.selectedProccessRowKeys,
     proccessPagination: model.proccessPagination,
@@ -274,8 +275,7 @@ class MiddleTable extends Component {
                 ))}
                 </Select>
               </div>) : null}
-
-            {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null}
+              <BtnGroup arr={secondOprationArr} />
           </div>
 
           <Table

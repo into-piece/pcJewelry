@@ -42,6 +42,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import UploadImg from '@/components/UploadImg';
 import { defaultImages } from '@/utils/utils';
+import ProductForm from '@/pages/Business/Specimen/components/ProductForm';
 
 const { Description } = DescriptionList;
 
@@ -102,6 +103,7 @@ class SpecimenDetaill extends Component {
       productParams: {},
       isEditItem: false,
       showItem: {},
+      swiProductvisible:false
     };
   }
 
@@ -157,9 +159,11 @@ class SpecimenDetaill extends Component {
   }
 
   getDetailInfo = () => {
-    const { imageObject, drawVisible, visible, showItem, isLoading, isAdd } = this.state;
+    const { imageObject, drawVisible, visible, showItem, isLoading, isAdd ,swiProductvisible} = this.state;
     const { isProductUpdate, productUpdateloading, productSaveloading } = this.props;
-
+    const isBomStatus = (showItem.bomStatus==='2' && showItem.turnProductStatus === '0');
+    const cancel = (showItem.status === '2' && showItem.bomStatus === '0');
+    
     const modalFooter = isAdd
       ? [
           <Button key="back" onClick={this.handleCancel}>
@@ -352,7 +356,8 @@ class SpecimenDetaill extends Component {
                           },
                         });
                       }}
-                      disabled={!showItem || showItem === '' || !isProductUpdate}
+                      // disabled={!showItem || showItem === '' || !isProductUpdate||isBomStatus}
+                      disabled={!cancel}
                     >
                       取消审批
                     </Button>
@@ -408,14 +413,11 @@ class SpecimenDetaill extends Component {
                     size="small"
                     type="primary"
                     icon="retweet"
-                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    disabled={!isBomStatus||!showItem || showItem === '' || !isProductUpdate}
                     onClick={() => {
-                      ModalConfirm({
-                        content: '确定转产品吗？',
-                        onOk: () => {
-                          this.handleTransferProduct();
-                        },
-                      });
+                      this.setState({
+                        swiProductvisible:true
+                      })
                     }}
                   >
                     转产品
@@ -441,6 +443,13 @@ class SpecimenDetaill extends Component {
               >
                 {this.getProductModalContent()}
               </Modal>
+
+                 <ProductForm
+                   title='转产品'
+                   visible={swiProductvisible}
+                   submit={this.handleSwiProductSave}
+                   cancle={this.handleSwiProductCancle}
+                 />
             </Card>
           </div>
         </div>
@@ -554,12 +563,11 @@ class SpecimenDetaill extends Component {
                   }
                   style={{ width: 180 }}
                   placeholder="请输入"
-                  onSelect={v => {
-                    if (v && v.brandNo) {
-                      this.state.cNoBrandNo = v.brandNo;
-                      this.parseProductNo();
-                    }
-                  }}
+                  // onSelect={v => {
+                  //   if (v && v.brandNo) {
+                  //     this.parseProductNo();
+                  //   }
+                  // }}
                   content={current.brand}
                 />
               )}
@@ -827,22 +835,17 @@ class SpecimenDetaill extends Component {
                     }
                     style={{ width: 180 }}
                     content={current.customerId}
-                    onSelectEndName={(file, customerCombine) => {
-                      if (file && customerCombine) {
-                        // console.log('end name ', file);
-                        this.setState(
-                          {
-                            customerShotName: customerCombine,
-                            customerNo: file,
-                          },
-                          () => {
-                            this.parseProductNo2();
-                          }
-                        );
-                        // setFieldsValue({
-                        //   customerShotName: customerCombine,
-                        // });
-                      }
+                    onSelectEndName={(v,no,name) => {
+                      // debugger
+                      this.setState(
+                        {
+                          customerNo: no,
+                          customerShotName:name
+                        },
+                        () => {
+                          this.parseProductNo();
+                        }
+                      );
                     }}
                   />
                 )}
@@ -877,8 +880,10 @@ class SpecimenDetaill extends Component {
           </Row>
           <Modal
             maskClosable={false}
-            {...modalCropperFooter}
             width={740}
+            okText='保存'
+            onOk={this.handleCropSubmit}
+            onCancel={this.handleCropCancle}
             destroyOnClose
             visible={cropperVisible}
           >
@@ -962,7 +967,6 @@ class SpecimenDetaill extends Component {
             });
           },
         });
-        // todo
 
         this.setState({
           isEdit: true,
@@ -1068,7 +1072,7 @@ class SpecimenDetaill extends Component {
           });
           // console.log(" update data ",showItem)
         }
-        this.fetchImages(showItem);
+        // this.fetchImages(showItem);
 
         _this.setState({
           isLoading: false,
@@ -1192,15 +1196,21 @@ class SpecimenDetaill extends Component {
     });
   };
 
-  handleTransferProduct = () => {
+  handleTransferProduct = (modalNo) => {
     const { selectProductData = [] } = this.props;
     const ids = selectProductData.map(v => {
       return v.id;
     });
+    const item = selectProductData[0];
+    const parmas ={
+      id:item.id,
+      mould:modalNo.mould
+    }
+    // console.log(' handleTransferProduct ', item, modalNo,parmas);
     const { dispatch } = this.props;
     dispatch({
       type: 'specimen/transferProduct',
-      payload: ids,
+      payload: parmas,
     });
   };
 
@@ -1300,6 +1310,19 @@ class SpecimenDetaill extends Component {
     });
   };
 
+  handleSwiProductSave=(modal)=>{
+    this.handleTransferProduct(modal);
+    this.setState({
+      swiProductvisible:false
+    })
+  }
+
+  handleSwiProductCancle=()=>{
+    this.setState({
+      swiProductvisible:false
+    })
+  }
+
   handleCropDone = () => {
     this.setState({
       cropperVisible: false,
@@ -1310,35 +1333,30 @@ class SpecimenDetaill extends Component {
 
   parseProductNo = () => {
     const {
-      cNoColorCode = '',
-      cNoBrandNo = '',
       cNofCode = '',
       cNofCodezhName = '',
-      cNoUnitCode = '',
+      customerNo='',
       cNomainMold = '',
       cNozhNameUniCode,
       cNoenNameUniCode,
       cNoPercentageZhName = '',
       cNoPercentageEnName = '',
-      cNoCustomerCombine = '',
     } = this.state;
     const {
       form: { setFieldsValue ,getFieldValue},
     } = this.props;
-    const showMold = cNomainMold !== '' ? cNomainMold.substr(2, cNomainMold.length) : '';
     let productNo;
-    const newBrandNo = getFieldValue("productNo");
+    const newProduct = getFieldValue("productNo");
 
-    if(cNoBrandNo){
-      if (newBrandNo.split("-").length === 2) {
-        productNo = `${cNoBrandNo}-${newBrandNo.split("-")[1]}`;
-      }else if(newBrandNo.split("-").length === 1){
-        productNo = `${cNoBrandNo}-${newBrandNo}`;
+    if(customerNo){
+      if (newProduct.split("-").length === 2) {
+        productNo = `${customerNo}-${newProduct.split("-")[1]}`;
+      }else if(newProduct.split("-").length === 1){
+        productNo = `${customerNo}-${newProduct}`;
       }
     }else{
-      productNo = newBrandNo;
+      productNo = newProduct;
     }
-    // const productNo = `${cNoBrandNo + cNofCode  }-${  showMold  }${cNoUnitCode  }${cNoColorCode  }${cNoCustomerCombine}`;
     const zhName = `${cNoPercentageZhName} ${cNozhNameUniCode} ${cNofCodezhName}`;
     const enName = `${cNoPercentageEnName} ${cNoenNameUniCode} ${cNofCode}`;
     // 成色+宝石颜色+类别

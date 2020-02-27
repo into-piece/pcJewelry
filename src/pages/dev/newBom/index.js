@@ -97,10 +97,10 @@ const { Column, ColumnGroup } = Table;
     searchParams: model.searchParams,
     searchParamsSecond: model.searchParamsSecond,
     materialNoSearchParams: model.materialNoSearchParams,
-    bomlist: model.bomlist,
+    bomlist: model.newBomList,
     processList: model.processList,
     listGemSetProcessDropDown: model.listGemSetProcessDropDown,
-    processDropdown: model.processDropdown,
+    processDropdown: model.newBomProcessDropdown,
     choosenProccessData: model.choosenProccessData,
     selectedProccessRowKeys: model.selectedProccessRowKeys,
     proccessPagination: model.proccessPagination,
@@ -127,7 +127,7 @@ const { Column, ColumnGroup } = Table;
 })
 class Index extends Component {
 
-  bomPermission = getCurrentUser().permission.bom || []
+  bomPermission = getCurrentUser().permission.newbom || []
 
   state = {
     addloading: false,
@@ -242,7 +242,7 @@ class Index extends Component {
   // 获取生产流程的下拉
   getWorkFlowDropdownList = (params) => {
     const { dispatch } = this.props;
-    const { selectedBom } = this.state;
+    const { selectedBom,selectedProccess } = this.state;
     // getDevList
     dispatch({
       type: `${defaultModelName}/getDropdownList`,
@@ -307,7 +307,7 @@ class Index extends Component {
         },
         {
           name: 'listCustomerDropDown',
-          key1: 'shotName',
+          key1: 'customerNo',
           value1: 'id',
         },
       ];
@@ -1016,7 +1016,7 @@ class Index extends Component {
       params.materialId = materialNoChoosenRowData.id||choosenRowDataSecond.materialId;
       params.inventoryWeight = inventoryWeight||choosenRowDataSecond.inventoryWeight;
       console.log(singleWeight,'=======singleWeight')
-      debugger
+      // debugger
       params.singleWeight = singleWeight ||choosenRowDataSecond&&choosenRowDataSecond.singleWeight;
     }
     form.validateFields(fieldslist, (err, values) => {
@@ -1035,12 +1035,12 @@ class Index extends Component {
         };
 
         const addService =
-          rightActive === FIRST_TAG ? 'bomadd' :
+          rightActive === FIRST_TAG ? 'newBomadd' :
             rightActive === SECOND_TAG ?
-              'bomDtadd' :
+              'newBomDtadd' :
               notFlowIsProccess ?
-                'bomProcessadd' :
-                'workFlowadd';
+                'newBomProcessadd' :
+                'newWorkFlowadd';
 
         serviceObj[addService](params).then(res => {
           if (!res || !res.head) {
@@ -1691,9 +1691,9 @@ class Index extends Component {
     const str = type === 4 ? '审批' : '取消审批';
     dispatch({
       type: `${defaultModelName  }/commonOpration`,
-      payload: { params: [selectedBom.id], type, name: 'bom' },
+      payload: { params: [selectedBom.id], type, name: 'newBom' },
       callback: () => {
-        debugger;
+        // debugger;
         notification.success({
           message: `${str  }成功`,
         });
@@ -1721,13 +1721,16 @@ class Index extends Component {
 
   // 获取原料信息列表
   getMaterialList = params => {
+    // debugger
     console.log(params, '==========');
     const { selectedBom } = this.state;
     const { dispatch, paginationSecond,choosenRowDataSecond } = this.props;
+    // debugger
     dispatch({
       type: `${defaultModelName}/getMaterialList`,
       payload: { params: { BomId: selectedBom.id, ...paginationSecond, ...params } },
       callback:(data)=>{
+        // debugger
         if(choosenRowDataSecond.id){
           const arr = data.filter(({id})=>id===choosenRowDataSecond.id)||[]
           arr.length>0&& dispatch({
@@ -1748,6 +1751,7 @@ class Index extends Component {
       payload: { params: { pid: choosenRowData.id, ...params }, key1: 'bName', value1: 'id', name: 'newBomList' },
       callback: obj => {
         console.log(obj, '======obj');
+        // debugger
         const selectedBom = obj || { id: undefined };
         this.setState({
           selectedBom,
@@ -1790,7 +1794,7 @@ class Index extends Component {
     };
     dispatch({
       type: `${defaultModelName}/commonOpration`,
-      payload: { params: sendParams, type: 1, name: 'bomProcess', listName: 'processList' },
+      payload: { params: sendParams, type: 1, name: 'newBomProcess', listName: 'processList' },
     });
   };
 
@@ -1992,7 +1996,7 @@ class Index extends Component {
         className="addModal"
         style={{ width: '100%' }}
       >
-        <FormItem label='样品说明'>
+        <FormItem label='新款说明'>
           <TextArea placeholder="请输入说明" value={this.state.sampleExplain} style={{ width: 800 }}
                     onChange={this.onchangeExplaination}/>
         </FormItem>
@@ -2133,13 +2137,13 @@ class Index extends Component {
         key: '取消审批',
         fn: cancelVerify,
         disabled: !selectedBom.id || ~~selectedBom.status === 0,
-        permissionConfig:'raw.revoke'
+        permissionConfig:'newbom.raw.revoke'
       },
       {
         key: '审批BOM',
         fn: verifyBom,
         disabled: !selectedBom.id || ~~selectedBom.status === 2,
-        permissionConfig:'raw.approve'
+        permissionConfig:'newbom.raw.approve'
       },
       // {
       //   key: '导出BOM',
@@ -2151,7 +2155,7 @@ class Index extends Component {
         key: '打印BOM',
         fn: printBom,
         disabled: !selectedBom.id,
-        permissionConfig:'bom.print'
+        permissionConfig:'newbom.bom.print'
       },
     ];
 
@@ -2159,13 +2163,13 @@ class Index extends Component {
       {
         key: '批量新增',
         fn: addProccess,
-        permissionConfig:'flow.add'
+        permissionConfig:'newbom.flow.add'
       },
       {
         key: '删除流程',
         fn: deleteProccess,
         disabled: !(selectedProccess && selectedProccess.processId),
-        permissionConfig:'flow.del'
+        permissionConfig:'newbom.flow.del'
       },
     ];
     const opration = rightActive === THIRD_TAG ? secondProccessOprationArr : secondOprationArr;
@@ -2263,8 +2267,7 @@ class Index extends Component {
                           }}
                         >
                           {btnGroup.map(({ name, tag, icon,permission }) => {
-                            if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'bom':rightActive===SECOND_TAG?'raw':'process'}.${permission}`))return null
-                            if(selectedProccess&&selectedProccess.processName&&selectedProccess.processName!==getCurrentUser().dept&&rightActive===THIRD_TAG)return
+                            if(!this.bomPermission.includes(`${rightActive===FIRST_TAG?'newbom.bom':rightActive===SECOND_TAG?'newbom.raw':'newbom.process'}.${permission}`))return null
                             return (
                               <Button
                                 key={tag}
@@ -2284,7 +2287,7 @@ class Index extends Component {
                           {
                             rightActive === FIRST_TAG ?
                               <React.Fragment>
-                                {this.bomPermission.includes('bom.copy')&&
+                                {this.bomPermission.includes('newbom.bom.copy')&&
                                   <Button
                                     className={styles.buttomControl}
                                     type="primary"
@@ -2298,7 +2301,7 @@ class Index extends Component {
                                     复制新增
                                   </Button>
                                 }
-                                {this.bomPermission.includes('bom.desc')&&
+                                {this.bomPermission.includes('newbom.bom.desc')&&
                                   <Button
                                     className={styles.buttomControl}
                                     type={'primary'}
@@ -2311,7 +2314,7 @@ class Index extends Component {
                                     {choosenRowData.sampleExplain ? '编辑' : '新增'}说明
                                   </Button>
                                 }
-                                {this.bomPermission.includes('bom.dataSync')&&
+                                {this.bomPermission.includes('newbom.bom.dataSync')&&
                                 <Button
                                   className={styles.buttomControl}
                                   type="primary"

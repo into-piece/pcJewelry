@@ -729,7 +729,7 @@ class Info extends Component {
     let params = {};
     if (!isHead) {
       params = { quoteHeadId: choosenRowData.id, productLineId };
-      debugger;
+      // debugger;
     }
 
     form.validateFields((err, values) => {
