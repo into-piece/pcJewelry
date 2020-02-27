@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { query as queryUsers, queryCurrent,queryUser,saveUserInfo } from '@/services/user';
 import { queryAllCity} from '@/services/api';
 import { testCurrentUser } from '../utils/utils';
 
@@ -8,9 +8,31 @@ export default {
   state: {
     list: [],
     currentUser: {},
+    loginUser:{}
   },
 
   effects: {
+
+    *queryUser({ payload }, { call, put }) {
+
+      let u={}
+      const response = yield call(queryUser);
+      const body = response.body;
+      const records = body?body.records:[];
+      if(records&&records.length>0)
+        u = records[0];
+
+      yield put({
+        type: 'changeState',
+        payload: { data: u,typeName: "loginUser"},
+      });
+    },
+
+    *saveUserInfo({ payload }, { call, put }) {
+
+      return yield call(saveUserInfo,payload);
+    },
+
     *fetch(_, { call, put }) {
 
       const response = yield call(queryUsers);
@@ -33,6 +55,14 @@ export default {
   },
 
   reducers: {
+    changeState(state, action) {
+      const { typeName, data } = action.payload;
+      return {
+        ...state,
+        [typeName]: data,
+      };
+    },
+
     save(state, action) {
       return {
         ...state,
