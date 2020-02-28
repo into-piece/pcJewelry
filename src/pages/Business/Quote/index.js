@@ -167,7 +167,9 @@ let clientContentColumns = [
 clientContentColumns = clientContentColumns.map(item => ({ ...item, sorter: true }));
 
 // 报价详情表头
-let customerColumns = [
+const returnCustomerColumns = (qm)=>{
+  const quoteMethod  = returnNameObj.quoteMethod[qm]
+  let  customerColumns = [
   {
     title: <div className={styles.row_normal2}>产品编号</div>,
     dataIndex: 'productNo',
@@ -179,35 +181,35 @@ let customerColumns = [
     key: 'custoerProductNo',
   },
   {
-    title: <div className={styles.row_normal2}>前次工费/克</div>,
+    title: <div className={styles.row_normal2}>前次工费/{quoteMethod}</div>,
     dataIndex: 'lastCount',
     key: 'lastCount',
   },
   {
-    title: <div className={styles.row_normal2}>实际工费/克</div>,
+    title: <div className={styles.row_normal2}>实际工费/{quoteMethod}</div>,
     dataIndex: 'actualCount',
     key: 'actualCount',
   },
   {
-    title: <div className={styles.row_normal2}>最高工费/克</div>,
+    title: <div className={styles.row_normal2}>最高工费/{quoteMethod}</div>,
     dataIndex: 'topCount',
     key: 'topCount',
   },
   {
-    title: <div className={styles.row_normal2}>此次工费/克</div>,
+    title: <div className={styles.row_normal2}>此次工费/{quoteMethod}</div>,
     dataIndex: 'nowCount',
 
     key: 'nowCount',
   },
 
   {
-    title: <div className={styles.row_normal2}>字印价/件</div>,
+    title: <div className={styles.row_normal2}>字印价/{quoteMethod}</div>,
     dataIndex: 'markingPrice',
     key: 'markingPrice',
   },
 
   {
-    title: <div className={styles.row_normal2}>包装价/件</div>,
+    title: <div className={styles.row_normal2}>包装价/{quoteMethod}</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
   },
@@ -217,8 +219,10 @@ let customerColumns = [
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
   },
-];
-customerColumns = customerColumns.map(item => ({ ...item, sorter: true }));
+  ]
+  customerColumns = customerColumns.map(item => ({ ...item, sorter: true }));
+  return customerColumns
+};
 
 // 报价主页的筛选参数
 const searchParamsArr = [
@@ -242,6 +246,29 @@ const productSearchParams = [
   { key: '产品编号', value: 'productNo' },
   { key: '客户货号', value: 'customerProductNo' },
 ];
+
+const carouselsettings = {
+  speed: 150,
+  initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
+};
+
+const getImages = pictures => {
+  const images = pictures && pictures.flatMap(e => e.picPath || e);
+  if (!images) return;
+  return images.map(v => (
+    <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+      <Zmage
+        alt="图片"
+        align="center"
+        className={styles.carousel_image}
+        src={v}
+        edge={20}
+        set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
+      />
+    </div>
+  ));
+};
+
 
 @Form.create()
 @connect(({ loading, quote }) => {
@@ -308,7 +335,7 @@ class Info extends Component {
     this.getList({ sendReq: 'currentQuote' });
 
     // 获取汇率数组
-    this.setCurrency()
+    this.setCurrency()    
   }
 
   // 获取对应key=》页面进行数据请求
@@ -363,11 +390,6 @@ class Info extends Component {
     dispatch({
       type: 'quote/getEndCustomerListDropDown',
       payload: { key: choosenRowData.customerId },
-    });
-    // 字印下拉
-    dispatch({
-      type: 'quote/getMarkinglistDropDown',
-      payload: {key:choosenRowData.customerId},
     });
 
 
@@ -875,28 +897,6 @@ class Info extends Component {
     return v===true?1:(v===false?0:Number.parseInt(v));
   }
 
-  getImages = pictures => {
-    const images = pictures && pictures.flatMap(e => e.picPath || e);
-    if (!images) return;
-    return images.map(v => (
-      <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
-        <Zmage
-          alt="图片"
-          align="center"
-          className={styles.carousel_image}
-          src={v}
-          edge={20}
-          set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
-        />
-      </div>
-    ));
-  };
-
-  carouselsettings = {
-    speed: 150,
-    initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
-  };
-
   // 获取新增/编辑弹窗内容
   getModalContent = () => {
     const {
@@ -953,8 +953,8 @@ class Info extends Component {
             </div>
 
             <div className={styles.carousel_content}>
-              <Carousel {...this.carouselsettings} key={`as${Math.random(2)}`}>
-                {this.getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
+              <Carousel {...carouselsettings} key={`as${Math.random(2)}`}>
+                {getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
               </Carousel>
             </div>
           </React.Fragment>
@@ -984,9 +984,10 @@ class Info extends Component {
                 >
                   <FormItem
                     label={
-                    priceUnit === 1 && rightMenu === 2
-                      ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
-                      priceUnit === 2 && rightMenu === 2?`${key+currency}/件`
+                      rightMenu === 2?
+                        (priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
+                          priceUnit === 2 ?`${key+currency}/件`:
+                            `${key+currency}`)
                       : key
                   }
                   >
@@ -1862,12 +1863,15 @@ const GetRenderitem = ({ data, type, returnListName }) => {
     type === 1
       ? rowArr
       : [
+          { key: '产品编号', value: 'productNo' },
           ...detailList,
           { key: '新增人', value: 'createUser' },
           { key: '新增时间', value: 'createTime' },
           { key: '修改人', value: 'modifier' },
           { key: '修改时间', value: 'mtime' },
         ];
+
+  const {pictures} = data
   return (
     <div
       style={{ marginLeft: 10, marginTop: 10 }}
@@ -1875,6 +1879,14 @@ const GetRenderitem = ({ data, type, returnListName }) => {
       onClick={selectRowItem}
     >
       <DescriptionList className={styles.headerList} size="small" col="1">
+        {
+        type === 2&&
+        <div>
+          <Carousel {...carouselsettings} key={`as${Math.random(2)}`}>
+            {getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
+          </Carousel>
+        </div>
+      }
         {arr.map(({ key, value, belong, list }) => {
           const name = returnRowName({ belong, value, list });
           return name ? (
@@ -1932,6 +1944,11 @@ class CenterInfo extends Component {
     });
     if (type === 1) {
       this.getDetailList({ quoteHeadId: rowData.id });
+      // 字印下拉
+      dispatch({
+        type: 'quote/getMarkinglistDropDown',
+        payload: {key:rowData.customerId},
+      });
     } else {
       dispatch({
         type: `quote/changeRightMenu`,
@@ -2068,7 +2085,7 @@ class CenterInfo extends Component {
         />
         <div className={styles.tableBox}>
           <Table
-            columns={customerColumns}
+            columns={returnCustomerColumns(choosenRowData.quoteMethod)}
             body={quoteDatialList}
             type={2}
             changeChoosenRow={record => {
