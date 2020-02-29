@@ -251,7 +251,7 @@ class Index extends Component {
         name: 'processDropdown',
         key1: 'processName',
         value1: 'processId',
-        params: { ...params, bomId: selectedBom.id },
+        params: {  bomId: selectedBom.id,...params },
       },
       callback: data => {
         this.setState({
