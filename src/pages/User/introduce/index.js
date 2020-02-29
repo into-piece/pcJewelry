@@ -5,12 +5,19 @@ import router from 'umi/router';
 import {getMenuPath} from '@/utils/utils';
 import styles from './index.less';
 
+
+const testArr1 = [{key:'1',value:"1",text:'one'},{key:'2',value:"2",text:'two'},{key:'3',value:"3",text:'three'}];
+const testArr2 = [{key:'1',value:"1",text:'one'}];
+const testArr3 = [{key:'1',value:"1",text:'one'},{key:'2',value:"2",text:'two'}];
+const testArr4 = [{key:'1',value:"1",text:'one'},{key:'2',value:"2",text:'two'},{key:'3',value:"3",text:'three'},{key:'4',value:"4",text:'four'}];
+const testArr5 = [{key:'1',value:"1",text:'one'}];
+
 const menuArr = [
-  { key: 'menu.erp.business.product', value: ['/erp/business/product','/erp/business/product','/erp/business/product'], text: '123123sdfsdf' },
-  { key: 'menu.erp.business.quote', value: ['/erp/business/quote'], text: '123' },
-  { key: 'menu.erp.business.proforminvoice', value: ['/erp/business/proforminvoice','/erp/business/proforminvoice'], text: '123123sdfsdf' },
-  { key: 'menu.erp.business.deliver', value: ['/erp/business/deliver','/erp/business/deliver'], text: '123123sdfsdf' },
-  { key: 'menu.erp.business.receiving', value: ['/erp/business/receiving'], text: '123123sdfsdf' },
+  { key: 'menu.erp.business.product', value: ['/erp/business/product','/erp/business/product','/erp/business/product'], text: '123123sdfsdf',arr:testArr1 },
+  { key: 'menu.erp.business.quote', value: ['/erp/business/quote'], text: '123' ,arr:testArr2},
+  { key: 'menu.erp.business.proforminvoice', value: ['/erp/business/proforminvoice','/erp/business/proforminvoice'], text: '123123sdfsdf' ,arr:testArr3},
+  { key: 'menu.erp.business.deliver', value: ['/erp/business/deliver','/erp/business/deliver'], text: '123123sdfsdf',arr:testArr4 },
+  { key: 'menu.erp.business.receiving', value: ['/erp/business/receiving'], text: '123123sdfsdf',arr:testArr5 },
 ];
 
 @connect(({ login, loading }) => ({
@@ -41,7 +48,7 @@ class Introduct extends Component {
     const { onMouseEnter, onMouseLeave } = this;
     const { login, submitting } = this.props;
     const { showText, contentText } = this.state;
-    const testArr = [{key:'1',value:"1",text:'你好'},{key:'2',value:"2",text:'是吗'},{key:'3',value:"3",text:'你好'},{key:'5',value:"5",text:'你好'}];
+
     // console.log(" logi response  ",login)
 
     return (
@@ -49,9 +56,8 @@ class Introduct extends Component {
         <p className={styles.title}>业务部流程</p>
         <div className={styles.cotent}>
           <ul className={styles.menu}>
-            {menuArr.map(({ key, value, text }) =>
+            {menuArr.map(({ key, value, text,arr }) =>
               <div className={styles.menu_title}>
-                {/*<div className={styles.menu_li2}>*/}
               <li
                 key={value}
                 onMouseEnter={() => {
@@ -61,15 +67,15 @@ class Introduct extends Component {
                   onMouseLeave();
                 }}
               >
-
+                <div className={styles.menu_li_content}>
                 <FormattedMessage id={key} />
+                </div>
               </li>
-                {/*</div>*/}
-                {this.showMenuLine(testArr)}
-                <div className={styles.div_menu2}>
+                <div className={styles.menu_line}></div>
+                <div className={styles.menu2_group}>
 
                   <ul className={styles.menu2}>
-                    {testArr.map(({ key, value, text }) =>
+                    {arr.map(({ key, value, text }) =>
                       <li
                         key={value}
                         onMouseEnter={() => {
@@ -96,14 +102,6 @@ class Introduct extends Component {
       </div>
     );
   }
-
-  showMenuLine = (arr) => {
-    console.log(" arr  length ",arr.length,arr.length > 1)
-    if (arr.length > 1)
-      return <div className={styles.div_line}></div>;
-    else
-      return  <p>123</p>;
-  };
 
 }
 
