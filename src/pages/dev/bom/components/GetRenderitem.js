@@ -15,6 +15,14 @@ const checkObj = {
   1:'是'
 }
 
+const  remarksArr = [ { key: '备注', value: 'remarks' },
+{ key: '新增人', value: 'createUser' },
+{ key: '新增时间', value: 'createTime' },
+{ key: '修改人', value: 'modifier' },
+{ key: '修改时间', value: 'mtime' },
+
+]
+
 const { Description } = DescriptionList;
 const { Step } = Steps;
 // 右手边显示的详情信息
@@ -72,6 +80,9 @@ const GetRenderitem = ({ data, type, items }) => {
           {getImages(images)}
         </Carousel>
     }
+
+
+
       <DescriptionList className={styles.headerList} size="small" col="1">
         {arr.map(({ key, value, cName, convert, date, fixed,ischeck }) => {
             const showdata = date && data[value]
@@ -91,6 +102,23 @@ const GetRenderitem = ({ data, type, items }) => {
           )}return false
         })
         }
+      </DescriptionList>
+      <span className={styles.title_info}>备注</span>
+      <Divider className={styles.divder} style={{marginTop:10}} />
+      <DescriptionList className={styles.headerList} size="small" col="1">
+        {
+         remarksArr.map(({ key, value}) => {
+            const showdata = data[value]
+              if(showdata!=='undefined'&&showdata!=='null'&&showdata){
+                return(
+                  <Description key={key} term={key}>
+                    {showdata}
+                  </Description>
+                )
+              }return false
+          })
+        }
+
       </DescriptionList>
 
       {images && images.length > 0 && <Divider />}

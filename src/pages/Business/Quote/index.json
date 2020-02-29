@@ -103,7 +103,14 @@
       "list": "unitOfLengthDropdown",
       "disabled": true
     },
-    { "key": "字印编码", "value": "markingId", "type": 2, "list": "markinglist", "noNeed": true },
+    {
+      "key": "字印编码",
+      "value": "markingId",
+      "type": 2,
+      "list": "markinglist",
+      "noNeed": true,
+      "belong": 3
+    },
     { "key": "字印英文名", "value": "markingEnName", "noNeed": true, "type": 7 },
     { "key": "字印价", "value": "markingPrice", "number": true, "priceUnit": 2 },
     {
@@ -152,15 +159,15 @@
       "number": true,
       "priceUnit": 1
     },
-    { "key": "单价 RMB", "value": "price", "number": true, "type": 7 },
-    { "key": "产品工费 RMB", "value": "productCost", "number": true, "type": 7 },
+    { "key": "单价", "value": "price", "number": true, "type": 7, "priceUnit": 3 },
+    { "key": "产品工费 RMB/件", "value": "productCost", "number": true, "type": 7 },
     { "key": "报价数量", "value": "qty", "number": true },
     {
-      "key": "报价金额 RMB",
+      "key": "报价金额",
       "value": "quotedAmount",
       "number": true,
       "noNeed": true,
-      "type": 7
+      "priceUnit": 3
     },
     { "key": "备注", "value": "remark", "noNeed": true, "type": 8 },
     { "key": "客户要求", "value": "customerRequirements", "noNeed": true, "type": 8 }
