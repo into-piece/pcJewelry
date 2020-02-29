@@ -23,16 +23,13 @@ import {
   Radio,
   Checkbox,
   DatePicker,
-  Carousel,
 } from 'antd';
 import moment from 'moment';
-import Zmage from 'react-zmage';
 import ModalConfirm from '@/utils/modal';
 import HttpFetch from '@/utils/HttpFetch';
 import { getCurrentUser } from '@/utils/authority';
 import Table from '@/components/Table';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import DescriptionList from '@/components/DescriptionList';
 import serviceObj from '@/services/quote';
 import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
@@ -40,10 +37,11 @@ import SelectProductModal from './SelectProductModal';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
+import GetRenderitem from './GetRenderitem'
+import Carousel from '@/components/Carousel';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-const { Description } = DescriptionList;
 const FormItem = Form.Item;
 const { Option } = Select;
 const {
@@ -252,28 +250,6 @@ const productSearchParams = [
   { key: '客户货号', value: 'customerProductNo' },
 ];
 
-const carouselsettings = {
-  speed: 150,
-  initialSlide: 0, // 修改组件初始化时的initialSlide 为你想要的值
-};
-
-const getImages = pictures => {
-  const images = pictures && pictures.flatMap(e => e.picPath || e);
-  if (!images) return;
-  return images.map(v => (
-    <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
-      <Zmage
-        alt="图片"
-        align="center"
-        className={styles.carousel_image}
-        src={v}
-        edge={20}
-        set={images.map(image => ({ src: image, style: { minWidth: 800, minHeight: 800 } }))}
-      />
-    </div>
-  ));
-};
-
 
 @Form.create()
 @connect(({ loading, quote }) => {
@@ -440,7 +416,7 @@ class Info extends Component {
       const {  rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
         this.setState({
-          currencyArr:res.body.records
+          currencyArr: [...res.body.records,{currency:'RMB',bocConversionPrice:100}]
         })
       }else{
         notification.error({message:'无汇率数据，无法自动计算'})
@@ -636,10 +612,9 @@ class Info extends Component {
   countQuotePrice = (value) => {
     const {form} = this.props
     const {currencyArr,quotePriceUSA} = this.state
-    const currencyArrNew = [...currencyArr,{currency:'RMB',bocConversionPrice:100}]
-    const listTodayRateArr =currencyArrNew.filter(item=>item.currency === value )       
+    const listTodayRateArr =currencyArr.filter(item=>item.currency === value )       
     const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
-    const listTodayRateUsaArr =currencyArrNew.filter(item=>item.currency === 'USD' )       
+    const listTodayRateUsaArr =currencyArr.filter(item=>item.currency === 'USD' )       
     const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
     // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
     console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
@@ -955,9 +930,7 @@ class Info extends Component {
             </div>
 
             <div className={styles.carousel_content}>
-              <Carousel {...carouselsettings} key={`as${Math.random(2)}`}>
-                {getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
-              </Carousel>
+              <Carousel pictures={pictures} />
             </div>
           </React.Fragment>
         )}
@@ -1815,108 +1788,8 @@ const RightContent = ({
   </GridContent>
 );
 
-// 右手边详情显示
-const rowArr = [
-  { key: '报价单号', value: 'quoteNumber' },
-  { key: '报价日期', value: 'quoteDate' },
-  { key: '客户', value: 'customerNo' },
-  { key: '类别', value: 'type', belong: 3, list: 'wordbookdropdown' },
-  { key: '终客', value: 'endNo' },
-  { key: '中文名', value: 'zhName' },
-  { key: '英文名', value: 'enName' },
-  { key: '联系人', value: 'customerZhName' },
-  { key: '手机', value: 'customerPhone' },
-  { key: 'Email', value: 'customerEmail' },
-  { key: '报价方式', value: 'quoteMethod', belong: 2 },
-  { key: '主材价', value: 'quotePrice', belong: 3, list: 'materialPriceList' },
-  { key: '结算币种', value: 'currency' },
-  { key: '税率', value: 'taxRate' },
-  { key: '紧急程度', value: 'emergency', belong: 2 },
-  { key: '计石重', value: 'isWeighStones', belong: 2 },
-  { key: '字印编码', value: 'markingId', belong: 3, list: 'markinglist' },
-  { key: '字印英文名', value: 'markingEnName' },
-  { key: '包装单价', value: 'packPriceType', belong: 2 },
-  { key: '客户备料', value: 'customerPreparation', belong: 2 },
-  { key: '向客户采购用料', value: 'purchasingMaterialsFromCustomers', belong: 2 },
-  { key: '包装说明', value: 'packExplains' },
-  { key: '报价总数', value: 'quoteTotalCount' },
-  { key: '报价总重', value: 'quoteTotalWeight' },
-  { key: '报价总额', value: 'quoteTotalAmount' },
-  { key: '说明', value: 'explains' },
-  { key: '备注', value: 'remark' },
-  { key: '新增人', value: 'createUser' },
-  { key: '新增时间', value: 'createTime' },
-  { key: '修改人', value: 'modifier' },
-  { key: '修改时间', value: 'mtime' },
-];
 
 
-const returnKey = ({key,priceUnit,currency,quoteMethod}) => 
-  priceUnit?
-    priceUnit === 1 ? 
-      `${key + currency}/${quoteMethodobj[quoteMethod]}`:
-      priceUnit === 2 ?`${key+currency}/件`:
-  `${key+currency}`:key
-
-
-// 右手边显示的详情信息
-const GetRenderitem = ({ data, type, returnListName,currency,quoteMethod }) => {
-  const selectRowItem = () => {
-    // console.log('select the item');
-  };
-
-  const returnRowName = ({ value, list, belong }) => {
-    return belong === 2
-      ? returnName(value, data[value])
-      : belong === 3
-      ? returnListName(list, data[value])
-      : data[value];
-  };
-
-  const arr =
-    type === 1
-      ? rowArr
-      : [
-          { key: '产品编号', value: 'productNo' },
-          ...detailList,
-          { key: '新增人', value: 'createUser' },
-          { key: '新增时间', value: 'createTime' },
-          { key: '修改人', value: 'modifier' },
-          { key: '修改时间', value: 'mtime' },
-        ];
-
-  const {pictures} = data
-
-  
-  return (
-    <div
-      style={{ marginLeft: 10, marginTop: 10 }}
-      className={styles.getRenderitem}
-      onClick={selectRowItem}
-    >
-      <DescriptionList className={styles.headerList} size="small" col="1">
-        {
-        type === 2&&
-        <div>
-          <Carousel {...carouselsettings} key={`as${Math.random(2)}`}>
-            {getImages(pictures && (pictures.length === 0 ? defaultImages : pictures))}
-          </Carousel>
-        </div>
-      }
-        {arr.map(({ key, value, belong, list ,priceUnit}) => {
-          const name = returnRowName({ belong, value, list });
-          return name ? (
-            <Description key={value} term={returnKey({key,priceUnit,currency,quoteMethod})}>
-              {name}
-            </Description>
-          ) : (
-            ''
-          );
-        })}
-      </DescriptionList>
-    </div>
-  );
-};
 
 // Table 中间列表内容
 @Form.create()
