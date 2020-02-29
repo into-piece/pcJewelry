@@ -49,6 +49,7 @@ import { defaultImages } from '@/utils/utils';
 // import PrintTable from './PrintPage';
 import servicesConfig from '@/services/purchase';
 import { getCurrentUser } from '../../../utils/authority';
+
 const priefx = process.env.NODE_ENV === 'production' ? '' : '/server';
 const uploadvideo = `${priefx}/zuul/business/business/file/uploadFile`;
 const uploadfile = `${priefx}/zuul/business/business/file/uploadDocuments`;
@@ -250,7 +251,7 @@ class Index extends Component {
         name: 'newBomProcessDropdown',
         key1: 'processName',
         value1: 'processId',
-        params: { ...params, bomId: selectedBom.id },
+        params: {  bomId: selectedBom.id,...params },
       },
       callback: data => {
         this.setState({
@@ -1137,7 +1138,7 @@ class Index extends Component {
           // size: 10, current: 1, ...productBomRevokePagination,
           ...args,
           productNoPre : productNo.substr(0,9),
-          productNo:productNo
+          productNo
         },
       },
     });
