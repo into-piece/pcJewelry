@@ -96,6 +96,11 @@ const returnNameObj = {
 
 const returnName = (key, value) => returnNameObj[key][value];
 
+const quoteMethodobj = {
+  H008002: '克',
+  H008001: '件',
+};
+
 // 报价主页表头
 let clientContentColumns = [
   {
@@ -917,10 +922,7 @@ class Info extends Component {
     const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
     const {isWeighStones} = choosenRowData
-    const quoteMethodobj = {
-      H008002: '克',
-      H008001: '件',
-    };
+ 
     return (
       <Form size="small">
         {rightMenu === 2 && (
@@ -1691,6 +1693,7 @@ const RightContent = ({
   returnElement,
   onSearch,
   returnListName,
+  
 }) => (
   <GridContent>
     <Row gutter={24} className={styles.row_content}>
@@ -1734,6 +1737,8 @@ const RightContent = ({
               data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
               type={rightMenu}
               returnListName={returnListName}
+              currency={choosenRowData.currency}
+              quoteMethod={choosenRowData.quoteMethod}
             />
           </Card>
 
@@ -1845,8 +1850,17 @@ const rowArr = [
   { key: '修改时间', value: 'mtime' },
 ];
 
+
+const returnKey = ({key,priceUnit,currency,quoteMethod}) => 
+  priceUnit?
+    priceUnit === 1 ? 
+      `${key + currency}/${quoteMethodobj[quoteMethod]}`:
+      priceUnit === 2 ?`${key+currency}/件`:
+  `${key+currency}`:key
+
+
 // 右手边显示的详情信息
-const GetRenderitem = ({ data, type, returnListName }) => {
+const GetRenderitem = ({ data, type, returnListName,currency,quoteMethod }) => {
   const selectRowItem = () => {
     // console.log('select the item');
   };
@@ -1872,6 +1886,8 @@ const GetRenderitem = ({ data, type, returnListName }) => {
         ];
 
   const {pictures} = data
+
+  
   return (
     <div
       style={{ marginLeft: 10, marginTop: 10 }}
@@ -1887,10 +1903,10 @@ const GetRenderitem = ({ data, type, returnListName }) => {
           </Carousel>
         </div>
       }
-        {arr.map(({ key, value, belong, list }) => {
+        {arr.map(({ key, value, belong, list ,priceUnit}) => {
           const name = returnRowName({ belong, value, list });
           return name ? (
-            <Description key={value} term={key}>
+            <Description key={value} term={returnKey({key,priceUnit,currency,quoteMethod})}>
               {name}
             </Description>
           ) : (
