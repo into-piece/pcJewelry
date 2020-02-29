@@ -71,17 +71,9 @@ const product = [
     value: 'supplierNo',
   },
   {
-    key: '备注',
-    value: 'marks',
-  },
-  {
     key: '说明',
     value: 'productExplain',
   },
-  { key: '新增人', value: 'createUser' },
-  { key: '新增时间', value: 'createTime' },
-  { key: '修改人', value: 'modifier' },
-  { key: '修改时间', value: 'mtime' },
 ];
 
 const material = [
@@ -113,11 +105,6 @@ const material = [
   { key: '单件用重', value: 'sheetWithHeavy' },
   { key: '计价类别', value: 'valuationClassName' },
   { key: '损耗率', value: 'attritionRate' },
-  { key: '备注', value: 'remarks' },
-  { key: '新增人', value: 'createUser' },
-  { key: '新增时间', value: 'createTime' },
-  { key: '修改人', value: 'modifier' },
-  { key: '修改时间', value: 'mtime' },
 ];
 
 const productProcess = [
@@ -128,10 +115,6 @@ const productProcess = [
   { key: '图片', value: 'picPath' },
   // { key: '文档', value: 'workProcessCode' },
   { key: '备注', value: 'remarks' },
-  { key: '新增人', value: 'createUser' },
-  { key: '新增时间', value: 'createTime' },
-  { key: '修改人', value: 'modifier' },
-  { key: '修改时间', value: 'mtime' },
 ];
 
 export default {
