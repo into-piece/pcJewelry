@@ -105,4 +105,6 @@ export default {
   'menu.erp.editor.flow': '流程编辑器',
   'menu.erp.editor.mind': '脑图编辑器',
   'menu.erp.editor.koni': '拓扑编辑器',
+  'menu.erp.user.customer_management':'客户管理',
+  'menu.erp.user.marketing':'营销'
 };
