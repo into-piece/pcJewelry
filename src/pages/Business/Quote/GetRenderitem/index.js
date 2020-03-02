@@ -150,8 +150,9 @@ export default ({ data, type, returnListName,currency,quoteMethod }) => {
           );
         })}
       </DescriptionList>
-      <span className={styles.title_info}>备注</span>
-      <Divider className={styles.divder} style={{marginTop:10}} />
+      {data.createUser&&<><span className={styles.title_info}>备注</span>
+        <Divider className={styles.divder} style={{marginTop:10}} />
+      </>}
 
       <DescriptionList className={styles.headerList} size="small" col="1">
         {remarksArr.map(({ key, value}) => {
