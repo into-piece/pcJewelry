@@ -280,7 +280,8 @@ const productSearchParams = [
     searchDetailParams: quote.searchDetailParams,
     endCustomerList:quote.endCustomerList,
     searchProductParams:quote.searchProductParams,
-    customerDropDownList:quote.customerDropDownList
+    customerDropDownList:quote.customerDropDownList,
+    detailPagination:quote.detailPagination
   };
 })
 class Info extends Component {
@@ -1048,6 +1049,22 @@ class Info extends Component {
     return `${text}报价${str}`;
   };
 
+  getDetailList = (params) => {
+    const {dispatch,choosenRowData,detailPagination} = this.props
+    if('current' in params){
+      dispatch({
+        type: `quote/changeStateOut`,
+        payload: { key: 'detailPagination', value: { ...detailPagination, current: params.current } },
+      });
+    }
+    dispatch({
+      type: `quote/getDetailList`,
+      payload: {
+        params: { quoteHeadId: choosenRowData.id, ...detailPagination, ...params },
+      },
+    });
+  }
+
   // 新增按钮事件回调
   handleAdd = close => {
     const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
@@ -1080,7 +1097,9 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            this.getList({ sendReq: 'currentQuote' });
+            isHead ?
+              this.getList({ sendReq: 'currentQuote' }):
+              this.getDetailList()
             if (close) this.btnFn('');
           }
           this.setState({ addLoading: false });
@@ -1814,11 +1833,18 @@ const RightContent = ({
 })
 class CenterInfo extends Component {
   getDetailList = params => {
-    const { dispatch, pagination, choosenRowData } = this.props;
+    const { dispatch, detailPagination, choosenRowData } = this.props;
+    if('current' in params){
+      dispatch({
+        type: `quote/changeStateOut`,
+        payload: { key: 'detailPagination', value: { ...detailPagination, current: params.current } },
+      });
+    }
+    
     dispatch({
       type: `quote/getDetailList`,
       payload: {
-        params: { quoteHeadId: choosenRowData.id, ...pagination, ...params },
+        params: { quoteHeadId: choosenRowData.id, ...detailPagination, ...params },
       },
     });
   };
