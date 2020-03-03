@@ -323,6 +323,13 @@ class Info extends Component {
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
+    if(param && 'current' in param){
+      dispatch({
+        type: `quote/changeStateOut`,
+        payload: { key: 'pagination', value: { ...pagination, current: param.current } },
+      });
+    }
+
     // getDevList
     dispatch({
       type: `quote/getList`,
@@ -338,8 +345,6 @@ class Info extends Component {
     const customerNo = choosenRowData.customerNo
 
     if ('current' in args) {
-      console.log(args);
-      
       dispatch({
         type: `quote/changeStateOut`,
         payload: { key: 'productPagination', value: { ...productPagination, current: args.current } },
@@ -1049,9 +1054,9 @@ class Info extends Component {
     return `${text}报价${str}`;
   };
 
-  getDetailList = (params) => {
+  getDetailList = (params = {}) => {
     const {dispatch,choosenRowData,detailPagination} = this.props
-    if('current' in params){
+    if( 'current' in params){
       dispatch({
         type: `quote/changeStateOut`,
         payload: { key: 'detailPagination', value: { ...detailPagination, current: params.current } },
