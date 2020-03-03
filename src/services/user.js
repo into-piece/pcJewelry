@@ -1,6 +1,7 @@
 import request from '@/utils/request';
 import HttpFetch, { priefx } from '../utils/HttpFetch';
 import { getCurrentUser } from '../utils/authority';
+
 const env = process.env.NODE_ENV === 'production' ? '' : '/server';
 
 const prefix1 = `${env}/`;
@@ -65,3 +66,16 @@ export async function saveUserInfo(params) {
     }
   });
 }
+
+
+
+export async function getFlowMenu(params) {
+  return request(`${prefix1}/sys.user/sys-resource/getFlowMenu`,{
+    method: 'POST',
+    data: {
+     ...params
+    }
+  });
+}
+
+

@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent,queryUser,saveUserInfo } from '@/services/user';
+import { query as queryUsers, queryCurrent,queryUser,saveUserInfo,getFlowMenu } from '@/services/user';
 import { queryAllCity} from '@/services/api';
 import { testCurrentUser } from '../utils/utils';
 
@@ -48,10 +48,7 @@ export default {
         type: 'saveCurrentUserTest',
         payload: response,
       });
-
-
-
-    },
+    }
   },
 
   reducers: {
