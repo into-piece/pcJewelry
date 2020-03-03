@@ -1054,9 +1054,9 @@ class Info extends Component {
     return `${text}报价${str}`;
   };
 
-  getDetailList = (params) => {
+  getDetailList = (params = {}) => {
     const {dispatch,choosenRowData,detailPagination} = this.props
-    if('current' in params){
+    if( 'current' in params){
       dispatch({
         type: `quote/changeStateOut`,
         payload: { key: 'detailPagination', value: { ...detailPagination, current: params.current } },
