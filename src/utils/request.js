@@ -106,7 +106,7 @@ const request = extend({
 // 拦截器进行 200 + rtnCode!== '000000' 报错
 request.interceptors.response.use(async response => {
   const data = await response.clone().json();
-  if (response.status === 200 && data.head.rtnCode !== '000000') {
+  if (response.status === 200 && data.head && data.head.rtnCode !== '000000') {
     notification.error({
       message: data.head.rtnMsg,
     });

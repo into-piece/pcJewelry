@@ -2,7 +2,9 @@ import request from '@/utils/request';
 import HttpFetch, { priefx } from '../utils/HttpFetch';
 import { getCurrentUser } from '../utils/authority';
 
+const env = process.env.NODE_ENV === 'production' ? '' : '/server';
 
+const prefix1 = `${env}/`;
 export async function getMenuData(params) {
   // return request('/basic/ring-around/freeze', {
   return request(`${priefx  }/sys.user/sys-resource/getMenuTree`, {
@@ -38,6 +40,16 @@ export async function login(params) {
 
 }
 
+export async function queryUser() {
+  return request(`${prefix1}listUsers`,{
+    method: 'POST',
+    data: {
+      id: getCurrentUser().id,
+    }
+    });
+}
+
+
 export async function query() {
   return request('queryRule/api/users');
 }
@@ -45,3 +57,25 @@ export async function query() {
 export async function queryCurrent() {
   return request('/api/currentUser');
 }
+
+export async function saveUserInfo(params) {
+  return request(`${prefix1}updateUserById`,{
+    method: 'POST',
+    data: {
+     ...params
+    }
+  });
+}
+
+
+
+export async function getFlowMenu(params) {
+  return request(`${prefix1}/sys.user/sys-resource/getFlowMenu`,{
+    method: 'POST',
+    data: {
+     ...params
+    }
+  });
+}
+
+

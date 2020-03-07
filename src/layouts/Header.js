@@ -8,12 +8,14 @@ import GlobalHeader from '@/components/GlobalHeader';
 import TopNavHeader from '@/components/TopNavHeader';
 import styles from './Header.less';
 import { getAuthority } from '../utils/authority';
+import AccountModal from '@/components/AccountModal';
 
 const { Header } = Layout;
 
 class HeaderView extends Component {
   state = {
     visible: true,
+    accountLayoutVisible:false
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -58,7 +60,10 @@ class HeaderView extends Component {
   handleMenuClick = ({ key }) => {
     const { dispatch } = this.props;
     if (key === 'userCenter') {
-      router.push('/account/center');
+      // router.push('/account/center');
+      this.setState({
+        accountLayoutVisible:true,
+      })
       return;
     }
     if (key === 'triggerError') {
@@ -117,7 +122,7 @@ class HeaderView extends Component {
   render() {
     const { isMobile, handleMenuCollapse, setting } = this.props;
     const { navTheme, layout, fixedHeader } = setting;
-    const { visible } = this.state;
+    const { visible ,accountLayoutVisible} = this.state;
     const isTop = layout === 'topmenu';
     const width = this.getHeadWidth();
     const HeaderDom = visible ? (
@@ -148,6 +153,14 @@ class HeaderView extends Component {
             {...this.props}
           />
         )}
+        <AccountModal
+          onCancel={()=>{
+            this.setState({
+              accountLayoutVisible:false
+            })
+          }}
+          visible={accountLayoutVisible}
+        />
       </Header>
     ) : null;
     return (
