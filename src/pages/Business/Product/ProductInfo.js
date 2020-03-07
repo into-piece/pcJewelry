@@ -19,6 +19,7 @@ const defaultPageSize = 10;
 @connect(({ product, loading }) => {
   const { rtnCode, rtnMsg } = product;
   return {
+    product,
     body: product.body,
     rtnCode,
     rtnMsg,
@@ -29,6 +30,17 @@ const defaultPageSize = 10;
     productFreezeloading: loading.effects['product/freezeProduct'],
     queryProductLocking: loading.effects['product/queryProductLock'],
     updateProductUnLocking: loading.effects['product/updateProductUnLock'],
+    brand: product.brand,
+    productType: product.productType, // 类别
+    productColor: product.productColor,
+    gemColor: product.gemColor,
+    platingColor: product.platingColor,
+    customerId: product.customerId,
+    sourceOfProduct: product.sourceOfProduct,
+    unitOfMeasurement: product.unitOfMeasurement,
+    unitOfWeight: product.unitOfWeight,
+    finishedWeight: product.finishedWeight,
+    mouldNo: product.mouldNo,
   };
 })
 class ProductInfo extends Component {
@@ -157,6 +169,7 @@ class ProductInfo extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props,'=========')
     this.loadProduct();
     // window.onbeforeunload = () => {
     //   console.log('onbeforeunload ');
@@ -343,7 +356,21 @@ class ProductInfo extends Component {
     } = state;
 
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-    const { queryProductLocking, body = {} } = props;
+    const { 
+      queryProductLocking, 
+      body = {},
+      brand,
+      productType, // 类别
+      productColor,
+      gemColor,
+      platingColor,
+      customerId,
+      sourceOfProduct,
+      unitOfMeasurement,
+      unitOfWeight,
+      finishedWeight,
+      mouldNo
+    } = props;
     if (isLoad) {
       this.state.isLoadList = true;
     } else if (this.state.isLoadList) {
@@ -360,6 +387,19 @@ class ProductInfo extends Component {
                 <ProductSearchFrom
                   onSearch={this.handleProductSearch}
                   onCustomerReset={this.handleProductFormReset}
+                  data={{
+                    brand,
+                    productType, // 类别
+                    productColor,
+                    gemColor,
+                    platingColor,
+                    customerId,
+                    sourceOfProduct,
+                    unitOfMeasurement,
+                    unitOfWeight,
+                    finishedWeight,
+                    mouldNo
+                  }}
                 />
 
                 <Table

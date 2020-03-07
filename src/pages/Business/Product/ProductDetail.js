@@ -207,6 +207,12 @@ class ProductDetail extends Component {
     },
   };
 
+  componentDidMount(){
+    fetchArr.forEach(item => {
+      this.getData(item);
+    });
+  }
+
   centerFormLayout = {
     labelCol: { span: 12 },
     wrapperCol: {
@@ -289,10 +295,6 @@ class ProductDetail extends Component {
   };
 
   batchUpdate = () => {
-    fetchArr.forEach(item => {
-      this.getData(item);
-    });
-
     this.setState({
       batchUpdateShow: true,
     });
