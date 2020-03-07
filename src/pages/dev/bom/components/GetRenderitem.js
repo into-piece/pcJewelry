@@ -15,13 +15,7 @@ const checkObj = {
   1:'是'
 }
 
-const  remarksArr = [ { key: '备注', value: 'remarks' },
-{ key: '新增人', value: 'createUser' },
-{ key: '新增时间', value: 'createTime' },
-{ key: '修改人', value: 'modifier' },
-{ key: '修改时间', value: 'mtime' },
 
-]
 
 const { Description } = DescriptionList;
 const { Step } = Steps;

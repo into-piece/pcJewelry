@@ -121,7 +121,7 @@
       "noNeed": true,
       "priceUnit": 1
     },
-    { "key": "报价重量范围/%", "value": "quotedWeightRange", "noNeed": true, "initValue": "5" },
+    { "key": "报价重量范围%", "value": "quotedWeightRange", "noNeed": true, "initValue": "5" },
 
     {
       "key": "前次工费",
