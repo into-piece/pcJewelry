@@ -70,7 +70,7 @@ export async function saveUserInfo(params) {
 
 
 export async function getFlowMenu(params) {
-  return request(`${prefix1}/sys.user/sys-resource/getFlowMenu`,{
+  return request(`${priefx}/sys.user/sys-resource/getFlowMenu`,{
     method: 'POST',
     data: {
      ...params

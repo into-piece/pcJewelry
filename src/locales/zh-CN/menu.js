@@ -20,7 +20,7 @@ export default {
   'menu.erp.dev.productflow': '生产流程',
   'menu.erp.dev.productProcess': '生产工序',
   'menu.erp.dev.flowCostType': '流程工费',
-  'menu.erp.dev.Raw':'原料档案',
+  'menu.erp.dev.raw':'原料档案',
   'menu.erp.dev.basic': '基础数据',
   'menu.erp.dev.mould':'胶膜管理',
   'menu.erp.dev.dieSet':'胶膜管理',
@@ -106,5 +106,7 @@ export default {
   'menu.erp.editor.mind': '脑图编辑器',
   'menu.erp.editor.koni': '拓扑编辑器',
   'menu.erp.user.customer_management':'客户管理',
-  'menu.erp.user.marketing':'营销'
+  'menu.erp.user.marketing':'营销',
+  'menu.erp.user.dev':'开发',
+  'menu.erp.user.system':'系统'
 };
