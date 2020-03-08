@@ -41,7 +41,24 @@ class ProductSearchFrom extends Component {
   renderCustomerAdvancedForm() {
     const {
       form: { getFieldDecorator },
+      data
     } = this.props;
+
+    const {
+      brand,
+      productType, // 类别
+      productColor,
+      gemColor,
+      platingColor,
+      customerId,
+      sourceOfProduct,
+      unitOfMeasurement,
+      unitOfWeight,
+      finishedWeight,
+      mouldNo
+    } = data
+
+    console.log(productType,'=========productType')
     return (
       <Form
         onSubmit={this.handleSearch}
@@ -65,7 +82,16 @@ class ProductSearchFrom extends Component {
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="产品类别" className={business.from_content_col}>
-              {getFieldDecorator('productType')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('productType')(
+                <Select style={{ width: 171 }} placeholder="请选择">
+                  {
+                    productType.map(({value,key})=>(
+                      <Option value={value} key={value}>{key}</Option>
+                    ))
+                  }
+                </Select>
+              )}
+              
             </FormItem>
           </Col>
 
@@ -73,21 +99,43 @@ class ProductSearchFrom extends Component {
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="颜色" className={business.from_content_col}>
-              {getFieldDecorator('gemColor')(<Input laceholder="请输入" />)}
+              {getFieldDecorator('gemColor')(
+                <Select style={{ width: 171 }} placeholder="请选择">
+                  {
+                    gemColor.map(({value,key})=>(
+                      <Option value={value} key={value}>{key}</Option>
+                    ))
+                  }
+                </Select>
+              )}
+              
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="成色" className={business.from_content_col}>
-              {getFieldDecorator('productColor', {
-                initialValue: '',
-              })(<Input placeholder="请输入" />)}
+              {getFieldDecorator('productColor')(
+                <Select style={{ width: 171 }} placeholder="请选择">
+                  {
+                    productColor.map(({value,key})=>(
+                      <Option value={value} key={value}>{key}</Option>
+                    ))
+                  }
+                </Select>
+              )}
+
             </FormItem>
           </Col>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="电镀颜色" className={business.from_content_col}>
-              {getFieldDecorator('platingColor', {
-                initialValue: '',
-              })(<Input placeholder="请输入" />)}
+              {getFieldDecorator('platingColor')(
+                <Select style={{ width: 171 }} placeholder="请选择">
+                  {
+                    platingColor.map(({value,key})=>(
+                      <Option value={value} key={value}>{key}</Option>
+                    ))
+                  }
+                </Select>
+              )}
             </FormItem>
           </Col>
 
@@ -95,7 +143,16 @@ class ProductSearchFrom extends Component {
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="客户编号" className={business.from_content_col}>
-              {getFieldDecorator('customerNo')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('customerNo')(
+                <Select style={{ width: 171 }} placeholder="请选择">
+                  {
+                    customerId.map(({value,key})=>(
+                      <Option value={value} key={value}>{key}</Option>
+                    ))
+                  }
+                </Select>
+              )}
+
             </FormItem>
           </Col>
 
@@ -110,7 +167,7 @@ class ProductSearchFrom extends Component {
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="状态" className={business.from_content_col}>
               {getFieldDecorator('status', { initialValue: 0 })(
-                <Select style={{ width: 174 }} placeholder="请选择">
+                <Select style={{ width: 171 }} placeholder="请选择" >
                   <Option value={undefined}>不限</Option>
                   <Option value={0}>输入</Option>
                   <Option value={2}>已审批</Option>
@@ -155,7 +212,7 @@ class ProductSearchFrom extends Component {
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="状态" className={business.from_content_col}>
               {getFieldDecorator('status', { initialValue: 0 })(
-                <Select style={{ width: 174 }} placeholder="请选择">
+                <Select style={{ width: 171 }} placeholder="请选择">
                   <Option value={undefined}>不限</Option>
                   <Option value={0}>输入</Option>
                   <Option value={2}>已审批</Option>
