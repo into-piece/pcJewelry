@@ -60,5 +60,6 @@ export default {
   'menu.erp.purchase.supplier': 'Supplier Manager',
   'menu.erp.user.customer_management':'customer_management',
   'menu.erp.user.marketing':'marketing',
-  'menu.erp.user.system':'system'
+  'menu.erp.user.system':'system',
+  'menu.erp.user.purchase':'purchase'
 };
