@@ -7,6 +7,10 @@ import {
   unApprovalThePerson,
 } from '@/services/api';
 
+import servicesConfig from '@/services/dev';
+
+const { listMstWordbook, listDeptDropDown } = servicesConfig;
+
 export default {
   namespace: 'person',
 
@@ -72,12 +76,55 @@ export default {
       if (callback) callback();
     },
 
+    *listDataRang({payload, callback}, {put, call}) {
+      const key = 'wordbookContentZh';
+      const value = 'wordbookCode';
+      const response = yield call(listMstWordbook,{wordbookTypeCode:'H020'})
+      let list = response.head.rtnCode === '000000' ? response.body.records : [];
+      list = list.map(item => ({
+        key : item[key],
+        value: item[value]
+      }))
+      
+      yield put({
+        type: 'changeState',
+        payload: {
+          typeName: 'listDataRangDropDown',
+          data: list
+        }
+      })
+    },
 
-
-
+    *listDept({payload, callback}, {put, call}) {
+      const key = 'zhName';
+      const value = 'id';
+      const response = yield call(listDeptDropDown)
+      let list = response.head.rtnCode === '000000' ? response.body.records : [];
+      list = list.map(item => ({
+        key : item[key],
+        value: item[value]
+      }))
+      
+      yield put({
+        type: 'changeState',
+        payload: {
+          typeName: 'listDeptDropDown',
+          data: list
+        }
+      })
+    }
   },
 
   reducers: {
+
+    changeState(state, action ){
+      const { data, typeName } = action.payload;
+      return {
+        ...state,
+        [typeName]: data
+      }
+    },
+
     list(state, action) {
       return {
         ...state,

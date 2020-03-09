@@ -7,7 +7,7 @@ import {
   Button,
   Input,
   DatePicker,
-  Divider, Carousel, Modal, message, Spin,Empty
+  Divider, Carousel, Modal, message, Spin,Empty, Select
 } from 'antd';
 import { statusConvert, YoNConvert, genderConvert } from '@/utils/convert';
 import BuildTitle from '@/components/BuildTitle';
@@ -46,6 +46,8 @@ const FormItem = Form.Item;
     personDeleteloading: loading.effects['person/deletePerson'],
     approvalPersonloading: loading.effects['person/approvalPerson'],
     unApprovaloading: loading.effects['person/unApprovalPerson'],
+    listDataRangDropDown: person.listDataRangDropDown,
+    listDeptDropDown: person.listDeptDropDown
   };
 })
 @Form.create()
@@ -310,7 +312,6 @@ class IndexDetail extends Component {
                   </Carousel>
                   <DescriptionList size="small" col="1">
                     <Description term="用户编号">{showItem.userName}</Description>
-                    <Description term="状态">{showItem.statusVar}</Description>
                     <Description term="姓名">{showItem.zhName}</Description>
                     <Description term="英文名称">{showItem.enName}</Description>
                     <Description term="民族">{showItem.nation}</Description>
@@ -344,8 +345,9 @@ class IndexDetail extends Component {
                     <Description term="离职日期">{showItem.terminationDate}</Description>
                     <Description term="离厂原因">{showItem.exFactoryReson}</Description>
                     <Description term="离职类别">{showItem.teminationType}</Description>
-
+                    <Description term="数据状态">{showItem.dataRangeName}</Description>
                     <Description term="有效期">{showItem.indate}</Description>
+                    <Description term="状态">{showItem.statusVar}</Description>
                   </DescriptionList>
                   <span className={business.title_info}>
             备注
@@ -487,8 +489,9 @@ class IndexDetail extends Component {
   };
 
   getProductModalContent = () => {
-    const { form: { getFieldDecorator } } = this.props;
+    const { form: { getFieldDecorator }, listDataRangDropDown, listDeptDropDown } = this.props;
     const { current = {} } = this.state;
+    const Option = Select.Option;
 
     return (
       <div className={clientStyle.list_info}>
@@ -748,8 +751,21 @@ class IndexDetail extends Component {
                 className={business.from_content_col}
               >
                 {getFieldDecorator('dept', {
-                  required: true, initialValue: current.dept,
-                })(<DeptListSelect showSearch />)}
+                  initialValue: current.dept,
+                  rules: [{
+                    required: true,
+                    message: '请选择部门'
+                  }]
+                })(<Select>
+                  {
+                    listDeptDropDown && listDeptDropDown.length > 0 && 
+                    listDeptDropDown.map(({key, value}) =>(
+                      <Option value = {value} >
+                        {key}
+                      </Option>
+                    ))
+                  }
+                </Select>)}
               </FormItem>
             </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
@@ -864,6 +880,39 @@ class IndexDetail extends Component {
 
           </Row>
           <Row>
+          <Col lg={4} md={4} sm={4} xs={4}>
+              <FormItem
+                label="数据范围"
+                {...this.centerFormLayout}
+                className={business.from_content_col}
+              >
+                {getFieldDecorator('dataRange', {
+                  initialValue: current.dataRange,
+                  rules: [
+                    {
+                      required: true,
+                      message: '请选择数据范围'
+                    }
+                  ]
+                })(<Select 
+                      allowClear
+                      placeholder="请选择"
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      >
+                      {
+                        listDataRangDropDown && listDataRangDropDown.length > 0 && listDataRangDropDown.map(({key, value }) => (
+                          <Option value = {value} key = {value}>
+                            {key}
+                          </Option>
+                        ))
+                      }
+                   </Select>)}
+              </FormItem>
+            </Col>
             <Col lg={4} md={4} sm={4} xs={4}>
               <FormItem
                 label="离职类别"
@@ -886,7 +935,9 @@ class IndexDetail extends Component {
                 })(<DatePicker format="YYYY-MM-DD" />)}
               </FormItem>
             </Col>
-            <Col lg={16} md={16} sm={16} xs={16}>
+          </Row>
+          <Row>
+          <Col span = {24}>
               <FormItem
                 label="备注"
                 {...this.centerFormLayout}
@@ -894,7 +945,7 @@ class IndexDetail extends Component {
               >
                 {getFieldDecorator('remarks', {
                   initialValue: current.remarks,
-                })(<TextArea />)}
+                })(<TextArea rows = {1} />)}
               </FormItem>
             </Col>
           </Row>
@@ -1063,6 +1114,16 @@ class IndexDetail extends Component {
   };
 
   handleNewProduct = () => {
+    // 数据范围下拉
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'person/listDataRang'
+    })
+    // 部门
+    dispatch({
+      type: 'person/listDept'
+    })
+
     this.resetParse();
     this.setState({
       visible: true,
@@ -1075,6 +1136,16 @@ class IndexDetail extends Component {
 
   handleEditProduct = () => {
     const { item } = this.props;
+    // 数据范围下拉
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'person/listDataRang'
+    })
+    // 部门
+    dispatch({
+      type: 'person/listDept'
+    })
+
     this.resetParse();
     const { imageObject } = this.state;
     this.parseImages(imageObject);
