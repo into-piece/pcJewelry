@@ -167,7 +167,7 @@ class ProductSearchFrom extends Component {
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="状态" className={business.from_content_col}>
               {getFieldDecorator('status', { initialValue: 0 })(
-                <Select style={{ width: 171 }} placeholder="请选择" >
+                <Select style={{ width: 171 }} placeholder="请选择">
                   <Option value={undefined}>不限</Option>
                   <Option value={0}>输入</Option>
                   <Option value={2}>已审批</Option>
