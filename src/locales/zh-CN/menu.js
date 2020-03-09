@@ -109,5 +109,5 @@ export default {
   'menu.erp.user.marketing':'营销',
   'menu.erp.user.dev':'开发',
   'menu.erp.user.system':'系统',
-  'menu.erp.user.purchase':''
+  'menu.erp.user.purchase':'采购'
 };
