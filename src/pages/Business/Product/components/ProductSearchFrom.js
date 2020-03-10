@@ -143,7 +143,7 @@ class ProductSearchFrom extends Component {
         <Row gutter={2}>
           <Col lg={8} md={8} sm={8} xs={8}>
             <FormItem label="客户编号" className={business.from_content_col}>
-              {getFieldDecorator('customerNo')(
+              {getFieldDecorator('customerId')(
                 <Select style={{ width: 171 }} placeholder="请选择">
                   {
                     customerId.map(({value,key})=>(

@@ -169,7 +169,6 @@ class ProductInfo extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props,'=========')
     this.loadProduct();
     // window.onbeforeunload = () => {
     //   console.log('onbeforeunload ');

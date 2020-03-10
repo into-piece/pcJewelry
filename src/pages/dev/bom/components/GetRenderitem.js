@@ -15,6 +15,12 @@ const checkObj = {
   1:'是'
 }
 
+const  remarksArr = [ { key: '备注', value: 'remarks' },
+{ key: '新增人', value: 'createUser' },
+{ key: '新增时间', value: 'createTime' },
+{ key: '修改人', value: 'modifier' },
+{ key: '修改时间', value: 'mtime' },
+]
 
 
 const { Description } = DescriptionList;
@@ -101,7 +107,7 @@ const GetRenderitem = ({ data, type, items }) => {
       <Divider className={styles.divder} style={{marginTop:10}} />
       <DescriptionList className={styles.headerList} size="small" col="1">
         {
-         remarksArr.map(({ key, value}) => {
+         remarksArr && remarksArr.map(({ key, value}) => {
             const showdata = data[value]
               if(showdata!=='undefined'&&showdata!=='null'&&showdata){
                 return(
