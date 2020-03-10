@@ -728,7 +728,7 @@ class Info extends Component {
     // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
     if (type === 'qty' && price) {
-      const quotedAmount = Number(value) * Number(price);
+      const quotedAmount = (Number(value) * Number(price)).toFixed(2);
       form.setFieldsValue({
         quotedAmount,
       });
@@ -902,7 +902,7 @@ class Info extends Component {
     const { currency, quoteMethod } = choosenRowData;
     const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
-    const {isWeighStones} = choosenRowData
+    const {isWeighStones,packPriceType} = choosenRowData
  
     return (
       <Form size="small">
@@ -958,6 +958,7 @@ class Info extends Component {
             }) => {
               if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
               if(value === 'stonePrice'&& isWeighStones === 'H009001')return
+              if(value === 'markingPrice' &&  packPriceType === 'H011002')return
               return(
                 <div
                   className="addModal"
@@ -1161,6 +1162,7 @@ class Info extends Component {
               message: rtnMsg,
             });
             this.getList({ sendReq: 'currentQuote' });
+            !isHead && this.getDetailList()
             if (close) this.btnFn('');
           }
           this.setState({ addLoading: false });
@@ -1400,7 +1402,6 @@ class Info extends Component {
     serviceObj.getQuoteDtInit({key:id}).then(res=>{
       const { rtnMsg, rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
-        console.log(res.body.records,'==========getQuoteDtInit')
         const {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice} = res.body.records[0]
 
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率

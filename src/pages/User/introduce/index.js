@@ -76,7 +76,7 @@ class Introduct extends Component {
         <div className={styles.cotent}>
           <ul className={styles.menu}>
             {menuData&&menuData.length>0&&menuData.map(({name,list }) =>
-              <div className={styles.menu_title}>
+              <div className={styles.menu_title} key={name}>
                 <li
                   key={name}
                   onMouseEnter={() => {
