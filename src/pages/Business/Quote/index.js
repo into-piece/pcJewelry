@@ -23,6 +23,7 @@ import {
   Radio,
   Checkbox,
   DatePicker,
+  InputNumber
 } from 'antd';
 import moment from 'moment';
 import ModalConfirm from '@/utils/modal';
@@ -804,7 +805,8 @@ class Info extends Component {
   // type 7 被顺带出的文字
   // type 8 inputext
   // type 9 RangePicker
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form,disabled }) => {
+  // type 11 inputnumber
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form,disabled,precision }) => {
     switch (type) {
       case 2:
         return (
@@ -888,6 +890,10 @@ class Info extends Component {
             }}
           />
         );
+      case 11:
+        return (
+          <InputNumber style={{ width: '100' }} precision={0} />
+        )
       default:
         return (
           <Input
@@ -979,7 +985,9 @@ class Info extends Component {
               initValue,
               number,
               priceUnit,
-              disabled
+              disabled,
+              positiveInteger,
+              precision
             }) => { 
               // 计石重不需要石材重量、主材重量、石材价
               if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
@@ -1021,7 +1029,7 @@ class Info extends Component {
                       : value === 'quoteDate'
                         ? moment(moment().format('L'))
                         : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
-                          : initValue || (number ? '0.00' : undefined),
+                          :initValue || (number ?positiveInteger === 1? 0: '0.00' : undefined),
                   })(
                     this.returnElement({
                       key,
@@ -1035,7 +1043,9 @@ class Info extends Component {
                       initValue,
                       data: quote,
                       form,
-                      disabled
+                      disabled,
+                      positiveInteger,
+                      precision
                     })
                   )}
                   </FormItem>
@@ -1454,7 +1464,7 @@ class Info extends Component {
         
         // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
         if(choosenRowData.isWeighStones === 'H009002'){
-          const finishedWeight = form.getFieldValue('finishedWeight');
+          console.log(finishedWeight,stoneWeightTotal,'======')
           const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
           form.setFieldsValue({
             mainMaterialWeight:mainMaterialWeightT
@@ -1475,13 +1485,10 @@ class Info extends Component {
           markingPrice:this.conversionPrice(packagePrice),
           packPrice: this.conversionPrice(packagePrice),
         })
-
         this.setState({
           productCostValue,
           customerQuoteCoeff:this.conversionPrice(customerQuoteCoeff),
         })
-
-
         dispatch({
           type:'quote/changeStateOut',
           payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
@@ -1502,12 +1509,9 @@ class Info extends Component {
               unitOfMeasurementName,
               unitOfWeightName,
               productLineName,
-              packPrice,
-              actualCount,
               productLineCoefficientQuotation,
               specification,
               unitOfLength,
-              markingPrice
             }
             form.setFieldsValue(obj);
             this.countPrice(obj)

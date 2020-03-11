@@ -125,7 +125,7 @@
       "value": "packPrice",
       "number": true,
       "noNeed": true,
-      "priceUnit": 1
+      "priceUnit": 2
     },
     { "key": "报价重量范围%", "value": "quotedWeightRange", "noNeed": true, "initValue": "5" },
 
@@ -161,7 +161,14 @@
     },
     { "key": "单价", "value": "price", "number": true, "type": 7, "priceUnit": 3 },
     { "key": "产品工费 RMB/件", "value": "productCost", "number": true, "type": 7 },
-    { "key": "报价数量", "value": "qty", "number": true },
+    {
+      "key": "报价数量",
+      "value": "qty",
+      "number": true,
+      "positiveInteger": 1,
+      "type": 11,
+      "precision": 0
+    },
     {
       "key": "报价金额",
       "value": "quotedAmount",
