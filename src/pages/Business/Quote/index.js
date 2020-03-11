@@ -1150,7 +1150,7 @@ class Info extends Component {
 
   // 编辑按钮回调
   handleEdit = close => {
-    const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData } = this.props;
+    const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData,productChoosenRowData} = this.props;
     const isHead = rightMenu === 1;
     const str = isHead ? 'quotelist' : 'quoteDatialList';
 
@@ -1162,10 +1162,11 @@ class Info extends Component {
       params = { 
         id:choosenDetailRowData.id,
         quoteHeadId: choosenRowData.id ,
-        productId: choosenDetailRowData.productId ,
+        productId: productChoosenRowData.id || choosenDetailRowData.productId ,
         productCostValue:  choosenDetailRowData.productCostValue ,
         customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff ,
       };
+      console.log(choosenDetailRowData.productId,choosenDetailRowData,'=========')
     }
 
     // 还要清空所选中项
@@ -1479,8 +1480,39 @@ class Info extends Component {
           productCostValue,
           customerQuoteCoeff:this.conversionPrice(customerQuoteCoeff),
         })
-        // const listTodayRate = res.body.records.filter(item=>item.currency === choosenRowData.currency)
-        // this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
+
+
+        dispatch({
+          type:'quote/changeStateOut',
+          payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
+          callback:()=>{
+            this.showProductModalFunc(2);
+            const obj = {
+              productId: id,
+              productNo,
+              productColorName,
+              customerProductNo,
+              productTypeName,
+              productType,
+              gemColorName,
+              platingColorName,
+              finishedWeight,
+              topCount,
+              lastCount,
+              unitOfMeasurementName,
+              unitOfWeightName,
+              productLineName,
+              packPrice,
+              actualCount,
+              productLineCoefficientQuotation,
+              specification,
+              unitOfLength,
+              markingPrice
+            }
+            form.setFieldsValue(obj);
+            this.countPrice(obj)
+          }
+        })
       }
     })
     // let packPrice = ''
@@ -1496,36 +1528,7 @@ class Info extends Component {
     //     actualCount = res.body.records[0].count
     //   }
     // })
-    dispatch({
-      type:'quote/changeStateOut',
-      payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
-      callback:()=>{
-        this.showProductModalFunc(2);
-        const obj = {
-          productId: id,
-          productNo,
-          productColorName,
-          customerProductNo,
-          productTypeName,
-          productType,
-          gemColorName,
-          platingColorName,
-          finishedWeight,
-          topCount,
-          lastCount,
-          unitOfMeasurementName,
-          unitOfWeightName,
-          productLineName,
-          packPrice,
-          actualCount,
-          productLineCoefficientQuotation,
-          specification,
-          unitOfLength
-        }
-        form.setFieldsValue(obj);
-        this.countPrice(obj)
-      }
-    })
+
   };
 
   // 产品选择弹窗取消回调
