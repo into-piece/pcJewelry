@@ -689,7 +689,7 @@ class Info extends Component {
     if(quoteMethod === 'H008002'){
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
-        const price = this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice+packPrice)
+        const price = this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice + packPrice)
         form.setFieldsValue({
           price 
         });
@@ -735,14 +735,12 @@ class Info extends Component {
     });
   };
 
-  inputChange = (v, type) => {
+  inputChange = (value, type) => {
     const { form,choosenRowData,choosenDetailRowData } = this.props;
     const {listTodayRate} = this.state
     const productCostValue = this.state.productCostValue||choosenDetailRowData.productCostValue
     const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
     
-    const {value}  = v.target
-
     // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
     if (type === 'qty' && price) {
@@ -893,7 +891,13 @@ class Info extends Component {
         );
       case 11:
         return (
-          <InputNumber style={{ width: '100' }} precision={0} />
+          <InputNumber 
+            style={{ width: '100' }} 
+            precision={0} 
+            onChange={v => {
+              this.inputChange(v, value);
+            }}
+          />
         )
       default:
         return (
@@ -902,7 +906,7 @@ class Info extends Component {
             style={{ width: '100' }}
             placeholder="请输入"
             onChange={v => {
-              this.inputChange(v, value);
+              this.inputChange(v.target.value, value);
             }}
           />
         );
