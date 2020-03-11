@@ -689,8 +689,9 @@ class Info extends Component {
     if(quoteMethod === 'H008002'){
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
+        const price = this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice*packPrice)
         form.setFieldsValue({
-          price:  this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice*packPrice)
+          price 
         });
       }else{
         form.setFieldsValue({
@@ -1924,17 +1925,22 @@ class CenterInfo extends Component {
   // 选中某行表头
   changeChoosenRow = (rowData, type) => {
     const { dispatch, pagination } = this.props;
-    const str = type === 1 ? '' : 'Detail';
+    const isHead = type === 1
+    const str = isHead ? '' : 'Detail';
     dispatch({
       type: `quote/getChoosen${str}RowData`,
       payload: rowData,
     });
-    if (type === 1) {
+    if (isHead) {
       this.getDetailList({ quoteHeadId: rowData.id });
       // 字印下拉
       dispatch({
         type: 'quote/getMarkinglistDropDown',
         payload: {key:rowData.customerId},
+      });
+      dispatch({
+        type: `quote/getChoosenDetailRowData`,
+        payload: {id: ''},
       });
     } else {
       dispatch({
