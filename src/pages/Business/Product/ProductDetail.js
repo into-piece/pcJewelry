@@ -86,7 +86,7 @@ const fetchArr = [
   {
     key: 'productType',
     value: queryproductDropDown2,
-    value1: 'unitCode',
+    value1: 'id',
     params: {
       bType: 'H015002',
     },
@@ -94,17 +94,17 @@ const fetchArr = [
   {
     key: 'productColor',
     value: queryProductMaterial,
-    value1: 'productMaterial',
+    value1: 'id',
   },
   {
     key: 'gemColor',
     value: queryunitColor,
-    value1: 'unitCode',
+    value1: 'id',
   },
   {
     key: 'platingColor',
     value: queryPlatingColor,
-    value1: 'colorCode',
+    value1: 'id',
   },
   {
     key: 'customerId',

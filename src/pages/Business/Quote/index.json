@@ -93,7 +93,7 @@
     { "key": "重量单位", "value": "unitOfWeightName", "type": 7, "noNeed": true },
     { "key": "石材重量", "value": "stonesWeight", "noNeed": true, "number": true },
     { "key": "成品重量", "value": "finishedWeight", "number": true },
-    { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true, "type": 7 },
+    { "key": "主材重量", "value": "mainMaterialWeight", "noNeed": true, "number": true },
     { "key": "规格", "value": "specification", "noNeed": true, "number": true },
     {
       "key": "长度单位",

@@ -55,6 +55,8 @@ const {
 } = serviceObj;
 const { headList, detailList } = jsonData;
 
+const menuRadio2 = ['产品清单'];
+
 // 右手边按钮集合
 const btnGroup = [
   { name: '新增', tag: 'plus' },
@@ -174,33 +176,44 @@ const returnCustomerColumns = (qm)=>{
   const quoteMethod  = quoteMethodobj[qm]
   let  customerColumns = [
   {
+    title: <div className={styles.row_normal2}>序号</div>,
+    dataIndex: 'seq',
+    key: 'seq',
+  },
+  {    
     title: <div className={styles.row_normal2}>产品编号</div>,
     dataIndex: 'productNo',
     key: 'productNo',
+    sorter: true
   },
   {
     title: <div className={styles.row_normal2}>客户货号</div>,
     dataIndex: 'custoerProductNo',
     key: 'custoerProductNo',
+    sorter: true
   },
   {
     title: <div className={styles.row_normal2}>前次工费/{quoteMethod}</div>,
     dataIndex: 'lastCount',
     key: 'lastCount',
+    sorter: true
   },
   {
     title: <div className={styles.row_normal2}>实际工费/{quoteMethod}</div>,
     dataIndex: 'actualCount',
     key: 'actualCount',
+    sorter: true
   },
   {
     title: <div className={styles.row_normal2}>最高工费/{quoteMethod}</div>,
     dataIndex: 'topCount',
     key: 'topCount',
+    sorter: true
   },
   {
     title: <div className={styles.row_normal2}>此次工费/{quoteMethod}</div>,
     dataIndex: 'nowCount',
+    sorter: true,
 
     key: 'nowCount',
   },
@@ -209,21 +222,24 @@ const returnCustomerColumns = (qm)=>{
     title: <div className={styles.row_normal2}>字印价/{quoteMethod}</div>,
     dataIndex: 'markingPrice',
     key: 'markingPrice',
+    sorter: true
   },
 
   {
     title: <div className={styles.row_normal2}>包装价/{quoteMethod}</div>,
     dataIndex: 'packPrice',
     key: 'packPrice',
+    sorter: true
   },
 
   {
     title: <div className={styles.row_normal2}>报价金额</div>,
     dataIndex: 'quotedAmount',
     key: 'quotedAmount',
+    sorter: true
   },
   ]
-  customerColumns = customerColumns.map(item => ({ ...item, sorter: true }));
+  customerColumns = customerColumns.map(item => ({ ...item }));
   return customerColumns
 };
 
@@ -540,13 +556,13 @@ class Info extends Component {
     const { dispatch } = this.props;
     if (type === 1) {
       this.getProduct();
-      // 获取筛选参数下拉
-      dispatch({
-        type: 'quote/getBrandsList',
-      });
-      dispatch({
-        type: 'quote/getbasicColourSettingsList',
-      });
+      // 获取筛选参数下拉，注释原因：当前未用上
+      // dispatch({
+      //   type: 'quote/getBrandsList',
+      // });
+      // dispatch({
+      //   type: 'quote/getbasicColourSettingsList',
+      // });
     }
     dispatch({
       type: 'quote/showProductModalFn',
@@ -742,8 +758,9 @@ class Info extends Component {
     const arr2 = ['nowCount','finishedWeight']
     arr2.includes(type) && this.countProductCost({[type]:value})
     
-
+    // 石材重量
     const  stonesWeight = Number(form.getFieldValue('stonesWeight')) || '';
+    // 成品重量
     const  finishedWeight = Number(form.getFieldValue('finishedWeight')) || '';
     
     // 计算主材重量  成品重量-石材重量
@@ -758,6 +775,14 @@ class Info extends Component {
         mainMaterialWeight: (value - stonesWeight).toFixed(2),
       });
     }
+
+    // 修改主材重量时需要反推石材重量
+    if(type === 'mainMaterialWeight' && finishedWeight ){
+      form.setFieldsValue({
+        stonesWeight: (finishedWeight - value).toFixed(2),
+      })
+    }
+
 
     console.log(productCostValue,customerQuoteCoeff,'=========productCostValue')
     // 计算实际工费 计重
@@ -955,10 +980,15 @@ class Info extends Component {
               number,
               priceUnit,
               disabled
-            }) => {
+            }) => { 
+              // 计石重不需要石材重量、主材重量、石材价
               if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
               if(value === 'stonePrice'&& isWeighStones === 'H009001')return
+
               if(value === 'markingPrice' &&  packPriceType === 'H011002')return
+
+              if(value ==='stonesWeight' && isWeighStones === 'H009001') return
+
               return(
                 <div
                   className="addModal"
@@ -1399,14 +1429,18 @@ class Info extends Component {
 
 
     // 获取计算明细的相关数据
-    serviceObj.getQuoteDtInit({key:id}).then(res=>{
+    serviceObj.getQuoteDtInit({key:id, markingId: choosenRowData.markingId}).then(res=>{
       const { rtnMsg, rtnCode } = res.head;
-      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
-        const {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice} = res.body.records[0]
+      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {        
+        console.log(res.body.records,'==========getQuoteDtInit')
+        const {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice} = res.body.records[0]
 
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
         let productCostValue = '0.00'
 
+
+        // 实际工费/件=产品成本*客户报价系数*汇率。
+        // 实际工费/克=产品成本*报价系数/成品重量*汇率
         // 计算实际工费 计件情况下
         if(choosenRowData.quoteMethod === 'H008001'){
           actualCount = this.conversionPrice(productCost*customerQuoteCoeff*listTodayRate)
@@ -1417,12 +1451,28 @@ class Info extends Component {
           productCostValue = this.conversionPrice(productCost*listTodayRate*finishedWeight)
         }
         
+        // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
+        if(choosenRowData.isWeighStones === 'H009002'){
+          const finishedWeight = form.getFieldValue('finishedWeight');
+          const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
+          form.setFieldsValue({
+            mainMaterialWeight:mainMaterialWeightT
+          })
+        }
+        // 字印价/件；报价主页选择计收的时候需要带出
+        if(choosenRowData.markingTypeName === '计收') {
+          form.setFieldsValue({
+            markingPrice
+          })
+        }
+
         form.setFieldsValue({
           productCost: productCostValue,
           actualCount,
           stonesWeight:stoneWeightTotal,
           stonePrice:this.conversionPrice(stonePriceTotal),
-          markingPrice:this.conversionPrice(packagePrice)
+          markingPrice:this.conversionPrice(packagePrice),
+          packPrice: this.conversionPrice(packagePrice),
         })
 
         this.setState({
@@ -2037,7 +2087,6 @@ class CenterInfo extends Component {
   }
 }
 
-const menuRadio2 = ['产品清单'];
 
 export default Info;
 

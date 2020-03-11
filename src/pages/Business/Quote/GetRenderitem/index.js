@@ -83,10 +83,10 @@ const rowArr = [
   { key: '报价总额', value: 'quoteTotalAmount' },
   { key: '说明', value: 'explains' },
   { key: '备注', value: 'remark' },
-  { key: '新增人', value: 'createUser' },
-  { key: '新增时间', value: 'createTime' },
-  { key: '修改人', value: 'modifier' },
-  { key: '修改时间', value: 'mtime' },
+  // { key: '新增人', value: 'createUser' },
+  // { key: '新增时间', value: 'createTime' },
+  // { key: '修改人', value: 'modifier' },
+  // { key: '修改时间', value: 'mtime' },
 ];
 
 const returnKey = ({key,priceUnit,currency,quoteMethod}) => 
@@ -115,12 +115,12 @@ export default ({ data, type, returnListName,currency,quoteMethod }) => {
     type === 1
       ? rowArr
       : [
-          { key: '产品编号', value: 'productNo' },
+          // { key: '产品编号', value: 'productNo' },
           ...detailList,
-          { key: '新增人', value: 'createUser' },
-          { key: '新增时间', value: 'createTime' },
-          { key: '修改人', value: 'modifier' },
-          { key: '修改时间', value: 'mtime' },
+          // { key: '新增人', value: 'createUser' },
+          // { key: '新增时间', value: 'createTime' },
+          // { key: '修改人', value: 'modifier' },
+          // { key: '修改时间', value: 'mtime' },
         ];
 
   const {pictures} = data
