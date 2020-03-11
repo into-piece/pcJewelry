@@ -676,7 +676,8 @@ class Info extends Component {
   // 计算单价
   countPrice = (params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
     const {form,choosenRowData} = this.props
-    const {isWeighStones,quoteMethod,quotePrice} = choosenRowData
+    let {isWeighStones,quoteMethod,quotePrice} = choosenRowData
+    quotePrice = Number(quotePrice)
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
     const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )// 成品重量
     const markingPrice=  Number(params.markingPrice||form.getFieldValue('markingPrice')) // 字印价
@@ -694,8 +695,10 @@ class Info extends Component {
           price 
         });
       }else{
+        const price = this.conversionPrice((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice)
+        console.log(price,nowCount,quotePrice+nowCount,(quotePrice+nowCount)*mainMaterialWeight,'====')
         form.setFieldsValue({
-          price:  this.conversionPrice((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice)
+          price
         });
       }
     }
