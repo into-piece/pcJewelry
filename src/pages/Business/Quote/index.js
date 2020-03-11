@@ -689,7 +689,7 @@ class Info extends Component {
     if(quoteMethod === 'H008002'){
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
-        const price = this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice*packPrice)
+        const price = this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice+packPrice)
         form.setFieldsValue({
           price 
         });
