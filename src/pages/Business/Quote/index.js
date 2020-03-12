@@ -1452,12 +1452,15 @@ class Info extends Component {
       const { rtnMsg, rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {        
         console.log(res.body.records,'==========getQuoteDtInit')
-        const {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice} = res.body.records[0]
-
+        let {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice} = res.body.records[0]
+        customerQuoteCoeff = Number(customerQuoteCoeff)
+        productCost = Number(productCost)
+        stonePriceTotal = Number(stonePriceTotal)
+        stoneWeightTotal = Number(stoneWeightTotal)
+        packagePrice = Number(packagePrice)
+        markingPrice = Number(markingPrice)
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
         let productCostValue = '0.00'
-
-
         // 实际工费/件=产品成本*客户报价系数*汇率。
         // 实际工费/克=产品成本*报价系数/成品重量*汇率
         // 计算实际工费 计件情况下
