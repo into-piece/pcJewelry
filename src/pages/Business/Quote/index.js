@@ -680,7 +680,7 @@ class Info extends Component {
     quotePrice = Number(quotePrice)
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
     const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )// 成品重量
-    const markingPrice=  Number(params.markingPrice||form.getFieldValue('markingPrice')) // 字印价
+    const markingPrice=  Number(params.markingPrice!==''?params.markingPrice:form.getFieldValue('markingPrice')) // 字印价
     const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice')) // 包装单价
     const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight')) // 主材重量
     const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice')) // 石材价
@@ -1459,6 +1459,7 @@ class Info extends Component {
         stoneWeightTotal = Number(stoneWeightTotal)
         packagePrice = Number(packagePrice)
         markingPrice = Number(markingPrice)
+        const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
         let productCostValue = '0.00'
         // 实际工费/件=产品成本*客户报价系数*汇率。
@@ -1476,7 +1477,6 @@ class Info extends Component {
         // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
         if(choosenRowData.isWeighStones === 'H009002'){
           console.log(finishedWeight,stoneWeightTotal,'======')
-          const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
           form.setFieldsValue({
             mainMaterialWeight:mainMaterialWeightT
           })
@@ -1488,6 +1488,10 @@ class Info extends Component {
           })
         }
 
+        this.countPrice({
+          finishedWeight,markingPrice,packPrice,mainMaterialWeight:mainMaterialWeightT,stonePrice:stonePriceTotal
+        })
+
         form.setFieldsValue({
           productCost: productCostValue,
           actualCount,
@@ -1495,6 +1499,22 @@ class Info extends Component {
           stonePrice:this.conversionPrice(stonePriceTotal),
           markingPrice:this.conversionPrice(packagePrice),
           packPrice: this.conversionPrice(packagePrice),
+          productId: id,
+          productNo,
+          productColorName,
+          customerProductNo,
+          productTypeName,
+          productType,
+          gemColorName,
+          platingColorName,
+          finishedWeight,
+          topCount,
+          lastCount,
+          unitOfMeasurementName,
+          unitOfWeightName,
+          productLineName,
+          productLineCoefficientQuotation,
+          specification,
         })
         this.setState({
           productCostValue,
@@ -1504,28 +1524,8 @@ class Info extends Component {
           type:'quote/changeStateOut',
           payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
           callback:()=>{
+            form.setFieldsValue({unitOfLength});
             this.showProductModalFunc(2);
-            const obj = {
-              productId: id,
-              productNo,
-              productColorName,
-              customerProductNo,
-              productTypeName,
-              productType,
-              gemColorName,
-              platingColorName,
-              finishedWeight,
-              topCount,
-              lastCount,
-              unitOfMeasurementName,
-              unitOfWeightName,
-              productLineName,
-              productLineCoefficientQuotation,
-              specification,
-              unitOfLength,
-            }
-            form.setFieldsValue(obj);
-            this.countPrice(obj)
           }
         })
       }
