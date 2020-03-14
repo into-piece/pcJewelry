@@ -679,7 +679,7 @@ class Info extends Component {
   countPrice = (params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
     const {form,choosenRowData} = this.props
     let {isWeighStones,quoteMethod,quotePrice} = choosenRowData
-    quotePrice = Number(quotePrice)
+    quotePrice = Number(quotePrice) // 主材价
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount')) || 0// 此次工费
     const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )|| 0// 成品重量
     const markingPrice=  Number(params.markingPrice!==''?params.markingPrice:form.getFieldValue('markingPrice'))|| 0 // 字印价
@@ -1413,6 +1413,7 @@ class Info extends Component {
     let productLineCoefficientQuotation = '';
     let packPrice = '';
     let actualCount = '0.00';
+    let nowCount = 0
     // await getLastQuoteDetailByProductId({ productId: id }).then(res => {
     //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
     //     lastCount = res.body.records[0].count
@@ -1449,9 +1450,10 @@ class Info extends Component {
       packPrice = this.conversionPrice(data.lastPackPrice);
       lastCount = this.conversionPrice(data.lastQuoteCount);
       topCount = this.conversionPrice(data.topQuoteCount);
-      if (lastCount || actualCount) {
+      nowCount = lastCount || actualCount
+      if (nowCount) {
         form.setFieldsValue({
-          nowCount: lastCount || actualCount,
+          nowCount,
         });
       }
     }
@@ -1499,7 +1501,8 @@ class Info extends Component {
         }
 
         this.countPrice({
-          finishedWeight,markingPrice,packPrice,mainMaterialWeight:mainMaterialWeightT,stonePrice:stonePriceTotal
+          finishedWeight,markingPrice,packPrice,mainMaterialWeight:mainMaterialWeightT,stonePrice:stonePriceTotal,
+          nowCount
         })
 
         form.setFieldsValue({
@@ -1507,7 +1510,7 @@ class Info extends Component {
           actualCount,
           stonesWeight:stoneWeightTotal,
           stonePrice:this.conversionPrice(stonePriceTotal),
-          markingPrice:this.conversionPrice(packagePrice),
+          markingPrice:this.conversionPrice(markingPrice),
           packPrice: this.conversionPrice(packagePrice),
           productId: id,
           productNo,
