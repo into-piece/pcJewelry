@@ -267,6 +267,8 @@ const productSearchParams = [
   { key: '客户货号', value: 'customerProductNo' },
 ];
 
+const isHeadFn = (rightMenu) => rightMenu===1
+
 
 @Form.create()
 @connect(({ loading, quote }) => {
@@ -678,12 +680,12 @@ class Info extends Component {
     const {form,choosenRowData} = this.props
     let {isWeighStones,quoteMethod,quotePrice} = choosenRowData
     quotePrice = Number(quotePrice)
-    const nowCount= Number(params.nowCount||form.getFieldValue('nowCount'))// 此次工费
-    const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )// 成品重量
-    const markingPrice=  Number(params.markingPrice!==''?params.markingPrice:form.getFieldValue('markingPrice')) // 字印价
-    const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice')) // 包装单价
-    const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight')) // 主材重量
-    const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice')) // 石材价
+    const nowCount= Number(params.nowCount||form.getFieldValue('nowCount')) || 0// 此次工费
+    const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )|| 0// 成品重量
+    const markingPrice=  Number(params.markingPrice!==''?params.markingPrice:form.getFieldValue('markingPrice'))|| 0 // 字印价
+    const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice'))|| 0 // 包装单价
+    const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight'))|| 0 // 主材重量
+    const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice'))|| 0 // 石材价
     
     console.log(nowCount,finishedWeight,markingPrice,packPrice,mainMaterialWeight,stonePrice,'=======')
     // 计重
@@ -1002,7 +1004,7 @@ class Info extends Component {
               if(value === 'stonePrice'&& isWeighStones === 'H009001')return
 
               if(value === 'markingPrice' &&  packPriceType === 'H011002')return
-
+              if(value === 'packPrice' &&  packPriceType === 'H011002')return
               if(value ==='stonesWeight' && isWeighStones === 'H009001') return
 
               return(
@@ -1124,7 +1126,7 @@ class Info extends Component {
   handleAdd = close => {
     const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
     const {productCostValue,customerQuoteCoeff} = this.state
-    const isHead = rightMenu === 1;
+    const isHead = isHeadFn(rightMenu);
     const str = isHead ? 'quotelist' : 'quoteDatialList';
     let params = {}; 
     if (!isHead) {
@@ -1169,7 +1171,7 @@ class Info extends Component {
   // 编辑按钮回调
   handleEdit = close => {
     const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData,productChoosenRowData} = this.props;
-    const isHead = rightMenu === 1;
+    const isHead = isHeadFn(rightMenu);
     const str = isHead ? 'quotelist' : 'quoteDatialList';
 
     let params = {
@@ -1220,11 +1222,14 @@ class Info extends Component {
     });
   };
 
+  
+
   // 删除按钮回调
   handleDelect = () => {
     const { rightMenu, selectedRowKeys, selectedDetailRowKeys } = this.props;
+    const isHead = isHeadFn(rightMenu)
     console.log(selectedRowKeys, selectedDetailRowKeys);
-    const sendApi = rightMenu === 1 ? deleteProductQuoteHeader : deleteProductQuoteDetail;
+    const sendApi =  isHead ? deleteProductQuoteHeader : deleteProductQuoteDetail;
     const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head;
@@ -1233,6 +1238,7 @@ class Info extends Component {
           message: rtnMsg,
         });
         this.getList({ sendReq: 'currentQuote' });
+        !isHead && (this.getDetailList())
       }
     });
   };
@@ -1423,32 +1429,31 @@ class Info extends Component {
         productLineCoefficientQuotation = res.body.records[0].productLineCoefficientQuotation;
       }
     });
-    await geInitializeCountByProductId({
+    const resData = await geInitializeCountByProductId({
       productId: id,
       customerId: choosenRowData.customerId,
-    }).then(res => {
-      if (
-        res.head &&
-        res.head.rtnCode === '000000' &&
-        res.body.records &&
-        res.body.records.length > 0
-      ) {
-        const data = res.body.records[0];
-        actualCount = this.conversionPrice(data.actualCount);
-        packPrice = this.conversionPrice(data.lastPackPrice);
-        lastCount = this.conversionPrice(data.lastQuoteCount);
-        topCount = this.conversionPrice(data.topQuoteCount);
-        if (lastCount || actualCount) {
-          form.setFieldsValue({
-            nowCount: lastCount || actualCount,
-          });
-        }
+    })
+    if (
+      resData.head &&
+      resData.head.rtnCode === '000000' &&
+      resData.body.records &&
+      resData.body.records.length > 0
+    ) {
+      const data = resData.body.records[0];
+      actualCount = this.conversionPrice(data.actualCount);
+      packPrice = this.conversionPrice(data.lastPackPrice);
+      lastCount = this.conversionPrice(data.lastQuoteCount);
+      topCount = this.conversionPrice(data.topQuoteCount);
+      if (lastCount || actualCount) {
+        form.setFieldsValue({
+          nowCount: lastCount || actualCount,
+        });
       }
-    });
+    }
 
 
     // 获取计算明细的相关数据
-    serviceObj.getQuoteDtInit({key:id, markingId: choosenRowData.markingId}).then(res=>{
+    await serviceObj.getQuoteDtInit({key:id, markingId: choosenRowData.markingId}).then(res=>{
       const { rtnMsg, rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {        
         console.log(res.body.records,'==========getQuoteDtInit')
