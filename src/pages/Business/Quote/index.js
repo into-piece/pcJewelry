@@ -566,6 +566,13 @@ class Info extends Component {
       // dispatch({
       //   type: 'quote/getbasicColourSettingsList',
       // });
+    }else{
+      // 清空筛选参数
+      dispatch({
+        type:'quote/changeStateOut',
+        payload:{key:'searchProductParams',value:{}}
+      })
+
     }
     dispatch({
       type: 'quote/showProductModalFn',
