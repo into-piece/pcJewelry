@@ -83,10 +83,6 @@ const rowArr = [
   { key: '报价总额', value: 'quoteTotalAmount' },
   { key: '说明', value: 'explains' },
   { key: '备注', value: 'remark' },
-  // { key: '新增人', value: 'createUser' },
-  // { key: '新增时间', value: 'createTime' },
-  // { key: '修改人', value: 'modifier' },
-  // { key: '修改时间', value: 'mtime' },
 ];
 
 const returnKey = ({key,priceUnit,currency,quoteMethod}) => 
@@ -132,7 +128,7 @@ export default ({ data, type, returnListName,currency,quoteMethod }) => {
       className={styles.getRenderitem}
       onClick={selectRowItem}
     >
-      <DescriptionList className={styles.headerList} size="small" col="1">
+      <DescriptionList className={styles.headerList} size="small" col="2">
         {
         type === 2&&
         <div>

@@ -810,14 +810,14 @@ class Info extends Component {
   // type 8 inputext
   // type 9 RangePicker
   // type 11 inputnumber
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form,disabled,precision }) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form,disabled,precision,isEdit ,noedit}) => {
     switch (type) {
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
-            disabled={disabled}
+            disabled={disabled || noedit&&isEdit}
             onChange={v => {
               this.handleSelectChange(v, value);
             }}
@@ -860,7 +860,9 @@ class Info extends Component {
         );
       case 6:
         return (
-          <Radio.Group>
+          <Radio.Group
+            disabled={noedit&&isEdit}
+          >
             {arr.map(({ key, value }) => {
               return (
                 <Radio value={value} key={value}>
@@ -997,7 +999,8 @@ class Info extends Component {
               priceUnit,
               disabled,
               positiveInteger,
-              precision
+              precision,
+              noedit
             }) => { 
               // 计石重不需要石材重量、主材重量、石材价
               if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
@@ -1055,7 +1058,9 @@ class Info extends Component {
                       form,
                       disabled,
                       positiveInteger,
-                      precision
+                      precision,
+                      noedit,
+                      isEdit
                     })
                   )}
                   </FormItem>
