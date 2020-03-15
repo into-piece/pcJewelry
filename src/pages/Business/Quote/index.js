@@ -689,7 +689,7 @@ class Info extends Component {
     quotePrice = Number(quotePrice) // 主材价
     const nowCount= Number(params.nowCount||form.getFieldValue('nowCount')) || 0// 此次工费
     const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )|| 0// 成品重量
-    const markingPrice=  Number(params.markingPrice!==''?params.markingPrice:form.getFieldValue('markingPrice'))|| 0 // 字印价
+    const markingPrice=  Number(params.markingPrice||form.getFieldValue('markingPrice'))|| 0 // 字印价
     const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice'))|| 0 // 包装单价
     const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight'))|| 0 // 主材重量
     const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice'))|| 0 // 石材价
