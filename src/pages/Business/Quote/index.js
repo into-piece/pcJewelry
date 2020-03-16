@@ -750,7 +750,7 @@ class Info extends Component {
   inputChange = (value, type) => {
     const { form,choosenRowData,choosenDetailRowData } = this.props;
     const {listTodayRate} = this.state
-    const productCostValue = this.state.productCostValue||choosenDetailRowData.productCostValue
+    const productCostAndCoefficient = this.state.productCostAndCoefficient||choosenDetailRowData.productCostAndCoefficient
     const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
     
     // 报价金额 = 单价*报价数量
@@ -796,12 +796,12 @@ class Info extends Component {
     }
 
 
-    console.log(productCostValue,customerQuoteCoeff,'=========productCostValue')
+    console.log(productCostAndCoefficient,customerQuoteCoeff,'=========productCostAndCoefficient')
     // 计算实际工费 计重
     if(choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight'){
-      const productCost = (productCostValue*listTodayRate*value).toFixed(2)
+      const productCost = (productCostAndCoefficient*value).toFixed(2)
       form.setFieldsValue({
-        actualCount:(productCost*customerQuoteCoeff/value*listTodayRate).toFixed(2),
+        actualCount:(productCost*customerQuoteCoeff/value).toFixed(2),
         productCost
       })
     }
@@ -1017,6 +1017,7 @@ class Info extends Component {
               if(value === 'packPrice' &&  packPriceType === 'H011002')return
               if(value ==='stonesWeight' && isWeighStones === 'H009001') return
 
+              //  eslint-disable-next-line
               return(
                 <div
                   className="addModal"
@@ -1025,6 +1026,7 @@ class Info extends Component {
                 >
                   <FormItem
                     label={
+                      //  eslint-disable-next-line
                       rightMenu === 2?
                         (priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
                           priceUnit === 2 ?`${key+currency}/件`:
@@ -1137,7 +1139,7 @@ class Info extends Component {
   // 新增按钮事件回调
   handleAdd = close => {
     const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
-    const {productCostValue,customerQuoteCoeff} = this.state
+    const {productCostAndCoefficient,customerQuoteCoeff} = this.state
     const isHead = isHeadFn(rightMenu);
     const str = isHead ? 'quotelist' : 'quoteDatialList';
     let params = {}; 
@@ -1145,7 +1147,7 @@ class Info extends Component {
       params = { 
         quoteHeadId: choosenRowData.id ,
         productId:productChoosenRowData.id || choosenDetailRowData.productId ,
-        productCostValue: productCostValue|| choosenDetailRowData.productCostValue ,
+        productCostAndCoefficient: productCostAndCoefficient|| choosenDetailRowData.productCostAndCoefficient ,
         customerQuoteCoeff:customerQuoteCoeff|| choosenDetailRowData.customerQuoteCoeff ,
       };
     }
@@ -1195,7 +1197,7 @@ class Info extends Component {
         id:choosenDetailRowData.id,
         quoteHeadId: choosenRowData.id ,
         productId: productChoosenRowData.id || choosenDetailRowData.productId ,
-        productCostValue:  choosenDetailRowData.productCostValue ,
+        productCostAndCoefficient:  choosenDetailRowData.productCostAndCoefficient ,
         customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff ,
       };
       console.log(choosenDetailRowData.productId,choosenDetailRowData,'=========')
@@ -1397,7 +1399,7 @@ class Info extends Component {
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
     const { choosenRowData, form ,dispatch,productChoosenRowData} = this.props;
-    let {
+    const {
       id,
       productNo,
       customerProductNo,
@@ -1409,11 +1411,11 @@ class Info extends Component {
       productLineName,
       unitOfMeasurementName,
       unitOfWeightName,
-      finishedWeight,
       specification,
       unitOfLengthName,
       unitOfLength
     } = productChoosenRowData;
+    let {finishedWeight} = productChoosenRowData
     const {listTodayRate} = this.state
     let lastCount = '0.00';
     let topCount = '0.00';
@@ -1422,17 +1424,7 @@ class Info extends Component {
     let actualCount = '0.00';
     let nowCount = 0
     finishedWeight = Number(finishedWeight)
-    // await getLastQuoteDetailByProductId({ productId: id }).then(res => {
-    //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
-    //     lastCount = res.body.records[0].count
-    //   }
-    // })
-    // let topCount = 0
-    // await getTopQuoteDetailByProductId({ productId: id }).then(res => {
-    //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
-    //     topCount = res.body.records[0].count
-    //   }
-    // })
+    
     await getlistProductLine({ productId: id }).then(res => {
       if (
         res.head &&
@@ -1479,20 +1471,17 @@ class Info extends Component {
         stoneWeightTotal = Number(stoneWeightTotal)
         packagePrice = Number(packagePrice)
         markingPrice = Number(markingPrice)
-        productCostAndCoefficient = Number(productCostAndCoefficient )
+        productCostAndCoefficient = Number(productCostAndCoefficient)
         const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
-        let productCostValue = '0.00'
         // 实际工费/件=产品成本*客户报价系数*汇率。
         // 实际工费/克=产品成本*报价系数/成品重量*汇率
         // 计算实际工费 计件情况下
         if(choosenRowData.quoteMethod === 'H008001'){
-          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff*listTodayRate)
-          productCostValue = this.conversionPrice(productCost*listTodayRate)
+          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff)
         }
         if(choosenRowData.quoteMethod === 'H008002'){
-          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff/finishedWeight*listTodayRate)
-          productCostValue = this.conversionPrice(productCost*listTodayRate*finishedWeight)
+          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff/finishedWeight)
         }
         
         // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
@@ -1515,7 +1504,7 @@ class Info extends Component {
         })
 
         form.setFieldsValue({
-          productCost: productCostValue,
+          productCost: this.conversionPrice(productCost),
           actualCount,
           stonesWeight:stoneWeightTotal,
           stonePrice:this.conversionPrice(stonePriceTotal),
@@ -1539,7 +1528,7 @@ class Info extends Component {
           specification,
         })
         this.setState({
-          productCostValue,
+          productCostAndCoefficient:this.conversionPrice(productCostAndCoefficient),
           customerQuoteCoeff:this.conversionPrice(customerQuoteCoeff),
         })
         dispatch({
