@@ -1397,7 +1397,7 @@ class Info extends Component {
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
     const { choosenRowData, form ,dispatch,productChoosenRowData} = this.props;
-    const {
+    let {
       id,
       productNo,
       customerProductNo,
@@ -1421,6 +1421,7 @@ class Info extends Component {
     let packPrice = '';
     let actualCount = '0.00';
     let nowCount = 0
+    finishedWeight = Number(finishedWeight)
     // await getLastQuoteDetailByProductId({ productId: id }).then(res => {
     //   if (res.head && res.head.rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
     //     lastCount = res.body.records[0].count
@@ -1471,13 +1472,14 @@ class Info extends Component {
       const { rtnMsg, rtnCode } = res.head;
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {        
         console.log(res.body.records,'==========getQuoteDtInit')
-        let {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice} = res.body.records[0]
+        let {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice,productCostAndCoefficient} = res.body.records[0]
         customerQuoteCoeff = Number(customerQuoteCoeff)
         productCost = Number(productCost)
         stonePriceTotal = Number(stonePriceTotal)
         stoneWeightTotal = Number(stoneWeightTotal)
         packagePrice = Number(packagePrice)
         markingPrice = Number(markingPrice)
+        productCostAndCoefficient = Number(productCostAndCoefficient )
         const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
         let productCostValue = '0.00'
@@ -1485,11 +1487,11 @@ class Info extends Component {
         // 实际工费/克=产品成本*报价系数/成品重量*汇率
         // 计算实际工费 计件情况下
         if(choosenRowData.quoteMethod === 'H008001'){
-          actualCount = this.conversionPrice(productCost*customerQuoteCoeff*listTodayRate)
+          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff*listTodayRate)
           productCostValue = this.conversionPrice(productCost*listTodayRate)
         }
         if(choosenRowData.quoteMethod === 'H008002'){
-          actualCount = this.conversionPrice(productCost*customerQuoteCoeff/finishedWeight*listTodayRate)
+          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff/finishedWeight*listTodayRate)
           productCostValue = this.conversionPrice(productCost*listTodayRate*finishedWeight)
         }
         
