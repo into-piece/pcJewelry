@@ -18,14 +18,8 @@
       "initValue": 0,
       "noNeed": true
     },
-    { "key": "主材类别", "value": "pType", "type": 2, "list": "mainTypeDropdown", "noedit": 1 },
-    {
-      "key": "客户编号",
-      "value": "customerId",
-      "type": 2,
-      "list": "customerDropDownList",
-      "noedit": 1
-    },
+    { "key": "主材类别", "value": "pType", "type": 2, "list": "mainTypeDropdown" },
+    { "key": "客户编号", "value": "customerId", "type": 2, "list": "customerDropDownList" },
     { "key": "客户简称", "value": "customerShotName", "type": 7, "noNeed": true },
     { "key": "终客编号", "value": "endId", "type": 2, "list": "endCustomerList", "noNeed": true },
     { "key": "终客简称", "value": "endShotName", "noNeed": true },
@@ -34,16 +28,14 @@
       "value": "quoteMethod",
       "type": 6,
       "arr": [{ "key": "计重", "value": "H008002" }, { "key": "计件", "value": "H008001" }],
-      "initValue": "H008002",
-      "noedit": 1
+      "initValue": "H008002"
     },
     {
       "key": "是否计石重",
       "value": "isWeighStones",
       "type": 6,
       "arr": [{ "key": "是", "value": "H009001" }, { "key": "否", "value": "H009002" }],
-      "initValue": "H009001",
-      "noedit": 1
+      "initValue": "H009001"
     },
     {
       "key": "结算币种",
@@ -61,8 +53,7 @@
       "type": 6,
       "arr": [{ "key": "计收", "value": "H011001" }, { "key": "不计收", "value": "H011002" }],
       "initValue": "H011002",
-      "priceUnit": 1,
-      "noedit": 1
+      "priceUnit": 1
     },
     {
       "key": "字印单价",
@@ -70,8 +61,7 @@
       "type": 6,
       "arr": [{ "key": "计收", "value": "H011001" }, { "key": "不计收", "value": "H011002" }],
       "initValue": "H011002",
-      "priceUnit": 1,
-      "noedit": 1
+      "priceUnit": 1
     },
     {
       "key": "客户备料",
