@@ -138,19 +138,23 @@ class PrintTable extends Component {
     bomList: [],
     datalist: [],
     selectLoading: false,
-    loading: false
+    loading: false,
+    selectValue: false
   };
 
   componentWillMount() {
     const { id } = this.props;
     this.getBomDropDown(id).then(() => {
       const { bomList } = this.state;
-      this.handelSelectBom(bomList[0].id);
+      var id = bomList[0].id;
+      this.setState({ selectValue: id });
+      this.handelSelectBom(id);
     });
 
   }
 
   handelSelectBom = value => {
+    this.setState({ selectValue: value });
     this.getProductBillCost(value);
   }
 
@@ -251,7 +255,7 @@ class PrintTable extends Component {
 
 
   render() {
-    const { bomList } = this.state;
+    const { bomList, selectValue } = this.state;
     const { Option } = Select;
 
     return (
@@ -262,7 +266,7 @@ class PrintTable extends Component {
           <Select
             className={styles.selectControl}
             showSearch
-            value={bomList.length !== 0 ? bomList[0].id : null}
+            value={selectValue}
             style={{ width: 150 }}
             placeholder="请选择"
             optionFilterProp="children"
