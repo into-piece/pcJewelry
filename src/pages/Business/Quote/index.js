@@ -954,7 +954,8 @@ class Info extends Component {
       quote,
       productChoosenRowData,
     } = this.props;
-    const { pictures } = productChoosenRowData;
+    let { pictures } = productChoosenRowData;
+    pictures = pictures && pictures.length>0 ? [pictures[0]] :[]
     const { getFieldDecorator, getFieldValue } = form;
     const { modalType } = this.state;
     const isEdit = modalType === 'edit';
@@ -996,9 +997,12 @@ class Info extends Component {
               </FormItem>
             </div>
 
-            <div className={styles.carousel_content}>
-              <Carousel pictures={pictures} />
-            </div>
+            {
+              pictures && pictures.length>0 &&
+              <div className={styles.carousel_content}>
+                <Carousel pictures={pictures} />
+              </div>
+            }
           </React.Fragment>
         )}
         {addArr &&

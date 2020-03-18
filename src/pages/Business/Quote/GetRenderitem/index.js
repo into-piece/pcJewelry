@@ -36,13 +36,17 @@ const returnNameObj = {
     0: '不紧急',
     1: '紧急',
   },
-  isWeighStones: isCheck,
+  isWeighStones:  {H009001:"是",H009002: "否"},
   packPriceType: {
     H011001: '计收',
     H011002: '不计收',
   },
   customerPreparation: isCheck,
   purchasingMaterialsFromCustomers: isCheck,
+  markingType:{
+    H011001: "计收",
+    H011002:"不计收"
+  }
 };
 const returnName = (key, value) => returnNameObj[key][value];
 
@@ -67,14 +71,15 @@ const rowArr = [
   { key: '手机', value: 'customerPhone' },
   { key: 'Email', value: 'customerEmail' },
   { key: '报价方式', value: 'quoteMethod', belong: 2 },
-  { key: '主材价', value: 'quotePrice', belong: 3, list: 'materialPriceList' },
+  { key: '主材价', value: 'quotePrice' },
   { key: '结算币种', value: 'currency' },
   { key: '税率', value: 'taxRate' },
   { key: '紧急程度', value: 'emergency', belong: 2 },
-  { key: '计石重', value: 'isWeighStones', belong: 2 },
+  { key: '是否计石重', value: 'isWeighStones', belong: 2 },
   { key: '字印编码', value: 'markingId', belong: 3, list: 'markinglist' },
   { key: '字印英文名', value: 'markingEnName' },
   { key: '包装单价', value: 'packPriceType', belong: 2 },
+  { key: '字印单价', value: 'markingType', belong: 2 },
   { key: '客户备料', value: 'customerPreparation', belong: 2 },
   { key: '向客户采购用料', value: 'purchasingMaterialsFromCustomers', belong: 2 },
   { key: '包装说明', value: 'packExplains' },
@@ -83,10 +88,6 @@ const rowArr = [
   { key: '报价总额', value: 'quoteTotalAmount' },
   { key: '说明', value: 'explains' },
   { key: '备注', value: 'remark' },
-  // { key: '新增人', value: 'createUser' },
-  // { key: '新增时间', value: 'createTime' },
-  // { key: '修改人', value: 'modifier' },
-  // { key: '修改时间', value: 'mtime' },
 ];
 
 const returnKey = ({key,priceUnit,currency,quoteMethod}) => 
@@ -132,7 +133,7 @@ export default ({ data, type, returnListName,currency,quoteMethod }) => {
       className={styles.getRenderitem}
       onClick={selectRowItem}
     >
-      <DescriptionList className={styles.headerList} size="small" col="1">
+      <DescriptionList className={styles.headerList} size="small" col="2">
         {
         type === 2&&
         <div>

@@ -11,7 +11,7 @@ const getImages = pictures => {
   const images = pictures && pictures.flatMap(e => e.picPath || e);
   if (!images) return;
   return images.map(v => (
-    <div className={styles.carousel_image_ground} key={`as${Math.random(1)}`}>
+    <div className={styles.carousel_image_ground}>
       <Zmage
         alt="图片"
         align="center"
