@@ -762,6 +762,7 @@ class Info extends Component {
     const {listTodayRate} = this.state
     const productCostAndCoefficient = this.state.productCostAndCoefficient||choosenDetailRowData.productCostAndCoefficient
     const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
+    const productCostInit = this.state.productCostInit
     
     // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
@@ -807,11 +808,12 @@ class Info extends Component {
 
 
     console.log(productCostAndCoefficient,customerQuoteCoeff,'=========productCostAndCoefficient')
+    
     // 计算实际工费 计重
     if(choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight'){
       form.setFieldsValue({
         actualCount:(productCostAndCoefficient*customerQuoteCoeff/value).toFixed(2),
-        productCost:(productCostAndCoefficient*value).toFixed(2)
+        productCost:(productCostInit*value).toFixed(2)
       })
     }
   };
@@ -1145,7 +1147,7 @@ class Info extends Component {
   // 新增按钮事件回调
   handleAdd = close => {
     const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
-    const {productCostAndCoefficient,customerQuoteCoeff} = this.state
+    const {productCostAndCoefficient,customerQuoteCoeff,productCostInit} = this.state
     const isHead = isHeadFn(rightMenu);
     const str = isHead ? 'quotelist' : 'quoteDatialList';
     let params = {}; 
@@ -1155,6 +1157,7 @@ class Info extends Component {
         productId:productChoosenRowData.id || choosenDetailRowData.productId ,
         productCostAndCoefficient: productCostAndCoefficient|| choosenDetailRowData.productCostAndCoefficient ,
         customerQuoteCoeff:customerQuoteCoeff|| choosenDetailRowData.customerQuoteCoeff ,
+        productCostInit:productCostInit||choosenDetailRowData.productCostInit
       };
     }
 
@@ -1205,6 +1208,7 @@ class Info extends Component {
         productId: productChoosenRowData.id || choosenDetailRowData.productId ,
         productCostAndCoefficient:  choosenDetailRowData.productCostAndCoefficient ,
         customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff ,
+        productCostInit:choosenDetailRowData.productCostInit
       };
       console.log(choosenDetailRowData.productId,choosenDetailRowData,'=========')
     }
@@ -1537,6 +1541,7 @@ class Info extends Component {
         this.setState({
           productCostAndCoefficient,
           customerQuoteCoeff,
+          productCostInit:productCost
         })
         dispatch({
           type:'quote/changeStateOut',
