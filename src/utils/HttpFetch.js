@@ -160,6 +160,18 @@ export const queryProductLock = `${priefx}/business/business/product/checkIsEdit
 export const queryProductList = `${priefx}/business/business/product/listProduct`
 
 /**
+ * 获取bom下拉框名称
+ * @type {string}
+ */
+export const getBomDropDown = `${priefx}/business/develop.bom/develop-bom/getBomDropDown`
+
+/**
+ * 获取bom下拉框名称
+ * @type {string}
+ */
+export const getProductBillCost = `${priefx}/business/business/product/getBillOfCost`
+
+/**
  * 加载部门
  * @type {string}
  */
@@ -325,6 +337,8 @@ export default {
   queryProductImage,
   saveProductImage,
   queryProductList,
+  getBomDropDown,
+  getProductBillCost,
   queryDeptList,
   querSpecimentLock,
   querSpecimentUnLock,

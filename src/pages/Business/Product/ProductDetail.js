@@ -46,6 +46,8 @@ import UploadImg from '@/components/UploadImg';
 import { queryListWordbook } from '@/services/api'; // 产品来源
 import servicesConfig from '@/services/business';
 import { defaultImages } from '@/utils/utils';
+import PrintTable from './PrintPage';
+import { instanceOf, string } from 'prop-types';
 
 // 客户编号 产品来源 模具号
 const { productBatchUpdate } = servicesConfig;
@@ -191,6 +193,7 @@ class ProductDetail extends Component {
     productParams: {},
     isEditItem: false,
     batchUpdateShow: false,
+    productListShow: false,
     nowData: {
       brand: [],
       productType: [],
@@ -207,7 +210,7 @@ class ProductDetail extends Component {
     },
   };
 
-  componentDidMount(){
+  componentDidMount() {
     fetchArr.forEach(item => {
       this.getData(item);
     });
@@ -300,16 +303,18 @@ class ProductDetail extends Component {
     });
   };
 
+
+
   // 更改table select数组
   onSelectChange = (selectedRowKeys, value) => {
-    console.log(selectedRowKeys, '==========selectedRowKeys');
+    // console.log(selectedRowKeys, '==========selectedRowKeys');
     this.props.dispatch({
       type: 'product/changeState',
       payload: { key: `${value}Keys`, value: selectedRowKeys },
     });
   };
 
-  onSearch = (v, type) => {};
+  onSearch = (v, type) => { };
 
   returnStyle = v => {
     if (v === 'marks') return { width: 1200 };
@@ -395,7 +400,7 @@ class ProductDetail extends Component {
                         }
                       >
                         {arr.map(({ value, key }) => (
-                          <Option value={value}>{key}</Option>
+                          <Option key={value} value={value}>{key}</Option>
                         ))}
                       </Select>
                     ) : type && type === 3 ? (
@@ -412,16 +417,16 @@ class ProductDetail extends Component {
                         }
                       >
                         {arr.map(({ value, key }) => (
-                          <Option value={value}>{key}</Option>
+                          <Option key={value} value={value}>{key}</Option>
                         ))}
                       </Select>
                     ) : (
-                      <Input
-                        placeholder="请输入"
-                        readOnly={readOnly || false}
-                        placeholder={placeholder || undefined}
-                      />
-                    )
+                            <Input
+                              placeholder="请输入"
+                              readOnly={readOnly || false}
+                              placeholder={placeholder || undefined}
+                            />
+                          )
                   )}
                 </FormItem>
               </div>
@@ -481,6 +486,13 @@ class ProductDetail extends Component {
     });
   };
 
+  // 关闭产品清单 modal
+  handleCloseListModal = () => {
+    this.setState({
+      productListShow: false
+    });
+  }
+
   // 批量新增 保存确认 提交回调
   handleBatchSubmit = () => {
     const { dispatch, form, product } = this.props;
@@ -504,7 +516,7 @@ class ProductDetail extends Component {
       if (err) {
         return;
       }
-      console.log(fieldsValue, '===============');
+      // console.log(fieldsValue, '===============');
       const { customerId, productColor, gemColor, platingColor } = product;
 
       let customerV = fieldsValue.customerId.map(
@@ -580,45 +592,45 @@ class ProductDetail extends Component {
 
     const modalFooter = isAdd
       ? [
-          <Button key="back" onClick={this.handleCancel}>
-            取消
+        <Button key="back" onClick={this.handleCancel}>
+          取消
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={productSaveloading}
-            onClick={() => {
-              this.handleSubmit(true);
-            }}
-          >
-            保存
+        <Button
+          key="submit"
+          type="primary"
+          loading={productSaveloading}
+          onClick={() => {
+            this.handleSubmit(true);
+          }}
+        >
+          保存
           </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={productSaveloading}
-            onClick={() => {
-              this.handleSubmit(false);
-            }}
-          >
-            继续添加
+        <Button
+          key="continue"
+          type="primary"
+          loading={productSaveloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          继续添加
           </Button>,
-        ]
+      ]
       : [
-          <Button key="back" onClick={this.handleCancel}>
-            取消
+        <Button key="back" onClick={this.handleCancel}>
+          取消
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={productUpdateloading}
-            onClick={() => {
-              this.handleSubmit(false);
-            }}
-          >
-            保存
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          保存
           </Button>,
-        ];
+      ];
 
     const batchFooter = [
       <Button key="back" onClick={this.closeModal}>
@@ -704,8 +716,8 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-              <div />
-            )}
+                <div />
+              )}
           </Card>
         </div>
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -777,24 +789,24 @@ class ProductDetail extends Component {
                   取消审批
                 </Button>
               ) : (
-                <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="primary"
-                  icon="lock"
-                  disabled={!showItem || showItem === '' || !isProductUpdate}
-                  onClick={() => {
-                    ModalConfirm({
-                      content: '确定审批吗？',
-                      onOk: () => {
-                        this.handleFreezeProduct();
-                      },
-                    });
-                  }}
-                >
-                  审批
-                </Button>
-              )}
+                  <Button
+                    className={business.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定审批吗？',
+                        onOk: () => {
+                          this.handleFreezeProduct();
+                        },
+                      });
+                    }}
+                  >
+                    审批
+                  </Button>
+                )}
             </div>
             <div
               style={{
@@ -955,7 +967,7 @@ class ProductDetail extends Component {
     // const supplierId = getFieldValue("supplierId");
     const productType = getFieldValue('productType');
 
-    console.log(current, getFieldValue('productNo'), getFieldsValue());
+    // console.log(current, getFieldValue('productNo'), getFieldsValue());
 
     return (
       <div className={clientStyle.list_info}>
@@ -969,8 +981,8 @@ class ProductDetail extends Component {
           <div className={classNames('adddevModal', styles.maxline)}>
             <FormItem
               label="产品编号"
-              // labelCol={{ span: 12 }}
-              // wrapperCol={{ span: 20 }}
+            // labelCol={{ span: 12 }}
+            // wrapperCol={{ span: 20 }}
             >
               {getFieldDecorator('productNo', {
                 rules: [{ required: true, message: '请输入姓名' }],
@@ -1342,18 +1354,18 @@ class ProductDetail extends Component {
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
                   }}
                   content={current.customerId}
-                  onSelectEndName={(v,no,name) => {
-                      // debugger
-                      this.setState(
-                        {
-                          customerNo: no,
-                          customerShotName:name
-                        },
-                        () => {
-                          this.parseProductNo();
-                        }
-                      );
-                    }}
+                  onSelectEndName={(v, no, name) => {
+                    // debugger
+                    this.setState(
+                      {
+                        customerNo: no,
+                        customerShotName: name
+                      },
+                      () => {
+                        this.parseProductNo();
+                      }
+                    );
+                  }}
                 />
               )}
             </FormItem>
@@ -1395,16 +1407,16 @@ class ProductDetail extends Component {
               {getFieldDecorator('customerCurrency', {
                 initialValue: current.customerCurrency,
               })(<Dict
-                  dict="H006"
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                  style={{ width: 180 }}
-                  content={current.customerCurrency}
-                  placeholder="请输入"
-                />,
+                dict="H006"
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                style={{ width: 180 }}
+                content={current.customerCurrency}
+                placeholder="请输入"
+              />,
               )}
             </FormItem>
           </div>
@@ -1430,7 +1442,7 @@ class ProductDetail extends Component {
               {getFieldDecorator('productDesc', {
                 rules: [{ message: '请输入描述' }],
                 initialValue: current.productDesc,
-              })(<TextArea placeholder="请输入" style={{ width: 1040,height:32 }}/>)}
+              })(<TextArea placeholder="请输入" style={{ width: 1040, height: 32 }} />)}
             </FormItem>
 
           </div>
@@ -1465,8 +1477,8 @@ class ProductDetail extends Component {
             </div>
           </Form>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
     );
   };
@@ -1478,7 +1490,7 @@ class ProductDetail extends Component {
   };
 
   handleSubmit = close => {
-    const { dispatch, form ,clearSelect} = this.props;
+    const { dispatch, form, clearSelect } = this.props;
     const { isAdd, fileList, showItem, current, productTypeId } = this.state;
     let arr2 = [];
     if (
@@ -1503,7 +1515,7 @@ class ProductDetail extends Component {
       ...arr2,
     ];
 
-    console.log(this.props.form.getFieldsValue(), current);
+    // console.log(this.props.form.getFieldsValue(), current);
     form.validateFields(err => {
       if (err) {
         return;
@@ -1585,7 +1597,7 @@ class ProductDetail extends Component {
           message.error(head.rtnMsg);
         }
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           loading: false,
         });
@@ -1635,7 +1647,7 @@ class ProductDetail extends Component {
           isLoading: false,
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         _this.setState({
           isLoading: false,
         });
@@ -1709,7 +1721,7 @@ class ProductDetail extends Component {
 
   // 点击编辑按钮弹出编辑弹窗
   handleEditProduct = async () => {
-    const { item , clearSelect} = this.props;
+    const { item, clearSelect } = this.props;
 
     // 是否可编辑
     const isEdit = await this.loadProductLock(item);
@@ -1794,7 +1806,7 @@ class ProductDetail extends Component {
     this.setState({
       current: item,
       visible: true,
-      isAdd:true,
+      isAdd: true,
       fileList: this.state.showItem.pictures, // 测试真实数据重接口获取
       isEditItem: false,
     });
@@ -1802,6 +1814,20 @@ class ProductDetail extends Component {
     this.state.isEditItem = true;
     this.productRefresh();
   };
+
+  handleProductList = async () => {
+    const { item } = this.props;
+
+    if (!item || (typeof item === "string")) {
+      message.error('该产品不存在！');
+      return;
+    }
+
+    this.setState({
+      current: item,
+      productListShow: true
+    });
+  }
 
   openCutImageModal = () => {
     const { uploadFile } = this.state;
@@ -1820,7 +1846,7 @@ class ProductDetail extends Component {
           guides
           background
           aspectRatio={1 / 1}
-          // crop={this.crop}
+        // crop={this.crop}
         />
         <div className={styles.cropper_preview}>
           <div className="img-preview" style={{ width: '100%', height: '100%' }} />
@@ -1861,7 +1887,7 @@ class ProductDetail extends Component {
           imageObject: [],
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log('parsing failed', ex);
         _this.setState({
           loading: false,
@@ -1927,7 +1953,7 @@ class ProductDetail extends Component {
     const {
       form: { setFieldsValue },
     } = this.props;
-    console.log(mouldNo);
+    // console.log(mouldNo);
     const showMold = mouldNo;
     // const showMold = mouldNo !== '' ? mouldNo.substr(2, mouldNo.length) : '';
     // console.log(" showMold ",mouldNo,showMold)
@@ -1946,6 +1972,15 @@ class ProductDetail extends Component {
       zhName,
       enName,
     });
+  };
+
+  // 获取产品清单内容
+  getProductListModalContent = () => {
+    const { current } = this.state;
+    if (current && (current instanceof Object)) {
+      var id = current.id;
+      return (<PrintTable id={id}/>);
+    }
   };
 
   render() {
@@ -1977,6 +2012,7 @@ class ProductDetail extends Component {
       isLoading,
       isAdd,
       batchUpdateShow,
+      productListShow,
       current,
     } = this.state;
 
@@ -2026,45 +2062,45 @@ class ProductDetail extends Component {
 
     const modalFooter = isAdd
       ? [
-          <Button key="back" onClick={this.handleCancel}>
-            取消
+        <Button key="back" onClick={this.handleCancel}>
+          取消
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={productSaveloading}
-            onClick={() => {
-              this.handleSubmit(true);
-            }}
-          >
-            保存
+        <Button
+          key="submit"
+          type="primary"
+          loading={productSaveloading}
+          onClick={() => {
+            this.handleSubmit(true);
+          }}
+        >
+          保存
           </Button>,
-          <Button
-            key="continue"
-            type="primary"
-            loading={productSaveloading}
-            onClick={() => {
-              this.handleSubmit(false);
-            }}
-          >
-            继续添加
+        <Button
+          key="continue"
+          type="primary"
+          loading={productSaveloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          继续添加
           </Button>,
-        ]
+      ]
       : [
-          <Button key="back" onClick={this.handleCancel}>
-            取消
+        <Button key="back" onClick={this.handleCancel}>
+          取消
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={productUpdateloading}
-            onClick={() => {
-              this.handleSubmit(false);
-            }}
-          >
-            保存
+        <Button
+          key="submit"
+          type="primary"
+          loading={productUpdateloading}
+          onClick={() => {
+            this.handleSubmit(false);
+          }}
+        >
+          保存
           </Button>,
-        ];
+      ];
 
     const batchFooter = [
       <Button key="back" onClick={this.closeModal}>
@@ -2079,6 +2115,12 @@ class ProductDetail extends Component {
         保存
       </Button>,
     ];
+
+    const productListFooter = [
+      <Button key="back" onClick={this.handleCloseListModal}>
+        取消
+      </Button>
+    ]
 
     return (
       <div className={business.right_info}>
@@ -2113,7 +2155,7 @@ class ProductDetail extends Component {
                     autoplay
                   >
                     {this.getImages(
-                      (showItem.pictures&&showItem.pictures.length === 0) ? defaultImages : showItem.pictures
+                      (showItem.pictures && showItem.pictures.length === 0) ? defaultImages : showItem.pictures
                     )}
                   </Carousel>
                   {showItem.pictures && showItem.pictures.length > 0 && <Divider />}
@@ -2152,8 +2194,8 @@ class ProductDetail extends Component {
                 </Spin>
               </div>
             ) : (
-              <div />
-            )}
+                <div />
+              )}
           </Card>
         </div>
         <Card bodyStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
@@ -2225,24 +2267,24 @@ class ProductDetail extends Component {
                   取消审批
                 </Button>
               ) : (
-                <Button
-                  className={business.buttomControl}
-                  size="small"
-                  type="primary"
-                  icon="lock"
-                  disabled={!showItem || showItem === '' || !isProductUpdate}
-                  onClick={() => {
-                    ModalConfirm({
-                      content: '确定审批吗？',
-                      onOk: () => {
-                        this.handleFreezeProduct();
-                      },
-                    });
-                  }}
-                >
-                  审批
-                </Button>
-              )}
+                  <Button
+                    className={business.buttomControl}
+                    size="small"
+                    type="primary"
+                    icon="lock"
+                    disabled={!showItem || showItem === '' || !isProductUpdate}
+                    onClick={() => {
+                      ModalConfirm({
+                        content: '确定审批吗？',
+                        onOk: () => {
+                          this.handleFreezeProduct();
+                        },
+                      });
+                    }}
+                  >
+                    审批
+                  </Button>
+                )}
             </div>
             <div
               style={{
@@ -2282,6 +2324,18 @@ class ProductDetail extends Component {
               >
                 批量新增
               </Button>
+              <Button
+                className={business.buttomControl}
+                type="primary"
+                size="small"
+                icon="unordered-list"
+                disabled={
+                  !showItem || showItem === '' || !isProductUpdate || showItem.status !== '2'
+                }
+                onClick={this.handleProductList}
+              >
+                成本清单
+              </Button>
             </div>
           </div>
           <Modal
@@ -2313,6 +2367,17 @@ class ProductDetail extends Component {
             bodyStyle={{ padding: '28px 0 0' }}
           >
             {this.getProductModalContent()}
+          </Modal>
+          <Modal
+            title={<BuildTitle title="产品清单" />}
+            maskClosable={false}
+            width={1200}
+            destroyOnClose
+            visible={productListShow}
+            footer={productListFooter}
+            onCancel={this.handleCloseListModal}
+            bodyStyle={{ padding: '28px 0 0' }}>
+            {this.getProductListModalContent()}
           </Modal>
         </Card>
       </div>

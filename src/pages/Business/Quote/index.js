@@ -266,7 +266,6 @@ const productSearchParams = [
   { key: '产品编号', value: 'productNo' },
   { key: '客户货号', value: 'customerProductNo' },
 ];
-
 const isHeadFn = (rightMenu) => rightMenu===1
 
 
@@ -311,7 +310,8 @@ class Info extends Component {
     quoteDateTo: null,
     quoteDate: null,
     quotePriceUSA:'',// 美元的主材价
-    currencyArr:[]
+    currencyArr:[],
+    productCostAndCoefficient:''
   };
 
   componentDidMount() {
@@ -385,7 +385,7 @@ class Info extends Component {
   openAddModal = (isEdit) => {
     const { rightMenu, dispatch, form, choosenRowData } = this.props;
     const {currencyArr} = this.state
-    const isHead = rightMenu === 1;
+    const isHead = isHeadFn(rightMenu);
     if (isHead) {
       dispatch({
         type: 'quote/getcurrencydropdown',
@@ -572,7 +572,6 @@ class Info extends Component {
         type:'quote/changeStateOut',
         payload:{key:'searchProductParams',value:{}}
       })
-
     }
     dispatch({
       type: 'quote/showProductModalFn',
@@ -810,10 +809,9 @@ class Info extends Component {
     console.log(productCostAndCoefficient,customerQuoteCoeff,'=========productCostAndCoefficient')
     // 计算实际工费 计重
     if(choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight'){
-      const productCost = (productCostAndCoefficient*value).toFixed(2)
       form.setFieldsValue({
-        actualCount:(productCost*customerQuoteCoeff/value).toFixed(2),
-        productCost
+        actualCount:(productCostAndCoefficient*customerQuoteCoeff/value).toFixed(2),
+        productCost:(productCostAndCoefficient*value).toFixed(2)
       })
     }
   };
@@ -1023,11 +1021,9 @@ class Info extends Component {
               // 计石重不需要石材重量、主材重量、石材价
               if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
               if(value === 'stonePrice'&& isWeighStones === 'H009001')return
-
               if(value === 'markingPrice' &&  packPriceType === 'H011002')return
               if(value === 'packPrice' &&  packPriceType === 'H011002')return
               if(value ==='stonesWeight' && isWeighStones === 'H009001') return
-
               //  eslint-disable-next-line
               return(
                 <div
@@ -1037,7 +1033,6 @@ class Info extends Component {
                 >
                   <FormItem
                     label={
-                      //  eslint-disable-next-line
                       rightMenu === 2?
                         (priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
                           priceUnit === 2 ?`${key+currency}/件`:
@@ -1247,15 +1242,13 @@ class Info extends Component {
     });
   };
 
-  
-
   // 删除按钮回调
   handleDelect = () => {
     const { rightMenu, selectedRowKeys, selectedDetailRowKeys } = this.props;
     const isHead = isHeadFn(rightMenu)
     console.log(selectedRowKeys, selectedDetailRowKeys);
-    const sendApi =  isHead ? deleteProductQuoteHeader : deleteProductQuoteDetail;
-    const data = rightMenu === 1 ? selectedRowKeys : selectedDetailRowKeys;
+    const sendApi = isHead ? deleteProductQuoteHeader : deleteProductQuoteDetail;
+    const data = isHead ? selectedRowKeys : selectedDetailRowKeys;
     sendApi(data).then(res => {
       const { rtnCode, rtnMsg } = res.head;
       if (rtnCode === '000000') {
@@ -1434,9 +1427,9 @@ class Info extends Component {
     let productLineCoefficientQuotation = '';
     let packPrice = '';
     let actualCount = '0.00';
-    let nowCount = 0
+    let nowCount = 0;
     finishedWeight = Number(finishedWeight)
-    
+
     await getlistProductLine({ productId: id }).then(res => {
       if (
         res.head &&
@@ -1447,6 +1440,7 @@ class Info extends Component {
         productLineCoefficientQuotation = res.body.records[0].productLineCoefficientQuotation;
       }
     });
+
     const resData = await geInitializeCountByProductId({
       productId: id,
       customerId: choosenRowData.customerId,
@@ -1494,6 +1488,7 @@ class Info extends Component {
         }
         if(choosenRowData.quoteMethod === 'H008002'){
           actualCount = (productCostAndCoefficient*customerQuoteCoeff/finishedWeight).toFixed(2);
+          productCost = (productCost*finishedWeight).toFixed(2)
         }
         
         // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
