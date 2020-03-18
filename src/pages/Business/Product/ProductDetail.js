@@ -2371,7 +2371,7 @@ class ProductDetail extends Component {
           <Modal
             title={<BuildTitle title="产品清单" />}
             maskClosable={false}
-            width={1200}
+            width={1000}
             destroyOnClose
             visible={productListShow}
             footer={productListFooter}

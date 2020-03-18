@@ -19,13 +19,15 @@ import barCodeImg from '../../../../assets/bar-code.png';
 class ComponentToPrint extends Component {
 
   state = {
-    data: {}
+    data: {},
+    details: []
   }
 
   componentWillReceiveProps(nextProps) {
     var list = nextProps.list;
     if (list.length !== 0) {
-      this.setState({ data: list[0] });
+      var details = this.detailIntegration(list[0]);
+      this.setState({ data: list[0], details: details });
 
       // 生产条形码
       JsBarcode(this._barcodeSVG, list[0].productNo,
@@ -38,14 +40,31 @@ class ComponentToPrint extends Component {
     }
   }
 
+  detailIntegration = data => {
+    var coslength = data.costDetails.length;
+    var materiallength = data.materialDetails.length;
+    let length = 0;
+    let list = [];
+    if (coslength > materiallength) {
+      length = coslength;
+    } else {
+      length = materiallength;
+    }
+    for (var i = 0; i < length; i++) {
+      var obj = { ...data.materialDetails[i], ...data.costDetails[i] };
+      list.push(obj);
+    }
+    return list;
+  }
+
   render() {
-    const { data } = this.state;
+    const { data, details } = this.state;
 
     return (
       <div>
         <table border="1" cellSpacing="1" cellPadding="0" className={styles.table}>
           <tr>
-            <th colSpan="2"><img src={logoImg} /></th>
+            <th colSpan="2"><img style={{ width: '118px', height: '106px' }} src={logoImg} /></th>
             <th colSpan="7">
               <div className={styles.titleTh}>
                 <span className={styles.title}>成本清单</span>
@@ -58,19 +77,19 @@ class ComponentToPrint extends Component {
           </tr>
 
           <tr className={styles.trtd}>
-            <th>客户</th>
-            <th style={{ width: '9%' }}>{data.customerNo}</th>
-            <th style={{ width: '9%' }}>产品编号</th>
-            <th colSpan="2">{data.productNo}</th>
-            <th>客户货号</th>
-            <th colSpan="3">{data.customerProductNo}</th>
+            <td>客户</td>
+            <td style={{ width: '10%' }}>{data.customerNo}</td>
+            <td style={{ width: '10%' }}>产品编号</td>
+            <td colSpan="2">{data.productNo}</td>
+            <td>客户货号</td>
+            <td colSpan="3">{data.customerProductNo}</td>
           </tr>
 
           <tr className={styles.trtd}>
-            <th>重量</th>
-            <th>{data.finishedWeight}</th>
-            <th>产品说明</th>
-            <th colSpan="6">{data.productDesc}</th>
+            <td>重量</td>
+            <td>{data.finishedWeight}</td>
+            <td>产品说明</td>
+            <td colSpan="6">{data.productDesc}</td>
           </tr>
 
           <tr className={styles.title01}>
@@ -91,7 +110,7 @@ class ComponentToPrint extends Component {
           </tr>
 
           {
-            data.materialDetails ? data.materialDetails.map((i, k) => {
+            details.length !== 0 ? details.map((i, k) => {
               return <tr className={styles.trtd} key={k}>
                 <td>{i.materialType}</td>
                 <td colSpan="3">{i.zhName}</td>
@@ -100,8 +119,8 @@ class ComponentToPrint extends Component {
                 <td>{i.attritionRate}</td>
                 <td>{i.silverW}</td>
                 <td>{i.materialTP}</td>
-                <td>{i.materialTP}</td>
-                <td>{i.materialTP}</td>
+                <td>{i.flowName}</td>
+                <td>{i.cost}</td>
               </tr>;
             }) :
               null
@@ -109,8 +128,8 @@ class ComponentToPrint extends Component {
 
           <tr className={styles.title03}>
             <th colSpan="7">合计：</th>
-            <th>5.42</th>
-            <th>8.20</th>
+            <th>{data.silverTW}</th>
+            <th>{data.materialTP}</th>
             <th>总工费：</th>
             <th>{data.wageTC}</th>
           </tr>
