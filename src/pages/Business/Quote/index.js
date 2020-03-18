@@ -693,18 +693,18 @@ class Info extends Component {
     const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice'))|| 0 // 包装单价
     const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight'))|| 0 // 主材重量
     const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice'))|| 0 // 石材价
-    
+    let price = 0
     console.log(nowCount,finishedWeight,markingPrice,packPrice,mainMaterialWeight,stonePrice,'=======')
     // 计重
     if(quoteMethod === 'H008002'){
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
-        const price = this.conversionPrice((quotePrice+nowCount)*finishedWeight+markingPrice + packPrice)
+        price = ((quotePrice+nowCount)*finishedWeight+markingPrice + packPrice).toFixed(2)
         form.setFieldsValue({
           price 
         });
       }else{
-        const price = this.conversionPrice((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice)
+        price = ((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice).toFixed(2)
         console.log(price,nowCount,quotePrice+nowCount,(quotePrice+nowCount)*mainMaterialWeight,'====')
         form.setFieldsValue({
           price
@@ -715,15 +715,26 @@ class Info extends Component {
     else{
       // 是否计石重 是
       if(isWeighStones === 'H009001'){
+        price = (quotePrice*finishedWeight+nowCount+markingPrice+packPrice).toFixed(2)
         form.setFieldsValue({
-          price:  this.conversionPrice(quotePrice*finishedWeight+nowCount+markingPrice+packPrice)
+          price  
         });
       }else{
+        price = (quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice).toFixed(2)
         form.setFieldsValue({
-          price:  this.conversionPrice(quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice)
+          price
         });
       }
     }
+
+    const qty = form.getFieldValue('qty')
+    if (qty && price) {
+      const quotedAmount = (Number(qty) * Number(price)).toFixed(2);
+      form.setFieldsValue({
+        quotedAmount,
+      });
+    }
+
   }
 
   handleDatePicker = (date, dateString) => {
@@ -1389,6 +1400,7 @@ class Info extends Component {
 
   // 根据主页换算价格
   conversionPrice = (v) => {
+    v = typeof v !== "number" ? Number(v) : v
     const {choosenRowData} = this.props
     const {currency} = choosenRowData
     const {currencyArr} = this.state
@@ -1465,23 +1477,23 @@ class Info extends Component {
       if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {        
         console.log(res.body.records,'==========getQuoteDtInit')
         let {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice,productCostAndCoefficient} = res.body.records[0]
-        customerQuoteCoeff = Number(customerQuoteCoeff)
-        productCost = Number(productCost)
-        stonePriceTotal = Number(stonePriceTotal)
-        stoneWeightTotal = Number(stoneWeightTotal)
-        packagePrice = Number(packagePrice)
-        markingPrice = Number(markingPrice)
-        productCostAndCoefficient = Number(productCostAndCoefficient)
+        customerQuoteCoeff = this.conversionPrice(customerQuoteCoeff)
+        productCost = this.conversionPrice(productCost)
+        stonePriceTotal = this.conversionPrice(stonePriceTotal)
+        stoneWeightTotal = this.conversionPrice(stoneWeightTotal)
+        packagePrice = this.conversionPrice(packagePrice)
+        markingPrice = this.conversionPrice(markingPrice)
+        productCostAndCoefficient = this.conversionPrice(productCostAndCoefficient)
         const mainMaterialWeightT = (finishedWeight - stoneWeightTotal).toFixed(2);
         // 产品工费 按件：产品成本*汇率；按重：产品成本*成品重量*汇率
         // 实际工费/件=产品成本*客户报价系数*汇率。
         // 实际工费/克=产品成本*报价系数/成品重量*汇率
         // 计算实际工费 计件情况下
         if(choosenRowData.quoteMethod === 'H008001'){
-          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff)
+          actualCount = (productCostAndCoefficient*customerQuoteCoeff).toFixed(2);
         }
         if(choosenRowData.quoteMethod === 'H008002'){
-          actualCount = this.conversionPrice(productCostAndCoefficient*customerQuoteCoeff/finishedWeight)
+          actualCount = (productCostAndCoefficient*customerQuoteCoeff/finishedWeight).toFixed(2);
         }
         
         // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
@@ -1504,12 +1516,12 @@ class Info extends Component {
         })
 
         form.setFieldsValue({
-          productCost: this.conversionPrice(productCost),
+          productCost,
           actualCount,
           stonesWeight:stoneWeightTotal,
-          stonePrice:this.conversionPrice(stonePriceTotal),
-          markingPrice:this.conversionPrice(markingPrice),
-          packPrice: this.conversionPrice(packagePrice),
+          stonePrice:stonePriceTotal,
+          markingPrice,
+          packPrice:packagePrice,
           productId: id,
           productNo,
           productColorName,
@@ -1528,8 +1540,8 @@ class Info extends Component {
           specification,
         })
         this.setState({
-          productCostAndCoefficient:this.conversionPrice(productCostAndCoefficient),
-          customerQuoteCoeff:this.conversionPrice(customerQuoteCoeff),
+          productCostAndCoefficient,
+          customerQuoteCoeff,
         })
         dispatch({
           type:'quote/changeStateOut',
