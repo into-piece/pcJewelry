@@ -228,48 +228,20 @@ class PrintTable extends Component {
   }
 
   exportExcel = () => {
-    const { id } = this.props;
+    const { selectValue } = this.state;
 
-    const params = {
-      'key': id
-    };
-    fetch(HttpFetch.getProductBillCost, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params),
+    let bomid = selectValue;
+    let url = `${HttpFetch.getBillOfCostExcel}?key=${bomid}`
+
+    fetch(url, {
+      method: 'GET'
     })
       .then(response => response.json())
       .then(d => {
-        const url = window.URL.createObjectURL(new Blob([data]));
-        const link = document.createElement('a');
-        link.style.display = 'none';
-        link.href = url;
-        link.setAttribute('download', 'excel.xlsx');
-
-        document.body.appendChild(link);
-        link.click();
       })
       .catch((ex) => {
         console.log(ex);
       });
-
-    // servicesConfig.purchaseExport(args).then(data => {
-    //   if (!data) {
-    //     console.log(1)
-    //     return
-    //   }
-    //   const url = window.URL.createObjectURL(new Blob([data]))
-    //   const link = document.createElement('a')
-    //   link.style.display = 'none'
-    //   link.href = url
-    //   link.setAttribute('download', 'excel.xlsx')
-
-    //   document.body.appendChild(link)
-    //   link.click()
-    // });
-
   };
 
 
