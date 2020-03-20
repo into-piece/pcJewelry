@@ -30,7 +30,7 @@ class ComponentToPrint extends Component {
       this.setState({ data: list[0], details: details });
 
       // 生产条形码
-      JsBarcode(this._barcodeSVG, list[0].productNo,
+      JsBarcode(this._barcodeSVG, list[0].productNo.substring(0, 9),
         {
           format: "CODE39",
           height: 55,
@@ -77,12 +77,12 @@ class ComponentToPrint extends Component {
           </tr>
 
           <tr className={styles.trtd}>
-            <td>客户</td>
-            <td style={{ width: '10%' }}>{data.customerNo}</td>
-            <td style={{ width: '10%' }}>产品编号</td>
-            <td colSpan="2">{data.productNo}</td>
-            <td>客户货号</td>
-            <td colSpan="3">{data.customerProductNo}</td>
+            <td style={{ width: '9%' }}>客户</td>
+            <td style={{ width: '9%' }}>{data.customerNo}</td>
+            <td style={{ width: '9%' }}>产品编号</td>
+            <td colSpan="2" style={{ width: '18%' }}>{data.productNo}</td>
+            <td style={{ width: '9%' }}>客户货号</td>
+            <td colSpan="3" style={{ width: '27%' }}>{data.customerProductNo}</td>
           </tr>
 
           <tr className={styles.trtd}>
@@ -103,7 +103,7 @@ class ComponentToPrint extends Component {
             <th style={{ width: '9%' }}>用量</th>
             <th style={{ width: '9%' }}>单价</th>
             <th style={{ width: '9%' }}>损耗</th>
-            <th style={{ width: '10%' }}>银重</th>
+            <th style={{ width: '11%' }}>银重</th>
             <th style={{ width: '9%' }}>物料总价</th>
             <th style={{ width: '9%' }}>流程</th>
             <th style={{ width: '9%' }}>工费</th>
@@ -232,16 +232,7 @@ class PrintTable extends Component {
 
     let bomid = selectValue;
     let url = `${HttpFetch.getBillOfCostExcel}?key=${bomid}`
-
-    fetch(url, {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then(d => {
-      })
-      .catch((ex) => {
-        console.log(ex);
-      });
+    location.href = url;
   };
 
 
