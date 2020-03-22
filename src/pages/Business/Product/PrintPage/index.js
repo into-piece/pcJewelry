@@ -19,16 +19,18 @@ import barCodeImg from '../../../../assets/bar-code.png';
 class ComponentToPrint extends Component {
 
   state = {
-    data: {}
+    data: {},
+    details: []
   }
 
   componentWillReceiveProps(nextProps) {
     var list = nextProps.list;
     if (list.length !== 0) {
-      this.setState({ data: list[0] });
+      var details = this.detailIntegration(list[0]);
+      this.setState({ data: list[0], details: details });
 
       // 生产条形码
-      JsBarcode(this._barcodeSVG, list[0].productNo,
+      JsBarcode(this._barcodeSVG, list[0].productNo.substring(0, 9),
         {
           format: "CODE39",
           height: 55,
@@ -38,14 +40,31 @@ class ComponentToPrint extends Component {
     }
   }
 
+  detailIntegration = data => {
+    var coslength = data.costDetails.length;
+    var materiallength = data.materialDetails.length;
+    let length = 0;
+    let list = [];
+    if (coslength > materiallength) {
+      length = coslength;
+    } else {
+      length = materiallength;
+    }
+    for (var i = 0; i < length; i++) {
+      var obj = { ...data.materialDetails[i], ...data.costDetails[i] };
+      list.push(obj);
+    }
+    return list;
+  }
+
   render() {
-    const { data } = this.state;
+    const { data, details } = this.state;
 
     return (
       <div>
         <table border="1" cellSpacing="1" cellPadding="0" className={styles.table}>
           <tr>
-            <th colSpan="2"><img src={logoImg} /></th>
+            <th colSpan="2"><img style={{ width: '118px', height: '106px' }} src={logoImg} /></th>
             <th colSpan="7">
               <div className={styles.titleTh}>
                 <span className={styles.title}>成本清单</span>
@@ -58,19 +77,19 @@ class ComponentToPrint extends Component {
           </tr>
 
           <tr className={styles.trtd}>
-            <th>客户</th>
-            <th style={{ width: '9%' }}>{data.customerNo}</th>
-            <th style={{ width: '9%' }}>产品编号</th>
-            <th colSpan="2">{data.productNo}</th>
-            <th>客户货号</th>
-            <th colSpan="3">{data.customerProductNo}</th>
+            <td style={{ width: '9%' }}>客户</td>
+            <td style={{ width: '9%' }}>{data.customerNo}</td>
+            <td style={{ width: '9%' }}>产品编号</td>
+            <td colSpan="2" style={{ width: '18%' }}>{data.productNo}</td>
+            <td style={{ width: '9%' }}>客户货号</td>
+            <td colSpan="3" style={{ width: '27%' }}>{data.customerProductNo}</td>
           </tr>
 
           <tr className={styles.trtd}>
-            <th>重量</th>
-            <th>{data.finishedWeight}</th>
-            <th>产品说明</th>
-            <th colSpan="6">{data.productDesc}</th>
+            <td>重量</td>
+            <td>{data.finishedWeight}</td>
+            <td>产品说明</td>
+            <td colSpan="6">{data.productDesc}</td>
           </tr>
 
           <tr className={styles.title01}>
@@ -84,14 +103,14 @@ class ComponentToPrint extends Component {
             <th style={{ width: '9%' }}>用量</th>
             <th style={{ width: '9%' }}>单价</th>
             <th style={{ width: '9%' }}>损耗</th>
-            <th style={{ width: '10%' }}>银重</th>
+            <th style={{ width: '11%' }}>银重</th>
             <th style={{ width: '9%' }}>物料总价</th>
             <th style={{ width: '9%' }}>流程</th>
             <th style={{ width: '9%' }}>工费</th>
           </tr>
 
           {
-            data.materialDetails ? data.materialDetails.map((i, k) => {
+            details.length !== 0 ? details.map((i, k) => {
               return <tr className={styles.trtd} key={k}>
                 <td>{i.materialType}</td>
                 <td colSpan="3">{i.zhName}</td>
@@ -100,8 +119,8 @@ class ComponentToPrint extends Component {
                 <td>{i.attritionRate}</td>
                 <td>{i.silverW}</td>
                 <td>{i.materialTP}</td>
-                <td>{i.materialTP}</td>
-                <td>{i.materialTP}</td>
+                <td>{i.flowName}</td>
+                <td>{i.cost}</td>
               </tr>;
             }) :
               null
@@ -109,8 +128,8 @@ class ComponentToPrint extends Component {
 
           <tr className={styles.title03}>
             <th colSpan="7">合计：</th>
-            <th>5.42</th>
-            <th>8.20</th>
+            <th>{data.silverTW}</th>
+            <th>{data.materialTP}</th>
             <th>总工费：</th>
             <th>{data.wageTC}</th>
           </tr>
@@ -209,48 +228,11 @@ class PrintTable extends Component {
   }
 
   exportExcel = () => {
-    const { id } = this.props;
+    const { selectValue } = this.state;
 
-    const params = {
-      'key': id
-    };
-    fetch(HttpFetch.getProductBillCost, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params),
-    })
-      .then(response => response.json())
-      .then(d => {
-        const url = window.URL.createObjectURL(new Blob([data]));
-        const link = document.createElement('a');
-        link.style.display = 'none';
-        link.href = url;
-        link.setAttribute('download', 'excel.xlsx');
-
-        document.body.appendChild(link);
-        link.click();
-      })
-      .catch((ex) => {
-        console.log(ex);
-      });
-
-    // servicesConfig.purchaseExport(args).then(data => {
-    //   if (!data) {
-    //     console.log(1)
-    //     return
-    //   }
-    //   const url = window.URL.createObjectURL(new Blob([data]))
-    //   const link = document.createElement('a')
-    //   link.style.display = 'none'
-    //   link.href = url
-    //   link.setAttribute('download', 'excel.xlsx')
-
-    //   document.body.appendChild(link)
-    //   link.click()
-    // });
-
+    let bomid = selectValue;
+    let url = `${HttpFetch.getBillOfCostExcel}?key=${bomid}`
+    location.href = url;
   };
 
 

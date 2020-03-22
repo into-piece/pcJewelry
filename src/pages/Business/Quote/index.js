@@ -35,6 +35,7 @@ import serviceObj from '@/services/quote';
 import jsonData from './index.json';
 import SearchForm from '@/components/SearchForm';
 import SelectProductModal from './SelectProductModal';
+import PrintTable from './PrintPage';
 import styles from './index.less';
 import { defaultImages } from '@/utils/utils';
 import BuildTitle from '@/components/BuildTitle';
@@ -65,6 +66,7 @@ const btnGroup = [
   { name: '编辑', tag: 'edit' },
   { name: '审批', tag: 'lock' },
   { name: '复制', tag: 'copy' },
+  { name: '打印', tag: 'printer' },
 ];
 
 const isLockList = false; // table是否锁定=》显示锁定标签做判断 先设定为否
@@ -551,6 +553,9 @@ class Info extends Component {
       case 'freshList':
         this.freshList();
         break;
+      case 'printer':
+        this.setState({ modalType });
+        break;
     }
   };
 
@@ -963,7 +968,11 @@ class Info extends Component {
     const { currency, quoteMethod } = choosenRowData;
     const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
-    const {isWeighStones,packPriceType} = choosenRowData
+    const {isWeighStones,packPriceType} = choosenRowData;
+
+    if (modalType === 'printer') {
+      return <PrintTable />;
+    }
  
     return (
       <Form size="small">
@@ -1117,6 +1126,7 @@ class Info extends Component {
     const { modalType } = this.state;
     let text = '';
     const { rightMenu } = this.props;
+    if (modalType == 'printer') return '报价单';
     switch (modalType) {
       case 'plus':
         text = '新增';
@@ -1353,6 +1363,9 @@ class Info extends Component {
         (rightMenu === 2 && selectedDetailRowKeys.length === 0) ||
         this.returnLockType().disabled
       );
+    if (tag === 'printer') {
+      return !(rightMenu === 1 && selectedRowKeys.length !== 0);
+    }
     return (
       (rightMenu === 1 && selectedRowKeys.length === 0) ||
       (rightMenu === 2 && selectedDetailRowKeys.length === 0)

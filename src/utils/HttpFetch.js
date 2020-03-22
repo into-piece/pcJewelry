@@ -166,10 +166,16 @@ export const queryProductList = `${priefx}/business/business/product/listProduct
 export const getBomDropDown = `${priefx}/business/develop.bom/develop-bom/getBomDropDown`
 
 /**
- * 获取bom下拉框名称
+ * 获取产品清单
  * @type {string}
  */
 export const getProductBillCost = `${priefx}/business/business/product/getBillOfCost`
+
+/**
+ * 导出产品清单Excel
+ * @type {string}
+ */
+export const getBillOfCostExcel = `${priefx}/business/business/product/getBillOfCostExcel`
 
 /**
  * 加载部门
@@ -339,6 +345,7 @@ export default {
   queryProductList,
   getBomDropDown,
   getProductBillCost,
+  getBillOfCostExcel,
   queryDeptList,
   querSpecimentLock,
   querSpecimentUnLock,
