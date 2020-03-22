@@ -20,9 +20,7 @@ const returnApi = (module) => {
 // module 2 product-quote-detail模块
 // moudle 3 product模块
 // 4/sys/mst-wordbook
-const resultArr = [
-
-
+const postArr = [
   { key: 'listSupplier', path: '/purchase-supplier/list' },// 供应商list
   { key: 'listSupplierNoPage', path: '/purchase-supplier/listAll' },// 供应商list
   { key: 'deleteSupplier', path: '/purchase-supplier/delete' },// 删除表头
@@ -41,20 +39,52 @@ const resultArr = [
 
   { key: 'listMstWordbook', path: '/sys/mst-wordbook/listMstWordbook', module: 4 }, // 获取为报价的产品参数
   { key: 'listDropDownPurchase', path: '/purchase.supplier/purchase-supplier/listDropDown', module: 4 }, // 新增供应商下拉接口
-  { key: 'purchaseExport', path: '/purchase.supplier/purchase-supplier/export', module: 4 }, // 供应商导出excel接口
   { key: 'change', path: '/purchase-supplier/change' },
+];
+
+const getArr = [
+  { key: 'purchaseExport', path: '/purchase.supplier/purchase-supplier/export', module: 4 }, // 供应商导出excel接口
 ];
 // /listMstWordbook
 
+const buildUrlByParams = (url, params = false) => {
+  const keys = Object.keys(params);
+  if (params && keys && 0 < keys.length) {
+    let query = /\?/.test(url) ? '' : '?';
+    for (let key of keys) {
+      query += `${key}=${params[key]}&`;
+    }
+    url += query;
+    url = url.substring(0, url.length - 1);
+  }
+  return url;
+};
+
 // 请求url配置
 const outPutObject = {};
-resultArr.forEach(({ key, path, module }) => {
+postArr.forEach(({ key, path, module }) => {
   outPutObject[key] = async (params) => {
     return request(returnApi(module) + path, {
       method: 'POST',
       data: params,
     });
   };
+});
+
+getArr.forEach(({ key, path, module }, i) => {
+  if (i === 0) {
+    outPutObject[key] = (params) => {
+      var url = returnApi(module) + path;
+      return buildUrlByParams(url, params);
+    };
+  } else {
+    outPutObject[key] = async (params) => {
+      return request(returnApi(module) + path, {
+        method: 'GET',
+        params: params,
+      });
+    };
+  }
 });
 
 export default outPutObject;

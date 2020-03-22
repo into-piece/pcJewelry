@@ -52,39 +52,43 @@ class ComponentToPrint extends Component {
 class PrintTable extends Component {
   state = {
     datalist: [],
-    loading:false
+    loading: false
   };
 
   componentWillMount() {
-    this.setState({loading:true})
+    this.setState({ loading: true })
 
-    const {args} =this.props;
+    const { args } = this.props;
     servicesConfig.listSupplierNoPage(args).then(res => {
-      if (res && res.body && res.body.records ) {
-        this.setState({datalist:res.body.records})
+      if (res && res.body && res.body.records) {
+        this.setState({ datalist: res.body.records })
       }
-      this.setState({loading:false})
+      this.setState({ loading: false })
     });
   }
 
 
   exportExcel = () => {
     const { args } = this.props;
+    const { status } = args;
 
-    servicesConfig.purchaseExport(args).then(data => {
-      if (!data) {
-        console.log(1)
-        return
-      }
-      const url = window.URL.createObjectURL(new Blob([data]))
-      const link = document.createElement('a')
-      link.style.display = 'none'
-      link.href = url
-      link.setAttribute('download', 'excel.xlsx')
+    var url = servicesConfig.purchaseExport({ 'status': status });
+    window.location.href = url;
 
-      document.body.appendChild(link)
-      link.click()
-    });
+    // servicesConfig.purchaseExport(args).then(data => {
+    //   if (!data) {
+    //     console.log(1)
+    //     return
+    //   }
+    //   const url = window.URL.createObjectURL(new Blob([data]))
+    //   const link = document.createElement('a')
+    //   link.style.display = 'none'
+    //   link.href = url
+    //   link.setAttribute('download', 'excel.xlsx')
+
+    //   document.body.appendChild(link)
+    //   link.click()
+    // });
 
   };
 
