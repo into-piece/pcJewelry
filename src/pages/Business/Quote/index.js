@@ -1902,7 +1902,6 @@ const RightContent = ({
                   }
                 }}
               >
-                {' '}
                 <Button type="primary" size="small" className={styles.buttomControl}>
                   <Icon type="upload" />
                   导入

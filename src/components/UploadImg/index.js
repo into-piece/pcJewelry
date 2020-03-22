@@ -80,7 +80,7 @@ class UploadImg extends Component {
     this.refs.cropper.getCroppedCanvas().toBlob((b) => {
 
       const formData = new FormData();
-      formData.append('file', b, `img${  Math.random(1)  }.png`);
+      formData.append('file', b);
       fetch(HttpFetch.uploadImg, {
         method: 'POST',
         headers: {
