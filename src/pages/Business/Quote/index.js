@@ -175,72 +175,72 @@ let clientContentColumns = [
 clientContentColumns = clientContentColumns.map(item => ({ ...item, sorter: true }));
 
 // 报价详情表头
-const returnCustomerColumns = (qm)=>{
-  const quoteMethod  = quoteMethodobj[qm]
-  let  customerColumns = [
-  {
-    title: <div className={styles.row_normal2}>序号</div>,
-    dataIndex: 'seq',
-    key: 'seq',
-  },
-  {    
-    title: <div className={styles.row_normal2}>产品编号</div>,
-    dataIndex: 'productNo',
-    key: 'productNo',
-    sorter: true
-  },
-  {
-    title: <div className={styles.row_normal2}>客户货号</div>,
-    dataIndex: 'custoerProductNo',
-    key: 'custoerProductNo',
-    sorter: true
-  },
-  {
-    title: <div className={styles.row_normal2}>前次工费/{quoteMethod}</div>,
-    dataIndex: 'lastCount',
-    key: 'lastCount',
-    sorter: true
-  },
-  {
-    title: <div className={styles.row_normal2}>实际工费/{quoteMethod}</div>,
-    dataIndex: 'actualCount',
-    key: 'actualCount',
-    sorter: true
-  },
-  {
-    title: <div className={styles.row_normal2}>最高工费/{quoteMethod}</div>,
-    dataIndex: 'topCount',
-    key: 'topCount',
-    sorter: true
-  },
-  {
-    title: <div className={styles.row_normal2}>此次工费/{quoteMethod}</div>,
-    dataIndex: 'nowCount',
-    sorter: true,
+const returnCustomerColumns = (qm) => {
+  const quoteMethod = quoteMethodobj[qm]
+  let customerColumns = [
+    {
+      title: <div className={styles.row_normal2}>序号</div>,
+      dataIndex: 'seq',
+      key: 'seq',
+    },
+    {
+      title: <div className={styles.row_normal2}>产品编号</div>,
+      dataIndex: 'productNo',
+      key: 'productNo',
+      sorter: true
+    },
+    {
+      title: <div className={styles.row_normal2}>客户货号</div>,
+      dataIndex: 'custoerProductNo',
+      key: 'custoerProductNo',
+      sorter: true
+    },
+    {
+      title: <div className={styles.row_normal2}>前次工费/{quoteMethod}</div>,
+      dataIndex: 'lastCount',
+      key: 'lastCount',
+      sorter: true
+    },
+    {
+      title: <div className={styles.row_normal2}>实际工费/{quoteMethod}</div>,
+      dataIndex: 'actualCount',
+      key: 'actualCount',
+      sorter: true
+    },
+    {
+      title: <div className={styles.row_normal2}>最高工费/{quoteMethod}</div>,
+      dataIndex: 'topCount',
+      key: 'topCount',
+      sorter: true
+    },
+    {
+      title: <div className={styles.row_normal2}>此次工费/{quoteMethod}</div>,
+      dataIndex: 'nowCount',
+      sorter: true,
 
-    key: 'nowCount',
-  },
+      key: 'nowCount',
+    },
 
-  {
-    title: <div className={styles.row_normal2}>字印价/{quoteMethod}</div>,
-    dataIndex: 'markingPrice',
-    key: 'markingPrice',
-    sorter: true
-  },
+    {
+      title: <div className={styles.row_normal2}>字印价/{quoteMethod}</div>,
+      dataIndex: 'markingPrice',
+      key: 'markingPrice',
+      sorter: true
+    },
 
-  {
-    title: <div className={styles.row_normal2}>包装价/{quoteMethod}</div>,
-    dataIndex: 'packPrice',
-    key: 'packPrice',
-    sorter: true
-  },
+    {
+      title: <div className={styles.row_normal2}>包装价/{quoteMethod}</div>,
+      dataIndex: 'packPrice',
+      key: 'packPrice',
+      sorter: true
+    },
 
-  {
-    title: <div className={styles.row_normal2}>报价金额</div>,
-    dataIndex: 'quotedAmount',
-    key: 'quotedAmount',
-    sorter: true
-  },
+    {
+      title: <div className={styles.row_normal2}>报价金额</div>,
+      dataIndex: 'quotedAmount',
+      key: 'quotedAmount',
+      sorter: true
+    },
   ]
   customerColumns = customerColumns.map(item => ({ ...item }));
   return customerColumns
@@ -268,7 +268,7 @@ const productSearchParams = [
   { key: '产品编号', value: 'productNo' },
   { key: '客户货号', value: 'customerProductNo' },
 ];
-const isHeadFn = (rightMenu) => rightMenu===1
+const isHeadFn = (rightMenu) => rightMenu === 1
 
 
 @Form.create()
@@ -298,10 +298,10 @@ const isHeadFn = (rightMenu) => rightMenu===1
     productListLoading: loading.effects['quote/getProductList'],
     searchParams: quote.searchParams,
     searchDetailParams: quote.searchDetailParams,
-    endCustomerList:quote.endCustomerList,
-    searchProductParams:quote.searchProductParams,
-    customerDropDownList:quote.customerDropDownList,
-    detailPagination:quote.detailPagination
+    endCustomerList: quote.endCustomerList,
+    searchProductParams: quote.searchProductParams,
+    customerDropDownList: quote.customerDropDownList,
+    detailPagination: quote.detailPagination
   };
 })
 class Info extends Component {
@@ -311,9 +311,9 @@ class Info extends Component {
     quoteDateFrom: null,
     quoteDateTo: null,
     quoteDate: null,
-    quotePriceUSA:'',// 美元的主材价
-    currencyArr:[],
-    productCostAndCoefficient:''
+    quotePriceUSA: '',// 美元的主材价
+    currencyArr: [],
+    productCostAndCoefficient: ''
   };
 
   componentDidMount() {
@@ -323,7 +323,7 @@ class Info extends Component {
   // 初始化表单数据
   initDropdownReq = () => {
     const { dispatch } = this.props;
-        // this.unLockEdit("424f66d2-2cff-4312-8a0e-67ccd3332589")
+    // this.unLockEdit("424f66d2-2cff-4312-8a0e-67ccd3332589")
     // 获取客户编号下拉
     dispatch({
       type: 'quote/getlistCustomerDropDown',
@@ -338,13 +338,13 @@ class Info extends Component {
     this.getList({ sendReq: 'currentQuote' });
 
     // 获取汇率数组
-    this.setCurrency()    
+    this.setCurrency()
   }
 
   // 获取对应key=》页面进行数据请求
   getList = (args, param) => {
     const { dispatch, pagination, searchParams } = this.props;
-    if(param && 'current' in param){
+    if (param && 'current' in param) {
       dispatch({
         type: `quote/changeStateOut`,
         payload: { key: 'pagination', value: { ...pagination, current: param.current } },
@@ -361,8 +361,8 @@ class Info extends Component {
     });
   };
 
-  getProduct = (args={}) => {
-    const { dispatch, productPagination ,choosenRowData,searchProductParams} = this.props;
+  getProduct = (args = {}) => {
+    const { dispatch, productPagination, choosenRowData, searchProductParams } = this.props;
     const customerNo = choosenRowData.customerNo
 
     if ('current' in args) {
@@ -374,7 +374,7 @@ class Info extends Component {
 
     dispatch({
       type: 'quote/getProductList',
-      payload: { params: {...searchProductParams, customerNo,...productPagination, ...args } },
+      payload: { params: { ...searchProductParams, customerNo, ...productPagination, ...args } },
       callback: res => {
         if (res && res.records.length === 1 && args.search) {
           this.changeChoosenRow(res.records[0]);
@@ -386,7 +386,7 @@ class Info extends Component {
 
   openAddModal = (isEdit) => {
     const { rightMenu, dispatch, form, choosenRowData } = this.props;
-    const {currencyArr} = this.state
+    const { currencyArr } = this.state
     const isHead = isHeadFn(rightMenu);
     if (isHead) {
       dispatch({
@@ -401,7 +401,7 @@ class Info extends Component {
     });
 
 
-    if(!isEdit){
+    if (!isEdit) {
       // 获取到的是美元的主材价 还需
       getMainMaterialPrice().then(res => {
         const { head, body } = res;
@@ -415,7 +415,7 @@ class Info extends Component {
     }
 
     let arr = []
-    if(rightMenu === 1){
+    if (rightMenu === 1) {
       arr = [
         {
           name: 'mainTypeDropdown',
@@ -425,12 +425,12 @@ class Info extends Component {
         },
       ];
     }
-    if(rightMenu === 2 && currencyArr.length>0){
-      const listTodayRate =currencyArr.filter(item=>item.currency === choosenRowData.currency )        
-      this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice)/100 });
+    if (rightMenu === 2 && currencyArr.length > 0) {
+      const listTodayRate = currencyArr.filter(item => item.currency === choosenRowData.currency)
+      this.setState({ listTodayRate: Number(listTodayRate[0].bocConversionPrice) / 100 });
     }
 
-    arr.length>0 && arr.forEach(item => {
+    arr.length > 0 && arr.forEach(item => {
       dispatch({
         type: `quote/getDropdownList`,
         payload: item,
@@ -439,39 +439,39 @@ class Info extends Component {
   };
 
   setCurrency = () => {
-    serviceObj.listTodayRate().then(res=>{
-      const {  rtnCode } = res.head;
-      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {
+    serviceObj.listTodayRate().then(res => {
+      const { rtnCode } = res.head;
+      if (rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
         this.setState({
-          currencyArr: [...res.body.records,{currency:'RMB',bocConversionPrice:100}]
+          currencyArr: [...res.body.records, { currency: 'RMB', bocConversionPrice: 100 }]
         })
-      }else{
-        notification.error({message:'无汇率数据，无法自动计算'})
+      } else {
+        notification.error({ message: '无汇率数据，无法自动计算' })
       }
-    })   
+    })
   }
 
   countProductCost = (params) => {
-    const {listTodayRate} = this.state
-    const {form,choosenRowData} = this.props
-    const {quoteMethod} = choosenRowData
-    const nowCount = Number(params.nowCount|| form.getFieldValue('nowCount') ) // 此次工费
-    const finishedWeight = Number(params.finishedWeight|| form.getFieldValue('finishedWeight')) // 成品重量
-    
-    console.log(nowCount,listTodayRate,finishedWeight);
-    
+    const { listTodayRate } = this.state
+    const { form, choosenRowData } = this.props
+    const { quoteMethod } = choosenRowData
+    const nowCount = Number(params.nowCount || form.getFieldValue('nowCount')) // 此次工费
+    const finishedWeight = Number(params.finishedWeight || form.getFieldValue('finishedWeight')) // 成品重量
+
+    console.log(nowCount, listTodayRate, finishedWeight);
+
     // 计件
-    if(quoteMethod === 'H008001'){
+    if (quoteMethod === 'H008001') {
       form.setFieldsValue({
-        productCost:(listTodayRate*nowCount).toFixed(3)
+        productCost: (listTodayRate * nowCount).toFixed(3)
       })
-    }else{
+    } else {
       form.setFieldsValue({
-        productCost:(listTodayRate*nowCount*finishedWeight).toFixed(3)
+        productCost: (listTodayRate * nowCount * finishedWeight).toFixed(3)
       })
     }
   }
-      
+
 
   // 复制
   handleCopy = () => {
@@ -496,13 +496,13 @@ class Info extends Component {
       default:
         if (rightMenu === 2) {
           const { markingId, markingEnName } = choosenRowData;
-          if(!choosenRowData.id){
+          if (!choosenRowData.id) {
             notification.error({
               message: '请先选择对应的报价主页',
             })
             return
           }
-          if(markingId){
+          if (markingId) {
             form.setFieldsValue({
               markingId,
               markingEnName,
@@ -571,11 +571,11 @@ class Info extends Component {
       // dispatch({
       //   type: 'quote/getbasicColourSettingsList',
       // });
-    }else{
+    } else {
       // 清空筛选参数
       dispatch({
-        type:'quote/changeStateOut',
-        payload:{key:'searchProductParams',value:{}}
+        type: 'quote/changeStateOut',
+        payload: { key: 'searchProductParams', value: {} }
       })
     }
     dispatch({
@@ -586,8 +586,8 @@ class Info extends Component {
 
   // 弹窗表单 下拉回调
   handleSelectChange = (value, type) => {
-    const { quote, form, rightMenu, dispatch,customerDropDownList } = this.props;
-    
+    const { quote, form, rightMenu, dispatch, customerDropDownList } = this.props;
+
     // 自动带出字印英文名
     if (type === 'markingId') {
       const obj = quote.markinglist.find(item => {
@@ -619,10 +619,10 @@ class Info extends Component {
       form.setFieldsValue({
         customerShotName: shotName,
         quoteNumber: `${moment(date).format('YYYYMMDD')}_Quote_${shotName}`,
-        currency: settlementCurrency||'USD',
+        currency: settlementCurrency || 'USD',
       });
 
-      this.countQuotePrice(settlementCurrency||'USD')
+      this.countQuotePrice(settlementCurrency || 'USD')
     }
 
     if (type === 'endId') {
@@ -631,7 +631,7 @@ class Info extends Component {
       // debugger
       const startIndex = key.indexOf('(') + 1;
       const endIndex = key.indexOf(')');
-      const endShotName = key.substring(startIndex,endIndex);
+      const endShotName = key.substring(startIndex, endIndex);
       console.log(key)
       form.setFieldsValue({
         endShotName,
@@ -640,22 +640,22 @@ class Info extends Component {
 
     // 更换当前汇率
 
-    if(type==='currency'){
+    if (type === 'currency') {
       this.countQuotePrice(value)
     }
   };
 
   countQuotePrice = (value) => {
-    const {form} = this.props
-    const {currencyArr,quotePriceUSA} = this.state
-    const listTodayRateArr =currencyArr.filter(item=>item.currency === value )       
-    const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice)/100)// 当前汇率
-    const listTodayRateUsaArr =currencyArr.filter(item=>item.currency === 'USD' )       
-    const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice)/100) // 美元汇率
+    const { form } = this.props
+    const { currencyArr, quotePriceUSA } = this.state
+    const listTodayRateArr = currencyArr.filter(item => item.currency === value)
+    const listTodayRateCur = (Number(listTodayRateArr[0].bocConversionPrice) / 100)// 当前汇率
+    const listTodayRateUsaArr = currencyArr.filter(item => item.currency === 'USD')
+    const listTodayRateUsa = (Number(listTodayRateUsaArr[0].bocConversionPrice) / 100) // 美元汇率
     // 先通过美元汇率换算成人民币 再换算当前选中汇率计算
-    console.log(quotePriceUSA,listTodayRateUsa,listTodayRateCur)
+    console.log(quotePriceUSA, listTodayRateUsa, listTodayRateCur)
     form.setFieldsValue({
-      quotePrice: ((quotePriceUSA*listTodayRateUsa)/listTodayRateCur).toFixed(2)
+      quotePrice: ((quotePriceUSA * listTodayRateUsa) / listTodayRateCur).toFixed(2)
     })
   }
 
@@ -666,7 +666,7 @@ class Info extends Component {
       value: e.target.checked ? 1 : 0,
     });
     if (value === 'isWeighStones') {
-      const isWeighStones = e.target.checked ;
+      const isWeighStones = e.target.checked;
       if (isWeighStones) {
         form.validateFields(['stonePrice', 'mainMaterialWeight'], { disabled: true });
       }
@@ -674,12 +674,12 @@ class Info extends Component {
   };
 
   disabledCondition = (v, form) => {
-    const {markingType,packPriceType} = this.props.choosenRowData
+    const { markingType, packPriceType } = this.props.choosenRowData
     // const isstonePrice = v === 'stonePrice' && form.getFieldValue('isWeighStones') === 'H009001';
     // const ismainMaterialWeight =
     //   v === 'mainMaterialWeight' && form.getFieldValue('isWeighStones') === 'H009001';
     // return isstonePrice || ismainMaterialWeight;
-    if((markingType === 'H011002'&&v==='markingPrice') || (packPriceType === 'H011002'&&v==='packPrice') ){
+    if ((markingType === 'H011002' && v === 'markingPrice') || (packPriceType === 'H011002' && v === 'packPrice')) {
       return true
     }
 
@@ -687,44 +687,44 @@ class Info extends Component {
   };
 
   // 计算单价
-  countPrice = (params={nowCount:'',finishedWeight:'',markingPrice:'',packPrice:'',mainMaterialWeight:'',stonePrice:''})=>{
-    const {form,choosenRowData} = this.props
-    let {isWeighStones,quoteMethod,quotePrice} = choosenRowData
+  countPrice = (params = { nowCount: '', finishedWeight: '', markingPrice: '', packPrice: '', mainMaterialWeight: '', stonePrice: '' }) => {
+    const { form, choosenRowData } = this.props
+    let { isWeighStones, quoteMethod, quotePrice } = choosenRowData
     quotePrice = Number(quotePrice) // 主材价
-    const nowCount= Number(params.nowCount||form.getFieldValue('nowCount')) || 0// 此次工费
-    const finishedWeight=  Number(params.finishedWeight||form.getFieldValue('finishedWeight') )|| 0// 成品重量
-    const markingPrice=  Number(params.markingPrice||form.getFieldValue('markingPrice'))|| 0 // 字印价
-    const packPrice=  Number(params.packPrice||form.getFieldValue('packPrice'))|| 0 // 包装单价
-    const mainMaterialWeight=  Number(params.mainMaterialWeight||form.getFieldValue('mainMaterialWeight'))|| 0 // 主材重量
-    const stonePrice=  Number(params.stonePrice||form.getFieldValue('stonePrice'))|| 0 // 石材价
+    const nowCount = Number(params.nowCount || form.getFieldValue('nowCount')) || 0// 此次工费
+    const finishedWeight = Number(params.finishedWeight || form.getFieldValue('finishedWeight')) || 0// 成品重量
+    const markingPrice = Number(params.markingPrice || form.getFieldValue('markingPrice')) || 0 // 字印价
+    const packPrice = Number(params.packPrice || form.getFieldValue('packPrice')) || 0 // 包装单价
+    const mainMaterialWeight = Number(params.mainMaterialWeight || form.getFieldValue('mainMaterialWeight')) || 0 // 主材重量
+    const stonePrice = Number(params.stonePrice || form.getFieldValue('stonePrice')) || 0 // 石材价
     let price = 0
-    console.log(nowCount,finishedWeight,markingPrice,packPrice,mainMaterialWeight,stonePrice,'=======')
+    console.log(nowCount, finishedWeight, markingPrice, packPrice, mainMaterialWeight, stonePrice, '=======')
     // 计重
-    if(quoteMethod === 'H008002'){
+    if (quoteMethod === 'H008002') {
       // 是否计石重 是
-      if(isWeighStones === 'H009001'){
-        price = ((quotePrice+nowCount)*finishedWeight+markingPrice + packPrice).toFixed(2)
+      if (isWeighStones === 'H009001') {
+        price = ((quotePrice + nowCount) * finishedWeight + markingPrice + packPrice).toFixed(2)
         form.setFieldsValue({
-          price 
+          price
         });
-      }else{
-        price = ((quotePrice+nowCount)*mainMaterialWeight+stonePrice+markingPrice+packPrice).toFixed(2)
-        console.log(price,nowCount,quotePrice+nowCount,(quotePrice+nowCount)*mainMaterialWeight,'====')
+      } else {
+        price = ((quotePrice + nowCount) * mainMaterialWeight + stonePrice + markingPrice + packPrice).toFixed(2)
+        console.log(price, nowCount, quotePrice + nowCount, (quotePrice + nowCount) * mainMaterialWeight, '====')
         form.setFieldsValue({
           price
         });
       }
     }
     // 计件
-    else{
+    else {
       // 是否计石重 是
-      if(isWeighStones === 'H009001'){
-        price = (quotePrice*finishedWeight+nowCount+markingPrice+packPrice).toFixed(2)
+      if (isWeighStones === 'H009001') {
+        price = (quotePrice * finishedWeight + nowCount + markingPrice + packPrice).toFixed(2)
         form.setFieldsValue({
-          price  
+          price
         });
-      }else{
-        price = (quotePrice*mainMaterialWeight+nowCount+stonePrice+markingPrice+packPrice).toFixed(2)
+      } else {
+        price = (quotePrice * mainMaterialWeight + nowCount + stonePrice + markingPrice + packPrice).toFixed(2)
         form.setFieldsValue({
           price
         });
@@ -763,12 +763,12 @@ class Info extends Component {
   };
 
   inputChange = (value, type) => {
-    const { form,choosenRowData,choosenDetailRowData } = this.props;
-    const {listTodayRate} = this.state
-    const productCostAndCoefficient = this.state.productCostAndCoefficient||choosenDetailRowData.productCostAndCoefficient
-    const customerQuoteCoeff = this.state.customerQuoteCoeff||choosenDetailRowData.customerQuoteCoeff
+    const { form, choosenRowData, choosenDetailRowData } = this.props;
+    const { listTodayRate } = this.state
+    const productCostAndCoefficient = this.state.productCostAndCoefficient || choosenDetailRowData.productCostAndCoefficient
+    const customerQuoteCoeff = this.state.customerQuoteCoeff || choosenDetailRowData.customerQuoteCoeff
     const productCostInit = this.state.productCostInit
-    
+
     // 报价金额 = 单价*报价数量
     const price = form.getFieldValue('price') || '';
     if (type === 'qty' && price) {
@@ -777,48 +777,48 @@ class Info extends Component {
         quotedAmount,
       });
     }
-    
+
     // 计算单价
-    const arr = ['nowCount','finishedWeight','markingPrice','packPrice','mainMaterialWeight','stonePrice']
-    arr.includes(type) && this.countPrice({[type]:value})
+    const arr = ['nowCount', 'finishedWeight', 'markingPrice', 'packPrice', 'mainMaterialWeight', 'stonePrice']
+    arr.includes(type) && this.countPrice({ [type]: value })
 
 
-    const arr2 = ['nowCount','finishedWeight']
-    arr2.includes(type) && this.countProductCost({[type]:value})
-    
+    const arr2 = ['nowCount', 'finishedWeight']
+    arr2.includes(type) && this.countProductCost({ [type]: value })
+
     // 石材重量
-    const  stonesWeight = Number(form.getFieldValue('stonesWeight')) || '';
+    const stonesWeight = Number(form.getFieldValue('stonesWeight')) || '';
     // 成品重量
-    const  finishedWeight = Number(form.getFieldValue('finishedWeight')) || '';
-    
+    const finishedWeight = Number(form.getFieldValue('finishedWeight')) || '';
+
     // 计算主材重量  成品重量-石材重量
-    console.log(stonesWeight,finishedWeight,value,'==========成品重量-石材重量')
-    if(type === 'stonesWeight'&&finishedWeight){
+    console.log(stonesWeight, finishedWeight, value, '==========成品重量-石材重量')
+    if (type === 'stonesWeight' && finishedWeight) {
       form.setFieldsValue({
         mainMaterialWeight: (finishedWeight - value).toFixed(2),
       });
     }
-    if(type === 'finishedWeight' && stonesWeight){
+    if (type === 'finishedWeight' && stonesWeight) {
       form.setFieldsValue({
         mainMaterialWeight: (value - stonesWeight).toFixed(2),
       });
     }
 
     // 修改主材重量时需要反推石材重量
-    if(type === 'mainMaterialWeight' && finishedWeight ){
+    if (type === 'mainMaterialWeight' && finishedWeight) {
       form.setFieldsValue({
         stonesWeight: (finishedWeight - value).toFixed(2),
       })
     }
 
 
-    console.log(productCostAndCoefficient,customerQuoteCoeff,'=========productCostAndCoefficient')
-    
+    console.log(productCostAndCoefficient, customerQuoteCoeff, '=========productCostAndCoefficient')
+
     // 计算实际工费 计重
-    if(choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight'){
+    if (choosenRowData.quoteMethod === 'H008002' && type === 'finishedWeight') {
       form.setFieldsValue({
-        actualCount:(productCostAndCoefficient*customerQuoteCoeff/value).toFixed(2),
-        productCost:(productCostInit*value).toFixed(2)
+        actualCount: (productCostAndCoefficient * customerQuoteCoeff / value).toFixed(2),
+        productCost: (productCostInit * value).toFixed(2)
       })
     }
   };
@@ -833,14 +833,14 @@ class Info extends Component {
   // type 8 inputext
   // type 9 RangePicker
   // type 11 inputnumber
-  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form,disabled,precision,isEdit ,noedit}) => {
+  returnElement = ({ key, value, noNeed, type, list, clickFn, text, arr, data, form, disabled, precision, isEdit, noedit }) => {
     switch (type) {
       case 2:
         return (
           <Select
             style={{ width: 180 }}
             placeholder="请选择"
-            disabled={disabled || noedit&&isEdit}
+            disabled={disabled || noedit && isEdit}
             onChange={v => {
               this.handleSelectChange(v, value);
             }}
@@ -884,7 +884,7 @@ class Info extends Component {
       case 6:
         return (
           <Radio.Group
-            disabled={noedit&&isEdit}
+            disabled={noedit && isEdit}
           >
             {arr.map(({ key, value }) => {
               return (
@@ -898,7 +898,7 @@ class Info extends Component {
       case 7:
         return <Input disabled style={{ width: '100' }} placeholder="自动带出" />;
       case 8:
-        return <TextArea rows={1} placeholder="请输入" style={{width:820}} />;
+        return <TextArea rows={1} placeholder="请输入" style={{ width: 820 }} />;
       case 9:
         return (
           <RangePicker
@@ -921,9 +921,9 @@ class Info extends Component {
         );
       case 11:
         return (
-          <InputNumber 
-            style={{ width: '100' }} 
-            precision={0} 
+          <InputNumber
+            style={{ width: '100' }}
+            precision={0}
             onChange={v => {
               this.inputChange(v, value);
             }}
@@ -945,8 +945,8 @@ class Info extends Component {
   };
 
 
-  switchBooleanToInt =(v)=>{
-    return v===true?1:(v===false?0:Number.parseInt(v));
+  switchBooleanToInt = (v) => {
+    return v === true ? 1 : (v === false ? 0 : Number.parseInt(v));
   }
 
   // 获取新增/编辑弹窗内容
@@ -973,9 +973,9 @@ class Info extends Component {
 
     console.log(isEdit,picture,'===========')
     if (modalType === 'printer') {
-      return <PrintTable />;
+      return <PrintTable id={id}/>;
     }
- 
+
     return (
       <Form size="small">
         {rightMenu === 2 && (
@@ -1033,15 +1033,15 @@ class Info extends Component {
               positiveInteger,
               precision,
               noedit
-            }) => { 
+            }) => {
               // 计石重不需要石材重量、主材重量、石材价
-              if(value==='mainMaterialWeight' && isWeighStones === 'H009001')return
-              if(value === 'stonePrice'&& isWeighStones === 'H009001')return
-              if(value === 'markingPrice' &&  packPriceType === 'H011002')return
-              if(value === 'packPrice' &&  packPriceType === 'H011002')return
-              if(value ==='stonesWeight' && isWeighStones === 'H009001') return
+              if (value === 'mainMaterialWeight' && isWeighStones === 'H009001') return
+              if (value === 'stonePrice' && isWeighStones === 'H009001') return
+              if (value === 'markingPrice' && packPriceType === 'H011002') return
+              if (value === 'packPrice' && packPriceType === 'H011002') return
+              if (value === 'stonesWeight' && isWeighStones === 'H009001') return
               //  eslint-disable-next-line
-              return(
+              return (
                 <div
                   className="addModal"
                   key={key}
@@ -1049,54 +1049,55 @@ class Info extends Component {
                 >
                   <FormItem
                     label={
-                      rightMenu === 2?
-                        (priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}`:
-                          priceUnit === 2 ?`${key+currency}/件`:
-                           priceUnit === 3 ?`${key+currency}`:key)
-                      : key
-                  }
+                      rightMenu === 2 ?
+                        (priceUnit === 1 ? `${key + currency}/${quoteMethodobj[quoteMethod]}` :
+                          priceUnit === 2 ? `${key + currency}/件` :
+                            priceUnit === 3 ? `${key + currency}` : key)
+                        : key
+                    }
                   >
                     {getFieldDecorator(value, {
-                    rules: [
-                      {
-                        required: !noNeed,
-                        message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
-                      },
-                    ],
-                    // eslint-disable-next-line
-                    initialValue: isEdit
-                      ? rightMenu === 1
-                        ? value === 'quoteDate'
-                          ? moment(choosenRowData[value])
-                          : choosenRowData[value]
-                        : choosenDetailRowData[value]
-                      : value === 'quoteDate'
-                        ? moment(moment().format('L'))
-                        : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
-                          :initValue || (number ?positiveInteger === 1? 0: '0.00' : undefined),
-                  })(
-                    this.returnElement({
-                      key,
-                      value,
-                      noNeed,
-                      type,
-                      list,
-                      clickFn,
-                      text,
-                      arr,
-                      initValue,
-                      data: quote,
-                      form,
-                      disabled,
-                      positiveInteger,
-                      precision,
-                      noedit,
-                      isEdit
-                    })
-                  )}
+                      rules: [
+                        {
+                          required: !noNeed,
+                          message: `请${type && type === 2 ? '选择' : '输入'}${key}`,
+                        },
+                      ],
+                      // eslint-disable-next-line
+                      initialValue: isEdit
+                        ? rightMenu === 1
+                          ? value === 'quoteDate'
+                            ? moment(choosenRowData[value])
+                            : choosenRowData[value]
+                          : choosenDetailRowData[value]
+                        : value === 'quoteDate'
+                          ? moment(moment().format('L'))
+                          : value === 'quoteNumber' ? `${moment(moment().format('L')).format('YYYYMMDD')}_Quote_`
+                            : initValue || (number ? positiveInteger === 1 ? 0 : '0.00' : undefined),
+                    })(
+                      this.returnElement({
+                        key,
+                        value,
+                        noNeed,
+                        type,
+                        list,
+                        clickFn,
+                        text,
+                        arr,
+                        initValue,
+                        data: quote,
+                        form,
+                        disabled,
+                        positiveInteger,
+                        precision,
+                        noedit,
+                        isEdit
+                      })
+                    )}
                   </FormItem>
                 </div>
-            )}
+              )
+            }
           )}
 
         {/* {rightMenu === 2 && productTypeName === '戒指' && (
@@ -1144,8 +1145,8 @@ class Info extends Component {
   };
 
   getDetailList = (params = {}) => {
-    const {dispatch,choosenRowData,detailPagination} = this.props
-    if( 'current' in params){
+    const { dispatch, choosenRowData, detailPagination } = this.props
+    if ('current' in params) {
       dispatch({
         type: `quote/changeStateOut`,
         payload: { key: 'detailPagination', value: { ...detailPagination, current: params.current } },
@@ -1161,18 +1162,18 @@ class Info extends Component {
 
   // 新增按钮事件回调
   handleAdd = close => {
-    const { rightMenu, form, choosenRowData,productChoosenRowData,choosenDetailRowData } = this.props;
-    const {productCostAndCoefficient,customerQuoteCoeff,productCostInit} = this.state
+    const { rightMenu, form, choosenRowData, productChoosenRowData, choosenDetailRowData } = this.props;
+    const { productCostAndCoefficient, customerQuoteCoeff, productCostInit } = this.state
     const isHead = isHeadFn(rightMenu);
     const str = isHead ? 'quotelist' : 'quoteDatialList';
-    let params = {}; 
+    let params = {};
     if (!isHead) {
-      params = { 
-        quoteHeadId: choosenRowData.id ,
-        productId:productChoosenRowData.id || choosenDetailRowData.productId ,
-        productCostAndCoefficient: productCostAndCoefficient|| choosenDetailRowData.productCostAndCoefficient ,
-        customerQuoteCoeff:customerQuoteCoeff|| choosenDetailRowData.customerQuoteCoeff ,
-        productCostInit:productCostInit||choosenDetailRowData.productCostInit
+      params = {
+        quoteHeadId: choosenRowData.id,
+        productId: productChoosenRowData.id || choosenDetailRowData.productId,
+        productCostAndCoefficient: productCostAndCoefficient || choosenDetailRowData.productCostAndCoefficient,
+        customerQuoteCoeff: customerQuoteCoeff || choosenDetailRowData.customerQuoteCoeff,
+        productCostInit: productCostInit || choosenDetailRowData.productCostInit
       };
     }
 
@@ -1192,9 +1193,9 @@ class Info extends Component {
             notification.success({
               message: rtnMsg,
             });
-            if(isHead){
+            if (isHead) {
               this.getList({ sendReq: 'currentQuote' })
-            }else{
+            } else {
               this.getDetailList()
               this.getList({ sendReq: 'currentQuote' })
             }
@@ -1208,7 +1209,7 @@ class Info extends Component {
 
   // 编辑按钮回调
   handleEdit = close => {
-    const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData,productChoosenRowData} = this.props;
+    const { rightMenu, form, choosenRowData, dispatch, choosenDetailRowData, productChoosenRowData } = this.props;
     const isHead = isHeadFn(rightMenu);
     const str = isHead ? 'quotelist' : 'quoteDatialList';
 
@@ -1217,15 +1218,15 @@ class Info extends Component {
     };
 
     if (!isHead) {
-      params = { 
-        id:choosenDetailRowData.id,
-        quoteHeadId: choosenRowData.id ,
-        productId: productChoosenRowData.id || choosenDetailRowData.productId ,
-        productCostAndCoefficient:  choosenDetailRowData.productCostAndCoefficient ,
-        customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff ,
-        productCostInit:choosenDetailRowData.productCostInit
+      params = {
+        id: choosenDetailRowData.id,
+        quoteHeadId: choosenRowData.id,
+        productId: productChoosenRowData.id || choosenDetailRowData.productId,
+        productCostAndCoefficient: choosenDetailRowData.productCostAndCoefficient,
+        customerQuoteCoeff: choosenDetailRowData.customerQuoteCoeff,
+        productCostInit: choosenDetailRowData.productCostInit
       };
-      console.log(choosenDetailRowData.productId,choosenDetailRowData,'=========')
+      console.log(choosenDetailRowData.productId, choosenDetailRowData, '=========')
     }
 
     // 还要清空所选中项
@@ -1395,7 +1396,7 @@ class Info extends Component {
 
   unLockEdit = id => {
     const { choosenRowData } = this.props;
-    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => {});
+    serviceObj.unLockEdit({ id: id || choosenRowData.id }).then(res => { });
   };
 
   // 取消弹窗回调
@@ -1416,16 +1417,16 @@ class Info extends Component {
   // 根据主页换算价格
   conversionPrice = (v) => {
     v = typeof v !== "number" ? Number(v) : v
-    const {choosenRowData} = this.props
-    const {currency} = choosenRowData
-    const {currencyArr} = this.state
-    const curRate =(currencyArr.find(item=>item.currency === currency ).bocConversionPrice)/100
-    return (v/curRate).toFixed(2)
+    const { choosenRowData } = this.props
+    const { currency } = choosenRowData
+    const { currencyArr } = this.state
+    const curRate = (currencyArr.find(item => item.currency === currency).bocConversionPrice) / 100
+    return (v / curRate).toFixed(2)
   }
 
   // 产品选择弹窗确认回调
   handleProductModalOk = async () => {
-    const { choosenRowData, form ,dispatch,productChoosenRowData} = this.props;
+    const { choosenRowData, form, dispatch, productChoosenRowData } = this.props;
     const {
       id,
       productNo,
@@ -1442,8 +1443,8 @@ class Info extends Component {
       unitOfLengthName,
       unitOfLength
     } = productChoosenRowData;
-    let {finishedWeight} = productChoosenRowData
-    const {listTodayRate} = this.state
+    let { finishedWeight } = productChoosenRowData
+    const { listTodayRate } = this.state
     let lastCount = '0.00';
     let topCount = '0.00';
     let productLineCoefficientQuotation = '';
@@ -1488,11 +1489,11 @@ class Info extends Component {
 
 
     // 获取计算明细的相关数据
-    await serviceObj.getQuoteDtInit({key:id, markingId: choosenRowData.markingId}).then(res=>{
+    await serviceObj.getQuoteDtInit({ key: id, markingId: choosenRowData.markingId }).then(res => {
       const { rtnMsg, rtnCode } = res.head;
-      if (rtnCode === '000000'&& res.body.records && res.body.records.length>0) {        
-        console.log(res.body.records,'==========getQuoteDtInit')
-        let {customerQuoteCoeff,productCost,stonePriceTotal,stoneWeightTotal,packagePrice, markingPrice,productCostAndCoefficient} = res.body.records[0]
+      if (rtnCode === '000000' && res.body.records && res.body.records.length > 0) {
+        console.log(res.body.records, '==========getQuoteDtInit')
+        let { customerQuoteCoeff, productCost, stonePriceTotal, stoneWeightTotal, packagePrice, markingPrice, productCostAndCoefficient } = res.body.records[0]
         customerQuoteCoeff = this.conversionPrice(customerQuoteCoeff)
         productCost = this.conversionPrice(productCost)
         stonePriceTotal = this.conversionPrice(stonePriceTotal)
@@ -1505,40 +1506,40 @@ class Info extends Component {
         // 实际工费/件=产品成本*客户报价系数*汇率。
         // 实际工费/克=产品成本*报价系数/成品重量*汇率
         // 计算实际工费 计件情况下
-        if(choosenRowData.quoteMethod === 'H008001'){
-          actualCount = (productCostAndCoefficient*customerQuoteCoeff).toFixed(2);
+        if (choosenRowData.quoteMethod === 'H008001') {
+          actualCount = (productCostAndCoefficient * customerQuoteCoeff).toFixed(2);
         }
-        if(choosenRowData.quoteMethod === 'H008002'){
-          actualCount = (productCostAndCoefficient*customerQuoteCoeff/finishedWeight).toFixed(2);
-          productCost = (productCost*finishedWeight).toFixed(2)
+        if (choosenRowData.quoteMethod === 'H008002') {
+          actualCount = (productCostAndCoefficient * customerQuoteCoeff / finishedWeight).toFixed(2);
+          productCost = (productCost * finishedWeight).toFixed(2)
         }
-        
+
         // 主材重量，报价主页是【不计石重】则需要计算主材重量，主材重量=成品重量-石材重量
-        if(choosenRowData.isWeighStones === 'H009002'){
-          console.log(finishedWeight,stoneWeightTotal,'======')
+        if (choosenRowData.isWeighStones === 'H009002') {
+          console.log(finishedWeight, stoneWeightTotal, '======')
           form.setFieldsValue({
-            mainMaterialWeight:mainMaterialWeightT
+            mainMaterialWeight: mainMaterialWeightT
           })
         }
         // 字印价/件；报价主页选择计收的时候需要带出
-        if(choosenRowData.markingTypeName === '计收') {
+        if (choosenRowData.markingTypeName === '计收') {
           form.setFieldsValue({
             markingPrice
           })
         }
 
         this.countPrice({
-          finishedWeight,markingPrice,packPrice,mainMaterialWeight:mainMaterialWeightT,stonePrice:stonePriceTotal,
+          finishedWeight, markingPrice, packPrice, mainMaterialWeight: mainMaterialWeightT, stonePrice: stonePriceTotal,
           nowCount
         })
 
         form.setFieldsValue({
           productCost,
           actualCount,
-          stonesWeight:stoneWeightTotal,
-          stonePrice:stonePriceTotal,
+          stonesWeight: stoneWeightTotal,
+          stonePrice: stonePriceTotal,
           markingPrice,
-          packPrice:packagePrice,
+          packPrice: packagePrice,
           productId: id,
           productNo,
           productColorName,
@@ -1559,13 +1560,13 @@ class Info extends Component {
         this.setState({
           productCostAndCoefficient,
           customerQuoteCoeff,
-          productCostInit:productCost
+          productCostInit: productCost
         })
         dispatch({
-          type:'quote/changeStateOut',
-          payload:{key:'unitOfLengthDropdown',value:[{key:unitOfLengthName,value:unitOfLength}]},
-          callback:()=>{
-            form.setFieldsValue({unitOfLength});
+          type: 'quote/changeStateOut',
+          payload: { key: 'unitOfLengthDropdown', value: [{ key: unitOfLengthName, value: unitOfLength }] },
+          callback: () => {
+            form.setFieldsValue({ unitOfLength });
             this.showProductModalFunc(2);
           }
         })
@@ -1619,10 +1620,10 @@ class Info extends Component {
   };
 
   getProductSearch = args => {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch({
-      type:'quote/changeStateOut',
-      payload:{key:'searchProductParams',value:args}
+      type: 'quote/changeStateOut',
+      payload: { key: 'searchProductParams', value: args }
     })
     this.getProduct({ ...args, search: true });
   };
@@ -1672,41 +1673,47 @@ class Info extends Component {
       modalType === 'plus'
         ? [
           <Button key="back" onClick={onCancel}>
-              取消
+            取消
           </Button>,
           <Button
             key="submit"
             type="primary"
             loading={addloading}
             onClick={() => {
-                handleModalOk(true);
-              }}
+              handleModalOk(true);
+            }}
           >
-              保存
+            保存
           </Button>,
           <Button
             key="continue"
             type="primary"
             loading={addloading}
             onClick={() => {
-                handleModalOk(false);
-              }}
+              handleModalOk(false);
+            }}
           >
-              继续添加
+            继续添加
           </Button>,
-          ]
-        : [
-          <Button key="back" onClick={onCancel}>
+        ]
+        : modalType === 'printer' ?
+          [
+            <Button key="back" onClick={onCancel}>
+              取消
+            </Button>
+          ] :
+          [
+            <Button key="back" onClick={onCancel}>
               取消
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={addloading}
-            onClick={() => {
+            <Button
+              key="submit"
+              type="primary"
+              loading={addloading}
+              onClick={() => {
                 handleModalOk(true);
               }}
-          >
+            >
               保存
           </Button>,
           ];
@@ -1745,7 +1752,7 @@ class Info extends Component {
             title={<BuildTitle title={returnTitle()} />}
             zIndex={1000}
             maskClosable={false}
-            width={1000}
+            width={modalType === 'printer' ? 1200 : 1000}
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
@@ -1809,126 +1816,127 @@ const RightContent = ({
   returnElement,
   onSearch,
   returnListName,
-  
-}) => (
-  <GridContent>
-    <Row gutter={24} className={styles.row_content}>
-      {/* 中间table组件 */}
-      <Col lg={16} md={24}>
-        <CenterInfo
-          type={type}
-          handleRadio={handleRadio}
-          returnElement={returnElement}
-          onSearch={onSearch}
-        />
-      </Col>
-      {/* 右边显示详细信息和按钮操作 */}
-      <Col lg={8} md={24}>
-        <div className={styles.view_right_content}>
-          <Radio.Group
-            size="small"
-            className={styles.right_content_tabgroud}
-            onChange={changeRightMenu}
-            buttonStyle="solid"
-            value={rightMenu}
-            style={{ textAlign: 'center' }}
-          >
-            {radioArr.map((item, index) => (
-              <Radio.Button
-                key={item}
-                style={{
-                  height: 40,
-                  width: 130,
-                  textalign: 'center',
-                  lineHeight: '40px',
-                }}
-                value={index + 1}
-              >
-                {item}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
-          <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
-            <GetRenderitem
-              data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
-              type={rightMenu}
-              returnListName={returnListName}
-              currency={choosenRowData.currency}
-              quoteMethod={choosenRowData.quoteMethod}
-            />
-          </Card>
 
-          {/*  */}
-          <Card
-            bodyStyle={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              paddingLeft: 5,
-              paddingRight: 5,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {btnGroup.map(({ name, tag, type: t }) => (
-                <Button
-                  key={tag}
-                  className={styles.buttomControl}
-                  type={
-                    t === 'danger' || (returnLockType().type === 2 && tag === 'lock')
-                      ? 'danger'
-                      : 'primary'
-                  }
-                  icon={tag}
-                  size="small"
-                  disabled={returnSisabled(tag)}
-                  onClick={() => {
-                    btnFn(tag);
+}) => (
+    <GridContent>
+      <Row gutter={24} className={styles.row_content}>
+        {/* 中间table组件 */}
+        <Col lg={16} md={24}>
+          <CenterInfo
+            type={type}
+            handleRadio={handleRadio}
+            returnElement={returnElement}
+            onSearch={onSearch}
+          />
+        </Col>
+        {/* 右边显示详细信息和按钮操作 */}
+        <Col lg={8} md={24}>
+          <div className={styles.view_right_content}>
+            <Radio.Group
+              size="small"
+              className={styles.right_content_tabgroud}
+              onChange={changeRightMenu}
+              buttonStyle="solid"
+              value={rightMenu}
+              style={{ textAlign: 'center' }}
+            >
+              {radioArr.map((item, index) => (
+                <Radio.Button
+                  key={item}
+                  style={{
+                    height: 40,
+                    width: 130,
+                    textalign: 'center',
+                    lineHeight: '40px',
+                  }}
+                  value={index + 1}
+                >
+                  {item}
+                </Radio.Button>
+              ))}
+            </Radio.Group>
+            <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
+              <GetRenderitem
+                data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
+                type={rightMenu}
+                returnListName={returnListName}
+                currency={choosenRowData.currency}
+                quoteMethod={choosenRowData.quoteMethod}
+              />
+            </Card>
+
+            {/*  */}
+            <Card
+              bodyStyle={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                paddingLeft: 5,
+                paddingRight: 5,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {btnGroup.map(({ name, tag, type: t }) => (
+                  <Button
+                    key={tag}
+                    className={styles.buttomControl}
+                    type={
+                      t === 'danger' || (returnLockType().type === 2 && tag === 'lock')
+                        ? 'danger'
+                        : 'primary'
+                    }
+                    icon={tag}
+                    size="small"
+                    disabled={returnSisabled(tag)}
+                    onClick={() => {
+                      btnFn(tag);
+                    }}
+                  >
+                    {tag === 'lock' ? returnLockType().name : name}
+                  </Button>
+                ))}
+              </div>
+              <div style={{ paddingTop: '10px' }}>
+                <Upload
+                  name="file"
+                  action={HttpFetch.productExcelImport}
+                  showUploadList={false}
+                  headers={{
+                    token: getCurrentUser() ? getCurrentUser().token : '',
+                  }}
+                  onChange={info => {
+                    if (info.file.status !== 'uploading') {
+                      // console.log(info.file, info.fileList);
+                    }
+                    if (info.file.status === 'done') {
+                      // 获取初始表单数据
+                      btnFn('freshList');
+                      const { response } = info.file;
+
+                      if (response.head && response.head.btnCode !== '000000') {
+                        message.error(response.head.rtnMsg);
+                      }
+
+                      // console.log(JSON.stringify(info.file.response))
+                      // message.success(info.file.response);
+                    } else if (info.file.status === 'error') {
+                      message.error(`import fail`);
+                    }
                   }}
                 >
-                  {tag === 'lock' ? returnLockType().name : name}
-                </Button>
-              ))}
-            </div>
-            <div style={{ paddingTop: '10px' }}>
-              <Upload
-                name="file"
-                action={HttpFetch.productExcelImport}
-                showUploadList={false}
-                headers={{
-                  token: getCurrentUser() ? getCurrentUser().token : '',
-                }}
-                onChange={info => {
-                  if (info.file.status !== 'uploading') {
-                    // console.log(info.file, info.fileList);
-                  }
-                  if (info.file.status === 'done') {
-                    // 获取初始表单数据
-                    btnFn('freshList');
-                    const { response } = info.file;
-
-                    if (response.head && response.head.btnCode !== '000000') {
-                      message.error(response.head.rtnMsg);
-                    }
-
-                    // console.log(JSON.stringify(info.file.response))
-                    // message.success(info.file.response);
-                  } else if (info.file.status === 'error') {
-                    message.error(`import fail`);
-                  }
-                }}
-              >
-                <Button type="primary" size="small" className={styles.buttomControl}>
-                  <Icon type="upload" />
+                  {' '}
+                  <Button type="primary" size="small" className={styles.buttomControl}>
+                    <Icon type="upload" />
                   导入
                 </Button>
-              </Upload>
-            </div>
-          </Card>
-        </div>
-      </Col>
-    </Row>
-  </GridContent>
-);
+                </Upload>
+              </div>
+            </Card>
+          </div>
+        </Col>
+      </Row>
+    </GridContent>
+  );
 
 
 
@@ -1957,13 +1965,13 @@ const RightContent = ({
 class CenterInfo extends Component {
   getDetailList = params => {
     const { dispatch, detailPagination, choosenRowData } = this.props;
-    if('current' in params){
+    if ('current' in params) {
       dispatch({
         type: `quote/changeStateOut`,
         payload: { key: 'detailPagination', value: { ...detailPagination, current: params.current } },
       });
     }
-    
+
     dispatch({
       type: `quote/getDetailList`,
       payload: {
@@ -1986,11 +1994,11 @@ class CenterInfo extends Component {
       // 字印下拉
       dispatch({
         type: 'quote/getMarkinglistDropDown',
-        payload: {key:rowData.customerId},
+        payload: { key: rowData.customerId },
       });
       dispatch({
         type: `quote/getChoosenDetailRowData`,
-        payload: {id: ''},
+        payload: { id: '' },
       });
     } else {
       dispatch({

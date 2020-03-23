@@ -20,7 +20,7 @@ const returnApi = (module) => {
 // module 2 product-quote-detail模块
 // moudle 3 product模块
 // 4/sys/mst-wordbook
-const resultArr = [
+const postArr = [
   { key: 'queryProductQuoteHeadersAlreadyDone', path: '/product-quote-header/queryProductQuoteHeadersAlreadyDone' },
   { key: 'queryProductQuoteHeadersNotDone', path: '/product-quote-header/queryProductQuoteHeadersNotDone' },
   { key: 'createQuoteByProduct', path: '/product-quote-header/createQuoteByProduct' },
@@ -58,34 +58,64 @@ const resultArr = [
     path: '/develop/category/develop-basic-category-set/dropdown',
     module: 4
   },
-
   {
     key: 'listTodayRate',
     path: '/basic/currency/listTodayRate',
     module: 4
   },
-
   {
     key: 'getQuoteDtInit',
     path: '/business/product/product-quote-detail/getQuoteDtInit',
     module: 4
   },
-  
+  {
+    key: 'getPrintInfo', path: '/business/product/product-quote-header/getPrintInfo', module: 4 // 获取打印列表数据
+  }
 ]
+
+const getArr = [
+  { key: 'getPrintInfoExcel', path: '/business/product/product-quote-header/getPrintInfoExcel', module: 4 }, // 供应商导出excel接口
+];
 // /listMstWordbook
 
-console.log(resultArr, '============')
+const buildUrlByParams = (url, params = false) => {
+  const keys = Object.keys(params);
+  if (params && keys && 0 < keys.length) {
+    let query = /\?/.test(url) ? '' : '?';
+    for (let key of keys) {
+      query += `${key}=${params[key]}&`;
+    }
+    url += query;
+    url = url.substring(0, url.length - 1);
+  }
+  return url;
+};
 
 // 请求url配置
-const outPutObject = {}
-resultArr.forEach(({ key, path, module }) => {
+const outPutObject = {};
+postArr.forEach(({ key, path, module }) => {
   outPutObject[key] = async (params) => {
     return request(returnApi(module) + path, {
       method: 'POST',
       data: params,
     });
+  };
+});
+
+getArr.forEach(({ key, path, module }, i) => {
+  if (i === 0) {
+    outPutObject[key] = (params) => {
+      var url = returnApi(module) + path;
+      return buildUrlByParams(url, params);
+    };
+  } else {
+    outPutObject[key] = async (params) => {
+      return request(returnApi(module) + path, {
+        method: 'GET',
+        params: params,
+      });
+    };
   }
-})
-console.log(outPutObject)
+});
 
 export default outPutObject
