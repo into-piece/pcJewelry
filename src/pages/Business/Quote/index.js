@@ -969,7 +969,9 @@ class Info extends Component {
     const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
     const {isWeighStones,packPriceType} = choosenRowData;
+    const picture = pictures && pictures.length>0 && pictures[0].picPath || isEdit && choosenDetailRowData.pictures&&choosenDetailRowData.pictures.length>0&&choosenDetailRowData.pictures[0].picPath || ''
 
+    console.log(isEdit,picture,'===========')
     if (modalType === 'printer') {
       return <PrintTable />;
     }
@@ -1006,9 +1008,9 @@ class Info extends Component {
             </div>
 
             {
-              pictures && pictures.length>0 &&
+              picture &&
               <div className={styles.carousel_content}>
-                <img style={{width:'100%'}} src={pictures[0].picPath} alt="show" />
+                <img style={{width:'80%'}} src={picture} alt="show" />
               </div>
             }
           </React.Fragment>
