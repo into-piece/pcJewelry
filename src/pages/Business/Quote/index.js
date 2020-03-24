@@ -1753,7 +1753,7 @@ class Info extends Component {
             title={<BuildTitle title={returnTitle()} />}
             zIndex={1000}
             maskClosable={false}
-            width={modalType === 'printer' ? 1200 : 1000}
+            width={modalType === 'printer' ? 1200 : 1000} 
             className={styles.standardListForm}
             bodyStyle={{ padding: '28px 0 0' }}
             destroyOnClose
