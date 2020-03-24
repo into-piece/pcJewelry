@@ -968,7 +968,7 @@ class Info extends Component {
     const { currency, quoteMethod } = choosenRowData;
     const productNo = getFieldValue('productNo') || '';
     const productNoStyle = productNo ? { marginLeft: 20 } : {};
-    const {isWeighStones,packPriceType} = choosenRowData;
+    const {isWeighStones,packPriceType,id} = choosenRowData;
     const picture = pictures && pictures.length>0 && pictures[0].picPath || isEdit && choosenDetailRowData.pictures&&choosenDetailRowData.pictures.length>0&&choosenDetailRowData.pictures[0].picPath || ''
 
     console.log(isEdit,picture,'===========')
