@@ -707,9 +707,10 @@ class Info extends Component {
         form.setFieldsValue({
           price
         });
-      } else {
-        price = ((quotePrice + nowCount) * mainMaterialWeight + stonePrice + markingPrice + packPrice).toFixed(2)
-        console.log(price, nowCount, quotePrice + nowCount, (quotePrice + nowCount) * mainMaterialWeight, '====')
+      } 
+      // 不计石重/计重 单价=主材价*主材重量+此次工费/G*成品重量+石材价+字印件+包装单价
+      else {
+        price = (quotePrice * mainMaterialWeight + nowCount + finishedWeight + stonePrice + markingPrice + packPrice).toFixed(2)
         form.setFieldsValue({
           price
         });
@@ -973,7 +974,7 @@ class Info extends Component {
 
     console.log(isEdit,picture,'===========')
     if (modalType === 'printer') {
-      return <PrintTable id={id}/>;
+      return <PrintTable id={id} />;
     }
 
     return (
@@ -1705,7 +1706,7 @@ class Info extends Component {
           [
             <Button key="back" onClick={onCancel}>
               取消
-          </Button>,
+            </Button>,
             <Button
               key="submit"
               type="primary"
@@ -1715,7 +1716,7 @@ class Info extends Component {
               }}
             >
               保存
-          </Button>,
+            </Button>,
           ];
 
     console.log(choosenRowData, choosenRowData.id);
@@ -1818,93 +1819,93 @@ const RightContent = ({
   returnListName,
 
 }) => (
-    <GridContent>
-      <Row gutter={24} className={styles.row_content}>
-        {/* 中间table组件 */}
-        <Col lg={16} md={24}>
-          <CenterInfo
-            type={type}
-            handleRadio={handleRadio}
-            returnElement={returnElement}
-            onSearch={onSearch}
-          />
-        </Col>
-        {/* 右边显示详细信息和按钮操作 */}
-        <Col lg={8} md={24}>
-          <div className={styles.view_right_content}>
-            <Radio.Group
-              size="small"
-              className={styles.right_content_tabgroud}
-              onChange={changeRightMenu}
-              buttonStyle="solid"
-              value={rightMenu}
-              style={{ textAlign: 'center' }}
-            >
-              {radioArr.map((item, index) => (
-                <Radio.Button
-                  key={item}
-                  style={{
+  <GridContent>
+    <Row gutter={24} className={styles.row_content}>
+      {/* 中间table组件 */}
+      <Col lg={16} md={24}>
+        <CenterInfo
+          type={type}
+          handleRadio={handleRadio}
+          returnElement={returnElement}
+          onSearch={onSearch}
+        />
+      </Col>
+      {/* 右边显示详细信息和按钮操作 */}
+      <Col lg={8} md={24}>
+        <div className={styles.view_right_content}>
+          <Radio.Group
+            size="small"
+            className={styles.right_content_tabgroud}
+            onChange={changeRightMenu}
+            buttonStyle="solid"
+            value={rightMenu}
+            style={{ textAlign: 'center' }}
+          >
+            {radioArr.map((item, index) => (
+              <Radio.Button
+                key={item}
+                style={{
                     height: 40,
                     width: 130,
                     textalign: 'center',
                     lineHeight: '40px',
                   }}
-                  value={index + 1}
-                >
-                  {item}
-                </Radio.Button>
+                value={index + 1}
+              >
+                {item}
+              </Radio.Button>
               ))}
-            </Radio.Group>
-            <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
-              <GetRenderitem
-                data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
-                type={rightMenu}
-                returnListName={returnListName}
-                currency={choosenRowData.currency}
-                quoteMethod={choosenRowData.quoteMethod}
-              />
-            </Card>
+          </Radio.Group>
+          <Card bordered={false} style={{ overflow: 'auto', flexGrow: 1 }}>
+            <GetRenderitem
+              data={rightMenu === 1 ? choosenRowData : choosenDetailRowData}
+              type={rightMenu}
+              returnListName={returnListName}
+              currency={choosenRowData.currency}
+              quoteMethod={choosenRowData.quoteMethod}
+            />
+          </Card>
 
-            {/*  */}
-            <Card
-              bodyStyle={{
+          {/*  */}
+          <Card
+            bodyStyle={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 paddingLeft: 5,
                 paddingRight: 5,
               }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {btnGroup.map(({ name, tag, type: t }) => (
-                  <Button
-                    key={tag}
-                    className={styles.buttomControl}
-                    type={
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {btnGroup.map(({ name, tag, type: t }) => (
+                <Button
+                  key={tag}
+                  className={styles.buttomControl}
+                  type={
                       t === 'danger' || (returnLockType().type === 2 && tag === 'lock')
                         ? 'danger'
                         : 'primary'
                     }
-                    icon={tag}
-                    size="small"
-                    disabled={returnSisabled(tag)}
-                    onClick={() => {
+                  icon={tag}
+                  size="small"
+                  disabled={returnSisabled(tag)}
+                  onClick={() => {
                       btnFn(tag);
                     }}
-                  >
-                    {tag === 'lock' ? returnLockType().name : name}
-                  </Button>
+                >
+                  {tag === 'lock' ? returnLockType().name : name}
+                </Button>
                 ))}
-              </div>
-              <div style={{ paddingTop: '10px' }}>
-                <Upload
-                  name="file"
-                  action={HttpFetch.productExcelImport}
-                  showUploadList={false}
-                  headers={{
+            </div>
+            <div style={{ paddingTop: '10px' }}>
+              <Upload
+                name="file"
+                action={HttpFetch.productExcelImport}
+                showUploadList={false}
+                headers={{
                     token: getCurrentUser() ? getCurrentUser().token : '',
                   }}
-                  onChange={info => {
+                onChange={info => {
                     if (info.file.status !== 'uploading') {
                       // console.log(info.file, info.fileList);
                     }
@@ -1923,19 +1924,19 @@ const RightContent = ({
                       message.error(`import fail`);
                     }
                   }}
-                >
-                  {' '}
-                  <Button type="primary" size="small" className={styles.buttomControl}>
-                    <Icon type="upload" />
+              >
+                {' '}
+                <Button type="primary" size="small" className={styles.buttomControl}>
+                  <Icon type="upload" />
                   导入
                 </Button>
-                </Upload>
-              </div>
-            </Card>
-          </div>
-        </Col>
-      </Row>
-    </GridContent>
+              </Upload>
+            </div>
+          </Card>
+        </div>
+      </Col>
+    </Row>
+  </GridContent>
   );
 
 
