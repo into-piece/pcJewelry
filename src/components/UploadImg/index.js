@@ -29,6 +29,7 @@ class UploadImg extends Component {
       loading: false,
       fileList: dflist,
       cropperVisible: false,
+      fileName:''
     };
   }
 
@@ -45,12 +46,10 @@ class UploadImg extends Component {
         return;
       }
     }
-
     // if (maxcount && fileList.length > maxcount) {
     //   message.error(`只能上传${maxcount}张图片`);
     //   return;
     // }
-
     fileList.map(f => {
       if (f.uid === info.file.uid && !f.url) {
         this.getBase64(f.originFileObj, imageUrl => {
@@ -59,6 +58,7 @@ class UploadImg extends Component {
             cropperVisible: true,
             uploadFile: imageUrl,
             uploadFileUid: f.uid,
+            fileName: f.name
           });
         });
         fileList = fileList.slice(0, fileList.length - 1);
@@ -72,15 +72,14 @@ class UploadImg extends Component {
   };
 
   handleCropSubmit = () => {
-    const { uploadFileUid, fileList } = this.state;
+    const { uploadFileUid, fileList ,fileName} = this.state;
     const { fileListFun } = this.props;
     this.setState({ loading: true });
     const _this = this;
     const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
-    this.refs.cropper.getCroppedCanvas().toBlob((b) => {
-
+    this.refs.cropper.getCroppedCanvas().toBlob(async(b) => {
       const formData = new FormData();
-      formData.append('file', b);
+      formData.append('file', b,fileName);
       fetch(HttpFetch.uploadImg, {
         method: 'POST',
         headers: {
