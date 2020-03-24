@@ -937,7 +937,6 @@ class Index extends Component {
     let inputarr = rightActive;
     const notFlowIsProccess = !this.isEditworkFlow && rightActive === THIRD_TAG;
 
-
     // if (rightActive !== FIRST_TAG) {
     //   params = { mainMoldCode: choosenRowData.id };
     // }
@@ -1075,8 +1074,16 @@ class Index extends Component {
                 type: `${defaultModelName}/clearProccess`,
               });
             }
-            if (close) this.btnFn('');
-            if (close) this.setState({ filelist: [] });
+
+            // 保存 不是继续添加
+            if (close) {
+              this.btnFn('');
+              this.setState({ filelist: [] });
+              dispatch({
+                type: `${defaultModelName}/changeStateOut`,
+                payload: { data: {id:''}, name: 'materialNoChoosenRowData' },
+              });
+            }
           }
         });
       }
@@ -1225,7 +1232,7 @@ class Index extends Component {
     const { pictures } = choosenRowData;
 
     if (modalType === 'sys') {
-      // todo 同步产品数据到其他产品modal
+      // todo 同步产品数据到其他产品modala
       return <SysProduct
         list={productBomRevokeList}
         productChoosenData={choosenRowData}
