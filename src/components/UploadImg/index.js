@@ -76,8 +76,8 @@ class UploadImg extends Component {
     const { fileListFun } = this.props;
     this.setState({ loading: true });
     const _this = this;
-    const cropImage = this.refs.cropper.getCroppedCanvas().toDataURL();
-    this.refs.cropper.getCroppedCanvas().toBlob(async(b) => {
+    const cropImage = this.refs.cropper.getCroppedCanvas({fillColor: '#fff'}).toDataURL();
+    this.refs.cropper.getCroppedCanvas({fillColor: '#fff'}).toBlob(async(b) => {
       const formData = new FormData();
       formData.append('file', b,fileName);
       fetch(HttpFetch.uploadImg, {
