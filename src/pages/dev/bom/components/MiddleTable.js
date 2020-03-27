@@ -228,57 +228,55 @@ class MiddleTable extends Component {
 
         {/*  操作部分  */}
         <div className={styles.tableBox}>
-          <div style={{marginBottom:20}}>
+          <div style={{display:'flex',justifyContent:'space-between',marginBottom:20}}>
             {/* <span>BOM: </span> */}
             {/* bom列表 */}
-            <Select
-              style={{ width: 180, marginRight: 20 }}
-              placeholder="请选择"
-              value={selectedBom.id || undefined}
-              onChange={handleBomSelectChange}
-            >
-              {bomlist &&
-              bomlist.map(({ value, key }) => (
-                <Option value={value} key={value}>
-                  {key}
-                </Option>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <Group value={menuValue} buttonStyle="solid" onChange={handleSwitchMenu}>
-              {menuRadio.map(({ title, key }) => (
-                <Radio.Button value={key} key={key}>
-                  {title}
-                  {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
-                </Radio.Button>
-              ))}
-            </Group>
-          </div>
-          <div style={{ margin: '20px 0 ', display: 'flex', justifyContent: isthird?'space-between':'flex-end'}}>
-            {/* 生产流程列表 */}
-            {isthird ? (
-              <div>
-                {/* <span>生产流程: </span> */}
-                <Select
-                  style={{ width: 180 }}
-                  placeholder="请选择"
-                  value={selectedProccess && selectedProccess.processId || undefined}
-                  onChange={handleWorkFlowSelectChange}
-                >
-                  {processDropdown &&
-                processDropdown.map(({ value, key }) => (
+            <div>
+              <Select
+                style={{ width: 180, marginRight: 20 }}
+                placeholder="请选择"
+                value={selectedBom.id || undefined}
+                onChange={handleBomSelectChange}
+              >
+                {bomlist &&
+                bomlist.map(({ value, key }) => (
                   <Option value={value} key={value}>
                     {key}
                   </Option>
                 ))}
-                </Select>
-              </div>) : null}
+              </Select>
+              <Group value={menuValue} buttonStyle="solid" onChange={handleSwitchMenu}>
+                {menuRadio.map(({ title, key }) => (
+                  <Radio.Button value={key} key={key}>
+                    {title}
+                    {/* <FormattedMessage id={`app.quote.menuMap.${type}`} defaultMessage="" /> */}
+                  </Radio.Button>
+                ))}
+              </Group>
 
-            {/* {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null} */}
-            <BtnGroup arr={secondOprationArr} />
+              {/* 生产流程列表 */}
+              {isthird && 
+              <Select
+                style={{ width: 180,marginLeft:20 }}
+                placeholder="请选择"
+                value={selectedProccess && selectedProccess.processId || undefined}
+                onChange={handleWorkFlowSelectChange}
+              >
+                {processDropdown &&
+                  processDropdown.map(({ value, key }) => (
+                    <Option value={value} key={value}>
+                      {key}
+                    </Option>
+                  ))}
+              </Select>}
+            </div>
+            <div style={{display: 'flex', justifyContent: isthird?'space-between':'flex-end'}}>
+              
+
+              {/* {selectedProccess&&selectedProccess.processName&&selectedProccess.processName===getCurrentUser().dept||rightActive!==THIRD_TAG?<BtnGroup arr={secondOprationArr} />:null} */}
+              <BtnGroup arr={secondOprationArr} />
+            </div>
           </div>
-
           <Table
             scroll={{ x: 'max-content' }}
             columns={columnsConfig[menuValue]}

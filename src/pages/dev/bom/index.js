@@ -734,6 +734,7 @@ class Index extends Component {
         ) : (
           <Input
             placeholder="请输入"
+            style={value === 'bName'?{width: 300}:{}}
           />
         );
     }
@@ -1372,6 +1373,11 @@ class Index extends Component {
                   break;
               }
             }
+            
+            if(!isEdit && rightActive === FIRST_TAG){
+              initValue2 = choosenRowData.productNo
+            }
+
 
             /* eslint-disable */
             return (
