@@ -83,7 +83,7 @@ const GetRenderitem = ({ data, type, items }) => {
 
 
 
-      <DescriptionList className={styles.headerList} size="small" col="1">
+      <DescriptionList className={styles.headerList} size="small" col="2">
         {arr.map(({ key, value, cName, convert, date, fixed,ischeck }) => {
             const showdata = date && data[value]
             ? moment(data[value]).format(date)
@@ -105,7 +105,7 @@ const GetRenderitem = ({ data, type, items }) => {
       </DescriptionList>
       <span className={styles.title_info}>备注</span>
       <Divider className={styles.divder} style={{marginTop:10}} />
-      <DescriptionList className={styles.headerList} size="small" col="1">
+      <DescriptionList className={styles.headerList} size="small" col="2">
         {
          remarksArr && remarksArr.map(({ key, value}) => {
             const showdata = data[value]

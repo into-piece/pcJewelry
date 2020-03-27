@@ -1375,7 +1375,7 @@ class Index extends Component {
             }
             
             if(!isEdit && rightActive === FIRST_TAG){
-              initValue2 = choosenRowData.productNo
+              initValue2 = choosenRowData && choosenRowData.productNo && choosenRowData.productNo.slice(0,9)
             }
 
 
