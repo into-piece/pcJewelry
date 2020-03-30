@@ -22,12 +22,13 @@ const product = [
     value: 'productColorName',
   },
   {
-    key: '英文名',
-    value: 'enName',
-  },
-  {
     key: '客户编号',
     value: 'customerNo',
+  },
+  {
+    title: '中文名',
+    dataIndex: 'zhName',
+    key: 'zhName',
   },
   {
     key: '客户货号',

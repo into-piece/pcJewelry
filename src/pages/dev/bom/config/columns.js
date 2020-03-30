@@ -28,14 +28,14 @@ let product = [
     key: 'productColorName',
   },
   {
-    title: '英文名',
-    dataIndex: 'enName',
-    key: 'enName',
-  },
-  {
     title: '客户编号',
     dataIndex: 'customerNo',
     key: 'customerNo',
+  },
+  {
+    title: '中文名',
+    dataIndex: 'zhName',
+    key: 'zhName',
   },
   {
     title: '客户货号',

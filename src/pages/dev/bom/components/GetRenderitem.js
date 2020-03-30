@@ -83,7 +83,7 @@ const GetRenderitem = ({ data, type, items }) => {
 
 
 
-      <DescriptionList className={styles.headerList} size="small" col="2">
+      <DescriptionList className={styles.headerList} size="small" col="1">
         {arr.map(({ key, value, cName, convert, date, fixed,ischeck }) => {
             const showdata = date && data[value]
             ? moment(data[value]).format(date)
@@ -96,7 +96,7 @@ const GetRenderitem = ({ data, type, items }) => {
             : ischeck===1?checkObj[Number(data[value])]:`${data[value]}`
             if(showdata!=='undefined'&&showdata!=='null'&&showdata){
             return(
-              <Description key={key} term={key}>
+              <Description key={key} term={key} style={showdata && showdata.length > 16?{ width:'100%'}:{width:'50%'}}>
                 {showdata||''}
               </Description>
           )}return false
