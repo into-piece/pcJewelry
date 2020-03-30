@@ -89,8 +89,20 @@
       "noNeed": true,
       "initValue": 0
     },
-    { "key": "说明", "value": "explains", "type": 8, "noNeed": true },
-    { "key": "备注", "value": "remark", "type": 8, "noNeed": true }
+    {
+      "key": "说明",
+      "value": "explains",
+      "type": 8,
+      "noNeed": true,
+      "initValue": "925 silver jewelry with rhodium plating"
+    },
+    {
+      "key": "备注",
+      "value": "remark",
+      "type": 8,
+      "noNeed": true,
+      "initValue": "Note:Above prices are based on 925 silver jewelry with rhodium plating,and nickle free."
+    }
   ],
 
   "detailList": [
