@@ -37,6 +37,7 @@ export default {
     unitOfWeight: [],
     finishedWeight: [],
     mouldNo: [],
+    searchParams:{}
   },
 
   effects: {

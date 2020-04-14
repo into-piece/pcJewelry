@@ -1,19 +1,34 @@
 import React, { Component } from 'react';
-import { Card, Row, Col, Form, Breadcrumb, message, Drawer } from 'antd';
+import { Card, Row, Col, Form, Breadcrumb, message, Drawer,Select,Input } from 'antd';
 import { connect } from 'dva';
 
 import business from '../business.less';
 import product from './product.less';
-import JewelryTable from '../../components/JewelryTable';
-import ProductSearchFrom from './components/ProductSearchFrom';
-import 'cropperjs/dist/cropper.css';
-import HttpFetch from '../../../utils/HttpFetch';
+import SearchForm from '@/components/SearchForm';
 import ProductDetail from './ProductDetail';
 import TableSortView from '../../components/TableSortView';
-import { getCurrentUser } from '../../../utils/authority';
 import Table from '@/components/Table';
 
 const defaultPageSize = 10;
+const { Option } = Select;
+
+export const dieSet = [
+  { 'key': '产品编号', 'value': 'productNo'  },
+  { 'key': '成色', 'value': 'purity', 'type': 2,  },
+  { 'key': '产品类别', 'value': 'productType', 'type': 2},
+];
+
+// 报价主页的筛选参数
+const searchParamsArr = [
+  { key: '产品编号', value: 'productNo'}, //
+  { key: '货号', value: 'customerProductNo' },
+  { key: '产品类别', value: 'productType', type: 2, list: 'productType',}, //
+  { key: '颜色', value: 'gemColor', type: 2 , list: 'gemColor'},
+  { key: '成色', value: 'productColor', type: 2 , 'list': 'productColor'}, //
+  { key: '电镀颜色', value: 'platingColor', type: 2 ,list:'platingColor'},
+  { key: '客户编号', value: 'customerId', type: 2,list:'customerId'},
+  { key: '供应商编号', value: 'supplierId' },
+];
 
 @Form.create()
 @connect(({ product, loading }) => {
@@ -237,10 +252,11 @@ class ProductInfo extends Component {
     this.loadProduct();
   };
 
-  loadProduct = () => {
+  loadProduct = (param) => {
+    const {searchParams} = this.props
     const { productPage, searchProductParams } = this.state;
     // let params = { current: productPage, size: defaultPageSize };
-    const params = {status:0, ...searchProductParams };
+    const params = {status:0, ...searchProductParams,...searchParams,...param };
     params.current = productPage;
     params.size = defaultPageSize;
     if (this.state.productSorts.length > 0) {
@@ -340,8 +356,62 @@ class ProductInfo extends Component {
     })
   }
 
+  // 根据btn点击 返回对应弹窗内容
+  // type 2 下啦选择
+  returnElement = ({ value, type, list,  data, disabled, isEdit, noedit }) => {
+    switch (type) {
+      case 2:
+        return (
+          <Select
+            style={{ width: 180 }}
+            placeholder="请选择"
+            disabled={disabled || noedit && isEdit}
+          >
+            {data[list] &&
+              data[list].map(({ value, key }) => (
+                <Option value={value} key={value}>
+                  {key}
+                </Option>
+              ))}
+          </Select>
+        );
+      default:
+        return (
+          <Input
+            style={{ width: '100' }}
+            placeholder="请输入"
+            onChange={v => {
+              this.inputChange(v.target.value, value);
+            }}
+          />
+        );
+    }
+    //  type === 7 ?
+  };
+
+  onSearch = v => {
+    this.loadProduct(v);
+  };
+
+  changeSearchParams = v => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `quote/changeState`,
+      payload: {key:'searchParams', value:v},
+    });
+  };
+
+
   render() {
-    const { onSelectChange, state, props, changeChoosenRow } = this;
+    const { 
+      onSelectChange, 
+      state, 
+      props,
+      changeChoosenRow,
+      onSearch,
+      returnElement,
+      changeSearchParams
+    } = this;
     const {
       leftlg,
       rightlg,
@@ -356,6 +426,7 @@ class ProductInfo extends Component {
 
     const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
     const { 
+      product,
       queryProductLocking, 
       body = {},
       brand,
@@ -383,10 +454,9 @@ class ProductInfo extends Component {
           <Row gutter={24}>
             <Col lg={rightlg} md={24}>
               <Card bordered={false} className={business.left_content} loading={false}>
-                <ProductSearchFrom
-                  onSearch={this.handleProductSearch}
-                  onCustomerReset={this.handleProductFormReset}
-                  data={{
+                <SearchForm
+                  data={searchParamsArr}
+                  source={{
                     brand,
                     productType, // 类别
                     productColor,
@@ -399,6 +469,10 @@ class ProductInfo extends Component {
                     finishedWeight,
                     mouldNo
                   }}
+                  onSearch={onSearch}
+                  returnElement={returnElement}
+                  onchange={changeSearchParams}
+                  needStatus
                 />
 
                 <Table
@@ -412,37 +486,6 @@ class ProductInfo extends Component {
                   onSelectChange={onSelectChange}
                   listLoading={isLoad}
                 />
-
-                {/* <JewelryTable
-                  scroll={{ x: 1200 }}
-                  onSelectItem={(item, rows) => {
-                    const { showItem } = this.state;
-                    if (showItem && showItem.id !== item.id) {
-                      // console.log("两个选中的对象 :",item.id,showItem.id)
-                      this.updateProductLock(showItem);
-                      // console.log('执行解锁 ： ',showItem.id);
-                    }
-
-                    if (item) {
-                      if (!showItem || showItem.id !== item.id)
-                        // this.fetchImages(item);
-                        this.loadProductLock(item);
-                    }
-                    this.state.showItem = item ? { ...item } : false;
-                    this.setState({
-                      showItem: this.state.showItem,
-                      selectProductData: [...rows],
-                    });
-                  }}
-                  ref="productTable"
-                  loading={isLoad} // productListloading || isUpdate
-                  columns={this.productColumns}
-                  className={business.small_table}
-                  rowClassName={this.onSelectRowClass}
-                  // scroll={{ y: 300 }}
-                  body={body}
-                  pageChange={this.pageProductChange}
-                /> */}
               </Card>
             </Col>
             <Col lg={leftlg} md={24}>
